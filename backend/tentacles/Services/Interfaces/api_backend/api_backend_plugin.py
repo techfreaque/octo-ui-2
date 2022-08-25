@@ -10,14 +10,7 @@ class ApiBackendPlugin(plugins.AbstractWebInterfacePlugin):
     PLUGIN_ROOT_FOLDER = os.path.dirname(os.path.abspath(__file__))
 
     def register_routes(self):
-        controllers.register_api_backend_routes(self)
+        controllers.bot_info.register_bot_info_routes(self)
+        controllers.commands.register_commands_routes(self)
+        controllers.plot_data.register_plot_data_routes(self)
 
-    def get_tabs(self):
-        return [
-            models.WebInterfaceTab(
-                "api_backend",
-                "api_backend.bot_info",
-                "API Backend",
-                web_enums.TabsLocation.START
-            )
-        ]

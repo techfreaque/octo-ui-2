@@ -1,6 +1,6 @@
 import React from "react"
 import AppWidgets from "../../AppWidgets"
-import SplitPane, {Pane} from "react-split-pane"
+import SplitPane from "react-split-pane"
 import "./index.css"
 
 export default function SplitMainContent(props) {

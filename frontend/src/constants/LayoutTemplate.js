@@ -83,5 +83,13 @@ export const defaultColors = {
     border: "#2a2e39",
     borderActive: "#1e53e5",
     warning: "#fb3",
-    success: "#00c851",    
+    success: "#00c851",
+    candles: {
+        wick: {green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)"},
+        body: {green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)"},
+        border: {green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)"},
+        // wick: {green: "#6BA583", red: "#DB0000"},
+        // body: {green: "#6BA583", red: "#DB0000"},
+        // border: {green: "#6BA583", red: "#DB0000"},
+        }  
 }

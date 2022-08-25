@@ -5,7 +5,8 @@ export default function fetchBotData (botDataManager) {
           .then(res => res.json())
           .then(data => {
             botDataManager.setMainBotData(data)
-            fetchPlotData (botDataManager.setBotPlotData, data.exchange_id, "BTC/USDT", "1h", botDataManager.botDomain)
+            fetchPlotData (botDataManager.setBotPlotData, data.exchange_id, 
+                            data.symbols[0], data.traded_time_frames[0], botDataManager.botDomain)
           })
 }
 

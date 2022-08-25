@@ -3,7 +3,7 @@ import fetchBotData from "../../data/botData";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Page from "../Page";
 import NotFoundPage from "../NotFoundPage";
-import { defaultBotTemplate, defaultColors } from "../../widgets/LayoutTemplate"
+import { defaultBotTemplate, defaultColors } from "../../constants/LayoutTemplate"
 
 
 export default function Octobot(props) {
@@ -20,9 +20,9 @@ export default function Octobot(props) {
         colors: colors, setColors: setColors,
         botDomain: botDomain, setBotDomain: setBotDomain
     }
-
+    
     React.useEffect(() => {
-            fetchBotData(botDataManager)
+        fetchBotData(botDataManager)
     }, [])
       
     return (
