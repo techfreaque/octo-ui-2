@@ -12,9 +12,18 @@ const useSaveBotConfigContext = () => {
 
 export function useBotConfig(configKeys){
   const _botConfig = useContext(BotConfigContext)
+  
   const requestedBotConfig = {}
   configKeys.forEach(configKey => {
-    requestedBotConfig[configKey] = _botConfig[configKey]
+    const paths = configKey.split("/")
+    let tmp_config = _botConfig
+    paths.forEach(path => {
+      if (!tmp_config){
+        return
+      }
+      tmp_config = tmp_config[path]
+    })
+    requestedBotConfig[configKey] = tmp_config
   })
   return requestedBotConfig
 };

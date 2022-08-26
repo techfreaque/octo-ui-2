@@ -17,7 +17,7 @@ export const defaultBotTemplate = [
                 component: "ScrollableTabs", id: 1, 
                     tabs: [
                         {component: "Tab", id: 0, title: "test", 
-                            content: [{component: "Configuration", id:0, configKey: "profile"}],
+                            content: [{component: "Configuration", id:0, configKey: "profile/crypto-currencies"}],
                         },
                         [{component: "RestartBotButton", id: 1}],
                         {component: "Tab", id: 2, title: "test", 
@@ -53,13 +53,17 @@ export const defaultBotTemplate = [
                             content: [{component: "CurrentPanelFullscreen", id: 0}]
                         },
                         {component: "Tab", id: 1, title: "Currencies",
-                            content: [{component: "RestartBotButton", id: 1}]
+                            content: [{component: "Configuration", id:0, configKey: "profile/crypto-currencies"}],
                         },
                         {component: "Tab", id: 2, title: "Exchanges", 
-                            content: [{component: "RestartBotButton", id: 2}]
+                            content: [{component: "Configuration", id:0, configKey: "profile/exchanges"}],
                         },
                         {component: "Tab", id: 3, title: "Trading", 
-                            content: [{component: "RestartBotButton", id: 3}]
+                            content: [
+                                {component: "Configuration", id:0, configKey: "profile/trading"},
+                                {component: "Configuration", id:0, configKey: "profile/trader"},
+                                {component: "Configuration", id:0, configKey: "profile/trader-simulator"},
+                            ],
                         },
                         [{component: "RestartBotButton", id: 4}],
                     ],

@@ -103,7 +103,8 @@ def register_bot_config_routes(plugin):
                                 ]
 
                             }
-                        }
+                        },
+                        "data": current_profile.config["exchanges"],
                     },
                     "trader": {
                         "schema": {
@@ -119,7 +120,8 @@ def register_bot_config_routes(plugin):
                             "required": [
                                 "enabled"
                             ]
-                        }
+                        },
+                        "data": current_profile.config["trader"],
                     },
                     "trader-simulator": {
                         "schema": {
@@ -151,12 +153,13 @@ def register_bot_config_routes(plugin):
                                     "type": "object",
                                     "additionalProperties": {"type": "number", "minimum": 0},
                                 }
-                            }
+                            },
+                            "required": [
+                                "fees",
+                                "starting-portfolio"
+                            ]
                         },
-                        "required": [
-                            "fees",
-                            "starting-portfolio"
-                        ]
+                        "data": current_profile.config["trader-simulator"],
                     },
                     "trading": {
                         "schema": {
@@ -179,26 +182,15 @@ def register_bot_config_routes(plugin):
                                 "reference-market",
                                 "risk"
                             ]
-                        }
+                        },
+                        "data": current_profile.config["trading"],
                     }
                 },
             }
-            # "config": {
-            #     "type": "object",
-            #     "properties": {
-            #
-            # },
-            # "required": [
-            #     "crypto-currencies",
-            #     "exchanges",
-            #     "trading",
-            #     "trader",
-            #     "trader-simulator"
-            # ]
             configs_to_send = {}
             for key in requested_config_keys:
                 try:
-                    configs_to_send[key] = configs[key]["crypto-currencies"]
+                    configs_to_send[key] = configs[key]
                 except KeyError:
                     configs_to_send[key] = {}
             return configs_to_send
