@@ -9,6 +9,7 @@ import SplitMainContent from "../LayoutWidgets/SplitMainContent";
 import RestartBotButton from "./Buttons/RestartBotButton";
 import CurrentPanelFullscreen from "./Buttons/CurrentPanelFullscreen";
 import CurrentPanelMinimize from "./Buttons/CurrentPanelMinimize";
+import Configuration from "./Configuration/Form";
 // import your custom widgets here
 
 const KeysToComponentMap = {
@@ -22,6 +23,7 @@ const KeysToComponentMap = {
     RestartBotButton: RestartBotButton,
     CurrentPanelFullscreen: CurrentPanelFullscreen,
     CurrentPanelMinimize: CurrentPanelMinimize,
+    Configuration: Configuration,
   };
   
 export default function AppWidgets(props) {

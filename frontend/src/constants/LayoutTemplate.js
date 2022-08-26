@@ -17,10 +17,11 @@ export const defaultBotTemplate = [
                 component: "ScrollableTabs", id: 1, 
                     tabs: [
                         {component: "Tab", id: 0, title: "test", 
-                            content: [{component: "CurrentPanelFullscreen"}]},
+                            content: [{component: "Configuration", id:0, configKey: "frontendSettings"}],
+                        },
                         [{component: "RestartBotButton", id: 1}],
                         {component: "Tab", id: 2, title: "test", 
-                            content: [{component: "RestartBotButton"}]},
+                            content: [{component: "RestartBotButton", id:1}]},
                         [{component: "RestartBotButton", id: 3}],
                     ],
                     rightContent: [

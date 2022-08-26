@@ -28,7 +28,7 @@ import {
 	// lastVisibleItemBasedZoomAnchor,
 	// rightDomainBasedZoomAnchor,
 } from "react-stockcharts/lib/utils/zoomBehavior";
-import { fitWidth } from "react-stockcharts/lib/helper";
+// import { fitWidth } from "react-stockcharts/lib/helper";
 
 
 class ReactStockCharts extends React.Component {
@@ -37,9 +37,9 @@ class ReactStockCharts extends React.Component {
 		this.saveNode = this.saveNode.bind(this);
 		this.resetYDomain = this.resetYDomain.bind(this);
 		this.handleReset = this.handleReset.bind(this);
-		this.setState({
-			suffix: 1
-		});
+		// this.setState({
+		// 	suffix: 1
+		// });
 	}
 	saveNode(node) {
 		this.node = node;
@@ -142,7 +142,7 @@ class ReactStockCharts extends React.Component {
 
 						{plottedData.map(plot => {
 							if (plot.type === "candlestick") {
-								return <>
+								return (<div key={plot.title}>
 											<CandlestickSeries key={plot.title} yAccessor={d => candlesYAccessor(d, plot.title)}
 															stroke={d => d.close > d.open 
 																? this.props.botDataManager.colors.candles.border.green 
@@ -159,7 +159,7 @@ class ReactStockCharts extends React.Component {
 													origin={[10, -10]} textFill={this.props.botDataManager.colors.font}
 													// labelFill={this.props.botDataManager.colors.fontActive}
 													/>
-										</>
+										</div>)
 							} else if (plot.type === "markers") {
 								return <ScatterSeries key={plot.title} yAccessor={d => defaultYAccessor(d.data, plot.title)} 
 											marker={TriangleMarker} markerProps={{ width: 8, stroke: "#2ca02c", fill: "#2ca02c" }}/>

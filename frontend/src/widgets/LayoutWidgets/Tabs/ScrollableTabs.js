@@ -26,14 +26,14 @@ export default function ResizableTabs(props) {
           variant="scrollable"
           scrollButtons
           allowScrollButtonsMobile
-          aria-label="scrollable auto tabs example"
+          aria-label="Tabs"
           textColor=  "inherit"
         >
           {props.tabs.map(tab => {
             if (tab.component === "Tab") {
               return <Tab key={tab.id} label={tab.title} value={tab.id} />
             } else {
-              return <AppWidgets key={tab[0].id} {...props} layout={tab} />
+              return <AppWidgets key={tab[0].id+20} {...props} layout={tab} />
             }
           })}
         </Tabs>

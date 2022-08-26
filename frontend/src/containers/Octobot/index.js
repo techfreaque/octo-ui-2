@@ -1,9 +1,10 @@
 import React from "react";
-import fetchBotData from "../../data/botData";
+import fetchBotData from "../../context/botData";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Page from "../Page";
 import NotFoundPage from "../NotFoundPage";
 import { defaultBotTemplate, defaultColors } from "../../constants/LayoutTemplate"
+import { BotConfigProvider } from "../../context/BotConfigProvider";
 
 
 export default function Octobot(props) {
@@ -27,23 +28,26 @@ export default function Octobot(props) {
       
     return (
         <BrowserRouter>
-            <Routes>
-                {pages.map(page => {
-                    return (
-                        <Route 
-                            key={page.path} 
-                            exact
-                            path={page.path} 
-                            element={
-                                <Page key={page.path} currentPage={page} 
-                                        botDataManager={botDataManager}
-                                />
-                            } 
-                        />
-                        )
-                    })}
-                <Route key="notFound" path="*" element={<NotFoundPage/>} />
-            </Routes>
+            <BotConfigProvider botDataManager={botDataManager}>
+                <Routes>
+                    {pages.map(page => {
+                        return (
+                            <Route 
+                                key={page.path} 
+                                exact
+                                path={page.path} 
+                                element={
+                                    <Page key={page.path} currentPage={page} 
+                                            botDataManager={botDataManager}
+                                    />
+                                } 
+                            />
+                            )
+                        })
+                    }
+                    <Route key="notFound" path="*" element={<NotFoundPage/>} />
+                </Routes>
+            </BotConfigProvider>
         </BrowserRouter>
     );
 }
