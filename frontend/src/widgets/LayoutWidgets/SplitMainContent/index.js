@@ -38,7 +38,7 @@ export default function SplitMainContent(props) {
                                 dimensions={{height: panelSize, width:props.width}}
                     />
                 </div>
-                <div>
+                <div style={{height: props.height-panelSize}}>
                     <AppWidgets {...props} layout={props.lowerContent} 
                     // dimensions={dimensions.lowerPart}
                     />

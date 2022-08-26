@@ -12,7 +12,7 @@ export default function ResizableTabs(props) {
   };
 
   return (
-    <div>
+    <div style={{height: "calc(100% - 38px)"}}>
       <Box sx={{ bgcolor: props.botDataManager.colors.background, 
                 borderBottom: "solid 1px "+props.botDataManager.colors.border,
               }} 
@@ -41,7 +41,7 @@ export default function ResizableTabs(props) {
           <AppWidgets {...props} layout={props.rightContent} />
         </div>
       </Box>
-      <div className="w-100 h-100">
+      <div className="w-100 h-100" style={{overflow: "scroll"}}>
         <AppWidgets {...props} layout={props.tabs[currentTabId].content}/>
       </div>
     </div>

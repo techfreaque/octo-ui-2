@@ -46,9 +46,9 @@ export const useSaveFormBotConfig = () => {
 
 
 export const BotConfigProvider = ({ botDataManager, children }) => {
-  const [botConfig, setBotConfig] = useState({frontendSettings: {schema: undefined, data: undefined}});
+  const [botConfig, setBotConfig] = useState({});
   React.useEffect(() => {
-    FetchBotConfigs(setBotConfig, botDataManager, ["frontendSettings", "test"])
+    FetchBotConfigs(setBotConfig, botDataManager, ["profile", "test"])
   }, [])  
   return (
     <BotConfigContext.Provider value={botConfig}>

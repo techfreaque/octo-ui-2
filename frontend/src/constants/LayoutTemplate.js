@@ -17,7 +17,7 @@ export const defaultBotTemplate = [
                 component: "ScrollableTabs", id: 1, 
                     tabs: [
                         {component: "Tab", id: 0, title: "test", 
-                            content: [{component: "Configuration", id:0, configKey: "frontendSettings"}],
+                            content: [{component: "Configuration", id:0, configKey: "profile"}],
                         },
                         [{component: "RestartBotButton", id: 1}],
                         {component: "Tab", id: 2, title: "test", 
