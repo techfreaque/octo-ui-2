@@ -12,4 +12,5 @@ class ApiBackendPlugin(plugins.AbstractWebInterfacePlugin):
         controllers.commands.register_commands_routes(self)
         controllers.plot_data.register_plot_data_routes(self)
         controllers.configuration.register_bot_config_routes(self)
+        controllers.portfolio.register_portfolio_routes(self)
 

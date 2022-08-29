@@ -17,7 +17,7 @@ export const defaultBotTemplate = [
                 component: "ScrollableTabs", id: 1, 
                     tabs: [
                         {component: "Tab", id: 0, title: "test", 
-                            content: [{component: "Configuration", id:0, configKey: "profile/crypto-currencies"}],
+                            content: [{component: "Configuration", id:0, configKey: "profile"}],
                         },
                         [{component: "RestartBotButton", id: 1}],
                         {component: "Tab", id: 2, title: "test", 
@@ -54,6 +54,48 @@ export const defaultBotTemplate = [
                         },
                         {component: "Tab", id: 1, title: "Currencies",
                             content: [{component: "Configuration", id:0, configKey: "profile/crypto-currencies"}],
+                        },
+                        {component: "Tab", id: 2, title: "Exchanges", 
+                            content: [{component: "Configuration", id:0, configKey: "profile/exchanges"}],
+                        },
+                        {component: "Tab", id: 3, title: "Trading", 
+                            content: [
+                                {component: "Configuration", id:0, configKey: "profile/trading"},
+                                {component: "Configuration", id:1, configKey: "profile/trader"},
+                                {component: "Configuration", id:2, configKey: "profile/trader-simulator"},
+                            ],
+                        },
+                        [{component: "RestartBotButton", id: 4}],
+                    ],
+                    rightContent: [
+                        {component: "CurrentPanelMinimize", id: 1},
+                        {component: "CurrentPanelFullscreen", id: 2}]
+            }],
+            footerContent: [{
+                component: "Footer",
+                id: 3
+            },]
+        }
+    ]},
+    {"path": "/portfolio", "title": "Portfolio", "layout": [
+        {
+            id: 1, 
+            component: "DefaultLayout", 
+            headerContent: [{
+                id: 1,
+                component: "Header",
+                leftContent: [{component: "AppDrawerDropdown", id: 1}]
+            }],
+    
+            upperContent: [{component: "MainCharts", id: 1}],
+            lowerContent: [{
+                component: "ScrollableTabs", id: 1, 
+                    tabs: [
+                        {component: "Tab", id: 0, title: "Trading Mode", 
+                            content: [{component: "CurrentPanelFullscreen", id: 0}]
+                        },
+                        {component: "Tab", id: 1, title: "Currencies",
+                            content: [{component: "Configuration", id:0, configKey: "profile"}],
                         },
                         {component: "Tab", id: 2, title: "Exchanges", 
                             content: [{component: "Configuration", id:0, configKey: "profile/exchanges"}],

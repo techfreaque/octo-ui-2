@@ -62,7 +62,7 @@ def get_plotted_data(trading_mode, symbol, time_frame, exchange_id, backtesting_
 
         elif plotted_element.x:
             plot_sources["main_chart"].append({"title": plotted_element.title, "type": plotted_element.kind,
-                                               "y_type": plotted_element.y_type})
+                                               "y_type": plotted_element.y_type, "mode": plotted_element.mode})
             for index, timestamp in enumerate(plotted_element.x):
                 if timestamp in timestamps_dict:
                     timestamps_dict[timestamp]["data"][plotted_element.title] = {"y": plotted_element.y[index]}

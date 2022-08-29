@@ -1,14 +1,15 @@
-import React, { useRef, useState } from "react";
+import React from "react";
 import { format } from "d3-format";
 import { timeFormat } from "d3-time-format";
 import { ChartCanvas, Chart } from "react-stockcharts";
 import {
 	ScatterSeries,
-	SquareMarker,
+	// SquareMarker,
 	TriangleMarker,
-	CircleMarker,
+	// CircleMarker,
 	LineSeries,
 	CandlestickSeries,
+
 } from "react-stockcharts/lib/series";
 import { XAxis, YAxis } from "react-stockcharts/lib/axes";
 import {
@@ -49,7 +50,7 @@ class ReactStockCharts extends React.Component {
 		
 	}
 	handleReset() {
-		console.log("rest")
+		console.log("reset")
 		this.setState({
 			suffix: this.state.suffix + 1
 		});
@@ -60,7 +61,7 @@ class ReactStockCharts extends React.Component {
 		const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => new Date(d.x));
 		const {
-			data: data,
+			data,
 			xScale,
 			xAccessor,
 			displayXAccessor,
@@ -160,9 +161,11 @@ class ReactStockCharts extends React.Component {
 													// labelFill={this.props.botDataManager.colors.fontActive}
 													/>
 										</div>)
-							} else if (plot.type === "markers") {
+							} else if (plot.mode === "markers") {
 								return <ScatterSeries key={plot.title} yAccessor={d => defaultYAccessor(d.data, plot.title)} 
-											marker={TriangleMarker} markerProps={{ width: 8, stroke: "#2ca02c", fill: "#2ca02c" }}/>
+											marker={TriangleMarker} 
+											markerProps={{ width: 8, stroke: "#2ca02c", fill: "#2ca02c" }}
+											/>
 							} else {
 								return <LineSeries key={plot.title} yAccessor={d => defaultYAccessor(d.data, plot.title)} />
 							}

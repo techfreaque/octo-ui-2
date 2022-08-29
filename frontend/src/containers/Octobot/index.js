@@ -1,10 +1,12 @@
 import React from "react";
-import fetchBotData from "../../context/botData";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Page from "../Page";
 import NotFoundPage from "../NotFoundPage";
 import { defaultBotTemplate, defaultColors } from "../../constants/LayoutTemplate"
 import { BotConfigProvider } from "../../context/BotConfigProvider";
+import { fetchBotData } from "../../api/botData";
+import { ReactNotifications } from 'react-notifications-component'
+import 'react-notifications-component/dist/theme.css'
 
 
 export default function Octobot(props) {
@@ -28,6 +30,7 @@ export default function Octobot(props) {
       
     return (
         <BrowserRouter>
+            <ReactNotifications/>
             <BotConfigProvider botDataManager={botDataManager}>
                 <Routes>
                     {pages.map(page => {

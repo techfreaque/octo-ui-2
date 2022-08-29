@@ -1,12 +1,12 @@
-import { FetchBotConfigs } from "./botData"
-import React, { useState, useContext } from "react";
+import { useState, useContext, createContext } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
+import { fetchBotConfigs } from "../api/botData";
 
-const BotConfigContext = React.createContext();
-const UpdateBotConfigContext = React.createContext();
+const BotConfigContext = createContext();
+const UpdateBotConfigContext = createContext();
 
-const useSaveBotConfigContext = () => {
+export const useSaveBotConfigContext = () => {
   return useContext(UpdateBotConfigContext);
 };
 
@@ -16,14 +16,15 @@ export function useBotConfig(configKeys){
   const requestedBotConfig = {}
   configKeys.forEach(configKey => {
     const paths = configKey.split("/")
-    let tmp_config = _botConfig
+    let tmp_config = _botConfig.configs
+    let tmp_data = _botConfig.data
     paths.forEach(path => {
-      if (!tmp_config){
-        return
+      if (tmp_config){
+        tmp_config = tmp_config.properties[path]
+        tmp_data = tmp_data[path]
       }
-      tmp_config = tmp_config[path]
     })
-    requestedBotConfig[configKey] = tmp_config
+    requestedBotConfig[configKey] = {schema: tmp_config, data: tmp_data}
   })
   return requestedBotConfig
 };
@@ -41,11 +42,15 @@ export const useSaveBotConfig = () => {
 
 export const useSaveFormBotConfig = () => {
   const _saveBotConfig = useSaveBotConfigContext()
-  const logic = useCallback((key, dataToStore) => {
+  const logic = useCallback((paths, dataToStore) => {
     _saveBotConfig(prevConfig => {
       const newConfig = {...prevConfig}
-      newConfig[key].data = dataToStore.formData
-      console.log(newConfig)
+      let tmpNewConfig = newConfig.data
+      let i;
+      const pathsList = paths.split('/');
+
+      for (i=0;i<pathsList.length-1;i++) tmpNewConfig = tmpNewConfig[pathsList[i]];
+      tmpNewConfig[pathsList[i]] = dataToStore.formData
       return newConfig
     })
         
@@ -53,11 +58,19 @@ export const useSaveFormBotConfig = () => {
   return logic;
 };
 
+export const useFetchBotConfigs = () => {
+  const _saveBotConfig = useSaveBotConfigContext()
+  const logic = useCallback((botDataManager, configKeys) => {
+    fetchBotConfigs(_saveBotConfig, botDataManager, configKeys)        
+  }, [_saveBotConfig]);
+  return logic;
+}
+
 
 export const BotConfigProvider = ({ botDataManager, children }) => {
   const [botConfig, setBotConfig] = useState({});
-  React.useEffect(() => {
-    FetchBotConfigs(setBotConfig, botDataManager, ["profile", "test"])
+  useEffect(() => {
+    fetchBotConfigs(setBotConfig, botDataManager, ["profile", "test"]) 
   }, [])  
   return (
     <BotConfigContext.Provider value={botConfig}>
