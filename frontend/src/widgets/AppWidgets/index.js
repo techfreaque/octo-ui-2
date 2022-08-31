@@ -35,8 +35,8 @@ export default function AppWidgets(props) {
                     KeysToComponentMap[element.component],
                     {
                     key: element.id,
-                    botDataManager: props.botDataManager,
                     dimensions: props.dimensions,
+                    currentPanel: props.currentPanel,
                     ...element,
                     },
                     element.children &&

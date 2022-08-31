@@ -8,7 +8,7 @@ export default function CurrentPanelMinimize(props){
 
     return (
             <Button 
-                onClick={props.botDataManager.currentPanelMinimize} 
+                onClick={props.currentPanel.Minimize} 
                 variant="outlined" 
                 // color={props.botDataManager.colors.backgroundHover ? props.botDataManager.currentPanelState != 0 : "warning"}
                 >

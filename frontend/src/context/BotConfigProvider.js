@@ -2,6 +2,7 @@ import { useState, useContext, createContext } from "react";
 import { useCallback } from "react";
 import { useEffect } from "react";
 import { fetchBotConfigs } from "../api/botData";
+import { useBotDomainContext } from "./BotDomainProvider";
 
 const BotConfigContext = createContext();
 const UpdateBotConfigContext = createContext();
@@ -48,7 +49,6 @@ export const useSaveFormBotConfig = () => {
       let tmpNewConfig = newConfig.data
       let i;
       const pathsList = paths.split('/');
-
       for (i=0;i<pathsList.length-1;i++) tmpNewConfig = tmpNewConfig[pathsList[i]];
       tmpNewConfig[pathsList[i]] = dataToStore.formData
       return newConfig
@@ -60,18 +60,20 @@ export const useSaveFormBotConfig = () => {
 
 export const useFetchBotConfigs = () => {
   const _saveBotConfig = useSaveBotConfigContext()
-  const logic = useCallback((botDataManager, configKeys) => {
-    fetchBotConfigs(_saveBotConfig, botDataManager, configKeys)        
-  }, [_saveBotConfig]);
+  const botDomain = useBotDomainContext()
+  const logic = useCallback((configKeys) => {
+    fetchBotConfigs(_saveBotConfig, botDomain, configKeys)        
+  }, [_saveBotConfig, botDomain]);
   return logic;
 }
 
 
-export const BotConfigProvider = ({ botDataManager, children }) => {
+export const BotConfigProvider = ({ children }) => {
   const [botConfig, setBotConfig] = useState({});
+  const botDomain = useBotDomainContext()
   useEffect(() => {
-    fetchBotConfigs(setBotConfig, botDataManager, ["profile", "test"]) 
-  }, [])  
+    fetchBotConfigs(setBotConfig, botDomain, ["profile", "test"]) 
+  }, [botDomain])  
   return (
     <BotConfigContext.Provider value={botConfig}>
       <UpdateBotConfigContext.Provider value={setBotConfig}>

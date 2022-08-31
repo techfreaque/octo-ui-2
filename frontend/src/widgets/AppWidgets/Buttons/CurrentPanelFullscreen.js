@@ -6,7 +6,7 @@ import { faWindowMaximize } from '@fortawesome/free-solid-svg-icons';
 export default function CurrentPanelFullscreen(props){
     return (
             <Button 
-                onClick={() => props.botDataManager.currentPanelSetHeight(0)} 
+                onClick={() => props.currentPanel.SetHeight(0)} 
                 variant="outlined" 
                 // color={props.botDataManager.colors.backgroundHover ? props.botDataManager.currentPanelState != 0 : "warning"}
                 >

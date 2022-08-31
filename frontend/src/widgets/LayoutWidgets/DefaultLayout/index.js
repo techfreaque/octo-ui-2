@@ -6,8 +6,6 @@ import SplitMainContent from "../SplitMainContent"
 export default function DefaultLayout(props) {
     const [dimensions, setDimensions] = React.useState({
         header:50, windowHeight:window.innerHeight, main: window.innerHeight-100, footer: 50})
-    props.botDataManager.dimensions = dimensions
-    props.botDataManager.setDimensions = setDimensions
     const headerRef = useRef(null)
     const footerRef = useRef(null)
 

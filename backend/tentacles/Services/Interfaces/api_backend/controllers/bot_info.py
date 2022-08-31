@@ -1,18 +1,9 @@
-# import json as json
-import flask
 from flask_cors import cross_origin
 
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
-import tentacles.Services.Interfaces.api_backend.models as local_models
-import tentacles.Services.Interfaces.web_interface.util as util
-# import tentacles.Services.Interfaces.web_interface.errors as errors
-# import tentacles.Services.Interfaces.web_interface as web_interface
-import octobot_commons.logging as commons_logging
 import octobot_commons.enums as commons_enums
-# import octobot_commons.constants as commons_constants
 import octobot_commons.symbols.symbol_util as symbol_util
-from octobot_trading.util import config_util as config_util
 import octobot_commons
 
 

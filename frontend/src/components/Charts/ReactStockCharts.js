@@ -55,6 +55,7 @@ class ReactStockCharts extends React.Component {
 			suffix: this.state.suffix + 1
 		});
 	}
+
 	render() {
 		const initialData = this.props.data.data
 		const plottedData = this.props.data.plot_sources.main_chart
@@ -87,7 +88,7 @@ class ReactStockCharts extends React.Component {
 		const margin = { left: 70, right: 70, top: 20, bottom: 30 };
 
 		const gridHeight = this.props.dimensions.height - margin.top - margin.bottom;
-		const gridWidth = this.props.botDataManager.dimensions.windowWidth - margin.left - margin.right;
+		const gridWidth = window.innerWidth - margin.left - margin.right;
 		const showGrid = true;
 		const yGrid = showGrid ? { innerTickSize: -1 * gridWidth, tickStrokeOpacity: 0.2 } : {};
 		const xGrid = showGrid ? { innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.2 } : {};
@@ -99,7 +100,7 @@ class ReactStockCharts extends React.Component {
 		return (
 				<ChartCanvas 
 						ratio={1} 
-						width={this.props.botDataManager.dimensions.windowWidth}
+						width={window.innerWidth}
 						height={this.props.dimensions.height}
 						margin={margin}
 						type={this.props.type}
@@ -119,15 +120,15 @@ class ReactStockCharts extends React.Component {
 						<XAxis 
 							axisAt="bottom"
 							orient="bottom" 
-							tickStroke={this.props.botDataManager.colors.font}
-							stroke={this.props.botDataManager.colors.border}
+							tickStroke={this.props.botColors.font}
+							stroke={this.props.botColors.border}
 							{...xGrid}
 							/>
 						<YAxis
 							axisAt="left"
 							orient="left"
-							tickStroke={this.props.botDataManager.colors.font}
-							stroke={this.props.botDataManager.colors.border}
+							tickStroke={this.props.botColors.font}
+							stroke={this.props.botColors.border}
 							{...yGrid}
 							onDoubleClick={this.resetYDomain}
 						/>
@@ -146,19 +147,19 @@ class ReactStockCharts extends React.Component {
 								return (<div key={plot.title}>
 											<CandlestickSeries key={plot.title} yAccessor={d => candlesYAccessor(d, plot.title)}
 															stroke={d => d.close > d.open 
-																? this.props.botDataManager.colors.candles.border.green 
-																: this.props.botDataManager.colors.candles.border.red}
+																? this.props.botColors.candles.border.green 
+																: this.props.botColors.candles.border.red}
 															wickStroke={d => d.close > d.open 
-																? this.props.botDataManager.colors.candles.wick.green 
-																: this.props.botDataManager.colors.candles.wick.red}
+																? this.props.botColors.candles.wick.green 
+																: this.props.botColors.candles.wick.red}
 															fill={d => d.close > d.open 
-																? this.props.botDataManager.colors.candles.body.green 
-																: this.props.botDataManager.colors.candles.body.red}
+																? this.props.botColors.candles.body.green 
+																: this.props.botColors.candles.body.red}
 											/>
 											<OHLCTooltip forChart={1} key={plot.title+"tt"} 
 													accessor={d => candlesYAccessor(d, plot.title)} 
-													origin={[10, -10]} textFill={this.props.botDataManager.colors.font}
-													// labelFill={this.props.botDataManager.colors.fontActive}
+													origin={[10, -10]} textFill={this.props.botColors.font}
+													// labelFill={this.props.botColors.fontActive}
 													/>
 										</div>)
 							} else if (plot.mode === "markers") {
@@ -175,7 +176,7 @@ class ReactStockCharts extends React.Component {
 							onReset={this.handleReset}
 						/>
 					</Chart>
-					<CrossHairCursor stroke={this.props.botDataManager.colors.font} />
+					<CrossHairCursor stroke={this.props.botColors.font} />
 				</ChartCanvas>
 		);
 	}

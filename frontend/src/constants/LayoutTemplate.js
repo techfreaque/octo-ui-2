@@ -16,17 +16,28 @@ export const defaultBotTemplate = [
             lowerContent: [{
                 component: "ScrollableTabs", id: 1, 
                     tabs: [
-                        {component: "Tab", id: 0, title: "test", 
+                        {component: "Tab", id: 0, title: "Strategy Settings", overflow: "scroll",
                             content: [{component: "Configuration", id:0, configKey: "profile"}],
                         },
-                        [{component: "RestartBotButton", id: 1}],
-                        {component: "Tab", id: 2, title: "test", 
+                        {component: "Tab", id: 1, title: "Backtesting", 
                             content: [{component: "RestartBotButton", id:1}]},
-                        [{component: "RestartBotButton", id: 3}],
+                        {component: "Tab", id: 2, title: "Trading", 
+                            content: [{component: "RestartBotButton", id:1}]},
+                        {component: "Tab", id: 3, title: "Strategy Optimizer", overflow: "scroll",
+                            content: [{component: "ScrollableTabs", id: 0, 
+                            tabs: [{component: "Tab", id: 0, title: "Optimizer Settings",
+                                    content: [{component: "RestartBotButton", id:0},
+                                    {component: "Footer", id: 1}]
+                            }],
+                            rightContent: []    
+                        }]
+                        },
+                        [{component: "RestartBotButton", id: 4}],
                     ],
                     rightContent: [
-                        {component: "CurrentPanelMinimize", id: 1},
-                        {component: "CurrentPanelFullscreen", id: 2}]
+                        {component: "CurrentPanelMinimize", id: 0},
+                        {component: "CurrentPanelFullscreen", id: 1}],
+                    
             }],
             footerContent: [{
                 component: "Footer",

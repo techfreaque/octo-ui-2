@@ -28,7 +28,7 @@ def get_plotted_data(trading_mode, symbol, time_frame, exchange_id, backtesting_
         raise KeyError("Can't load exchange data, OctoBot might be initializing.")
     try:
         interfaces_util.run_in_bot_async_executor(
-            elements.fill_from_database(database_manager, exchange_name, symbol, time_frame,
+            elements.fill_from_database(trading_mode, database_manager, exchange_name, symbol, time_frame,
                                         exchange_id, with_inputs=backtesting_id is None)
         )
     except commons_errors.DatabaseNotFoundError as e:

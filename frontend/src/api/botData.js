@@ -19,11 +19,9 @@ async function getRequest(url){
   return data;
 };
 
-export function fetchBotData (botDataManager) {
-  getRequest(botDataManager.botDomain + backendRoutes.botInfo).then(data =>{
-    botDataManager.setMainBotData(data)
-    fetchPlotData (botDataManager.setBotPlotData, data.exchange_id, 
-                    data.symbols[0], data.traded_time_frames[0], botDataManager.botDomain)
+export function fetchBotInfo(botDomain, setBotInfo) {
+  getRequest(botDomain + backendRoutes.botInfo).then(data =>{
+    setBotInfo(data)
   }
   )
 };
@@ -31,15 +29,14 @@ export function fetchBotData (botDataManager) {
 export function fetchPlotData (setBotPlotData, exchange_id, symbol, time_frame, botDomain) {
   	postRequest(botDomain+backendRoutes.plottedData, 
                 {exchange_id: exchange_id, symbol: symbol, time_frame: time_frame})
-    .then(data => {              
+    .then(data => {     
       setBotPlotData(data.data.sub_elements[0].data.elements)
     })
 }
 
-export const fetchBotConfigs = (_useSaveBotConfig, botDataManager, configKeys) => {
-  getRequest(`${botDataManager.botDomain + backendRoutes.botConfig}?config_keys=${configKeys}`)
+export const fetchBotConfigs = (_useSaveBotConfig, botDomain, configKeys) => {
+  getRequest(`${botDomain + backendRoutes.botConfig}?config_keys=${configKeys}`)
   .then(data => {
-    console.log(data)
     _useSaveBotConfig(prevData => {
       return {...prevData, ...data}
     })

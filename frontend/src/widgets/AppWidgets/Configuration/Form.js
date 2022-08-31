@@ -10,7 +10,6 @@ export default function Configuration(props){
   // useEffect(() => {
   //   _useFetchBotConfigs(props.botDataManager, [props.configKey])
   // }, [])  
-  console.log(props)
   return botConfigs[props.configKey] && botConfigs[props.configKey].schema
     ? <Form 
             schema={botConfigs[props.configKey].schema}
