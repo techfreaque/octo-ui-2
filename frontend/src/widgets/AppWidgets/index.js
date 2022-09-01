@@ -11,6 +11,7 @@ import CurrentPanelFullscreen from "./Buttons/CurrentPanelFullscreen";
 import CurrentPanelMinimize from "./Buttons/CurrentPanelMinimize";
 import Configuration from "./Configuration/Form";
 import Legend from "./PlotSources/Legend";
+import TimeFrameSelector from "./TimeFrameSelector/TimeFrameSelector";
 // import your custom widgets here
 
 const KeysToComponentMap = {
@@ -25,7 +26,8 @@ const KeysToComponentMap = {
     CurrentPanelFullscreen: CurrentPanelFullscreen,
     CurrentPanelMinimize: CurrentPanelMinimize,
     Configuration: Configuration,
-    Legend: Legend
+    Legend: Legend,
+    TimeFrameSelector: TimeFrameSelector,
   };
   
 export default function AppWidgets(props) {

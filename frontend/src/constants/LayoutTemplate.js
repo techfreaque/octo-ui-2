@@ -7,7 +7,8 @@ export const defaultBotTemplate = [
                 id: 1,
                 component: "Header",
                 leftContent: [
-                    {component: "AppDrawerDropdown", id: 1},
+                    {component: "AppDrawerDropdown", id: 0},
+                    {component: "TimeFrameSelector", id: 1},
                     
             ]
             }],
@@ -20,8 +21,7 @@ export const defaultBotTemplate = [
                             content: [{component: "Configuration", id:0, configKey: "profile"}],
                         },
                         {component: "Tab", id: 1, title: "Backtesting", 
-                            content: [{component: "RestartBotButton", id:0},
-                                        {component: "Legend", id:1}]
+                            content: [{component: "RestartBotButton", id:0}]
                         },
                         {component: "Tab", id: 2, title: "Trading", 
                             content: [{component: "RestartBotButton", id:1}]},
