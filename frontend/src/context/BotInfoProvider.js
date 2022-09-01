@@ -1,6 +1,5 @@
 import React, { useState, useContext, createContext, useCallback } from "react";
 import { fetchBotInfo } from "../api/botData";
-import { defaultColors } from "../constants/LayoutTemplate";
 import { useBotDomainContext } from "./BotDomainProvider";
 
 const BotInfoContext = createContext();

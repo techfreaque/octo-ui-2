@@ -57,8 +57,8 @@ class ReactStockCharts extends React.Component {
 	}
 
 	render() {
-		const initialData = this.props.data.data
-		const plottedData = this.props.data.plot_sources.main_chart
+		const initialData = this.props.plot_data
+		const plottedSources = this.props.plot_sources
 		const xScaleProvider = discontinuousTimeScaleProvider
 			.inputDateAccessor(d => new Date(d.x));
 		const {
@@ -73,16 +73,25 @@ class ReactStockCharts extends React.Component {
 		];
 		function candlesYAccessor(dataSet, dataTitle) {
 			const data = dataSet.data[dataTitle]
-			return { open: data.open, high: data.high, 
+			return data ? { open: data.open, high: data.high, 
 				low: data.low, close: data.close, 
-				volume: data.volume, date: dataSet.x};
+				volume: data.volume, date: dataSet.x} : undefined;
 		}
 		function defaultYAccessor(data, title) {
-			try {
-				return data[title].y
-			} catch {
-				return undefined
-			}
+				return data[title] ? data[title].y : undefined
+		}
+		function defaultYExtents(d, chartLocation) {
+			let data = []
+			plottedSources[chartLocation].forEach(source => {
+				if (source.enabled === false){
+					return
+				} else if (source.title === "candles") {
+					data = data.concat([d.data.candles.low, d.data.candles.high])
+				} else if (d.data[source.title]) {
+					data = data.concat([d.data[source.title].y])
+				}
+			})
+			return data
 		}
 
 		const margin = { left: 70, right: 70, top: 20, bottom: 30 };
@@ -93,10 +102,89 @@ class ReactStockCharts extends React.Component {
 		const yGrid = showGrid ? { innerTickSize: -1 * gridWidth, tickStrokeOpacity: 0.2 } : {};
 		const xGrid = showGrid ? { innerTickSize: -1 * gridHeight, tickStrokeOpacity: 0.2 } : {};
 
-		if (this.props.data.data.length === 0){
+		if (this.props.plot_data.length < 1){
 			console.log("no data to plot on Chart")
 			return <></>
 		}
+		let upperHeight = this.props.dimensions.height
+		let lowerHeight = 0
+		if (Object.keys(plottedSources).length === 2){
+			upperHeight = this.props.dimensions.height * 0.65 - 25
+			lowerHeight = this.props.dimensions.height * 0.35 - 25
+		}
+		const charts = Object.keys(plottedSources).map((chartLocation, chartIndex) => {
+			const origin = chartIndex === 1 ? upperHeight : 0	
+			const height = chartIndex === 1 ? lowerHeight : upperHeight	
+			return (
+				<Chart id={chartIndex} key={chartIndex} height={height} 
+						yExtents={d => defaultYExtents(d, chartLocation)}
+						origin={(w, h) => [0, origin]} 
+						// padding={{ top: 10, bottom: 10 }}		
+				>
+				{chartIndex===0 && <XAxis 
+					axisAt="bottom"
+					orient="bottom" 
+					tickStroke={this.props.botColors.font}
+					stroke={this.props.botColors.border}
+					{...xGrid}
+					/>}
+				<YAxis
+					axisAt="left"
+					orient="left"
+					tickStroke={this.props.botColors.font}
+					stroke={this.props.botColors.border}
+					{...yGrid}
+					onDoubleClick={this.resetYDomain}
+				/>
+				<MouseCoordinateX
+					at="bottom"
+					orient="bottom"
+					displayFormat={timeFormat("%Y-%m-%d %H:%M")} 
+					/>
+				<MouseCoordinateY
+					at="right"
+					orient="right"
+					displayFormat={format(".2f")} />
+
+				{plottedSources[chartLocation].map((plot, plotIndex) => {
+					if (plot.enabled === false){
+						return <></>
+					} else if (plot.type === "candlestick") {
+						return (<div key={plot.title}>
+									<CandlestickSeries key={plotIndex} yAccessor={d => candlesYAccessor(d, plot.title)}
+													stroke={d => d.close > d.open 
+														? this.props.botColors.candles.border.green 
+														: this.props.botColors.candles.border.red}
+													wickStroke={d => d.close > d.open 
+														? this.props.botColors.candles.wick.green 
+														: this.props.botColors.candles.wick.red}
+													fill={d => d.close > d.open 
+														? this.props.botColors.candles.body.green 
+														: this.props.botColors.candles.body.red}
+									/>
+									<OHLCTooltip forChart={chartIndex} key={plotIndex+"tt"} 
+											accessor={d => candlesYAccessor(d, plot.title)} 
+											origin={[10, -10]} textFill={this.props.botColors.font}
+											// labelFill={this.props.botColors.fontActive}
+											/>
+								</div>)
+					} else if (plot.mode === "markers") {
+						return <ScatterSeries key={plotIndex} yAccessor={d => defaultYAccessor(d.data, plot.title)} 
+									marker={TriangleMarker} 
+									markerProps={{ width: 8, stroke: "#2ca02c", fill: "#2ca02c" }}
+									/>
+					} else {
+						return <LineSeries key={plotIndex} yAccessor={d => defaultYAccessor(d.data, plot.title)} />
+					}
+				})}
+					
+				<ZoomButtons
+					onReset={this.handleReset}
+				/>
+			</Chart>
+			)
+		})
+
 		return (
 				<ChartCanvas 
 						ratio={1} 
@@ -115,67 +203,7 @@ class ReactStockCharts extends React.Component {
 						zoomAnchor={mouseBasedZoomAnchor}
 						// clamp={true}
 				>
-					<Chart id={1}
-							yExtents={d => [d.data.candles.low, d.data.candles.high]}>
-						<XAxis 
-							axisAt="bottom"
-							orient="bottom" 
-							tickStroke={this.props.botColors.font}
-							stroke={this.props.botColors.border}
-							{...xGrid}
-							/>
-						<YAxis
-							axisAt="left"
-							orient="left"
-							tickStroke={this.props.botColors.font}
-							stroke={this.props.botColors.border}
-							{...yGrid}
-							onDoubleClick={this.resetYDomain}
-						/>
-						<MouseCoordinateX
-							at="bottom"
-							orient="bottom"
-							displayFormat={timeFormat("%Y-%m-%d %H:%M")} 
-							/>
-						<MouseCoordinateY
-							at="right"
-							orient="right"
-							displayFormat={format(".2f")} />
-
-						{plottedData.map(plot => {
-							if (plot.type === "candlestick") {
-								return (<div key={plot.title}>
-											<CandlestickSeries key={plot.title} yAccessor={d => candlesYAccessor(d, plot.title)}
-															stroke={d => d.close > d.open 
-																? this.props.botColors.candles.border.green 
-																: this.props.botColors.candles.border.red}
-															wickStroke={d => d.close > d.open 
-																? this.props.botColors.candles.wick.green 
-																: this.props.botColors.candles.wick.red}
-															fill={d => d.close > d.open 
-																? this.props.botColors.candles.body.green 
-																: this.props.botColors.candles.body.red}
-											/>
-											<OHLCTooltip forChart={1} key={plot.title+"tt"} 
-													accessor={d => candlesYAccessor(d, plot.title)} 
-													origin={[10, -10]} textFill={this.props.botColors.font}
-													// labelFill={this.props.botColors.fontActive}
-													/>
-										</div>)
-							} else if (plot.mode === "markers") {
-								return <ScatterSeries key={plot.title} yAccessor={d => defaultYAccessor(d.data, plot.title)} 
-											marker={TriangleMarker} 
-											markerProps={{ width: 8, stroke: "#2ca02c", fill: "#2ca02c" }}
-											/>
-							} else {
-								return <LineSeries key={plot.title} yAccessor={d => defaultYAccessor(d.data, plot.title)} />
-							}
-						})}
-							
-						<ZoomButtons
-							onReset={this.handleReset}
-						/>
-					</Chart>
+					{charts}
 					<CrossHairCursor stroke={this.props.botColors.font} />
 				</ChartCanvas>
 		);

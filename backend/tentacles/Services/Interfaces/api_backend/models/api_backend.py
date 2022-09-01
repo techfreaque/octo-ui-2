@@ -38,37 +38,40 @@ def get_plotted_data(trading_mode, symbol, time_frame, exchange_id, backtesting_
         raise
     timestamps_dict = {}
     plot_sources = {"main_chart": []}
-    for plotted_element in elements.nested_elements['main-chart'].elements:
+    for section in elements.nested_elements:
+        if section == "inputs":
+            continue
+        for plotted_element in elements.nested_elements[section].elements:
 
-        if plotted_element.low:
-            plot_sources["main_chart"].append({"title": plotted_element.title, "type": plotted_element.kind,
-                                               "y_type": plotted_element.y_type})
-            for index, timestamp in enumerate(plotted_element.x):
-                if timestamp in timestamps_dict:
-                    timestamps_dict[timestamp]["data"][plotted_element.title] = \
-                        {"open": plotted_element.open[index], "high": plotted_element.high[index],
-                         "low": plotted_element.low[index], "close": plotted_element.close[index],
-                         "volume": plotted_element.volume[index]}
-                else:
-                    timestamps_dict[timestamp] = {
-                        "x": timestamp,
-                        "data": {plotted_element.title:
-                                     {"open": plotted_element.open[index], "high": plotted_element.high[index],
-                                      "low": plotted_element.low[index], "close": plotted_element.close[index],
-                                      "volume": plotted_element.volume[index]
-                                      }
-                                 }
-                    }
+            if plotted_element.low:
+                plot_sources["main_chart"].append({"title": plotted_element.title, "type": plotted_element.kind,
+                                                   "y_type": plotted_element.y_type})
+                for index, timestamp in enumerate(plotted_element.x):
+                    if timestamp in timestamps_dict:
+                        timestamps_dict[timestamp]["data"][plotted_element.title] = \
+                            {"open": plotted_element.open[index], "high": plotted_element.high[index],
+                             "low": plotted_element.low[index], "close": plotted_element.close[index],
+                             "volume": plotted_element.volume[index]}
+                    else:
+                        timestamps_dict[timestamp] = {
+                            "x": timestamp,
+                            "data": {plotted_element.title:
+                                         {"open": plotted_element.open[index], "high": plotted_element.high[index],
+                                          "low": plotted_element.low[index], "close": plotted_element.close[index],
+                                          "volume": plotted_element.volume[index]
+                                          }
+                                     }
+                        }
 
-        elif plotted_element.x:
-            plot_sources["main_chart"].append({"title": plotted_element.title, "type": plotted_element.kind,
-                                               "y_type": plotted_element.y_type, "mode": plotted_element.mode})
-            for index, timestamp in enumerate(plotted_element.x):
-                if timestamp in timestamps_dict:
-                    timestamps_dict[timestamp]["data"][plotted_element.title] = {"y": plotted_element.y[index]}
-                else:
-                    timestamps_dict[timestamp] = {"x": timestamp, "data": {plotted_element.title:
-                                                                               {"y": plotted_element.y[index]}}}
+            elif plotted_element.x:
+                plot_sources["main_chart"].append({"title": plotted_element.title, "type": plotted_element.kind,
+                                                   "y_type": plotted_element.y_type, "mode": plotted_element.mode})
+                for index, timestamp in enumerate(plotted_element.x):
+                    if timestamp in timestamps_dict:
+                        timestamps_dict[timestamp]["data"][plotted_element.title] = {"y": plotted_element.y[index]}
+                    else:
+                        timestamps_dict[timestamp] = {"x": timestamp, "data": {plotted_element.title:
+                                                                                   {"y": plotted_element.y[index]}}}
 
     new_element = elements.to_json()
     new_element['data']['sub_elements'][0]['data']['elements'] = {"data": list(timestamps_dict.values()), "plot_sources": plot_sources}

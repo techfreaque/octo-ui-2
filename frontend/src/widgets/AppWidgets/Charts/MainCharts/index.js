@@ -6,11 +6,13 @@ import { useBotPlottedElementsContext } from '../../../../context/BotPlottedElem
 function MainCharts(props) {
   const botColors = useBotColorsContext()
   const plottedElements = useBotPlottedElementsContext()
-  if (plottedElements.data) {
+  // console.log(plottedElements)
+  if (plottedElements.plot_data) {
     return (
       <ReactStockCharts type="hybrid" 
-                        data={plottedElements} 
-                        {...props} 
+                        plot_data={plottedElements.plot_data} 
+                        plot_sources={plottedElements.plot_sources}
+                        dimensions={props.dimensions} 
                         botColors={botColors}/>
     );
   } else {

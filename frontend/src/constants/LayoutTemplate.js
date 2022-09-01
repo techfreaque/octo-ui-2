@@ -20,7 +20,9 @@ export const defaultBotTemplate = [
                             content: [{component: "Configuration", id:0, configKey: "profile"}],
                         },
                         {component: "Tab", id: 1, title: "Backtesting", 
-                            content: [{component: "RestartBotButton", id:1}]},
+                            content: [{component: "RestartBotButton", id:0},
+                                        {component: "Legend", id:1}]
+                        },
                         {component: "Tab", id: 2, title: "Trading", 
                             content: [{component: "RestartBotButton", id:1}]},
                         {component: "Tab", id: 3, title: "Strategy Optimizer", overflow: "scroll",
