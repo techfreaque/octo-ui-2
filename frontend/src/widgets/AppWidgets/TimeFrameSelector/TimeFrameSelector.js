@@ -3,7 +3,6 @@ import { useBotColorsContext } from "../../../context/BotColorsProvider";
 import {
   FormControlLabel,
   Switch,
-  Tab,
   Tabs,
   ToggleButton,
   ToggleButtonGroup,
@@ -15,7 +14,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
-// import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 export default function TimeFrameSelector() {
   const botInfo = useBotInfoContext();
@@ -34,21 +32,11 @@ export default function TimeFrameSelector() {
 
     return (
       <div style={{ display: "flex", maxWidth: "200px" }}>
-        {/* <Box
-          sx={{
-            bgcolor: botColors.background,
-            borderBottom: "solid 1px " + botColors.border,
-          }}
-          style={{ display: "flex", maxWidth: "200px" }}
-          // textColor=  {botColorss.font}
-        > */}
         <Tabs
-          //   value={currentTabId}
-          //   onChange={handleTabChange}
           variant="scrollable"
           scrollButtons
           allowScrollButtonsMobile
-          aria-label="Tabs1"
+          aria-label="Active Time Frames"
           textColor="inherit"
         >
           <ToggleButtonGroup
@@ -67,26 +55,11 @@ export default function TimeFrameSelector() {
               );
             })}
           </ToggleButtonGroup>
-          {/* {props.tabs.map((tab) => {
-            if (tab.component === "Tab") {
-              return <Tab key={tab.id} label={tab.title} value={tab.id} />;
-            } else {
-              return (
-                <AppWidgets key={tab[0].id + 20} {...props} layout={tab} />
-              );
-            }
-          })}
-           */}
         </Tabs>
         <TimeFrameEnabler
           time_frames={botInfo.time_frames}
           traded_time_frames={botInfo.traded_time_frames}
         />
-
-        {/* <div className="ms-auto d-flex">
-          <AppWidgets {...props} layout={props.rightContent} />
-        </div> */}
-        {/* </Box> */}
       </div>
     );
   } else {
@@ -106,7 +79,7 @@ function TimeFrameEnabler({ time_frames, traded_time_frames }) {
     setAnchorEl(null);
   };
   return (
-    <div className="d-flex">
+    <div style={{ display: "flex" }}>
       <IconButton
         aria-label="more"
         id="long-button"
@@ -115,10 +88,7 @@ function TimeFrameEnabler({ time_frames, traded_time_frames }) {
         aria-haspopup="true"
         onClick={handleClick}
       >
-        <FontAwesomeIcon
-          icon={faEllipsisVertical}
-          //  icon="fa-solid fa-ellipsis-vertical"
-        />
+        <FontAwesomeIcon icon={faEllipsisVertical} />
       </IconButton>
       <Menu
         id="long-menu"
