@@ -1,15 +1,15 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/frontend/node_modules
+/source/frontend/node_modules
 /.pnp
 .pnp.js
 
 # testing
-/frontend/coverage
+/source/frontend/coverage
 
 # production
-/frontend/build
+/source/frontend/build
 
 # misc
 .DS_Store
@@ -24,3 +24,4 @@ yarn-error.log*
 /.vscode
 
 *.pyc
+/source/backend/tentacles/Services/Interfaces/octo_ui2/static/
