@@ -3,6 +3,7 @@ import NotFoundPage from "../NotFoundPage";
 import { useBotLayoutContext } from "../../context/BotLayoutProvider";
 import React from "react";
 import { Route, Routes } from "react-router-dom";
+import { backendRoutes } from "../../constants/backendConstants";
 
 export default function Pages() {
   const botLayout = useBotLayoutContext();
@@ -13,7 +14,7 @@ export default function Pages() {
           <Route
             key={page.path}
             exact
-            path={page.path}
+            path={backendRoutes.frontendEntry + page.path}
             element={<Page key={page.path} currentPage={page} />}
           />
         );

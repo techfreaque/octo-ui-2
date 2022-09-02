@@ -28,7 +28,6 @@ export default function DefaultLayout(props) {
     handleWindowResize();
     window.addEventListener("resize", handleWindowResize);
   }, []);
-  console.log(props);
   return (
     <div style={{ flex: 1, height: "100vh" }}>
       <div

@@ -7,8 +7,13 @@ import BotDataProvider from "../../context/BotDataProvider";
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default function App() {
+  const botDomain =
+    process.env.NODE_ENV === "development"
+      ? "http://192.168.18.6:5003"
+      : window.location.origin;
+
   return (
-    <BotDataProvider defaultDomain={"http://192.168.18.6:5003"}>
+    <BotDataProvider defaultDomain={botDomain}>
       <ReactNotifications />
       <Pages />
     </BotDataProvider>

@@ -13,10 +13,14 @@ export default function Header(props) {
       <Navbar id="header">
         <Container fluid>
           <Nav className="me-auto">
-            <AppWidgets {...props} layout={props.leftContent} />
+            {props.leftContent && (
+              <AppWidgets {...props} layout={props.leftContent} />
+            )}
           </Nav>
           <Nav>
-            <AppWidgets {...props} layout={props.rightContent} />
+            {props.leftContent && (
+              <AppWidgets {...props} layout={props.rightContent} />
+            )}
           </Nav>
         </Container>
       </Navbar>

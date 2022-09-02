@@ -1,5 +1,4 @@
 import { useBotInfoContext } from "../../../context/BotInfoProvider";
-import { useBotColorsContext } from "../../../context/BotColorsProvider";
 import {
   FormControlLabel,
   Switch,
@@ -14,34 +13,32 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
+import { useUpdateVisibleTimeFramesContext, useVisibleTimeFramesContext } from "../../../context/VisibleTimeFrameProvider/VisibleTimeFrameProvider";
 
 export default function TimeFrameSelector() {
   const botInfo = useBotInfoContext();
-  const botColors = useBotColorsContext();
-  const [visibleTimeframe, setVisibleTimeframe] = useState();
+  const visibleTimeframes = useVisibleTimeFramesContext();
+  const setVisibleTimeframes = useUpdateVisibleTimeFramesContext();
 
   const handleChange = (event, newTimeframe) => {
-    setVisibleTimeframe(newTimeframe);
+    setVisibleTimeframes(newTimeframe);
   };
   if (botInfo && botInfo.traded_time_frames[0]) {
-    const control = {
-      value: visibleTimeframe,
-      onChange: handleChange,
-      exclusive: true,
-    };
+    console.log(visibleTimeframes);
 
     return (
       <div style={{ display: "flex", maxWidth: "200px" }}>
         <Tabs
+          value={false}
           variant="scrollable"
           scrollButtons
           allowScrollButtonsMobile
           aria-label="Active Time Frames"
-          textColor="inherit"
         >
           <ToggleButtonGroup
             size="medium"
-            {...control}
+            value={visibleTimeframes}
+            exclusive={true}
             aria-label="Small sizes"
           >
             {botInfo.traded_time_frames.map((availableTimeframe) => {
@@ -49,6 +46,7 @@ export default function TimeFrameSelector() {
                 <ToggleButton
                   value={availableTimeframe}
                   key={availableTimeframe}
+                  onClick={handleChange}
                 >
                   {availableTimeframe}
                 </ToggleButton>

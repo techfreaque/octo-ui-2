@@ -13,6 +13,7 @@ import Configuration from "./AppWidgets/Configuration/Form";
 import Legend from "./AppWidgets/PlotSources/Legend";
 import TimeFrameSelector from "./AppWidgets/TimeFrameSelector/TimeFrameSelector";
 import Header from "./LayoutWidgets/Header";
+import ColorModeSwitch from "./AppWidgets/Buttons/ColorModeSwitcher";
 // import your custom widgets here
 
 const KeysToComponentMap = {
@@ -30,6 +31,7 @@ const KeysToComponentMap = {
   Configuration: Configuration,
   Legend: Legend,
   TimeFrameSelector: TimeFrameSelector,
+  ColorModeSwitch: ColorModeSwitch,
 };
 
 export default function AppWidgets(props) {

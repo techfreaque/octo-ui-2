@@ -36,7 +36,6 @@ export default function ResizableTabs(props) {
           scrollButtons
           allowScrollButtonsMobile
           aria-label="Tabs"
-          textColor="inherit"
           className="mx-auto"
         >
           {props.tabs.map((tab) => {

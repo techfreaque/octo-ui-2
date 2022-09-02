@@ -54,12 +54,35 @@ class ReactStockCharts extends React.Component {
   render() {
     const initialData = this.props.plot_data;
     const plottedSources = this.props.plot_sources;
+
+
+    const chartsToRender = {};
+    Object.keys(plottedSources).forEach((chartLocation) => {
+      const DataToPlotException = {};
+      try {
+        plottedSources[chartLocation].forEach((plotSource) => {
+          if (plotSource.enabled !== false) {
+            chartsToRender[chartLocation] = true;
+            throw DataToPlotException;
+          }
+        });
+      } catch (e) {
+        if (e !== DataToPlotException) throw e;
+      }
+    });
+    if (chartsToRender === {}) {
+      return <></>;
+    }
+
+
+
     const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(
       (d) => new Date(d.x)
     );
     const { data, xScale, xAccessor, displayXAccessor } =
       xScaleProvider(initialData);
-    const xExtents = [xAccessor(last(data)), xAccessor(data[data.length - 20])];
+    const defaultZoomedDataPoints = data.length < 5000 ? data.length : 5000
+    const xExtents = [xAccessor(last(data)), xAccessor(data[data.length - defaultZoomedDataPoints])];
     function candlesYAccessor(dataSet, dataTitle) {
       const data = dataSet.data[dataTitle];
       return data
@@ -76,6 +99,7 @@ class ReactStockCharts extends React.Component {
     function defaultYAccessor(data, title) {
       return data[title] ? data[title].y : undefined;
     }
+
     function defaultYExtents(d, chartLocation) {
       let data = [];
       plottedSources[chartLocation].forEach((source) => {
@@ -111,21 +135,7 @@ class ReactStockCharts extends React.Component {
       return <></>;
     }
 
-    const chartsToRender = {};
-    Object.keys(plottedSources).forEach((chartLocation) => {
-      const NoDataToPlotException = {};
-      try {
-        plottedSources[chartLocation].forEach((plotSource) => {
-          if (plotSource.enabled !== false) {
-            chartsToRender[chartLocation] = true;
-            throw NoDataToPlotException;
-          }
-        });
-      } catch (e) {
-        if (e !== NoDataToPlotException) throw e;
-      }
-    });
-
+  
     let upperHeight = this.props.dimensions.height - 50;
     let lowerHeight = 0;
     if (Object.keys(chartsToRender).length === 2) {

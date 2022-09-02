@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowMinimize } from "@fortawesome/free-solid-svg-icons";
 
 export default function CurrentPanelMinimize(props) {
-  console.log(props);
   return (
     <Button
       onClick={props.currentPanel.Minimize}

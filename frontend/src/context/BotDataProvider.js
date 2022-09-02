@@ -6,20 +6,23 @@ import { BotDomainProvider } from "./BotDomainProvider";
 import { BotInfoProvider } from "./BotInfoProvider";
 import { BotLayoutProvider } from "./BotLayoutProvider";
 import { BotPlottedElementsProvider } from "./BotPlottedElementsProvider";
+import { VisibleTimeFramesProvider } from "./VisibleTimeFrameProvider/VisibleTimeFrameProvider";
 
 export default function BotDataProvider({ defaultDomain, children }) {
   return (
     <BrowserRouter>
       <BotDomainProvider defaultDomain={defaultDomain}>
-        <BotInfoProvider>
-          <BotLayoutProvider>
-            <BotColorsProvider>
-              <BotPlottedElementsProvider>
-                <BotConfigProvider>{children}</BotConfigProvider>
-              </BotPlottedElementsProvider>
-            </BotColorsProvider>
-          </BotLayoutProvider>
-        </BotInfoProvider>
+        <VisibleTimeFramesProvider>
+          <BotInfoProvider>
+            <BotLayoutProvider>
+              <BotColorsProvider>
+                <BotPlottedElementsProvider>
+                  <BotConfigProvider>{children}</BotConfigProvider>
+                </BotPlottedElementsProvider>
+              </BotColorsProvider>
+            </BotLayoutProvider>
+          </BotInfoProvider>
+        </VisibleTimeFramesProvider>
       </BotDomainProvider>
     </BrowserRouter>
   );

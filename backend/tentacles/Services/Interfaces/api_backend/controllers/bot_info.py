@@ -38,7 +38,7 @@ def register_bot_info_routes(plugin):
         return {
             "is_starting": is_starting,
             "trading_mode_name": trading_mode_name,
-            "tentacle_class": None,  #util.get_rest_reply(trading_mode),
+            "tentacle_class": None,  # util.get_rest_reply(trading_mode),
             "exchange_id": exchange_id,
             "exchange_name": exchange_name,
             "symbols": sorted([symbol_util.convert_symbol(s, octobot_commons.MARKET_SEPARATOR, "|") for s in symbols]),

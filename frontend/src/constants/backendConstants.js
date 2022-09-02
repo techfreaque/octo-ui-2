@@ -1,6 +1,9 @@
+export const basePath = "/api_backend";
+
 export const backendRoutes = {
-  botInfo: "/api_backend/bot-info",
-  botConfig: "/api_backend/bot-config",
-  plottedData: "/api_backend/plotted_data",
+  frontendEntry: basePath + "/home",
+  botInfo: basePath + "/bot-info",
+  botConfig: basePath + "/bot-config",
+  plottedData: basePath + "/plotted_data",
 };
 export const OctoBotVersion = "0.4.6";

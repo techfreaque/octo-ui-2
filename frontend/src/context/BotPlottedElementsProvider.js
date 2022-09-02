@@ -2,6 +2,7 @@ import { useState, useContext, createContext, useEffect } from "react";
 import { fetchPlotData } from "../api/botData";
 import { useBotDomainContext } from "./BotDomainProvider";
 import { useBotInfoContext } from "./BotInfoProvider";
+import { useVisibleTimeFramesContext } from "./VisibleTimeFrameProvider/VisibleTimeFrameProvider";
 
 const BotPlottedElementsContext = createContext();
 const UpdateBotPlottedElementsContext = createContext();
@@ -21,21 +22,28 @@ export const useUpdateBotPlottedElementsContext = () => {
 //       console.log(dataToStore)
 //       return {...prevData, plot_sources: dataToStore.formData}
 //     })
-        
+
 //   }, [updateBotPlottedElements]);
 //   return logic;
 // };
 
-export const BotPlottedElementsProvider = ({children }) => {
+export const BotPlottedElementsProvider = ({ children }) => {
   const [botPlottedElements, setBotPlottedElements] = useState({});
-  const botInfo = useBotInfoContext()
-  const botDomain = useBotDomainContext()
+  const botInfo = useBotInfoContext();
+  const botDomain = useBotDomainContext();
+  const visibleTimeframes = useVisibleTimeFramesContext();
   useEffect(() => {
-    if (botInfo){
-      fetchPlotData(setBotPlottedElements, botInfo.exchange_id, 
-                        botInfo.symbols[0], botInfo.traded_time_frames[0], botDomain)
+    if (botInfo) {
+      console.log("test" + visibleTimeframes);
+      fetchPlotData(
+        setBotPlottedElements,
+        botInfo.exchange_id,
+        botInfo.symbols[0],
+        visibleTimeframes,
+        botDomain
+      );
     }
-  }, [botInfo, botDomain])  
+  }, [botInfo, botDomain, visibleTimeframes]);
   return (
     <BotPlottedElementsContext.Provider value={botPlottedElements}>
       <UpdateBotPlottedElementsContext.Provider value={setBotPlottedElements}>
