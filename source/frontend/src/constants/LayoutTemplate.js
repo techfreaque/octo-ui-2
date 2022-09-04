@@ -187,7 +187,10 @@ export const defaultBotTemplate = [
           {
             id: 1,
             component: "Header",
-            leftContent: [{ component: "AppDrawerDropdown", id: 1 }],
+            leftContent: [
+              { component: "AppDrawerDropdown", id: 0 },
+              { component: "TimeFrameSelector", id: 1 },
+            ],
           },
         ],
 
@@ -200,50 +203,8 @@ export const defaultBotTemplate = [
               {
                 component: "Tab",
                 id: 0,
-                title: "Trading Mode",
-                content: [{ component: "CurrentPanelFullscreen", id: 0 }],
-              },
-              {
-                component: "Tab",
-                id: 1,
-                title: "Currencies",
-                content: [
-                  { component: "Configuration", id: 0, configKey: "profile" },
-                ],
-              },
-              {
-                component: "Tab",
-                id: 2,
-                title: "Exchanges",
-                content: [
-                  {
-                    component: "Configuration",
-                    id: 0,
-                    configKey: "profile/exchanges",
-                  },
-                ],
-              },
-              {
-                component: "Tab",
-                id: 3,
-                title: "Trading",
-                content: [
-                  {
-                    component: "Configuration",
-                    id: 0,
-                    configKey: "profile/trading",
-                  },
-                  {
-                    component: "Configuration",
-                    id: 0,
-                    configKey: "profile/trader",
-                  },
-                  {
-                    component: "Configuration",
-                    id: 0,
-                    configKey: "profile/trader-simulator",
-                  },
-                ],
+                title: "Current Portfolio",
+                content: [{ component: "CurrentPortfolioTable", id: 0 }],
               },
               [{ component: "RestartBotButton", id: 4 }],
             ],

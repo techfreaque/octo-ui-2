@@ -15,9 +15,9 @@ export default function ColorModeSwitch() {
       color="inherit"
     >
       {theme.palette.mode === "dark" ? (
-        <FontAwesomeIcon icon={faSun} />
-      ) : (
         <FontAwesomeIcon icon={faMoon} />
+      ) : (
+        <FontAwesomeIcon icon={faSun} />
       )}
     </IconButton>
   );

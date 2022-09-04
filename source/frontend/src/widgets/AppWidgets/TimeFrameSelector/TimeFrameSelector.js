@@ -27,8 +27,6 @@ export default function TimeFrameSelector() {
     setVisibleTimeframes(newTimeframe);
   };
   if (botInfo && botInfo.traded_time_frames[0]) {
-    console.log(visibleTimeframes);
-
     return (
       <div style={{ display: "flex", maxWidth: "200px" }}>
         <Tabs
@@ -36,13 +34,11 @@ export default function TimeFrameSelector() {
           variant="scrollable"
           scrollButtons
           allowScrollButtonsMobile
-          aria-label="Active Time Frames"
         >
           <ToggleButtonGroup
             size="medium"
             value={visibleTimeframes}
             exclusive={true}
-            aria-label="Small sizes"
           >
             {botInfo.traded_time_frames.map((availableTimeframe) => {
               return (
@@ -83,8 +79,8 @@ function TimeFrameEnabler({ time_frames, traded_time_frames }) {
     <div style={{ display: "flex" }}>
       <IconButton
         aria-label="more"
-        id="long-button"
-        aria-controls={open ? "long-menu" : undefined}
+        id="timeframes-button"
+        aria-controls={open ? "timeframes-menu" : undefined}
         aria-expanded={open ? "true" : undefined}
         aria-haspopup="true"
         onClick={handleClick}
@@ -92,9 +88,9 @@ function TimeFrameEnabler({ time_frames, traded_time_frames }) {
         <FontAwesomeIcon icon={faEllipsisVertical} />
       </IconButton>
       <Menu
-        id="long-menu"
+        id="timeframes-menu"
         MenuListProps={{
-          "aria-labelledby": "long-button",
+          "aria-labelledby": "timeframes-button",
         }}
         anchorEl={anchorEl}
         open={open}

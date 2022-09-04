@@ -33,8 +33,7 @@ export const BotPlottedElementsProvider = ({ children }) => {
   const botDomain = useBotDomainContext();
   const visibleTimeframes = useVisibleTimeFramesContext();
   useEffect(() => {
-    if (botInfo) {
-      console.log("test" + visibleTimeframes);
+    if (botInfo && visibleTimeframes) {
       fetchPlotData(
         setBotPlottedElements,
         botInfo.exchange_id,

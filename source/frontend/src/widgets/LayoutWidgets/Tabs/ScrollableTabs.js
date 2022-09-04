@@ -23,11 +23,9 @@ export default function ResizableTabs(props) {
     <div style={{ height: "calc(100%)" }}>
       <Box
         sx={{
-          bgcolor: botColors.background,
           borderBottom: "solid 1px " + botColors.border,
         }}
         style={{ display: "flex" }}
-        // textColor=  {botColorss.font}
       >
         <Tabs
           value={currentTabId}

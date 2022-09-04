@@ -55,7 +55,6 @@ class ReactStockCharts extends React.Component {
     const initialData = this.props.plot_data;
     const plottedSources = this.props.plot_sources;
 
-
     const chartsToRender = {};
     Object.keys(plottedSources).forEach((chartLocation) => {
       const DataToPlotException = {};
@@ -74,15 +73,16 @@ class ReactStockCharts extends React.Component {
       return <></>;
     }
 
-
-
     const xScaleProvider = discontinuousTimeScaleProvider.inputDateAccessor(
       (d) => new Date(d.x)
     );
     const { data, xScale, xAccessor, displayXAccessor } =
       xScaleProvider(initialData);
-    const defaultZoomedDataPoints = data.length < 5000 ? data.length : 5000
-    const xExtents = [xAccessor(last(data)), xAccessor(data[data.length - defaultZoomedDataPoints])];
+    const defaultZoomedDataPoints = data.length < 5000 ? data.length : 5000;
+    const xExtents = [
+      xAccessor(last(data)),
+      xAccessor(data[data.length - defaultZoomedDataPoints]),
+    ];
     function candlesYAccessor(dataSet, dataTitle) {
       const data = dataSet.data[dataTitle];
       return data
@@ -94,19 +94,26 @@ class ReactStockCharts extends React.Component {
             volume: data.volume,
             date: dataSet.x,
           }
-        : undefined;
+        : {
+            open: undefined,
+            high: undefined,
+            low: undefined,
+            close: undefined,
+            volume: undefined,
+            date: undefined,
+          };
     }
     function defaultYAccessor(data, title) {
-      return data[title] ? data[title].y : undefined;
+      return data[title] && data[title].y;
     }
 
     function defaultYExtents(d, chartLocation) {
       let data = [];
       plottedSources[chartLocation].forEach((source) => {
-        if (source.enabled === false) {
+        if (source.enabled === false || !d.data[source.title]) {
           return;
         } else if (source.title === "candles") {
-          data = data.concat([d.data.candles.low, d.data.candles.high]);
+          data = [d.data.candles.low, d.data.candles.high];
         } else if (d.data[source.title]) {
           data = data.concat([d.data[source.title].y]);
         }
@@ -135,7 +142,6 @@ class ReactStockCharts extends React.Component {
       return <></>;
     }
 
-  
     let upperHeight = this.props.dimensions.height - 50;
     let lowerHeight = 0;
     if (Object.keys(chartsToRender).length === 2) {

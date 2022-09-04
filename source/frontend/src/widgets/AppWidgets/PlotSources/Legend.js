@@ -1,15 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   useBotPlottedElementsContext,
   useUpdateBotPlottedElementsContext,
 } from "../../../context/BotPlottedElementsProvider";
-import { Chip } from "@mui/material";
+import { Button, Chip } from "@mui/material";
 import "./legend.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
 
 export default function Legend() {
-  const updatePlottedElements = useUpdateBotPlottedElementsContext();
   const plottedElements = useBotPlottedElementsContext();
 
+  const [legendOpen, setLegendOpen] = useState(true);
+  function toggleLegend() {
+    setLegendOpen((prevState) => !prevState);
+  }
+
+  if (plottedElements.plot_sources) {
+    return (
+      <div>
+        <div className="legend-container">
+          {legendOpen && <LegendElements plottedElements={plottedElements} />}
+          <Button onClick={toggleLegend} variant="outlined">
+            <FontAwesomeIcon icon={legendOpen ? faArrowUp : faArrowDown} />
+          </Button>
+        </div>
+      </div>
+    );
+  } else {
+    return <></>;
+  }
+}
+
+function LegendElements({ plottedElements }) {
+  const updatePlottedElements = useUpdateBotPlottedElementsContext();
   function handleChange(event) {
     updatePlottedElements((prevElements) => {
       const sourceId = event.target.id
@@ -23,39 +47,33 @@ export default function Legend() {
       return { ...prevElements };
     });
   }
-
-  if (plottedElements.plot_sources) {
-    const sources = Object.keys(plottedElements.plot_sources).map(
-      (chartLocation, chartIndex) => {
-        return (
-          <div key={chartIndex}>
-            <p className="mb-0">{chartLocation}</p>
-            {plottedElements.plot_sources[chartLocation].map(
-              (plotElement, index) => {
-                return (
-                  <div key={index}>
-                    <Chip
-                      key={index}
-                      variant="outlined"
-                      color={
-                        plotElement.enabled !== false ? "primary" : undefined
-                      }
-                      size="small"
-                      label={plotElement.title}
-                      id={chartLocation + "/" + index}
-                      onClick={(event) => handleChange(event)}
-                      // icon={<FaceIco />}
-                    />
-                  </div>
-                );
-              }
-            )}
-          </div>
-        );
-      }
-    );
-    return <div className="legend-container">{sources}</div>;
-  } else {
-    return <></>;
-  }
+  return Object.keys(plottedElements.plot_sources).map(
+    (chartLocation, chartIndex) => {
+      return (
+        <div key={chartIndex}>
+          <p className="mb-0">{chartLocation}</p>
+          {plottedElements.plot_sources[chartLocation].map(
+            (plotElement, index) => {
+              return (
+                <div key={index}>
+                  <Chip
+                    key={index}
+                    variant="outlined"
+                    color={
+                      plotElement.enabled !== false ? "primary" : undefined
+                    }
+                    size="small"
+                    label={plotElement.title}
+                    id={chartLocation + "/" + index}
+                    onClick={(event) => handleChange(event)}
+                    // icon={<FaceIco />}
+                  />
+                </div>
+              );
+            }
+          )}
+        </div>
+      );
+    }
+  );
 }

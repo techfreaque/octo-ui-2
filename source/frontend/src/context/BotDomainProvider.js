@@ -17,7 +17,6 @@ export const BotDomainProvider = ({ children }) => {
   const [botDomain, setBotDomain] = useState(
     isProduction ? window.location.origin : developmentBotDomain
   );
-  console.log(botDomain);
   return (
     <BotDomainContext.Provider value={botDomain}>
       <UpdateBotDomainContext.Provider value={setBotDomain}>

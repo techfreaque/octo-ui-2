@@ -1,4 +1,4 @@
-export const developmentBotDomain = "http://localhost:5003";
+export const developmentBotDomain = "http://192.168.18.6:5003";
 
 export const basePath = "/octo_ui2";
 
