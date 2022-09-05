@@ -1,0 +1,32 @@
+from flask_cors import cross_origin
+import tentacles.Services.Interfaces.web_interface.login as login
+import octobot_services.interfaces.util as interfaces_util
+import tentacles.Services.Interfaces.web_interface.models as models
+
+
+def register_portfolio_routes(plugin):
+    @plugin.blueprint.route("/portfolio")
+    @cross_origin(origins="*")
+    @login.login_required_when_activated
+    def portfolio():
+        has_real_trader, has_simulated_trader = interfaces_util.has_real_and_or_simulated_traders()
+
+        displayed_portfolio = models.get_exchange_holdings_per_symbol()
+        symbols_values = models.get_symbols_values(displayed_portfolio.keys(), has_real_trader, has_simulated_trader) \
+            if displayed_portfolio else {}
+
+        _, _, portfolio_real_current_value, portfolio_simulated_current_value = \
+            interfaces_util.get_portfolio_current_value()
+
+        displayed_portfolio_value = portfolio_real_current_value if has_real_trader else portfolio_simulated_current_value
+        reference_market = interfaces_util.get_reference_market()
+        initializing_currencies_prices_set = models.get_initializing_currencies_prices_set()
+
+        return {"has_real_trader": has_real_trader,
+                "has_simulated_trade": has_simulated_trader,
+                "displayed_portfolio": displayed_portfolio,
+                "symbols_values": symbols_values,
+                "displayed_portfolio_value": round(displayed_portfolio_value, 8),
+                "reference_unit": reference_market,
+                # "initializing_currencies_prices": initializing_currencies_prices_set
+                }
