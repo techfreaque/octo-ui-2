@@ -1,6 +1,7 @@
 import React, { createElement } from "react";
 
-import DefaultLayout from "./LayoutWidgets/DefaultLayout";
+import DefaultLayout from "./LayoutWidgets/PageLayouts/DefaultLayout";
+import SimpleLayout from "./LayoutWidgets/PageLayouts/SimpleLayout/SimpleLayout";
 import MainCharts from "./AppWidgets/Charts/MainCharts";
 import AppDrawerDropdown from "./AppWidgets/AppDrawerDropdown";
 import ScrollableTabs from "./LayoutWidgets/Tabs/ScrollableTabs";
@@ -14,12 +15,14 @@ import Legend from "./AppWidgets/PlotSources/Legend";
 import TimeFrameSelector from "./AppWidgets/TimeFrameSelector/TimeFrameSelector";
 import Header from "./LayoutWidgets/Header";
 import ColorModeSwitch from "./AppWidgets/Buttons/ColorModeSwitcher";
-import CurrentPortfolioTable from "./AppWidgets/Buttons/Tables/CurrentPortfolioTable";
+import AppStore from "./AppWidgets/AppStore/AppStore";
+import CurrentPortfolioTable from "./AppWidgets/Tables/CurrentPortfolio";
 // import your custom widgets here
 
 const KeysToComponentMap = {
   // define your custom widget here
   DefaultLayout: DefaultLayout,
+  SimpleLayout: SimpleLayout,
   Header: Header,
   MainCharts: MainCharts,
   AppDrawerDropdown: AppDrawerDropdown,
@@ -34,6 +37,7 @@ const KeysToComponentMap = {
   TimeFrameSelector: TimeFrameSelector,
   ColorModeSwitch: ColorModeSwitch,
   CurrentPortfolioTable: CurrentPortfolioTable,
+  AppStore: AppStore,
 };
 
 export default function AppWidgets(props) {

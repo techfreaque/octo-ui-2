@@ -28,7 +28,6 @@ export const defaultBotTemplate = [
                 component: "Tab",
                 id: 0,
                 title: "Strategy Settings",
-                overflow: "scroll",
                 content: [
                   { component: "Configuration", id: 0, configKey: "profile" },
                 ],
@@ -49,7 +48,6 @@ export const defaultBotTemplate = [
                 component: "Tab",
                 id: 3,
                 title: "Strategy Optimizer",
-                overflow: "scroll",
                 content: [
                   {
                     component: "ScrollableTabs",
@@ -110,12 +108,6 @@ export const defaultBotTemplate = [
               {
                 component: "Tab",
                 id: 0,
-                title: "Trading Mode",
-                content: [{ component: "CurrentPanelFullscreen", id: 0 }],
-              },
-              {
-                component: "Tab",
-                id: 1,
                 title: "Currencies",
                 content: [
                   {
@@ -127,7 +119,7 @@ export const defaultBotTemplate = [
               },
               {
                 component: "Tab",
-                id: 2,
+                id: 1,
                 title: "Exchanges",
                 content: [
                   {
@@ -139,7 +131,7 @@ export const defaultBotTemplate = [
               },
               {
                 component: "Tab",
-                id: 3,
+                id: 2,
                 title: "Trading",
                 content: [
                   {
@@ -159,7 +151,7 @@ export const defaultBotTemplate = [
                   },
                 ],
               },
-              [{ component: "RestartBotButton", id: 4 }],
+              [{ component: "RestartBotButton", id: 3 }],
             ],
             rightContent: [
               { component: "CurrentPanelMinimize", id: 1 },
@@ -191,6 +183,7 @@ export const defaultBotTemplate = [
               { component: "AppDrawerDropdown", id: 0 },
               { component: "TimeFrameSelector", id: 1 },
             ],
+            rightContent: [{ component: "ColorModeSwitch", id: 0 }],
           },
         ],
 
@@ -206,7 +199,6 @@ export const defaultBotTemplate = [
                 title: "Current Portfolio",
                 content: [{ component: "CurrentPortfolioTable", id: 0 }],
               },
-              [{ component: "RestartBotButton", id: 4 }],
             ],
             rightContent: [
               { component: "CurrentPanelMinimize", id: 1 },
@@ -223,24 +215,69 @@ export const defaultBotTemplate = [
       },
     ],
   },
+  {
+    path: "/appstore",
+    title: "App Store",
+    layout: [
+      {
+        id: 0,
+        component: "SimpleLayout",
+        headerContent: [
+          {
+            id: 0,
+            component: "Header",
+            leftContent: [{ component: "AppDrawerDropdown", id: 0 }],
+          },
+        ],
+        pageContent: [{ component: "AppStore", id: 0 }],
+        footerContent: [
+          {
+            component: "Footer",
+            id: 0,
+          },
+        ],
+      },
+    ],
+  },
 ];
 
 export const defaultColors = {
-  background: "#131722",
-  backgroundHover: "#2a2e39",
-  font: "#b2b5be",
-  fontHover: "#131722",
-  fontActive: "#1e53e5",
-  border: "#2a2e39",
-  borderActive: "#1e53e5",
-  warning: "#fb3",
-  success: "#00c851",
-  candles: {
-    wick: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-    body: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-    border: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-    // wick: {green: "#6BA583", red: "#DB0000"},
-    // body: {green: "#6BA583", red: "#DB0000"},
-    // border: {green: "#6BA583", red: "#DB0000"},
+  dark: {
+    background: "#131722",
+    backgroundHover: "#2a2e39",
+    font: "#b2b5be",
+    fontHover: "#131722",
+    fontActive: "#1e53e5",
+    border: "#2a2e39",
+    borderActive: "#1e53e5",
+    warning: "#fb3",
+    success: "#00c851",
+    candles: {
+      wick: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+      body: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+      border: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+      // wick: {green: "#6BA583", red: "#DB0000"},
+      // body: {green: "#6BA583", red: "#DB0000"},
+      // border: {green: "#6BA583", red: "#DB0000"},
+    },
+  },
+  light: {
+    background: "#131722",
+    backgroundHover: "#2a2e39",
+    font: "#000",
+    fontHover: "#131722",
+    fontActive: "#1e53e5",
+    border: "#2a2e39",
+    borderActive: "#1e53e5",
+    warning: "#fb3",
+    success: "#00c851",
+    candles: {
+      wick: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+      body: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+      border: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+      // wick: {green: "#6BA583", red: "#DB0000"},
+      // body: {green: "#6BA583", red: "#DB0000"},
+      // border: {green: "#6BA583", red: "#DB0000"},
+    },
   },
 };

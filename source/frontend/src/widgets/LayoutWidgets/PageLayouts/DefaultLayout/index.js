@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import AppWidgets from "../../AppWidgets";
-import SplitMainContent from "../SplitMainContent";
+import AppWidgets from "../../../AppWidgets";
+import SplitMainContent from "../../SplitMainContent";
 
 export default function DefaultLayout(props) {
   const [dimensions, setDimensions] = React.useState({

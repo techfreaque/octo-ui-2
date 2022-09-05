@@ -10,9 +10,11 @@ export default function Configuration(props) {
   const botConfigs = useBotConfig([props.configKey]);
   const _saveBotConfigs = useSaveFormBotConfig();
   function handleSaveForm(dataToStore) {
+    console.log("fsdjkfjsd");
     _saveBotConfigs(props.configKey, dataToStore);
     notification(
-      botConfigs[props.configKey].schema.title + " saved successfully",
+      botConfigs[props.configKey].schema.title +
+        " saved successfully (saving isnt supported yet)",
       "success"
     );
   }

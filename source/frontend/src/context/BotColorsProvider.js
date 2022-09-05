@@ -1,6 +1,6 @@
-import React, { useState, useContext, createContext } from "react";
+import React, { useState, useContext, createContext, useEffect } from "react";
 import { defaultColors } from "../constants/LayoutTemplate";
-import ColorModeProvider from "./ColorModeProvider";
+import { useColorModeContext } from "./ColorModeProvider";
 
 const BotColorsContext = createContext();
 const UpdateBotColorsContext = createContext();
@@ -14,14 +14,19 @@ export const useUpdateBotColorsContext = () => {
 };
 
 export const BotColorsProvider = ({ children }) => {
-  const [botColors, setBotColors] = useState(defaultColors);
+  const botColorMode = useColorModeContext();
+  const [botColors, setBotColors] = useState(defaultColors.dark);
+
+  useEffect(() => {
+    if (botColorMode) {
+      botColorMode && setBotColors(defaultColors[botColorMode]);
+    }
+  }, [botColorMode]);
   return (
-    <ColorModeProvider>
-      <BotColorsContext.Provider value={botColors}>
-        <UpdateBotColorsContext.Provider value={setBotColors}>
-          {children}
-        </UpdateBotColorsContext.Provider>
-      </BotColorsContext.Provider>
-    </ColorModeProvider>
+    <BotColorsContext.Provider value={botColors}>
+      <UpdateBotColorsContext.Provider value={setBotColors}>
+        {children}
+      </UpdateBotColorsContext.Provider>
+    </BotColorsContext.Provider>
   );
 };

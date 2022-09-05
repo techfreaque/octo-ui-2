@@ -11,12 +11,11 @@ export default function ResizableTabs(props) {
   const handleTabChange = (event, newCurrentTabId) => {
     setCurrentTabId(newCurrentTabId);
   };
-  const overflowY = props.tabs[currentTabId].overflow
-    ? props.tabs[currentTabId].overflow
-    : "inherit";
-  const height = props.tabs[currentTabId].overflow
+  const overflowY = props.tabs[currentTabId].dontScroll ? "inherit" : "scroll";
+  const overflowX = props.tabs[currentTabId].dontScroll ? "unset" : "hidden";
+  const height = props.tabs[currentTabId].dontScroll
     ? "calc(100% - 54px)"
-    : "unset";
+    : "calc(100% - 54px)";
   const botColors = useBotColorsContext();
 
   return (
@@ -52,7 +51,11 @@ export default function ResizableTabs(props) {
       </Box>
       <div
         className="w-100"
-        style={{ overflowY: overflowY, overflowX: "hidden", height: height }}
+        style={{
+          overflowY: overflowY,
+          overflowX: overflowX,
+          height: height,
+        }}
       >
         <AppWidgets {...props} layout={props.tabs[currentTabId].content} />
       </div>

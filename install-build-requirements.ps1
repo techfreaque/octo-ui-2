@@ -1,2 +1,2 @@
 cd source/frontend
-npm install --f
+npm install

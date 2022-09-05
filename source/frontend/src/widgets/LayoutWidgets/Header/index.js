@@ -18,7 +18,7 @@ export default function Header(props) {
             )}
           </Nav>
           <Nav>
-            {props.leftContent && (
+            {props.rightContent && (
               <AppWidgets {...props} layout={props.rightContent} />
             )}
           </Nav>
