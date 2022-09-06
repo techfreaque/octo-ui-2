@@ -6,33 +6,38 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 
-export default function Categories({ categories }) {
-  const [selectedIndex, setSelectedIndex] = React.useState(1);
-
-  const handleListItemClick = (event, index) => {
-    setSelectedIndex(index);
-  };
-  console.log(categories);
-
+export default function Categories({
+  categories,
+  handleCategoryClick,
+  selectedCategories,
+}) {
   return (
     <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
       <List component="nav" aria-label="main mailbox folders">
         <ListItemButton
-          selected={selectedIndex === 0}
-          onClick={(event) => handleListItemClick(event, 0)}
+          selected={selectedCategories.includes("all")}
+          onClick={(event) => handleCategoryClick(event, "all")}
         >
-          <ListItemIcon>a</ListItemIcon>
+          <ListItemIcon>A</ListItemIcon>
           <ListItemText primary="All" />
+        </ListItemButton>
+        <ListItemButton
+          selected={selectedCategories.includes("installed")}
+          onClick={(event) => handleCategoryClick(event, "installed")}
+        >
+          <ListItemIcon>I</ListItemIcon>
+          <ListItemText primary="Installed" />
         </ListItemButton>
       </List>
       <Divider />
       <List component="nav" aria-label="secondary mailbox folder">
         {categories &&
-          Object.keys(categories).map((category) => {
+          Object.keys(categories).map((category, index) => {
             return (
               <ListItemButton
-                selected={selectedIndex === 2}
-                onClick={(event) => handleListItemClick(event, 2)}
+                key={index}
+                selected={selectedCategories.includes(category)}
+                onClick={(event) => handleCategoryClick(event, category)}
               >
                 <ListItemIcon>{category[0]}</ListItemIcon>
                 <ListItemText primary={category} />

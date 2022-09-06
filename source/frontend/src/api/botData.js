@@ -1,5 +1,6 @@
 import { backendRoutes } from "../constants/backendConstants";
-import fetchAndStoreFromBot from "./fetchAndStoreFromBot";
+import fetchAndStoreFromBot, { postRequest } from "./fetchAndStoreFromBot";
+import notification from "../components/Notifications/Notification";
 
 export async function fetchBotInfo(botDomain, setBotInfo) {
   await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo, setBotInfo);
@@ -41,6 +42,27 @@ export async function fetchBotPortfolio(_useSaveBotPortfolio, botDomain) {
     _useSaveBotPortfolio
   );
 }
+
+export async function fetchAppStoreData(_useSaveAppStoreData, botDomain) {
+  await fetchAndStoreFromBot(
+    botDomain + backendRoutes.appStore,
+    _useSaveAppStoreData
+  );
+}
+export async function installAppPackage(appUrl, appName, botDomain) {
+  postRequest(
+    botDomain + backendRoutes.installApp + "?update_type=add_package",
+    {
+      [appUrl]: "register_and_install",
+    }
+  ).then((response) => {
+    console.log("response");
+    console.log(response);
+
+    notification("Successfully installed " + appName);
+  });
+}
+
 // function updateStrategyDesignerConfig(configKey, value){
 //   return new Promise((resolve, reject) => {
 //       const _designerConfigSaveSuccess = (updated_data, update_url, dom_root_element, msg, status) => {

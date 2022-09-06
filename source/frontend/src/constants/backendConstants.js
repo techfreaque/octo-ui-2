@@ -10,4 +10,6 @@ export const backendRoutes = {
   botConfig: basePath + "/bot-config",
   plottedData: basePath + "/plotted_data",
   botPortfolio: basePath + "/portfolio",
+  appStore: basePath + "/app-store",
+  installApp: "/advanced/tentacle_packages"
 }

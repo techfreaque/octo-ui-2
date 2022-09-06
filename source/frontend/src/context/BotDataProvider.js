@@ -1,4 +1,5 @@
 import React from "react";
+import { AppStoreDataProvider } from "./AppStoreDataProvider";
 import { BotColorsProvider } from "./BotColorsProvider";
 import { BotConfigProvider } from "./BotConfigProvider";
 import { BotDomainProvider } from "./BotDomainProvider";
@@ -19,7 +20,9 @@ export default function BotDataProvider({ children }) {
               <BotColorsProvider>
                 <BotPlottedElementsProvider>
                   <BotPortfolioProvider>
-                    <BotConfigProvider>{children}</BotConfigProvider>
+                    <AppStoreDataProvider>
+                      <BotConfigProvider>{children}</BotConfigProvider>
+                    </AppStoreDataProvider>
                   </BotPortfolioProvider>
                 </BotPlottedElementsProvider>
               </BotColorsProvider>

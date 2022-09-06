@@ -3,7 +3,7 @@ import os
 import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.enums as web_enums
-from .controllers import frontend, configuration, portfolio, plot_data, commands, bot_info
+from .controllers import frontend, configuration, portfolio, plot_data, commands, bot_info, app_store
 
 
 class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
@@ -17,6 +17,7 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
         plot_data.register_plot_data_routes(self)
         configuration.register_bot_config_routes(self)
         portfolio.register_portfolio_routes(self)
+        app_store.register_appstore_routes(self)
 
     def get_tabs(self):
         return [
