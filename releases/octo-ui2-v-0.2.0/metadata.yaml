@@ -1,0 +1,10 @@
+author: Max
+description: ''
+name: octo-ui2
+repository: Unknown repository location
+short-name: octo-ui2
+tags: []
+tentacles:
+- octo_ui2@0.2.0
+type: tentacle_package
+version: unknown_version
