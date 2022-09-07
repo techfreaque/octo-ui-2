@@ -46,7 +46,6 @@ def get_plotted_data(trading_mode, symbol, time_frame, exchange_id, backtesting_
     except commons_errors.MissingExchangeDataError as e:
         _get_logger().exception(e, True, f"Error when opening database: {e}")
         raise
-
     timestamps_dict = {}
     plot_sources = {"main-chart": [], "sub-chart": []}
     user_inputs = None

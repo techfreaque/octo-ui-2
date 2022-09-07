@@ -25,3 +25,4 @@ yarn-error.log*
 
 *.pyc
 /source/backend/tentacles/Services/Interfaces/octo_ui2/static/
+/source/frontend/package-lock.json
