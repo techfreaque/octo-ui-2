@@ -27,7 +27,7 @@ def import_cross_origin_if_enabled():
         try:
             from flask_cors import cross_origin
             return cross_origin
-        except ImportError:
+        except (ImportError, ModuleNotFoundError):
             _get_logger().exception("install flask_cors to expose your api")
             return
 

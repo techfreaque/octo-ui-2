@@ -17,6 +17,7 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
         configuration.register_bot_config_routes(self)
         portfolio.register_portfolio_routes(self)
         app_store.register_appstore_routes(self)
+        commands.register_commands_routes(self)
 
     def get_tabs(self):
         return [
