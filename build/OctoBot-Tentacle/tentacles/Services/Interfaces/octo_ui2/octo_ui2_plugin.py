@@ -13,7 +13,6 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
     def register_routes(self):
         frontend.register_frontend_route(self)
         bot_info.register_bot_info_routes(self)
-        commands.register_commands_routes(self)
         plot_data.register_plot_data_routes(self)
         configuration.register_bot_config_routes(self)
         portfolio.register_portfolio_routes(self)

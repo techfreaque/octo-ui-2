@@ -14,6 +14,24 @@ def _get_logger():
     return bot_logging.get_logger("OctoUi2Plugin")
 
 
+CORS_ENABLED = True
+DEV_MODE_ENABLED = True
+
+
+def dev_mode_is_on():
+    return DEV_MODE_ENABLED
+
+
+def import_cross_origin_if_enabled():
+    if CORS_ENABLED:
+        try:
+            from flask_cors import cross_origin
+            return cross_origin
+        except ImportError:
+            _get_logger().exception("install flask_cors to expose your api")
+            return
+
+
 def get_portfolio_history():
     exchange_manager, exchange_name, exchange_id = models.get_first_exchange_data()
 
@@ -93,7 +111,7 @@ def get_plotted_data(trading_mode, symbol, time_frame, exchange_id, backtesting_
             timestamps_dict[adapted_timestamp] \
                 = {"x": adapted_timestamp, "data": {"Portfolio Value": {"y": float(portfolio_history[timestamp])}}}
     plot_sources["sub-chart"].append({"title": "Portfolio Value", "type": "scattergl",
-                                       "y_type": "log", "mode": "markers"})
+                                      "y_type": "log", "mode": "markers"})
 
     return {"plot_data": list(timestamps_dict.values()), "plot_sources": plot_sources,
             "user_inputs": elements.nested_elements['inputs'].to_json()}

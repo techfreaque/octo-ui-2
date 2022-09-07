@@ -1,17 +1,26 @@
-from flask_cors import cross_origin
-
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import octobot_commons.enums as commons_enums
 import octobot_commons.symbols.symbol_util as symbol_util
 import octobot_commons
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import import_cross_origin_if_enabled
 
 
 def register_bot_info_routes(plugin):
-    @plugin.blueprint.route("/bot-info")
-    @cross_origin(origins="*")
-    @login.login_required_when_activated
-    def bot_info():
+    route = "/bot-info"
+    if cross_origin := import_cross_origin_if_enabled():
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def bot_info():
+            return _bot_info()
+    else:
+        @plugin.blueprint.route(route)
+        @login.login_required_when_activated
+        def bot_info():
+            return _bot_info()
+
+    def _bot_info():
         is_starting = False
         config_candles_count = 0
         trading_mode = trading_mode_name = activated_strategy = exchange_name = exchange_id = None

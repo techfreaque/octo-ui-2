@@ -1,13 +1,23 @@
-from flask_cors import cross_origin
 import tentacles.Services.Interfaces.web_interface.login as login
 import octobot_services.interfaces.util as interfaces_util
 import tentacles.Services.Interfaces.web_interface.models as models
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import import_cross_origin_if_enabled
 
 
 def register_portfolio_routes(plugin):
-    @plugin.blueprint.route("/portfolio")
-    @cross_origin(origins="*")
-    @login.login_required_when_activated
+    route = "/portfolio"
+    if cross_origin := import_cross_origin_if_enabled():
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def _portfolio():
+            return portfolio()
+    else:
+        @plugin.blueprint.route(route)
+        @login.login_required_when_activated
+        def _portfolio():
+            return portfolio()
+
     def portfolio():
         has_real_trader, has_simulated_trader = interfaces_util.has_real_and_or_simulated_traders()
 

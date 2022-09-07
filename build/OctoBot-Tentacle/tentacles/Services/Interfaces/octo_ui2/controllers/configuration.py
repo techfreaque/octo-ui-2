@@ -1,18 +1,30 @@
-from flask_cors import cross_origin
+# from flask_cors import cross_origin
 import flask
 import octobot_commons.constants as commons_constants
+import octobot_commons.logging as commons_logging
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
 import octobot_backtesting.api as backtesting_api
 import octobot_services.interfaces.util as interfaces_util
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import import_cross_origin_if_enabled, dev_mode_is_on
 
 
 def register_bot_config_routes(plugin):
-    @plugin.blueprint.route("/bot-config")
-    @cross_origin(origins="*")
-    @login.login_required_when_activated
-    def bot_config():
+    route = "/bot-config"
+    if cross_origin := import_cross_origin_if_enabled():
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def bot_config():
+            return _bot_config()
+    else:
+        @plugin.blueprint.route(route)
+        @login.login_required_when_activated
+        def bot_config():
+            return _bot_config()
+
+    def _bot_config():
         if flask.request.method == "GET":
             display_config = interfaces_util.get_edited_config()
             current_profile = models.get_current_profile()

@@ -1,6 +1,4 @@
 import flask
-from flask_cors import cross_origin
-
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.octo_ui2.models as local_models
@@ -8,12 +6,24 @@ import tentacles.Services.Interfaces.web_interface.util as util
 import octobot_commons.logging as commons_logging
 import octobot_commons.symbols.symbol_util as symbol_util
 from octobot_trading.util import config_util as config_util
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import import_cross_origin_if_enabled
 
 
 def register_plot_data_routes(plugin):
-    @plugin.blueprint.route("/plotted_data", methods=["POST"])
-    @cross_origin(origins="*")
-    @login.login_required_when_activated
+    route = "/plotted_data"
+    methods = ['POST']
+    if cross_origin := import_cross_origin_if_enabled():
+        @plugin.blueprint.route(route, methods=methods)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def _plotted_data():
+            return plotted_data()
+    else:
+        @plugin.blueprint.route(route, methods=methods)
+        @login.login_required_when_activated
+        def _plotted_data():
+            return plotted_data()
+
     def plotted_data():
         try:
             request = flask.request.get_json()
