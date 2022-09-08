@@ -28,11 +28,11 @@ def register_plot_data_routes(plugin):
         try:
             request = flask.request.get_json()
             trading_mode = models.get_config_activated_trading_mode()
-            bot_recording_id = config_util.get_current_bot_recording_id()
+            live_id = config_util.get_current_bot_live_id()
             return util.get_rest_reply(local_models.get_plotted_data(
                 trading_mode=trading_mode, symbol=symbol_util.convert_symbol(request["symbol"], "|"),
                 time_frame=request["time_frame"], exchange_id=request["exchange_id"], backtesting_id=None,
-                bot_recording_id=bot_recording_id, optimizer_id=None, campaign_name=None), 200)
+                bot_recording_id=live_id, optimizer_id=None, campaign_name=None), 200)
         except Exception as e:
             commons_logging.get_logger("plotted_data").exception(e)
             return util.get_rest_reply(str(e), 500)
