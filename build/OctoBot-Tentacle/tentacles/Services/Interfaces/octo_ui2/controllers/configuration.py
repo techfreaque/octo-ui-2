@@ -29,7 +29,7 @@ def register_bot_config_routes(plugin):
             display_config = interfaces_util.get_edited_config()
             current_profile = models.get_current_profile()
             profiles = models.get_profiles()
-            active_tentacles = models.get_profiles_activated_tentacles({"current_profile": current_profile})
+            # active_tentacles = models.get_profiles_activated_tentacles({"current_profile": current_profile})
 
             requested_config_keys = flask.request.args['config_keys'].split(",")
             configs = {
@@ -223,8 +223,8 @@ def register_bot_config_routes(plugin):
             profiles = models.get_profiles()
             config_exchanges = display_config[commons_constants.CONFIG_EXCHANGES]
 
-            profiles_activated_tentacles = models.get_profiles_activated_tentacles(profiles),
-
+            # profiles_activated_tentacles = models.get_profiles_activated_tentacles(profiles),
+            #
             config_trading = display_config[commons_constants.CONFIG_TRADING],
             config_trader = display_config[commons_constants.CONFIG_TRADER],
             config_trader_simulator = display_config[commons_constants.CONFIG_SIMULATOR],

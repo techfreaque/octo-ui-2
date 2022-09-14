@@ -48,7 +48,7 @@ def get_plotted_data(trading_mode, symbol, time_frame, exchange_id, backtesting_
     database_manager = databases.RunDatabasesIdentifier(trading_mode,
                                                         optimization_campaign_name=campaign_name,
                                                         backtesting_id=backtesting_id,
-                                                        bot_recording_id=bot_recording_id,
+                                                        live_id=bot_recording_id,
                                                         optimizer_id=optimizer_id)
     try:
         exchange_name = trading_api.get_exchange_name(trading_api.get_exchange_manager_from_exchange_id(exchange_id))
@@ -104,7 +104,7 @@ def get_plotted_data(trading_mode, symbol, time_frame, exchange_id, backtesting_
 
     portfolio_history = get_portfolio_history()
     for timestamp in portfolio_history:
-        adapted_timestamp = timestamp * 1000
+        adapted_timestamp = float(timestamp * 1000)
         if adapted_timestamp in timestamps_dict:
             timestamps_dict[adapted_timestamp]["data"]["Portfolio Value"] = {"y": float(portfolio_history[timestamp])}
         else:
@@ -113,5 +113,5 @@ def get_plotted_data(trading_mode, symbol, time_frame, exchange_id, backtesting_
     plot_sources["sub-chart"].append({"title": "Portfolio Value", "type": "scattergl",
                                       "y_type": "log", "mode": "markers"})
 
-    return {"plot_data": list(timestamps_dict.values()), "plot_sources": plot_sources,
+    return {"plot_data": sorted(list(timestamps_dict.values()), key=lambda d: d['x']), "plot_sources": plot_sources,
             "user_inputs": elements.nested_elements['inputs'].to_json()}
