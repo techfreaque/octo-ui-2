@@ -1,6 +1,6 @@
-export const developmentBotDomain = "http://192.168.18.6:5003";
+export const developmentBotDomain = "http://192.168.18.5:5003";
 ;
-export const OctoBotVersion = "0.4.6";
+export const OctoBotVersion = "0.4.9";
 
 export const basePath = "/octo_ui2";
 
@@ -11,5 +11,6 @@ export const backendRoutes = {
   plottedData: basePath + "/plotted_data",
   botPortfolio: basePath + "/portfolio",
   appStore: basePath + "/app-store",
-  installApp: "/advanced/tentacle_packages"
+  installApp: "/advanced/tentacle_packages",
+  updateTentaclesConfig: "/config_tentacles"
 }

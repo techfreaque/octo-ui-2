@@ -29,7 +29,7 @@ export const defaultBotTemplate = [
                 id: 0,
                 title: "Strategy Settings",
                 content: [
-                  { component: "Configuration", id: 0, configKey: "profile" },
+                  { component: "TradingConfig", id: 0},
                 ],
               },
               {

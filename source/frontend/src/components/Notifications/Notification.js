@@ -1,6 +1,6 @@
 import { Store } from "react-notifications-component";
 
-export default function notification(title, type, message) {
+export default function notification(title, type="success", message) {
   Store.addNotification({
     title: title,
     message: message,

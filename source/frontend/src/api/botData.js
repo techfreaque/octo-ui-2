@@ -49,6 +49,7 @@ export async function fetchAppStoreData(_useSaveAppStoreData, botDomain) {
     _useSaveAppStoreData
   );
 }
+
 export async function installAppPackage(appUrl, appName, botDomain) {
   postRequest(
     botDomain + backendRoutes.installApp + "?update_type=add_package",
@@ -56,31 +57,15 @@ export async function installAppPackage(appUrl, appName, botDomain) {
       [appUrl]: "register_and_install",
     }
   ).then((response) => {
-    console.log("response");
-    console.log(response);
-
     notification("Successfully installed " + appName);
   });
 }
 
-// function updateStrategyDesignerConfig(configKey, value){
-//   return new Promise((resolve, reject) => {
-//       const _designerConfigSaveSuccess = (updated_data, update_url, dom_root_element, msg, status) => {
-//           resolve(updated_data);
-//       }
-//       const _designerConfigSaveFailure = (updated_data, update_url, dom_root_element, msg, status) => {
-//           create_alert("error", "Error when updating config", msg.responseText);
-//           reject(updated_data);
-//       }
-//       const newStrVal = JSON.stringify(value);
-//       const currentStrVal = JSON.stringify(_strategyDesignConfig[configKey])
-//       if (currentStrVal !== newStrVal) {
-//           // only store a deepcopy of the updated value
-//           _strategyDesignConfig[configKey] = JSON.parse(newStrVal);
-//           send_and_interpret_bot_update(_strategyDesignConfig, $("#strategy_body").data("designer-config-url"),
-//               null, _designerConfigSaveSuccess, _designerConfigSaveFailure);
-//       }else{
-//           resolve(_strategyDesignConfig[configKey]);
-//       }
-//   });
-// }
+export async function saveTentaclesConfig(newConfigs, botDomain) {
+  postRequest(
+    botDomain + backendRoutes.updateTentaclesConfig + "?action=update",
+    newConfigs
+  ).then((response) => {
+    notification(response);
+  });
+}

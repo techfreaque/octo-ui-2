@@ -1,4 +1,4 @@
-import React, { useState, useContext, createContext, useEffect } from "react";
+import React, { useState, useContext, createContext, useEffect, useCallback } from "react";
 import { fetchPlotData } from "../api/botData";
 import { useBotDomainContext } from "./BotDomainProvider";
 import { useBotInfoContext } from "./BotInfoProvider";
@@ -15,17 +15,23 @@ export const useUpdateBotPlottedElementsContext = () => {
   return useContext(UpdateBotPlottedElementsContext);
 };
 
-// export const useUpdateVisiblePlottedElements = () => {
-//   const updateBotPlottedElements = useUpdateBotPlottedElementsContext()
-//   const logic = useCallback((dataToStore) => {
-//     updateBotPlottedElements(prevData => {
-//       console.log(dataToStore)
-//       return {...prevData, plot_sources: dataToStore.formData}
-//     })
+export const useFetchPlotData = () => {
+  const updateBotPlottedElements = useUpdateBotPlottedElementsContext()
+  const botInfo = useBotInfoContext();
+  const botDomain = useBotDomainContext();
+  const visibleTimeframes = useVisibleTimeFramesContext();
+  const logic = useCallback(() => {
+    fetchPlotData(
+      updateBotPlottedElements,
+      botInfo.exchange_id,
+      botInfo.symbols[0],
+      visibleTimeframes,
+      botDomain
+    );
 
-//   }, [updateBotPlottedElements]);
-//   return logic;
-// };
+  }, [updateBotPlottedElements, botInfo, botDomain, visibleTimeframes]);
+  return logic;
+};
 
 export const BotPlottedElementsProvider = ({ children }) => {
   const [botPlottedElements, setBotPlottedElements] = useState({});
