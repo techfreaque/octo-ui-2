@@ -8,7 +8,6 @@
     "@fortawesome/free-regular-svg-icons": "^6.2.0",
     "@fortawesome/free-solid-svg-icons": "^6.2.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@json-editor/json-editor": "^2.9.0-beta.0",
     "@mui/icons-material": "^5.10.3",
     "@mui/lab": "^5.0.0-alpha.97",
     "@mui/material": "^5.10.3",
@@ -16,6 +15,7 @@
     "@rjsf/bootstrap-4": "github:techfreaque/-rjsf-bootstrap-4",
     "@rjsf/core": "^5.0.0-beta.2",
     "@table-library/react-table-library": "^4.0.18",
+    "@techfreaque/json-editor-react": "^1.1.1",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.4.3",
@@ -33,6 +33,7 @@
     "react-scripts": "^5.0.1",
     "react-split-pane": "github:techfreaque/react-split-pane",
     "react-stockcharts": "github:techfreaque/react-stock-charts-builds",
+    "spectre.css": "~0.5.9",
     "web-vitals": "^3.0.1"
   },
   "scripts": {

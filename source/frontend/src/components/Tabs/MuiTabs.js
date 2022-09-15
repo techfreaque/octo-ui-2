@@ -3,10 +3,12 @@ import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
 import {useBotColorsContext} from "../../context/BotColorsProvider";
 
-export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
+export default function MuiTabs({tabs, rightContent, defaultTabId}) {
     const botColors = useBotColorsContext();
     const [currentTabId, setCurrentTabId] = React.useState(defaultTabId ? defaultTabId : 0);
-    if (!tabs[currentTabId]) {return}
+    if (!tabs[currentTabId]) {
+        return
+    }
     const handleTabChange = (event, newCurrentTabId) => {
         setCurrentTabId(newCurrentTabId);
     };
@@ -36,8 +38,9 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                     tabs && tabs.map((tab) => (tab.title))
                 } </Tabs>
                 <div className="ms-auto d-flex">
-                    {rightContent && rightContent}
-                </div>
+                    {
+                    rightContent && rightContent
+                } </div>
             </Box>
             <div className="w-100"
                 style={
@@ -48,7 +51,17 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                     }
             }>
                 {
-                tabs[currentTabId].content
+                tabs.map((tab, index) => (
+                    <div style={
+                        {
+                            display: index !== currentTabId && "none"
+                        }
+                    }>
+                        {
+                        tab.content
+                    }</div>
+
+                ))
             } </div>
         </div>
     );
