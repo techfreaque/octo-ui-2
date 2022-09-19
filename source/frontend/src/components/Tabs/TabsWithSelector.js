@@ -43,7 +43,6 @@ export default function TabsWithSelector({ children, handleChange, items, curren
         </div>)
 }
 
-
 const ITEM_HEIGHT = 80;
 
 function SelectorMenu({ children }) {

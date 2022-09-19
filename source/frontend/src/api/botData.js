@@ -36,11 +36,42 @@ export async function fetchBotConfigs(
   );
 }
 
+export async function fetchRunData(
+  _useSaveBotConfig,
+  botDomain,
+  forceSelectLatestBacktesting,
+  campaigns,
+) {
+  const data = JSON.stringify({ forceSelectLatestBacktesting: forceSelectLatestBacktesting, campaigns: campaigns })
+  console.log(data)
+  await fetchAndStoreFromBot(
+    `${botDomain + backendRoutes.strategyDesignRunData}?${data}`,
+    _useSaveBotConfig
+  );
+}
+
 export async function fetchBotPortfolio(_useSaveBotPortfolio, botDomain) {
   await fetchAndStoreFromBot(
     botDomain + backendRoutes.botPortfolio,
     _useSaveBotPortfolio
   );
+}
+
+export async function fetchStrategyDesignConfig(botDomain, _useSaveStrategyDesignConfig) {
+  await fetchAndStoreFromBot(
+    botDomain + backendRoutes.strategyDesignConfig,
+    _useSaveStrategyDesignConfig
+  );
+}
+
+export async function saveStrategyDesignConfig(botDomain, _useSaveStrategyDesignConfig, newConfig) {
+  postRequest(
+    botDomain + backendRoutes.strategyDesignConfig,
+    newConfig
+  ).then((response) => {
+    _useSaveStrategyDesignConfig(newConfig)
+    notification(response);
+  });
 }
 
 export async function fetchAppStoreData(_useSaveAppStoreData, botDomain) {

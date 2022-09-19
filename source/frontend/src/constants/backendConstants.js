@@ -12,5 +12,7 @@ export const backendRoutes = {
   botPortfolio: basePath + "/portfolio",
   appStore: basePath + "/app-store",
   installApp: "/advanced/tentacle_packages",
-  updateTentaclesConfig: "/config_tentacles"
+  updateTentaclesConfig: "/config_tentacles",
+  strategyDesignRunData: "/strategy_design/run_data",
+  strategyDesignConfig: "/strategy_design/strategy_design_config"
 }
