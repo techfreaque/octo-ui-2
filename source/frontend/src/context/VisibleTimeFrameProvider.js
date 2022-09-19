@@ -12,7 +12,7 @@ export const useUpdateVisibleTimeFramesContext = () => {
 };
 
 export const VisibleTimeFramesProvider = ({ children }) => {
-  const [visibleTimeFrames, setVisibleTimeFrames] = useState([]);
+  const [visibleTimeFrames, setVisibleTimeFrames] = useState();
   return (
     <VisibleTimeFramesContext.Provider value={visibleTimeFrames}>
       <UpdateVisibleTimeFramesContext.Provider value={setVisibleTimeFrames}>

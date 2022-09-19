@@ -18,6 +18,7 @@ import ColorModeSwitch from "./AppWidgets/Buttons/ColorModeSwitcher";
 import AppStore from "./AppWidgets/AppStore/AppStore";
 import CurrentPortfolioTable from "./AppWidgets/Tables/CurrentPortfolio";
 import TradingConfig from "./AppWidgets/Configuration/TradingConfig";
+import PairsSelector from "./AppWidgets/PairsSelector/PairsSelector";
 // import your custom widgets here
 
 const KeysToComponentMap = {
@@ -40,6 +41,7 @@ const KeysToComponentMap = {
   CurrentPortfolioTable: CurrentPortfolioTable,
   AppStore: AppStore,
   TradingConfig: TradingConfig,
+  PairsSelector: PairsSelector,
 };
 
 export default function AppWidgets(props) {

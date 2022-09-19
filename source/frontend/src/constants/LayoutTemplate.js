@@ -12,7 +12,8 @@ export const defaultBotTemplate = [
             component: "Header",
             leftContent: [
               { component: "AppDrawerDropdown", id: 0 },
-              { component: "TimeFrameSelector", id: 1 },
+              { component: "PairsSelector", id: 1 },
+              { component: "TimeFrameSelector", id: 2 },
             ],
             rightContent: [{ component: "ColorModeSwitch", id: 0 }],
           },
@@ -95,7 +96,12 @@ export const defaultBotTemplate = [
           {
             id: 1,
             component: "Header",
-            leftContent: [{ component: "AppDrawerDropdown", id: 1 }],
+            leftContent: [
+              { component: "AppDrawerDropdown", id: 0 },
+              { component: "PairsSelector", id: 1 },
+              { component: "TimeFrameSelector", id: 2 },
+            ],
+
           },
         ],
 
@@ -181,7 +187,8 @@ export const defaultBotTemplate = [
             component: "Header",
             leftContent: [
               { component: "AppDrawerDropdown", id: 0 },
-              { component: "TimeFrameSelector", id: 1 },
+              { component: "PairsSelector", id: 1 },
+              { component: "TimeFrameSelector", id: 2 },
             ],
             rightContent: [{ component: "ColorModeSwitch", id: 0 }],
           },

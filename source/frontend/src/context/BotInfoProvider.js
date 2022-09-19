@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { fetchBotInfo } from "../api/botData";
 import { useBotDomainContext } from "./BotDomainProvider";
+import { useUpdateVisiblePairsContext } from "./VisiblePairProvider";
 import { useUpdateVisibleTimeFramesContext } from "./VisibleTimeFrameProvider";
 
 const BotInfoContext = createContext();
@@ -33,14 +34,16 @@ export const BotInfoProvider = ({ children }) => {
   const [botInfo, setBotInfo] = useState();
   const botDomain = useBotDomainContext();
   const setVisibleTimeframes = useUpdateVisibleTimeFramesContext();
+  const setVisiblePairs = useUpdateVisiblePairsContext();
   useEffect(() => {
     fetchBotInfo(botDomain, setBotInfo);
   }, [botDomain]);
   useEffect(() => {
     if (botInfo && botInfo.traded_time_frames) {
       setVisibleTimeframes(botInfo.traded_time_frames[0]);
+      setVisiblePairs(botInfo.symbols[0]);
     }
-  }, [botInfo, setVisibleTimeframes]);
+  }, [botInfo, setVisibleTimeframes, setVisiblePairs]);
 
   return (
     <BotInfoContext.Provider value={botInfo}>

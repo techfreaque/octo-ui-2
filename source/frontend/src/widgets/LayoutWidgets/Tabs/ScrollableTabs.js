@@ -40,7 +40,8 @@ export default function ResizableTabs(props) {
         }
     })
     return (
-        <MuiTabs tabs={tabsData}
+        <MuiTabs
+            tabs={tabsData}
             rightContent={
                 (
                     <AppWidgets {...props}

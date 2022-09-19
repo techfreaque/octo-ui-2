@@ -13,7 +13,7 @@ export default function SplitMainContent(props) {
   }
   function checkAndUpdatePanelSize() {
     setPanelSize((prevSize) => {
-      return prevSize ? prevSize < maxSize : maxSize;
+      return prevSize < maxSize ? prevSize : maxSize;
     });
   }
   window.addEventListener("resize", checkAndUpdatePanelSize);

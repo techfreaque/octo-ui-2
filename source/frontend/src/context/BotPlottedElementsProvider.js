@@ -3,6 +3,7 @@ import { fetchPlotData } from "../api/botData";
 import { useBotDomainContext } from "./BotDomainProvider";
 import { useBotInfoContext } from "./BotInfoProvider";
 import { useVisibleTimeFramesContext } from "./VisibleTimeFrameProvider";
+import { useVisiblePairsContext } from "./VisiblePairProvider";
 
 const BotPlottedElementsContext = createContext();
 const UpdateBotPlottedElementsContext = createContext();
@@ -19,17 +20,18 @@ export const useFetchPlotData = () => {
   const updateBotPlottedElements = useUpdateBotPlottedElementsContext()
   const botInfo = useBotInfoContext();
   const botDomain = useBotDomainContext();
+  const visiblePairs = useVisiblePairsContext();
   const visibleTimeframes = useVisibleTimeFramesContext();
   const logic = useCallback(() => {
     fetchPlotData(
       updateBotPlottedElements,
       botInfo.exchange_id,
-      botInfo.symbols[0],
+      visiblePairs,
       visibleTimeframes,
       botDomain
     );
 
-  }, [updateBotPlottedElements, botInfo, botDomain, visibleTimeframes]);
+  }, [updateBotPlottedElements, botInfo, botDomain, visibleTimeframes, visiblePairs]);
   return logic;
 };
 
@@ -37,18 +39,19 @@ export const BotPlottedElementsProvider = ({ children }) => {
   const [botPlottedElements, setBotPlottedElements] = useState({});
   const botInfo = useBotInfoContext();
   const botDomain = useBotDomainContext();
+  const visiblePairs = useVisiblePairsContext();
   const visibleTimeframes = useVisibleTimeFramesContext();
   useEffect(() => {
-    if (botInfo && visibleTimeframes) {
+    if (botInfo && visibleTimeframes && visiblePairs) {
       fetchPlotData(
         setBotPlottedElements,
         botInfo.exchange_id,
-        botInfo.symbols[0],
+        visiblePairs,
         visibleTimeframes,
         botDomain
       );
     }
-  }, [botInfo, botDomain, visibleTimeframes]);
+  }, [botInfo, botDomain, visibleTimeframes, visiblePairs]);
   return (
     <BotPlottedElementsContext.Provider value={botPlottedElements}>
       <UpdateBotPlottedElementsContext.Provider value={setBotPlottedElements}>

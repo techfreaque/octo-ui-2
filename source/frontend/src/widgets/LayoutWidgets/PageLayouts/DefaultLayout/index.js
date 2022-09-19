@@ -13,16 +13,18 @@ export default function DefaultLayout(props) {
   const footerRef = useRef(null);
 
   function handleWindowResize() {
-    setDimensions({
-      windowHeight: window.innerHeight,
-      windowWidth: window.innerWidth,
-      header: headerRef.current.clientHeight,
-      footer: footerRef.current.clientHeight,
-      main:
-        window.innerHeight -
-        headerRef.current.clientHeight -
-        footerRef.current.clientHeight,
-    });
+    headerRef.current
+      && footerRef.current
+      && setDimensions({
+        windowHeight: window.innerHeight,
+        windowWidth: window.innerWidth,
+        header: headerRef.current.clientHeight,
+        footer: footerRef.current.clientHeight,
+        main:
+          window.innerHeight -
+          headerRef.current.clientHeight -
+          footerRef.current.clientHeight,
+      });
   }
   React.useEffect(() => {
     handleWindowResize();
