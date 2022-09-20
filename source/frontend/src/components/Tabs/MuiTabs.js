@@ -15,7 +15,7 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
     const height = tabs[currentTabId].dontScroll ? "calc(100% - 54px)" : "calc(100% - 54px)";
     return (
         <div style={
-            {height: "calc(100%)"}
+            { height: "calc(100%)" }
         }>
             <Box sx={
                 {
@@ -56,7 +56,7 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                         <div
                             style={
                                 {
-
+                                    height: "100%",
                                 }
                             }>
                             {

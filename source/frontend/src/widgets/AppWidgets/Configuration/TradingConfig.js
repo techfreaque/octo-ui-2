@@ -57,7 +57,6 @@ function RenderTradingConfig() {
     const _useFetchPlotData = useFetchPlotData();
     const jsonEditorsData = useGetJsonEditorsData();
     function useSaveEditors() {
-        console.log(jsonEditorsData)
         saveTentaclesConfig(jsonEditorsData, botDomain)
         _useFetchPlotData()
     };

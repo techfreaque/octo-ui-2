@@ -3,12 +3,7 @@ import {
   FormControlLabel,
   Switch,
 } from "@mui/material";
-import { useState } from "react";
-import IconButton from "@mui/material/IconButton";
-import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import {
   useUpdateVisibleTimeFramesContext,
   useVisibleTimeFramesContext,

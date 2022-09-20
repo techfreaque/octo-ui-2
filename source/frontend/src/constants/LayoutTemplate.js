@@ -37,7 +37,8 @@ export const defaultBotTemplate = [
                 component: "Tab",
                 id: 1,
                 title: "Backtesting",
-                content: [{ component: "RestartBotButton", id: 0 }],
+                content: [{ component: "RunDataTable", id: 0 }],
+                dontScroll: true,
               },
               {
                 component: "Tab",

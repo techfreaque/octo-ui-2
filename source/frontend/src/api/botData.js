@@ -43,7 +43,6 @@ export async function fetchRunData(
   campaigns,
 ) {
   const data = JSON.stringify({ forceSelectLatestBacktesting: forceSelectLatestBacktesting, campaigns: campaigns })
-  console.log(data)
   await fetchAndStoreFromBot(
     `${botDomain + backendRoutes.strategyDesignRunData}?${data}`,
     _useSaveBotConfig
@@ -93,6 +92,9 @@ export async function installAppPackage(appUrl, appName, botDomain) {
 }
 
 export async function saveTentaclesConfig(newConfigs, botDomain) {
+  JSON.parse(
+    JSON.stringify(newConfigs).replace(/ /g, "_")
+  )
   postRequest(
     botDomain + backendRoutes.updateTentaclesConfig + "?action=update",
     newConfigs

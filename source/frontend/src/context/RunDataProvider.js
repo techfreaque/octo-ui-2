@@ -30,7 +30,7 @@ export const useFetchRunData = () => {
 };
 
 export const RunDataProvider = ({ children }) => {
-  const [runData, setRunData] = useState();
+  const [runData, setRunData] = useState({});
   const botDomain = useBotDomainContext();
   const uiConfig = useUiConfigContext()
   const setUiConfig = useUpdateUiConfigContext()
@@ -40,7 +40,6 @@ export const RunDataProvider = ({ children }) => {
       && fetchRunData(setRunData, botDomain, false, { ...uiConfig.optimizer_campaigns_to_load })
     
   }, [botDomain, uiConfig.optimizer_campaigns_to_load]);
-  console.log(runData);
   return (
     <RunDataContext.Provider value={runData}>
       <UpdateRunDataContext.Provider value={setRunData}>
