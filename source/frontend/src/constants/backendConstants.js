@@ -16,3 +16,16 @@ export const backendRoutes = {
   strategyDesignRunData: "/strategy_design/run_data",
   strategyDesignConfig: "/strategy_design/strategy_design_config"
 }
+
+export let hiddenBacktestingMetadataColumns = []; // should be null
+export const displayedRunIds = [];
+export const ID_SEPARATOR = "_";
+export const TENTACLE_SEPARATOR = "###";
+export const MAX_SEARCH_LABEL_SIZE = 32;
+export const TIMESTAMP_DATA = ["timestamp", "start time", "end time"];
+export const ID_DATA = ["id", "backtesting id", "optimizer id"];
+export const METADATA_HIDDEN_FIELDS = ["backtesting files", "user inputs"]
+export const METADATA_UNDISPLAYED_FIELDS = ["children"]
+export const CUSTOM_USER_INPUT_PATH_SEPARATOR = "/"
+
+export const hidden_class = "d-none"

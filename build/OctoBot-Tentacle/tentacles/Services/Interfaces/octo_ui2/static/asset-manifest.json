@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/octo_ui2/static/static/css/main.3706b362.css",
-    "main.js": "/octo_ui2/static/static/js/main.868f2367.js",
-    "static/js/496.83276ce1.chunk.js": "/octo_ui2/static/static/js/496.83276ce1.chunk.js",
+    "main.css": "/octo_ui2/static/static/css/main.70481b2d.css",
+    "main.js": "/octo_ui2/static/static/js/main.7bb76737.js",
+    "static/js/496.31b6df2f.chunk.js": "/octo_ui2/static/static/js/496.31b6df2f.chunk.js",
     "index.html": "/octo_ui2/static/index.html",
-    "main.3706b362.css.map": "/octo_ui2/static/static/css/main.3706b362.css.map",
-    "main.868f2367.js.map": "/octo_ui2/static/static/js/main.868f2367.js.map",
-    "496.83276ce1.chunk.js.map": "/octo_ui2/static/static/js/496.83276ce1.chunk.js.map"
+    "main.70481b2d.css.map": "/octo_ui2/static/static/css/main.70481b2d.css.map",
+    "main.7bb76737.js.map": "/octo_ui2/static/static/js/main.7bb76737.js.map",
+    "496.31b6df2f.chunk.js.map": "/octo_ui2/static/static/js/496.31b6df2f.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.3706b362.css",
-    "static/js/main.868f2367.js"
+    "static/css/main.70481b2d.css",
+    "static/js/main.7bb76737.js"
   ]
 }

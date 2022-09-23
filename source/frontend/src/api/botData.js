@@ -1,6 +1,6 @@
 import { backendRoutes } from "../constants/backendConstants";
 import fetchAndStoreFromBot, { postRequest } from "./fetchAndStoreFromBot";
-import notification from "../components/Notifications/Notification";
+import createNotification from "../components/Notifications/Notification";
 
 export async function fetchBotInfo(botDomain, setBotInfo) {
   await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo, setBotInfo);
@@ -36,16 +36,18 @@ export async function fetchBotConfigs(
   );
 }
 
-export async function fetchRunData(
-  _useSaveBotConfig,
+export async function fetchBacktestingRunData(
+  useSaveBotConfig,
+  setUiConfig,
   botDomain,
   forceSelectLatestBacktesting,
   campaigns,
 ) {
   const data = JSON.stringify({ forceSelectLatestBacktesting: forceSelectLatestBacktesting, campaigns: campaigns })
+  // todo save campaigns
   await fetchAndStoreFromBot(
     `${botDomain + backendRoutes.strategyDesignRunData}?${data}`,
-    _useSaveBotConfig
+    useSaveBotConfig
   );
 }
 
@@ -69,7 +71,7 @@ export async function saveStrategyDesignConfig(botDomain, _useSaveStrategyDesign
     newConfig
   ).then((response) => {
     _useSaveStrategyDesignConfig(newConfig)
-    notification(response);
+    createNotification(response);
   });
 }
 
@@ -87,7 +89,7 @@ export async function installAppPackage(appUrl, appName, botDomain) {
       [appUrl]: "register_and_install",
     }
   ).then((response) => {
-    notification("Successfully installed " + appName);
+    createNotification("Successfully installed " + appName);
   });
 }
 
@@ -99,6 +101,6 @@ export async function saveTentaclesConfig(newConfigs, botDomain) {
     botDomain + backendRoutes.updateTentaclesConfig + "?action=update",
     newConfigs
   ).then((response) => {
-    notification(response);
+    createNotification(response);
   });
 }

@@ -23,28 +23,49 @@ export const defaultBotTemplate = [
         lowerContent: [
           {
             component: "ScrollableTabs",
-            id: 1,
+            id: 0,
             tabs: [
               {
                 component: "Tab",
                 id: 0,
                 title: "Strategy Settings",
                 content: [
-                  { component: "TradingConfig", id: 0},
+                  { component: "TradingConfig", id: 0 },
                 ],
               },
               {
                 component: "Tab",
                 id: 1,
                 title: "Backtesting",
-                content: [{ component: "RunDataTable", id: 0 }],
+                content: [{
+                  component: "ScrollableTabs",
+                  id: 1,
+                  tabs: [
+                    {
+                      component: "Tab",
+                      id: 0,
+                      title: "Backtesting Settings",
+                      content: [
+                        { component: "TimeFrameSelector", id: 0 },
+                      ],
+                    },
+                    {
+                      component: "Tab",
+                      id: 1,
+                      title: "Backtesting Overview",
+                      content: [
+                        { component: "BacktestingRunDataTable", id: 0 },
+                      ],
+                    },
+                  ]
+                }],
                 dontScroll: true,
               },
               {
                 component: "Tab",
                 id: 2,
                 title: "Trading",
-                content: [{ component: "RestartBotButton", id: 1 }],
+                content: [{ component: "TimeFrameSelector", id: 1 }],
               },
               {
                 component: "Tab",

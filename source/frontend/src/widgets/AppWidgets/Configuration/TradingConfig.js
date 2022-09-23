@@ -69,5 +69,6 @@ function RenderTradingConfig() {
                 )
             }
             defaultTabId={0} />
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [botPlottedElements.user_inputs])
 }

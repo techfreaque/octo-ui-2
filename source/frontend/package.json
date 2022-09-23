@@ -22,6 +22,7 @@
     "bootstrap": "^5.2.0",
     "d3-format": "^3.1.0",
     "d3-time-format": "^4.1.0",
+    "jquery": "^3.6.1",
     "mui-datatables": "^4.2.2",
     "react": "^18.2.0",
     "react-bootstrap": "^2.5.0",
@@ -35,6 +36,7 @@
     "react-split-pane": "github:techfreaque/react-split-pane",
     "react-stockcharts": "github:techfreaque/react-stock-charts-builds",
     "spectre.css": "~0.5.9",
+    "w2ui": "github:vitmalina/w2ui",
     "web-vitals": "^3.0.1"
   },
   "scripts": {

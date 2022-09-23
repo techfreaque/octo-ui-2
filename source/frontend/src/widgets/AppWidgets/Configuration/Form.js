@@ -4,7 +4,7 @@ import {
   useBotConfig,
   useSaveFormBotConfig,
 } from "../../../context/BotConfigProvider";
-import notification from "../../../components/Notifications/Notification";
+import createNotification from "../../../components/Notifications/Notification";
 
 export default function Configuration(props) {
   const botConfigs = useBotConfig([props.configKey]);
@@ -12,14 +12,14 @@ export default function Configuration(props) {
   function handleSaveForm(dataToStore) {
     console.log("fsdjkfjsd");
     _saveBotConfigs(props.configKey, dataToStore);
-    notification(
+    createNotification(
       botConfigs[props.configKey].schema.title +
         " saved successfully (saving isnt supported yet)",
       "success"
     );
   }
   function handleFormSaveError() {
-    notification(
+    createNotification(
       "error saving " + botConfigs[props.configKey].schema.title,
       "danger"
     );
