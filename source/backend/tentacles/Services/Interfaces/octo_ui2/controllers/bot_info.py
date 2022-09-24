@@ -1,5 +1,6 @@
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
+import octobot_services.interfaces as services_interfaces
 import octobot_commons.enums as commons_enums
 import octobot_commons.symbols.symbol_util as symbol_util
 import octobot_commons
@@ -59,4 +60,5 @@ def register_bot_info_routes(plugin):
             # "activated_strategy": activated_strategy,
             # "config_candles_count": config_candles_count,
             "data_files": models.get_data_files_with_description(),
+            "octobot_version": services_interfaces.AbstractInterface.project_version
         }

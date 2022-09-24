@@ -1,18 +1,18 @@
 import React from "react";
 import AppWidgets from "../../AppWidgets";
-import {Tab} from "@mui/material";
+import { Tab } from "@mui/material";
 import MuiTabs from "../../../components/Tabs/MuiTabs";
 
 export default function ResizableTabs(props) {
-    const {tabs, rightContent, defaultTabId} = props;
+    const { tabs, rightContent, defaultTabId } = props;
 
     const tabsData = []
     tabs.forEach((tab, index) => {
         if (tab.component === "Tab") {
             tabsData[index] = {
                 title: <Tab key={
-                        tab.id
-                    }
+                    tab.id
+                }
                     label={
                         tab.title
                     }
@@ -20,21 +20,22 @@ export default function ResizableTabs(props) {
                         tab.id
                     }
                     sx={
-                        {textTransform: 'none'}
-                    }/>,
-                content: <AppWidgets {...props}
-                    layout={
-                        tab.content
-                    }/>,
+                        { textTransform: 'none' }
+                    } />,
+                content: tab.content && tab.content[0]
+                    && <AppWidgets {...props}
+                        layout={
+                            tab.content
+                        } />,
                 dontScroll: tab.dontScroll
             }
         } else {
             tabsData[index] = {
                 title: <AppWidgets key={
-                        tab[0].id + 20
-                    }
+                    tab[0].id + 20
+                }
                     {...props}
-                    layout={tab}/>,
+                    layout={tab} />,
                 content: undefined
             }
         }
@@ -43,11 +44,11 @@ export default function ResizableTabs(props) {
         <MuiTabs
             tabs={tabsData}
             rightContent={
-                (
+                rightContent && rightContent[0] && (
                     <AppWidgets {...props}
-                        layout={rightContent}/>
+                        layout={rightContent} />
                 )
             }
-            defaultTabId={defaultTabId}/>
+            defaultTabId={defaultTabId} />
     )
 }

@@ -57,7 +57,11 @@ export const defaultBotTemplate = [
                         { component: "BacktestingRunDataTable", id: 0 },
                       ],
                     },
-                  ]
+                    [
+                      { component: "StartBacktestingButton", id: 2 },
+                      { component: "StopBacktestingButton", id: 3 },
+                    ]
+                  ],
                 }],
                 dontScroll: true,
               },
@@ -75,7 +79,7 @@ export const defaultBotTemplate = [
                       title: "Trading Settings",
                       content: [
                         {
-                          // component: "UIConfig", id: 0, configKeys: ["current-live-id"]
+                          component: "RestartBotButton", id: 0, 
                         },
                       ],
                     },
@@ -85,7 +89,7 @@ export const defaultBotTemplate = [
                       title: "Trading Overview",
                       content: [
                         {
-                          // component: "BacktestingRunDataTable", id: 0
+                          component: "RestartBotButton", id: 0
                         },
                       ],
                     },
@@ -108,11 +112,14 @@ export const defaultBotTemplate = [
                         id: 0,
                         title: "Optimizer Settings",
                         content: [
-                          { component: "UIConfig", id: 0, configKeys: ["optimization_campaign", "optimizer_run_settings"] },
+                          {
+                            component: "UIConfig", id: 0, configKeys: [
+                              // "optimization_campaign",
+                              "optimizer_run_settings"]
+                          },
                         ],
                       },
                     ],
-                    rightContent: [],
                   },
                 ],
               },

@@ -12,10 +12,11 @@ import {
   faBitcoin,
   faEthereum,
 } from "@fortawesome/free-brands-svg-icons";
-import { OctoBotVersion } from "../../../constants/backendConstants";
+import { useBotInfoContext } from "../../../context/BotInfoProvider";
 
 export default function Footer() {
   const botColors = useBotColorsContext();
+  const botInfo = useBotInfoContext()
   return (
     <div style={{ borderTop: "solid 2px " + botColors.border }}>
       <Navbar>
@@ -64,7 +65,7 @@ export default function Footer() {
               <FontAwesomeIcon className="me-1" icon={faBitcoin} />
               <FontAwesomeIcon className="me-1" icon={faEthereum} />
             </a>
-            <span>OctoBot {OctoBotVersion}</span>
+            <span>OctoBot {botInfo && botInfo.octobot_version}</span>
           </div>
         </Container>
       </Navbar>

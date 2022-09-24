@@ -1,9 +1,9 @@
 import $ from "jquery";
 import createNotification from "../components/Notifications/Notification";
-import { useIsBotOnlineContext } from "../context/IsBotOnlineProvider";
+// import { useIsBotOnlineContext } from "../context/IsBotOnlineProvider";
 
-export function useSendAndInterpretBotUpdate(updated_data, update_url, success_callback, error_callback, method = "POST") {
-  const gnericRequestFailureCallback = useGenericRequestFailureCallback()
+export function sendAndInterpretBotUpdate(updated_data, update_url, success_callback, error_callback, method = "POST") {
+  // const gnericRequestFailureCallback = useGenericRequestFailureCallback()
   $.ajax({
     url: update_url,
     type: method,
@@ -11,16 +11,16 @@ export function useSendAndInterpretBotUpdate(updated_data, update_url, success_c
     contentType: 'application/json',
     data: JSON.stringify(updated_data),
     success: function (msg, status) {
-      if (typeof error_callback === "undefined") {
+      if (typeof success_callback === "undefined") {
         generic_request_success_callback(updated_data, update_url, msg, status)
       } else {
-        success_callback(updated_data, update_url, msg, status)
+        success_callback(updated_data, update_url, undefined, msg, status)
       }
     },
     error: function (result, status, error) {
       window.console && console.error(result, status, error);
       if (typeof error_callback === "undefined") {
-        gnericRequestFailureCallback(updated_data, update_url, result, status, error);
+        genericRequestFailureCallback(updated_data, update_url, result, status, error);
       }
       else {
         error_callback(updated_data, update_url, result, status, error);
@@ -29,7 +29,7 @@ export function useSendAndInterpretBotUpdate(updated_data, update_url, success_c
   })
 }
 
-export function generic_request_success_callback(updated_data, update_url, dom_root_element, msg, status) {
+function generic_request_success_callback(updated_data, update_url, result, msg, status) {
   if(msg.hasOwnProperty("title")){
       createNotification(msg["title"], "success", msg["details"]);
   } else {
@@ -37,13 +37,13 @@ export function generic_request_success_callback(updated_data, update_url, dom_r
   }
 }
 
-function useGenericRequestFailureCallback(updated_data, update_url, dom_root_element, msg, status) {
-  const isBotConnected = useIsBotOnlineContext()
-  if(isBotConnected()){
-      createNotification("Can't connect to OctoBot", "danger", "Your OctoBot might be offline.");
-  }else{
+function genericRequestFailureCallback(updated_data, update_url, result, msg, status) {
+  // const isBotConnected = useIsBotOnlineContext()
+  // if(isBotConnected()){
+  //     createNotification("Can't connect to OctoBot", "danger", "Your OctoBot might be offline.");
+  // }else{
       createNotification(msg.responseText, "danger");
-  }
+  // }
 }
 
 export default async function fetchAndStoreFromBot(

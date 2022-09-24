@@ -21,6 +21,8 @@ import TradingConfig from "./AppWidgets/Configuration/TradingConfig";
 import PairsSelector from "./AppWidgets/PairsSelector/PairsSelector";
 import { BacktestingRunDataTable } from "./AppWidgets/Tables/RunDataTableW2UI";
 import UIConfig from "./AppWidgets/Configuration/UIConfig";
+import StartBacktestingButton from "./AppWidgets/Buttons/StartBacktestingButton";
+import StopBacktestingButton from "./AppWidgets/Buttons/StopBacktestingButton";
 // import your custom widgets here
 
 const KeysToComponentMap = {
@@ -34,6 +36,8 @@ const KeysToComponentMap = {
   Footer: Footer,
   SplitMainContent: SplitMainContent,
   RestartBotButton: RestartBotButton,
+  StartBacktestingButton: StartBacktestingButton,
+  StopBacktestingButton: StopBacktestingButton,
   CurrentPanelFullscreen: CurrentPanelFullscreen,
   CurrentPanelMinimize: CurrentPanelMinimize,
   Configuration: Configuration,
@@ -61,14 +65,12 @@ export default function AppWidgets(props) {
             currentPanel: props.currentPanel,
             ...element,
           }
-          // element.children &&
-          // (typeof element.children === "string"
-          //     ? element.children
-          //     : AppWidgets(element.children))
         );
       } else {
-        console.log("error loading widget: " + element.component);
+        console.log("error loading widget: ", element.component);
         console.log(element);
+        console.log(props);
+
         return <></>;
       }
     });

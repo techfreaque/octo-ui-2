@@ -3,6 +3,7 @@ import JsonEditor from "@techfreaque/json-editor-react";
 import { useSaveUiConfig, useUiConfigContext } from "../../../context/UiConfigProvider";
 import { uiConfigSchema } from "./uiConfigSchema";
 import { useCallback } from "react";
+import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 
 export default function UIConfig({ configKeys }) {
     const uiConfig = useUiConfigContext();
@@ -11,17 +12,12 @@ export default function UIConfig({ configKeys }) {
     const editors = configKeys.map(configKey => {
         const startVal = convertTimestamps(uiConfig[configKey])
         return <JsonEditor
+            {...defaultJsonEditorSettings()}
             schema={uiConfigSchema.properties[configKey]}
             startval={startVal}
             editorName={"uiConf-" + configKey}
-            onChange={()=>saveEditors(configKeys)}
-            theme={"bootstrap4"}
-            iconlib={"spectre"}
-            no_additional_properties={false}
-            object_layout={"grid"}
+            onChange={() => saveEditors(configKeys)}
             disable_edit_json={true}
-            disable_properties={true}
-            required_by_default={true}
             key={configKey}
         />
     })

@@ -1,8 +1,9 @@
 import { backendRoutes } from "../constants/backendConstants";
-import fetchAndStoreFromBot, { postRequest } from "./fetchAndStoreFromBot";
+import fetchAndStoreFromBot, { postRequest, sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
 import createNotification from "../components/Notifications/Notification";
 import { useFetchPlotData } from "../context/BotPlottedElementsProvider";
 import { useCallback } from "react";
+import { useBotDomainContext } from "../context/BotDomainProvider";
 
 export async function fetchBotInfo(botDomain, setBotInfo) {
   await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo, setBotInfo);
@@ -53,43 +54,54 @@ export async function fetchBacktestingRunData(
   );
 }
 
+export async function startBacktesting(botDomain, backtestingSettings, exchageId, setBotIsBacktesting) {
+  const success = (updated_data, update_url, result, msg, status) => {
+    setBotIsBacktesting(true)
+    createNotification(msg, "success")
+  }
+  const failure = (updated_data, update_url, result, status, error) => {
+    createNotification(result.responseText, "danger")
+    // todo check if running
+    setBotIsBacktesting(true)
+  }
+  sendAndInterpretBotUpdate(
+    { ...backtestingSettings, exchange_id: exchageId },
+    botDomain + backendRoutes.backtestingStart,
+    success, failure
+  )
+}
+
+export async function stopBacktesting(botDomain, setBotIsBacktesting) {
+  const success = (updated_data, update_url, result, msg, status) => {
+    setBotIsBacktesting(false)
+    createNotification(msg);
+  }
+  sendAndInterpretBotUpdate({}, botDomain + backendRoutes.backtestingStop, success)
+}
 export async function fetchBotPortfolio(_useSaveBotPortfolio, botDomain) {
-  await fetchAndStoreFromBot(
-    botDomain + backendRoutes.botPortfolio,
-    _useSaveBotPortfolio
-  );
+  await fetchAndStoreFromBot(botDomain + backendRoutes.botPortfolio, _useSaveBotPortfolio);
 }
 
 export async function fetchStrategyDesignConfig(botDomain, _useSaveStrategyDesignConfig) {
-  await fetchAndStoreFromBot(
-    botDomain + backendRoutes.strategyDesignConfig,
-    _useSaveStrategyDesignConfig
-  );
+  await fetchAndStoreFromBot(botDomain + backendRoutes.strategyDesignConfig, _useSaveStrategyDesignConfig);
 }
 
 export async function saveStrategyDesignConfig(botDomain, _useSaveStrategyDesignConfig, newConfig) {
-  postRequest(
-    botDomain + backendRoutes.strategyDesignConfig,
-    newConfig
-  ).then((response) => {
-    _useSaveStrategyDesignConfig(newConfig)
-    createNotification(response);
-  });
+  postRequest(botDomain + backendRoutes.strategyDesignConfig, newConfig)
+    .then((response) => {
+      _useSaveStrategyDesignConfig(newConfig)
+      createNotification(response);
+    });
 }
 
 export async function fetchAppStoreData(_useSaveAppStoreData, botDomain) {
-  await fetchAndStoreFromBot(
-    botDomain + backendRoutes.appStore,
-    _useSaveAppStoreData
-  );
+  await fetchAndStoreFromBot(botDomain + backendRoutes.appStore, _useSaveAppStoreData);
 }
 
 export async function installAppPackage(appUrl, appName, botDomain) {
   postRequest(
     botDomain + backendRoutes.installApp + "?update_type=add_package",
-    {
-      [appUrl]: "register_and_install",
-    }
+    {[appUrl]: "register_and_install"}
   ).then((response) => {
     createNotification("Successfully installed " + appName);
   });
@@ -97,8 +109,8 @@ export async function installAppPackage(appUrl, appName, botDomain) {
 
 export const useSaveTentaclesConfig = () => {
   const _fetchPlotData = useFetchPlotData();
-
-  const logic = useCallback((newConfigs, botDomain) => {
+  const botDomain = useBotDomainContext()
+  const logic = useCallback((newConfigs,) => {
     JSON.parse(
       JSON.stringify(newConfigs).replace(/ /g, "_")
     )
@@ -106,10 +118,10 @@ export const useSaveTentaclesConfig = () => {
       botDomain + backendRoutes.updateTentaclesConfig + "?action=update&reload=true",
       newConfigs
     ).then((response) => {
-      _fetchPlotData()  
+      _fetchPlotData()
       createNotification(response);
     });
-  }, [_fetchPlotData]);
+  }, [_fetchPlotData, botDomain]);
   return logic;
 };
 

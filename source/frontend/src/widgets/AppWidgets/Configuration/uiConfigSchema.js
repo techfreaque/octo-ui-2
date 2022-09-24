@@ -1,3 +1,5 @@
+import { CURRENT_BOT_DATA } from "../../../constants/backendConstants";
+
 export const uiConfigSchema = {
     type: "object",
     title: "UI Config",
@@ -76,7 +78,7 @@ export const uiConfigSchema = {
                     type: "string",
                     title: "Backtest on",
                     enum: [
-                        "use_current_profile",
+                        CURRENT_BOT_DATA,
 
                     ],
                     options: {
@@ -168,7 +170,7 @@ export const uiConfigSchema = {
                     type: "string",
                     title: "Backtest on",
                     enum: [
-                        "use_current_profile",
+                        CURRENT_BOT_DATA,
                     ],
                     options: {
                         enum_titles: ["Currently traded asset(s)",]
