@@ -20,6 +20,7 @@ import CurrentPortfolioTable from "./AppWidgets/Tables/CurrentPortfolio";
 import TradingConfig from "./AppWidgets/Configuration/TradingConfig";
 import PairsSelector from "./AppWidgets/PairsSelector/PairsSelector";
 import { BacktestingRunDataTable } from "./AppWidgets/Tables/RunDataTableW2UI";
+import UIConfig from "./AppWidgets/Configuration/UIConfig";
 // import your custom widgets here
 
 const KeysToComponentMap = {
@@ -44,6 +45,7 @@ const KeysToComponentMap = {
   TradingConfig: TradingConfig,
   PairsSelector: PairsSelector,
   BacktestingRunDataTable: BacktestingRunDataTable,
+  UIConfig: UIConfig
 };
 
 export default function AppWidgets(props) {

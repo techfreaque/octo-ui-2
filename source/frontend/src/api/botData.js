@@ -1,6 +1,8 @@
 import { backendRoutes } from "../constants/backendConstants";
 import fetchAndStoreFromBot, { postRequest } from "./fetchAndStoreFromBot";
 import createNotification from "../components/Notifications/Notification";
+import { useFetchPlotData } from "../context/BotPlottedElementsProvider";
+import { useCallback } from "react";
 
 export async function fetchBotInfo(botDomain, setBotInfo) {
   await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo, setBotInfo);
@@ -93,14 +95,21 @@ export async function installAppPackage(appUrl, appName, botDomain) {
   });
 }
 
-export async function saveTentaclesConfig(newConfigs, botDomain) {
-  JSON.parse(
-    JSON.stringify(newConfigs).replace(/ /g, "_")
-  )
-  postRequest(
-    botDomain + backendRoutes.updateTentaclesConfig + "?action=update",
-    newConfigs
-  ).then((response) => {
-    createNotification(response);
-  });
-}
+export const useSaveTentaclesConfig = () => {
+  const _fetchPlotData = useFetchPlotData();
+
+  const logic = useCallback((newConfigs, botDomain) => {
+    JSON.parse(
+      JSON.stringify(newConfigs).replace(/ /g, "_")
+    )
+    postRequest(
+      botDomain + backendRoutes.updateTentaclesConfig + "?action=update&reload=true",
+      newConfigs
+    ).then((response) => {
+      _fetchPlotData()  
+      createNotification(response);
+    });
+  }, [_fetchPlotData]);
+  return logic;
+};
+

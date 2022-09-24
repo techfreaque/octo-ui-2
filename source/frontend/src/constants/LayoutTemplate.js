@@ -46,7 +46,7 @@ export const defaultBotTemplate = [
                       id: 0,
                       title: "Backtesting Settings",
                       content: [
-                        { component: "TimeFrameSelector", id: 0 },
+                        { component: "UIConfig", id: 0, configKeys: ["backtesting_run_settings", "backtesting_analysis_settings", "optimizer_campaigns_to_load"] },
                       ],
                     },
                     {
@@ -65,7 +65,34 @@ export const defaultBotTemplate = [
                 component: "Tab",
                 id: 2,
                 title: "Trading",
-                content: [{ component: "TimeFrameSelector", id: 1 }],
+                content: [{
+                  component: "ScrollableTabs",
+                  id: 1,
+                  tabs: [
+                    {
+                      component: "Tab",
+                      id: 0,
+                      title: "Trading Settings",
+                      content: [
+                        {
+                          // component: "UIConfig", id: 0, configKeys: ["current-live-id"]
+                        },
+                      ],
+                    },
+                    {
+                      component: "Tab",
+                      id: 1,
+                      title: "Trading Overview",
+                      content: [
+                        {
+                          // component: "BacktestingRunDataTable", id: 0
+                        },
+                      ],
+                    },
+                  ]
+                }],
+                dontScroll: true,
+
               },
               {
                 component: "Tab",
@@ -81,8 +108,7 @@ export const defaultBotTemplate = [
                         id: 0,
                         title: "Optimizer Settings",
                         content: [
-                          { component: "RestartBotButton", id: 0 },
-                          { component: "Footer", id: 1 },
+                          { component: "UIConfig", id: 0, configKeys: ["optimization_campaign", "optimizer_run_settings"] },
                         ],
                       },
                     ],
