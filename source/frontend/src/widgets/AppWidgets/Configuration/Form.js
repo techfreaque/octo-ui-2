@@ -1,10 +1,7 @@
 import React from "react";
 import Form from "@rjsf/bootstrap-4";
-import {
-  useBotConfig,
-  useSaveFormBotConfig,
-} from "../../../context/BotConfigProvider";
 import createNotification from "../../../components/Notifications/Notification";
+import { useBotConfig, useSaveFormBotConfig } from "../../../context/config/BotConfigProvider";
 
 export default function Configuration(props) {
   const botConfigs = useBotConfig([props.configKey]);

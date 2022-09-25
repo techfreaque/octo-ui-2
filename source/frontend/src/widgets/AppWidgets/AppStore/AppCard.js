@@ -14,8 +14,8 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { useBotDomainContext } from "../../../context/BotDomainProvider";
-import { installAppPackage } from "../../../api/botData";
+import { installAppPackage } from "../../../api/actions";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -32,9 +32,9 @@ export default function AppCard({ app }) {
   const [expanded, setExpanded] = React.useState(false);
   const botDomain = useBotDomainContext()
 
-function handleInstallApp(){
-  installAppPackage(app.url, app.name, botDomain)
-}
+  function handleInstallApp() {
+    installAppPackage(app.url, app.name, botDomain)
+  }
 
   const handleExpandClick = () => {
     setExpanded(!expanded);

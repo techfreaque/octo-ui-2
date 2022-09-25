@@ -12,7 +12,7 @@ export function sendAndInterpretBotUpdate(updated_data, update_url, success_call
     data: JSON.stringify(updated_data),
     success: function (msg, status) {
       if (typeof success_callback === "undefined") {
-        generic_request_success_callback(updated_data, update_url, msg, status)
+        genericRequestSuccessCallback(updated_data, update_url, msg, status)
       } else {
         success_callback(updated_data, update_url, undefined, msg, status)
       }
@@ -29,57 +29,37 @@ export function sendAndInterpretBotUpdate(updated_data, update_url, success_call
   })
 }
 
-function generic_request_success_callback(updated_data, update_url, result, msg, status) {
-  if(msg.hasOwnProperty("title")){
-      createNotification(msg["title"], "success", msg["details"]);
-  } else {
-      createNotification(msg);
+export default async function fetchAndStoreFromBot(
+  url,
+  setBotDataFunction,
+  type = "get",
+  dataToSend,
+  successNotification = false,
+  keepPreviousValues = true
+) {
+  const success = (updated_data, update_url, result, msg, status) => {
+    keepPreviousValues ? setBotDataFunction((prevData) => ({ ...prevData, ...msg }))
+      : setBotDataFunction(msg)
+    successNotification && defaultSuccessNotification(msg, result)
   }
+  sendAndInterpretBotUpdate(dataToSend, url, success, undefined, type)
+}
+
+function genericRequestSuccessCallback(updated_data, update_url, result, msg, status) {
+  defaultSuccessNotification(msg, result)
+}
+
+export function defaultSuccessNotification(msg, result) {
+  (msg.hasOwnProperty("title")
+    ? createNotification(msg["title"], "success", msg["details"])
+    : createNotification(result));
 }
 
 function genericRequestFailureCallback(updated_data, update_url, result, msg, status) {
   // const isBotConnected = useIsBotOnlineContext()
   // if(isBotConnected()){
-  //     createNotification("Can't connect to OctoBot", "danger", "Your OctoBot might be offline.");
+  createNotification("Can't connect to OctoBot", "danger", "Your OctoBot might be offline.");
   // }else{
-      createNotification(msg.responseText, "danger");
+  // createNotification(msg.responseText, "danger");
   // }
-}
-
-export default async function fetchAndStoreFromBot(
-  url,
-  setBotDataFunction,
-  type = "get",
-  dataToSend
-) {
-  if (type === "get") {
-    getRequest(url).then((newData) => {
-      setBotDataFunction(newData);
-    });
-  } else if (type === "post") {
-    postRequest(url, dataToSend).then((newData) => {
-      setBotDataFunction((prevData) => {
-        return { ...prevData, ...newData };
-      });
-    });
-  }
-}
-
-export async function postRequest(url, data) {
-  const res = await fetch(url, {
-    method: "POST",
-    mode: "cors",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(data),
-  });
-  const response = await res.json();
-  return response;
-}
-
-async function getRequest(url) {
-  const res = await fetch(url);
-  const data = await res.json();
-  return data;
 }

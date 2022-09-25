@@ -1,7 +1,7 @@
 import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
-import { useBotColorsContext } from "../../context/BotColorsProvider";
+import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 
 export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
     const botColors = useBotColorsContext();

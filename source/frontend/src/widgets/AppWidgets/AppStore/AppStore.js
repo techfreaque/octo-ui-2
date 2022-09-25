@@ -3,7 +3,7 @@ import React from "react";
 import {
   useAppStoreDataContext,
   useFetchAppStoreData,
-} from "../../../context/AppStoreDataProvider";
+} from "../../../context/data/AppStoreDataProvider";
 import AppList from "./AppList";
 import Categories from "./Categories";
 
@@ -42,14 +42,14 @@ export default function AppStore() {
     appStoreData &&
     appStoreData.available_apps && (
       <Grid container spacing={0}>
-        <Grid xs={12} md={4} lg={3}>
+        <Grid item xs={12} md={4} lg={3}>
           <Categories
             categories={appStoreData.available_apps.categories}
             handleCategoryClick={handleCategoryClick}
             selectedCategories={selectedCategories}
           />
         </Grid>
-        <Grid xs={12} md={8} lg={9}>
+        <Grid item xs={12} md={8} lg={9}>
           <AppList
             selectedCategories={selectedCategories}
             appStoreData={appStoreData}

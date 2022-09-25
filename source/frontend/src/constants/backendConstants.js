@@ -9,16 +9,17 @@ export const backendRoutes = {
   plottedData: basePath + "/plotted_data",
   botPortfolio: basePath + "/portfolio",
   appStore: basePath + "/app-store",
-  installApp: "/advanced/tentacle_packages",
-  updateTentaclesConfig: "/config_tentacles",
+  installApp: "/advanced/tentacle_packages?update_type=add_package",
+  updateTentaclesConfig: "/config_tentacles?action=update&reload=true",
   strategyDesignRunData: "/strategy_design/run_data",
   strategyDesignConfig: "/strategy_design/strategy_design_config",
   backtesting: "/backtesting",
   backtestingStart: "/backtesting?action_type=start_backtesting_with_current_bot_data&source=strategy_design&reset_tentacle_config=False&auto_stop=True",
   backtestingStop: "/backtesting?action_type=stop_backtesting",
+  optimizerQueueUpdate: "/strategy_design/strategy_design_optimizer_queueupdate",
 }
 
-export let hiddenBacktestingMetadataColumns = []; // should be null
+export let hiddenBacktestingMetadataColumns = []; // todo remove
 export const displayedRunIds = [];
 export const ID_SEPARATOR = "_";
 export const TENTACLE_SEPARATOR = "###";
@@ -28,6 +29,7 @@ export const ID_DATA = ["id", "backtesting id", "optimizer id"];
 export const METADATA_HIDDEN_FIELDS = ["backtesting files", "user inputs"]
 export const METADATA_UNDISPLAYED_FIELDS = ["children"]
 export const CUSTOM_USER_INPUT_PATH_SEPARATOR = "/"
+export const _INPUT_SEPARATOR = "_------_";
 
 export const hidden_class = "d-none"
 

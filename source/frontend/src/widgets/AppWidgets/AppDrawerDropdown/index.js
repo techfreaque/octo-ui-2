@@ -4,7 +4,7 @@ import { Button, Menu, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { backendRoutes } from "../../../constants/backendConstants";
-import { useBotLayoutContext } from "../../../context/BotLayoutProvider";
+import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider";
 
 export default function AppDrawerDropdown() {
   const botLayout = useBotLayoutContext();
@@ -20,8 +20,8 @@ export default function AppDrawerDropdown() {
   return (
     <div className="my-auto">
       <Button
-        id="demo-positioned-button"
-        aria-controls={open ? "demo-positioned-menu" : undefined}
+        id="appdrawer-button"
+        aria-controls={open ? "appdrawer-menu" : undefined}
         aria-haspopup="true"
         aria-expanded={open ? "true" : undefined}
         onClick={handleClick}
@@ -29,8 +29,8 @@ export default function AppDrawerDropdown() {
         <FontAwesomeIcon icon={faBars} size="xl" />
       </Button>
       <Menu
-        id="demo-positioned-menu"
-        aria-labelledby="demo-positioned-button"
+        id="appdrawer-menu"
+        aria-labelledby="appdrawer-button"
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
@@ -54,7 +54,6 @@ export default function AppDrawerDropdown() {
           );
         })}
       </Menu>
-
       {/* <NavDropdown.Divider /> */}
     </div>
   );

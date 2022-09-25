@@ -1,10 +1,10 @@
 import { Button, Tab } from "@mui/material";
-import { useSaveTentaclesConfig } from "../../../api/botData";
 import MuiTabs from "../../../components/Tabs/MuiTabs";
-import { useBotPlottedElementsContext } from "../../../context/BotPlottedElementsProvider";
 import { useMemo } from "react";
 import JsonEditor from "@techfreaque/json-editor-react";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
+import { useSaveTentaclesConfig } from "../../../api/configs";
+import { useBotPlottedElementsContext } from "../../../context/data/BotPlottedElementsProvider";
 
 export default function TradingConfig() {
     const botPlottedElements = useBotPlottedElementsContext();

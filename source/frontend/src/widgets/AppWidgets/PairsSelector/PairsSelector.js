@@ -1,10 +1,7 @@
-import { useBotInfoContext } from "../../../context/BotInfoProvider";
-import {
-  useUpdateVisiblePairsContext,
-  useVisiblePairsContext,
-} from "../../../context/VisiblePairProvider";
 import TabsWithSelector from "../../../components/Tabs/TabsWithSelector";
 import { Button } from "@mui/material";
+import { useUpdateVisiblePairsContext, useVisiblePairsContext } from "../../../context/config/VisiblePairProvider";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 
 export default function PairsSelector() {
   const botInfo = useBotInfoContext();

@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
-import { useBotIsBacktestingContext, useStopBacktesting } from "../../../context/BotBacktestingProvider";
+import { useBotIsBacktestingContext, useStopBacktesting } from "../../../context/actions/BotBacktestingProvider";
 
 export default function StopBacktestingButton() {
   const isBacktesting = useBotIsBacktestingContext()

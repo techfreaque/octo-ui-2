@@ -17,7 +17,7 @@ import {
 import UnfoldMoreOutlinedIcon from "@mui/icons-material/UnfoldMoreOutlined";
 import KeyboardArrowUpOutlinedIcon from "@mui/icons-material/KeyboardArrowUpOutlined";
 import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDownOutlined";
-import { useBotColorsContext } from "../../context/BotColorsProvider";
+import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 import { useEffect, useState } from "react";
 
 export default function ReactTables({ nodes, cells }) {
@@ -78,7 +78,7 @@ export default function ReactTables({ nodes, cells }) {
             {tableList.map((item) => (
               <Row key={item.id} item={item}>
                 {cells.map((cell) => (
-                  <Cell>{item[cell.key]}</Cell>
+                  <Cell key={cell.key}>{item[cell.key]}</Cell>
                 ))}
               </Row>
             ))}

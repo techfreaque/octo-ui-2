@@ -1,14 +1,11 @@
-import { useBotInfoContext } from "../../../context/BotInfoProvider";
 import {
   FormControlLabel,
   Switch,
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
-import {
-  useUpdateVisibleTimeFramesContext,
-  useVisibleTimeFramesContext,
-} from "../../../context/VisibleTimeFrameProvider";
 import TabsWithSelector from "../../../components/Tabs/TabsWithSelector";
+import { useUpdateVisibleTimeFramesContext, useVisibleTimeFramesContext } from "../../../context/config/VisibleTimeFrameProvider";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 
 export default function TimeFrameSelector() {
   const botInfo = useBotInfoContext();

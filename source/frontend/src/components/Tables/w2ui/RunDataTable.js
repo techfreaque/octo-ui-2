@@ -160,10 +160,9 @@ function createBacktestingMetadataTable(
                 direction: "asc"
             }
         ];
-        createTable(tableId + "-table", tableTitle, tableId,
-            searches, columns, records, columnGroups, searchData, sortData,
-            true, false, false, false, null, null);
-        const table = w2ui[tableId];
+        const table = createTable(tableId + "-table", tableTitle, tableId,
+        searches, columns, records, columnGroups, searchData, sortData,
+        true, false, false, false, null, null);
         _addBacktestingMetadataTableButtons(
             table, runDataHidableColumns, userInputColumns,
             forceSelectLatest, currentCampaignName, reloadData

@@ -1,7 +1,7 @@
 import { useTheme } from "@mui/material";
 import React from "react";
 import { Helmet } from "react-helmet";
-import { useBotColorsContext } from "../../context/BotColorsProvider";
+import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 import AppWidgets from "../../widgets/AppWidgets";
 
 export default function Page(props) {

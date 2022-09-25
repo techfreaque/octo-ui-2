@@ -1,7 +1,6 @@
 import React from "react";
 import Container from "react-bootstrap/Container";
 import Navbar from "react-bootstrap/Navbar";
-import { useBotColorsContext } from "../../../context/BotColorsProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
   faGithub,
@@ -12,7 +11,8 @@ import {
   faBitcoin,
   faEthereum,
 } from "@fortawesome/free-brands-svg-icons";
-import { useBotInfoContext } from "../../../context/BotInfoProvider";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 
 export default function Footer() {
   const botColors = useBotColorsContext();

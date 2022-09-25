@@ -3,17 +3,19 @@ import "./W2UI.css"
 
 export function createTable(elementID, name, tableName, searches, columns, records, columnGroups, searchData, sortData,
     selectable, addToTable, reorderRows, deleteRows, onReorderRowCallback, onDeleteCallback) {
-    const tableExists = typeof w2ui[tableName] !== "undefined";
+    window.w2ui = window.w2ui ? window.w2ui : w2ui
+    let table = window.w2ui[tableName]
+    const tableExists = typeof table !== "undefined";
     if (tableExists && addToTable) {
-        w2ui[tableName].add(records)
+        table.add(records)
     } else {
         if (tableExists) {
-            w2ui[tableName].destroy();
+            table.destroy();
         }
         const downloadRecords = () => {
             _downloadRecords(name, table.columns, table.records);
         }
-        const table = new w2grid({
+        table = new w2grid({
             name: tableName,
             box: document.getElementById(elementID),
             header: name,
@@ -30,7 +32,7 @@ export function createTable(elementID, name, tableName, searches, columns, recor
                 toolbarEdit: false,
                 columnMenu: true,
                 columnHeaders: true,
-                expandColumn: true,
+                // expandColumn: true,
                 emptyRecords: true,
                 toolbarColumns: true,
             },
@@ -47,7 +49,7 @@ export function createTable(elementID, name, tableName, searches, columns, recor
         });
         table.toolbar.add({ type: 'button', id: 'exportTable', text: 'Export', img: 'fas fa-file-download', onClick: downloadRecords });
     }
-    return tableName;
+    return table;
 }
 
 function _downloadRecords(name, columns, rows) {

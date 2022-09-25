@@ -1,12 +1,9 @@
 import { Chip } from "@mui/material";
 import { useEffect } from "react";
-import { fetchBotPortfolio } from "../../../api/botData";
+import { fetchBotPortfolio } from "../../../api/data";
 import ReactTables from "../../../components/Tables/ReactTables";
-import { useBotDomainContext } from "../../../context/BotDomainProvider";
-import {
-  useBotPortfolioContext,
-  useSaveBotPortfolioContext,
-} from "../../../context/BotPortfolioProvider";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { useBotPortfolioContext, useSaveBotPortfolioContext } from "../../../context/data/BotPortfolioProvider";
 
 export default function CurrentPortfolioTable() {
   const _useSetBotPortfolio = useSaveBotPortfolioContext();

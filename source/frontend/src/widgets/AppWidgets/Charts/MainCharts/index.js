@@ -1,7 +1,7 @@
 import React from "react";
 import ReactStockCharts from "../../../../components/Charts/ReactStockCharts";
-import { useBotColorsContext } from "../../../../context/BotColorsProvider";
-import { useBotPlottedElementsContext } from "../../../../context/BotPlottedElementsProvider";
+import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
+import { useBotPlottedElementsContext } from "../../../../context/data/BotPlottedElementsProvider";
 import Legend from "../../PlotSources/Legend";
 
 export default function MainCharts(props) {

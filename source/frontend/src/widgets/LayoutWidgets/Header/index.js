@@ -2,7 +2,7 @@ import React from "react";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { useBotColorsContext } from "../../../context/BotColorsProvider";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import AppWidgets from "../../AppWidgets";
 
 export default function Header(props) {

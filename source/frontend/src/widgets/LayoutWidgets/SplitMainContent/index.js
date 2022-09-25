@@ -2,7 +2,7 @@ import React from "react";
 import AppWidgets from "../../AppWidgets";
 import SplitPane from "react-split-pane";
 import "./index.css";
-import { useBotColorsContext } from "../../../context/BotColorsProvider";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 
 export default function SplitMainContent(props) {
   const maxSize = props.height - 49 - 6; // tabs + resizer

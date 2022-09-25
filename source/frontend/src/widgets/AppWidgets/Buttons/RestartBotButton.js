@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
-import { useBotDomainContext } from "../../../context/BotDomainProvider";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 
 export default function RestartBotButton() {
   const [isLoading, setIsloading] = useState(false);

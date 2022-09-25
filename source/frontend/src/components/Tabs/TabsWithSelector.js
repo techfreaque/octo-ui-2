@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     IconButton,
     Menu,
+    Tab,
     Tabs,
     ToggleButton,
     ToggleButtonGroup,
@@ -14,36 +15,40 @@ export default function TabsWithSelector({ children, handleChange, items, curren
     return (
         <div style={{ display: "flex", maxWidth: "300px" }}>
             <Tabs
-                value={false}
+                value="0"
                 variant="scrollable"
                 scrollButtons
                 allowScrollButtonsMobile
             >
+                <Tab value="0" style={{ minWidth: 0, paddingLeft: 0, paddingRight: 0 }} />
                 <ToggleButtonGroup
                     size="medium"
                     value={currentItem}
                     exclusive={true}
-                    aria-label="Test"
+                    aria-label={items}
+                    style={{ marginRight: "10px"}}
                 >
                     {items.map((item) => (
                         <ToggleButton
                             value={item}
                             key={item}
                             onClick={handleChange}
+                            style={{ height: "40px", margin: "auto"}}
                         >
                             {item}
                         </ToggleButton>
                     )
                     )}
+                    <SelectorMenu>
+                        {children}
+                    </SelectorMenu>
                 </ToggleButtonGroup>
             </Tabs>
-            <SelectorMenu>
-                {children}
-            </SelectorMenu>
+
         </div>)
 }
 
-const ITEM_HEIGHT = 80;
+const ITEM_HEIGHT = 40;
 
 function SelectorMenu({ children }) {
     const [anchorEl, setAnchorEl] = useState();
@@ -55,7 +60,7 @@ function SelectorMenu({ children }) {
         setAnchorEl(null);
     };
     return (
-        <div style={{ display: "flex" }}>
+        <ToggleButton value={"selector"} style={{ height: "40px", margin: "auto"}}>
             <IconButton
                 aria-label="more"
                 id="timeframes-button"
@@ -83,6 +88,6 @@ function SelectorMenu({ children }) {
             >
                 {children}
             </Menu>
-        </div>
+        </ToggleButton>
     );
 }

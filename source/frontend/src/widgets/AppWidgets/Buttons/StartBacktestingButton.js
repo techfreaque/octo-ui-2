@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
-import { useBotIsBacktestingContext, useStartBacktesting } from "../../../context/BotBacktestingProvider";
+import { useBotIsBacktestingContext, useStartBacktesting } from "../../../context/actions/BotBacktestingProvider";
 
 export default function StartBacktestingButton() {
   const isBacktesting = useBotIsBacktestingContext()

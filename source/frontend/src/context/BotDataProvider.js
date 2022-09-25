@@ -1,20 +1,22 @@
 import React from "react";
-import { AppStoreDataProvider } from "./AppStoreDataProvider";
-import { BacktestingRunDataProvider } from "./BacktestingRunDataProvider";
-import { BotBacktestingProvider } from "./BotBacktestingProvider";
-import { BotColorsProvider } from "./BotColorsProvider";
-import { BotConfigProvider } from "./BotConfigProvider";
-import { BotDomainProvider } from "./BotDomainProvider";
-import { BotInfoProvider } from "./BotInfoProvider";
-import { BotLayoutProvider } from "./BotLayoutProvider";
-import { BotPlottedElementsProvider } from "./BotPlottedElementsProvider";
-import { BotPortfolioProvider } from "./BotPortfolioProvider";
-import ColorModeProvider from "./ColorModeProvider";
-import { IsBotOnlineProvider } from "./IsBotOnlineProvider";
-import { LiveRunDataProvider } from "./LiveRunDataProvider";
-import { UiConfigProvider } from "./UiConfigProvider";
-import { VisiblePairsProvider } from "./VisiblePairProvider";
-import { VisibleTimeFramesProvider } from "./VisibleTimeFrameProvider";
+import { BotBacktestingProvider } from "./actions/BotBacktestingProvider";
+import { BotColorsProvider } from "./config/BotColorsProvider";
+import { BotDomainProvider } from "./config/BotDomainProvider";
+import { BotInfoProvider } from "./data/BotInfoProvider";
+import { BotLayoutProvider } from "./config/BotLayoutProvider";
+import { BotPlottedElementsProvider } from "./data/BotPlottedElementsProvider";
+import { BotPortfolioProvider } from "./data/BotPortfolioProvider";
+import ColorModeProvider from "./config/ColorModeProvider";
+import { BotConfigProvider } from "./config/BotConfigProvider";
+import { UiConfigProvider } from "./config/UiConfigProvider";
+import { VisibleTimeFramesProvider } from "./config/VisibleTimeFrameProvider";
+import { AppStoreDataProvider } from "./data/AppStoreDataProvider";
+import { BacktestingRunDataProvider } from "./data/BacktestingRunDataProvider";
+import { IsBotOnlineProvider } from "./data/IsBotOnlineProvider";
+import { LiveRunDataProvider } from "./data/LiveRunDataProvider";
+import { OptimizerQueueProvider } from "./data/OptimizerQueueProvider";
+import { VisiblePairsProvider } from "./config/VisiblePairProvider";
+
 
 export default function BotDataProvider({ children }) {
   return (
@@ -34,7 +36,9 @@ export default function BotDataProvider({ children }) {
                               <AppStoreDataProvider>
                                 <BotConfigProvider>
                                   <BotBacktestingProvider>
-                                    {children}
+                                    <OptimizerQueueProvider>
+                                      {children}
+                                    </OptimizerQueueProvider>
                                   </BotBacktestingProvider>
                                 </BotConfigProvider>
                               </AppStoreDataProvider>

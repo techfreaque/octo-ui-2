@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import {
-  useBotPlottedElementsContext,
-  useUpdateBotPlottedElementsContext,
-} from "../../../context/BotPlottedElementsProvider";
 import { Button, Chip } from "@mui/material";
 import "./legend.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowDown, faArrowUp } from "@fortawesome/free-solid-svg-icons";
+import { useBotPlottedElementsContext, useUpdateBotPlottedElementsContext } from "../../../context/data/BotPlottedElementsProvider";
 
 export default function Legend() {
   const plottedElements = useBotPlottedElementsContext();

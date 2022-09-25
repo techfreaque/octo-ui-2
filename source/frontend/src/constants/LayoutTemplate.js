@@ -79,7 +79,7 @@ export const defaultBotTemplate = [
                       title: "Trading Settings",
                       content: [
                         {
-                          component: "RestartBotButton", id: 0, 
+                          component: "RestartBotButton", id: 0,
                         },
                       ],
                     },
@@ -117,7 +117,21 @@ export const defaultBotTemplate = [
                               // "optimization_campaign",
                               "optimizer_run_settings"]
                           },
+                          {
+                            component: "OptimizerConfigForm", id: 1
+                          }
                         ],
+                      },
+                      {
+                        component: "Tab",
+                        id: 1,
+                        title: "Optimizer Queue",
+                        content: [
+                          {
+                            component: "OptimizerQueueTable", id: 0
+                          },
+                        ],
+                        dontScroll: true,
                       },
                     ],
                   },
