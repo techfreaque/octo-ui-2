@@ -72,7 +72,7 @@ function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, updateOpti
     $("#optimizer-filters-root").empty();
     _buildOptimizerFilters(optimizerConfig.filters_settings, false);
     _updateCounter(updateOptimizerEditorCounter);
-    _updateInputSettingsDisplay(settingsRoot);
+    updateInputSettingsDisplay(settingsRoot);
     settingsRoot.find("input, select").each((i, jsInputSetting) => {
         $(jsInputSetting).on("change", () => _updateCounter(updateOptimizerEditorCounter));
     })
@@ -326,7 +326,7 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
     $(document.getElementById(`${tentacleIdentifier}-${inputDetail.title}-Input-enabled-value`)).prop("checked", isEnabled);
 }
 
-function _updateInputSettingsDisplay(settingsRoot) {
+function updateInputSettingsDisplay(settingsRoot) {
     settingsRoot.find("select[multiple]").select2({
         width: 'resolve', // need to override the changed default
         closeOnSelect: false,
@@ -379,7 +379,7 @@ function _moveInputToPath(input_key, tentacle_schema, configValues) {
     const path_list = tentacle_schema.schema.properties[input_key].options.custom_path.split(CUSTOM_USER_INPUT_PATH_SEPARATOR)
     let target_obj = tentacle_schema.schema.properties
     path_list.shift()
-    let stored_settings_path = "ScriptedTradingMode"
+    let stored_settings_path = tentacle_schema.tentacle;
     for (let path in path_list) {
         try {
             target_obj = target_obj[path_list[path]].properties
@@ -405,7 +405,6 @@ function _buildCustomPathSchema(schemaElements, configValues) {
         if (_tentacle.is_hidden) { return }
         for (let input_key in _tentacle.schema.properties) {
             if (_tentacle.schema.properties[input_key].options.custom_path) {
-                // todo support nested inputs
                 _moveInputToPath(input_key, _tentacle, configValues)
             }
         }

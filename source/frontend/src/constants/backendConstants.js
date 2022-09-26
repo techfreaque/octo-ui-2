@@ -12,6 +12,7 @@ export const backendRoutes = {
   installApp: "/advanced/tentacle_packages?update_type=add_package",
   updateTentaclesConfig: "/config_tentacles?action=update&reload=true",
   strategyDesignRunData: "/strategy_design/run_data",
+  strategyDesignDeleteRunData: "/strategy_design/run_data?action=delete",
   strategyDesignConfig: "/strategy_design/strategy_design_config",
   backtesting: "/backtesting",
   backtestingStart: "/backtesting?action_type=start_backtesting_with_current_bot_data&source=strategy_design&reset_tentacle_config=False&auto_stop=True",

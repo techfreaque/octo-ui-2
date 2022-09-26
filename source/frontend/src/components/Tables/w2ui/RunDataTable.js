@@ -1,19 +1,32 @@
 import { w2confirm, w2ui } from "w2ui/dist/w2ui.es6.js"
 // import "w2ui/dist/w2ui.min.css"
 import {
+    backendRoutes,
     displayedRunIds, hiddenBacktestingMetadataColumns, hidden_class, ID_DATA,
     ID_SEPARATOR, MAX_SEARCH_LABEL_SIZE, METADATA_HIDDEN_FIELDS,
     METADATA_UNDISPLAYED_FIELDS, TENTACLE_SEPARATOR, TIMESTAMP_DATA
 } from "../../../constants/backendConstants";
 import { useEffect } from "react";
 import { createTable } from "../../../components/Tables/w2ui/W2UI";
+import { sendAndInterpretBotUpdate } from "../../../api/fetchAndStoreFromBot";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 
 export default function RunDataTableW2UI({ tableTitle, tableId, runData, currentCampaignName, noData, reloadData }) {
+
+    function deleteBacktestingRuns(runsToDelete) {
+        const data = {
+            runs: runsToDelete
+        }
+        const successCallback = () => reloadData();
+        sendAndInterpretBotUpdate(data, botDomain + backendRoutes.deleteRuns, successCallback);
+    }
     useEffect(() => {
         runData.data && currentCampaignName
-            && updateBacktestingSelector(tableTitle, tableId, runData, false, currentCampaignName, reloadData)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+            && updateBacktestingSelector(tableTitle, tableId, runData, false, currentCampaignName, reloadData, deleteBacktestingRuns)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [runData, currentCampaignName]);
+
+    const botDomain = useBotDomainContext()
 
     return (
         <div id={tableId + "-container"} style={{ height: "100%" }}>
@@ -25,7 +38,7 @@ export default function RunDataTableW2UI({ tableTitle, tableId, runData, current
     )
 }
 
-function updateBacktestingSelector(tableTitle, tableId, msg, forceSelectLatestBacktesting = false, currentCampaignName, reloadData) {
+function updateBacktestingSelector(tableTitle, tableId, msg, forceSelectLatestBacktesting = false, currentCampaignName, reloadData, deleteBacktestingRuns) {
     const updateSelection = (event, selected) => {
         if (typeof event.recid !== "undefined") {
             updateOrClearBacktestingAnalysisReportFromSelectedRow(w2ui[event.target].get(event.recid), selected);
@@ -44,13 +57,13 @@ function updateBacktestingSelector(tableTitle, tableId, msg, forceSelectLatestBa
     createBacktestingMetadataTable(
         tableTitle, tableId, msg.data, updateSelection,
         afterUpdateSelection, forceSelectLatestBacktesting,
-        currentCampaignName, reloadData)
+        currentCampaignName, reloadData, deleteBacktestingRuns)
     // currentLoadedOptimizerCampaigns = msg.campaigns
 }
 
 function createBacktestingMetadataTable(
     tableTitle, tableId, metadata, sectionHandler, afterSectionHandler,
-    forceSelectLatest, currentCampaignName, reloadData
+    forceSelectLatest, currentCampaignName, reloadData, deleteBacktestingRuns
 ) {
     // const tableName = tableTitle.replaceAll(" ", "-");
     _clearAllBacktestingSelection(tableId);
@@ -161,11 +174,11 @@ function createBacktestingMetadataTable(
             }
         ];
         const table = createTable(tableId + "-table", tableTitle, tableId,
-        searches, columns, records, columnGroups, searchData, sortData,
-        true, false, false, false, null, null);
+            searches, columns, records, columnGroups, searchData, sortData,
+            true, false, false, false, null, null);
         _addBacktestingMetadataTableButtons(
             table, runDataHidableColumns, userInputColumns,
-            forceSelectLatest, currentCampaignName, reloadData
+            forceSelectLatest, currentCampaignName, reloadData, deleteBacktestingRuns
         )
         table.on("select", function (event) {
             console.log("test1");
@@ -194,7 +207,7 @@ function createBacktestingMetadataTable(
 }
 
 
-function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userInputColumns, forceSelectLatest, currentOptimizerCampaignName, reloadData) {
+function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userInputColumns, forceSelectLatest, currentOptimizerCampaignName, reloadData, deleteBacktestingRuns) {
     // tabs
     function showRunInfo() {
         table.showColumn(...runDataHidableColumns.map((column) => column.field))
@@ -219,7 +232,7 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
             table.toolbar.check(buttonId);
         }
     }
-    function deleteShownRuns() {
+    function deleteShownRuns(deleteBacktestingRuns) {
         const toDeleteRunIds = table.last.searchIds;
         let toDeleteRuns = [];
         if (toDeleteRunIds.length === 0) {
@@ -229,13 +242,13 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
         }
         w2confirm(`Delete these ${toDeleteRuns.length} runs ?`)
             .yes(() => {
-                // deleteBacktestingRuns(toDeleteRuns.map((run) => {
-                //     return {
-                //         backtesting_id: getIdFromTableRow(run),
-                //         optimizer_id: getOptimizerIdFromTableRow(run),
-                //         campaign_name: getCampaignNameFromTableRow(run),
-                //     }
-                // }))
+                deleteBacktestingRuns(toDeleteRuns.map((run) => {
+                    return {
+                        backtesting_id: getIdFromTableRow(run),
+                        optimizer_id: getOptimizerIdFromTableRow(run),
+                        campaign_name: getCampaignNameFromTableRow(run),
+                    }
+                }))
             });
     }
     table.toolbar.add({ type: 'button', id: 'show-run-info', text: 'Run info', icon: 'fa fa-bolt', disabled: true, onClick: showRunInfo });
@@ -245,12 +258,16 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
         text: `Current optimization campaign: ${currentOptimizerCampaignName}`,
         icon: 'fas fa-list', onClick: () => showCurrentOptimizationCampaignOnly(currentOptimizerCampaignName)
     })
-    // table.toolbar.add({ type: 'button', id: 'optimizer-campaigns-to-load-button', text: 'Campaigns to Load',
-    //     icon: 'fa fa-cog', onClick: openOptimizerCampaignsToLoadSettings })
     table.toolbar.add({ type: 'spacer' });
-    table.toolbar.add({ type: 'button', id: 'refresh-backtesting-runs',
-        text: 'Refresh', icon: 'w2ui-icon-reload', onClick: reloadData})
-    table.toolbar.add({ type: 'button', id: 'delete_shown_runs', text: 'Delete', icon: 'fa fa-trash', onClick: deleteShownRuns });
+    table.toolbar.add({
+        type: 'button', id: 'refresh-backtesting-runs',
+        text: 'Refresh', icon: 'w2ui-icon-reload', onClick: reloadData
+    })
+    table.toolbar.add({
+        type: 'button', id: 'delete_shown_runs',
+        text: 'Delete', icon: 'fa fa-trash',
+        onClick: () => deleteShownRuns(deleteBacktestingRuns)
+    });
 }
 
 
