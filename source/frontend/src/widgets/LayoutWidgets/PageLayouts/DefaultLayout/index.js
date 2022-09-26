@@ -1,25 +1,16 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
+import { useUiDimensionsContext, useUpdateUiDimensionsContext } from "../../../../context/config/BotLayoutProvider";
 import AppWidgets from "../../../AppWidgets";
 import SplitMainContent from "../../SplitMainContent";
 
-export default function DefaultLayout(props) {
-  const [dimensions, setDimensions] = React.useState({
-    header: 50,
-    windowHeight: window.innerHeight,
-    main: window.innerHeight - 100,
-    footer: 50,
-  });
+export default function DefaultLayout({headerContent, upperContent, lowerContent, footerContent}) {
+  const [dimensions, setDimensions] = useState({main: 0})
   const headerRef = useRef(null);
   const footerRef = useRef(null);
-
   function handleWindowResize() {
     headerRef.current
       && footerRef.current
       && setDimensions({
-        windowHeight: window.innerHeight,
-        windowWidth: window.innerWidth,
-        header: headerRef.current.clientHeight,
-        footer: footerRef.current.clientHeight,
         main:
           window.innerHeight -
           headerRef.current.clientHeight -
@@ -42,17 +33,17 @@ export default function DefaultLayout(props) {
         }}
       >
         <div ref={headerRef}>
-          <AppWidgets {...props} layout={props.headerContent} />
+          <AppWidgets layout={headerContent} />
         </div>
         <div style={{ height: dimensions.main }}>
           <SplitMainContent
-            {...props}
+            upperContent={upperContent}
+            lowerContent={lowerContent}
             height={dimensions.main}
-            dimensions={dimensions}
           />
         </div>
         <div ref={footerRef}>
-          <AppWidgets {...props} layout={props.footerContent} />
+          <AppWidgets layout={footerContent} />
         </div>
       </div>
     </div>

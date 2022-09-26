@@ -6,7 +6,7 @@ import { BotInfoProvider } from "./data/BotInfoProvider";
 import { BotLayoutProvider } from "./config/BotLayoutProvider";
 import { BotPlottedElementsProvider } from "./data/BotPlottedElementsProvider";
 import { BotPortfolioProvider } from "./data/BotPortfolioProvider";
-import ColorModeProvider from "./config/ColorModeProvider";
+import { ColorModeProvider } from "./config/ColorModeProvider";
 import { BotConfigProvider } from "./config/BotConfigProvider";
 import { UiConfigProvider } from "./config/UiConfigProvider";
 import { VisibleTimeFramesProvider } from "./config/VisibleTimeFrameProvider";
@@ -16,6 +16,8 @@ import { IsBotOnlineProvider } from "./data/IsBotOnlineProvider";
 import { LiveRunDataProvider } from "./data/LiveRunDataProvider";
 import { OptimizerQueueProvider } from "./data/OptimizerQueueProvider";
 import { VisiblePairsProvider } from "./config/VisiblePairProvider";
+import { OptimizerEditorProvider } from "./config/OptimizerEditorProvider";
+import { BotOptimizerProvider } from "./actions/BotOptimizerProvider";
 
 
 export default function BotDataProvider({ children }) {
@@ -36,9 +38,13 @@ export default function BotDataProvider({ children }) {
                               <AppStoreDataProvider>
                                 <BotConfigProvider>
                                   <BotBacktestingProvider>
-                                    <OptimizerQueueProvider>
-                                      {children}
-                                    </OptimizerQueueProvider>
+                                    <OptimizerEditorProvider>
+                                      <OptimizerQueueProvider>
+                                        <BotOptimizerProvider>
+                                          {children}
+                                        </BotOptimizerProvider>
+                                      </OptimizerQueueProvider>
+                                    </OptimizerEditorProvider>
                                   </BotBacktestingProvider>
                                 </BotConfigProvider>
                               </AppStoreDataProvider>

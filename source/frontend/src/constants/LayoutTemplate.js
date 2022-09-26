@@ -114,17 +114,23 @@ export const defaultBotTemplate = [
                         content: [
                           {
                             component: "UIConfig", id: 0, configKeys: [
-                              // "optimization_campaign",
                               "optimizer_run_settings"]
                           },
-                          {
-                            component: "OptimizerConfigForm", id: 1
-                          }
                         ],
                       },
                       {
                         component: "Tab",
                         id: 1,
+                        title: "Optimizer",
+                        content: [
+                          {
+                            component: "OptimizerConfigForm", id: 0
+                          }
+                        ],
+                      },
+                      {
+                        component: "Tab",
+                        id: 2,
                         title: "Optimizer Queue",
                         content: [
                           {
@@ -133,6 +139,12 @@ export const defaultBotTemplate = [
                         ],
                         dontScroll: true,
                       },
+                      [
+                        { component: "OptimizerRunsToBeAdded", id: 3 },
+                        { component: "StartOptimizerButton", id: 4 },
+                        { component: "StopOptimizerButton", id: 5 },
+                        { component: "AddToOptimizerQueueButton", id: 6 },
+                      ]
                     ],
                   },
                 ],

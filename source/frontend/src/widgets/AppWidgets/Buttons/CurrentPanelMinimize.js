@@ -1,19 +1,13 @@
-import React from "react";
 import { Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowMinimize } from "@fortawesome/free-solid-svg-icons";
+import { useSetCurrentPanelPercent } from "../../LayoutWidgets/SplitMainContent";
 
-export default function CurrentPanelMinimize(props) {
+export default function CurrentPanelMinimize() {
+  const setPanelSize = useSetCurrentPanelPercent()
   return (
-    <Button
-      onClick={props.currentPanel.Minimize}
-      variant="outlined"
-      // color={props.botDataManager.colors.backgroundHover ? props.botDataManager.currentPanelState != 0 : "warning"}
-    >
-      <FontAwesomeIcon
-        icon={faWindowMinimize}
-        // className={isLoading ? "fa-spin" : ""}
-      />
+    <Button onClick={()=>setPanelSize(100)} variant="outlined">
+      <FontAwesomeIcon icon={faWindowMinimize} />
     </Button>
   );
 }

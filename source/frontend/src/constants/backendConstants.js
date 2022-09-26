@@ -16,7 +16,10 @@ export const backendRoutes = {
   backtesting: "/backtesting",
   backtestingStart: "/backtesting?action_type=start_backtesting_with_current_bot_data&source=strategy_design&reset_tentacle_config=False&auto_stop=True",
   backtestingStop: "/backtesting?action_type=stop_backtesting",
+  optimizerStart: "/strategy_design/strategy_design_start_optimizerstart",
+  optimizerStop: "/advanced/strategy-optimizer?update_type=cancel_optimizer",
   optimizerQueueUpdate: "/strategy_design/strategy_design_optimizer_queueupdate",
+  optimizerAddToQueue: "/strategy_design/strategy_design_optimizer_queueadd",
 }
 
 export let hiddenBacktestingMetadataColumns = []; // todo remove

@@ -190,7 +190,7 @@ function createBacktestingMetadataTable(
     if (typeof table !== "undefined") {
         table.destroy();
     }
-    document.getElementById(tableId + "-no-message").removeClass(hidden_class);
+    document.getElementById(tableId + "-no-message").classList.remove(hidden_class);
 }
 
 

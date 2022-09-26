@@ -32,7 +32,8 @@ export const useSaveUiConfig = () => {
   const setUiConfig = useUpdateUiConfigContext();
   const botDomain = useBotDomainContext();
   const logic = useCallback((newConfig) => {
-    saveStrategyDesignConfig(botDomain, setUiConfig, newConfig);
+    setUiConfig(prevConfig => ({...prevConfig , ...newConfig}))
+    saveStrategyDesignConfig(botDomain, newConfig);
   }, [setUiConfig, botDomain]);
   return logic;
 };

@@ -24,7 +24,11 @@ import UIConfig from "./AppWidgets/Configuration/UIConfig";
 import StartBacktestingButton from "./AppWidgets/Buttons/StartBacktestingButton";
 import StopBacktestingButton from "./AppWidgets/Buttons/StopBacktestingButton";
 import OptimizerQueueTable from "./AppWidgets/Tables/OptimizerQueue";
-import OptimizerConfigForm from "./AppWidgets/Configuration/OptimizerConfigForm";
+import OptimizerConfigForm from "./AppWidgets/Configuration/OptimizerConfigForm/OptimizerConfigForm";
+import OptimizerRunsToBeAdded from "./AppWidgets/Stats/OptimizerRunsToBeAdded";
+import StartOptimizerButton from "./AppWidgets/Buttons/StartOptimizerButton";
+import StopOptimizerButton from "./AppWidgets/Buttons/StopOptimizerButton";
+import AddToOptimizerQueueButton from "./AppWidgets/Buttons/AddToOptimizerQueueButton";
 // import your custom widgets here
 
 const KeysToComponentMap = {
@@ -40,6 +44,8 @@ const KeysToComponentMap = {
   RestartBotButton: RestartBotButton,
   StartBacktestingButton: StartBacktestingButton,
   StopBacktestingButton: StopBacktestingButton,
+  StartOptimizerButton: StartOptimizerButton,
+  StopOptimizerButton: StopOptimizerButton,
   CurrentPanelFullscreen: CurrentPanelFullscreen,
   CurrentPanelMinimize: CurrentPanelMinimize,
   Configuration: Configuration,
@@ -54,32 +60,24 @@ const KeysToComponentMap = {
   UIConfig: UIConfig,
   OptimizerQueueTable: OptimizerQueueTable,
   OptimizerConfigForm: OptimizerConfigForm,
+  OptimizerRunsToBeAdded: OptimizerRunsToBeAdded,
+  AddToOptimizerQueueButton: AddToOptimizerQueueButton,
 };
 
 export default function AppWidgets(props) {
   if (props.layout) {
     return props.layout.map((element) => {
       if (typeof KeysToComponentMap[element.component] !== "undefined") {
-        // console.log("widget is loading: "+element.component)
+        // console.log("widget is loading: "+element.component, element)
         return createElement(
           KeysToComponentMap[element.component],
-          {
-            key: element.id,
-            dimensions: props.dimensions,
-            currentPanel: props.currentPanel,
-            ...element,
-          }
+          { key: element.id, ...element }
         );
       } else {
-        console.log("error loading widget: ", element.component);
-        console.log(element);
-        console.log(props);
-        return <></>;
+        console.log("error loading widget: ", element.component, element, props);
       }
     });
   } else {
-    console.log("error loading widget: ");
-    console.log(props);
-    return <></>;
+    console.log("error loading widget:", props);
   }
 }

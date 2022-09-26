@@ -124,7 +124,7 @@ class ReactStockCharts extends React.Component {
     const margin = { left: 70, right: 70, top: 20, bottom: 30 };
 
     const gridHeight =
-      this.props.dimensions.height - margin.top - margin.bottom;
+      this.props.height - margin.top - margin.bottom;
     const gridWidth = window.innerWidth - margin.left - margin.right;
     const showGrid = true;
     const yGrid = showGrid
@@ -142,11 +142,11 @@ class ReactStockCharts extends React.Component {
       return <></>;
     }
 
-    let upperHeight = this.props.dimensions.height - 50;
+    let upperHeight = this.props.height - 50;
     let lowerHeight = 0;
     if (Object.keys(chartsToRender).length === 2) {
-      upperHeight = this.props.dimensions.height * 0.65;
-      lowerHeight = this.props.dimensions.height * 0.35 - 55;
+      upperHeight = this.props.height * 0.65;
+      lowerHeight = this.props.height * 0.35 - 55;
     }
     const charts = Object.keys(chartsToRender).map(
       (chartLocation, chartIndex) => {
@@ -259,7 +259,7 @@ class ReactStockCharts extends React.Component {
       <ChartCanvas
         ratio={1}
         width={window.innerWidth}
-        height={this.props.dimensions.height}
+        height={this.props.height}
         margin={margin}
         type={this.props.type}
         pointsPerPxThreshold={1000}
