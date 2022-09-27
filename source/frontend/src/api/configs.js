@@ -3,7 +3,7 @@ import createNotification from "../components/Notifications/Notification";
 import { backendRoutes } from "../constants/backendConstants";
 import { useBotDomainContext } from "../context/config/BotDomainProvider";
 import { useFetchPlotData } from "../context/data/BotPlottedElementsProvider";
-import fetchAndStoreFromBot, { defaultSuccessNotification, sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
+import fetchAndStoreFromBot, { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
 
 export async function fetchBotConfigs(
     useSaveBotConfig,

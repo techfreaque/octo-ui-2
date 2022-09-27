@@ -3,9 +3,7 @@ import {
   useContext,
   createContext,
   useCallback,
-  useEffect,
 } from "react";
-import { fetchStrategyDesignConfig } from "../../api/configs";
 import fetchAndStoreFromBot, { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";

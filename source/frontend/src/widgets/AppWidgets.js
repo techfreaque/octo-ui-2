@@ -1,4 +1,4 @@
-import React, { createElement } from "react";
+import { createElement } from "react";
 
 import DefaultLayout from "./LayoutWidgets/PageLayouts/DefaultLayout";
 import SimpleLayout from "./LayoutWidgets/PageLayouts/SimpleLayout/SimpleLayout";
@@ -29,6 +29,7 @@ import OptimizerRunsToBeAdded from "./AppWidgets/Stats/OptimizerRunsToBeAdded";
 import StartOptimizerButton from "./AppWidgets/Buttons/StartOptimizerButton";
 import StopOptimizerButton from "./AppWidgets/Buttons/StopOptimizerButton";
 import AddToOptimizerQueueButton from "./AppWidgets/Buttons/AddToOptimizerQueueButton";
+import { useMemo } from "react";
 // import your custom widgets here
 
 const KeysToComponentMap = {
@@ -65,19 +66,22 @@ const KeysToComponentMap = {
 };
 
 export default function AppWidgets(props) {
-  if (props.layout) {
-    return props.layout.map((element) => {
-      if (typeof KeysToComponentMap[element.component] !== "undefined") {
-        // console.log("widget is loading: "+element.component, element)
-        return createElement(
-          KeysToComponentMap[element.component],
-          { key: element.id, ...element }
-        );
-      } else {
-        console.log("error loading widget: ", element.component, element, props);
-      }
-    });
-  } else {
-    console.log("error loading widget:", props);
-  }
+  return useMemo(() => {
+    if (props.layout) {
+      return props.layout.map((element) => {
+        if (typeof KeysToComponentMap[element.component] !== "undefined") {
+          // console.log("widget is loading: " + element.component, element)
+          return createElement(
+            KeysToComponentMap[element.component],
+            { key: element.id, ...element }
+          );
+        } else {
+          console.log("error loading widget: ", element.component, element, props);
+          return <></>;
+        }
+      });
+    } else {
+      console.log("error loading widget:", props);
+    }
+  }, [props])
 }

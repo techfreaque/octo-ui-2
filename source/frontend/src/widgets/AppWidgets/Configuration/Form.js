@@ -1,5 +1,5 @@
 import React from "react";
-import { useBotConfig, useSaveFormBotConfig } from "../../../context/config/BotConfigProvider";
+import { useBotConfig } from "../../../context/config/BotConfigProvider";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import JsonEditor from "@techfreaque/json-editor-react";
 

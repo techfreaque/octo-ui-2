@@ -1,25 +1,15 @@
-import React, { useRef, useState } from "react";
-import { useUiDimensionsContext, useUpdateUiDimensionsContext } from "../../../../context/config/BotLayoutProvider";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import AppWidgets from "../../../AppWidgets";
 import SplitMainContent from "../../SplitMainContent";
 
-export default function DefaultLayout({headerContent, upperContent, lowerContent, footerContent}) {
-  const [dimensions, setDimensions] = useState({main: 0})
+export default function DefaultLayout({ headerContent, upperContent, lowerContent, footerContent }) {
+  const [dimensions, setDimensions] = useState({ main: 0 })
   const headerRef = useRef(null);
   const footerRef = useRef(null);
-  function handleWindowResize() {
-    headerRef.current
-      && footerRef.current
-      && setDimensions({
-        main:
-          window.innerHeight -
-          headerRef.current.clientHeight -
-          footerRef.current.clientHeight,
-      });
-  }
-  React.useEffect(() => {
-    handleWindowResize();
-    window.addEventListener("resize", handleWindowResize);
+
+  useEffect(() => {
+    handleWindowResize(headerRef, footerRef, setDimensions);
+    window.addEventListener("resize", () => handleWindowResize(headerRef, footerRef, setDimensions));
   }, []);
   return (
     <div style={{ flex: 1, height: "100vh" }}>
@@ -33,7 +23,7 @@ export default function DefaultLayout({headerContent, upperContent, lowerContent
         }}
       >
         <div ref={headerRef}>
-          <AppWidgets layout={headerContent} />
+        {useMemo(() => (<AppWidgets layout={headerContent} />), [headerContent])}
         </div>
         <div style={{ height: dimensions.main }}>
           <SplitMainContent
@@ -43,9 +33,21 @@ export default function DefaultLayout({headerContent, upperContent, lowerContent
           />
         </div>
         <div ref={footerRef}>
-          <AppWidgets layout={footerContent} />
+          {useMemo(() => (<AppWidgets layout={footerContent} />), [footerContent])}
         </div>
       </div>
     </div>
-  );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  )
+}
+
+function handleWindowResize(headerRef, footerRef, setDimensions) {
+  headerRef.current
+    && footerRef.current
+    && setDimensions({
+      main:
+        window.innerHeight -
+        headerRef.current.clientHeight -
+        footerRef.current.clientHeight,
+    });
 }

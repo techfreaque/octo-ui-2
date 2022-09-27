@@ -21,15 +21,14 @@ export const useUpdateBotIsOptimizingContext = () => {
   return useContext(UpdateBotIsOptimizingContext);
 };
 
-export const useCheckIsOptimizing = () => {
-  const setBotIsOptimizing = useUpdateBotIsOptimizingContext();
-  const botDomain = useBotDomainContext();
-  const logic = useCallback(() => {
-    // checkBotIsOptimizing(botDomain, setBotIsOptimizing);
-    return false
-  }, [setBotIsOptimizing, botDomain]);
-  return logic;
-};
+// export const useCheckIsOptimizing = () => {
+//   const setBotIsOptimizing = useUpdateBotIsOptimizingContext();
+//   const botDomain = useBotDomainContext();
+//   const logic = useCallback(() => {
+//     return checkBotIsOptimizing(botDomain, setBotIsOptimizing);
+//   }, [setBotIsOptimizing, botDomain]);
+//   return logic;
+// };
 
 export const useStopOptimizer = () => {
   const setBotIsOptimizing = useUpdateBotIsOptimizingContext();
@@ -85,7 +84,6 @@ export const useGetAndSaveOptimizerForm = () => {
 
 export const BotOptimizerProvider = ({ children }) => {
   const [botIsOptimizing, setBotIsOptimizing] = useState(false);
-  const botDomain = useBotDomainContext();
   // todo handle progress
   return (
     <BotIsOptimizingContext.Provider value={botIsOptimizing}>

@@ -1,7 +1,6 @@
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
-    IconButton,
     Menu,
     Tab,
     Tabs,
@@ -11,7 +10,7 @@ import {
 import { useState } from "react";
 import "./TabsWithSelector.css";
 
-export default function TabsWithSelector({ children, handleChange, items, currentItem }) {
+export default function TabsWithSelector({ children, handleChange, items, currentItem, id }) {
     return (
         <div style={{ display: "flex", maxWidth: "300px" }}>
             <Tabs
@@ -26,20 +25,20 @@ export default function TabsWithSelector({ children, handleChange, items, curren
                     value={currentItem}
                     exclusive={true}
                     aria-label={items}
-                    style={{ marginRight: "10px"}}
+                    style={{ marginRight: "10px" }}
                 >
                     {items.map((item) => (
                         <ToggleButton
                             value={item}
                             key={item}
                             onClick={handleChange}
-                            style={{ height: "40px", margin: "auto"}}
+                            style={{ height: "40px", margin: "auto" }}
                         >
                             {item}
                         </ToggleButton>
                     )
                     )}
-                    <SelectorMenu>
+                    <SelectorMenu id={id}>
                         {children}
                     </SelectorMenu>
                 </ToggleButtonGroup>
@@ -48,9 +47,9 @@ export default function TabsWithSelector({ children, handleChange, items, curren
         </div>)
 }
 
-const ITEM_HEIGHT = 40;
+const ITEM_HEIGHT = 80;
 
-function SelectorMenu({ children }) {
+function SelectorMenu({ children, id }) {
     const [anchorEl, setAnchorEl] = useState();
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -60,21 +59,23 @@ function SelectorMenu({ children }) {
         setAnchorEl(null);
     };
     return (
-        <ToggleButton value={"selector"} style={{ height: "40px", margin: "auto"}}>
-            <IconButton
+        <>
+            <ToggleButton
+                onClick={handleClick}
                 aria-label="more"
-                id="timeframes-button"
-                aria-controls={open ? "timeframes-menu" : undefined}
+                id={id + "-selector-more-button"}
+                aria-controls={open ? id + "selector-menu" : undefined}
                 aria-expanded={open ? "true" : undefined}
                 aria-haspopup="true"
-                onClick={handleClick}
+                style={{ height: "40px", margin: "auto" }}
+                value="selector"
             >
-                <FontAwesomeIcon icon={faEllipsisVertical} />
-            </IconButton>
+                <FontAwesomeIcon icon={faEllipsisVertical} size="xl" />
+            </ToggleButton>
             <Menu
-                id="timeframes-menu"
+                id={id + "selector-menu"}
                 MenuListProps={{
-                    "aria-labelledby": "timeframes-button",
+                    "aria-labelledby": id + "-selector-more-button",
                 }}
                 anchorEl={anchorEl}
                 open={open}
@@ -88,6 +89,6 @@ function SelectorMenu({ children }) {
             >
                 {children}
             </Menu>
-        </ToggleButton>
+        </>
     );
 }

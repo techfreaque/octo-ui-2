@@ -5,6 +5,7 @@ import { useBotPlottedElementsContext } from "../../../../context/data/BotPlotte
 import $ from "jquery";
 import OptimizerSettingTemplate from "./OptimizerInputTemplate";
 import OptimizerRunFilterTemplate from "./OptimizerFilteremplate";
+// eslint-disable-next-line no-unused-vars
 import select2 from "select2/dist/js/select2.js" // required
 import { useUpdateOptimizerEditorCounterContext } from "../../../../context/config/OptimizerEditorProvider";
 import { Button } from "@mui/material";
@@ -18,13 +19,15 @@ export default function OptimizerConfigForm() {
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
     useEffect(() => {
-        plotData && userInputs &&
-            _buildOptimizerSettingsForm(userInputs, optimizerConfig, updateOptimizerEditorCounter);
+        (async () => {
+            plotData && userInputs &&
+                _buildOptimizerSettingsForm(userInputs, optimizerConfig, updateOptimizerEditorCounter);
+        })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInputs]);
     return (
         <div>
-            <div><Button onClick={saveOptimizerForm}>Save Optimizer Form</Button></div>
+            <div><Button variant="outlined" onClick={saveOptimizerForm}>Save Optimizer Form</Button></div>
             <div id="strategy-optimizer-inputs">
                 <OptimizerSettingTemplate />
             </div>
@@ -41,7 +44,7 @@ export default function OptimizerConfigForm() {
     )
 }
 
-function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, updateOptimizerEditorCounter) {
+async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, updateOptimizerEditorCounter) {
     const settingsRoot = $("#optimizer-settings-root");
     settingsRoot.empty();
     // reset user inputs custom paths
@@ -81,17 +84,17 @@ function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, updateOpti
     })
 }
 
-export function getOptimizerSettingsValues(){
+export function getOptimizerSettingsValues() {
     const settings = {
         filters_settings: _getOptimizerFiltersValues($("#optimizer-filters-root")),
         user_inputs: {}
     };
-    $("#optimizer-settings-root").find(".optimizer-input-setting").each(function (i, jsInputSetting){
+    $("#optimizer-settings-root").find(".optimizer-input-setting").each(function (i, jsInputSetting) {
         const inputSetting = $(jsInputSetting);
         const rawSettingName = inputSetting.data("input-setting-base-name")
         let tentacleValue = inputSetting.data("tentacle-name")
         let settingValue = inputSetting.val();
-        if(inputSetting.data("type") === "number"){
+        if (inputSetting.data("type") === "number") {
             const minInputSetting = inputSetting
             const maxInputSetting = $(document.getElementById(`${tentacleValue}-${rawSettingName}-Input-setting-number-max`));
             const stepInputSetting = $(document.getElementById(`${tentacleValue}-${rawSettingName}-Input-setting-number-step`));
@@ -100,7 +103,7 @@ export function getOptimizerSettingsValues(){
                 max: Number(maxInputSetting.val()),
                 step: Number(stepInputSetting.val()),
             }
-        }else if(inputSetting.data("type") === "boolean"){
+        } else if (inputSetting.data("type") === "boolean") {
             settingValue = inputSetting.val().map((x) => (x.toLowerCase() === "true"));
         }
         const enabled = $(document.getElementById(`${tentacleValue}-${rawSettingName}-Input-enabled-value`)).prop("checked");
@@ -114,7 +117,7 @@ export function getOptimizerSettingsValues(){
         //    "rawSettingName" to be used in the following line
 
         const originalTentacleValue = window.CUSTOM_PATH_USER_INPUTS[rawSettingName]
-        if (originalTentacleValue){
+        if (originalTentacleValue) {
             tentacleValue = originalTentacleValue
         }
 

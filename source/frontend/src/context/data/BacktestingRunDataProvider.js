@@ -5,6 +5,9 @@ import React, {
   useCallback,
 } from "react";
 import { fetchBacktestingRunData } from "../../api/data";
+import { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
+import createNotification from "../../components/Notifications/Notification";
+import { backendRoutes } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useUiConfigContext, useUpdateUiConfigContext } from "../config/UiConfigProvider";
 
@@ -26,12 +29,29 @@ export const useFetchBacktestingRunData = () => {
   const uiConfig = useUiConfigContext()
   const setUiConfig = useUpdateUiConfigContext()
   const logic = useCallback(() => {
-    uiConfig.optimizer_campaigns_to_load
+    uiConfig.optimization_campaign
       && fetchBacktestingRunData(
         setBacktestingRunData, setUiConfig, botDomain,
         false, { ...uiConfig.optimizer_campaigns_to_load }
       )
   }, [setBacktestingRunData, botDomain, uiConfig, setUiConfig]);
+  return logic;
+};
+
+export const useDeleteBacktestingRunData = () => {
+  const botDomain = useBotDomainContext();
+  const reloadData = useFetchBacktestingRunData()
+  const logic = useCallback((runsToDelete) => {
+      const data = {
+          runs: runsToDelete
+      }
+      const successCallback = () => {
+          reloadData()
+          createNotification("Runs successfully deleted")
+      };
+      sendAndInterpretBotUpdate(data, botDomain + backendRoutes.strategyDesignDeleteRunData, successCallback);
+
+  }, [botDomain, reloadData]);
   return logic;
 };
 

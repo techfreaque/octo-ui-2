@@ -1,6 +1,5 @@
 import createNotification from "../components/Notifications/Notification"
 import { backendRoutes } from "../constants/backendConstants"
-import { getOptimizerSettingsValues } from "../widgets/AppWidgets/Configuration/OptimizerConfigForm/OptimizerConfigForm"
 import { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot"
 
 export async function startBacktesting(botDomain, backtestingSettings, exchageId, setBotIsBacktesting) {

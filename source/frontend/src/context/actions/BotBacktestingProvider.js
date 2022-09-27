@@ -21,15 +21,14 @@ export const useUpdateBotIsBacktestingContext = () => {
   return useContext(UpdateBotIsBacktestingContext);
 };
 
-export const useCheckIsBacktesting = () => {
-  const setBotIsBacktesting = useUpdateBotIsBacktestingContext();
-  const botDomain = useBotDomainContext();
-  const logic = useCallback(() => {
-    // checkBotIsBacktesting(botDomain, setBotIsBacktesting);
-    return false
-  }, [setBotIsBacktesting, botDomain]);
-  return logic;
-};
+// export const useCheckIsBacktesting = () => {
+//   const setBotIsBacktesting = useUpdateBotIsBacktestingContext();
+//   const botDomain = useBotDomainContext();
+//   const logic = useCallback(() => {
+//     return checkBotIsBacktesting(botDomain, setBotIsBacktesting);
+//   }, [setBotIsBacktesting, botDomain]);
+//   return logic;
+// };
 
 export const useStopBacktesting = () => {
   const setBotIsBacktesting = useUpdateBotIsBacktestingContext();
@@ -57,7 +56,6 @@ export const useStartBacktesting = () => {
 
 export const BotBacktestingProvider = ({ children }) => {
   const [botIsBacktesting, setBotIsBacktesting] = useState(false);
-  const botDomain = useBotDomainContext();
   // todo handle progress
   return (
     <BotIsBacktestingContext.Provider value={botIsBacktesting}>

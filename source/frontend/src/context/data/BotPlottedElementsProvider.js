@@ -8,6 +8,8 @@ import { useBotInfoContext } from "./BotInfoProvider";
 
 const BotPlottedElementsContext = createContext();
 const UpdateBotPlottedElementsContext = createContext();
+const HiddenBacktestingMetadataColumnsContext = createContext();
+const UpdateHiddenBacktestingMetadataColumnsContext = createContext();
 
 export const useBotPlottedElementsContext = () => {
   return useContext(BotPlottedElementsContext);
@@ -15,6 +17,14 @@ export const useBotPlottedElementsContext = () => {
 
 export const useUpdateBotPlottedElementsContext = () => {
   return useContext(UpdateBotPlottedElementsContext);
+};
+
+export const useHiddenBacktestingMetadataColumnsContext = () => {
+  return useContext(HiddenBacktestingMetadataColumnsContext);
+};
+
+export const useUpdateHiddenBacktestingMetadataColumnsContext = () => {
+  return useContext(UpdateHiddenBacktestingMetadataColumnsContext);
 };
 
 export const useFetchPlotData = () => {
@@ -38,6 +48,7 @@ export const useFetchPlotData = () => {
 
 export const BotPlottedElementsProvider = ({ children }) => {
   const [botPlottedElements, setBotPlottedElements] = useState({});
+  const [hiddenBacktestingMetadataColumns, setHiddenBacktestingMetadataColumns] = useState();
   const botInfo = useBotInfoContext();
   const botDomain = useBotDomainContext();
   const visiblePairs = useVisiblePairsContext();
@@ -56,7 +67,11 @@ export const BotPlottedElementsProvider = ({ children }) => {
   return (
     <BotPlottedElementsContext.Provider value={botPlottedElements}>
       <UpdateBotPlottedElementsContext.Provider value={setBotPlottedElements}>
-        {children}
+        <HiddenBacktestingMetadataColumnsContext.Provider value={hiddenBacktestingMetadataColumns}>
+          <UpdateHiddenBacktestingMetadataColumnsContext.Provider value={setHiddenBacktestingMetadataColumns}>
+            {children}
+          </UpdateHiddenBacktestingMetadataColumnsContext.Provider>
+        </HiddenBacktestingMetadataColumnsContext.Provider>
       </UpdateBotPlottedElementsContext.Provider>
     </BotPlottedElementsContext.Provider>
   );

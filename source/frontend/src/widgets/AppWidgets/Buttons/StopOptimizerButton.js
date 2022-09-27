@@ -1,6 +1,6 @@
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRotateRight, faStop } from "@fortawesome/free-solid-svg-icons";
+import {faStop } from "@fortawesome/free-solid-svg-icons";
 import { useBotIsOptimizingContext, useStopOptimizer } from "../../../context/actions/BotOptimizerProvider";
 
 export default function StopOptimizerButton() {

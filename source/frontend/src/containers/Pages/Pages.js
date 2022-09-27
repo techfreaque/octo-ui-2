@@ -1,7 +1,7 @@
 import Page from "../Page";
 import NotFoundPage from "../NotFoundPage";
 import { useBotLayoutContext } from "../../context/config/BotLayoutProvider";
-import React from "react";
+import React, { useMemo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { backendRoutes } from "../../constants/backendConstants";
 import { ReactNotifications } from "react-notifications-component";
@@ -12,7 +12,7 @@ import "select2/dist/css/select2.min.css"
 
 export default function Pages() {
   const botLayout = useBotLayoutContext();
-  return (
+  return useMemo(() => (
     <BrowserRouter>
       <ReactNotifications />
       <Routes>
@@ -28,6 +28,5 @@ export default function Pages() {
         })}
         <Route key="notFound" path="*" element={<NotFoundPage />} />
       </Routes>
-    </BrowserRouter>
-  );
+    </BrowserRouter>), [botLayout])
 }

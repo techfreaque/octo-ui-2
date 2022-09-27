@@ -1,10 +1,8 @@
 
 import { useEffect } from "react";
-import { w2ui } from "w2ui/dist/w2ui.es6.min";
-import { sendAndInterpretBotUpdate } from "../../../api/fetchAndStoreFromBot";
-import createNotification from "../../../components/Notifications/Notification";
 import { createTable } from "../../../components/Tables/w2ui/W2UI";
-import { backendRoutes, hidden_class, ID_DATA, MAX_SEARCH_LABEL_SIZE, TENTACLE_SEPARATOR, TIMESTAMP_DATA } from "../../../constants/backendConstants";
+import { userInputKey } from "../../../components/UserInputs/utils";
+import { hidden_class, ID_DATA, MAX_SEARCH_LABEL_SIZE, TENTACLE_SEPARATOR, TIMESTAMP_DATA } from "../../../constants/backendConstants";
 import { useFetchOptimizerQueue, useOptimizerQueueContext, useSaveOptimizerQueue, useUpdateOptimizerQueueCounterContext } from "../../../context/data/OptimizerQueueProvider";
 
 
@@ -18,7 +16,6 @@ export default function OptimizerQueueTable() {
     }, [fetchOptimizerQueue]);
     useEffect(() => {
         optimizerQueue && optimizerQueue.queue && handleOptimizerQueue(optimizerQueue.queue, updateOptimizerQueueCounter, saveOptimizerQueue)
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [optimizerQueue]);
 
@@ -99,7 +96,7 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
             if (addedLabels.indexOf(addedLabel) === -1) {
                 keys.push({
                     text: addedLabel,
-                    field: _userInputKey(inputDetail.user_input, inputDetail.tentacle)
+                    field: userInputKey(inputDetail.user_input, inputDetail.tentacle)
                 });
                 if (typeof tentaclesInputsCounts[inputDetail.tentacle] !== "undefined") {
                     tentaclesInputsCounts[inputDetail.tentacle]++;
@@ -127,12 +124,12 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
     const records = []
     let recId = 0;
     const userInputSamples = {};
-    Object.values(optimizerRun.runs).map((run) => {
+    Object.values(optimizerRun.runs).forEach((run) => {
         const row = {
             recid: recId++
         };
         run.forEach(function (runUserInputDetails) {
-            const field = _userInputKey(runUserInputDetails.user_input, runUserInputDetails.tentacle)
+            const field = userInputKey(runUserInputDetails.user_input, runUserInputDetails.tentacle)
             row[field] = runUserInputDetails.value;
             userInputSamples[field] = runUserInputDetails.value;
         })
@@ -223,13 +220,10 @@ function _addOptimizerQueueTableButtons(table, _updateOptimizerQueue) {
         const queueInfo = tableDiv.dataset
         _updateOptimizerQueue(queueInfo, table.records)
     }
-    console.log("tbl", table)
     table.toolbar.add({ type: 'button', id: 'show-run-info', text: 'Randomize', img: 'fas fa-random', onClick: randomizeRecords });
 }
 
-function _userInputKey(userInput, tentacle) {
-    return `${userInput}${TENTACLE_SEPARATOR}${tentacle}`;
-}
+
 
 function _getTableDataType(records, search, defaultValue, sampleValue) {
     if (ID_DATA.indexOf(search.field) !== -1) {

@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState, useCallback } from "react";
+import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
 import AppWidgets from "../../AppWidgets";
 import SplitPane from "react-split-pane";
 import "./index.css";
@@ -60,10 +60,10 @@ export default function SplitMainContent({ height, upperContent, lowerContent })
             onChange={(size) => setPanelSize({ maxSize: maxSize, size: size })}
           >
             <div style={{ overflow: "hidden" }}>
-              <AppWidgets layout={upperContent}/>
+              {useMemo(()=>(<AppWidgets layout={upperContent}/>), [upperContent])}
             </div>
             <div style={{ height: height - panelSize.size }}>
-              <AppWidgets layout={lowerContent}/>
+            {useMemo(()=>(<AppWidgets layout={lowerContent}/>), [lowerContent])}
             </div>
           </SplitPane>
         </div>

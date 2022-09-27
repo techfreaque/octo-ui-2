@@ -8,26 +8,23 @@ import { useSaveUiConfig, useUiConfigContext } from "../../../context/config/UiC
 export default function UIConfig({ configKeys }) {
     const uiConfig = useUiConfigContext();
     const saveEditors = useSaveEditors()
-
-    const editors = configKeys.map(configKey => {
-        const startVal = convertTimestamps(uiConfig[configKey])
-        return <JsonEditor
-            {...defaultJsonEditorSettings()}
-            schema={uiConfigSchema.properties[configKey]}
-            startval={startVal}
-            editorName={"uiConf-" + configKey}
-            onChange={() => saveEditors(configKeys)}
-            disable_edit_json={true}
-            key={configKey}
-        />
-    })
-
     return useMemo(() => (
         <div>
-            {editors}
-        </div>
+            {configKeys.map(configKey => {
+                const startVal = convertTimestamps(uiConfig[configKey])
+                return <JsonEditor
+                    {...defaultJsonEditorSettings()}
+                    schema={uiConfigSchema.properties[configKey]}
+                    startval={startVal}
+                    editorName={"uiConf-" + configKey}
+                    onChange={() => saveEditors(configKeys)}
+                    disable_edit_json={true}
+                    key={configKey}
+                />
+            })} </div>
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), configKeys.map(configKey => uiConfig[configKey]))
+    ), [])
+
 }
 
 const useSaveEditors = () => {
@@ -41,9 +38,7 @@ const useSaveEditors = () => {
                 const finalNewConfig = convertTimestamps(newConfig, true)
                 newConfigs[configKey] = finalNewConfig
             })
-            // todo find an alternative
-            JSON.stringify(uiConfig) !== JSON.stringify(newConfigs)
-                && saveUiConfig(newConfigs)
+            saveUiConfig(newConfigs)
         }
     }, [uiConfig, saveUiConfig]);
     return logic;
