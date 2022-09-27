@@ -10,21 +10,26 @@ const BotPlottedElementsContext = createContext();
 const UpdateBotPlottedElementsContext = createContext();
 const HiddenBacktestingMetadataColumnsContext = createContext();
 const UpdateHiddenBacktestingMetadataColumnsContext = createContext();
+const DisplayedRunIdsContext = createContext();
+const UpdateDisplayedRunIdsContext = createContext();
 
 export const useBotPlottedElementsContext = () => {
   return useContext(BotPlottedElementsContext);
 };
-
 export const useUpdateBotPlottedElementsContext = () => {
   return useContext(UpdateBotPlottedElementsContext);
 };
-
 export const useHiddenBacktestingMetadataColumnsContext = () => {
   return useContext(HiddenBacktestingMetadataColumnsContext);
 };
-
 export const useUpdateHiddenBacktestingMetadataColumnsContext = () => {
   return useContext(UpdateHiddenBacktestingMetadataColumnsContext);
+};
+export const useDisplayedRunIdsContext = () => {
+  return useContext(DisplayedRunIdsContext);
+};
+export const useUpdateDisplayedRunIdsContext = () => {
+  return useContext(UpdateDisplayedRunIdsContext);
 };
 
 export const useFetchPlotData = () => {
@@ -49,6 +54,7 @@ export const useFetchPlotData = () => {
 export const BotPlottedElementsProvider = ({ children }) => {
   const [botPlottedElements, setBotPlottedElements] = useState({});
   const [hiddenBacktestingMetadataColumns, setHiddenBacktestingMetadataColumns] = useState();
+  const [displayedRunIds, setDisplayedRunIds] = useState({live: [], backtesting: []});
   const botInfo = useBotInfoContext();
   const botDomain = useBotDomainContext();
   const visiblePairs = useVisiblePairsContext();
@@ -65,14 +71,18 @@ export const BotPlottedElementsProvider = ({ children }) => {
     }
   }, [botInfo, botDomain, visibleTimeframes, visiblePairs]);
   return (
-    <BotPlottedElementsContext.Provider value={botPlottedElements}>
-      <UpdateBotPlottedElementsContext.Provider value={setBotPlottedElements}>
-        <HiddenBacktestingMetadataColumnsContext.Provider value={hiddenBacktestingMetadataColumns}>
-          <UpdateHiddenBacktestingMetadataColumnsContext.Provider value={setHiddenBacktestingMetadataColumns}>
-            {children}
-          </UpdateHiddenBacktestingMetadataColumnsContext.Provider>
-        </HiddenBacktestingMetadataColumnsContext.Provider>
-      </UpdateBotPlottedElementsContext.Provider>
-    </BotPlottedElementsContext.Provider>
+    <DisplayedRunIdsContext.Provider value={displayedRunIds}>
+      <UpdateDisplayedRunIdsContext.Provider value={setDisplayedRunIds}>
+        <BotPlottedElementsContext.Provider value={botPlottedElements}>
+          <UpdateBotPlottedElementsContext.Provider value={setBotPlottedElements}>
+            <HiddenBacktestingMetadataColumnsContext.Provider value={hiddenBacktestingMetadataColumns}>
+              <UpdateHiddenBacktestingMetadataColumnsContext.Provider value={setHiddenBacktestingMetadataColumns}>
+                {children}
+              </UpdateHiddenBacktestingMetadataColumnsContext.Provider>
+            </HiddenBacktestingMetadataColumnsContext.Provider>
+          </UpdateBotPlottedElementsContext.Provider>
+        </BotPlottedElementsContext.Provider>
+      </UpdateDisplayedRunIdsContext.Provider>
+    </DisplayedRunIdsContext.Provider>
   );
 };

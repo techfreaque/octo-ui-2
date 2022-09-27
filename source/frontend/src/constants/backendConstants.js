@@ -23,8 +23,6 @@ export const backendRoutes = {
   optimizerAddToQueue: "/strategy_design/strategy_design_optimizer_queueadd",
 }
 
-export let hiddenBacktestingMetadataColumns = []; // todo remove
-export const displayedRunIds = [];
 export const ID_SEPARATOR = "_";
 export const TENTACLE_SEPARATOR = "###";
 export const MAX_SEARCH_LABEL_SIZE = 32;

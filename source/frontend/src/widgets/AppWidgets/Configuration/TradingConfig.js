@@ -52,7 +52,7 @@ function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {
             _hideNotShownUserInputs(inputDetails.tentacle, inputDetails.schema, inputDetails.is_hidden)
         );
     });
-    // setHiddenMetadataColumns(hiddenMetadataColumns)
+    setHiddenMetadataColumns(hiddenMetadataColumns)
 }
 
 function saveUserInputs(saveTentaclesConfig) {

@@ -1,17 +1,21 @@
 import { w2confirm, w2ui } from "w2ui/dist/w2ui.es6.js"
 import {
-    displayedRunIds, hidden_class, ID_DATA,
+    hidden_class, ID_DATA,
     ID_SEPARATOR, MAX_SEARCH_LABEL_SIZE, METADATA_HIDDEN_FIELDS,
     METADATA_UNDISPLAYED_FIELDS, TENTACLE_SEPARATOR, TIMESTAMP_DATA
 } from "../../../constants/backendConstants";
 import { useEffect } from "react";
 import { createTable } from "../../../components/Tables/w2ui/W2UI";
+import { useDisplayedRunIdsContext, useUpdateDisplayedRunIdsContext } from "../../../context/data/BotPlottedElementsProvider";
 
 export default function RunDataTableW2UI({ tableTitle, tableId, runData, currentCampaignName, noData, reloadData, deleteRuns, hiddenMetadataColumns }) {
+    const setDisplayedRunIds = useUpdateDisplayedRunIdsContext()
+    const displayedRunIds = useDisplayedRunIdsContext()
     useEffect(() => {
         // todo
-        runData.data &&
-            updateBacktestingSelector(tableTitle, tableId, runData, false, currentCampaignName, reloadData, deleteRuns, hiddenMetadataColumns)
+        runData.data && hiddenMetadataColumns && 
+            updateBacktestingSelector(tableTitle, tableId, runData, false, currentCampaignName, reloadData,
+                deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [runData, currentCampaignName, hiddenMetadataColumns]);
     return (
@@ -26,36 +30,36 @@ export default function RunDataTableW2UI({ tableTitle, tableId, runData, current
 
 function updateBacktestingSelector(
     tableTitle, tableId, msg, forceSelectLatestBacktesting = false, currentCampaignName,
-    reloadData, deleteBacktestingRuns, hiddenMetadataColumns
+    reloadData, deleteBacktestingRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds
 ) {
     const updateSelection = (event, selected) => {
         if (typeof event.recid !== "undefined") {
-            updateOrClearBacktestingAnalysisReportFromSelectedRow(w2ui[event.target].get(event.recid), selected);
+            updateOrClearBacktestingAnalysisReportFromSelectedRow(w2ui[event.target].get(event.recid), selected, setDisplayedRunIds);
         }
         if (typeof event.recids !== "undefined") {
             event.recids.forEach(recid => {
-                updateOrClearBacktestingAnalysisReportFromSelectedRow(w2ui[event.target].get(recid), selected);
+                updateOrClearBacktestingAnalysisReportFromSelectedRow(w2ui[event.target].get(recid), selected, setDisplayedRunIds);
             })
         }
     }
 
     const afterUpdateSelection = (event) => {
         // Make sure every element in selectedId is actually still selected
-        clearUnselectedRuns(event.target);
+        clearUnselectedRuns(event.target, displayedRunIds);
     }
     createBacktestingMetadataTable(
-        tableTitle, tableId, msg.data, updateSelection, 
+        tableTitle, tableId, msg.data, updateSelection,
         afterUpdateSelection, forceSelectLatestBacktesting,
         currentCampaignName, reloadData,
-        deleteBacktestingRuns, hiddenMetadataColumns)
+        deleteBacktestingRuns, hiddenMetadataColumns, setDisplayedRunIds)
 }
 
 function createBacktestingMetadataTable(
     tableTitle, tableId, metadata, sectionHandler,
     afterSectionHandler, forceSelectLatest, currentCampaignName,
-    reloadData, deleteBacktestingRuns, hiddenMetadataColumns
+    reloadData, deleteBacktestingRuns, hiddenMetadataColumns, setDisplayedRunIds
 ) {
-    _clearAllBacktestingSelection(tableId);
+    _clearAllBacktestingSelection(tableId, setDisplayedRunIds);
     document.getElementsByClassName("backtesting-run-container").innerHTML = undefined;
     if (metadata !== null && metadata.length) {
         const sortedMetadata = metadata.sort((a, b) => b.timestamp - a.timestamp);
@@ -260,11 +264,20 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
 }
 
 
-function updateBacktestingAnalysisReport(run_id, optimizer_id, campaign_name, addReport) {
-    // const fullId = mergeRunIdentifiers(run_id, optimizer_id, campaign_name);
-    // if(displayedRunIds.indexOf(fullId) === -1){
-    //     displayedRunIds.push(fullId)
-    // }
+function updateBacktestingAnalysisReport(run_id, optimizer_id, campaign_name, addReport, setDisplayedRunIds) {
+    const fullId = mergeRunIdentifiers(run_id, optimizer_id, campaign_name);
+    setDisplayedRunIds(prevRunIds => {
+        console.log("ssss", {
+            ...prevRunIds,
+            backtesting: prevRunIds.backtesting.indexOf(fullId) === -1
+                && prevRunIds.backtesting.push(fullId)
+        });
+        return {
+            ...prevRunIds,
+            backtesting: prevRunIds.backtesting.indexOf(fullId) === -1
+                && prevRunIds.backtesting.push(fullId)
+        }
+    })
     // // upper charts
     // displayChartsAndInputs(true, run_id, false, optimizer_id, campaign_name, addReport, getSelectedSymbol(), getSelectedTimeFrame(), false, null, null)
     // // toolbox
@@ -301,29 +314,34 @@ function getCampaignNameFromTableRow(row) {
 }
 
 
-function updateOrClearBacktestingAnalysisReportFromSelectedRow(row, selected) {
+function updateOrClearBacktestingAnalysisReportFromSelectedRow(row, selected, setDisplayedRunIds) {
     if (selected) {
         updateBacktestingAnalysisReport(
             getIdFromTableRow(row),
             getOptimizerIdFromTableRow(row),
             getCampaignNameFromTableRow(row),
-            true
+            true, setDisplayedRunIds
         );
     } else {
         clearBacktestingAnalysisReport(
             getIdFromTableRow(row),
             getOptimizerIdFromTableRow(row),
             getCampaignNameFromTableRow(row),
+            setDisplayedRunIds
         );
     }
 }
 
 
-function clearBacktestingAnalysisReport(run_id, optimizer_id, campaign_name) {
+function clearBacktestingAnalysisReport(run_id, optimizer_id, campaign_name, setDisplayedRunIds) {
     const fullId = mergeRunIdentifiers(run_id, optimizer_id, campaign_name);
-    if (displayedRunIds.indexOf(fullId) !== -1) {
-        displayedRunIds.splice(displayedRunIds.indexOf(fullId), 1);
-    }
+    setDisplayedRunIds(prevRunIds => (
+        {
+            ...prevRunIds,
+            backtesting: prevRunIds.backtesting.indexOf(fullId) !== -1
+                && prevRunIds.backtesting.splice(prevRunIds.backtesting.indexOf(fullId), 1)
+        }
+    ))
     const emptyData = {
         data: {
             sub_elements: []
@@ -332,9 +350,8 @@ function clearBacktestingAnalysisReport(run_id, optimizer_id, campaign_name) {
     // const chartIdentifier = run_id ? optimizer_id ? `${run_id}:${optimizer_id} - ${campaign_name}` : `${run_id} - ${campaign_name}` : "live";
     // updateDisplayedElement(emptyData, true, window.editors, false, run_id, optimizer_id, campaign_name,
     //     false, window.backtestingTableName, chartIdentifier);
-    const backtestingChartIdentifier = mergeRunIdentifiers(run_id, optimizer_id, campaign_name);
     _updateBacktestingChart(emptyData, true, run_id, optimizer_id, campaign_name,
-        false, window.backtestingTableName, backtestingChartIdentifier, false)
+        false, window.backtestingTableName, fullId, false)
 }
 
 function _updateBacktestingChart(data, replot, backtesting_id, optimizer_id, campaign_name,
@@ -343,20 +360,21 @@ function _updateBacktestingChart(data, replot, backtesting_id, optimizer_id, cam
     //     added, backtestingTableName, chartIdentifier, afterGraphPlot, [], backtestingPart);
 }
 
-function _clearAllBacktestingSelection(tableName) {
+function _clearAllBacktestingSelection(tableName, setDisplayedRunIds) {
     if (typeof w2ui[tableName] !== "undefined") {
         // unselect previously selected elements
         const table = w2ui[tableName];
         table.getSelection().forEach(recid => {
-            updateOrClearBacktestingAnalysisReportFromSelectedRow(table.get(recid), false);
+            updateOrClearBacktestingAnalysisReportFromSelectedRow(table.get(recid), false, setDisplayedRunIds);
         })
     }
 }
 
-function clearUnselectedRuns(tableName) {
+function clearUnselectedRuns(tableName, displayedRunIds) {
     const selectedRunIdentifiers = getSelectedBacktestingRunIdentifiers(tableName);
-    const toRemove = displayedRunIds.filter(element => selectedRunIdentifiers.indexOf(element) === -1);
-    toRemove.forEach(fullId => displayedRunIds.splice(displayedRunIds.indexOf(fullId), 1));
+    console.log("reee", displayedRunIds)
+    const toRemove = displayedRunIds.backtesting.filter(element => selectedRunIdentifiers.indexOf(element) === -1);
+    toRemove.forEach(fullId => displayedRunIds.backtesting.splice(displayedRunIds.backtesting.indexOf(fullId), 1));
 }
 
 function getSelectedBacktestingRunIdentifiers(tableName) {
