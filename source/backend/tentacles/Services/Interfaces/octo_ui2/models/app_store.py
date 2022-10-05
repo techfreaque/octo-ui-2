@@ -1,11 +1,14 @@
+import json
+
 import octobot_tentacles_manager.loaders as loaders
+import requests
 
 
 app_store_repos = [
     {
         "name": "Matrix-Repo",
         "description": "This is a repo full of OctoBot apps",
-        "url": "https://github.com/techfreaque/octo-ui-2/tree/main/releases/octo_repo.json?raw=true",
+        "url": "https://raw.githubusercontent.com/techfreaque/octo-ui-2/main/releases/octo_repo.json",
     },
     {
         "name": "Another Repo without a server",
@@ -13,30 +16,9 @@ app_store_repos = [
         "apps": [
             {
                 "name": "Sample Octobot Tentacle",
-                "description": "This is a sample OctoBot app",
-                "url": "https://github.com/techfreaque/OctoBot-Tentacles/blob/master/okteto-stack.yaml?raw=true",
+                "description": "This is a sample OctoBot app that cant be installed",
+                "versions": [{"version": "1.0.0", "url": "https://google.com"}],
                 "categories": ["UI", "Strategies"],
-                "tentacle_package_name": "TentaclePackageName",
-            },
-            {
-                "name": "A nice Sample 2 Octobot Tentacle",
-                "description": "This is a sample OctoBot app",
-                "url": "https://github.com/techfreaque/OctoBot-Tentacles/blob/master/okteto-stack.yaml?raw=true",
-                "categories": ["UI", "Strategies"],
-                "tentacle_package_name": "TentaclePackageName",
-            },
-            {
-                "name": "Sample Octobot Tentacle",
-                "description": "This is a sample OctoBot app",
-                "url": "https://github.com/techfreaque/OctoBot-Tentacles/blob/master/okteto-stack.yaml?raw=true",
-                "categories": ["UI", "Strategies"],
-                "tentacle_package_name": "TentaclePackageName",
-            },
-            {
-                "name": "Sample Octobot Tentacle",
-                "description": "This is a sample OctoBot app",
-                "url": "https://github.com/techfreaque/OctoBot-Tentacles/blob/master/okteto-stack.yaml?raw=true",
-                "categories": ["Stuff", "Things"],
                 "tentacle_package_name": "TentaclePackageName",
             },
         ]
@@ -45,37 +27,14 @@ app_store_repos = [
 
 
 def fetch_app_list_from_repo(repo):
-    apps = [
-        {
-            "name": "Another Sample Octobot Tentacle",
-            "description": "This is a sample OctoBot app",
-            "url": "https://github.com/techfreaque/OctoBot-Tentacles/blob/master/okteto-stack.yaml?raw=true",
-            "categories": ["UI", "Strategies"],
-            "tentacle_package_name": "TentaclePackageName",
-        },
-        {
-            "name": "Sample Octobot Tentacle",
-            "description": "This is a sample OctoBot app",
-            "url": "https://github.com/techfreaque/OctoBot-Tentacles/blob/master/okteto-stack.yaml?raw=true",
-            "categories": ["UI", "Strategies"],
-            "tentacle_package_name": "TentaclePackageName",
-        },
-        {
-            "name": "Sample Octobot Tentacle",
-            "description": "This is a sample OctoBot app",
-            "url": "https://github.com/techfreaque/OctoBot-Tentacles/blob/master/okteto-stack.yaml?raw=true",
-            "categories": ["UI", "Strategies"],
-            "tentacle_package_name": "TentaclePackageName",
-        },
-        {
-            "name": "Sample Octobot Tentacle",
-            "description": "This is a sample OctoBot app",
-            "url": "https://github.com/techfreaque/OctoBot-Tentacles/blob/master/okteto-stack.yaml?raw=true",
-            "categories": ["Stuff", "Things"],
-            "tentacle_package_name": "TentaclePackageName",
-        },
-    ]
-    return apps
+    try:
+        request = requests.get(repo["url"])
+        repo_content = json.loads(request.text)
+        apps = repo_content.get("apps", [])
+        return apps
+    except:
+        print(f"Invalid URL or unsupported format for repo {str(repo)}")
+        return []
 
 
 def fetch_available_apps_from_repos():
@@ -88,7 +47,7 @@ def fetch_available_apps_from_repos():
                     "name": app["name"],
                     "tentacle_package_name": app["tentacle_package_name"],
                     "description": app["description"],
-                    "url": app["url"],
+                    "versions": app["versions"],
                     "categories": app["categories"],
                     "installed": True,
                     "repo": repo["name"]
@@ -97,9 +56,9 @@ def fetch_available_apps_from_repos():
                     if category not in app_store_data["categories"]:
                         app_store_data["categories"][category] = {"title": category}
             except KeyError:
-                # log.error(f"App Store Error: The app "
-                #                   f"({app['name'] if 'name' in app else 'no name provided'}) "
-                #                   f"in the repo ({repo['name']}) has missing informations")
+                print(f"App Store Error: The app "
+                                  f"({app['name'] if 'name' in app else 'no name provided'}) "
+                                  f"in the repo ({repo['name']}) has missing informations")
                 pass
     return app_store_data
 
