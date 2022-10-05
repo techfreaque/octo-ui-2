@@ -1,13 +1,26 @@
 import { useMemo } from "react";
 import JsonEditor from "@techfreaque/json-editor-react";
 import { uiConfigSchema } from "./uiConfigSchema";
-import { useCallback } from "react";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import { useSaveUiConfig, useUiConfigContext } from "../../../context/config/UiConfigProvider";
 
+export const availableUIConfigKeys = ["backtesting_run_settings", "backtesting_analysis_settings", "optimizer_campaigns_to_load", "optimizer_run_settings"]
+
 export default function UIConfig({ configKeys }) {
     const uiConfig = useUiConfigContext();
-    const saveEditors = useSaveEditors()
+    const saveUiConfig = useSaveUiConfig()
+
+    function handleEditorsAutosave(configKeys) {
+        if (uiConfig && uiConfig.optimization_campaign) {
+            const newConfigs = { ...uiConfig }
+            configKeys.forEach(configKey => {
+                const newConfig = window.$JsonEditors["uiConf-" + configKey].getValue()
+                const finalNewConfig = convertTimestamps(newConfig, true)
+                newConfigs[configKey] = finalNewConfig
+            })
+            newConfigs && saveUiConfig(newConfigs)
+        }
+    };
     return useMemo(() => (
         <div>
             {configKeys.map(configKey => {
@@ -17,7 +30,7 @@ export default function UIConfig({ configKeys }) {
                     schema={uiConfigSchema.properties[configKey]}
                     startval={startVal}
                     editorName={"uiConf-" + configKey}
-                    onChange={() => saveEditors(configKeys)}
+                    onChange={() => handleEditorsAutosave(configKeys)}
                     disable_edit_json={true}
                     key={configKey}
                 />
@@ -27,22 +40,6 @@ export default function UIConfig({ configKeys }) {
 
 }
 
-const useSaveEditors = () => {
-    const saveUiConfig = useSaveUiConfig()
-    const uiConfig = useUiConfigContext()
-    const logic = useCallback((configKeys) => {
-        if (uiConfig && uiConfig.optimization_campaign) {
-            const newConfigs = { ...uiConfig }
-            configKeys.forEach(configKey => {
-                const newConfig = window.$JsonEditors["uiConf-" + configKey].getValue()
-                const finalNewConfig = convertTimestamps(newConfig, true)
-                newConfigs[configKey] = finalNewConfig
-            })
-            saveUiConfig(newConfigs)
-        }
-    }, [uiConfig, saveUiConfig]);
-    return logic;
-};
 
 function convertTimestamps(config, convertBack = false) {
     const newValues = {}

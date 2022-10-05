@@ -9,24 +9,30 @@ import "react-notifications-component/dist/theme.css";
 import "bootstrap/dist/css/bootstrap.min.css"
 import "../../components/Forms/JsonEditor/JsonEditor.css"
 import "select2/dist/css/select2.min.css"
+import LoadingPage from "../LoadingPage";
+import "./pages.css"
 
 export default function Pages() {
   const botLayout = useBotLayoutContext();
-  return useMemo(() => (
-    <BrowserRouter>
+  return useMemo(() => {
+
+    return <BrowserRouter>
       <ReactNotifications />
       <Routes>
-        {botLayout.map((page) => {
-          return (
-            <Route
-              key={page.path}
-              exact
-              path={backendRoutes.frontendEntry + page.path}
-              element={<Page key={page.path} currentPage={page} />}
-            />
-          );
-        })}
+        {botLayout
+          ? botLayout.map((page) => {
+            return (
+              <Route
+                key={page.path}
+                exact
+                path={backendRoutes.frontendEntry + page.path}
+                element={<Page key={page.path} currentPage={page} />}
+              />
+            );
+          })
+          : <Route key="isLoading" path="*" element={<LoadingPage />} />}
         <Route key="notFound" path="*" element={<NotFoundPage />} />
       </Routes>
-    </BrowserRouter>), [botLayout])
+    </BrowserRouter>
+  }, [botLayout])
 }

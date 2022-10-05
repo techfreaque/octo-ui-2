@@ -13,7 +13,7 @@ export default function RunDataTableW2UI({ tableTitle, tableId, runData, current
     const displayedRunIds = useDisplayedRunIdsContext()
     useEffect(() => {
         // todo
-        runData.data && hiddenMetadataColumns && 
+        runData.data && hiddenMetadataColumns &&
             updateBacktestingSelector(tableTitle, tableId, runData, false, currentCampaignName, reloadData,
                 deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds)
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -127,7 +127,13 @@ function createBacktestingMetadataTable(
         // init searches before formatting rows to access user_inputs objects
         const userInputSearches = userInputKeys.map((key) => {
             const splitKey = key.split(TENTACLE_SEPARATOR);
-            const sampleValue = userInputSampleValueByKey[key];
+            let sampleValue = userInputSampleValueByKey[key];
+            if (sampleValue === null) {
+                console.error(
+                    `Impossible to guess type of ${key} user input (no sample value). Using text as search type`
+                );
+                sampleValue = "";
+            }
             const label = splitKey[0].length > MAX_SEARCH_LABEL_SIZE ?
                 `${splitKey[0].slice(0, MAX_SEARCH_LABEL_SIZE)} ...` : splitKey[0];
             return {

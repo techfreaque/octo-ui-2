@@ -30,9 +30,10 @@ import StartOptimizerButton from "./AppWidgets/Buttons/StartOptimizerButton";
 import StopOptimizerButton from "./AppWidgets/Buttons/StopOptimizerButton";
 import AddToOptimizerQueueButton from "./AppWidgets/Buttons/AddToOptimizerQueueButton";
 import { useMemo } from "react";
+import PageBuilder from "./AppWidgets/PageBuilder/PageBuilder";
 // import your custom widgets here
 
-const KeysToComponentMap = {
+export const registeredComponents = {
   // define your custom widget here
   DefaultLayout: DefaultLayout,
   SimpleLayout: SimpleLayout,
@@ -63,25 +64,27 @@ const KeysToComponentMap = {
   OptimizerConfigForm: OptimizerConfigForm,
   OptimizerRunsToBeAdded: OptimizerRunsToBeAdded,
   AddToOptimizerQueueButton: AddToOptimizerQueueButton,
+  PageBuilder: PageBuilder,
 };
 
 export default function AppWidgets(props) {
   return useMemo(() => {
-    if (props.layout) {
-      return props.layout.map((element) => {
-        if (typeof KeysToComponentMap[element.component] !== "undefined") {
+    if (props.layout && props.layout[0]) {
+      return props.layout.map((element, index) => {
+        if (typeof registeredComponents[element.component] !== "undefined") {
           // console.log("widget is loading: " + element.component, element)
           return createElement(
-            KeysToComponentMap[element.component],
-            { key: element.id, ...element }
+            registeredComponents[element.component],
+            { key: index, id: index, ...element }
           );
         } else {
           console.log("error loading widget: ", element.component, element, props);
           return <></>;
         }
       });
-    } else {
-      console.log("error loading widget:", props);
     }
+    // else {
+    //   console.log("widget doesnt have a layout:", props);
+    // }
   }, [props])
 }

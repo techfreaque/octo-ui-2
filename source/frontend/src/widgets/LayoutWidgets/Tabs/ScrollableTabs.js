@@ -10,18 +10,11 @@ export default function ResizableTabs(props) {
     tabs.forEach((tab, index) => {
         if (tab.component === "Tab") {
             tabsData[index] = {
-                title: <Tab key={
-                    tab.id
-                }
-                    label={
-                        tab.title
-                    }
-                    value={
-                        tab.id
-                    }
-                    sx={
-                        { textTransform: 'none' }
-                    } />,
+                title: <Tab key={index}
+                        label={tab.title}
+                        value={index}
+                        sx={{ textTransform: 'none' }}
+                    />,
                 content: tab.content && tab.content[0]
                     && <AppWidgets {...props}
                         layout={
@@ -31,11 +24,10 @@ export default function ResizableTabs(props) {
             }
         } else {
             tabsData[index] = {
-                title: <AppWidgets key={
-                    tab[0].id + 20
-                }
+                title: <AppWidgets
+                    key={index + 20}
                     {...props}
-                    layout={tab} />,
+                    layout={[tab]} />,
                 content: undefined
             }
         }

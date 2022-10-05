@@ -30,11 +30,20 @@ export const useFetchUiConfig = () => {
 
 export const useSaveUiConfig = () => {
   const setUiConfig = useUpdateUiConfigContext();
+  const uiConfig = useUiConfigContext();
   const botDomain = useBotDomainContext();
   const logic = useCallback((newConfig) => {
-    setUiConfig(prevConfig => ({...prevConfig , ...newConfig}))
-    saveStrategyDesignConfig(botDomain, newConfig);
-  }, [setUiConfig, botDomain]);
+    if (uiConfig.optimization_campaign && uiConfig.optimization_campaign.name) {
+      let newCombinedConfig = {}
+      setUiConfig(prevConfig => {
+        newCombinedConfig = { ...prevConfig, ...newConfig }
+        newCombinedConfig.optimization_campaign
+        && newCombinedConfig.optimization_campaign.name
+        && saveStrategyDesignConfig(botDomain, newCombinedConfig);
+        return newCombinedConfig
+      })
+    }
+  }, [setUiConfig, botDomain, uiConfig]);
   return logic;
 };
 

@@ -9,8 +9,9 @@ export default function OptimizerSettingTemplate() {
             <div className="row border" id="optimizer-settings-root">
             </div>
             <div className="row border d-none" id="optimizer-settings-default-values">
-                <OptimizerSettingTentacleGroupTemplate/>
-                <OptimizerSettingNestedTentacleConfigTemplate/>
+                <OptimizerSettingTentacleGroupTemplate />
+                <OptimizerSettingNestedTentacleConfigTemplate />
+                <OptimizerSettingArrayTemplate />
                 <OptimizerSetting valueType={"number"} />
                 <OptimizerSetting valueType={"options"} />
                 <OptimizerSetting valueType={"multiple-options"} />
@@ -102,6 +103,19 @@ function OptimizerSettingBoolean() {
     )
 }
 
+function OptimizerSettingArrayTemplate() {
+    return (
+        <div id="optimizer-settings-object-array-template">
+            <div id="optimizer-settings-XYZ-object-array-template" className="w-100 px-4 border">
+                <div className="row">
+                    XYZT
+                </div>
+                <div className="row input-content w-100 mx-0">
+                </div>
+            </div>
+        </div>)
+}
+
 function OptimizerSettingOptions() {
     return (
         <div className="col">
@@ -112,9 +126,10 @@ function OptimizerSettingOptions() {
                 data-input-setting-name="XYZ"
                 data-input-setting-base-name="XYZ"
                 data-type="string"
+                data-tags="false"
                 multiple="multiple"
                 style={{ width: "99%" }}
-            >             
+            >
             </select>
         </div>
     )
@@ -126,7 +141,7 @@ function OptimizerSettingNumber() {
                 <div className="input-group-prepend">
                     <label className="input-group-text" htmlFor="TENTACLEABC-XYZ-Input-setting-number-min">Min</label>
                 </div>
-                <input type="number" step="0.000001" value="ZYXDefaultValue"
+                <input type="number" step="0.000001" defaultValue="ZYXDefaultValue"
                     id="TENTACLEABC-XYZ-Input-setting-number-min"
                     className="form-control optimizer-input-setting"
                     data-tentacle-name="TENTACLEABC"
@@ -141,7 +156,7 @@ function OptimizerSettingNumber() {
                     <div className="input-group-prepend">
                         <label className="input-group-text" htmlFor="TENTACLEABC-XYZ-Input-setting-number-max">Max</label>
                     </div>
-                    <input type="number" step="0.000001" value="ZYXDefaultValue"
+                    <input type="number" step="0.000001" defaultValue="ZYXDefaultValue"
                         id="TENTACLEABC-XYZ-Input-setting-number-max"
                         className="form-control"
                         data-tentacle-name="TENTACLEABC"
@@ -156,7 +171,7 @@ function OptimizerSettingNumber() {
                     <div className="input-group-prepend">
                         <label className="input-group-text" htmlFor="TENTACLEABC-XYZ-Input-setting-number-step">Step</label>
                     </div>
-                    <input type="number" step="1" value="1" min="0.000000000000000000001"
+                    <input type="number" step="1" defaultValue="1" min="0.000000000000000000001"
                         id="TENTACLEABC-XYZ-Input-setting-number-step"
                         className="form-control"
                         data-tentacle-name="TENTACLEABC"

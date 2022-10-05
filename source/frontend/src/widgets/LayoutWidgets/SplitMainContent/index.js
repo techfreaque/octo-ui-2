@@ -27,27 +27,18 @@ export const useSetCurrentPanelPercent = () => {
 
 export default function SplitMainContent({ height, upperContent, lowerContent }) {
   const maxSize = height - 49 - 4; // tabs + resizer
-  const [panelSize, setPanelSize] = useState({ maxSize: 0, size: 0 }); 
-  function checkAndUpdatePanelSize() {
-    
-  }
+  const [panelSize, setPanelSize] = useState({  maxSize: maxSize, size: maxSize * 0.4 });
   useEffect(() => {
     setPanelSize((prevSize) => (
       { maxSize: maxSize, size: (prevSize.size < maxSize ? prevSize.size : maxSize) }
     ));
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [height]);
-  useEffect(() => {
-    setPanelSize({ maxSize: maxSize, size: maxSize * 0.4 }); // default position 40%
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [Boolean(height)]);
-
   const botColors = useBotColorsContext();
   return (
     <CurrentPanelContext.Provider value={panelSize}>
       <UpdateCurrentPanelContext.Provider value={setPanelSize}>
         <div
-          onResize={checkAndUpdatePanelSize}
           style={{ height: "100%", width: "100%", position: "relative" }}
         >
           <SplitPane
@@ -60,10 +51,10 @@ export default function SplitMainContent({ height, upperContent, lowerContent })
             onChange={(size) => setPanelSize({ maxSize: maxSize, size: size })}
           >
             <div style={{ overflow: "hidden" }}>
-              {useMemo(()=>(<AppWidgets layout={upperContent}/>), [upperContent])}
+              {useMemo(() => (<AppWidgets layout={upperContent} />), [upperContent])}
             </div>
             <div style={{ height: height - panelSize.size }}>
-            {useMemo(()=>(<AppWidgets layout={lowerContent}/>), [lowerContent])}
+              {useMemo(() => (<AppWidgets layout={lowerContent} />), [lowerContent])}
             </div>
           </SplitPane>
         </div>

@@ -4,12 +4,16 @@ import { Button, Menu, MenuItem } from "@mui/material";
 import React, { useState } from "react";
 import { LinkContainer } from "react-router-bootstrap";
 import { backendRoutes } from "../../../constants/backendConstants";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider";
+import { useColorModeContext } from "../../../context/config/ColorModeProvider";
 
 export default function AppDrawerDropdown() {
   const botLayout = useBotLayoutContext();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const botDomain = useBotDomainContext()
+  const colorMode = useColorModeContext()
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -53,8 +57,12 @@ export default function AppDrawerDropdown() {
             </LinkContainer>
           );
         })}
+        <a href={botDomain} style={{color: colorMode === "dark" ? "#fff": "#000"}}>
+          <li>
+            <MenuItem onClick={handleClose}>back to OctoBot</MenuItem>
+          </li>
+        </a>
       </Menu>
-      {/* <NavDropdown.Divider /> */}
     </div>
   );
 }

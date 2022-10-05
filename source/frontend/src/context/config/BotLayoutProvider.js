@@ -1,5 +1,6 @@
-import React, { useState, useContext, createContext } from "react";
-import { defaultBotTemplate } from "../../constants/LayoutTemplate";
+import React, { useState, useContext, createContext, useEffect } from "react";
+import { botLayoutKey } from "../../constants/backendConstants";
+import { useUiConfigContext } from "./UiConfigProvider";
 
 const BotLayoutContext = createContext();
 const UpdateBotLayoutContext = createContext();
@@ -20,12 +21,17 @@ export const useUpdateUiDimensionsContext = () => {
 };
 
 export const BotLayoutProvider = ({ children }) => {
-  const [botLayout, setBotLayout] = useState(defaultBotTemplate);
+  const [botLayout, setBotLayout] = useState();
   const [uiDimensions, setUiDimensions] = useState({
     header: 50,
     main: window.innerHeight - 100,
     footer: 50,
   });
+  const uiConfig = useUiConfigContext()
+  const loadedLayout = uiConfig[botLayoutKey]
+  useEffect(() => {
+    setBotLayout(loadedLayout)
+  }, [loadedLayout]);
   return (
     <BotLayoutContext.Provider value={botLayout}>
       <UpdateBotLayoutContext.Provider value={setBotLayout}>

@@ -1,332 +1,421 @@
 export const defaultBotTemplate = [
   {
-    path: "/",
-    title: "Home",
-    layout: [
+    "layout": [
       {
-        id: 1,
-        component: "DefaultLayout",
-        headerContent: [
+        "component": "DefaultLayout",
+        "footerContent": [
           {
-            id: 1,
-            component: "Header",
-            leftContent: [
-              { component: "AppDrawerDropdown", id: 0 },
-              { component: "PairsSelector", id: 1 },
-              { component: "TimeFrameSelector", id: 2 },
-            ],
-            rightContent: [{ component: "ColorModeSwitch", id: 0 }],
-          },
+            "component": "Footer",
+          }
         ],
-
-        upperContent: [{ component: "MainCharts", id: 1 }],
-        lowerContent: [
+        "headerContent": [
           {
-            component: "ScrollableTabs",
-            id: 0,
-            tabs: [
+            "component": "Header",
+            "leftContent": [
               {
-                component: "Tab",
-                id: 0,
-                title: "Strategy Settings",
-                content: [
-                  { component: "TradingConfig", id: 0 },
-                ],
+                "component": "AppDrawerDropdown",
               },
               {
-                component: "Tab",
-                id: 1,
-                title: "Backtesting",
-                content: [{
-                  component: "ScrollableTabs",
-                  id: 1,
-                  tabs: [
-                    {
-                      component: "Tab",
-                      id: 0,
-                      title: "Backtesting Settings",
-                      content: [
-                        { component: "UIConfig", id: 0, configKeys: ["backtesting_run_settings", "backtesting_analysis_settings", "optimizer_campaigns_to_load"] },
-                      ],
-                    },
-                    {
-                      component: "Tab",
-                      id: 1,
-                      title: "Backtesting Overview",
-                      content: [
-                        { component: "BacktestingRunDataTable", id: 0 },
-                      ],
-                    },
-                    [
-                      { component: "StartBacktestingButton", id: 2 },
-                      { component: "StopBacktestingButton", id: 3 },
-                    ]
-                  ],
-                }],
-                dontScroll: true,
+                "component": "PairsSelector",
               },
               {
-                component: "Tab",
-                id: 2,
-                title: "Trading",
-                content: [{
-                  component: "ScrollableTabs",
-                  id: 1,
-                  tabs: [
-                    {
-                      component: "Tab",
-                      id: 0,
-                      title: "Trading Settings",
-                      content: [
-                        {
-                          component: "RestartBotButton", id: 0,
-                        },
-                      ],
-                    },
-                    {
-                      component: "Tab",
-                      id: 1,
-                      title: "Trading Overview",
-                      content: [
-                        {
-                          component: "RestartBotButton", id: 0
-                        },
-                      ],
-                    },
-                  ]
-                }],
-                dontScroll: true,
-
+                "component": "TimeFrameSelector",
+              }
+            ],
+            "rightContent": [
+              {
+                "component": "ColorModeSwitch",
+              }
+            ]
+          }
+        ],
+        "lowerContent": [
+          {
+            "component": "ScrollableTabs",
+            "rightContent": [
+              {
+                "component": "CurrentPanelMinimize",
               },
               {
-                component: "Tab",
-                id: 3,
-                title: "Strategy Optimizer",
-                content: [
+                "component": "CurrentPanelFullscreen",
+              }
+            ],
+            "tabs": [
+              {
+                "component": "Tab",
+                "content": [
                   {
-                    component: "ScrollableTabs",
-                    id: 0,
-                    tabs: [
+                    "component": "TradingConfig",
+                  }
+                ],
+                "dontScroll": true,
+                "title": "Strategy Settings"
+              },
+              {
+                "component": "Tab",
+                "content": [
+                  {
+                    "component": "ScrollableTabs",
+                    "rightContent": [],
+                    "tabs": [
                       {
-                        component: "Tab",
-                        id: 0,
-                        title: "Optimizer Settings",
-                        content: [
+                        "component": "Tab",
+                        "content": [
                           {
-                            component: "UIConfig", id: 0, configKeys: [
-                              "optimizer_run_settings"]
-                          },
-                        ],
-                      },
-                      {
-                        component: "Tab",
-                        id: 1,
-                        title: "Optimizer",
-                        content: [
-                          {
-                            component: "OptimizerConfigForm", id: 0
+                            "component": "UIConfig",
+                            "configKeys": [
+                              "backtesting_run_settings",
+                              "backtesting_analysis_settings",
+                              "optimizer_campaigns_to_load"
+                            ],
                           }
                         ],
+                        "title": "Backtesting Settings"
                       },
                       {
-                        component: "Tab",
-                        id: 2,
-                        title: "Optimizer Queue",
-                        content: [
+                        "component": "Tab",
+                        "content": [
                           {
-                            component: "OptimizerQueueTable", id: 0
-                          },
+                            "component": "BacktestingRunDataTable",
+                          }
                         ],
-                        dontScroll: true,
+                        "title": "Backtesting Overview"
                       },
-                      [
-                        { component: "OptimizerRunsToBeAdded", id: 3 },
-                        { component: "StartOptimizerButton", id: 4 },
-                        { component: "StopOptimizerButton", id: 5 },
-                        { component: "AddToOptimizerQueueButton", id: 6 },
-                      ]
-                    ],
-                  },
+                      {
+                        "component": "StartBacktestingButton",
+                      },
+                      {
+                        "component": "StopBacktestingButton",
+                      }
+                    ]
+                  }
                 ],
+                "dontScroll": true,
+                "title": "Backtesting"
               },
-              [{ component: "RestartBotButton", id: 4 }],
-            ],
-            rightContent: [
-              { component: "CurrentPanelMinimize", id: 0 },
-              { component: "CurrentPanelFullscreen", id: 1 },
-            ],
-          },
+              {
+                "component": "Tab",
+                "content": [
+                  {
+                    "component": "ScrollableTabs",
+                    "rightContent": [],
+                    "tabs": [
+                      {
+                        "component": "Tab",
+                        "content": [
+                          {
+                            "component": "RestartBotButton",
+                          }
+                        ],
+                        "title": "Trading Settings"
+                      },
+                      {
+                        "component": "Tab",
+                        "content": [
+                          {
+                            "component": "RestartBotButton",
+                          }
+                        ],
+                        "title": "Trading Overview"
+                      }
+                    ]
+                  }
+                ],
+                "dontScroll": true,
+                "title": "Trading"
+              },
+              {
+                "component": "Tab",
+                "content": [
+                  {
+                    "component": "ScrollableTabs",
+                    "rightContent": [],
+                    "tabs": [
+                      {
+                        "component": "Tab",
+                        "content": [
+                          {
+                            "component": "UIConfig",
+                            "configKeys": [
+                              "optimizer_run_settings"
+                            ],
+                          }
+                        ],
+                        "title": "Optimizer Settings"
+                      },
+                      {
+                        "component": "Tab",
+                        "content": [
+                          {
+                            "component": "OptimizerConfigForm",
+                          }
+                        ],
+                        "title": "Optimizer"
+                      },
+                      {
+                        "component": "Tab",
+                        "content": [
+                          {
+                            "component": "OptimizerQueueTable",
+                          }
+                        ],
+                        "dontScroll": true,
+                        "title": "Optimizer Queue"
+                      },
+                      {
+                        "component": "OptimizerRunsToBeAdded",
+                      },
+                      {
+                        "component": "StartOptimizerButton",
+                      },
+                      {
+                        "component": "StopOptimizerButton",
+                      },
+                      {
+                        "component": "AddToOptimizerQueueButton",
+                      }
+                    ]
+                  }
+                ],
+                "dontScroll": false,
+                "title": "Strategy Optimizer"
+              },
+              {
+                "component": "RestartBotButton",
+              }
+            ]
+          }
         ],
-        footerContent: [
+        "upperContent": [
           {
-            component: "Footer",
-            id: 3,
-          },
-        ],
-      },
+            "component": "MainCharts",
+          }
+        ]
+      }
     ],
+    "path": "/",
+    "title": "Home"
   },
   {
-    path: "/profile",
-    title: "Profiles",
-    layout: [
+    "layout": [
       {
-        id: 1,
-        component: "DefaultLayout",
-        headerContent: [
+        "component": "DefaultLayout",
+        "footerContent": [
           {
-            id: 1,
-            component: "Header",
-            leftContent: [
-              { component: "AppDrawerDropdown", id: 0 },
-              { component: "PairsSelector", id: 1 },
-              { component: "TimeFrameSelector", id: 2 },
-            ],
-
-          },
+            "component": "Footer",
+          }
         ],
-
-        upperContent: [{ component: "MainCharts", id: 1 }],
-        lowerContent: [
+        "headerContent": [
           {
-            component: "ScrollableTabs",
-            id: 1,
-            tabs: [
+            "component": "Header",
+            "leftContent": [
               {
-                component: "Tab",
-                id: 0,
-                title: "Currencies",
-                content: [
-                  {
-                    component: "Configuration",
-                    id: 0,
-                    configKey: "profile/crypto-currencies",
-                  },
-                ],
+                "component": "AppDrawerDropdown",
               },
               {
-                component: "Tab",
-                id: 1,
-                title: "Exchanges",
-                content: [
-                  {
-                    component: "Configuration",
-                    id: 0,
-                    configKey: "profile/exchanges",
-                  },
-                ],
+                "component": "PairsSelector",
               },
               {
-                component: "Tab",
-                id: 2,
-                title: "Trading",
-                content: [
-                  {
-                    component: "Configuration",
-                    id: 0,
-                    configKey: "profile/trading",
-                  },
-                  {
-                    component: "Configuration",
-                    id: 1,
-                    configKey: "profile/trader",
-                  },
-                  {
-                    component: "Configuration",
-                    id: 2,
-                    configKey: "profile/trader-simulator",
-                  },
-                ],
-              },
-              [{ component: "RestartBotButton", id: 3 }],
+                "component": "TimeFrameSelector",
+              }
             ],
-            rightContent: [
-              { component: "CurrentPanelMinimize", id: 1 },
-              { component: "CurrentPanelFullscreen", id: 2 },
-            ],
-          },
+            "rightContent": []
+          }
         ],
-        footerContent: [
+        "lowerContent": [
           {
-            component: "Footer",
-            id: 3,
-          },
+            "component": "ScrollableTabs",
+            "rightContent": [
+              {
+                "component": "CurrentPanelMinimize",
+              },
+              {
+                "component": "CurrentPanelFullscreen",
+              }
+            ],
+            "tabs": [
+              {
+                "component": "Tab",
+                "content": [
+                  {
+                    "component": "Configuration",
+                    "configKey": "profile/crypto-currencies",
+                  }
+                ],
+                "dontScroll": false,
+                "title": "Currencies"
+              },
+              {
+                "component": "Tab",
+                "content": [
+                  {
+                    "component": "Configuration",
+                    "configKey": "profile/exchanges",
+                  }
+                ],
+                "dontScroll": false,
+                "title": "Exchanges"
+              },
+              {
+                "component": "Tab",
+                "content": [
+                  {
+                    "component": "Configuration",
+                    "configKey": "profile/trading",
+                  },
+                  {
+                    "component": "Configuration",
+                    "configKey": "profile/trader",
+                  },
+                  {
+                    "component": "Configuration",
+                    "configKey": "profile/trader-simulator",
+                  }
+                ],
+                "dontScroll": false,
+                "title": "Trading"
+              },
+              {
+                "component": "RestartBotButton",
+              }
+            ]
+          }
         ],
-      },
+        "upperContent": [
+          {
+            "component": "MainCharts",
+          }
+        ]
+      }
     ],
+    "path": "/profile",
+    "title": "Profiles"
   },
   {
-    path: "/portfolio",
-    title: "Portfolio",
-    layout: [
+    "layout": [
       {
-        id: 1,
-        component: "DefaultLayout",
-        headerContent: [
+        "component": "DefaultLayout",
+        "footerContent": [
           {
-            id: 1,
-            component: "Header",
-            leftContent: [
-              { component: "AppDrawerDropdown", id: 0 },
-              { component: "PairsSelector", id: 1 },
-              { component: "TimeFrameSelector", id: 2 },
-            ],
-            rightContent: [{ component: "ColorModeSwitch", id: 0 }],
-          },
+            "component": "Footer",
+          }
         ],
-
-        upperContent: [{ component: "MainCharts", id: 1 }],
-        lowerContent: [
+        "headerContent": [
           {
-            component: "ScrollableTabs",
-            id: 1,
-            tabs: [
+            "component": "Header",
+            "leftContent": [
               {
-                component: "Tab",
-                id: 0,
-                title: "Current Portfolio",
-                content: [{ component: "CurrentPortfolioTable", id: 0 }],
+                "component": "AppDrawerDropdown",
               },
+              {
+                "component": "PairsSelector",
+              },
+              {
+                "component": "TimeFrameSelector",
+              }
             ],
-            rightContent: [
-              { component: "CurrentPanelMinimize", id: 1 },
-              { component: "CurrentPanelFullscreen", id: 2 },
-            ],
-          },
+            "rightContent": [
+              {
+                "component": "ColorModeSwitch",
+              }
+            ]
+          }
         ],
-        footerContent: [
+        "lowerContent": [
           {
-            component: "Footer",
-            id: 3,
-          },
+            "component": "ScrollableTabs",
+            "rightContent": [
+              {
+                "component": "CurrentPanelMinimize",
+              },
+              {
+                "component": "CurrentPanelFullscreen",
+              }
+            ],
+            "tabs": [
+              {
+                "component": "Tab",
+                "content": [
+                  {
+                    "component": "CurrentPortfolioTable",
+                  }
+                ],
+                "dontScroll": false,
+                "title": "Current Portfolio"
+              }
+            ]
+          }
         ],
-      },
+        "upperContent": [
+          {
+            "component": "MainCharts",
+          }
+        ]
+      }
     ],
+    "path": "/portfolio",
+    "title": "Portfolio"
   },
   {
-    path: "/appstore",
-    title: "App Store",
-    layout: [
+    "layout": [
       {
-        id: 0,
-        component: "SimpleLayout",
-        headerContent: [
+        "component": "SimpleLayout",
+        "footerContent": [
           {
-            id: 0,
-            component: "Header",
-            leftContent: [{ component: "AppDrawerDropdown", id: 0 }],
-          },
+            "component": "Footer",
+          }
         ],
-        pageContent: [{ component: "AppStore", id: 0 }],
-        footerContent: [
+        "headerContent": [
           {
-            component: "Footer",
-            id: 0,
-          },
+            "component": "Header",
+            "leftContent": [
+              {
+                "component": "AppDrawerDropdown",
+              }
+            ],
+            "rightContent": []
+          }
         ],
-      },
+        "pageContent": [
+          {
+            "component": "AppStore",
+          }
+        ]
+      }
     ],
+    "path": "/appstore",
+    "title": "App Store"
   },
+  {
+    "layout": [
+      {
+        "component": "SimpleLayout",
+        "footerContent": [
+          {
+            "component": "Footer",
+          }
+        ],
+        "headerContent": [
+          {
+            "component": "Header",
+            "leftContent": [
+              {
+                "component": "AppDrawerDropdown",
+              }
+            ],
+            "rightContent": []
+          }
+        ],
+        "pageContent": [
+          {
+            "component": "PageBuilder",
+          }
+        ]
+      }
+    ],
+    "path": "/page-builder",
+    "title": "Page Builder"
+  }
 ];
 
 export const defaultColors = {

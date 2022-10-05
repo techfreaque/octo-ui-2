@@ -13,25 +13,23 @@ import { useGetAndSaveOptimizerForm } from "../../../../context/actions/BotOptim
 
 export default function OptimizerConfigForm() {
     const uiConfig = useUiConfigContext()
-    const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY]
+    const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
     const plotData = useBotPlottedElementsContext()
     const userInputs = plotData.user_inputs
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
     useEffect(() => {
-        (async () => {
-            plotData && userInputs &&
+            plotData && userInputs && uiConfig &&
                 _buildOptimizerSettingsForm(userInputs, optimizerConfig, updateOptimizerEditorCounter);
-        })();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userInputs]);
+    }, [userInputs, optimizerConfig, uiConfig]);
     return (
         <div>
             <div><Button variant="outlined" onClick={saveOptimizerForm}>Save Optimizer Form</Button></div>
             <div id="strategy-optimizer-inputs">
                 <OptimizerSettingTemplate />
             </div>
-            <div id="strategy-optimizer-filters" className="my-4 mx-2">
+            <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
                 <h4>
                     Run filters
                 </h4>
@@ -64,7 +62,7 @@ async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, upda
         const configInputs = typeof optimizerConfig.user_inputs === "undefined" ? {} : optimizerConfig.user_inputs
         Object.values(element.schema.properties).forEach(function (inputDetail) {
             if (_buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetail,
-                configInputs, tentacleName, inputDetail.title)) {
+                configInputs, tentacleName, inputDetail.options.name)) {
                 atLeastOneUserInput = true;
             }
         });
@@ -202,7 +200,7 @@ function _buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetails
 }
 function _buildOptimizerNestedConfigSettingsForm(inputGroupContent, inputDetail, configValues, parentInputIdentifier) {
     let atLeastOneUserInput = false;
-    const nestedInputGroupId = _appendNestedInputGroupFromTemplate(inputGroupContent, parentInputIdentifier, inputDetail.title);
+    const nestedInputGroupId = _appendNestedInputGroupFromTemplate(inputGroupContent, parentInputIdentifier, inputDetail.options.name);
     const nestedInputGroupElement = $(document.getElementById(nestedInputGroupId));
     const nestedInputGroupContent = nestedInputGroupElement.find(".input-content");
     Object.keys(inputDetail.properties).forEach(function (nestedInput) {
@@ -239,7 +237,7 @@ function _getInputSettingFromTemplate(valueType, inputDetail, tentacleName) {
     const template = _getInputSettingTemplate(valueType);
     if (template.length) {
         let inputSettings = template.html().replace(new RegExp("XYZT", "g"), inputDetail.title);
-        inputSettings = inputSettings.replace(new RegExp("XYZ", "g"), inputDetail.title);
+        inputSettings = inputSettings.replace(new RegExp("XYZ", "g"), inputDetail.options.name);
         inputSettings = inputSettings.replace(new RegExp("ZYXDefaultValue", "g"), inputDetail.default);
         inputSettings = inputSettings.replace(new RegExp("TENTACLEABC", "g"), tentacleName);
         return inputSettings;
@@ -295,7 +293,7 @@ function _getValueType(inputDetail) {
 }
 
 function _updateInputDetailValues(valueType, inputDetail, configValues, tentacleIdentifier) {
-    const rawValue = configValues[`${tentacleIdentifier}-${inputDetail.title.replaceAll(" ", "_")}`];
+    const rawValue = configValues[`${tentacleIdentifier}-${inputDetail.options.name.replaceAll(" ", "_")}`];
     let configValue = undefined;
     let isEnabled = false;
     if (typeof rawValue !== "undefined") {
@@ -304,7 +302,7 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
     }
     if (valueType === "options" || valueType === "boolean") {
         let values = typeof configValue === "undefined" ? [] : configValue
-        const valuesSelect = $(document.getElementById(`${tentacleIdentifier}-${inputDetail.title}-Input-setting-${valueType}`));
+        const valuesSelect = $(document.getElementById(`${tentacleIdentifier}-${inputDetail.options.name}-Input-setting-${valueType}`));
         if (valueType === "options") {
             inputDetail.enum.forEach(function (value) {
                 const isSelected = values.indexOf(value) !== -1;
@@ -321,12 +319,12 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
     } else if (valueType === "number") {
         let values = typeof configValue === "undefined" ? { min: 0, max: 0, step: 1 } : configValue;
         ["min", "max", "step"].forEach(function (suffix) {
-            const element = $(document.getElementById(`${tentacleIdentifier}-${inputDetail.title}-Input-setting-number-${suffix}`));
+            const element = $(document.getElementById(`${tentacleIdentifier}-${inputDetail.options.name}-Input-setting-number-${suffix}`));
             const value = values[suffix];
             element.val(value);
         })
     }
-    $(document.getElementById(`${tentacleIdentifier}-${inputDetail.title}-Input-enabled-value`)).prop("checked", isEnabled);
+    $(document.getElementById(`${tentacleIdentifier}-${inputDetail.options.name}-Input-enabled-value`)).prop("checked", isEnabled);
 }
 
 function updateInputSettingsDisplay(settingsRoot) {
@@ -388,15 +386,20 @@ function _moveInputToPath(input_key, tentacle_schema, configValues) {
             target_obj = target_obj[path_list[path]].properties
         } catch (e) {
             target_obj[path_list[path]] = {
-                "title": path_list[path], "type": "object",
-                "options": { "in_optimizer": true }, "properties": {}
+                title: path_list[path],
+                type: "object",
+                options: {
+                    in_optimizer: true,
+                    name: path_list[path],
+                },
+                properties:{},
             }
             target_obj = target_obj[path_list[path]]["properties"]
         }
         stored_settings_path = `${stored_settings_path}${_INPUT_SEPARATOR}${path_list[path]}`
     }
     target_obj[input_key] = tentacle_schema.schema.properties[input_key]
-    window.CUSTOM_PATH_USER_INPUTS[target_obj[input_key].title] = tentacle_schema.tentacle
+    window.CUSTOM_PATH_USER_INPUTS[target_obj[input_key].options.name] = tentacle_schema.tentacle
 
     _modifyStoredSettings(configValues, input_key, stored_settings_path, tentacle_schema.tentacle)
 

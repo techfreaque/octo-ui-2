@@ -1,8 +1,11 @@
+import octobot_tentacles_manager.loaders as loaders
+
+
 app_store_repos = [
     {
         "name": "Matrix-Repo",
         "description": "This is a repo full of OctoBot apps",
-        "url": "https://github.com/techfreaque/OctoBot-Tentacles/blob/master/okteto-stack.yaml?raw=true",
+        "url": "https://github.com/techfreaque/octo-ui-2/tree/main/releases/octo_repo.json?raw=true",
     },
     {
         "name": "Another Repo without a server",
@@ -99,3 +102,23 @@ def fetch_available_apps_from_repos():
                 #                   f"in the repo ({repo['name']}) has missing informations")
                 pass
     return app_store_data
+
+
+def get_installed_tentacles_modules_dict() -> dict:
+    return {_tentacle.name: {
+        "name": _tentacle.name,
+        "in_dev_mode": _tentacle.in_dev_mode,
+        "ARTIFACT_NAME": _tentacle.ARTIFACT_NAME,
+        "metadata": _tentacle.metadata,
+        "origin_package": _tentacle.origin_package,
+        "origin_repository": _tentacle.origin_repository,
+        "tentacle_class_names": _tentacle.tentacle_class_names,
+        "tentacle_group": _tentacle.tentacle_group,
+        "tentacle_module_path": _tentacle.tentacle_module_path,
+        "tentacle_path": _tentacle.tentacle_path,
+        "tentacle_root_path": _tentacle.tentacle_root_path,
+        "tentacle_root_type": _tentacle.tentacle_root_type,
+        # "tentacle_type": _tentacle.tentacle_type,
+        "tentacles_requirements": _tentacle.tentacles_requirements,
+        "version": _tentacle.version
+    } for _tentacle in loaders.get_tentacle_classes().values()}

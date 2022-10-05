@@ -6,7 +6,7 @@ export default function defaultJsonEditorSettings() {
   return {
     theme: "octobot",
     iconlib: "fontawesome5",
-    no_additional_properties: false,
+    no_additional_properties: true,
     object_layout: "grid",
     disable_properties: true,
     required_by_default: true,

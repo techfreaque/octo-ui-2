@@ -3,7 +3,7 @@ import AppWidgets from "../../../AppWidgets";
 import SplitMainContent from "../../SplitMainContent";
 
 export default function DefaultLayout({ headerContent, upperContent, lowerContent, footerContent }) {
-  const [dimensions, setDimensions] = useState({ main: 0 })
+  const [dimensions, setDimensions] = useState({ main: window.innerHeight - 108}) // ~108 is header + footer
   const headerRef = useRef(null);
   const footerRef = useRef(null);
 

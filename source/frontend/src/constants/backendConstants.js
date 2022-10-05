@@ -45,3 +45,5 @@ export const BACKTESTING_RUN_SETTINGS_KEY = "backtesting_run_settings";
 export const DISPLAY_SETTINGS_KEY = "display_settings"
 export const DISPLAYED_ELEMENTS_KEY = "displayed_elements"
 export const GRAPHS_KEY = "graphs"
+
+export const botLayoutKey = "bot_ui_layout"

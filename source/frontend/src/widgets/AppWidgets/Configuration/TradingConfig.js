@@ -1,44 +1,46 @@
 import { Button, Tab } from "@mui/material";
 import MuiTabs from "../../../components/Tabs/MuiTabs";
-import { useMemo } from "react";
+import { useEffect, useState } from "react";
 import JsonEditor from "@techfreaque/json-editor-react";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import { useSaveTentaclesConfig } from "../../../api/configs";
 import { useBotPlottedElementsContext, useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
-import { userInputKey } from "../../../components/UserInputs/utils";
+import { userInputKey, validateJSONEditor } from "../../../components/UserInputs/utils";
 import { CUSTOM_USER_INPUT_PATH_SEPARATOR } from "../../../constants/backendConstants";
 import createNotification from "../../../components/Notifications/Notification";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 
 export default function TradingConfig() {
     const botPlottedElements = useBotPlottedElementsContext();
     const userInputs = botPlottedElements.user_inputs
     const saveTentaclesConfig = useSaveTentaclesConfig()
     const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
+    const botInfo = useBotInfoContext()
+    const tradingModeName = botInfo && botInfo.trading_mode_name
+    const [tabs, setTabs] = useState([])
     function handleSaveUserInputs() {
         saveUserInputs(saveTentaclesConfig)
     }
-    return useMemo(() => (
+    useEffect(() => {
+        setTabs(tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName))
+    }, [userInputs, setHiddenMetadataColumns, tradingModeName]);
+
+    return tabs &&
         <MuiTabs
-            tabs={tradingConfigTabs(userInputs, setHiddenMetadataColumns)}
-            rightContent={
-                (
-                    <Button variant="contained"
-                        onClick={handleSaveUserInputs}>Save</Button>
-                )
-            }
+            tabs={tabs}
+            rightContent={<Button variant="contained" onClick={handleSaveUserInputs}>Save</Button>}
             defaultTabId={0} />
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), [userInputs])
 }
 
-function tradingConfigTabs(userInputs, setHiddenMetadataColumns) {
+function tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName) {
     const tabsData = []
+    window.trading_mode_objects = {}
     if (userInputs) {
         window.tradingEditors = {}
         // avoid working on original elements as they will be edited for custom user inputs
         const editedUserInputs = JSON.parse(JSON.stringify(userInputs));
         _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
-        window.customPathUserInputs = _applyCustomPathUserInputs(editedUserInputs);
+        window.customPathUserInputs = _applyCustomPathUserInputs(editedUserInputs, tradingModeName);
         _displayInputsForTentacle(editedUserInputs, "trading", "trading_mode", tabsData)
         _displayInputsForTentacle(editedUserInputs, "null", "evaluator", tabsData)
     }
@@ -69,7 +71,8 @@ function saveUserInputs(saveTentaclesConfig) {
             if (tentacleType === "tradingMode") {
                 tradingTentacle = tentacle;
             }
-            if (check_config(configuration)) {
+            const errorsDesc = validateJSONEditor(configuration)
+            if (errorsDesc.length === 0) {
                 if (isNested) {
                     nestedConfigurations[tentacle] = configuration.getValue();
                 } else {
@@ -78,7 +81,7 @@ function saveUserInputs(saveTentaclesConfig) {
             }
             else {
                 save = false;
-                createNotification(`Error when saving ${tentacle} configuration`, "error", "Invalid configuration data.");
+                createNotification(`Error when saving ${tentacle} configuration`, "error", `Invalid configuration: ${errorsDesc}`);
             }
         }
     });
@@ -94,11 +97,6 @@ function saveUserInputs(saveTentaclesConfig) {
     if (save) {
         saveTentaclesConfig(tentaclesConfigByTentacle)
     }
-}
-
-function check_config(editor) {
-    const errors = editor.validate();
-    return !errors.length;
 }
 
 function _restoreCustomUserInputs(tentaclesConfigByTentacle) {
@@ -171,9 +169,13 @@ function _displayNestedEvaluatorInputs(inputDetails, tabsData) {
     const toRemoveKeys = [];
     Object.keys(inputDetails.config).forEach(key => {
         const value = inputDetails.config[key];
+        const options = (inputDetails.schema.properties[key] && inputDetails.schema.properties[key].options) || {};
+        const isEvaluatorPath = options.is_custom_path && options.tentacleType === "evaluator"
         if (value instanceof Object && !(value instanceof Array)) {
-            _createSplitNestedEvaluatorConfig(key, value, inputDetails.schema.properties[key], tabsData);
-            toRemoveKeys.push(key);
+            if (options.is_nested_tentacle || isEvaluatorPath) {
+                _createSplitNestedEvaluatorConfig(key, value, inputDetails.schema.properties[key], tabsData);
+                toRemoveKeys.push(key);
+            }
         }
     })
     toRemoveKeys.forEach(key => {
@@ -201,7 +203,7 @@ function _createTentacleConfigTab(configTitle, configName, config, schema, edito
                 startval={config}
                 editorName={editorKey + "##" + configName}
                 {...defaultJsonEditorSettings()}
-                display_required_only={true}
+                display_required_only={false}
             />
         )
     });
@@ -222,7 +224,7 @@ function _hideNotShownUserInputs(tentacle, schema, is_hidden) {
     return hiddenColumns;
 }
 
-function _applyCustomPathUserInputs(elements) {
+function _applyCustomPathUserInputs(elements, tradingModeName) {
     // note: not working:
     // - " " in custom path
     // - custom paths for strategy optimizer
@@ -265,14 +267,14 @@ function _applyCustomPathUserInputs(elements) {
     });
     // patch existing inputs with custom ones or create new groups
     customPathUserInputs.forEach((customInput) => {
-        const bestMatchingInput = _findNestedUserInputPathInInputs(customInput, elements);
+        const bestMatchingInput = _findNestedUserInputPathInInputs(customInput, elements, tradingModeName);
         if (bestMatchingInput === null) {
             console.log("Error: no element matching required path for: ", customInput);
             return;
         }
         let currentInputConfig = bestMatchingInput.inputDetails.config;
         let currentInputSchema = bestMatchingInput.inputDetails.schema;
-        customInput.path.forEach((toFindKey) => {
+        customInput.path.forEach((toFindKey, index) => {
             if (typeof currentInputConfig[toFindKey] === "undefined") {
                 currentInputConfig[toFindKey] = {};
             }
@@ -282,7 +284,13 @@ function _applyCustomPathUserInputs(elements) {
                     type: "object",
                     title: toFindKey,
                     properties: {},
-                    options: { collapsed: true }
+                    format: "grid",
+                    options: {
+                        collapsed: index > 1 && true,
+                        grid_columns: 12,
+                        is_custom_path: true,
+                        tentacleType: customInput.tentacleType,
+                    }
                 };
             }
             currentInputConfig = currentInputConfig[toFindKey];
@@ -297,19 +305,22 @@ function _applyCustomPathUserInputs(elements) {
     return customPathUserInputs;
 }
 
-function _findNestedUserInputPathInInputs(customInput, elements) {
+function _findNestedUserInputPathInInputs(customInput, elements, tradingModeName) {
     let bestMatchingInputDetails = null;
     let bestMatchingPath = [];
     let toFindEvaluator = null;
     let firstEvaluator = null;
     if (customInput.tentacleType === "evaluator") {
         toFindEvaluator = customInput.path[0];
+    } else if (customInput.tentacleType === "trading") {
+        toFindEvaluator = tradingModeName;
+        window.trading_mode_objects[customInput.path.length ? customInput.path[0] : customInput.key] = true
     }
     elements.data.elements.forEach((inputDetails, index) => {
         if (inputDetails.is_hidden) {
             return;
         }
-        if (inputDetails.tentacle_type === "evaluator") {
+        if (inputDetails.tentacle_type === "evaluator" || customInput.tentacleType === "trading") {
             if (firstEvaluator === null) {
                 firstEvaluator = inputDetails;
             }
@@ -322,7 +333,7 @@ function _findNestedUserInputPathInInputs(customInput, elements) {
         let localMatchingPath = [];
         let currentInput = inputDetails.config;
         customInput.path.forEach((toFindKey, index) => {
-            if (inputDetails.tentacle_type === "evaluator" && index === 0) {
+            if ((inputDetails.tentacle_type === "evaluator" || inputDetails.tentacle_type === "trading") && index === 0) {
                 // for evaluators, the 1st element of the path is the evaluator name which is checked already
                 return;
             }

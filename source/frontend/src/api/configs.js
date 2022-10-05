@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import createNotification from "../components/Notifications/Notification";
-import { backendRoutes } from "../constants/backendConstants";
+import { backendRoutes, botLayoutKey } from "../constants/backendConstants";
+import { defaultBotTemplate } from "../constants/LayoutTemplate";
 import { useBotDomainContext } from "../context/config/BotDomainProvider";
 import { useFetchPlotData } from "../context/data/BotPlottedElementsProvider";
 import fetchAndStoreFromBot, { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
@@ -17,11 +18,15 @@ export async function fetchBotConfigs(
 }
 
 export async function fetchStrategyDesignConfig(botDomain, saveStrategyDesignConfig) {
-    await fetchAndStoreFromBot(botDomain + backendRoutes.strategyDesignConfig, saveStrategyDesignConfig);
+    const success = (updated_data, update_url, result, msg, status) => {
+        if (!msg[botLayoutKey]) msg[botLayoutKey] = defaultBotTemplate
+        saveStrategyDesignConfig(msg)
+    }
+    sendAndInterpretBotUpdate({}, botDomain + backendRoutes.strategyDesignConfig, success, undefined, "get")
 }
 
 export async function saveStrategyDesignConfig(botDomain, newConfig) {
-    sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.strategyDesignConfig, () => { })
+    sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.strategyDesignConfig, () => {})
 }
 
 export const useSaveTentaclesConfig = () => {
