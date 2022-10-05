@@ -11,7 +11,7 @@ app_store_repos = [
         "url": "https://raw.githubusercontent.com/techfreaque/octo-ui-2/main/releases/octo_repo.json",
     },
     {
-        "name": "Another Repo without a server",
+        "name": "Another Package without a Repo",
         "description": "This is a repo full of OctoBot apps",
         "apps": [
             {

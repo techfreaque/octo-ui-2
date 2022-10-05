@@ -32,14 +32,14 @@ export const useSaveUiConfig = () => {
   const setUiConfig = useUpdateUiConfigContext();
   const uiConfig = useUiConfigContext();
   const botDomain = useBotDomainContext();
-  const logic = useCallback((newConfig) => {
+  const logic = useCallback((newConfig, callbackSucces) => {
     if (uiConfig.optimization_campaign && uiConfig.optimization_campaign.name) {
       let newCombinedConfig = {}
       setUiConfig(prevConfig => {
         newCombinedConfig = { ...prevConfig, ...newConfig }
         newCombinedConfig.optimization_campaign
         && newCombinedConfig.optimization_campaign.name
-        && saveStrategyDesignConfig(botDomain, newCombinedConfig);
+        && saveStrategyDesignConfig(botDomain, newCombinedConfig, callbackSucces);
         return newCombinedConfig
       })
     }

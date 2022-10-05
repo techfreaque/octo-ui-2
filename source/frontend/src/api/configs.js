@@ -25,8 +25,8 @@ export async function fetchStrategyDesignConfig(botDomain, saveStrategyDesignCon
     sendAndInterpretBotUpdate({}, botDomain + backendRoutes.strategyDesignConfig, success, undefined, "get")
 }
 
-export async function saveStrategyDesignConfig(botDomain, newConfig) {
-    sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.strategyDesignConfig, () => {})
+export async function saveStrategyDesignConfig(botDomain, newConfig, callback) {
+    sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.strategyDesignConfig, callback ? callback : () => {})
 }
 
 export const useSaveTentaclesConfig = () => {

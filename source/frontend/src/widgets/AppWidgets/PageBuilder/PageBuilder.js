@@ -1,6 +1,7 @@
 import { Button } from "@mui/material"
 import JsonEditor from "@techfreaque/json-editor-react"
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults"
+import createNotification from "../../../components/Notifications/Notification"
 import { botLayoutKey } from "../../../constants/backendConstants"
 import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider"
 import { useSaveUiConfig } from "../../../context/config/UiConfigProvider"
@@ -14,7 +15,8 @@ export default function PageBuilder() {
     const editorName = "Page-Builder"
     function handlePageLayoutSaving() {
         const newConfig = { [botLayoutKey]: window.$JsonEditors[editorName].getValue() }
-        saveUiConfig(newConfig)
+        const success = () => createNotification("Successfully saved new UI layout")
+        saveUiConfig(newConfig, success)
     }
     return (
         <>
