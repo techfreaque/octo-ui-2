@@ -16,6 +16,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { installAppPackage } from "../../../api/actions";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -30,12 +33,6 @@ const ExpandMore = styled((props) => {
 
 export default function AppCard({ app }) {
   const [expanded, setExpanded] = React.useState(false);
-  const botDomain = useBotDomainContext()
-
-  function handleInstallApp() {
-    installAppPackage(app.url, app.name, botDomain)
-  }
-
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
@@ -48,11 +45,7 @@ export default function AppCard({ app }) {
             {app.name[0]}
           </Avatar>
         }
-        action={
-          <IconButton onClick={handleInstallApp} aria-label="Donwload Package">
-            <FontAwesomeIcon icon={faDownload} />
-          </IconButton>
-        }
+        action={<InstallAppMenu app={app} />}
         title={app.name}
         subheader="September 14, 2016"
       />
@@ -84,5 +77,49 @@ export default function AppCard({ app }) {
         </CardContent>
       </Collapse>
     </Card>
+  );
+}
+
+function InstallAppMenu({ app }) {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const botDomain = useBotDomainContext()
+  function handleInstallApp(AppVersion) {
+    installAppPackage(AppVersion.url, app.name + " " + AppVersion.version, botDomain)
+  }
+
+  return (
+    <div>
+      <IconButton
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+        aria-label="Donwload Package"
+      >
+        <FontAwesomeIcon icon={faDownload} />
+      </IconButton>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        {app.versions.map((appVersion) => (
+          <MenuItem key={appVersion.version} onClick={() => handleInstallApp(appVersion)}>{appVersion.version} <FontAwesomeIcon icon={faDownload} style={{marginLeft: "5px"}} /></MenuItem>
+        ))}
+      </Menu>
+    </div>
   );
 }

@@ -76,7 +76,10 @@ export async function installAppPackage(appUrl, appName, botDomain) {
   const success = (updated_data, update_url, result, msg, status) => {
     createNotification("Successfully installed " + appName)
   }
+  const fail = (updated_data, update_url, result, msg, status) => {
+    createNotification("Failed to install " + appName, "danger")
+  }
   sendAndInterpretBotUpdate(
     { [appUrl]: "register_and_install" },
-    botDomain + backendRoutes.installApp, success)
+    botDomain + backendRoutes.installApp, success, fail)
 }
