@@ -17,6 +17,12 @@ export function BacktestingRunDataTable() {
     const botDomain = useBotDomainContext()
     const hiddenBacktestingMetadataColumns = useHiddenBacktestingMetadataColumnsContext()
 
+    // function restoreSettings(settings) {
+    //     console.log("test", settings);
+        // saveTentaclesConfig(settings, botDomain)
+    //     _useFetchPlotData()
+    // }
+
     useEffect(() => {
         hiddenBacktestingMetadataColumns && fetchBacktestingRunData()
         // eslint-disable-next-line react-hooks/exhaustive-deps

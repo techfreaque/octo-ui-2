@@ -1,4 +1,4 @@
-import { Button, Tab } from "@mui/material";
+import { Button, Grid, Tab } from "@mui/material";
 import MuiTabs from "../../../components/Tabs/MuiTabs";
 import { useEffect, useState } from "react";
 import JsonEditor from "@techfreaque/json-editor-react";
@@ -9,6 +9,8 @@ import { userInputKey, validateJSONEditor } from "../../../components/UserInputs
 import { CUSTOM_USER_INPUT_PATH_SEPARATOR } from "../../../constants/backendConstants";
 import createNotification from "../../../components/Notifications/Notification";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import { deleteAllCache, deleteCurrentCache, deleteOrders, deleteTrades } from "../../../api/actions";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 
 export default function TradingConfig() {
     const botPlottedElements = useBotPlottedElementsContext();
@@ -16,14 +18,17 @@ export default function TradingConfig() {
     const saveTentaclesConfig = useSaveTentaclesConfig()
     const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
     const botInfo = useBotInfoContext()
+    const botDomain = useBotDomainContext()
     const tradingModeName = botInfo && botInfo.trading_mode_name
+    const exchangeId = botInfo && botInfo.exchange_id
     const [tabs, setTabs] = useState([])
     function handleSaveUserInputs() {
         saveUserInputs(saveTentaclesConfig)
     }
+
     useEffect(() => {
-        setTabs(tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName))
-    }, [userInputs, setHiddenMetadataColumns, tradingModeName]);
+        userInputs && setTabs(tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName, exchangeId, botDomain))
+    }, [userInputs, setHiddenMetadataColumns, tradingModeName, exchangeId, botDomain]);
 
     return tabs &&
         <MuiTabs
@@ -32,7 +37,7 @@ export default function TradingConfig() {
             defaultTabId={0} />
 }
 
-function tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName) {
+function tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName, exchangeId, botDomain) {
     const tabsData = []
     window.trading_mode_objects = {}
     if (userInputs) {
@@ -44,9 +49,44 @@ function tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName
         _displayInputsForTentacle(editedUserInputs, "trading", "trading_mode", tabsData)
         _displayInputsForTentacle(editedUserInputs, "null", "evaluator", tabsData)
     }
+    advancedTradingSettings(tabsData, exchangeId, botDomain)
     return tabsData
 }
-
+function advancedTradingSettings(tabsData, exchangeId, botDomain) {
+    tabsData.push({
+        title: (
+            <Tab key="advanced-settings"
+                label={"Other Trading Mode Settinges"}
+                value={tabsData.length}
+                sx={{ textTransform: 'none' }} />
+        ),
+        content: (
+            <Grid container spacing={2}>
+                <Grid item xs={12}>
+                    <h3>Delete current Script Cache</h3>
+                    <p>Deletes plotting cache for the current script version, doesnt delete Evaluator Cache and orders</p>
+                    <Button onClick={() => deleteCurrentCache(botDomain, exchangeId)} variant="outlined" color="warning">Delete cache from current Trading Mode</Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <h3>Delete all Cache</h3>
+                    <p>Delete all cached values and plots for evaluators and trading scripts.</p>
+                    <p>Doesnt delete orders and simulated trades</p>
+                    <Button onClick={() => deleteAllCache(botDomain, exchangeId)} variant="outlined" color="error">Delete all cached values and plots for evaluators and trading modes</Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <h3>Delete simulated orders</h3>
+                    <p>Deletes simulated orders from current forward test</p>
+                    <Button onClick={() => deleteOrders(botDomain, exchangeId)} variant="outlined" color="error">Delete orders from current forward test</Button>
+                </Grid>
+                <Grid item xs={12}>
+                    <h3>Delete simulated trades</h3>
+                    <p>Delete simulated trades from current forward test</p>
+                    <Button onClick={() => deleteTrades(botDomain, exchangeId)} variant="outlined" color="error">Delete simulated trades from current forward test</Button>
+                </Grid>
+            </Grid>
+        )
+    });
+}
 function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {
     let hiddenMetadataColumns = [];
     elements.data.elements.forEach(function (inputDetails) {
@@ -190,6 +230,8 @@ function _createSplitNestedEvaluatorConfig(configName, config, schema, tabsData)
 
 function _createTentacleConfigTab(configTitle, configName, config, schema, editorKey, tabsData) {
     window.tradingEditors[editorKey + "##" + configName] = undefined
+    _addGridDisplayOptions(schema, editorKey);
+    Object.values(schema.properties).forEach(property => _addGridDisplayOptions(property, null));
     Object.keys(schema.properties).length !== 0 && tabsData.push({
         title: (
             <Tab key={configName}
@@ -207,6 +249,22 @@ function _createTentacleConfigTab(configTitle, configName, config, schema, edito
             />
         )
     });
+}
+
+function _addGridDisplayOptions(schema, editorKey) {
+    if (typeof schema.format === "undefined") {
+        // display user inputs as grid
+        schema.format = "grid";
+    }
+    if (typeof schema.options === "undefined") {
+        schema.options = {};
+    }
+    if (typeof schema.options.grid_columns === "undefined") {
+        schema.options.grid_columns = 4;
+    }
+    if (editorKey === "tentacles") {
+        schema.options.compact = true;
+    }
 }
 
 function _hideNotShownUserInputs(tentacle, schema, is_hidden) {

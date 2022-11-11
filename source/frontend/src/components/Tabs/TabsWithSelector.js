@@ -10,7 +10,8 @@ import {
 import { useState } from "react";
 import "./TabsWithSelector.css";
 
-export default function TabsWithSelector({ children, handleChange, items, currentItem, id }) {
+export default function TabsWithSelector({ children, handleChange, items, currentItem, id, onClose }) {
+    // todo replace - works but logs errors
     return (
         <div style={{ display: "flex", maxWidth: "300px" }}>
             <Tabs
@@ -38,7 +39,7 @@ export default function TabsWithSelector({ children, handleChange, items, curren
                         </ToggleButton>
                     )
                     )}
-                    <SelectorMenu id={id}>
+                    <SelectorMenu id={id} onClose={onClose}>
                         {children}
                     </SelectorMenu>
                 </ToggleButtonGroup>
@@ -49,7 +50,7 @@ export default function TabsWithSelector({ children, handleChange, items, curren
 
 const ITEM_HEIGHT = 80;
 
-function SelectorMenu({ children, id }) {
+function SelectorMenu({ children, id, onClose }) {
     const [anchorEl, setAnchorEl] = useState();
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -57,6 +58,7 @@ function SelectorMenu({ children, id }) {
     };
     const handleClose = () => {
         setAnchorEl(null);
+        onClose();
     };
     return (
         <>

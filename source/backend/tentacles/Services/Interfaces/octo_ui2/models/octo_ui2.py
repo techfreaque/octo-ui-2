@@ -34,10 +34,12 @@ def import_cross_origin_if_enabled():
 
 def get_portfolio_history():
     exchange_manager, exchange_name, exchange_id = models.get_first_exchange_data()
-
-    return exchange_manager.exchange_personal_data.portfolio_manager \
-        .historical_portfolio_value_manager.get_historical_values("USDT", commons_enums.TimeFrames.ONE_DAY,
-                                                                  from_timestamp=0, to_timestamp=None)
+    try:
+        return exchange_manager.exchange_personal_data.portfolio_manager \
+                .historical_portfolio_value_manager.get_historical_values("USDT", commons_enums.TimeFrames.ONE_DAY,
+                                                                          from_timestamp=0, to_timestamp=None)
+    except AttributeError:
+        return {}
 
 
 def get_plotted_data(trading_mode, symbol, time_frame, exchange_id, backtesting_id=None,

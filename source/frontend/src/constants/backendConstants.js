@@ -8,8 +8,13 @@ export const backendRoutes = {
   botConfig: basePath + "/bot-config",
   plottedData: basePath + "/plotted_data",
   botPortfolio: basePath + "/portfolio",
+  manageSymbol: "/profile",
   appStore: basePath + "/app-store",
   installApp: "/advanced/tentacle_packages?update_type=add_package",
+  config: "/config",
+  restartBot: "/commands/restart",
+  stopBot: "/commands/stop",
+  updateBot: "/commands/update",
   updateTentaclesConfig: "/config_tentacles?action=update&reload=true",
   strategyDesignRunData: "/strategy_design/run_data",
   strategyDesignDeleteRunData: "/strategy_design/run_data?action=delete",
@@ -21,6 +26,13 @@ export const backendRoutes = {
   optimizerStop: "/advanced/strategy-optimizer?update_type=cancel_optimizer",
   optimizerQueueUpdate: "/strategy_design/strategy_design_optimizer_queueupdate",
   optimizerAddToQueue: "/strategy_design/strategy_design_optimizer_queueadd",
+  cacheActionDeleteTrades: "/strategy_design/cacheclear_simulated_trades_cache",
+  cacheActionDeleteCurrentCache: "/strategy_design/cacheclear_plotted_cache",
+  cacheActionDeleteAllCache: "/strategy_design/cacheclear_all_cache",
+  cacheActionDeleteOrders: "/strategy_design/cacheclear_simulated_orders_cache",
+
+
+
 }
 
 export const ID_SEPARATOR = "_";

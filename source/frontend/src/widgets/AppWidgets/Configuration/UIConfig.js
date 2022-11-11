@@ -1,14 +1,18 @@
 import { useMemo } from "react";
 import JsonEditor from "@techfreaque/json-editor-react";
-import { uiConfigSchema } from "./uiConfigSchema";
+import { getUiConfigSchema } from "./uiConfigSchema";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import { useSaveUiConfig, useUiConfigContext } from "../../../context/config/UiConfigProvider";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 
-export const availableUIConfigKeys = ["backtesting_run_settings", "backtesting_analysis_settings", "optimizer_campaigns_to_load", "optimizer_run_settings"]
+export const availableUIConfigKeys = ["backtesting_run_settings", "backtesting_analysis_settings", "optimizer_campaigns_to_load", "optimizer_run_settings", "display_settings"]
 
 export default function UIConfig({ configKeys }) {
     const uiConfig = useUiConfigContext();
+    const botInfo = useBotInfoContext();
     const saveUiConfig = useSaveUiConfig()
+    const dataFiles = botInfo?.data_files
+    const currentSymbols = botInfo?.symbols
 
     function handleEditorsAutosave(configKeys) {
         if (uiConfig && uiConfig.optimization_campaign) {
@@ -27,7 +31,7 @@ export default function UIConfig({ configKeys }) {
                 const startVal = convertTimestamps(uiConfig[configKey])
                 return <JsonEditor
                     {...defaultJsonEditorSettings()}
-                    schema={uiConfigSchema.properties[configKey]}
+                    schema={getUiConfigSchema(configKey, dataFiles, currentSymbols)}
                     startval={startVal}
                     editorName={"uiConf-" + configKey}
                     onChange={() => handleEditorsAutosave(configKeys)}

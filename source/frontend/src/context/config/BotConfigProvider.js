@@ -10,24 +10,30 @@ const UpdateBotConfigContext = createContext();
 export const useSaveBotConfigContext = () => {
   return useContext(UpdateBotConfigContext);
 };
+export const useBotConfigContext = () => {
+  return useContext(BotConfigContext);
+};
 
-export function useBotConfig(configKeys) {
-  const _botConfig = useContext(BotConfigContext)
+export const useGetBotConfig = () => {
+  const botConfig = useBotConfigContext()
+  const logic = useCallback((configKeys) => {
 
-  const requestedBotConfig = {}
-  configKeys.forEach(configKey => {
-    const paths = configKey.split("/")
-    let tmp_config = _botConfig.configs
-    let tmp_data = _botConfig.data
-    paths.forEach(path => {
-      if (tmp_config) {
-        tmp_config = tmp_config.properties[path]
-        tmp_data = tmp_data[path]
-      }
+    const requestedBotConfig = {}
+    configKeys.forEach(configKey => {
+      const paths = configKey.split("/")
+      let tmp_config = botConfig.configs
+      let tmp_data = botConfig.data
+      paths.forEach(path => {
+        if (tmp_config) {
+          tmp_config = tmp_config.properties[path]
+          tmp_data = tmp_data[path]
+        }
+      })
+      requestedBotConfig[configKey] = { schema: tmp_config, data: tmp_data }
     })
-    requestedBotConfig[configKey] = { schema: tmp_config, data: tmp_data }
-  })
-  return requestedBotConfig
+    return requestedBotConfig
+  }, [botConfig]);
+  return logic;
 };
 
 export const useSaveBotConfig = () => {

@@ -3,22 +3,23 @@ import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { restartBot } from "../../../api/actions";
+import { useIsBotOnlineContext, useUpdateIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 
 export default function RestartBotButton() {
   const [isLoading, setIsloading] = useState(false);
+  const updateIsOnline = useUpdateIsBotOnlineContext()
+  const isOnline = useIsBotOnlineContext()
   const botDomain = useBotDomainContext();
-  function handleRestart() {
-    setIsloading(true);
-    fetch(botDomain + "/api_backend/commands/restart").then((response) =>
-      setIsloading(false)
-    );
-  }
+  const disabled = isLoading || !isOnline
   return (
-    <Button onClick={handleRestart} variant="outlined" color="warning">
+    <Button disabled={disabled} onClick={() => restartBot(botDomain, updateIsOnline, setIsloading)} variant="outlined" color="warning">
       <FontAwesomeIcon
         icon={faArrowRotateRight}
-        className={isLoading ? "fa-spin" : ""}
+        className={disabled ? "fa-spin" : ""}
+        style={{ marginRight: "5px" }}
       />
+      Restart Bot
     </Button>
   );
 }

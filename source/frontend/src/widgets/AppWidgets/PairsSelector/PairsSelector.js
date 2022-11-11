@@ -2,9 +2,12 @@ import TabsWithSelector from "../../../components/Tabs/TabsWithSelector";
 import { Button } from "@mui/material";
 import { useUpdateVisiblePairsContext, useVisiblePairsContext } from "../../../context/config/VisiblePairProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import { backendRoutes } from "../../../constants/backendConstants";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 
 export default function PairsSelector() {
   const botInfo = useBotInfoContext();
+  const botDomain = useBotDomainContext();
   const visiblePairs = useVisiblePairsContext();
   const setVisiblePairs = useUpdateVisiblePairsContext();
 
@@ -18,7 +21,7 @@ export default function PairsSelector() {
         items={botInfo.symbols}
         handleChange={handleChange}
       >
-        <Button>Manage Curreny Settings</Button>
+        <Button href={botDomain + backendRoutes.manageSymbol}>Manage Curreny Settings</Button>
       </TabsWithSelector>
     );
   } else {

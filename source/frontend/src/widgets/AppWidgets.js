@@ -1,4 +1,5 @@
 import { createElement } from "react";
+import { useMemo } from "react";
 
 import DefaultLayout from "./LayoutWidgets/PageLayouts/DefaultLayout";
 import SimpleLayout from "./LayoutWidgets/PageLayouts/SimpleLayout/SimpleLayout";
@@ -7,7 +8,6 @@ import AppDrawerDropdown from "./AppWidgets/AppDrawerDropdown";
 import ScrollableTabs from "./LayoutWidgets/Tabs/ScrollableTabs";
 import Footer from "./LayoutWidgets/Footer";
 import SplitMainContent from "./LayoutWidgets/SplitMainContent";
-import RestartBotButton from "./AppWidgets/Buttons/RestartBotButton";
 import CurrentPanelFullscreen from "./AppWidgets/Buttons/CurrentPanelFullscreen";
 import CurrentPanelMinimize from "./AppWidgets/Buttons/CurrentPanelMinimize";
 import Configuration from "./AppWidgets/Configuration/Form";
@@ -29,8 +29,13 @@ import OptimizerRunsToBeAdded from "./AppWidgets/Stats/OptimizerRunsToBeAdded";
 import StartOptimizerButton from "./AppWidgets/Buttons/StartOptimizerButton";
 import StopOptimizerButton from "./AppWidgets/Buttons/StopOptimizerButton";
 import AddToOptimizerQueueButton from "./AppWidgets/Buttons/AddToOptimizerQueueButton";
-import { useMemo } from "react";
 import PageBuilder from "./AppWidgets/PageBuilder/PageBuilder";
+import ButtonWithModal from "./AppWidgets/Modals/ButtonWithModal";
+import RealTradingSwitch from "./AppWidgets/Configuration/SwitchRealTrading/SwitchRealTrading";
+import StopBotButton from "./AppWidgets/Buttons/StopBotButton";
+import RestartBotButton from "./AppWidgets/Buttons/RestartBotButton";
+import UpdateBotButton from "./AppWidgets/Buttons/UpdateBotButton";
+import PowerMenu from "./AppWidgets/Modals/PowerMenu";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -44,6 +49,8 @@ export const registeredComponents = {
   Footer: Footer,
   SplitMainContent: SplitMainContent,
   RestartBotButton: RestartBotButton,
+  StopBotButton: StopBotButton,
+  UpdateBotButton: UpdateBotButton,
   StartBacktestingButton: StartBacktestingButton,
   StopBacktestingButton: StopBacktestingButton,
   StartOptimizerButton: StartOptimizerButton,
@@ -65,6 +72,9 @@ export const registeredComponents = {
   OptimizerRunsToBeAdded: OptimizerRunsToBeAdded,
   AddToOptimizerQueueButton: AddToOptimizerQueueButton,
   PageBuilder: PageBuilder,
+  ButtonWithModal: ButtonWithModal,
+  RealTradingSwitch: RealTradingSwitch,
+  PowerMenu: PowerMenu,
 };
 
 export default function AppWidgets(props) {

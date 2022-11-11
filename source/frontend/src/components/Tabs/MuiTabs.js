@@ -13,7 +13,7 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
         setCurrentTabId(newCurrentTabId);
     };
     const height = tabs[currentTabId].dontScroll ? "calc(100% - 54px)" : "calc(100% - 54px)";
-    return (
+    return tabs && (
         <div style={
             { height: "calc(100%)" }
         }>

@@ -13,8 +13,9 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import AppWidgets from "../../AppWidgets";
 
-export default function Footer() {
+export default function Footer({ rightContent }) {
   const botColors = useBotColorsContext();
   const botInfo = useBotInfoContext()
   return (
@@ -28,7 +29,6 @@ export default function Footer() {
             <span> on </span>
             <a className="me-1" href="https://github.com/Drakkar-Software">
               <FontAwesomeIcon icon={faGithub} />
-              <i className="fab fa-github" />
               <span className="d-none d-md-inline"> GitHub</span>
             </a>
             <a className="me-1" href="https://twitter.com/DrakkarsOctoBot">
@@ -65,7 +65,8 @@ export default function Footer() {
               <FontAwesomeIcon className="me-1" icon={faBitcoin} />
               <FontAwesomeIcon className="me-1" icon={faEthereum} />
             </a>
-            <span>OctoBot {botInfo && botInfo.octobot_version}</span>
+            <span style={{marginRight: "10px"}}>OctoBot {botInfo && botInfo.octobot_version}</span>
+            {rightContent && <AppWidgets layout={rightContent} />}
           </div>
         </Container>
       </Navbar>

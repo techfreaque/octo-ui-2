@@ -38,8 +38,8 @@ export default function PageBuilder() {
 
 const pageBuilderSchema = (registeredComponents) => {
 
-    const availableComponentsList = ["Tab", ...Object.keys(registeredComponents).map(componentName => componentName)]
-    const appWidget = (childrenAppWidget) => {
+    const availableComponentsList = ["Tab", ...Object.keys(registeredComponents).map(componentName => componentName).sort()]
+    const appWidget = () => {
         return {
             headerTemplate: "{{self.component}} - Component {{i}}",
             "type": "object",
@@ -50,18 +50,19 @@ const pageBuilderSchema = (registeredComponents) => {
                     default: "Configuration"
                 },
                 // custom App Widget props
-                ...generateSimpleProp("title", "Tab", "string"),
+                ...generateSimpleProp("title", ["Tab", "ButtonWithModal"], "string"),
                 ...generateSimpleProp("dontScroll", "Tab", "boolean", "checkbox"),
                 ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeys),
                 ...generateSimpleProp("configKeys", "UIConfig", "array", "select", availableUIConfigKeys, true),
+                ...generateSimpleProp("faIcon", "ButtonWithModal", "string"),
                 ...generateCustomAppWidgetProp("tabs", "ScrollableTabs"),
                 ...generateCustomAppWidgetProp("headerContent", ["DefaultLayout", "SimpleLayout"]),
-                ...generateCustomAppWidgetProp("content", ["Tab"]),
+                ...generateCustomAppWidgetProp("content", ["Tab", "ButtonWithModal"]),
                 ...generateCustomAppWidgetProp("pageContent", "SimpleLayout"),
                 ...generateCustomAppWidgetProp("upperContent", "DefaultLayout"),
                 ...generateCustomAppWidgetProp("lowerContent", "DefaultLayout"),
                 ...generateCustomAppWidgetProp("leftContent", ["Header"]),
-                ...generateCustomAppWidgetProp("rightContent", ["Header", "ScrollableTabs"]),
+                ...generateCustomAppWidgetProp("rightContent", ["Header", "ScrollableTabs", "Footer"]),
                 ...generateCustomAppWidgetProp("footerContent", ["DefaultLayout", "SimpleLayout"]),
             },
             options: { collapsed: true }

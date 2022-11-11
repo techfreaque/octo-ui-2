@@ -1,5 +1,5 @@
 import React from "react";
-import { useBotConfig } from "../../../context/config/BotConfigProvider";
+import { useGetBotConfig } from "../../../context/config/BotConfigProvider";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import JsonEditor from "@techfreaque/json-editor-react";
 
@@ -7,7 +7,8 @@ export const availableConfigKeys = ["profile/crypto-currencies", "profile/exchan
   "profile/trading", "profile/trader", "profile/trader-simulator",]
 
 export default function Configuration({ configKey }) {
-  const botConfigs = useBotConfig([configKey]);
+  const getBotConfigs = useGetBotConfig()
+  const botConfigs = getBotConfigs([configKey])
   // const _saveBotConfigs = useSaveFormBotConfig();
   // function handleSaveForm(dataToStore) {
   //   console.log("fsdjkfjsd");
