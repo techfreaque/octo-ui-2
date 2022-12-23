@@ -4,14 +4,20 @@
             "name": "Octo Ui2",
             "description": "Web Interface for OctoBot based on react",
             "versions": [
-                {"version": "latest", "url": "https://github.com/techfreaque/octo-ui-2/blob/main/releases/octo-ui2-v-latest/any_platform.zip?raw=true"},
-                {"version": "0.3.1", "url": "https://github.com/techfreaque/octo-ui-2/blob/main/releases/octo-ui2-v-0.3.1/any_platform.zip?raw=true"},
-                {"version": "0.3.0", "url": "https://github.com/techfreaque/octo-ui-2/blob/main/releases/octo-ui2-v-0.3.0/any_platform.zip?raw=true"},
-                {"version": "0.2.9", "url": "https://github.com/techfreaque/octo-ui-2/blob/main/releases/octo-ui2-v-0.2.9/any_platform.zip?raw=true"}
-
+                {"version": "latest", "url": "https://github.com/techfreaque/octo-ui-2/blob/main/releases/octo-ui2-v-latest/any_platform.zip?raw=true"}
             ],
             "categories": ["UI"],
             "tentacle_package_name": "Matrix-Octo-UI2"
+        },
+        {
+            "name": "Spot Master 3000",
+            "description": "A spot trading mode that balances your portfolio. !! This trading mode requires you to import the profile here as well",
+            "versions": [
+                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/main/releases/trading_mode/latest/any_platform.zip"}
+
+            ],
+            "categories": ["Strategies"],
+            "tentacle_package_name": "Spot-Master-3000"
         }
     ]
 }
