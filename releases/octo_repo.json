@@ -4,7 +4,7 @@
             "name": "Octo Ui2",
             "description": "Web Interface for OctoBot based on react",
             "versions": [
-                {"version": "latest", "url": "https://github.com/techfreaque/octo-ui-2/blob/main/releases/octo-ui2-v-latest/any_platform.zip?raw=true"}
+                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octo-ui-2/main/releases/octo-ui2-latest/any_platform.zip"}
             ],
             "categories": ["UI"],
             "tentacle_package_name": "Matrix-Octo-UI2"
