@@ -3,7 +3,18 @@ import os
 import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.enums as web_enums
-from .controllers import frontend, configuration, portfolio, plot_data, bot_info, app_store
+from .controllers import (
+    frontend,
+    configuration,
+    portfolio,
+    plot_data,
+    bot_info,
+    app_store,
+)
+import octobot_services.interfaces.util as interfaces_util
+import octobot_trading.util as trading_util
+import octobot_tentacles_manager.api as tentacles_manager_api
+import octobot_commons.constants as commons_constants
 
 
 class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
@@ -24,6 +35,19 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
                 "octo_ui2",
                 "octo_ui2.home",
                 "Experimental",
-                web_enums.TabsLocation.START
+                web_enums.TabsLocation.START,
             )
         ]
+
+    @classmethod
+    def get_ui_config(
+        cls,
+        tentacles_setup_config=None,
+    ):
+        config = tentacles_manager_api.get_tentacle_config(
+            tentacles_setup_config or interfaces_util.get_edited_tentacles_config(), cls
+        )
+        config[
+            commons_constants.CONFIG_CURRENT_LIVE_ID
+        ] = trading_util.get_current_bot_live_id(interfaces_util.get_edited_config())
+        return config

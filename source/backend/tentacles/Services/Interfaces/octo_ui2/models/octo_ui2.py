@@ -9,7 +9,6 @@ import octobot_commons.optimization_campaign as optimization_campaign
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
 import tentacles.Services.Interfaces.web_interface.models as models
 
-
 def _get_logger():
     return bot_logging.get_logger("OctoUi2Plugin")
 

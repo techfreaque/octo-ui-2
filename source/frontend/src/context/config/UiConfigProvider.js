@@ -5,7 +5,7 @@ import {
   useCallback,
   useEffect,
 } from "react";
-import { fetchStrategyDesignConfig, saveStrategyDesignConfig } from "../../api/configs";
+import { fetchUIConfig, saveUIConfig } from "../../api/configs";
 import { useBotDomainContext } from "./BotDomainProvider";
 
 const UiConfigContext = createContext();
@@ -23,7 +23,7 @@ export const useFetchUiConfig = () => {
   const setUiConfig = useUpdateUiConfigContext();
   const botDomain = useBotDomainContext();
   const logic = useCallback(() => {
-    fetchStrategyDesignConfig(botDomain, setUiConfig);
+    fetchUIConfig(botDomain, setUiConfig);
   }, [setUiConfig, botDomain]);
   return logic;
 };
@@ -38,8 +38,8 @@ export const useSaveUiConfig = () => {
       setUiConfig(prevConfig => {
         newCombinedConfig = { ...prevConfig, ...newConfig }
         newCombinedConfig.optimization_campaign
-        && newCombinedConfig.optimization_campaign.name
-        && saveStrategyDesignConfig(botDomain, newCombinedConfig, callbackSucces);
+          && newCombinedConfig.optimization_campaign.name
+          && saveUIConfig(botDomain, newCombinedConfig, callbackSucces);
         return newCombinedConfig
       })
     }
@@ -51,7 +51,7 @@ export const UiConfigProvider = ({ children }) => {
   const [uiConfig, setUiConfig] = useState({});
   const botDomain = useBotDomainContext();
   useEffect(() => {
-    fetchStrategyDesignConfig(botDomain, setUiConfig);
+    fetchUIConfig(botDomain, setUiConfig);
   }, [botDomain]);
   return (
     <UiConfigContext.Provider value={uiConfig}>

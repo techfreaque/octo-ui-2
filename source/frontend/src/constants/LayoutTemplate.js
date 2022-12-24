@@ -6,6 +6,11 @@ export const defaultBotTemplate = [
         "footerContent": [
           {
             "component": "Footer",
+            "rightContent": [
+              {
+                "component": "PowerMenu"
+              }
+            ]
           }
         ],
         "headerContent": [
@@ -13,18 +18,21 @@ export const defaultBotTemplate = [
             "component": "Header",
             "leftContent": [
               {
-                "component": "AppDrawerDropdown",
+                "component": "AppDrawerDropdown"
               },
               {
-                "component": "PairsSelector",
+                "component": "PairsSelector"
               },
               {
-                "component": "TimeFrameSelector",
+                "component": "TimeFrameSelector"
               }
             ],
             "rightContent": [
               {
-                "component": "ColorModeSwitch",
+                "component": "ColorModeSwitch"
+              },
+              {
+                "component": "RealTradingSwitch"
               }
             ]
           }
@@ -34,10 +42,10 @@ export const defaultBotTemplate = [
             "component": "ScrollableTabs",
             "rightContent": [
               {
-                "component": "CurrentPanelMinimize",
+                "component": "CurrentPanelMinimize"
               },
               {
-                "component": "CurrentPanelFullscreen",
+                "component": "CurrentPanelFullscreen"
               }
             ],
             "tabs": [
@@ -45,7 +53,7 @@ export const defaultBotTemplate = [
                 "component": "Tab",
                 "content": [
                   {
-                    "component": "TradingConfig",
+                    "component": "TradingConfig"
                   }
                 ],
                 "dontScroll": true,
@@ -67,25 +75,27 @@ export const defaultBotTemplate = [
                               "backtesting_run_settings",
                               "backtesting_analysis_settings",
                               "optimizer_campaigns_to_load"
-                            ],
+                            ]
                           }
                         ],
+                        "dontScroll": false,
                         "title": "Backtesting Settings"
                       },
                       {
                         "component": "Tab",
                         "content": [
                           {
-                            "component": "BacktestingRunDataTable",
+                            "component": "BacktestingRunDataTable"
                           }
                         ],
+                        "dontScroll": false,
                         "title": "Backtesting Overview"
                       },
                       {
-                        "component": "StartBacktestingButton",
+                        "component": "StartBacktestingButton"
                       },
                       {
-                        "component": "StopBacktestingButton",
+                        "component": "StopBacktestingButton"
                       }
                     ]
                   }
@@ -104,18 +114,20 @@ export const defaultBotTemplate = [
                         "component": "Tab",
                         "content": [
                           {
-                            "component": "RestartBotButton",
+                            "component": "RestartBotButton"
                           }
                         ],
+                        "dontScroll": false,
                         "title": "Trading Settings"
                       },
                       {
                         "component": "Tab",
                         "content": [
                           {
-                            "component": "RestartBotButton",
+                            "component": "RestartBotButton"
                           }
                         ],
+                        "dontScroll": false,
                         "title": "Trading Overview"
                       }
                     ]
@@ -138,41 +150,43 @@ export const defaultBotTemplate = [
                             "component": "UIConfig",
                             "configKeys": [
                               "optimizer_run_settings"
-                            ],
+                            ]
                           }
                         ],
+                        "dontScroll": false,
                         "title": "Optimizer Settings"
                       },
                       {
                         "component": "Tab",
                         "content": [
                           {
-                            "component": "OptimizerConfigForm",
+                            "component": "OptimizerConfigForm"
                           }
                         ],
+                        "dontScroll": false,
                         "title": "Optimizer"
                       },
                       {
                         "component": "Tab",
                         "content": [
                           {
-                            "component": "OptimizerQueueTable",
+                            "component": "OptimizerQueueTable"
                           }
                         ],
                         "dontScroll": true,
                         "title": "Optimizer Queue"
                       },
                       {
-                        "component": "OptimizerRunsToBeAdded",
+                        "component": "OptimizerRunsToBeAdded"
                       },
                       {
-                        "component": "StartOptimizerButton",
+                        "component": "StartOptimizerButton"
                       },
                       {
-                        "component": "StopOptimizerButton",
+                        "component": "StopOptimizerButton"
                       },
                       {
-                        "component": "AddToOptimizerQueueButton",
+                        "component": "AddToOptimizerQueueButton"
                       }
                     ]
                   }
@@ -181,14 +195,14 @@ export const defaultBotTemplate = [
                 "title": "Strategy Optimizer"
               },
               {
-                "component": "RestartBotButton",
+                "component": "RestartBotButton"
               }
             ]
           }
         ],
         "upperContent": [
           {
-            "component": "MainCharts",
+            "component": "MainCharts"
           }
         ]
       }
@@ -203,6 +217,11 @@ export const defaultBotTemplate = [
         "footerContent": [
           {
             "component": "Footer",
+            "rightContent": [
+              {
+                "component": "PowerMenu"
+              }
+            ]
           }
         ],
         "headerContent": [
@@ -210,16 +229,23 @@ export const defaultBotTemplate = [
             "component": "Header",
             "leftContent": [
               {
-                "component": "AppDrawerDropdown",
+                "component": "AppDrawerDropdown"
               },
               {
-                "component": "PairsSelector",
+                "component": "PairsSelector"
               },
               {
-                "component": "TimeFrameSelector",
+                "component": "TimeFrameSelector"
               }
             ],
-            "rightContent": []
+            "rightContent": [
+              {
+                "component": "ColorModeSwitch"
+              },
+              {
+                "component": "RealTradingSwitch"
+              }
+            ]
           }
         ],
         "lowerContent": [
@@ -227,10 +253,10 @@ export const defaultBotTemplate = [
             "component": "ScrollableTabs",
             "rightContent": [
               {
-                "component": "CurrentPanelMinimize",
+                "component": "CurrentPanelMinimize"
               },
               {
-                "component": "CurrentPanelFullscreen",
+                "component": "CurrentPanelFullscreen"
               }
             ],
             "tabs": [
@@ -239,7 +265,7 @@ export const defaultBotTemplate = [
                 "content": [
                   {
                     "component": "Configuration",
-                    "configKey": "profile/crypto-currencies",
+                    "configKey": "profile/crypto-currencies"
                   }
                 ],
                 "dontScroll": false,
@@ -250,7 +276,7 @@ export const defaultBotTemplate = [
                 "content": [
                   {
                     "component": "Configuration",
-                    "configKey": "profile/exchanges",
+                    "configKey": "profile/exchanges"
                   }
                 ],
                 "dontScroll": false,
@@ -261,29 +287,29 @@ export const defaultBotTemplate = [
                 "content": [
                   {
                     "component": "Configuration",
-                    "configKey": "profile/trading",
+                    "configKey": "profile/trading"
                   },
                   {
                     "component": "Configuration",
-                    "configKey": "profile/trader",
+                    "configKey": "profile/trader"
                   },
                   {
                     "component": "Configuration",
-                    "configKey": "profile/trader-simulator",
+                    "configKey": "profile/trader-simulator"
                   }
                 ],
                 "dontScroll": false,
                 "title": "Trading"
               },
               {
-                "component": "RestartBotButton",
+                "component": "RestartBotButton"
               }
             ]
           }
         ],
         "upperContent": [
           {
-            "component": "MainCharts",
+            "component": "MainCharts"
           }
         ]
       }
@@ -298,6 +324,11 @@ export const defaultBotTemplate = [
         "footerContent": [
           {
             "component": "Footer",
+            "rightContent": [
+              {
+                "component": "PowerMenu"
+              }
+            ]
           }
         ],
         "headerContent": [
@@ -305,18 +336,21 @@ export const defaultBotTemplate = [
             "component": "Header",
             "leftContent": [
               {
-                "component": "AppDrawerDropdown",
+                "component": "AppDrawerDropdown"
               },
               {
-                "component": "PairsSelector",
+                "component": "PairsSelector"
               },
               {
-                "component": "TimeFrameSelector",
+                "component": "TimeFrameSelector"
               }
             ],
             "rightContent": [
               {
-                "component": "ColorModeSwitch",
+                "component": "ColorModeSwitch"
+              },
+              {
+                "component": "RealTradingSwitch"
               }
             ]
           }
@@ -326,10 +360,10 @@ export const defaultBotTemplate = [
             "component": "ScrollableTabs",
             "rightContent": [
               {
-                "component": "CurrentPanelMinimize",
+                "component": "CurrentPanelMinimize"
               },
               {
-                "component": "CurrentPanelFullscreen",
+                "component": "CurrentPanelFullscreen"
               }
             ],
             "tabs": [
@@ -337,7 +371,7 @@ export const defaultBotTemplate = [
                 "component": "Tab",
                 "content": [
                   {
-                    "component": "CurrentPortfolioTable",
+                    "component": "CurrentPortfolioTable"
                   }
                 ],
                 "dontScroll": false,
@@ -348,7 +382,7 @@ export const defaultBotTemplate = [
         ],
         "upperContent": [
           {
-            "component": "MainCharts",
+            "component": "MainCharts"
           }
         ]
       }
@@ -363,6 +397,11 @@ export const defaultBotTemplate = [
         "footerContent": [
           {
             "component": "Footer",
+            "rightContent": [
+              {
+                "component": "PowerMenu"
+              }
+            ]
           }
         ],
         "headerContent": [
@@ -370,15 +409,22 @@ export const defaultBotTemplate = [
             "component": "Header",
             "leftContent": [
               {
-                "component": "AppDrawerDropdown",
+                "component": "AppDrawerDropdown"
               }
             ],
-            "rightContent": []
+            "rightContent": [
+              {
+                "component": "ColorModeSwitch"
+              },
+              {
+                "component": "RealTradingSwitch"
+              }
+            ]
           }
         ],
         "pageContent": [
           {
-            "component": "AppStore",
+            "component": "AppStore"
           }
         ]
       }
@@ -393,6 +439,7 @@ export const defaultBotTemplate = [
         "footerContent": [
           {
             "component": "Footer",
+            "rightContent": []
           }
         ],
         "headerContent": [
@@ -400,7 +447,7 @@ export const defaultBotTemplate = [
             "component": "Header",
             "leftContent": [
               {
-                "component": "AppDrawerDropdown",
+                "component": "AppDrawerDropdown"
               }
             ],
             "rightContent": []
@@ -408,7 +455,7 @@ export const defaultBotTemplate = [
         ],
         "pageContent": [
           {
-            "component": "PageBuilder",
+            "component": "PageBuilder"
           }
         ]
       }

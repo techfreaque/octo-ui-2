@@ -2,15 +2,45 @@
 import flask
 import octobot_commons.constants as commons_constants
 import octobot_commons.logging as commons_logging
+from tentacles.Services.Interfaces.octo_ui2.models import config
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
 import octobot_backtesting.api as backtesting_api
 import octobot_services.interfaces.util as interfaces_util
-from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import import_cross_origin_if_enabled, dev_mode_is_on
-
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import import_cross_origin_if_enabled
 
 def register_bot_config_routes(plugin):
+    route = "/ui_config"
+    methods = ["GET", "POST"]
+    if cross_origin := import_cross_origin_if_enabled():
+
+        @plugin.blueprint.route(route, methods=methods)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def ui_config():
+            return _ui_config()
+
+    else:
+
+        @plugin.blueprint.route(route, methods=methods)
+        @login.login_required_when_activated
+        def ui_config():
+            return _ui_config()
+
+    def _ui_config():
+        if flask.request.method == "POST":
+            try:
+                request_data = flask.request.get_json()
+                return util.get_rest_reply(flask.jsonify(
+                    config.save_ui_config(request_data)
+                ))
+            except Exception as e:
+                commons_logging.get_logger("ui_config").exception(e)
+                return util.get_rest_reply(str(e), 500)
+        else:
+            return config.get_ui_config()
+
     route = "/bot-config"
     if cross_origin := import_cross_origin_if_enabled():
         @plugin.blueprint.route(route)

@@ -10,19 +10,19 @@ app_store_repos = [
         "description": "This is a repo full of OctoBot apps",
         "url": "https://raw.githubusercontent.com/techfreaque/octo-ui-2/main/releases/octo_repo.json",
     },
-    {
-        "name": "Another Package without a Repo",
-        "description": "This is a repo full of OctoBot apps",
-        "apps": [
-            {
-                "name": "Sample Octobot Tentacle",
-                "description": "This is a sample OctoBot app that cant be installed",
-                "versions": [{"version": "1.0.0", "url": "https://google.com"}],
-                "categories": ["UI", "Strategies"],
-                "tentacle_package_name": "TentaclePackageName",
-            },
-        ]
-    },
+    # {
+    #     "name": "Another Package without a Repo",
+    #     "description": "This is a repo full of OctoBot apps",
+    #     "apps": [
+    #         {
+    #             "name": "Sample Octobot Tentacle",
+    #             "description": "This is a sample OctoBot app that cant be installed",
+    #             "versions": [{"version": "1.0.0", "url": "https://google.com"}],
+    #             "categories": ["UI", "Strategies"],
+    #             "tentacle_package_name": "TentaclePackageName",
+    #         },
+    #     ]
+    # },
 ]
 
 
