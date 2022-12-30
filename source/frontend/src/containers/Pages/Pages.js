@@ -15,7 +15,6 @@ import "./pages.css"
 export default function Pages() {
   const botLayout = useBotLayoutContext();
   return useMemo(() => {
-
     return <BrowserRouter>
       <ReactNotifications />
       <Routes>

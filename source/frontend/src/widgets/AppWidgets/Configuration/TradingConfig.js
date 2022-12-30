@@ -1,40 +1,38 @@
 import { Button, Grid, Tab } from "@mui/material";
 import MuiTabs from "../../../components/Tabs/MuiTabs";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import JsonEditor from "@techfreaque/json-editor-react";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import { useSaveTentaclesConfig } from "../../../api/configs";
-import { useBotPlottedElementsContext, useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
+import { useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
 import { userInputKey, validateJSONEditor } from "../../../components/UserInputs/utils";
 import { CUSTOM_USER_INPUT_PATH_SEPARATOR } from "../../../constants/backendConstants";
 import createNotification from "../../../components/Notifications/Notification";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 import { deleteAllCache, deleteCurrentCache, deleteOrders, deleteTrades } from "../../../api/actions";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { useBotPlottedElementsContext } from "../../../context/data/BotPlottedElementsProvider";
 
 export default function TradingConfig() {
     const botPlottedElements = useBotPlottedElementsContext();
-    const userInputs = botPlottedElements.user_inputs
+    const botInfo = useBotInfoContext()
+    const userInputs = botPlottedElements?.inputs
     const saveTentaclesConfig = useSaveTentaclesConfig()
     const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
-    const botInfo = useBotInfoContext()
     const botDomain = useBotDomainContext()
     const tradingModeName = botInfo && botInfo.trading_mode_name
     const exchangeId = botInfo && botInfo.exchange_id
     const [tabs, setTabs] = useState([])
-    function handleSaveUserInputs() {
-        saveUserInputs(saveTentaclesConfig)
-    }
-
     useEffect(() => {
         userInputs && setTabs(tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName, exchangeId, botDomain))
-    }, [userInputs, setHiddenMetadataColumns, tradingModeName, exchangeId, botDomain]);
-
-    return tabs &&
-        <MuiTabs
-            tabs={tabs}
-            rightContent={<Button variant="contained" onClick={handleSaveUserInputs}>Save</Button>}
-            defaultTabId={0} />
+    }, [botPlottedElements, userInputs, setHiddenMetadataColumns, tradingModeName, exchangeId, botDomain]);
+    return useMemo(() => {
+        return tabs &&
+            <MuiTabs
+                tabs={tabs}
+                rightContent={<Button variant="contained" onClick={() => saveUserInputs(saveTentaclesConfig)}>Save</Button>}
+                defaultTabId={0} />
+    }, [saveTentaclesConfig, tabs])
 }
 
 function tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName, exchangeId, botDomain) {
@@ -89,7 +87,7 @@ function advancedTradingSettings(tabsData, exchangeId, botDomain) {
 }
 function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {
     let hiddenMetadataColumns = [];
-    elements.data.elements.forEach(function (inputDetails) {
+    elements.forEach(function (inputDetails) {
         hiddenMetadataColumns = hiddenMetadataColumns.concat(
             _hideNotShownUserInputs(inputDetails.tentacle, inputDetails.schema, inputDetails.is_hidden)
         );
@@ -183,7 +181,7 @@ function _restoreCustomUserInputs(tentaclesConfigByTentacle) {
 
 function _displayInputsForTentacle(elements, mainTab, tentacleType, tabsData) {
     const editorKey = tentacleType === "trading_mode" ? "tradingMode" : "tentacles";
-    return elements.data.elements.forEach(function (inputDetails) {
+    return elements.forEach(function (inputDetails) {
         if (inputDetails.tentacle_type === tentacleType && !inputDetails.is_hidden) {
             try {
                 // use a local deep copy of inputDetails to be able to edit it (split nested evaluator configurations)
@@ -289,7 +287,7 @@ function _applyCustomPathUserInputs(elements, tradingModeName) {
     // - custom paths merger with existing evaluator config
     // - custom paths containing only "trading"
     const customPathUserInputs = [];
-    elements.data.elements.forEach((inputDetails) => {
+    elements.forEach((inputDetails) => {
         if (inputDetails.is_hidden) {
             return;
         }
@@ -374,7 +372,7 @@ function _findNestedUserInputPathInInputs(customInput, elements, tradingModeName
         toFindEvaluator = tradingModeName;
         window.trading_mode_objects[customInput.path.length ? customInput.path[0] : customInput.key] = true
     }
-    elements.data.elements.forEach((inputDetails, index) => {
+    elements.forEach((inputDetails, index) => {
         if (inputDetails.is_hidden) {
             return;
         }

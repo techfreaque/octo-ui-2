@@ -2,9 +2,8 @@ import $ from "jquery";
 import createNotification from "../components/Notifications/Notification";
 // import { useIsBotOnlineContext } from "../context/IsBotOnlineProvider";
 
-export function sendAndInterpretBotUpdate(updated_data, update_url, success_callback, error_callback, method = "POST") {
-  // const gnericRequestFailureCallback = useGenericRequestFailureCallback()
-  $.ajax({
+export async function sendAndInterpretBotUpdate(updated_data, update_url, success_callback, error_callback, method = "POST") {
+  return $.ajax({
     url: update_url,
     type: method,
     dataType: "json",
@@ -16,6 +15,7 @@ export function sendAndInterpretBotUpdate(updated_data, update_url, success_call
       } else {
         success_callback(updated_data, update_url, undefined, msg, status)
       }
+      return updated_data
     },
     error: function (result, status, error) {
       window.console && console.error(result, status, error);
@@ -27,6 +27,17 @@ export function sendAndInterpretBotUpdate(updated_data, update_url, success_call
       }
     }
   })
+}
+
+export async function fetchAndGetFromBot(
+  url,
+  type = "get",
+  dataToSend,
+  success_callback,
+  error_callback, 
+
+) {
+  return await sendAndInterpretBotUpdate(dataToSend, url, success_callback, error_callback, type)
 }
 
 export default async function fetchAndStoreFromBot(

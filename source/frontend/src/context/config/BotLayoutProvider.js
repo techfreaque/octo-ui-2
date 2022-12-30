@@ -28,7 +28,7 @@ export const BotLayoutProvider = ({ children }) => {
     footer: 50,
   });
   const uiConfig = useUiConfigContext()
-  const loadedLayout = uiConfig[botLayoutKey]
+  const loadedLayout = uiConfig?.[botLayoutKey]
   useEffect(() => {
     setBotLayout(loadedLayout)
   }, [loadedLayout]);

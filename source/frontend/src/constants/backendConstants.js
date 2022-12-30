@@ -1,5 +1,3 @@
-export const developmentBotDomain = "http://localhost:5003";
-;
 export const basePath = "/octo_ui2";
 
 export const backendRoutes = {
@@ -7,6 +5,7 @@ export const backendRoutes = {
   botInfo: basePath + "/bot-info",
   botConfig: basePath + "/bot-config",
   plottedData: basePath + "/plotted_data",
+  plottedRunData: basePath + "/plotted_run_data",
   botPortfolio: basePath + "/portfolio",
   manageSymbol: "/profile",
   appStore: basePath + "/app-store",
@@ -57,5 +56,8 @@ export const BACKTESTING_RUN_SETTINGS_KEY = "backtesting_run_settings";
 export const DISPLAY_SETTINGS_KEY = "display_settings"
 export const DISPLAYED_ELEMENTS_KEY = "displayed_elements"
 export const GRAPHS_KEY = "graphs"
+
+export const CANDLES_PLOT_SOURCES = ["open", "high", "low", "close"];
+export const ALL_PLOT_SOURCES = ["y", "z", "volume"].concat(CANDLES_PLOT_SOURCES);
 
 export const botLayoutKey = "bot_ui_layout"

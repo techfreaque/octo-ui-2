@@ -5,7 +5,10 @@ import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/Json
 import { useSaveUiConfig, useUiConfigContext } from "../../../context/config/UiConfigProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 
-export const availableUIConfigKeys = ["backtesting_run_settings", "backtesting_analysis_settings", "optimizer_campaigns_to_load", "optimizer_run_settings", "display_settings"]
+export const availableUIConfigKeys = [
+    "backtesting_run_settings", "backtesting_analysis_settings", "live_analysis_settings",
+    "optimizer_campaigns_to_load", "optimizer_run_settings", "display_settings"
+]
 
 export default function UIConfig({ configKeys }) {
     const uiConfig = useUiConfigContext();
@@ -14,8 +17,8 @@ export default function UIConfig({ configKeys }) {
     const dataFiles = botInfo?.data_files
     const currentSymbols = botInfo?.symbols
 
-    function handleEditorsAutosave(configKeys) {
-        if (uiConfig && uiConfig.optimization_campaign) {
+    function handleEditorsAutosave() {
+        if (uiConfig) {
             const newConfigs = { ...uiConfig }
             configKeys.forEach(configKey => {
                 const newConfig = window.$JsonEditors["uiConf-" + configKey].getValue()
@@ -28,13 +31,12 @@ export default function UIConfig({ configKeys }) {
     return useMemo(() => (
         <div>
             {configKeys.map(configKey => {
-                const startVal = convertTimestamps(uiConfig[configKey])
                 return <JsonEditor
                     {...defaultJsonEditorSettings()}
                     schema={getUiConfigSchema(configKey, dataFiles, currentSymbols)}
-                    startval={startVal}
+                    startval={convertTimestamps(uiConfig[configKey])}
                     editorName={"uiConf-" + configKey}
-                    onChange={() => handleEditorsAutosave(configKeys)}
+                    onChange={handleEditorsAutosave}
                     disable_edit_json={true}
                     key={configKey}
                 />

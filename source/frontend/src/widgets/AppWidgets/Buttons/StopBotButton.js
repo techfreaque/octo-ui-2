@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
@@ -11,13 +11,15 @@ export default function StopBotButton() {
   const updateIsOnline = useUpdateIsBotOnlineContext()
   const isOnline = useIsBotOnlineContext()
   const botDomain = useBotDomainContext();
-  return (
-    <Button disabled={isLoading || !isOnline} onClick={() => stopBot(botDomain, updateIsOnline, setIsloading)} variant="outlined" color="error">
-      <FontAwesomeIcon
-        icon={faStop}
-        style={{ marginRight: "5px" }}
-      />
-      Stop Bot
-    </Button>
-  );
+  return useMemo(() => {
+    return (
+      <Button disabled={isLoading || !isOnline} onClick={() => stopBot(botDomain, updateIsOnline, setIsloading)} variant="outlined" color="error">
+        <FontAwesomeIcon
+          icon={faStop}
+          style={{ marginRight: "5px" }}
+        />
+        Stop Bot
+      </Button>
+    );
+  }, [botDomain, isLoading, isOnline, updateIsOnline])
 }

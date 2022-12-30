@@ -1,5 +1,4 @@
 import React, { useState, useContext, createContext } from "react";
-import { developmentBotDomain } from "../../constants/backendConstants";
 
 const BotDomainContext = createContext();
 const UpdateBotDomainContext = createContext();
@@ -15,7 +14,7 @@ export const useUpdateBotDomainContext = () => {
 export const BotDomainProvider = ({ children }) => {
   const isProduction = process.env.NODE_ENV !== "development";
   const [botDomain, setBotDomain] = useState(
-    isProduction ? window.location.origin : developmentBotDomain
+    isProduction ? window.location.origin : process.env.REACT_APP_DEVELOPMENT_BOT_DOMAIN
   );
   return (
     <BotDomainContext.Provider value={botDomain}>

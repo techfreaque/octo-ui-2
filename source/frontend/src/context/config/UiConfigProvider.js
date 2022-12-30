@@ -30,25 +30,20 @@ export const useFetchUiConfig = () => {
 
 export const useSaveUiConfig = () => {
   const setUiConfig = useUpdateUiConfigContext();
-  const uiConfig = useUiConfigContext();
   const botDomain = useBotDomainContext();
   const logic = useCallback((newConfig, callbackSucces) => {
-    if (uiConfig.optimization_campaign && uiConfig.optimization_campaign.name) {
       let newCombinedConfig = {}
       setUiConfig(prevConfig => {
         newCombinedConfig = { ...prevConfig, ...newConfig }
-        newCombinedConfig.optimization_campaign
-          && newCombinedConfig.optimization_campaign.name
-          && saveUIConfig(botDomain, newCombinedConfig, callbackSucces);
+        saveUIConfig(botDomain, newCombinedConfig, callbackSucces);
         return newCombinedConfig
       })
-    }
-  }, [setUiConfig, botDomain, uiConfig]);
+  }, [setUiConfig, botDomain]);
   return logic;
 };
 
 export const UiConfigProvider = ({ children }) => {
-  const [uiConfig, setUiConfig] = useState({});
+  const [uiConfig, setUiConfig] = useState();
   const botDomain = useBotDomainContext();
   useEffect(() => {
     fetchUIConfig(botDomain, setUiConfig);

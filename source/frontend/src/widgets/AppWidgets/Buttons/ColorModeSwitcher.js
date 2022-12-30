@@ -8,17 +8,19 @@ import { useToggleColorModeContext } from "../../../context/config/ColorModeProv
 export default function ColorModeSwitch() {
   const theme = useTheme();
   const colorMode = useToggleColorModeContext();
-  return (
-    <IconButton
-      sx={{ ml: 1 }}
-      onClick={colorMode.toggleColorMode}
-      color="inherit"
-    >
-      {theme.palette.mode === "dark" ? (
-        <FontAwesomeIcon icon={faMoon} />
-      ) : (
-        <FontAwesomeIcon icon={faSun} />
-      )}
-    </IconButton>
-  );
+  return React.useMemo(() => {
+    return (
+      <IconButton
+        sx={{ ml: 1 }}
+        onClick={colorMode.toggleColorMode}
+        color="inherit"
+      >
+        {theme.palette.mode === "dark" ? (
+          <FontAwesomeIcon icon={faMoon} />
+        ) : (
+          <FontAwesomeIcon icon={faSun} />
+        )}
+      </IconButton>
+    );
+  }, [theme, colorMode])
 }

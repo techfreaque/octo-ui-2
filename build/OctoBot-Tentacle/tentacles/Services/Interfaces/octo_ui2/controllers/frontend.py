@@ -2,7 +2,7 @@
 import tentacles.Services.Interfaces.web_interface.login as login
 import os
 from flask import send_from_directory
-from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import import_cross_origin_if_enabled, dev_mode_is_on
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import import_cross_origin_if_enabled
 
 
 def register_frontend_route(plugin):

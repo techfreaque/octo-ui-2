@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
@@ -12,6 +12,7 @@ export default function RestartBotButton() {
   const isOnline = useIsBotOnlineContext()
   const botDomain = useBotDomainContext();
   const disabled = isLoading || !isOnline
+    return useMemo(() => {
   return (
     <Button disabled={disabled} onClick={() => restartBot(botDomain, updateIsOnline, setIsloading)} variant="outlined" color="warning">
       <FontAwesomeIcon
@@ -22,4 +23,5 @@ export default function RestartBotButton() {
       Restart Bot
     </Button>
   );
+    }, [botDomain, disabled, updateIsOnline])
 }

@@ -1,3 +1,4 @@
+from octobot_commons import optimization_campaign
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import octobot_services.interfaces as services_interfaces
@@ -34,6 +35,7 @@ def register_bot_info_routes(plugin):
         ) = activated_strategy = exchange_name = exchange_id = None
         symbols = traded_time_frames = enabled_time_frames = activated_evaluators = []
         timeframes_dict = {}
+        strategy_name = None
         try:
             trading_mode = models.get_config_activated_trading_mode()
             trading_mode_name = trading_mode.get_name()
@@ -77,6 +79,7 @@ def register_bot_info_routes(plugin):
             "trading_mode_name": trading_mode_name,
             "tentacle_class": None,  # util.get_rest_reply(trading_mode),
             "exchange_id": exchange_id,
+            "live_id": 1,  # todo
             "exchange_name": exchange_name,
             "symbols": sorted(
                 [
@@ -88,6 +91,7 @@ def register_bot_info_routes(plugin):
             # "enabled_time_frames": enabled_time_frames,
             "traded_time_frames": traded_time_frames,
             "strategy_name": strategy_name,
+            "optimization_campaign": optimization_campaign.OptimizationCampaign.get_campaign_name(),
             # "activated_evaluators": activated_evaluators,
             # "activated_strategy": activated_strategy,
             # "config_candles_count": config_candles_count,

@@ -23,7 +23,7 @@ export default function DefaultLayout({ headerContent, upperContent, lowerConten
         }}
       >
         <div ref={headerRef}>
-        {useMemo(() => (<AppWidgets layout={headerContent} />), [headerContent])}
+        <AppWidgets layout={headerContent} />
         </div>
         <div style={{ height: dimensions.main }}>
           <SplitMainContent

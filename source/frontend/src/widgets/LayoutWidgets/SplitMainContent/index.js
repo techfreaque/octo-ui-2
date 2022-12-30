@@ -27,7 +27,7 @@ export const useSetCurrentPanelPercent = () => {
 
 export default function SplitMainContent({ height, upperContent, lowerContent }) {
   const maxSize = height - 49 - 4; // tabs + resizer
-  const [panelSize, setPanelSize] = useState({  maxSize: maxSize, size: maxSize * 0.4 });
+  const [panelSize, setPanelSize] = useState({ maxSize: maxSize, size: maxSize * 0.4 });
   useEffect(() => {
     setPanelSize((prevSize) => (
       { maxSize: maxSize, size: (prevSize.size < maxSize ? prevSize.size : maxSize) }
@@ -50,8 +50,8 @@ export default function SplitMainContent({ height, upperContent, lowerContent })
             size={panelSize.size}
             onChange={(size) => setPanelSize({ maxSize: maxSize, size: size })}
           >
-            <div style={{ overflow: "hidden" }}>
-              {useMemo(() => (<AppWidgets layout={upperContent} />), [upperContent])}
+            <div style={{ height: "100%", width: "100%", overflow: "hidden" }}>
+              {useMemo(() => (<AppWidgets layout={upperContent} panelSize={panelSize} />), [upperContent, panelSize])}
             </div>
             <div style={{ height: height - panelSize.size }}>
               {useMemo(() => (<AppWidgets layout={lowerContent} />), [lowerContent])}

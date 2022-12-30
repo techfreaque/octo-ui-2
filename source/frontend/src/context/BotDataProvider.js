@@ -32,25 +32,27 @@ export default function BotDataProvider({ children }) {
                   <ColorModeProvider>
                     <BotColorsProvider>
                       <BotPlottedElementsProvider>
-                        <LiveRunDataProvider>
-                          <BacktestingRunDataProvider>
-                            <BotPortfolioProvider>
-                              <AppStoreDataProvider>
-                                <BotConfigProvider>
-                                  <BotBacktestingProvider>
-                                    <OptimizerEditorProvider>
-                                      <OptimizerQueueProvider>
-                                        <BotOptimizerProvider>
-                                          {children}
-                                        </BotOptimizerProvider>
-                                      </OptimizerQueueProvider>
-                                    </OptimizerEditorProvider>
-                                  </BotBacktestingProvider>
-                                </BotConfigProvider>
-                              </AppStoreDataProvider>
-                            </BotPortfolioProvider>
-                          </BacktestingRunDataProvider>
-                        </LiveRunDataProvider>
+                        {/* <BotPlottedElementsPlotlyProvider> */}
+                          <LiveRunDataProvider>
+                            <BacktestingRunDataProvider>
+                              <BotPortfolioProvider>
+                                <AppStoreDataProvider>
+                                  <BotConfigProvider>
+                                    <BotBacktestingProvider>
+                                      <OptimizerEditorProvider>
+                                        <OptimizerQueueProvider>
+                                          <BotOptimizerProvider>
+                                            {children}
+                                          </BotOptimizerProvider>
+                                        </OptimizerQueueProvider>
+                                      </OptimizerEditorProvider>
+                                    </BotBacktestingProvider>
+                                  </BotConfigProvider>
+                                </AppStoreDataProvider>
+                              </BotPortfolioProvider>
+                            </BacktestingRunDataProvider>
+                          </LiveRunDataProvider>
+                        {/* </BotPlottedElementsPlotlyProvider> */}
                       </BotPlottedElementsProvider>
                     </BotColorsProvider>
                   </ColorModeProvider>

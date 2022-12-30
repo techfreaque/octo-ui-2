@@ -9,7 +9,7 @@ export function validateJSONEditor(editor) {
     let errorsDesc = "";
     if(errors.length) {
         window.console&&console.error("Errors when validating editor:", errors);
-        errors.map((error) => {
+        errors.forEach((error) => {
             errorsDesc = `${errorsDesc}${error.path.split("root.")[1]} ${error.message}\n`
         })
     }

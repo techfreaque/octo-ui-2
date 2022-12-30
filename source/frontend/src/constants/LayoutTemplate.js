@@ -42,6 +42,19 @@ export const defaultBotTemplate = [
             "component": "ScrollableTabs",
             "rightContent": [
               {
+                "component": "ButtonWithModal",
+                "content": [
+                  {
+                    "component": "UIConfig",
+                    "configKeys": [
+                      "display_settings"
+                    ]
+                  }
+                ],
+                "faIcon": "cog",
+                "title": ""
+              },
+              {
                 "component": "CurrentPanelMinimize"
               },
               {
@@ -118,17 +131,17 @@ export const defaultBotTemplate = [
                           }
                         ],
                         "dontScroll": false,
-                        "title": "Trading Settings"
+                        "title": "Trading Overview"
                       },
                       {
                         "component": "Tab",
                         "content": [
                           {
-                            "component": "RestartBotButton"
+                            "component": "CurrentPortfolioTable"
                           }
                         ],
                         "dontScroll": false,
-                        "title": "Trading Overview"
+                        "title": "Portfolio"
                       }
                     ]
                   }
@@ -193,16 +206,13 @@ export const defaultBotTemplate = [
                 ],
                 "dontScroll": false,
                 "title": "Strategy Optimizer"
-              },
-              {
-                "component": "RestartBotButton"
               }
             ]
           }
         ],
         "upperContent": [
           {
-            "component": "MainCharts"
+            "component": "PlotlyChart"
           }
         ]
       }
@@ -253,6 +263,19 @@ export const defaultBotTemplate = [
             "component": "ScrollableTabs",
             "rightContent": [
               {
+                "component": "ButtonWithModal",
+                "content": [
+                  {
+                    "component": "UIConfig",
+                    "configKeys": [
+                      "display_settings"
+                    ]
+                  }
+                ],
+                "faIcon": "cog",
+                "title": ""
+              },
+              {
                 "component": "CurrentPanelMinimize"
               },
               {
@@ -300,95 +323,19 @@ export const defaultBotTemplate = [
                 ],
                 "dontScroll": false,
                 "title": "Trading"
-              },
-              {
-                "component": "RestartBotButton"
               }
             ]
           }
         ],
         "upperContent": [
           {
-            "component": "MainCharts"
+            "component": "PlotlyChart"
           }
         ]
       }
     ],
     "path": "/profile",
     "title": "Profiles"
-  },
-  {
-    "layout": [
-      {
-        "component": "DefaultLayout",
-        "footerContent": [
-          {
-            "component": "Footer",
-            "rightContent": [
-              {
-                "component": "PowerMenu"
-              }
-            ]
-          }
-        ],
-        "headerContent": [
-          {
-            "component": "Header",
-            "leftContent": [
-              {
-                "component": "AppDrawerDropdown"
-              },
-              {
-                "component": "PairsSelector"
-              },
-              {
-                "component": "TimeFrameSelector"
-              }
-            ],
-            "rightContent": [
-              {
-                "component": "ColorModeSwitch"
-              },
-              {
-                "component": "RealTradingSwitch"
-              }
-            ]
-          }
-        ],
-        "lowerContent": [
-          {
-            "component": "ScrollableTabs",
-            "rightContent": [
-              {
-                "component": "CurrentPanelMinimize"
-              },
-              {
-                "component": "CurrentPanelFullscreen"
-              }
-            ],
-            "tabs": [
-              {
-                "component": "Tab",
-                "content": [
-                  {
-                    "component": "CurrentPortfolioTable"
-                  }
-                ],
-                "dontScroll": false,
-                "title": "Current Portfolio"
-              }
-            ]
-          }
-        ],
-        "upperContent": [
-          {
-            "component": "MainCharts"
-          }
-        ]
-      }
-    ],
-    "path": "/portfolio",
-    "title": "Portfolio"
   },
   {
     "layout": [

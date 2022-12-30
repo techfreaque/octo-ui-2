@@ -35,7 +35,8 @@ import RealTradingSwitch from "./AppWidgets/Configuration/SwitchRealTrading/Swit
 import StopBotButton from "./AppWidgets/Buttons/StopBotButton";
 import RestartBotButton from "./AppWidgets/Buttons/RestartBotButton";
 import UpdateBotButton from "./AppWidgets/Buttons/UpdateBotButton";
-import PowerMenu from "./AppWidgets/Modals/PowerMenu";
+import { registeredCommunityComponents } from "../communityPackages/registeredPackages";
+import PlotlyChart from "../components/Charts/Plotly";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -74,7 +75,8 @@ export const registeredComponents = {
   PageBuilder: PageBuilder,
   ButtonWithModal: ButtonWithModal,
   RealTradingSwitch: RealTradingSwitch,
-  PowerMenu: PowerMenu,
+  PlotlyChart: PlotlyChart,
+  ...registeredCommunityComponents,
 };
 
 export default function AppWidgets(props) {
@@ -93,8 +95,8 @@ export default function AppWidgets(props) {
         }
       });
     }
-    // else {
-    //   console.log("widget doesnt have a layout:", props);
-    // }
+    else {
+      console.log("widget doesnt have a layout:", props);
+    }
   }, [props])
 }

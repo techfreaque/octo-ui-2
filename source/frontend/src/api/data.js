@@ -1,5 +1,5 @@
 import { backendRoutes } from "../constants/backendConstants";
-import fetchAndStoreFromBot from "./fetchAndStoreFromBot";
+import fetchAndStoreFromBot, { fetchAndGetFromBot } from "./fetchAndStoreFromBot";
 
 export async function fetchBotInfo(botDomain, setBotInfo) {
   await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo, setBotInfo);
@@ -21,6 +21,46 @@ export async function fetchPlotData(
       symbol: symbol,
       time_frame: time_frame,
     }
+  );
+}
+
+export async function fetchPlotlyPlotData(
+  symbol,
+  timeFrame,
+  botDomain,
+  analysisSettings,
+  setBotPlottedElements,
+  botInfo,
+) {
+  const success = (updated_data, update_url, _undefined, msg, status) => {
+    setBotPlottedElements(prevData => {
+      const newData = { ...prevData }
+      msg.data.sub_elements.forEach(data => {
+        if (data.type === "input") {
+          newData.inputs = data.data.elements
+        }
+      })
+      newData.live = {
+        [botInfo.live_id]: { [symbol]: { [timeFrame]: msg } }
+      }
+      return newData
+    })
+  }
+  fetchAndGetFromBot(
+    botDomain + backendRoutes.plottedRunData,
+    "post",
+    {
+      exchange_id: botInfo.exchange_id,
+      backtesting_id: botInfo.backtesting_id,
+      optimizer_id: botInfo.optimizer_id,
+      live_id: botInfo.live_id,
+      symbol: symbol,
+      time_frame: timeFrame,
+      campaign_name: botInfo.optimization_campaign,
+      exchange: botInfo.exchange_name,
+      analysis_settings: analysisSettings,
+    },
+    success, undefined,
   );
 }
 

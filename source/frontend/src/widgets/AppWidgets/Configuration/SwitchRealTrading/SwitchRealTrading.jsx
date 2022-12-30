@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Alert, Button, Modal } from "@mui/material";
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Box } from "@mui/system";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { realTradingSwitch } from "../../../../api/actions";
 import { useBotConfigContext } from "../../../../context/config/BotConfigProvider";
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
@@ -19,32 +19,33 @@ export default function RealTradingSwitch() {
     const isBigScreen = useMediaQuery('(min-width:800px)');
     const title = isRealTrading ? "Real trading" : isSimulatedTrading ? "Simulated trading" : "Trading paused"
     const icon = isRealTrading ? faCoins : isSimulatedTrading ? faRobot : faPause;
-
-    return (
-        <div style={{ margin: "auto", height: "100%" }}>
-            <Button onClick={handleOpen} style={{ height: "100%", textTransform: "none" }} id="real-trading-switch-modal-title">
-                {isBigScreen && <span style={{ marginRight: "5px" }}>{title}</span>}
-                <FontAwesomeIcon size="xl" icon={icon} />
-            </Button>
-            <Modal
-                open={open}
-                onClose={handleClose}
-                aria-labelledby={"real-trading-switch-modal-title"}
-            >
-                <Box sx={style}>
-                    <h3>Currently using: {title}</h3>
-                    {isRealTrading
-                        ? <><p>By switching to simulated trading, OctoBot will only use its simulation mode on real market conditions.</p>
-                            <p>It will no longer create trades with your exchange account, it will use a simulated portfolio managed by OctoBot.</p>
-                        </>
-                        : <p>By switching to real trading, OctoBot will use your real funds</p>}
-                    <Alert style={{ marginBottom: "10px" }} severity="warning">Warning! The switch button will also restart OctoBot </Alert>
-                    <Button onClick={handleClose} variant="outlined" style={{ marginRight: "10px" }}>Stay</Button>
-                    <Button variant="contained" onClick={() => realTradingSwitch(botDomain, isRealTrading)}>Switch to {isRealTrading ? "Simulated trading" : "Real trading"}</Button>
-                </Box>
-            </Modal>
-        </div>
-    );
+    return useMemo(() => {
+        return (
+            <div style={{ margin: "auto", height: "100%" }}>
+                <Button onClick={handleOpen} style={{ height: "100%", textTransform: "none" }} id="real-trading-switch-modal-title">
+                    {isBigScreen && <span style={{ marginRight: "5px" }}>{title}</span>}
+                    <FontAwesomeIcon size="xl" icon={icon} />
+                </Button>
+                <Modal
+                    open={open}
+                    onClose={handleClose}
+                    aria-labelledby={"real-trading-switch-modal-title"}
+                >
+                    <Box sx={style}>
+                        <h3>Currently using: {title}</h3>
+                        {isRealTrading
+                            ? <><p>By switching to simulated trading, OctoBot will only use its simulation mode on real market conditions.</p>
+                                <p>It will no longer create trades with your exchange account, it will use a simulated portfolio managed by OctoBot.</p>
+                            </>
+                            : <p>By switching to real trading, OctoBot will use your real funds</p>}
+                        <Alert style={{ marginBottom: "10px" }} severity="warning">Warning! The switch button will also restart OctoBot </Alert>
+                        <Button onClick={handleClose} variant="outlined" style={{ marginRight: "10px" }}>Stay</Button>
+                        <Button variant="contained" onClick={() => realTradingSwitch(botDomain, isRealTrading)}>Switch to {isRealTrading ? "Simulated trading" : "Real trading"}</Button>
+                    </Box>
+                </Modal>
+            </div>
+        );
+    }, [botDomain, icon, isBigScreen, isRealTrading, open, title])
 }
 
 

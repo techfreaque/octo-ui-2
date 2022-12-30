@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
@@ -12,13 +12,15 @@ export default function UpdateBotButton() {
   const isOnline = useIsBotOnlineContext()
   const botDomain = useBotDomainContext();
   const disabled = isLoading || !isOnline
-  return (
-    <Button disabled={disabled} onClick={() => updateBot(botDomain, updateIsOnline, setIsloading)} variant="outlined" color="warning">
-      <FontAwesomeIcon
-        icon={faDownload}
-        style={{ marginRight: "5px" }}
-      />
-      Update Bot
-    </Button>
-  );
+  return useMemo(() => {
+    return (
+      <Button disabled={disabled} onClick={() => updateBot(botDomain, updateIsOnline, setIsloading)} variant="outlined" color="warning">
+        <FontAwesomeIcon
+          icon={faDownload}
+          style={{ marginRight: "5px" }}
+        />
+        Update Bot
+      </Button>
+    );
+  }, [botDomain, disabled, updateIsOnline])
 }

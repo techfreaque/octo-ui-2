@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { CUSTOM_USER_INPUT_PATH_SEPARATOR, OPTIMIZER_INPUTS_KEY, _INPUT_SEPARATOR } from "../../../../constants/backendConstants";
 import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
 import { useBotPlottedElementsContext } from "../../../../context/data/BotPlottedElementsProvider";
@@ -19,27 +19,30 @@ export default function OptimizerConfigForm() {
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
     useEffect(() => {
-            plotData && userInputs && uiConfig &&
-                _buildOptimizerSettingsForm(userInputs, optimizerConfig, updateOptimizerEditorCounter);
+        plotData && userInputs && uiConfig &&
+            _buildOptimizerSettingsForm(userInputs, optimizerConfig, updateOptimizerEditorCounter);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [userInputs, optimizerConfig, uiConfig]);
-    return (
-        <div>
-            <div><Button variant="outlined" onClick={saveOptimizerForm}>Save Optimizer Form</Button></div>
-            <div id="strategy-optimizer-inputs">
-                <OptimizerSettingTemplate />
+    return useMemo(() => {
+        return (
+            <div>
+                <div><Button variant="outlined" onClick={saveOptimizerForm}>Save Optimizer Form</Button></div>
+                <div id="strategy-optimizer-inputs">
+                    <OptimizerSettingTemplate />
+                </div>
+                <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
+                    <h4>
+                        Run filters
+                    </h4>
+                    <p>
+                        If a run validates any of these statements, it will be discarded.
+                    </p>
+                    <OptimizerRunFilterTemplate />
+                </div>
             </div>
-            <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
-                <h4>
-                    Run filters
-                </h4>
-                <p>
-                    If a run validates any of these statements, it will be discarded.
-                </p>
-                <OptimizerRunFilterTemplate />
-            </div>
-        </div>
-    )
+        )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [saveOptimizerForm, userInputs, optimizerConfig, uiConfig])
 }
 
 async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, updateOptimizerEditorCounter) {
@@ -392,7 +395,7 @@ function _moveInputToPath(input_key, tentacle_schema, configValues) {
                     in_optimizer: true,
                     name: path_list[path],
                 },
-                properties:{},
+                properties: {},
             }
             target_obj = target_obj[path_list[path]]["properties"]
         }
