@@ -12,114 +12,156 @@ const DISPLAYED_ELEMENTS_TITLES = [
 export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
     const dataFilevalues = [CURRENT_BOT_DATA]
     const dataFilesTitles = [`Currently traded asset(s): ${currentSymbols}`,]
-    dataFiles.forEach(dataFile => {
+    dataFiles?.forEach(dataFile => {
         dataFilevalues.push(dataFile[0])
         dataFilesTitles.push(`${dataFile[1].symbols} for ${dataFile[1].time_frames} from ${dataFile[1].start_date} to from ${dataFile[1].end_date}`)
     })
+    function selectableChartlocation(name, title) {
+        return {
+            [name]: {
+                type: "string",
+                title: title,
+                enum: [
+                    "main-chart",
+                    "sub-chart",
+                    "backtesting-run-overview",
+                ],
+                options: {
+                    enum_titles: [
+                        "Main Chart",
+                        "Main Sub-Chart",
+                        "Secondary-Chart"
+                    ]
+                }
+            },
+        }
+    }
     const uiConfigSchema = {
         type: "object",
         title: "UI Config",
         properties: {
             backtesting_analysis_settings: {
                 type: "object",
-                title: "Backtesting Analysis Settings",
+                title: "Trade Analysis Settings",
                 properties: {
-                    "backtest_display_analysis_report": {
-                        type: "boolean",
-                        format: "checkbox",
-                        fieldType: "boolean"
+                    backtesting_plot_settings: {
+                        type: "object",
+                        title: "Plot Settings",
+                        properties: {
+                            "plot_unrealized_portfolio": {
+                                type: "boolean",
+                                title: "Plot unrealized portfolio value",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value"),
+                            "plot_realized_portfolio": {
+                                type: "boolean",
+                                title: "Plot realized portfolio value",
+                                format: "checkbox",
+                                fieldType: "boolean",
+                                "default": true
+                            },
+                            ...selectableChartlocation("chart_location_realized_portfolio_value", "Chart location realized portfolio value"),
+                            "plot_trade_gains": {
+                                type: "boolean",
+                                title: "Plot realized gains per trade",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_trade_gains", "Chart location realized gains per trade"),
+                            "plot_funding_fees": {
+                                type: "boolean",
+                                title: "Plot funding fees",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_funding_fees", "Chart location funding fees"),
+                            "plot_best_case_growth": {
+                                type: "boolean",
+                                title: "Plot best case portfolio value",
+                                format: "checkbox",
+                                fieldType: "boolean",
+                                "default": true
+                            },
+                            ...selectableChartlocation("chart_location_best_case_growth", "Chart location best case portfolio value"),
+                            "plot_win_rate": {
+                                type: "boolean",
+                                title: "Plot best case portfolio value",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_win_rate", "Chart location win rate"),
+                            "plot_wins_and_losses_count": {
+                                type: "boolean",
+                                title: "Plot wins and losses count",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_wins_and_losses_count", "Chart location wins and losses count"),
+                            "plot_withdrawals": {
+                                type: "boolean",
+                                title: "Plot withdrawals",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals"),
+                        }
                     },
-                    "backtest_display_analysis_report_general": {
-                        type: "boolean",
-                        format: "checkbox",
-                        title: "Display Analysis Report General",
-                        fieldType: "boolean"
+                    backtesting_table_settings: {
+                        type: "object",
+                        title: "Table Settings",
+                        properties: {
+                            "display_trades_and_positions": {
+                                type: "boolean",
+                                title: "Display Trades and Positions Table",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            "display_withdrawals_table": {
+                                type: "boolean",
+                                title: "Display withdrawals table",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                        }
                     },
-                    "backtest_display_analysis_report_performances": {
-                        type: "boolean",
-                        format: "checkbox",
-                        title: "Display Analysis Report Performances",
-                        fieldType: "boolean"
-                    },
-                    "backtest_display_analysis_report_details": {
-                        type: "boolean",
-                        format: "checkbox",
-                        title: "Display Analysis Report Details",
-                        fieldType: "boolean"
-                    },
-                    "backtest_display_analysis_report_strategy_settings": {
-                        type: "boolean",
-                        format: "checkbox",
-                        title: "Display Analysis Report Strategy Settings",
-                        fieldType: "boolean"
-                    },
-                    "backtest_display_trades_and_positions": {
-                        type: "boolean",
-                        title: "display_trades_and_positions",
-                        format: "checkbox",
-                        fieldType: "boolean"
-                    },
-                    "backtest_plot_best_case_growth_on_secondary_chart": {
-                        type: "boolean",
-                        title: "plot_best_case_growth_on_secondary_chart",
-                        format: "checkbox",
-                        fieldType: "boolean"
-                    },
-                    "backtest_plot_funding_fees_on_secondary_chart": {
-                        type: "boolean",
-                        title: "plot_funding_fees_on_secondary_chart",
-                        format: "checkbox",
-                        fieldType: "boolean"
-                    },
-                    "backtest_plot_portfolio_value_on_secondary_chart": {
-                        type: "boolean",
-                        title: "plot_portfolio_value_on_secondary_chart",
-                        format: "checkbox",
-                        fieldType: "boolean",
-                        "default": true
-                    },
-                    "backtest_plot_pnl_on_secondary_chart": {
-                        type: "boolean",
-                        title: "plot_pnl_on_secondary_chart",
-                        format: "checkbox",
-                        fieldType: "boolean",
-                        "default": true
-                    },
-                    "backtest_plot_pnl_on_main_chart": {
-                        type: "boolean",
-                        title: "plot_pnl_on_main_chart",
-                        format: "checkbox",
-                        fieldType: "boolean"
-                    },
-                    "backtest_plot_portfolio_value_on_main_chart": {
-                        type: "boolean",
-                        title: "plot_portfolio_value_on_main_chart",
-                        format: "checkbox",
-                        fieldType: "boolean"
-                    },
-                    "backtest_plot_trade_gains_on_secondary_chart": {
-                        type: "boolean",
-                        title: "plot_trade_gains_on_secondary_chart",
-                        format: "checkbox",
-                        fieldType: "boolean"
-                    },
-                    "backtest_plot_trade_gains_on_main_chart": {
-                        type: "boolean",
-                        title: "plot_trade_gains_on_main_chart",
-                        format: "checkbox",
-                        fieldType: "boolean"
-                    },
-                    "backtest_plot_win_rate_on_secondary_chart": {
-                        type: "boolean",
-                        title: "plot_win_rate_on_secondary_chart",
-                        format: "checkbox",
-                        fieldType: "boolean"
-                    },
-                    "backtest_plot_wins_and_losses_count_on_secondary_chart": {
-                        type: "boolean",
-                        title: "plot_wins_and_losses_count_on_secondary_chart",
-                        format: "checkbox",
-                        fieldType: "boolean"
+                    backtesting_analysis_report_settings: {
+                        type: "object",
+                        title: "Analysis Report Settings",
+                        properties: {
+
+                            "display_analysis_report": {
+                                type: "boolean",
+                                format: "checkbox",
+                                title: "Display Analysis Report",
+                                fieldType: "boolean"
+                            },
+                            "display_analysis_report_general": {
+                                type: "boolean",
+                                format: "checkbox",
+                                title: "Display Analysis Report General",
+                                fieldType: "boolean"
+                            },
+                            "display_analysis_report_performances": {
+                                type: "boolean",
+                                format: "checkbox",
+                                title: "Display Analysis Report Performances",
+                                fieldType: "boolean"
+                            },
+                            "display_analysis_report_details": {
+                                type: "boolean",
+                                format: "checkbox",
+                                title: "Display Analysis Report Details",
+                                fieldType: "boolean"
+                            },
+                            "display_analysis_report_strategy_settings": {
+                                type: "boolean",
+                                format: "checkbox",
+                                title: "Display Analysis Report Strategy Settings",
+                                fieldType: "boolean"
+                            },
+                        }
                     }
                 }
             },
@@ -131,131 +173,84 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                         type: "object",
                         title: "Plot Settings",
                         properties: {
-                            live_main_chart_settings: {
-                                type: "object",
-                                title: "Secondary Chart",
-                                properties: {
-                                    "live_plot_portfolio_value_on_main_chart": {
-                                        type: "boolean",
-                                        title: "Plot Portfolio Value on Main Chart",
-                                        format: "checkbox",
-                                        fieldType: "boolean"
-                                    },
-                                    "live_plot_pnl_on_main_chart": {
-                                        type: "boolean",
-                                        title: "Plot PnL on Main Chart",
-                                        format: "checkbox",
-                                        fieldType: "boolean"
-                                    },
-                                    "live_plot_trade_gains_on_main_chart": {
-                                        type: "boolean",
-                                        title: "Plot Gains Per Trade on Main Chart",
-                                        format: "checkbox",
-                                        fieldType: "boolean"
-                                    },
-                                }
+                            "plot_unrealized_portfolio": {
+                                type: "boolean",
+                                title: "Plot unrealized portfolio value",
+                                format: "checkbox",
+                                fieldType: "boolean",
+                                "default": true
                             },
-                            live_secondary_chart_settings: {
-                                type: "object",
-                                title: "Secondary Chart",
-                                properties: {
-                                    "live_plot_best_case_growth_on_secondary_chart": {
-                                        type: "boolean",
-                                        title: "Plot Best Case Growth",
-                                        format: "checkbox",
-                                        fieldType: "boolean"
-                                    },
-                                    "live_plot_funding_fees_on_secondary_chart": {
-                                        type: "boolean",
-                                        title: "Plot Funding Fees",
-                                        format: "checkbox",
-                                        fieldType: "boolean"
-                                    },
-                                    "live_plot_pnl_on_secondary_chart": {
-                                        type: "boolean",
-                                        title: "Plot PnL on Secondary Chart",
-                                        format: "checkbox",
-                                        fieldType: "boolean",
-                                        "default": true
-                                    },
-                                    "live_plot_portfolio_value_on_secondary_chart": {
-                                        type: "boolean",
-                                        title: "Plot Portfolio Value on Secondary Chart",
-                                        format: "checkbox",
-                                        fieldType: "boolean",
-                                        "default": true
-                                    },
-                                    "live_plot_trade_gains_on_secondary_chart": {
-                                        type: "boolean",
-                                        title: "Plot Gains Per Trade on Secondary Chart",
-                                        format: "checkbox",
-                                        fieldType: "boolean"
-                                    },
-                                    "live_plot_win_rate_on_secondary_chart": {
-                                        type: "boolean",
-                                        title: "Plot Win Rate",
-                                        format: "checkbox",
-                                        fieldType: "boolean"
-                                    },
-                                    "live_plot_wins_and_losses_count_on_secondary_chart": {
-                                        type: "boolean",
-                                        title: "Plot Wins and Losses Count",
-                                        format: "checkbox",
-                                        fieldType: "boolean"
-                                    },
-                                }
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value"),
+                            "plot_realized_portfolio": {
+                                type: "boolean",
+                                title: "Plot realized portfolio value",
+                                format: "checkbox",
+                                fieldType: "boolean",
+                                "default": true
                             },
+                            ...selectableChartlocation("chart_location_realized_portfolio_value", "Chart location realized portfolio value"),
+                            "plot_trade_gains": {
+                                type: "boolean",
+                                title: "Plot realized gains per trade",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_trade_gains", "Chart location realized gains per trade"),
+                            "plot_funding_fees": {
+                                type: "boolean",
+                                title: "Plot funding fees",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_funding_fees", "Chart location funding fees"),
+                            "plot_best_case_growth": {
+                                type: "boolean",
+                                title: "Plot best case portfolio value",
+                                format: "checkbox",
+                                fieldType: "boolean",
+                            },
+                            ...selectableChartlocation("chart_location_best_case_growth", "Chart location best case portfolio value"),
+                            "plot_win_rate": {
+                                type: "boolean",
+                                title: "Plot best case portfolio value",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_win_rate", "Chart location win rate"),
+                            "plot_wins_and_losses_count": {
+                                type: "boolean",
+                                title: "Plot wins and losses count",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_wins_and_losses_count", "Chart location wins and losses count"),
+                            "plot_withdrawals": {
+                                type: "boolean",
+                                title: "Plot withdrawals",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals"),
                         }
                     },
                     live_table_settings: {
                         type: "object",
                         title: "Table Settings",
                         properties: {
-                            "live_display_trades_and_positions": {
+                            "display_trades_and_positions": {
                                 type: "boolean",
-                                title: "Display Trades and Positions Table",
+                                title: "Display trades and positions table",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            "display_withdrawals_table": {
+                                type: "boolean",
+                                title: "Display withdrawals table",
                                 format: "checkbox",
                                 fieldType: "boolean"
                             },
                         }
                     },
-                    live_analysis_report_settings: {
-                        type: "object",
-                        title: "Analysis Report Settings",
-                        properties: {
-
-                            "live_display_analysis_report": {
-                                type: "boolean",
-                                format: "checkbox",
-                                title: "Display Analysis Report",
-                                fieldType: "boolean"
-                            },
-                            "live_display_analysis_report_general": {
-                                type: "boolean",
-                                format: "checkbox",
-                                title: "Display Analysis Report General",
-                                fieldType: "boolean"
-                            },
-                            "live_display_analysis_report_performances": {
-                                type: "boolean",
-                                format: "checkbox",
-                                title: "Display Analysis Report Performances",
-                                fieldType: "boolean"
-                            },
-                            "live_display_analysis_report_details": {
-                                type: "boolean",
-                                format: "checkbox",
-                                title: "Display Analysis Report Details",
-                                fieldType: "boolean"
-                            },
-                            "live_display_analysis_report_strategy_settings": {
-                                type: "boolean",
-                                format: "checkbox",
-                                title: "Display Analysis Report Strategy Settings",
-                                fieldType: "boolean"
-                            },
-                        }
-                    }
                 }
             },
             backtesting_run_settings: {
@@ -319,6 +314,8 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                             },
                         },
                         title: "Elements to render",
+                        default: DISPLAYED_ELEMENTS_KEYS,
+
                         items: {
                             enum: DISPLAYED_ELEMENTS_KEYS,
                             type: "string",
@@ -336,7 +333,8 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                                 },
                                 type: "number",
                                 format: "number",
-                                minimum: 0
+                                minimum: 0,
+                                default: 50000,
                             },
                             max_candles_line_sources: {
                                 "type": "array",
@@ -349,6 +347,8 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                                     },
                                 },
                                 title: "Line(s) sources",
+                                default: ["open", "high", "low", "close"],
+
                                 items: {
                                     enum: ["open", "high", "low", "close"],
                                     type: "string",
@@ -364,7 +364,8 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                                 fieldType: "boolean",
                                 "options": {
                                     "grid_columns": 12,
-                                }
+                                },
+                                default: true,
                             },
                             display_use_log_scale: {
                                 title: "Use log scale: Displays all graphs with log scale except data with negative values",
@@ -467,7 +468,8 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                 properties: {
                     name: {
                         type: "string",
-                        title: "Campaign Name"
+                        title: "Optimization campaign name",
+                        default: "default_campaign"
                     }
                 }
             },

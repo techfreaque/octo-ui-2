@@ -4,10 +4,11 @@ import { getUiConfigSchema } from "./uiConfigSchema";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import { useSaveUiConfig, useUiConfigContext } from "../../../context/config/UiConfigProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import "./uiConfig.css"
 
 export const availableUIConfigKeys = [
     "backtesting_run_settings", "backtesting_analysis_settings", "live_analysis_settings",
-    "optimizer_campaigns_to_load", "optimizer_run_settings", "display_settings"
+    "optimizer_campaigns_to_load", "optimizer_run_settings", "display_settings", "optimization_campaign"
 ]
 
 export default function UIConfig({ configKeys }) {

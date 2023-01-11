@@ -5,9 +5,8 @@ import createNotification from "../../../components/Notifications/Notification"
 import { botLayoutKey } from "../../../constants/backendConstants"
 import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider"
 import { useSaveUiConfig } from "../../../context/config/UiConfigProvider"
-import { registeredComponents } from "../../AppWidgets"
-import { availableConfigKeys } from "../Configuration/Form"
-import { availableUIConfigKeys } from "../Configuration/UIConfig"
+import appWidgetsProps from "../../WidgetManagement/AppWidgetProps"
+import { registeredComponents } from "../../WidgetManagement/RegisteredAppWidgets"
 
 export default function PageBuilder() {
     const botLayout = useBotLayoutContext()
@@ -49,21 +48,7 @@ const pageBuilderSchema = (registeredComponents) => {
                     enum: availableComponentsList,
                     default: "Configuration"
                 },
-                // custom App Widget props
-                ...generateSimpleProp("title", ["Tab", "ButtonWithModal"], "string"),
-                ...generateSimpleProp("dontScroll", "Tab", "boolean", "checkbox"),
-                ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeys),
-                ...generateSimpleProp("configKeys", "UIConfig", "array", "select", availableUIConfigKeys, true),
-                ...generateSimpleProp("faIcon", "ButtonWithModal", "string"),
-                ...generateCustomAppWidgetProp("tabs", "ScrollableTabs"),
-                ...generateCustomAppWidgetProp("headerContent", ["DefaultLayout", "SimpleLayout"]),
-                ...generateCustomAppWidgetProp("content", ["Tab", "ButtonWithModal"]),
-                ...generateCustomAppWidgetProp("pageContent", "SimpleLayout"),
-                ...generateCustomAppWidgetProp("upperContent", "DefaultLayout"),
-                ...generateCustomAppWidgetProp("lowerContent", "DefaultLayout"),
-                ...generateCustomAppWidgetProp("leftContent", ["Header"]),
-                ...generateCustomAppWidgetProp("rightContent", ["Header", "ScrollableTabs", "Footer"]),
-                ...generateCustomAppWidgetProp("footerContent", ["DefaultLayout", "SimpleLayout"]),
+                ...appWidgetsProps()
             },
             options: { collapsed: true }
         }
@@ -93,7 +78,7 @@ const pageBuilderSchema = (registeredComponents) => {
     }
 }
 
-function generateCustomAppWidgetProp(propName, dependentComponents) {
+export function generateCustomAppWidgetProp(propName, dependentComponents) {
     return {
         [propName]: {
             type: "array",
@@ -109,7 +94,7 @@ function generateCustomAppWidgetProp(propName, dependentComponents) {
 
 }
 
-function generateSimpleProp(propName, dependentComponents, type, format, enumList, enumMulti) {
+export function generateSimpleProp(propName, dependentComponents, type, format, enumList, enumMulti) {
     const items = enumList ?
         (enumMulti
             ? { items: { enum: enumList, type: "string" } }

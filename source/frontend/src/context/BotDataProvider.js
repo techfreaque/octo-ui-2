@@ -33,7 +33,7 @@ export default function BotDataProvider({ children }) {
                     <BotColorsProvider>
                       <BotPlottedElementsProvider>
                         {/* <BotPlottedElementsPlotlyProvider> */}
-                          <LiveRunDataProvider>
+                          {/* <LiveRunDataProvider> */}
                             <BacktestingRunDataProvider>
                               <BotPortfolioProvider>
                                 <AppStoreDataProvider>
@@ -51,7 +51,7 @@ export default function BotDataProvider({ children }) {
                                 </AppStoreDataProvider>
                               </BotPortfolioProvider>
                             </BacktestingRunDataProvider>
-                          </LiveRunDataProvider>
+                          {/* </LiveRunDataProvider> */}
                         {/* </BotPlottedElementsPlotlyProvider> */}
                       </BotPlottedElementsProvider>
                     </BotColorsProvider>

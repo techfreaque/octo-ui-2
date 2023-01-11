@@ -1,10 +1,10 @@
-import AppWidgets from "../../AppWidgets";
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
 import { useState } from "react";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
 
 
 

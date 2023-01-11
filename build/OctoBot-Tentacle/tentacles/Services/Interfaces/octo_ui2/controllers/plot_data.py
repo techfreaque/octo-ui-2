@@ -78,17 +78,16 @@ def register_plot_data_routes(plugin):
             request_data = flask.request.get_json()
             trading_mode = models.get_config_activated_trading_mode()
             symbol = symbol_util.convert_symbol(request_data["symbol"], "|")
-            optimizer_id = int(request_data.get("optimizer_id", 0)) or None
-            optimization_campaign = request_data.get("optimization_campaign", None)
+            optimizer_id = None
+            backtesting_id = None
+            if not (live_id := int(request_data.get("live_id", 0)) or None):
+                optimizer_id = int(request_data.get("optimizer_id", 0)) or None
+                backtesting_id = int(request_data.get("backtesting_id", 0))
+            optimization_campaign = request_data.get("campaign_name", None)
             exchange_id = request_data.get("exchange_id", None)
-            backtesting_id = request_data.get("backtesting_id", None)
-            optimizer_id = request_data.get("optimizer_id", None)
-            live_id = request_data.get("live_id", None)
             time_frame = request_data.get("time_frame", None)
             exchange = request_data.get("exchange", None)
-            analysis_settings = request_data.get(
-                "analysis_settings", {}
-            )
+            analysis_settings = request_data.get("analysis_settings", {})
             return util.get_rest_reply(
                 plots_models.get_plotted_data(
                     trading_mode=trading_mode,
@@ -104,7 +103,6 @@ def register_plot_data_routes(plugin):
                 ),
                 200,
             )
-                
         except Exception as error:
-            commons_logging.get_logger("backtesting_run_plotted_data").exception(error)
+            commons_logging.get_logger("run_analysis_plotted_data").exception(error)
             return util.get_rest_reply(str(error), 500)

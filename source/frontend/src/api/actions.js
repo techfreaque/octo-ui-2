@@ -183,6 +183,37 @@ export async function deleteOrders(botDomain, exchange_id) {
     { exchange_id: exchange_id },
     botDomain + backendRoutes.cacheActionDeleteOrders, success, fail)
 }
+
+export async function cancelAllOrders(botDomain, setIsCancelling) {
+  setIsCancelling(true)
+  const success = (updated_data, update_url, result, msg, status) => {
+    createNotification("Successfully canceled all orders")
+    setIsCancelling(false)
+  }
+  const fail = (updated_data, update_url, result, msg, status) => {
+    createNotification("Failed to cancel all orders", "danger")
+    setIsCancelling(false)
+  }
+  sendAndInterpretBotUpdate(
+    {},
+    botDomain + backendRoutes.cancelAll_orders, success, fail, "GET")
+}
+
+export async function closeAllPositions(botDomain, setIsClosing) {
+  setIsClosing(true)
+  const success = (updated_data, update_url, result, msg, status) => {
+    createNotification("Successfully closed all positions")
+    setIsClosing(false)
+  }
+  const fail = (updated_data, update_url, result, msg, status) => {
+    createNotification("Failed to close all positions", "danger")
+    setIsClosing(false)
+  }
+  sendAndInterpretBotUpdate(
+    {},
+    botDomain + backendRoutes.closeAllPositions, success, fail, "GET")
+}
+
 export async function realTradingSwitch(botDomain, isRealTrading) {
   const title = isRealTrading ? "real" : "simulated"
   const success = (updated_data, update_url, result, msg, status) => {

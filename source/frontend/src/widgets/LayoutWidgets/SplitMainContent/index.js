@@ -1,8 +1,8 @@
 import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
-import AppWidgets from "../../AppWidgets";
 import SplitPane from "react-split-pane";
 import "./index.css";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 const CurrentPanelContext = createContext();
 const UpdateCurrentPanelContext = createContext();

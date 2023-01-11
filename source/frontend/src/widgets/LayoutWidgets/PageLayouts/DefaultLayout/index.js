@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import AppWidgets from "../../../AppWidgets";
+import AppWidgets from "../../../WidgetManagement/RenderAppWidgets";
 import SplitMainContent from "../../SplitMainContent";
 
 export default function DefaultLayout({ headerContent, upperContent, lowerContent, footerContent }) {

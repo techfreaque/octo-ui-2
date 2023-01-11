@@ -1,5 +1,5 @@
 import os
-
+from tentacles.Services.Interfaces.octo_ui2.controllers import semi_auto_trade, trading
 import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.enums as web_enums
@@ -10,6 +10,7 @@ from .controllers import (
     plot_data,
     bot_info,
     app_store,
+    run_data
 )
 import octobot_services.interfaces.util as interfaces_util
 import octobot_trading.util as trading_util
@@ -28,6 +29,9 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
         configuration.register_bot_config_routes(self)
         portfolio.register_portfolio_routes(self)
         app_store.register_appstore_routes(self)
+        run_data.register_run_data_routes(self)
+        semi_auto_trade.register_semi_auto_trade_routes(self)
+        trading.register_cancel_orders_routes(self)
 
     def get_tabs(self):
         return [

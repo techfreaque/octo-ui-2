@@ -12,8 +12,9 @@ import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 import { deleteAllCache, deleteCurrentCache, deleteOrders, deleteTrades } from "../../../api/actions";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useBotPlottedElementsContext } from "../../../context/data/BotPlottedElementsProvider";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
-export default function TradingConfig() {
+export default function TradingConfig({content}) {
     const botPlottedElements = useBotPlottedElementsContext();
     const botInfo = useBotInfoContext()
     const userInputs = botPlottedElements?.inputs
@@ -30,9 +31,12 @@ export default function TradingConfig() {
         return tabs &&
             <MuiTabs
                 tabs={tabs}
-                rightContent={<Button variant="contained" onClick={() => saveUserInputs(saveTentaclesConfig)}>Save</Button>}
+                rightContent={<>
+                    <AppWidgets layout={content} />
+                    <Button style={{ marginLeft: "5px" }}  variant="contained" onClick={() => saveUserInputs(saveTentaclesConfig)}>Save</Button>
+                </>}
                 defaultTabId={0} />
-    }, [saveTentaclesConfig, tabs])
+    }, [content, saveTentaclesConfig, tabs])
 }
 
 function tradingConfigTabs(userInputs, setHiddenMetadataColumns, tradingModeName, exchangeId, botDomain) {
@@ -95,7 +99,8 @@ function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {
     setHiddenMetadataColumns(hiddenMetadataColumns)
 }
 
-function saveUserInputs(saveTentaclesConfig) {
+export function saveUserInputs(saveTentaclesConfig, actionType, setIsLoading) {
+    setIsLoading && setIsLoading(true)
     const tentaclesConfigByTentacle = {};
     let save = true;
     const nestedConfigurations = {};
@@ -133,7 +138,7 @@ function saveUserInputs(saveTentaclesConfig) {
     }
     _restoreCustomUserInputs(tentaclesConfigByTentacle);
     if (save) {
-        saveTentaclesConfig(tentaclesConfigByTentacle)
+        saveTentaclesConfig(tentaclesConfigByTentacle, actionType, setIsLoading)
     }
 }
 

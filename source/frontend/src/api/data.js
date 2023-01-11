@@ -1,5 +1,5 @@
 import { backendRoutes } from "../constants/backendConstants";
-import fetchAndStoreFromBot, { fetchAndGetFromBot } from "./fetchAndStoreFromBot";
+import fetchAndStoreFromBot, { fetchAndGetFromBot, sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
 
 export async function fetchBotInfo(botDomain, setBotInfo) {
   await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo, setBotInfo);
@@ -31,17 +31,61 @@ export async function fetchPlotlyPlotData(
   analysisSettings,
   setBotPlottedElements,
   botInfo,
+  setHiddenMetadataFromInputs,
+  isLive = true,
+  optimization_campaign = undefined,
+  backtesting_id = undefined,
+  optimizer_id = undefined,
 ) {
+  const data = {
+    exchange_id: botInfo.exchange_id,
+    symbol: symbol,
+    time_frame: timeFrame,
+    exchange: botInfo.exchange_name,
+    analysis_settings: analysisSettings,
+  }
+  if (isLive) {
+    data.live_id = botInfo.live_id
+    data.campaign_name = botInfo.optimization_campaign
+  } else {
+    data.campaign_name = optimization_campaign
+    data.backtesting_id = backtesting_id
+    data.optimizer_id = optimizer_id
+
+  }
   const success = (updated_data, update_url, _undefined, msg, status) => {
     setBotPlottedElements(prevData => {
       const newData = { ...prevData }
-      msg.data.sub_elements.forEach(data => {
-        if (data.type === "input") {
-          newData.inputs = data.data.elements
+      if (isLive) {
+        msg.data.sub_elements.forEach(sub_data => {
+          if (sub_data.type === "input") {
+            newData.inputs = sub_data.data.elements
+            setHiddenMetadataFromInputs(sub_data.data.elements)
+          }
+        })
+        newData.live = {
+          [botInfo.live_id]: { [symbol]: { [timeFrame]: msg } }
         }
-      })
-      newData.live = {
-        [botInfo.live_id]: { [symbol]: { [timeFrame]: msg } }
+      } else {
+        if (!newData.backtesting) {
+          newData.backtesting = {
+            [optimization_campaign]: {
+              [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg } } }
+            }
+          }
+        } else if (!newData.backtesting[optimization_campaign]) {
+          newData.backtesting[optimization_campaign] = {
+            [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg } } }
+          }
+        } else if (!newData.backtesting[optimization_campaign][optimizer_id]) {
+          newData.backtesting[optimization_campaign][optimizer_id] = {
+            [backtesting_id]: { [symbol]: { [timeFrame]: msg } }
+          }
+        } else {
+          newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
+            [symbol]: { [timeFrame]: msg }
+          }
+        }
       }
       return newData
     })
@@ -49,34 +93,47 @@ export async function fetchPlotlyPlotData(
   fetchAndGetFromBot(
     botDomain + backendRoutes.plottedRunData,
     "post",
-    {
-      exchange_id: botInfo.exchange_id,
-      backtesting_id: botInfo.backtesting_id,
-      optimizer_id: botInfo.optimizer_id,
-      live_id: botInfo.live_id,
-      symbol: symbol,
-      time_frame: timeFrame,
-      campaign_name: botInfo.optimization_campaign,
-      exchange: botInfo.exchange_name,
-      analysis_settings: analysisSettings,
-    },
+    data,
     success, undefined,
-  );
+  )
 }
 
 export async function fetchBacktestingRunData(
-  useSaveBotConfig,
+  saveBotConfig,
   setUiConfig,
   botDomain,
   forceSelectLatestBacktesting,
   campaigns,
 ) {
-  const data = JSON.stringify({ forceSelectLatestBacktesting: forceSelectLatestBacktesting, campaigns: campaigns })
-  // todo save campaigns
-  await fetchAndStoreFromBot(
-    `${botDomain + backendRoutes.strategyDesignRunData}?${data}`,
-    useSaveBotConfig
-  );
+
+  const success = (updated_data, update_url, result, msg, status) => {
+    saveBotConfig(msg)
+    setUiConfig(prevConfig => {
+      return { ...prevConfig, optimizer_campaigns_to_load: msg.campaigns }
+    })
+  }
+  sendAndInterpretBotUpdate(
+    {
+      forceSelectLatestBacktesting: forceSelectLatestBacktesting,
+      campaigns: campaigns
+    },
+    botDomain + backendRoutes.backtestingRunData,
+    success, undefined, "post")
+}
+
+export async function fetchLiveRunData(
+  liveId,
+  setLiveRunData,
+  botDomain,
+) {
+
+  const success = (updated_data, update_url, result, msg, status) => {
+    setLiveRunData(msg.data)
+  }
+  sendAndInterpretBotUpdate(
+    {live_id: liveId},
+    botDomain + backendRoutes.liveRunData,
+    success, undefined, "post")
 }
 
 export async function fetchBotPortfolio(_useSaveBotPortfolio, botDomain) {

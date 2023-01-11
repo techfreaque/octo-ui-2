@@ -6,7 +6,8 @@ import { faCog, faRedo } from "@fortawesome/free-solid-svg-icons";
 import { useBacktestingRunDataContext, useDeleteBacktestingRunData, useFetchBacktestingRunData } from "../../../context/data/BacktestingRunDataProvider";
 import { useUiConfigContext } from "../../../context/config/UiConfigProvider";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import { useHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
+import { useFetchPlotData, useHiddenBacktestingMetadataColumnsContext, useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
+import { useSaveTentaclesConfig } from "../../../api/configs";
 
 export function BacktestingRunDataTable() {
     const runData = useBacktestingRunDataContext()
@@ -16,17 +17,19 @@ export function BacktestingRunDataTable() {
     const currentOptimizerCampaignName = uiSettings.optimization_campaign && uiSettings.optimization_campaign.name
     const botDomain = useBotDomainContext()
     const hiddenBacktestingMetadataColumns = useHiddenBacktestingMetadataColumnsContext()
+    const setHiddenBacktestingMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
+    const fetchPlotData = useFetchPlotData()
+    const saveTentaclesConfig = useSaveTentaclesConfig()
 
-    // function restoreSettings(settings) {
-    //     console.log("test", settings);
-        // saveTentaclesConfig(settings, botDomain)
-    //     _useFetchPlotData()
-    // }
+    function restoreSettings(settings) {
+        saveTentaclesConfig(settings, botDomain)
+        fetchPlotData()
+    }
 
     useEffect(() => {
-        hiddenBacktestingMetadataColumns && fetchBacktestingRunData()
+        currentOptimizerCampaignName && fetchBacktestingRunData()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [botDomain, currentOptimizerCampaignName, hiddenBacktestingMetadataColumns]);
+    }, [botDomain, currentOptimizerCampaignName]);
     return useMemo(() => (
         <RunDataTableW2UI
             tableTitle="Select backtestings"
@@ -36,6 +39,8 @@ export function BacktestingRunDataTable() {
             reloadData={fetchBacktestingRunData}
             deleteRuns={deleteBacktestingRunData}
             hiddenMetadataColumns={hiddenBacktestingMetadataColumns}
+            setHiddenMetadataColumns={setHiddenBacktestingMetadataColumns}
+            restoreSettings={restoreSettings}
             noData={<NoBacktestingData fetchBacktestingRunData={fetchBacktestingRunData}/>}
         />
         // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -100,20 +100,21 @@ export default function PlotlyChart() {
                 _layout.hovermode = false;
             }
             plottedElements && Object.keys(plottedElements).forEach((liveOrBacktest) => {
-                const isBacktest = liveOrBacktest === "backtest"
-                if (isBacktest) {
+                const isBacktest = liveOrBacktest === "backtesting"
+
+                if (liveOrBacktest === "backtesting") {
                     plottedElements[liveOrBacktest] && Object.keys(plottedElements[liveOrBacktest]).forEach((optimizerCampaign) => {
                         plottedElements[liveOrBacktest][optimizerCampaign]
                             && Object.keys(plottedElements[liveOrBacktest][optimizerCampaign]).forEach((optimizerId) => {
                                 plottedElements[liveOrBacktest][optimizerCampaign][optimizerId]
                                     && Object.keys(plottedElements[liveOrBacktest][optimizerCampaign][optimizerId]).forEach((backtestingId) => {
-                                        formatSubData(plottedElements[liveOrBacktest][optimizerCampaign][optimizerId],
+                                        formatSubData(plottedElements[liveOrBacktest][optimizerCampaign][optimizerId][backtestingId],
                                             undefined, backtestingId, optimizerCampaign, optimizerId, _layout, uiConfig,
                                             hiddenXAxisChartIDs, plotData, visibleTimeframes, visiblePairs)
                                     })
                             })
                     })
-                } else {
+                } else if (liveOrBacktest === "live") {
                     plottedElements[liveOrBacktest] && Object.keys(plottedElements[liveOrBacktest]).forEach((liveId) => {
                         formatSubData(plottedElements[liveOrBacktest][liveId], liveId, undefined, undefined, undefined, _layout, uiConfig,
                             hiddenXAxisChartIDs, plotData, visibleTimeframes, visiblePairs)

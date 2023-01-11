@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-brands-svg-icons";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
-import AppWidgets from "../../AppWidgets";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 export default function Footer({ rightContent }) {
   const botColors = useBotColorsContext();

@@ -3,7 +3,7 @@ import React from "react";
 import { useMemo } from "react";
 import { Helmet } from "react-helmet";
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
-import AppWidgets from "../../widgets/AppWidgets";
+import AppWidgets from "../../widgets/WidgetManagement/RenderAppWidgets";
 
 export default function Page({ currentPage }) {
   const botColors = useBotColorsContext();

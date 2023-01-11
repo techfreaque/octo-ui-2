@@ -13,7 +13,7 @@ import "./TabsWithSelector.css";
 export default function TabsWithSelector({ children, handleChange, items, currentItem, id, onClose }) {
     // todo replace - works but logs errors
     return (
-        <div style={{ display: "flex", maxWidth: "300px" }}>
+        <div style={{ display: "flex", width: "30vw", maxWidth: "30vw" }}>
             <Tabs
                 value="0"
                 variant="scrollable"

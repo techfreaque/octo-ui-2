@@ -18,6 +18,16 @@
             ],
             "categories": ["Strategies"],
             "tentacle_package_name": "Spot-Master-3000"
+        },
+        {
+            "name": "Semi Auto Trading Mode",
+            "description": "This Trading Mode allows you to prepare trades in advance for multiple pairs and execute by a click",
+            "versions": [
+                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octobot-semi_auto_trading_mode/main/releases/trading_mode/latest/any_platform.zip"}
+
+            ],
+            "categories": ["Strategies"],
+            "tentacle_package_name": "Semi-Auto-Trading-Mode"
         }
     ]
 }

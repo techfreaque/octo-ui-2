@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import AppWidgets from "../../../AppWidgets";
+import AppWidgets from "../../../WidgetManagement/RenderAppWidgets";
 
 export default function SimpleLayout(props) {
   const footerRef = useRef(50);

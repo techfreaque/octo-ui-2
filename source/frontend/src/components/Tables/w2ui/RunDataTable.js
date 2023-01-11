@@ -4,64 +4,55 @@ import {
     ID_SEPARATOR, MAX_SEARCH_LABEL_SIZE, METADATA_HIDDEN_FIELDS,
     METADATA_UNDISPLAYED_FIELDS, TENTACLE_SEPARATOR, TIMESTAMP_DATA
 } from "../../../constants/backendConstants";
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { createTable } from "../../../components/Tables/w2ui/W2UI";
 import { useDisplayedRunIdsContext, useUpdateDisplayedRunIdsContext } from "../../../context/data/BotPlottedElementsProvider";
+import createNotification from "../../Notifications/Notification";
 
-export default function RunDataTableW2UI({ tableTitle, tableId, runData, currentCampaignName, noData, reloadData, deleteRuns, hiddenMetadataColumns }) {
+export default function RunDataTableW2UI({
+    tableTitle, tableId, runData, currentCampaignName, noData, reloadData, deleteBacktestingRuns,
+    hiddenMetadataColumns, setHiddenMetadataColumns, restoreSettings
+}) {
     const setDisplayedRunIds = useUpdateDisplayedRunIdsContext()
     const displayedRunIds = useDisplayedRunIdsContext()
+
     useEffect(() => {
-        // todo
         runData.data && hiddenMetadataColumns &&
-            updateBacktestingSelector(tableTitle, tableId, runData, false, currentCampaignName, reloadData,
-                deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds)
+            createMetadataTable(
+                tableTitle, tableId, runData.data,
+                false,
+                currentCampaignName, reloadData,
+                deleteBacktestingRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [runData, currentCampaignName, hiddenMetadataColumns]);
-    return (
+    return useMemo(() => (
         <div id={tableId + "-container"} style={{ height: "100%" }}>
             <div id={tableId + "-no-message"} className="text-center mx-4 my-4">
                 {noData}
             </div>
             <div id={tableId + "-table"} style={{ height: "100%" }}></div>
         </div>
-    )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), [])
 }
 
-function updateBacktestingSelector(
-    tableTitle, tableId, msg, forceSelectLatestBacktesting = false, currentCampaignName,
-    reloadData, deleteBacktestingRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds
+function createMetadataTable(
+    tableTitle, tableId, metadata,
+    forceSelectLatest, currentCampaignName,
+    reloadData, deleteBacktestingRuns, hiddenMetadataColumns,
+    setDisplayedRunIds, displayedRunIds, restoreSettings
 ) {
-    const updateSelection = (event, selected) => {
-        if (typeof event.recid !== "undefined") {
-            updateOrClearBacktestingAnalysisReportFromSelectedRow(w2ui[event.target].get(event.recid), selected, setDisplayedRunIds);
-        }
-        if (typeof event.recids !== "undefined") {
-            event.recids.forEach(recid => {
-                updateOrClearBacktestingAnalysisReportFromSelectedRow(w2ui[event.target].get(recid), selected, setDisplayedRunIds);
-            })
-        }
-    }
-
-    const afterUpdateSelection = (event) => {
-        // Make sure every element in selectedId is actually still selected
-        clearUnselectedRuns(event.target, displayedRunIds);
-    }
-    createBacktestingMetadataTable(
-        tableTitle, tableId, msg.data, updateSelection,
-        afterUpdateSelection, forceSelectLatestBacktesting,
-        currentCampaignName, reloadData,
-        deleteBacktestingRuns, hiddenMetadataColumns, setDisplayedRunIds)
-}
-
-function createBacktestingMetadataTable(
-    tableTitle, tableId, metadata, sectionHandler,
-    afterSectionHandler, forceSelectLatest, currentCampaignName,
-    reloadData, deleteBacktestingRuns, hiddenMetadataColumns, setDisplayedRunIds
-) {
-    _clearAllBacktestingSelection(tableId, setDisplayedRunIds);
-    document.getElementsByClassName("backtesting-run-container").innerHTML = undefined;
+    document.getElementsByClassName(tableId + "-container").innerHTML = undefined;
     if (metadata !== null && metadata.length) {
+        function handleSelection(tableName, event) {
+            function handleSelection2() {
+                setDisplayedRunIds(prev_selection => {
+                    const selection = getSelectedBacktestingRunIdentifiers(tableName)
+                    return { ...prev_selection, backtesting: selection }
+                })
+            }
+            event.onComplete = handleSelection2
+        }
         const sortedMetadata = metadata.sort((a, b) => b.timestamp - a.timestamp);
         document.getElementById(tableId + "-no-message").classList.add(hidden_class);
         const keys = Object.keys(sortedMetadata[0]).filter(key => METADATA_UNDISPLAYED_FIELDS.indexOf(key) === -1);
@@ -73,7 +64,7 @@ function createBacktestingMetadataTable(
                 sortable: true,
                 hidden: METADATA_HIDDEN_FIELDS.indexOf(key) !== -1,
                 render: TIMESTAMP_DATA.indexOf(key) !== -1 ? "datetime" :
-                    ID_DATA.indexOf(key) !== -1 ? "float" : undefined,
+                    ID_DATA.indexOf(key) !== -1 ? "int" : undefined,
             }
         })
         // Always put the id attribute first
@@ -87,10 +78,10 @@ function createBacktestingMetadataTable(
         const inputPerTentacle = {};
         const userInputKeys = [];
         const userInputSampleValueByKey = {};
-        if (hiddenMetadataColumns === null) {
-            window.console && console.error(`createBacktestingMetadataTable called before hiddenBacktestingMetadataColumns was initialized`);
-            hiddenMetadataColumns = [];
-        }
+        // if (hiddenMetadataColumns === null) {
+        //     window.console && console.error(`createBacktestingMetadataTable called before hiddenBacktestingMetadataColumns was initialized`);
+        //     hiddenMetadataColumns = [];
+        // }
         sortedMetadata.forEach((run_metadata) => {
             if (typeof run_metadata["user inputs"] !== "undefined") {
                 Object.keys(run_metadata["user inputs"]).forEach((inputTentacle) => {
@@ -177,22 +168,15 @@ function createBacktestingMetadataTable(
             true, false, false, false, null, null);
         _addBacktestingMetadataTableButtons(
             table, runDataHidableColumns, userInputColumns,
-            forceSelectLatest, currentCampaignName, reloadData, deleteBacktestingRuns
+            forceSelectLatest, currentCampaignName, reloadData,
+            deleteBacktestingRuns, restoreSettings, records
         )
-        table.on("select", function (event) {
-            console.log("test1");
-            sectionHandler(event, true);
-            event.onComplete = afterSectionHandler;
-        })
-        table.on("unselect", function (event) {
-            console.log("test2");
-            sectionHandler(event, false);
-            event.onComplete = afterSectionHandler;
-        })
+        table.on("select", (event) => handleSelection(tableId, event))
+        table.on("unselect", (event) => handleSelection(tableId, event))
         if (records.length) {
             _filterOptimizationCampaign(table, currentCampaignName);
             table.toolbar.check('show-current-optimization-campaign');
-            if (forceSelectLatest || autoSelectFirstBacktesting()) {
+            if (forceSelectLatest) {
                 table.click(table.getFirst());
             }
             return tableId;
@@ -206,7 +190,11 @@ function createBacktestingMetadataTable(
 }
 
 
-function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userInputColumns, forceSelectLatest, currentOptimizerCampaignName, reloadData, deleteBacktestingRuns) {
+function _addBacktestingMetadataTableButtons(
+    table, runDataHidableColumns, userInputColumns,
+    forceSelectLatest, currentOptimizerCampaignName,
+    reloadData, deleteBacktestingRuns, restoreSettings, records
+) {
     // tabs
     function showRunInfo() {
         table.showColumn(...runDataHidableColumns.map((column) => column.field))
@@ -258,6 +246,34 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
         icon: 'fas fa-list', onClick: () => showCurrentOptimizationCampaignOnly(currentOptimizerCampaignName)
     })
     table.toolbar.add({ type: 'spacer' });
+
+    function _restoreSettings() {
+        const selectedRuns = table.getSelection()
+        if (selectedRuns && selectedRuns.length === 1) {
+            function removeSpacesOnlyFromKeys(inputs) {
+                Object.keys(inputs).forEach((inputKey) => {
+                    const newInputKey = inputKey.replace(/ /g, "_")
+                    if (newInputKey !== inputKey) {
+                        inputs[newInputKey] = inputs[inputKey]
+                        delete inputs[inputKey]
+                    }
+                    typeof inputs[newInputKey] === 'object'
+                        && removeSpacesOnlyFromKeys(inputs[newInputKey])
+                })
+                return inputs
+            }
+            const run = selectedRuns[0];
+            const userInputs = removeSpacesOnlyFromKeys(JSON.parse(records[run]["user inputs"]))
+            restoreSettings(userInputs)
+        } else {
+            createNotification("Error restoring user iputs", "danger", "You must select one run");
+        }
+    }
+
+    table.toolbar.add({
+        type: 'button', id: 'restore-run',
+        text: 'Restore settings', icon: 'fa fa-download', onClick: _restoreSettings
+    })
     table.toolbar.add({
         type: 'button', id: 'refresh-backtesting-runs',
         text: 'Refresh', icon: 'w2ui-icon-reload', onClick: reloadData
@@ -269,38 +285,6 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
     });
 }
 
-
-function updateBacktestingAnalysisReport(run_id, optimizer_id, campaign_name, addReport, setDisplayedRunIds) {
-    const fullId = mergeRunIdentifiers(run_id, optimizer_id, campaign_name);
-    setDisplayedRunIds(prevRunIds => {
-        console.log("ssss", {
-            ...prevRunIds,
-            backtesting: prevRunIds.backtesting.indexOf(fullId) === -1
-                && prevRunIds.backtesting.push(fullId)
-        });
-        return {
-            ...prevRunIds,
-            backtesting: prevRunIds.backtesting.indexOf(fullId) === -1
-                && prevRunIds.backtesting.push(fullId)
-        }
-    })
-    // // upper charts
-    // displayChartsAndInputs(true, run_id, false, optimizer_id, campaign_name, addReport, getSelectedSymbol(), getSelectedTimeFrame(), false, null, null)
-    // // toolbox
-    // const data = {
-    //     id: run_id,
-    //     optimizer_id: optimizer_id,
-    //     campaign_name: campaign_name,
-    //     exchange: getExchangeName(),
-    //     symbol: getSelectedSymbol(),
-    //     time_frame: getSelectedTimeFrame(),
-    //     added: addReport,
-    //     fullId: fullId,
-    //     backtesting_analysis_settings: getBacktestingPlotSettings()
-    // }
-    // send_and_interpret_bot_update(data, $("#backtesting-run-overview").data("url"), null,
-    //     updateBacktestingReport, generic_request_failure_callback);
-}
 
 
 function mergeRunIdentifiers(backtestingId, optimizerId, campaignName) {
@@ -317,70 +301,6 @@ function getOptimizerIdFromTableRow(row) {
 
 function getCampaignNameFromTableRow(row) {
     return row["optimization campaign"];
-}
-
-
-function updateOrClearBacktestingAnalysisReportFromSelectedRow(row, selected, setDisplayedRunIds) {
-    if (selected) {
-        updateBacktestingAnalysisReport(
-            getIdFromTableRow(row),
-            getOptimizerIdFromTableRow(row),
-            getCampaignNameFromTableRow(row),
-            true, setDisplayedRunIds
-        );
-    } else {
-        clearBacktestingAnalysisReport(
-            getIdFromTableRow(row),
-            getOptimizerIdFromTableRow(row),
-            getCampaignNameFromTableRow(row),
-            setDisplayedRunIds
-        );
-    }
-}
-
-
-function clearBacktestingAnalysisReport(run_id, optimizer_id, campaign_name, setDisplayedRunIds) {
-    const fullId = mergeRunIdentifiers(run_id, optimizer_id, campaign_name);
-    setDisplayedRunIds(prevRunIds => (
-        {
-            ...prevRunIds,
-            backtesting: prevRunIds.backtesting.indexOf(fullId) !== -1
-                && prevRunIds.backtesting.splice(prevRunIds.backtesting.indexOf(fullId), 1)
-        }
-    ))
-    const emptyData = {
-        data: {
-            sub_elements: []
-        }
-    };
-    // const chartIdentifier = run_id ? optimizer_id ? `${run_id}:${optimizer_id} - ${campaign_name}` : `${run_id} - ${campaign_name}` : "live";
-    // updateDisplayedElement(emptyData, true, window.editors, false, run_id, optimizer_id, campaign_name,
-    //     false, window.backtestingTableName, chartIdentifier);
-    _updateBacktestingChart(emptyData, true, run_id, optimizer_id, campaign_name,
-        false, window.backtestingTableName, fullId, false)
-}
-
-function _updateBacktestingChart(data, replot, backtesting_id, optimizer_id, campaign_name,
-    added, backtestingTableName, chartIdentifier, backtestingPart) {
-    // _updateChart(data, replot, backtesting_id, optimizer_id, campaign_name,
-    //     added, backtestingTableName, chartIdentifier, afterGraphPlot, [], backtestingPart);
-}
-
-function _clearAllBacktestingSelection(tableName, setDisplayedRunIds) {
-    if (typeof w2ui[tableName] !== "undefined") {
-        // unselect previously selected elements
-        const table = w2ui[tableName];
-        table.getSelection().forEach(recid => {
-            updateOrClearBacktestingAnalysisReportFromSelectedRow(table.get(recid), false, setDisplayedRunIds);
-        })
-    }
-}
-
-function clearUnselectedRuns(tableName, displayedRunIds) {
-    const selectedRunIdentifiers = getSelectedBacktestingRunIdentifiers(tableName);
-    console.log("reee", displayedRunIds)
-    const toRemove = displayedRunIds.backtesting.filter(element => selectedRunIdentifiers.indexOf(element) === -1);
-    toRemove.forEach(fullId => displayedRunIds.backtesting.splice(displayedRunIds.backtesting.indexOf(fullId), 1));
 }
 
 function getSelectedBacktestingRunIdentifiers(tableName) {
@@ -408,7 +328,7 @@ function _ensureBacktestingMetadataColumnsOrder(runDataColumns) {
     runDataColumns.splice(0, 0, runDataColumns.splice(idIndex, 1)[0]);
 }
 
-function _userInputKey(userInput, tentacle) {
+export function userInputKey(userInput, tentacle) {
     return `${userInput}${TENTACLE_SEPARATOR}${tentacle}`;
 }
 
@@ -417,7 +337,7 @@ function _getUserInputColumns(
     inputPerTentacle, inputsByConfig, hiddenMetadataColumns
 ) {
     Object.keys(inputsByConfig[inputTentacle]).forEach((userInput) => {
-        const key = _userInputKey(userInput, inputTentacle);
+        const key = userInputKey(userInput, inputTentacle);
         if (userInputKeys.indexOf(key) === -1 && hiddenMetadataColumns.indexOf(key.replaceAll("_", " ")) === -1) {
             userInputSampleValueByKey[key] = inputsByConfig[inputTentacle][userInput]
             if (userInputSampleValueByKey[key] instanceof Object && !(userInputSampleValueByKey[key] instanceof Array)) {
@@ -444,7 +364,7 @@ function _getUserInputColumns(
 
 function _getTableDataType(records, search, defaultValue, sampleValue) {
     if (ID_DATA.indexOf(search.field) !== -1) {
-        return "float";
+        return "int";
     }
     if (search.type !== null) {
         return search.type;
@@ -471,15 +391,15 @@ function _formatUserInputRow(parent, userInputData, parentIdentifier) {
         if (value instanceof Object && !(value instanceof Array)) {
             _formatUserInputRow(parent, userInputData[userInputIdentifier], userInputIdentifier);
         } else {
-            parent[_userInputKey(userInputIdentifier, parentIdentifier)] = value;
+            parent[userInputKey(userInputIdentifier, parentIdentifier)] = value;
         }
     })
 }
 
 function _formatMetadataRow(row, recordId) {
     row.timestamp = typeof row.timestamp === "undefined" ? undefined : Math.round(row.timestamp * 1000);
-    row["start time"] = typeof row["start time"] === "undefined" ? undefined : Math.round(row["start time"] * 1000);
-    row["end time"] = typeof row["end time"] === "undefined" ? undefined : Math.round(row["end time"] * 1000);
+    row["start_time"] = typeof row["start_time"] === "undefined" ? undefined : Math.round(row["start_time"] * 1000);
+    row["end_time"] = typeof row["end_time"] === "undefined" ? undefined : Math.round(row["end_time"] * 1000);
     if (typeof row["user inputs"] !== "undefined") {
         _formatUserInputRow(row, row["user inputs"], null);
     }
@@ -507,8 +427,6 @@ function _formatMetadataRow(row, recordId) {
     return recordId
 }
 
-
-
 function _filterOptimizationCampaign(table, currentOptimizerCampaignName) {
     // default search and sort
     table.search(
@@ -518,9 +436,4 @@ function _filterOptimizationCampaign(table, currentOptimizerCampaignName) {
     table.searchData[0]['operator'] = "is"
     table.localSearch()
     table.refresh()
-}
-
-function autoSelectFirstBacktesting() {
-    // TODO (use js localstorage ?)
-    return false;
 }

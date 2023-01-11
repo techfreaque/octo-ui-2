@@ -1,4 +1,5 @@
 import octobot_commons.databases as databases
+import tentacles.Meta.Keywords.scripting_library.run_analysis.run_analysis_data as run_analysis_data
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
 import octobot_commons.errors as commons_errors
 import octobot_services.interfaces.util as interfaces_util
@@ -45,7 +46,7 @@ def get_plotted_data(
     live_id=None,
     optimizer_id=None,
     optimization_campaign_name=None,
-    analysis_settings={}
+    analysis_settings={},
 ):
     trading_model.ensure_valid_exchange_id(exchange_id)
     elements = commons_display.display_translator_factory()
@@ -73,18 +74,23 @@ def get_plotted_data(
     except commons_errors.MissingExchangeDataError as e:
         octo_ui2.get_logger().exception(e, True, f"Error when opening database: {e}")
         raise
-    elements2 = interfaces_util.run_in_bot_async_executor(
-    trading_mode.get_backtesting_plot(
-        exchange_name,
-        symbol,
-        backtesting_id=backtesting_id,
-        optimizer_id=optimizer_id,
-        optimization_campaign=optimization_campaign_name if not live_id else None,
-        backtesting_analysis_settings=analysis_settings,
-        live_id=live_id
-    )
-    )
-    elements2 = elements2.to_json()
     elements = elements.to_json()
-    elements["data"]["sub_elements"] += elements2["data"]["sub_elements"]
+    try:
+        elements2 = interfaces_util.run_in_bot_async_executor(
+            trading_mode.get_run_analysis_plots(
+                exchange_name,
+                symbol,
+                backtesting_id=backtesting_id,
+                optimizer_id=optimizer_id,
+                optimization_campaign=optimization_campaign_name
+                if not live_id
+                else None,
+                analysis_settings=analysis_settings,
+                live_id=live_id,
+            )
+        )
+        elements2 = elements2.to_json()
+        elements["data"]["sub_elements"] += elements2["data"]["sub_elements"]
+    except run_analysis_data.CandlesLoadingError as error:
+        octo_ui2.get_logger().error(f"Failed to load candles - error: {error}")
     return elements

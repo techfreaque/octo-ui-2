@@ -15,12 +15,18 @@ export const backendRoutes = {
   stopBot: "/commands/stop",
   updateBot: "/commands/update",
   updateTentaclesConfig: "/config_tentacles?action=update&reload=true",
-  strategyDesignRunData: "/strategy_design/run_data",
-  strategyDesignDeleteRunData: "/strategy_design/run_data?action=delete",
+  updateTentaclesConfigAndSendCommand: basePath + "/trading_mode_command",
+  backtestingRunData: basePath + "/backtesting_runs",
+  cancelAll_orders: basePath + "/orders/cancel_all",
+  closeAllPositions: basePath + "/positions/close_all",
+  liveRunData: basePath + "/live_run_data",
   UIConfig: basePath + "/ui_config",
   backtesting: "/backtesting",
   backtestingStart: "/backtesting?action_type=start_backtesting_with_current_bot_data&source=strategy_design&reset_tentacle_config=False&auto_stop=True",
   backtestingStop: "/backtesting?action_type=stop_backtesting",
+
+
+  strategyDesignDeleteRunData: "/strategy_design/run_data?action=delete",
   optimizerStart: "/strategy_design/strategy_design_start_optimizerstart",
   optimizerStop: "/advanced/strategy-optimizer?update_type=cancel_optimizer",
   optimizerQueueUpdate: "/strategy_design/strategy_design_optimizer_queueupdate",
@@ -34,10 +40,10 @@ export const backendRoutes = {
 
 }
 
-export const ID_SEPARATOR = "_";
+export const ID_SEPARATOR = "_------_";
 export const TENTACLE_SEPARATOR = "###";
 export const MAX_SEARCH_LABEL_SIZE = 32;
-export const TIMESTAMP_DATA = ["timestamp", "start time", "end time"];
+export const TIMESTAMP_DATA = ["timestamp", "start time", "end time", "start_time", "end_time"];
 export const ID_DATA = ["id", "backtesting id", "optimizer id"];
 export const METADATA_HIDDEN_FIELDS = ["backtesting files", "user inputs"]
 export const METADATA_UNDISPLAYED_FIELDS = ["children"]
