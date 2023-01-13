@@ -92,5 +92,11 @@ def get_plotted_data(
         elements2 = elements2.to_json()
         elements["data"]["sub_elements"] += elements2["data"]["sub_elements"]
     except run_analysis_data.CandlesLoadingError as error:
-        octo_ui2.get_logger().error(f"Failed to load candles - error: {error}")
+        octo_ui2.get_logger().exception(
+            error, True, f"Failed to load run analysis plots - error: {error}"
+        )
+    except run_analysis_data.LiveMetaDataNotInitializedError as error:
+        octo_ui2.get_logger().exception(
+            error, True, f"Failed to load run analysis plots - error: {error}"
+        )
     return elements
