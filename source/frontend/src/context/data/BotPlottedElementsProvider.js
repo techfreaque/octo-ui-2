@@ -69,30 +69,12 @@ export const useFetchPlotData = () => {
   ]);
   return logic;
 };
-// export const useFetchPlotData = () => {
-// const updateBotPlottedElements = useUpdateBotPlottedElementsContext()
-// const botInfo = useBotInfoContext();
-// const botDomain = useBotDomainContext();
-// const visiblePairs = useVisiblePairsContext();
-// const visibleTimeframes = useVisibleTimeFramesContext();
-// const logic = useCallback(() => {
-//     fetchPlotData(
-//       updateBotPlottedElements,
-//       botInfo.exchange_id,
-//       visiblePairs,
-//       visibleTimeframes,
-//       botDomain
-//     );
-
-// }, [updateBotPlottedElements, botInfo, botDomain, visibleTimeframes, visiblePairs]);
-// return logic;
-// };
-
-
 function convertAnalysisSettings(analysis_settings, isLive = true) {
   const key = isLive ? "live" : "backtesting"
   return {
     plot_unrealized_portfolio_value: analysis_settings?.[key + "_plot_settings"]?.plot_unrealized_portfolio || false,
+    plot_unrealized_portfolio_value_for_each_asset: analysis_settings?.[key + "_plot_settings"]?.plot_unrealized_portfolio_value_for_each_asset || false,
+    plot_unrealized_portfolio_amount_for_each_asset: analysis_settings?.[key + "_plot_settings"]?.plot_unrealized_portfolio_amount_for_each_asset || false,
     plot_realized_portfolio_value: analysis_settings?.[key + "_plot_settings"]?.plot_realized_portfolio || false,
     plot_realized_trade_gains: analysis_settings?.[key + "_plot_settings"]?.plot_trade_gains || false,
     plot_best_case_growth: analysis_settings?.[key + "_plot_settings"]?.plot_best_case_growth || false,
@@ -236,6 +218,7 @@ export const BotPlottedElementsProvider = ({ children }) => {
         (elements) => setHiddenMetadataFromInputs(elements, setHiddenBacktestingMetadataColumns)
       );
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     botInfo?.exchange_id,
     botDomain,

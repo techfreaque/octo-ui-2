@@ -347,8 +347,8 @@ export const defaultBotTemplate = [
                 ]
             }
         ],
-        "path": "/appstore",
-        "title": "App Store"
+        "path": "/opm",
+        "title": "Package Manager"
     },
     {
         "layout": [

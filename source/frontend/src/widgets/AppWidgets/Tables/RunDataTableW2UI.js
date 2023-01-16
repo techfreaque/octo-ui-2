@@ -51,13 +51,9 @@ function NoBacktestingData({ fetchBacktestingRunData }) {
     return (
         <>
             <h4>
-                No backtesting found, here you will be able to select backtestings using the ScriptedTradingMode for comparison.
+                No backtesting found, here you will be able to select backtestings using for comparison.
             </h4>
             <h4>
-                <Button>
-                    <FontAwesomeIcon icon={faCog} style={{ marginRight: "5px" }} />
-                    select optimization campaigns to load
-                </Button>
                 <Button
                     onClick={fetchBacktestingRunData}>
                     <FontAwesomeIcon icon={faRedo} style={{ marginRight: "5px" }} />

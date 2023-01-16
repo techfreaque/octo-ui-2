@@ -1,10 +1,24 @@
 import octobot_commons.databases as databases
-import tentacles.Meta.Keywords.scripting_library.run_analysis.run_analysis_data as run_analysis_data
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
 import octobot_commons.errors as commons_errors
 import octobot_services.interfaces.util as interfaces_util
 import tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 as octo_ui2
 import octobot_commons.display as commons_display
+
+try:
+    from tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.base_data_provider import (
+        CandlesLoadingError,
+    )
+    from tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.init_base_data import (
+        LiveMetaDataNotInitializedError,
+    )
+except (ImportError, ModuleNotFoundError):
+
+    class LiveMetaDataNotInitializedError(Exception):
+        pass
+
+    class CandlesLoadingError(Exception):
+        pass
 
 
 # def get_run_plotted_data(
@@ -76,8 +90,12 @@ def get_plotted_data(
         raise
     elements = elements.to_json()
     try:
+        from octobot_trading.api.modes import get_run_analysis_plots
+        import tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.base_data_provider as base_data_provider
+
         elements2 = interfaces_util.run_in_bot_async_executor(
-            trading_mode.get_run_analysis_plots(
+            get_run_analysis_plots(
+                trading_mode,
                 exchange_name,
                 symbol,
                 backtesting_id=backtesting_id,
@@ -91,11 +109,19 @@ def get_plotted_data(
         )
         elements2 = elements2.to_json()
         elements["data"]["sub_elements"] += elements2["data"]["sub_elements"]
-    except run_analysis_data.CandlesLoadingError as error:
+    except CandlesLoadingError as error:
         octo_ui2.get_logger().exception(
             error, True, f"Failed to load run analysis plots - error: {error}"
         )
-    except run_analysis_data.LiveMetaDataNotInitializedError as error:
+    except LiveMetaDataNotInitializedError as error:
+        octo_ui2.get_logger().exception(
+            error, True, f"Failed to load run analysis plots - error: {error}"
+        )
+    except (ImportError, ModuleNotFoundError) as error:
+        octo_ui2.get_logger().exception(
+            error, True, f"Failed to load run analysis plots - error: {error}"
+        )
+    except Exception as error:
         octo_ui2.get_logger().exception(
             error, True, f"Failed to load run analysis plots - error: {error}"
         )

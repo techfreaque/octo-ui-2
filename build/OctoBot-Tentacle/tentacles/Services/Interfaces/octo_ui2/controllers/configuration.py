@@ -267,7 +267,7 @@ def register_bot_config_routes(plugin):
             symbol_list = sorted(models.get_symbol_list([exchange
                                                          for exchange in display_config[
                                                              commons_constants.CONFIG_EXCHANGES]])),
-            full_symbol_list = models.get_all_symbols_dict(),
+            # full_symbol_list = models.get_all_symbols_dict(),
             evaluator_config = models.get_evaluator_detailed_config(media_url, missing_tentacles),
             strategy_config = models.get_strategy_config(media_url, missing_tentacles),
             evaluator_startup_config = models.get_evaluators_tentacles_startup_activation(),

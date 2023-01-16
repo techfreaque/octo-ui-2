@@ -54,6 +54,18 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                                 format: "checkbox",
                                 fieldType: "boolean"
                             },
+                            "plot_unrealized_portfolio_value_for_each_asset": {
+                                type: "boolean",
+                                title: "Plot unrealized portfolio value for each asset",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            "plot_unrealized_portfolio_amount_for_each_asset": {
+                                type: "boolean",
+                                title: "Plot unrealized portfolio amount for each asset",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value"),
                             "plot_realized_portfolio": {
                                 type: "boolean",
@@ -179,6 +191,18 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 "default": true
+                            },
+                            "plot_unrealized_portfolio_value_for_each_asset": {
+                                type: "boolean",
+                                title: "Plot unrealized portfolio value for each asset",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            "plot_unrealized_portfolio_amount_for_each_asset": {
+                                type: "boolean",
+                                title: "Plot unrealized portfolio amount for each asset",
+                                format: "checkbox",
+                                fieldType: "boolean"
                             },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value"),
                             "plot_realized_portfolio": {
