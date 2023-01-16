@@ -6,12 +6,13 @@
 
 # Getting started
 ## Install octo ui2 tentacle
-- the current version requires my forks of all OctoBot packages, once my custom code is merged into OctoBot it will work with stock OctoBot
+- the current version doesnt support plotting on stock OctoBot. It requires my forks of OctoBot (my master branches on each Octobot repository), once my custom code is merged into OctoBot it will work with stock OctoBot
 1. to be able to install Tentacles, you need to enable a login password for your OctoBot under "Accounts -> Interface"
-2. then go to yourOctobotDomain.com:5001/advanced/tentacle_packages - paste the URL for the latest version and install it
+2. then go to yourOctobotDomain.com:5001/advanced/tentacle_packages - paste the URL for the latest version (se at the bottom) and install it
 
-## Latest octo-ui2 tentacle package
-https://raw.githubusercontent.com/techfreaque/octo-ui-2/main/releases/octo-ui2-latest/any_platform.zip
+# Ask any questions
+if you have any question, bug report, feature request, etc just open an issue here:\
+https://github.com/techfreaque/octo-ui-2/issues
 
 # Customize and install from source
 ## It's very easy to customize and create your own custom AppWidgets
@@ -24,7 +25,6 @@ and here: /source/frontend/src/widgets/LayoutWidgets
 
 ## Bulding from source
 - if you want to use the dev branch, usually it will require my forked branches of the Octobot packages and tentacles
-- currently also the main branch requires my forks, which will change soon\
 `git clone https://github.com/techfreaque/octo-ui-2`\
 `cd octo-ui-2`
 ### 1. install requirements
@@ -32,7 +32,7 @@ and here: /source/frontend/src/widgets/LayoutWidgets
 `npm install`
 
 ### 2. Run dev Server for the frontend
-- make sure to update the REACT_APP_DEVELOPMENT_BOT_DOMAIN which should be the domain/ip of your running OctoBot instance in /source/frontend/.env
+- make sure to update the env in /source/frontend/.env REACT_APP_DEVELOPMENT_BOT_DOMAIN which should be the domain/ip:port of your running OctoBot instance
 
 `cd source/frontend` \
 `npm start`\
@@ -92,4 +92,46 @@ example VSCode launch.json:\
 `	]`\
 `}`
 
+## License: GPL
+
+If you decide to customize my code, please note that it is licensed under the GNU General Public License (GPL). This means that you have the right to use, modify, and distribute the code as long as you also distribute any modified versions under the same GPL license. If you would like to contribute your modifications back to the original codebase, please open a pull request on the repository. This allows the community to review and potentially merge your changes, while also ensuring that any improvements or modifications are shared with others. Thank you for considering using my code, and I hope it serves you well.
+
+## Your Donation Makes a Difference
+
+Thank you for considering donating to support this open source project! Your support allows me to continue working on new and exciting features for everyone to enjoy. As this project is developed in my free time, every donation helps to motivate me to spend more time on it and bring new ideas to life. Your contribution will go towards funding the development and maintenance of this project, and will help ensure that it remains a valuable resource for the community. Thank you for your support and for helping to make this project a reality!
+
+### USDT wallets:
+
+USDT - TRX (Tron TRC20): TYfDkrjMeL6KpDFbB5A667V5BwYE3vzium\
+USDT - BSC (BNB Smart Chain BEP20): 0x7bc06015304f00f5dccc22f009be313eb51396aa\
+USDT - SOL (Solana): 8MeDCMQHXZJdhipkyoVUxahemuLy3ueEzuA8d8LTZe8o
+
+### BUSD wallets:
+
+BUSD - BSC (BNB Smart Chain BEP20): 0x7bc06015304f00f5dccc22f009be313eb51396aa
+
+### BTC wallets
+
+BTC - BTC: 163A8EDxQPjuUYUoP9u9f91dyRPAALmER7\
+BTC - BSC (BNB Smart Chain BEP20): 0x7bc06015304f00f5dccc22f009be313eb51396aa\
+BTC - SegWit BTC: bc1q2qnte70sdee0mw2h33jazx0dg4qd6erexzdajl\
+BTC - ETH (ERC20): 0x7bc06015304f00f5dccc22f009be313eb51396aa
+
+### BNB Wallets
+
+BNB - BSC (BNB Smart Chain BEP20): 0x7bc06015304f00f5dccc22f009be313eb51396aa\
+BNB - ETH (ERC20): 0x7bc06015304f00f5dccc22f009be313eb51396aa
+
+### ETH wallets
+
+ETH - ETH (ERC20): 0x7bc06015304f00f5dccc22f009be313eb51396aa ETH - BSC (BNB Smart Chain BEP20): 0x7bc06015304f00f5dccc22f009be313eb51396aa
+
+### DOGE wallets
+
+DOGE - DOGE: D5WteSP23WTAhM7Jh4dXxgkCL2CRjrdFJK\
+DOGE - BSC (BNB Smart Chain BEP20): 0x7bc06015304f00f5dccc22f009be313eb51396aa
+
+
+## Download latest octo-ui2 tentacle package
+https://raw.githubusercontent.com/techfreaque/octo-ui-2/main/releases/octo-ui2-latest/any_platform.zip
 
