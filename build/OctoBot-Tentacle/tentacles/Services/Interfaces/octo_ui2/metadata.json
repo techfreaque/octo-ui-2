@@ -1,5 +1,5 @@
 {
-  "version": "0.4.3",
+  "version": "0.4.4",
   "origin_package": "Matrix-Octo-UI2",
   "tentacles": ["OctoUi2Plugin"],
   "tentacles-requirements": []

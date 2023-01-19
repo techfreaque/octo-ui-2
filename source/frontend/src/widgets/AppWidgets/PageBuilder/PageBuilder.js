@@ -22,7 +22,7 @@ export default function PageBuilder() {
             <Button variant="contained" onClick={handlePageLayoutSaving}>Save Page Layout</Button>
             <JsonEditor
                 {...defaultJsonEditorSettings()}
-                schema={pageBuilderSchema(registeredComponents)}
+                schema={pageBuilderSchema()}
                 startval={botLayout}
                 editorName={editorName}
                 disable_properties={false}
@@ -35,8 +35,7 @@ export default function PageBuilder() {
     )
 }
 
-const pageBuilderSchema = (registeredComponents) => {
-
+function pageBuilderSchema() {
     const availableComponentsList = ["Tab", ...Object.keys(registeredComponents).map(componentName => componentName).sort()]
     const appWidget = () => {
         return {
@@ -78,7 +77,7 @@ const pageBuilderSchema = (registeredComponents) => {
     }
 }
 
-export function generateCustomAppWidgetProp(propName, dependentComponents) {
+export function generateAppWidgetProp(propName, dependentComponents) {
     return {
         [propName]: {
             type: "array",

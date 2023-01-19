@@ -14,10 +14,9 @@ import ShareIcon from "@mui/icons-material/Share";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faDownload } from "@fortawesome/free-solid-svg-icons";
-import { installAppPackage } from "../../../api/actions";
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { useInstallAppPackage } from "../../../context/data/AppStoreDataProvider";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -88,12 +87,7 @@ function InstallAppMenu({ app }) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
-  const botDomain = useBotDomainContext()
-  function handleInstallApp(AppVersion) {
-    installAppPackage(AppVersion.url, app.name + " " + AppVersion.version, botDomain)
-  }
-
+  const installAppPackage = useInstallAppPackage()
   return (
     <div>
       <IconButton
@@ -116,7 +110,10 @@ function InstallAppMenu({ app }) {
         }}
       >
         {app.versions.map((appVersion) => (
-          <MenuItem key={appVersion.version} onClick={() => handleInstallApp(appVersion)}>{appVersion.version} <FontAwesomeIcon icon={faDownload} style={{marginLeft: "5px"}} /></MenuItem>
+          <MenuItem key={appVersion.version}
+            onClick={() => installAppPackage(appVersion.url, app.name + " " + appVersion.version)}>
+            {appVersion.version} <FontAwesomeIcon icon={faDownload} style={{ marginLeft: "5px" }} />
+          </MenuItem>
         ))}
       </Menu>
     </div>

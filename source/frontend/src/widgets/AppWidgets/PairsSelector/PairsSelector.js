@@ -12,8 +12,7 @@ export default function PairsSelector() {
   const visiblePairs = useVisiblePairsContext();
   const setVisiblePairs = useUpdateVisiblePairsContext();
   return useMemo(() => {
-    if (botInfo && visiblePairs) {
-      return (
+      return botInfo && visiblePairs && (
         <TabsWithSelector
           currentItem={visiblePairs}
           items={botInfo.symbols}
@@ -22,8 +21,5 @@ export default function PairsSelector() {
           <Button href={botDomain + backendRoutes.manageSymbol}>Manage Currency Settings</Button>
         </TabsWithSelector>
       );
-    } else {
-      return <></>;
-    }
   }, [botDomain, botInfo, setVisiblePairs, visiblePairs])
 }

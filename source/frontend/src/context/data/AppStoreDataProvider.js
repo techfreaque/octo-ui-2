@@ -1,5 +1,6 @@
 import React, { useState, useContext, createContext } from "react";
 import { useCallback } from "react";
+import { installAppPackage } from "../../api/actions";
 import { fetchAppStoreData } from "../../api/data";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 
@@ -25,11 +26,10 @@ export const useFetchAppStoreData = () => {
 }
 
 export const useInstallAppPackage = () => {
-  const _saveAppStoreData = useSaveAppStoreDataContext()
   const botDomain = useBotDomainContext()
-  const logic = useCallback((packageUrl) => {
-    fetchAppStoreData(_saveAppStoreData, botDomain)
-  }, [_saveAppStoreData, botDomain]);
+  const logic = useCallback((packageUrl, packageNameAndVersion) => {
+    installAppPackage(packageUrl, packageNameAndVersion, botDomain)
+  }, [botDomain]);
   return logic;
 }
 

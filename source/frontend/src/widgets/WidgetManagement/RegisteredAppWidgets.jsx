@@ -31,12 +31,12 @@ import RealTradingSwitch from "../AppWidgets/Configuration/SwitchRealTrading/Swi
 import StopBotButton from "../AppWidgets/Buttons/StopBotButton";
 import RestartBotButton from "../AppWidgets/Buttons/RestartBotButton";
 import UpdateBotButton from "../AppWidgets/Buttons/UpdateBotButton";
-import PlotlyChart from "../../components/Charts/Plotly";
 import LiveRunMetaData from "../AppWidgets/Stats/LiveRunData";
 import CloseAllPositionsButton from "../AppWidgets/Buttons/CloseAllPositionsButton";
 import CancelAllOrdersButton from "../AppWidgets/Buttons/CancelAllOrdersButton";
 import PowerMenu from "../AppWidgets/Modals/PowerMenu/PowerMenu";
 import SendActionCommandToTradingMode from "../AppWidgets/Buttons/SendActionCommandToTradingMode";
+import PlotlyChart from "../AppWidgets/Charts/MainCharts/Plotly";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -59,7 +59,7 @@ export const registeredComponents = {
   CurrentPanelFullscreen: CurrentPanelFullscreen,
   CurrentPanelMinimize: CurrentPanelMinimize,
   Configuration: Configuration,
-  Legend: Legend,
+  // Legend: Legend,
   TimeFrameSelector: TimeFrameSelector,
   ColorModeSwitch: ColorModeSwitch,
   CurrentPortfolioTable: CurrentPortfolioTable,

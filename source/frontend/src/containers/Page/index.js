@@ -8,7 +8,6 @@ import AppWidgets from "../../widgets/WidgetManagement/RenderAppWidgets";
 export default function Page({ currentPage }) {
   const botColors = useBotColorsContext();
   const theme = useTheme();
-  // loadFontAwesomeIcons()
   return useMemo(() => (
     <main
       style={{

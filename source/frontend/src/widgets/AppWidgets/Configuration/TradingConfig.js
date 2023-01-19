@@ -89,6 +89,7 @@ function advancedTradingSettings(tabsData, exchangeId, botDomain) {
         )
     });
 }
+
 function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {
     let hiddenMetadataColumns = [];
     elements.forEach(function (inputDetails) {
@@ -124,7 +125,7 @@ export function saveUserInputs(saveTentaclesConfig, actionType, setIsLoading) {
             }
             else {
                 save = false;
-                createNotification(`Error when saving ${tentacle} configuration`, "error", `Invalid configuration: ${errorsDesc}`);
+                createNotification(`Error when saving ${tentacle} configuration`, "danger", `Invalid configuration: ${errorsDesc}`);
             }
         }
     });

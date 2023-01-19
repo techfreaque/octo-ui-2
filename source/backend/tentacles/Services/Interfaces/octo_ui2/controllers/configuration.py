@@ -3,6 +3,7 @@ import flask
 import octobot_commons.constants as commons_constants
 import octobot_commons.logging as commons_logging
 from tentacles.Services.Interfaces.octo_ui2.models import config
+from tentacles.Services.Interfaces.octo_ui2.models import octo_ui2
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
@@ -36,7 +37,7 @@ def register_bot_config_routes(plugin):
                     config.save_ui_config(request_data)
                 ))
             except Exception as e:
-                commons_logging.get_logger("ui_config").exception(e)
+                octo_ui2.get_logger().exception(e)
                 return util.get_rest_reply(str(e), 500)
         else:
             return config.get_ui_config()

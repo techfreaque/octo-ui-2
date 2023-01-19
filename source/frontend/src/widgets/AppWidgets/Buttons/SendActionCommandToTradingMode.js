@@ -3,15 +3,18 @@ import Button from "@mui/material/Button";
 import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 import { useSaveTentaclesConfigAndSendAction } from "../../../api/configs";
 import { saveUserInputs } from "../Configuration/TradingConfig";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 
 export default function SendActionCommandToTradingMode({ command, title, faIcon, color = "warning", variant = "outlined" }) {
   const isOnline = useIsBotOnlineContext()
   const [isExecuting, setIsExecuting] = useState(false)
   const saveTentaclesConfigAndSendAction = useSaveTentaclesConfigAndSendAction()
+  const botInfo = useBotInfoContext()
+  const availableApiActions = botInfo.available_api_actions
+  const isAvailableApiAction = botInfo.available_api_actions && availableApiActions.indexOf(command) !== -1
 
-  // todo get available actions with botinfo
   return useMemo(() => {
-    return (
+    return isAvailableApiAction && (
       <Button disabled={!isOnline || isExecuting}
         onClick={() => saveUserInputs(saveTentaclesConfigAndSendAction, command, setIsExecuting)}
         variant={variant} color={color}>
@@ -19,5 +22,5 @@ export default function SendActionCommandToTradingMode({ command, title, faIcon,
         {title}
       </Button>
     );
-  }, [color, command, faIcon, isExecuting, isOnline, saveTentaclesConfigAndSendAction, title, variant])
+  }, [isAvailableApiAction, isOnline, isExecuting, variant, color, faIcon, title, saveTentaclesConfigAndSendAction, command])
 }

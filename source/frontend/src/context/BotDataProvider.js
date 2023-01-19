@@ -13,7 +13,6 @@ import { VisibleTimeFramesProvider } from "./config/VisibleTimeFrameProvider";
 import { AppStoreDataProvider } from "./data/AppStoreDataProvider";
 import { BacktestingRunDataProvider } from "./data/BacktestingRunDataProvider";
 import { IsBotOnlineProvider } from "./data/IsBotOnlineProvider";
-import { LiveRunDataProvider } from "./data/LiveRunDataProvider";
 import { OptimizerQueueProvider } from "./data/OptimizerQueueProvider";
 import { VisiblePairsProvider } from "./config/VisiblePairProvider";
 import { OptimizerEditorProvider } from "./config/OptimizerEditorProvider";

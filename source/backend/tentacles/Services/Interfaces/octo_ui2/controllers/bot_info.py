@@ -30,15 +30,19 @@ def register_bot_info_routes(plugin):
     def _bot_info():
         is_starting = False
         config_candles_count = 0
-        trading_mode = (
-            trading_mode_name
-        ) = activated_strategy = exchange_name = exchange_id = None
+        trading_mode = trading_mode_name = None
+        (activated_strategy) = None
+        exchange_name = None
+        exchange_id = None
+        available_api_actions = None
         symbols = traded_time_frames = enabled_time_frames = activated_evaluators = []
         timeframes_dict = {}
         strategy_name = None
         try:
             trading_mode = models.get_config_activated_trading_mode()
             trading_mode_name = trading_mode.get_name()
+            if hasattr(trading_mode, "AVAILABLE_API_ACTIONS"):
+                available_api_actions = trading_mode.AVAILABLE_API_ACTIONS
             (
                 exchange_manager,
                 exchange_name,
@@ -95,6 +99,7 @@ def register_bot_info_routes(plugin):
             # "activated_evaluators": activated_evaluators,
             # "activated_strategy": activated_strategy,
             # "config_candles_count": config_candles_count,
+            "available_api_actions": available_api_actions,
             "data_files": models.get_data_files_with_description(),
             "octobot_version": services_interfaces.AbstractInterface.project_version,
         }

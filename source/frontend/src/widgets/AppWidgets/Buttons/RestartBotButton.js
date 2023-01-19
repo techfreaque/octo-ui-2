@@ -14,7 +14,8 @@ export default function RestartBotButton() {
   const disabled = isLoading || !isOnline
     return useMemo(() => {
   return (
-    <Button disabled={disabled} onClick={() => restartBot(botDomain, updateIsOnline, setIsloading)} variant="outlined" color="warning">
+    <Button disabled={disabled} onClick={() => restartBot(botDomain, updateIsOnline, setIsloading)}
+      variant="outlined" color="warning">
       <FontAwesomeIcon
         icon={faArrowRotateRight}
         className={disabled ? "fa-spin" : ""}

@@ -1,7 +1,7 @@
 /**
  * Loading Page
  *
- * This page is showw until routes are loaded from the bot
+ * This page is show until routes are loaded from the bot
  */
 
 import { CircularProgress } from "@mui/material";
