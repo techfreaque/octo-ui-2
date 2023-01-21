@@ -3,7 +3,7 @@ from tentacles.Services.Interfaces.web_interface import models
 import tentacles.Services.Interfaces.web_interface.login as login
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     dev_mode_is_on,
-    get_logger,
+    get_octo_ui_2_logger,
     import_cross_origin_if_enabled,
 )
 from tentacles.Services.Interfaces.web_interface.models.configuration import (
@@ -54,7 +54,13 @@ def register_semi_auto_trade_routes(plugin):
                 response = ", ".join(responses)
             try:
                 send_command_to_activated_tentacles(command)
-                return {"success": True, "message": response}
+                return {
+                    "success": True,
+                    "message": "Successfully fetched package manager data",
+                    "data": response,
+                }
             except Exception as error:
-                get_logger().exception(error, True, f"Failed to execute trades")
+                get_octo_ui_2_logger().exception(
+                    error, True, f"Failed to execute trades"
+                )
                 raise

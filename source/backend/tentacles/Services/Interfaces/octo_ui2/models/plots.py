@@ -21,35 +21,6 @@ except (ImportError, ModuleNotFoundError):
         pass
 
 
-# def get_run_plotted_data(
-#     trading_mode,
-#     exchange,
-#     symbol,
-#     time_frame,
-#     exchange_id,
-#     optimizer_id,
-#     backtesting_id,
-#     live_id,
-#     optimization_campaign,
-#     backtesting_analysis_settings,
-# ):
-#     try:
-#         elements = interfaces_util.run_in_bot_async_executor(
-#             trading_mode.get_backtesting_plot(
-#                 exchange,
-#                 symbol,
-#                 backtesting_id=backtesting_id,
-#                 optimizer_id=optimizer_id,
-#                 optimization_campaign=optimization_campaign,
-#                 backtesting_analysis_settings=backtesting_analysis_settings,
-#             )
-#         )
-#         return elements.to_json()
-#     except commons_errors.MissingExchangeDataError as e:
-#         octo_ui2.get_logger().exception(e, True, f"Error when opening database: {e}")
-#         raise
-
-
 def get_plotted_data(
     trading_mode,
     symbol,
@@ -83,15 +54,18 @@ def get_plotted_data(
                 with_inputs=backtesting_id is None,
             )
         )
-    except commons_errors.DatabaseNotFoundError as e:
-        octo_ui2.get_logger().exception(e, True, f"Error when opening database: {e}")
-    except commons_errors.MissingExchangeDataError as e:
-        octo_ui2.get_logger().exception(e, True, f"Error when opening database: {e}")
+    except commons_errors.DatabaseNotFoundError as error:
+        octo_ui2.get_octo_ui_2_logger().exception(
+            error, True, f"Error when opening database: {error}"
+        )
+    except commons_errors.MissingExchangeDataError as error:
+        octo_ui2.get_octo_ui_2_logger().exception(
+            error, True, f"Error when opening database: {error}"
+        )
         raise
     elements = elements.to_json()
     try:
         from octobot_trading.api.modes import get_run_analysis_plots
-        import tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.base_data_provider as base_data_provider
 
         elements2 = interfaces_util.run_in_bot_async_executor(
             get_run_analysis_plots(
@@ -110,19 +84,19 @@ def get_plotted_data(
         elements2 = elements2.to_json()
         elements["data"]["sub_elements"] += elements2["data"]["sub_elements"]
     except CandlesLoadingError as error:
-        octo_ui2.get_logger().exception(
+        octo_ui2.get_octo_ui_2_logger().exception(
             error, True, f"Failed to load run analysis plots - error: {error}"
         )
     except LiveMetaDataNotInitializedError as error:
-        octo_ui2.get_logger().exception(
+        octo_ui2.get_octo_ui_2_logger().exception(
             error, True, f"Failed to load run analysis plots - error: {error}"
         )
     except (ImportError, ModuleNotFoundError) as error:
-        octo_ui2.get_logger().exception(
+        octo_ui2.get_octo_ui_2_logger().exception(
             error, True, f"Failed to load run analysis plots - error: {error}"
         )
     except Exception as error:
-        octo_ui2.get_logger().exception(
+        octo_ui2.get_octo_ui_2_logger().exception(
             error, True, f"Failed to load run analysis plots - error: {error}"
         )
     return elements

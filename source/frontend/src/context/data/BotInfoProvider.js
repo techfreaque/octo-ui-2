@@ -25,8 +25,9 @@ export const useUpdateBotInfoContext = () => {
 export const useFetchBotInfo = () => {
   const setBotInfo = useUpdateBotInfoContext();
   const botDomain = useBotDomainContext();
-  const logic = useCallback(() => {
-    fetchBotInfo(botDomain, setBotInfo);
+  const logic = useCallback((successNotification=false, setIsFinished=undefined) => {
+    setIsFinished && setIsFinished(false)
+    fetchBotInfo(botDomain, setBotInfo, successNotification, setIsFinished);
   }, [setBotInfo, botDomain]);
   return logic;
 };

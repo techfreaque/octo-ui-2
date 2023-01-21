@@ -9,7 +9,10 @@ import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
 import octobot_backtesting.api as backtesting_api
 import octobot_services.interfaces.util as interfaces_util
-from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import import_cross_origin_if_enabled
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
+    import_cross_origin_if_enabled,
+)
+
 
 def register_bot_config_routes(plugin):
     route = "/ui_config"
@@ -33,23 +36,26 @@ def register_bot_config_routes(plugin):
         if flask.request.method == "POST":
             try:
                 request_data = flask.request.get_json()
-                return util.get_rest_reply(flask.jsonify(
-                    config.save_ui_config(request_data)
-                ))
+                return util.get_rest_reply(
+                    flask.jsonify(config.save_ui_config(request_data))
+                )
             except Exception as e:
-                octo_ui2.get_logger().exception(e)
+                octo_ui2.get_octo_ui_2_logger().exception(e)
                 return util.get_rest_reply(str(e), 500)
         else:
             return config.get_ui_config()
 
     route = "/bot-config"
     if cross_origin := import_cross_origin_if_enabled():
+
         @plugin.blueprint.route(route)
         @cross_origin(origins="*")
         @login.login_required_when_activated
         def bot_config():
             return _bot_config()
+
     else:
+
         @plugin.blueprint.route(route)
         @login.login_required_when_activated
         def bot_config():
@@ -62,7 +68,7 @@ def register_bot_config_routes(plugin):
             profiles = models.get_profiles()
             # active_tentacles = models.get_profiles_activated_tentacles({"current_profile": current_profile})
 
-            requested_config_keys = flask.request.args['config_keys'].split(",")
+            requested_config_keys = flask.request.args["config_keys"].split(",")
             configs = {
                 "configs": {
                     "type": "object",
@@ -76,23 +82,12 @@ def register_bot_config_routes(plugin):
                                     "type": "object",
                                     "title": "Profile Info",
                                     "properties": {
-                                        "id": {
-                                            "type": "string"
-                                        },
-                                        "name": {
-                                            "type": "string"
-                                        },
-                                        "description": {
-                                            "type": "string"
-                                        },
-                                        "avatar": {
-                                            "type": "string"
-                                        },
-                                        "read_only": {
-                                            "type": "boolean"
-                                        }
+                                        "id": {"type": "string"},
+                                        "name": {"type": "string"},
+                                        "description": {"type": "string"},
+                                        "avatar": {"type": "string"},
+                                        "read_only": {"type": "boolean"},
                                     },
-
                                 },
                                 "crypto-currencies": {
                                     "type": "object",
@@ -100,121 +95,90 @@ def register_bot_config_routes(plugin):
                                     "additionalProperties": {
                                         "type": "object",
                                         "properties": {
-                                            "enabled": {
-                                                "type": "boolean"
-                                            },
+                                            "enabled": {"type": "boolean"},
                                             "pairs": {
                                                 "type": "array",
                                                 "uniqueItems": True,
-                                                "items": {
-                                                    "type": "string"
-                                                }
+                                                "items": {"type": "string"},
                                             },
-                                            "quote": {
-                                                "type": "string"
-                                            },
+                                            "quote": {"type": "string"},
                                             "add": {
                                                 "type": "array",
                                                 "uniqueItems": True,
-                                                "items": {
-                                                    "type": "string"
-                                                }
-                                            }
-                                        }
-
+                                                "items": {"type": "string"},
+                                            },
+                                        },
                                     },
                                 },
                                 "exchanges": {
                                     "type": "object",
                                     "title": "Exchanges",
                                     "additionalProperties": {
-
                                         "type": "object",
                                         "properties": {
-                                            "enabled": {
-                                                "type": "boolean"
-                                            },
-                                            "exchange-type": {
-                                                "type": "string"
-                                            }
+                                            "enabled": {"type": "boolean"},
+                                            "exchange-type": {"type": "string"},
                                         },
-                                        "required": [
-                                            "enabled"
-                                        ]
-
+                                        "required": ["enabled"],
                                     },
                                 },
                                 "trader": {
                                     "type": "object",
                                     "title": "Trader",
                                     "properties": {
-                                        "enabled": {
-                                            "type": "boolean"
-                                        },
-                                        "load-trade-history": {
-                                            "type": "boolean"
-                                        }
-                                    }
+                                        "enabled": {"type": "boolean"},
+                                        "load-trade-history": {"type": "boolean"},
+                                    },
                                 },
                                 "trader-simulator": {
                                     "type": "object",
                                     "title": "Trader Simulator",
                                     "properties": {
-                                        "enabled": {
-                                            "type": "boolean"
-                                        },
+                                        "enabled": {"type": "boolean"},
                                         "fees": {
                                             "type": "object",
                                             "properties": {
                                                 "maker": {
                                                     "type": "number",
                                                     "minimum": -100,
-                                                    "maximum": 100
+                                                    "maximum": 100,
                                                 },
                                                 "taker": {
                                                     "type": "number",
                                                     "minimum": -100,
-                                                    "maximum": 100
-                                                }
+                                                    "maximum": 100,
+                                                },
                                             },
-                                            "required": [
-                                                "maker",
-                                                "taker"
-                                            ]
+                                            "required": ["maker", "taker"],
                                         },
                                         "starting-portfolio": {
                                             "type": "object",
-                                            "additionalProperties": {"type": "number", "minimum": 0},
-                                        }
+                                            "additionalProperties": {
+                                                "type": "number",
+                                                "minimum": 0,
+                                            },
+                                        },
                                     },
-                                    "required": [
-                                        "fees",
-                                        "starting-portfolio"
-                                    ],
+                                    "required": ["fees", "starting-portfolio"],
                                 },
                                 "trading": {
                                     "type": "object",
                                     "title": "Trading",
                                     "properties": {
-                                        "reference-market": {
-                                            "type": "string"
-                                        },
+                                        "reference-market": {"type": "string"},
                                         "risk": {
                                             "type": "number",
                                             "minimum": 0,
-                                            "maximum": 1
+                                            "maximum": 1,
                                         },
                                         "current-bot-recording-id": {
                                             "type": "integer",
-                                            "minimum": 1
-                                        }
+                                            "minimum": 1,
+                                        },
                                     },
-                                    "required": [
-                                        "reference-market",
-                                        "risk"
-                                    ],
-                                }
-                            }
+                                    "required": ["reference-market", "risk"],
+                                },
+                            },
                         },
                         "evaluator_config": {},
                         "tentacle_configs": {},
@@ -231,13 +195,15 @@ def register_bot_config_routes(plugin):
                             "read_only": current_profile.read_only,
                             "profile_id": current_profile.profile_id,
                         },
-                        "crypto-currencies": current_profile.config["crypto-currencies"],
+                        "crypto-currencies": current_profile.config[
+                            "crypto-currencies"
+                        ],
                         "exchanges": current_profile.config["exchanges"],
                         "trader": current_profile.config["trader"],
                         "trader-simulator": current_profile.config["trader-simulator"],
                         "trading": current_profile.config["trading"],
                     }
-                }
+                },
             }
             configs_to_send = {}
             # for key in requested_config_keys:
@@ -256,35 +222,67 @@ def register_bot_config_routes(plugin):
 
             # profiles_activated_tentacles = models.get_profiles_activated_tentacles(profiles),
             #
-            config_trading = display_config[commons_constants.CONFIG_TRADING],
-            config_trader = display_config[commons_constants.CONFIG_TRADER],
-            config_trader_simulator = display_config[commons_constants.CONFIG_SIMULATOR],
-            config_symbols = models.format_config_symbols(display_config),
-            config_reference_market = display_config[commons_constants.CONFIG_TRADING][
-                                          commons_constants.CONFIG_TRADER_REFERENCE_MARKET],
+            config_trading = (display_config[commons_constants.CONFIG_TRADING],)
+            config_trader = (display_config[commons_constants.CONFIG_TRADER],)
+            config_trader_simulator = (
+                display_config[commons_constants.CONFIG_SIMULATOR],
+            )
+            config_symbols = (models.format_config_symbols(display_config),)
+            config_reference_market = (
+                display_config[commons_constants.CONFIG_TRADING][
+                    commons_constants.CONFIG_TRADER_REFERENCE_MARKET
+                ],
+            )
 
-            real_trader_activated = interfaces_util.has_real_and_or_simulated_traders()[0],
+            real_trader_activated = (
+                interfaces_util.has_real_and_or_simulated_traders()[0],
+            )
 
-            symbol_list = sorted(models.get_symbol_list([exchange
-                                                         for exchange in display_config[
-                                                             commons_constants.CONFIG_EXCHANGES]])),
+            symbol_list = (
+                sorted(
+                    models.get_symbol_list(
+                        [
+                            exchange
+                            for exchange in display_config[
+                                commons_constants.CONFIG_EXCHANGES
+                            ]
+                        ]
+                    )
+                ),
+            )
             # full_symbol_list = models.get_all_symbols_dict(),
-            evaluator_config = models.get_evaluator_detailed_config(media_url, missing_tentacles),
-            strategy_config = models.get_strategy_config(media_url, missing_tentacles),
-            evaluator_startup_config = models.get_evaluators_tentacles_startup_activation(),
-            trading_startup_config = models.get_trading_tentacles_startup_activation(),
+            evaluator_config = (
+                models.get_evaluator_detailed_config(media_url, missing_tentacles),
+            )
+            strategy_config = (
+                models.get_strategy_config(media_url, missing_tentacles),
+            )
+            evaluator_startup_config = (
+                models.get_evaluators_tentacles_startup_activation(),
+            )
+            trading_startup_config = (
+                models.get_trading_tentacles_startup_activation(),
+            )
 
-            in_backtesting = backtesting_api.is_backtesting_enabled(display_config),
+            in_backtesting = (backtesting_api.is_backtesting_enabled(display_config),)
 
-            config_tentacles_by_group = models.get_tentacles_activation_desc_by_group(media_url,
-                                                                                      missing_tentacles),
+            config_tentacles_by_group = (
+                models.get_tentacles_activation_desc_by_group(
+                    media_url, missing_tentacles
+                ),
+            )
 
             exchanges_details = models.get_exchanges_details(config_exchanges)
 
-
             try:
-                return util.get_rest_reply(configs)
+                return util.get_rest_reply(
+                    {
+                        "success": True,
+                        "message": "Successfully fetched profiles data",
+                        "data": configs,
+                    }
+                )
 
             except Exception as e:
-                commons_logging.get_logger("plotted_data").exception(e)
+                octo_ui2.get_octo_ui_2_logger("plotted_data").exception(e)
                 return util.get_rest_reply(str(e), 500)

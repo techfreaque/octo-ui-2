@@ -11,9 +11,9 @@
         },
         {
             "name": "Spot Master 3000",
-            "description": "A spot trading mode that balances your portfolio. !! This trading mode requires you to import the profile here as well",
+            "description": "This trading mode requires you to import the profile here as well",
             "versions": [
-                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/main/releases/trading_mode/latest/any_platform.zip"}
+                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/main/releases/latest/any_platform.zip"}
 
             ],
             "categories": ["Strategies"],
@@ -23,11 +23,21 @@
             "name": "Semi Auto Trading Mode",
             "description": "This Trading Mode allows you to prepare trades in advance for multiple pairs and execute by a click",
             "versions": [
-                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octobot-semi_auto_trading_mode/main/releases/trading_mode/latest/any_platform.zip"}
+                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octobot-semi_auto_trading_mode/main/releases/latest/any_platform.zip"}
 
             ],
             "categories": ["Strategies"],
             "tentacle_package_name": "Semi-Auto-Trading-Mode"
+        },
+        {
+            "name": "Strategy Maker Trading Mode",
+            "description": "This Trading Mode allows you create powerful strategies without a single line of code. It supports 50 indicators. It costs 250$, includes 1 year of updates and is available through email max@a42.ch. If you are interested, you'll get access to a free demo, before you pay me.",
+            "versions": [
+                {"version": "latest", "url": ""}
+
+            ],
+            "categories": ["Strategies"],
+            "tentacle_package_name": "Matrix-Strategy-Maker"
         }
     ]
 }

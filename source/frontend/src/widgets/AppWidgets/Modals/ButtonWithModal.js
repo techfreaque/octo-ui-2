@@ -30,7 +30,7 @@ export default function ButtonWithModal({ title, content, faIcon }) {
   return (
     <div style={{ margin: "auto", height: "100%" }}>
       <Button onClick={handleOpen} style={{ height: "100%" }}>
-        {faIcon && <i className={"fa-2xl fas fa-" + faIcon} size="3x" style={{ marginRight: "5px" }}></i>}
+        {faIcon && <i className={"fa-2xl fas fa-" + faIcon}  style={{ marginRight: "5px" }}></i>}
         {title}
       </Button>
       <Modal

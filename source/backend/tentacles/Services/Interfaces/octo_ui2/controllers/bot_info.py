@@ -79,27 +79,33 @@ def register_bot_info_routes(plugin):
         except KeyError:
             is_starting = True
         return {
-            "is_starting": is_starting,
-            "trading_mode_name": trading_mode_name,
-            "tentacle_class": None,  # util.get_rest_reply(trading_mode),
-            "exchange_id": exchange_id,
-            "live_id": 1,  # todo
-            "exchange_name": exchange_name,
-            "symbols": sorted(
-                [
-                    symbol_util.convert_symbol(s, octobot_commons.MARKET_SEPARATOR, "|")
-                    for s in symbols
-                ]
-            ),
-            "time_frames": timeframes_dict,
-            # "enabled_time_frames": enabled_time_frames,
-            "traded_time_frames": traded_time_frames,
-            "strategy_name": strategy_name,
-            "optimization_campaign": optimization_campaign.OptimizationCampaign.get_campaign_name(),
-            # "activated_evaluators": activated_evaluators,
-            # "activated_strategy": activated_strategy,
-            # "config_candles_count": config_candles_count,
-            "available_api_actions": available_api_actions,
-            "data_files": models.get_data_files_with_description(),
-            "octobot_version": services_interfaces.AbstractInterface.project_version,
+            "success": True,
+            "message": "Successfully fetched bot base data",
+            "data": {
+                "is_starting": is_starting,
+                "trading_mode_name": trading_mode_name,
+                "tentacle_class": None,  # util.get_rest_reply(trading_mode),
+                "exchange_id": exchange_id,
+                "live_id": 1,  # todo
+                "exchange_name": exchange_name,
+                "symbols": sorted(
+                    [
+                        symbol_util.convert_symbol(
+                            s, octobot_commons.MARKET_SEPARATOR, "|"
+                        )
+                        for s in symbols
+                    ]
+                ),
+                "time_frames": timeframes_dict,
+                # "enabled_time_frames": enabled_time_frames,
+                "traded_time_frames": traded_time_frames,
+                "strategy_name": strategy_name,
+                "optimization_campaign": optimization_campaign.OptimizationCampaign.get_campaign_name(),
+                # "activated_evaluators": activated_evaluators,
+                # "activated_strategy": activated_strategy,
+                # "config_candles_count": config_candles_count,
+                "available_api_actions": available_api_actions,
+                "data_files": models.get_data_files_with_description(),
+                "octobot_version": services_interfaces.AbstractInterface.project_version,
+            },
         }

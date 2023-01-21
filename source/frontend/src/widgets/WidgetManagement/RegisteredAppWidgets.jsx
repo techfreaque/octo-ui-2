@@ -37,6 +37,7 @@ import CancelAllOrdersButton from "../AppWidgets/Buttons/CancelAllOrdersButton";
 import PowerMenu from "../AppWidgets/Modals/PowerMenu/PowerMenu";
 import SendActionCommandToTradingMode from "../AppWidgets/Buttons/SendActionCommandToTradingMode";
 import PlotlyChart from "../AppWidgets/Charts/MainCharts/Plotly";
+import RefreshBotData from "../AppWidgets/Buttons/RefreshData";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -59,6 +60,7 @@ export const registeredComponents = {
   CurrentPanelFullscreen: CurrentPanelFullscreen,
   CurrentPanelMinimize: CurrentPanelMinimize,
   Configuration: Configuration,
+  RefreshBotData: RefreshBotData,
   // Legend: Legend,
   TimeFrameSelector: TimeFrameSelector,
   ColorModeSwitch: ColorModeSwitch,

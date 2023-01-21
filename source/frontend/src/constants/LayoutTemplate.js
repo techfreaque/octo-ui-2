@@ -42,6 +42,9 @@ export const defaultBotTemplate = [
                         "component": "ScrollableTabs",
                         "rightContent": [
                             {
+                                "component": "RefreshBotData"
+                            },
+                            {
                                 "component": "ButtonWithModal",
                                 "content": [
                                     {
@@ -347,8 +350,8 @@ export const defaultBotTemplate = [
                 ]
             }
         ],
-        "path": "/opm",
-        "title": "Package Manager"
+        "path": "/appstore",
+        "title": "App Store"
     },
     {
         "layout": [

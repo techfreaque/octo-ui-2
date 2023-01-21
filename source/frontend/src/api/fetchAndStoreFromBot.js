@@ -34,7 +34,7 @@ export async function fetchAndGetFromBot(
   type = "get",
   dataToSend,
   success_callback,
-  error_callback, 
+  error_callback,
 
 ) {
   return await sendAndInterpretBotUpdate(dataToSend, url, success_callback, error_callback, type)
@@ -46,14 +46,27 @@ export default async function fetchAndStoreFromBot(
   type = "get",
   dataToSend,
   successNotification = false,
-  keepPreviousValues = true
+  keepPreviousValues = true,
+  setIsFinished = undefined,
 ) {
-  const success = (updated_data, update_url, result, msg, status) => {
-    keepPreviousValues ? setBotDataFunction((prevData) => ({ ...prevData, ...msg }))
-      : setBotDataFunction(msg)
-    successNotification && defaultSuccessNotification(msg, result)
+  const fail = (updated_data, update_url, result, msg, status) => {
+    genericRequestFailureCallback(updated_data, update_url, result, msg, status)
+    setIsFinished && setIsFinished(true)
   }
-  sendAndInterpretBotUpdate(dataToSend, url, success, undefined, type)
+  const success = (updated_data, update_url, result, msg, status) => {
+    if (msg?.success !== true) {
+      fail(updated_data, update_url, result, msg, status)
+    } else {
+      const data = msg?.data || msg
+      keepPreviousValues ? setBotDataFunction((prevData) => ({ ...prevData, ...data }))
+        : setBotDataFunction(data)
+      successNotification && createNotification(
+        msg?.message || "Successfully fetched data", "success")
+      setIsFinished && setIsFinished(true)
+
+    }
+  }
+  sendAndInterpretBotUpdate(dataToSend, url, success, fail, type)
 }
 
 function genericRequestSuccessCallback(updated_data, update_url, result, msg, status) {

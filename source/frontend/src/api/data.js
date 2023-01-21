@@ -1,8 +1,7 @@
 import { backendRoutes } from "../constants/backendConstants";
 import fetchAndStoreFromBot, { fetchAndGetFromBot, sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
-
-export async function fetchBotInfo(botDomain, setBotInfo) {
-  await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo, setBotInfo);
+export async function fetchBotInfo(botDomain, setBotInfo, successNotification=false, setIsFinished=undefined) {
+  await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo, setBotInfo, "get", {}, successNotification, false, setIsFinished);
 }
 
 export async function fetchPlotData(
@@ -57,33 +56,33 @@ export async function fetchPlotlyPlotData(
     setBotPlottedElements(prevData => {
       const newData = { ...prevData }
       if (isLive) {
-        msg.data.sub_elements.forEach(sub_data => {
+        msg.data.data.sub_elements.forEach(sub_data => {
           if (sub_data.type === "input") {
             newData.inputs = sub_data.data.elements
             setHiddenMetadataFromInputs(sub_data.data.elements)
           }
         })
         newData.live = {
-          [botInfo.live_id]: { [symbol]: { [timeFrame]: msg } }
+          [botInfo.live_id]: { [symbol]: { [timeFrame]: msg.data } }
         }
       } else {
         if (!newData.backtesting) {
           newData.backtesting = {
             [optimization_campaign]: {
-              [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg } } }
+              [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg.data } } }
             }
           }
         } else if (!newData.backtesting[optimization_campaign]) {
           newData.backtesting[optimization_campaign] = {
-            [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg } } }
+            [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg.data } } }
           }
         } else if (!newData.backtesting[optimization_campaign][optimizer_id]) {
           newData.backtesting[optimization_campaign][optimizer_id] = {
-            [backtesting_id]: { [symbol]: { [timeFrame]: msg } }
+            [backtesting_id]: { [symbol]: { [timeFrame]: msg.data } }
           }
         } else {
           newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
-            [symbol]: { [timeFrame]: msg }
+            [symbol]: { [timeFrame]: msg.data }
           }
         }
       }
@@ -131,7 +130,7 @@ export async function fetchLiveRunData(
     setLiveRunData(msg.data)
   }
   sendAndInterpretBotUpdate(
-    {live_id: liveId},
+    { live_id: liveId },
     botDomain + backendRoutes.liveRunData,
     success, undefined, "post")
 }

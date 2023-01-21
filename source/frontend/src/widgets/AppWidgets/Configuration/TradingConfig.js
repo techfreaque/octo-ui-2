@@ -14,7 +14,7 @@ import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useBotPlottedElementsContext } from "../../../context/data/BotPlottedElementsProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
-export default function TradingConfig({content}) {
+export default function TradingConfig({ content }) {
     const botPlottedElements = useBotPlottedElementsContext();
     const botInfo = useBotInfoContext()
     const userInputs = botPlottedElements?.inputs
@@ -33,7 +33,7 @@ export default function TradingConfig({content}) {
                 tabs={tabs}
                 rightContent={<>
                     <AppWidgets layout={content} />
-                    <Button style={{ marginLeft: "5px" }}  variant="contained" onClick={() => saveUserInputs(saveTentaclesConfig)}>Save</Button>
+                    <Button style={{ marginLeft: "5px" }} variant="contained" onClick={() => saveUserInputs(saveTentaclesConfig)}>Save</Button>
                 </>}
                 defaultTabId={0} />
     }, [content, saveTentaclesConfig, tabs])
@@ -262,6 +262,8 @@ function _addGridDisplayOptions(schema, editorKey) {
     }
     if (typeof schema.options === "undefined") {
         schema.options = {};
+    } if (schema.grid_columns) {
+        schema.options.grid_columns = schema.grid_columns
     }
     if (typeof schema.options.grid_columns === "undefined") {
         schema.options.grid_columns = 4;
