@@ -106,9 +106,9 @@ export async function fetchBacktestingRunData(
 ) {
 
   const success = (updated_data, update_url, result, msg, status) => {
-    saveBotConfig(msg)
+    saveBotConfig(msg.data)
     setUiConfig(prevConfig => {
-      return { ...prevConfig, optimizer_campaigns_to_load: msg.campaigns }
+      return { ...prevConfig, optimizer_campaigns_to_load: msg.data.campaigns }
     })
   }
   sendAndInterpretBotUpdate(

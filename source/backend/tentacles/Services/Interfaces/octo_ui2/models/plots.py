@@ -1,4 +1,6 @@
+import octobot_commons.logging as logging
 import octobot_commons.databases as databases
+import octobot_trading.modes.script_keywords.context_management as context_management
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
 import octobot_commons.errors as commons_errors
 import octobot_services.interfaces.util as interfaces_util
@@ -65,8 +67,6 @@ def get_plotted_data(
         raise
     elements = elements.to_json()
     try:
-        from octobot_trading.api.modes import get_run_analysis_plots
-
         elements2 = interfaces_util.run_in_bot_async_executor(
             get_run_analysis_plots(
                 trading_mode,
@@ -100,3 +100,35 @@ def get_plotted_data(
             error, True, f"Failed to load run analysis plots - error: {error}"
         )
     return elements
+
+
+async def get_run_analysis_plots(
+    trading_mode,
+    exchange,
+    symbol,
+    analysis_settings,
+    backtesting_id=None,
+    optimizer_id=None,
+    live_id=None,
+    optimization_campaign=None,
+):
+    ctx = context_management.Context.minimal(
+        trading_mode,
+        logging.get_logger(trading_mode.get_name()),
+        exchange,
+        symbol,
+        backtesting_id,
+        optimizer_id,
+        optimization_campaign,
+        analysis_settings,
+        live_id=live_id,
+    )
+    # TODO: replace with RunAnalysis Mode/Evaluators Factory
+    # TODO add scripted RunAnalysis Mode which should be compatible with all trading modes
+    if hasattr(trading_mode, "BACKTESTING_SCRIPT_MODULE"):
+        return await trading_mode.get_script_from_module(
+            trading_mode.BACKTESTING_SCRIPT_MODULE
+        )(ctx)
+    import tentacles.RunAnalysis.AnalysisMode.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
+
+    return await run_analysis_mode.DefaultRunAnalysisMode().run_analysis_script(ctx)

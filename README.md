@@ -24,7 +24,7 @@ and here: /source/frontend/src/widgets/LayoutWidgets
 
 
 ## Bulding from source
-- if you want to use the dev branch, usually it will require my forked branches of the Octobot packages and tentacles
+- if you want to use the dev branch, usually it will require my forked branches of the Octobot packages and tentacles\
 `git clone https://github.com/techfreaque/octo-ui-2`\
 `cd octo-ui-2`
 ### 1. install requirements
@@ -43,7 +43,7 @@ It will fail to load until the backend runs and is properly configured
 in your octobot folder, either create a .env file or edit the existing one and add those two variables.\
 if you want to run your bot in production, you should remove those variables or set them to False
 - CORS_MODE_ENABLED=True
-- API_DEV_MODE_ENABLED=True\
+- API_DEV_MODE_ENABLED=True
 
 ### 3. install backend
 

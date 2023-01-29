@@ -34,7 +34,7 @@ export default function TimeFrameSelector() {
     return (
       <TabsWithSelector
         currentItem={visibleTimeframes}
-        items={botInfo.traded_time_frames}
+        items={botInfo.trigger_time_frames || botInfo.traded_time_frames}
         handleChange={handleChange}
         onClose={saveTimeFrameSettings}
       >

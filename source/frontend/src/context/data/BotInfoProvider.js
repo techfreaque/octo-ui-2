@@ -25,7 +25,7 @@ export const useUpdateBotInfoContext = () => {
 export const useFetchBotInfo = () => {
   const setBotInfo = useUpdateBotInfoContext();
   const botDomain = useBotDomainContext();
-  const logic = useCallback((successNotification=false, setIsFinished=undefined) => {
+  const logic = useCallback((successNotification = false, setIsFinished = undefined) => {
     setIsFinished && setIsFinished(false)
     fetchBotInfo(botDomain, setBotInfo, successNotification, setIsFinished);
   }, [setBotInfo, botDomain]);
@@ -41,8 +41,8 @@ export const BotInfoProvider = ({ children }) => {
     fetchBotInfo(botDomain, setBotInfo);
   }, [botDomain]);
   useEffect(() => {
-    if (botInfo && botInfo.traded_time_frames) {
-      setVisibleTimeframes(botInfo.traded_time_frames[0]);
+    if (botInfo && (botInfo.trigger_time_frames || botInfo.traded_time_frames)) {
+      setVisibleTimeframes((botInfo.trigger_time_frames && botInfo.trigger_time_frames[0]) || botInfo.traded_time_frames[0]);
       setVisiblePairs(botInfo.symbols[0]);
     }
   }, [botInfo, setVisibleTimeframes, setVisiblePairs]);
