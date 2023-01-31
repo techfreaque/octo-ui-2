@@ -1,7 +1,7 @@
 import { backendRoutes } from "../constants/backendConstants";
 import fetchAndStoreFromBot, { fetchAndGetFromBot, sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
-export async function fetchBotInfo(botDomain, setBotInfo, successNotification=false, setIsFinished=undefined) {
-  await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo, setBotInfo, "get", {}, successNotification, false, setIsFinished);
+export async function fetchBotInfo(botDomain, setBotInfo, visibleExchanges, successNotification = false, setIsFinished = undefined) {
+  await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo + "/" + visibleExchanges, setBotInfo, "get", {}, successNotification, false, setIsFinished);
 }
 
 export async function fetchPlotData(

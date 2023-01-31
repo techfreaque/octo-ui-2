@@ -1,6 +1,6 @@
 import octobot_commons.logging as logging
 import octobot_commons.databases as databases
-import octobot_trading.modes.script_keywords.context_management as context_management
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.custom_context as custom_context
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
 import octobot_commons.errors as commons_errors
 import octobot_services.interfaces.util as interfaces_util
@@ -8,10 +8,10 @@ import tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 as octo_ui2
 import octobot_commons.display as commons_display
 
 try:
-    from tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.base_data_provider import (
+    from tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.base_data_provider import (
         CandlesLoadingError,
     )
-    from tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.init_base_data import (
+    from tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.init_base_data import (
         LiveMetaDataNotInitializedError,
     )
 except (ImportError, ModuleNotFoundError):
@@ -112,7 +112,7 @@ async def get_run_analysis_plots(
     live_id=None,
     optimization_campaign=None,
 ):
-    ctx = context_management.Context.minimal(
+    ctx = custom_context.Context.minimal(
         trading_mode,
         logging.get_logger(trading_mode.get_name()),
         exchange,
@@ -125,10 +125,10 @@ async def get_run_analysis_plots(
     )
     # TODO: replace with RunAnalysis Mode/Evaluators Factory
     # TODO add scripted RunAnalysis Mode which should be compatible with all trading modes
-    if hasattr(trading_mode, "BACKTESTING_SCRIPT_MODULE"):
+    if hasattr(trading_mode, "BACKTESTING_SCRIPT_MODULE") and trading_mode.BACKTESTING_SCRIPT_MODULE:
         return await trading_mode.get_script_from_module(
             trading_mode.BACKTESTING_SCRIPT_MODULE
         )(ctx)
-    import tentacles.RunAnalysis.AnalysisMode.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
+    import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisMode.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
 
     return await run_analysis_mode.DefaultRunAnalysisMode().run_analysis_script(ctx)

@@ -12,7 +12,7 @@
     "@mui/icons-material": "^5.10.6",
     "@mui/material": "^5.10.6",
     "@table-library/react-table-library": "^4.0.18",
-    "@techfreaque/json-editor-react": "~1.2.7",
+    "@techfreaque/json-editor-react": "~1.2.11",
     "babel-plugin-macros": "^3.1.0",
     "bootstrap": "^5.2.1",
     "d3-format": "^3.1.0",

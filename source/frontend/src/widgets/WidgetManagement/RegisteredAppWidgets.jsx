@@ -38,6 +38,7 @@ import PowerMenu from "../AppWidgets/Modals/PowerMenu/PowerMenu";
 import SendActionCommandToTradingMode from "../AppWidgets/Buttons/SendActionCommandToTradingMode";
 import PlotlyChart from "../AppWidgets/Charts/MainCharts/Plotly";
 import RefreshBotData from "../AppWidgets/Buttons/RefreshData";
+import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -68,6 +69,7 @@ export const registeredComponents = {
   AppStore: AppStore,
   TradingConfig: TradingConfig,
   PairsSelector: PairsSelector,
+  ExchangeSelector: ExchangeSelector,
   BacktestingRunDataTable: BacktestingRunDataTable,
   UIConfig: UIConfig,
   OptimizerQueueTable: OptimizerQueueTable,

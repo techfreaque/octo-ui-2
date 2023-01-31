@@ -55,7 +55,7 @@ export const useSaveTentaclesConfigAndSendAction = () => {
             setIsLoading(false)
             createNotification("Successfully executed semi auto trades")
         }
-        sendAndInterpretBotUpdate(newConfigs, botDomain + backendRoutes.updateTentaclesConfigAndSendCommand+"/"+actionType, success, fail)
+        sendAndInterpretBotUpdate(newConfigs, botDomain + backendRoutes.updateTentaclesConfigAndSendCommand + "/" + actionType, success, fail)
     }, [_fetchPlotData, botDomain]);
     return logic;
 };

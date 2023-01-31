@@ -5,17 +5,7 @@ repository: Unknown repository location
 short-name: any_platform.zip
 tags: []
 tentacles:
-- BestCaseGrowth@1.2.0
-- Fees@1.2.0
-- RealizedPortfolio@1.2.0
-- RealizeTradeGains@1.2.0
-- UnrealizedPortfolio@1.2.0
-- WinRates@1.2.0
-- WinsAndLossesCount@1.2.0
-- Positions@1.2.0
-- Trades@1.2.0
-- Withdrawals@1.2.0
-- default_run_analysis_mode@1.2.0
+- RunAnalysis@1.0.0
 - octo_ui2@0.5.1
 type: tentacle_package
 version: unknown_version

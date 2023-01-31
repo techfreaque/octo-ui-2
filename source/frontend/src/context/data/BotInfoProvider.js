@@ -9,6 +9,7 @@ import { fetchBotInfo } from "../../api/data";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useUpdateVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
 import { useUpdateVisiblePairsContext } from "../config/VisiblePairProvider";
+import { useUpdateVisibleExchangesContext, useVisibleExchangesContext } from "../config/VisibleExchangesProvider";
 
 
 const BotInfoContext = createContext();
@@ -25,10 +26,12 @@ export const useUpdateBotInfoContext = () => {
 export const useFetchBotInfo = () => {
   const setBotInfo = useUpdateBotInfoContext();
   const botDomain = useBotDomainContext();
+  const visibleExchanges = useVisibleExchangesContext();
+
   const logic = useCallback((successNotification = false, setIsFinished = undefined) => {
     setIsFinished && setIsFinished(false)
-    fetchBotInfo(botDomain, setBotInfo, successNotification, setIsFinished);
-  }, [setBotInfo, botDomain]);
+    fetchBotInfo(botDomain, setBotInfo, visibleExchanges, successNotification, setIsFinished);
+  }, [setBotInfo, botDomain, visibleExchanges]);
   return logic;
 };
 
@@ -37,6 +40,7 @@ export const BotInfoProvider = ({ children }) => {
   const botDomain = useBotDomainContext();
   const setVisibleTimeframes = useUpdateVisibleTimeFramesContext();
   const setVisiblePairs = useUpdateVisiblePairsContext();
+  const setVisibleExchanges = useUpdateVisibleExchangesContext();
   useEffect(() => {
     fetchBotInfo(botDomain, setBotInfo);
   }, [botDomain]);
@@ -44,8 +48,9 @@ export const BotInfoProvider = ({ children }) => {
     if (botInfo && (botInfo.trigger_time_frames || botInfo.traded_time_frames)) {
       setVisibleTimeframes((botInfo.trigger_time_frames && botInfo.trigger_time_frames[0]) || botInfo.traded_time_frames[0]);
       setVisiblePairs(botInfo.symbols[0]);
+      setVisibleExchanges(botInfo.exchange_name);
     }
-  }, [botInfo, setVisibleTimeframes, setVisiblePairs]);
+  }, [botInfo, setVisibleTimeframes, setVisiblePairs, setVisibleExchanges]);
 
   return (
     <BotInfoContext.Provider value={botInfo}>

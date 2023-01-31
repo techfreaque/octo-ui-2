@@ -25,6 +25,9 @@ export const defaultBotTemplate = [
                             },
                             {
                                 "component": "TimeFrameSelector"
+                            },
+                            {
+                                "component": "ExchangeSelector"
                             }
                         ],
                         "rightContent": [
@@ -220,6 +223,9 @@ export const defaultBotTemplate = [
                             },
                             {
                                 "component": "TimeFrameSelector"
+                            },
+                            {
+                                "component": "ExchangeSelector"
                             }
                         ],
                         "rightContent": [
