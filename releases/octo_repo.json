@@ -2,41 +2,52 @@
     "apps": [
         {
             "name": "Octo Ui2",
-            "description": "Web Interface for OctoBot based on react",
+            "description": "The web interface for OctoBot based on react, you are currently using",
             "versions": [
-                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octo-ui-2/main/releases/octo-ui2-latest/any_platform.zip"}
+                {
+                    "version": "latest",
+                    "url": "https://raw.githubusercontent.com/techfreaque/octo-ui-2/main/releases/octo-ui2-latest/any_platform.zip"
+                }
             ],
-            "categories": ["UI"],
+            "categories": [
+                "UI"
+            ],
             "tentacle_package_name": "Matrix-Octo-UI2"
         },
         {
             "name": "Spot Master 3000",
-            "description": "This trading mode requires you to import the profile here as well",
+            "description": "Automated portfolio balancing and cross asset arbitrage. This trading mode requires you to import the profile here as well, you can find the documentation here: https://github.com/techfreaque/octobot-spot-master-3000",
             "versions": [
-                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/main/releases/latest/any_platform.zip"}
-
+                {
+                    "version": "latest stable",
+                    "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/main/releases/latest/any_platform.zip",
+                },
+                {
+                    "version": "latest beta",
+                    "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/dev/releases/latest/any_platform.zip"
+                }
             ],
-            "categories": ["Strategies"],
+            "categories": [
+                "Strategies"
+            ],
             "tentacle_package_name": "Spot-Master-3000"
         },
         {
             "name": "Semi Auto Trading Mode",
-            "description": "This Trading Mode allows you to prepare trades in advance for multiple pairs and execute by a click",
-            "versions": [
-                {"version": "latest", "url": "https://raw.githubusercontent.com/techfreaque/octobot-semi_auto_trading_mode/main/releases/latest/any_platform.zip"}
-
+            "description": "This Trading Mode allows you to prepare complex trades in advance, for multiple pairs and execute by a click. It has a ton of options for entries, exits and position size. For example multiple grids, trailing stop losses and take profits based on indicators. It supports 50 indicators, It costs 100$, includes 1 year of updates and is available through email max@a42.ch. If you are interested, you'll get access to a free demo, before you pay me.",
+            "versions": [],
+            "categories": [
+                "Strategies"
             ],
-            "categories": ["Strategies"],
             "tentacle_package_name": "Semi-Auto-Trading-Mode"
         },
         {
             "name": "Strategy Maker Trading Mode",
             "description": "This Trading Mode allows you create powerful strategies without a single line of code. It supports 50 indicators. It costs 250$, includes 1 year of updates and is available through email max@a42.ch. If you are interested, you'll get access to a free demo, before you pay me.",
-            "versions": [
-                {"version": "latest", "url": ""}
-
+            "versions": [],
+            "categories": [
+                "Strategies"
             ],
-            "categories": ["Strategies"],
             "tentacle_package_name": "Matrix-Strategy-Maker"
         }
     ]
