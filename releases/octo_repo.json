@@ -20,7 +20,7 @@
             "versions": [
                 {
                     "version": "latest stable",
-                    "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/main/releases/latest/any_platform.zip",
+                    "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/main/releases/latest/any_platform.zip"
                 },
                 {
                     "version": "latest beta",
