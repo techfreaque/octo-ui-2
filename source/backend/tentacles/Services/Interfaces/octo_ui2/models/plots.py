@@ -60,11 +60,12 @@ def get_plotted_data(
         octo_ui2.get_octo_ui_2_logger().exception(
             error, True, f"Error when opening database: {error}"
         )
+        raise error
     except commons_errors.MissingExchangeDataError as error:
         octo_ui2.get_octo_ui_2_logger().exception(
             error, True, f"Error when opening database: {error}"
         )
-        raise
+        raise error
     elements = elements.to_json()
     try:
         elements2 = interfaces_util.run_in_bot_async_executor(
@@ -125,7 +126,10 @@ async def get_run_analysis_plots(
     )
     # TODO: replace with RunAnalysis Mode/Evaluators Factory
     # TODO add scripted RunAnalysis Mode which should be compatible with all trading modes
-    if hasattr(trading_mode, "BACKTESTING_SCRIPT_MODULE") and trading_mode.BACKTESTING_SCRIPT_MODULE:
+    if (
+        hasattr(trading_mode, "BACKTESTING_SCRIPT_MODULE")
+        and trading_mode.BACKTESTING_SCRIPT_MODULE
+    ):
         return await trading_mode.get_script_from_module(
             trading_mode.BACKTESTING_SCRIPT_MODULE
         )(ctx)

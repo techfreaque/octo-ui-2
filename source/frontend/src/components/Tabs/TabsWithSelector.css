@@ -1,3 +1,7 @@
 .MuiTabScrollButton-root.Mui-disabled {
-    position: absolute;
-  }
+  position: absolute;
+}
+
+.MuiTabs-flexContainer {
+  height: 100%;
+}

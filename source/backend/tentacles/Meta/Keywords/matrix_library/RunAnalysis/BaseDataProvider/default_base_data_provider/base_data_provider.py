@@ -173,7 +173,7 @@ class RunAnalysisBaseDataGenerator:
                             with_trades=with_trades,
                             with_portfolio=with_portfolio,
                             time_frame=time_frame,
-                            did_retry=True
+                            did_retry=True,
                         )
                 if with_trades and pair not in self.trades_data:
                     self.trades_data[pair] = await self.get_trades(pair)
@@ -194,18 +194,20 @@ class RunAnalysisBaseDataGenerator:
                     self.moving_portfolio_data[self.ref_market] = 0
 
     async def _get_candles(self, candles_sources, pair, time_frame) -> list:
-        if (
-            candles_sources[0][commons_enums.DBRows.VALUE.value]
-            == octobot_commons.constants.LOCAL_BOT_DATA
-        ):
-            try:
+        try:
+            if (
+                candles_sources[0][commons_enums.DBRows.VALUE.value]
+                == octobot_commons.constants.LOCAL_BOT_DATA
+            ):
                 return self._get_live_candles(pair, time_frame)
-            except IndexError as error:
-                raise CandlesLoadingError from error
-        else:
-            return await self._get_backtesting_candles(
-                candles_sources, pair, time_frame
-            )
+            else:
+                return await self._get_backtesting_candles(
+                    candles_sources, pair, time_frame
+                )
+        except IndexError as error:
+            raise CandlesLoadingError from error
+        except Exception as error:
+            raise CandlesLoadingError from error
 
     def _get_live_candles(self, symbol, time_frame):
         # todo get/download history from first tradetime or start time

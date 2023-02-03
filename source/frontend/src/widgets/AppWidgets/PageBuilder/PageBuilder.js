@@ -3,6 +3,7 @@ import JsonEditor from "@techfreaque/json-editor-react"
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults"
 import createNotification from "../../../components/Notifications/Notification"
 import { botLayoutKey } from "../../../constants/backendConstants"
+import { defaultBotTemplate } from "../../../constants/LayoutTemplate"
 import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider"
 import { useSaveUiConfig } from "../../../context/config/UiConfigProvider"
 import appWidgetsProps from "../../WidgetManagement/AppWidgetProps"
@@ -12,6 +13,11 @@ export default function PageBuilder() {
     const botLayout = useBotLayoutContext()
     const saveUiConfig = useSaveUiConfig()
     const editorName = "Page-Builder"
+    function handleResetLayout() {
+        const newConfig = { [botLayoutKey]: defaultBotTemplate }
+        const success = () => createNotification("Successfully restored default UI layout")
+        saveUiConfig(newConfig, success)
+    }
     function handlePageLayoutSaving() {
         const newConfig = { [botLayoutKey]: window.$JsonEditors[editorName].getValue() }
         const success = () => createNotification("Successfully saved new UI layout")
@@ -19,7 +25,8 @@ export default function PageBuilder() {
     }
     return (
         <>
-            <Button variant="contained" onClick={handlePageLayoutSaving}>Save Page Layout</Button>
+            <Button style={{margin: "5px"}} variant="contained" onClick={handlePageLayoutSaving}>Save Page Layout</Button>
+            <Button style={{margin: "5px"}} variant="contained" color="warning" onClick={handleResetLayout}>Reset to default layout</Button>
             <JsonEditor
                 {...defaultJsonEditorSettings()}
                 schema={pageBuilderSchema()}

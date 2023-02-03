@@ -10,6 +10,7 @@ import { userInputKey } from "../../components/Tables/w2ui/RunDataTable";
 import { ID_SEPARATOR } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useUiConfigContext } from "../config/UiConfigProvider";
+import { useVisibleExchangesContext } from "../config/VisibleExchangesProvider";
 import { useVisiblePairsContext } from "../config/VisiblePairProvider";
 import { useVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
 import { useBotInfoContext } from "./BotInfoProvider";
@@ -49,9 +50,12 @@ export const useFetchPlotData = () => {
   const uiConfig = useUiConfigContext();
   const setBotPlottedElements = useUpdateBotPlottedElementsContext();
   const setHiddenBacktestingMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext();
+  const visibleExchanges = useVisibleExchangesContext();
+
   const logic = useCallback((isLive = true) => {
     fetchPlotlyPlotData(
-      visiblePairs, visibleTimeframes,
+      visiblePairs, visibleTimeframes, botInfo.exchange_ids[visibleExchanges],
+      visibleExchanges,
       botDomain,
       convertAnalysisSettings(isLive ? uiConfig.live_analysis_settings : uiConfig.backtesting_analysis_settings),
       setBotPlottedElements, botInfo,
@@ -65,7 +69,8 @@ export const useFetchPlotData = () => {
     uiConfig.live_analysis_settings,
     setBotPlottedElements,
     botInfo,
-    setHiddenBacktestingMetadataColumns
+    setHiddenBacktestingMetadataColumns,
+    visibleExchanges
   ]);
   return logic;
 };
@@ -146,7 +151,7 @@ function clearUnselectedRuns(displayedRunIds, botPlottedElements, setBotPlottedE
 }
 
 function loadMissingRuns(
-  displayedRunIds, botPlottedElements, visiblePairs, visibleTimeframes,
+  displayedRunIds, botPlottedElements, visiblePairs, visibleTimeframes, visibleExchangeIds, visibleExchanges,
   botDomain, uiConfig, setBotPlottedElements, botInfo
 ) {
   // load missing runs
@@ -156,6 +161,8 @@ function loadMissingRuns(
       fetchPlotlyPlotData(
         visiblePairs,
         visibleTimeframes,
+        visibleExchangeIds,
+        visibleExchanges,
         botDomain,
         convertAnalysisSettings(uiConfig.backtesting_analysis_settings, false),
         setBotPlottedElements,
@@ -195,35 +202,39 @@ export const BotPlottedElementsProvider = ({ children }) => {
   const botDomain = useBotDomainContext();
   const visiblePairs = useVisiblePairsContext();
   const visibleTimeframes = useVisibleTimeFramesContext();
+  const visibleExchanges = useVisibleExchangesContext();
   const uiConfig = useUiConfigContext();
 
   useEffect(() => {
     // backtestings
-    if (displayedRunIds && botInfo && visibleTimeframes && visiblePairs && uiConfig?.backtesting_analysis_settings) {
+    if (displayedRunIds && botInfo && visibleTimeframes && visiblePairs && visibleExchanges && uiConfig?.backtesting_analysis_settings) {
       clearUnselectedRuns(displayedRunIds, botPlottedElements, setBotPlottedElements, visiblePairs, visibleTimeframes)
       loadMissingRuns(
-        displayedRunIds, botPlottedElements, visiblePairs, visibleTimeframes,
+        displayedRunIds, botPlottedElements, visiblePairs, visibleTimeframes, botInfo.exchange_ids[visibleExchanges],
+        visibleExchanges,
         botDomain, uiConfig, setBotPlottedElements, botInfo
       )
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [displayedRunIds, uiConfig?.backtesting_analysis_settings, visiblePairs, visibleTimeframes, botDomain, botInfo?.exchange_id]);
+  }, [displayedRunIds, uiConfig?.backtesting_analysis_settings, visiblePairs, visibleTimeframes, visibleExchanges, botDomain, botInfo?.exchange_id]);
 
   useEffect(() => { // live
-    if (uiConfig?.live_analysis_settings && botInfo && visibleTimeframes && visiblePairs) {
+    if (uiConfig?.live_analysis_settings && botInfo && visibleTimeframes && visiblePairs && visibleExchanges) {
       fetchPlotlyPlotData(
-        visiblePairs, visibleTimeframes, botDomain,
+        visiblePairs, visibleTimeframes, botInfo.exchange_ids[visibleExchanges],
+        visibleExchanges, botDomain,
         convertAnalysisSettings(uiConfig.live_analysis_settings),
         setBotPlottedElements, botInfo,
         (elements) => setHiddenMetadataFromInputs(elements, setHiddenBacktestingMetadataColumns)
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     botInfo?.exchange_id,
     botDomain,
     visibleTimeframes,
     visiblePairs,
+    visibleExchanges,
     uiConfig?.live_analysis_settings
   ]);
   return (<DisplayedRunIdsContext.Provider value={displayedRunIds}>

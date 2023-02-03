@@ -1,3 +1,4 @@
+import createNotification from "../components/Notifications/Notification";
 import { backendRoutes } from "../constants/backendConstants";
 import fetchAndStoreFromBot, { fetchAndGetFromBot, sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
 export async function fetchBotInfo(botDomain, setBotInfo, visibleExchanges, successNotification = false, setIsFinished = undefined) {
@@ -26,6 +27,8 @@ export async function fetchPlotData(
 export async function fetchPlotlyPlotData(
   symbol,
   timeFrame,
+  exchange_id,
+  exchange_name,
   botDomain,
   analysisSettings,
   setBotPlottedElements,
@@ -37,10 +40,10 @@ export async function fetchPlotlyPlotData(
   optimizer_id = undefined,
 ) {
   const data = {
-    exchange_id: botInfo.exchange_id,
+    exchange_id: exchange_id,
     symbol: symbol,
     time_frame: timeFrame,
-    exchange: botInfo.exchange_name,
+    exchange: exchange_name,
     analysis_settings: analysisSettings,
   }
   if (isLive) {
@@ -89,11 +92,16 @@ export async function fetchPlotlyPlotData(
       return newData
     })
   }
+  const _failed = () => {
+    createNotification(
+      "Failed to load chart data", "danger",
+      `The data for ${exchange_name} - ${symbol} - ${timeFrame} is not available`);
+  }
   fetchAndGetFromBot(
     botDomain + backendRoutes.plottedRunData,
     "post",
     data,
-    success, undefined,
+    success, _failed,
   )
 }
 

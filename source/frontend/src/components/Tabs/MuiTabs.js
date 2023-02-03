@@ -2,10 +2,13 @@ import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
+import { Grid } from "@mui/material";
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
     const botColors = useBotColorsContext();
     const [currentTabId, setCurrentTabId] = React.useState(defaultTabId ? defaultTabId : 0);
+    const isBigScreen = useMediaQuery('(min-width:800px)');
     if (!tabs[currentTabId]) {
         return <></>
     }
@@ -13,6 +16,8 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
         setCurrentTabId(newCurrentTabId);
     };
     const height = tabs[currentTabId].dontScroll ? "calc(100% - 54px)" : "calc(100% - 54px)";
+
+
     return tabs && (
         <div style={
             { height: "calc(100%)" }
@@ -25,21 +30,24 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                 style={
                     { display: "flex" }
                 }>
-                <Tabs
-                    value={currentTabId}
-                    onChange={handleTabChange}
-                    variant="scrollable"
-                    scrollButtons
-                    allowScrollButtonsMobile
-                    aria-label="Tabs"
-                    className="mx-auto">
-                    {
-                        tabs.map((tab) => (tab.title))
-                    } </Tabs>
-                <div className="ms-auto d-flex">
-                    {
-                        rightContent && rightContent
-                    } </div>
+                <TabsContainer>
+                    <TabsElement isBigScreen={isBigScreen}>
+                        <Tabs
+                            value={currentTabId}
+                            onChange={handleTabChange}
+                            variant="scrollable"
+                            scrollButtons
+                            allowScrollButtonsMobile
+                            aria-label="Tabs"
+                            className="mx-auto">
+                            {
+                                tabs.map((tab) => (tab.title))
+                            } </Tabs>
+                    </TabsElement>
+                    <TabsElement isBigScreen={isBigScreen} isRightContent={true} >
+                        {rightContent && rightContent}
+                    </TabsElement>
+                </TabsContainer>
             </Box>                {
                 tabs.map((tab, index) => (
                     <div
@@ -67,4 +75,18 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
             }
         </div>
     );
+}
+
+function TabsContainer({ children, isBigScreen }) {
+    return isBigScreen
+        ? <>{children}</>
+        : <Grid container>
+            {children}
+        </Grid>
+}
+
+function TabsElement({ children, isBigScreen, isRightContent }) {
+    return isBigScreen
+        ? <div className="ms-auto d-flex">{children}</div>
+        : <Grid item xs={12} >  <div className="ms-auto d-flex" style={isRightContent && { float: "right" }} >{children}</div> </Grid >
 }

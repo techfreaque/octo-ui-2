@@ -36,7 +36,9 @@ def register_bot_info_routes(plugin):
             return _bot_info(exchange)
 
     def _bot_info(exchange=None):
-        exchange = exchange if (exchange != "null" and exchange != "undefined") else None
+        exchange = (
+            exchange if (exchange != "null" and exchange != "undefined") else None
+        )
         is_starting = False
 
         running_seconds = time.time() - interfaces.get_bot_api().get_start_time()
@@ -50,6 +52,7 @@ def register_bot_info_routes(plugin):
         (activated_strategy) = None
         exchange_name = None
         exchange_names = []
+        exchange_ids: dict = {}
         exchange_id = None
         available_api_actions = None
         symbols = traded_time_frames = enabled_time_frames = activated_evaluators = []
@@ -62,9 +65,10 @@ def register_bot_info_routes(plugin):
                 exchange_name,
                 exchange_id,
             ) = models.get_first_exchange_data(exchange)
-
-            for _exchange_manager in interfaces_util.get_exchange_managers():
-                exchange_names.append(trading_api.get_exchange_name(_exchange_manager))
+            exchange_managers = interfaces.AbstractInterface.get_exchange_managers()
+            for _exchange_manager in exchange_managers:
+                exchange_names.append(_exchange_manager.exchange_name)
+                exchange_ids[_exchange_manager.exchange_name] = _exchange_manager.id
 
             trading_mode = exchange_manager.trading_modes[0]
             trading_mode_name = trading_mode.get_name()
@@ -123,6 +127,7 @@ def register_bot_info_routes(plugin):
                 "live_id": 1,  # todo
                 "exchange_name": exchange_name,
                 "exchange_names": exchange_names,
+                "exchange_ids": exchange_ids,
                 "symbols": sorted(
                     [
                         symbol_util.convert_symbol(

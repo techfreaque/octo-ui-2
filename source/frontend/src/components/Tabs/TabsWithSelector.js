@@ -6,27 +6,46 @@ import {
     Tabs,
     ToggleButton,
     ToggleButtonGroup,
+    useMediaQuery,
 } from "@mui/material";
 import { useState } from "react";
 import "./TabsWithSelector.css";
 
 export default function TabsWithSelector({ children, handleChange, items, currentItem, id, onClose }) {
     // todo replace - works but logs errors
+    const isBigScreen = useMediaQuery('(min-width:1100px)');
+    const isMediumScreen = useMediaQuery('(min-width:900px)');
+    const isSmallScreen = useMediaQuery('(min-width:630px)');
+    let maxWidth = "22vw"
+    if (isBigScreen) {
+        maxWidth = "27vw"
+    } else if (isMediumScreen) {
+        maxWidth = "23vw"
+
+    } else if (isSmallScreen) {
+        maxWidth = "24vw"
+
+    }
     return (
-        <div style={{ display: "flex", width: "30vw", maxWidth: "30vw" }}>
+        <div style={{
+            display: "flex",
+            maxWidth: maxWidth,
+        }} >
             <Tabs
                 value="0"
                 variant="scrollable"
                 scrollButtons
                 allowScrollButtonsMobile
             >
-                <Tab value="0" style={{ minWidth: 0, paddingLeft: 0, paddingRight: 0 }} />
                 <ToggleButtonGroup
-                    size="medium"
+                    size="small"
                     value={currentItem}
                     exclusive={true}
                     aria-label={items}
-                    style={{ marginRight: "10px" }}
+                    style={{
+                        marginRight: "10px",
+
+                    }}
                 >
                     {items.map((item) => (
                         <ToggleButton

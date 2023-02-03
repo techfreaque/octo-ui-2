@@ -9,10 +9,14 @@ export default function AppWidgets(props) {
       return props.layout.map((element, index) => {
         if (typeof registeredComponents[element.component] !== "undefined") {
           // console.log("widget is loading: " + element.component, element)
-          return createElement(
-            registeredComponents[element.component],
-            { key: index, id: index, ...element }
-          );
+          try {
+            return createElement(
+              registeredComponents[element.component],
+              { key: index, id: index, ...element }
+              );
+            } catch (error) {
+              console.error(error);
+            }
         } else {
           console.log("error loading widget: ", element.component, element, props);
           return <></>;

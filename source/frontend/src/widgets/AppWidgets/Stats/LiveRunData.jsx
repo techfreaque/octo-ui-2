@@ -13,7 +13,7 @@ export default function LiveRunMetaData() {
     const visibleTimeframes = useVisibleTimeFramesContext();
     useEffect(() => {
         botPlottedElements?.live && botInfo?.live_id && visiblePairs && visibleTimeframes &&
-            botPlottedElements.live[botInfo.live_id][visiblePairs][visibleTimeframes]?.data?.sub_elements?.forEach(element => {
+            botPlottedElements.live?.[botInfo.live_id]?.[visiblePairs]?.[visibleTimeframes]?.data?.sub_elements?.forEach(element => {
                 if (element.type === "dictionary") {
                     const newMetadata = { ...element?.data?.elements[0]?.value }
                     newMetadata["start portfolio"] = JSON.parse(newMetadata["start portfolio"].replace(/'/g, '"'))
