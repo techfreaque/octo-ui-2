@@ -257,7 +257,7 @@ class RunAnalysisBaseDataGenerator:
             )
         return raw_candles
 
-    async def generate_historical_portfolio_value(self):
+    async def generate_historical_portfolio_value(self, total_amount_in_btc=False):
         if not self.historical_portfolio_values_by_coin:
             if self.trading_type == "future":
                 # TODO remove when FuturesBaseDataGenerator is added
@@ -288,14 +288,14 @@ class RunAnalysisBaseDataGenerator:
                         # if conversion_symbol not in price_data:
                         #     conversion_symbol = f"{ref_market}/{parsed_symbol.quote}"
                         #     if conversion_symbol not in price_data:
-                        #         run_analysis_data.get_logger().error(
+                        #         run_analysis_data.get_base_data_logger().error(
                         #             f"Unable to handle sell trade {trade['symbol']}, no pair "
                         #             "aivailable to convert value plots "
                         #             f"will not be accurate: {trade}"
                         #         )
                         #         break
                         # conversion_pair = f"{}/{self.ref_market}"
-                        get_logger().exception(
+                        get_base_data_logger().exception(
                             error,
                             True,
                             f"Unable to get price data for {coin}/{self.ref_market} "
@@ -341,6 +341,30 @@ class RunAnalysisBaseDataGenerator:
             pairs = list(self.historical_portfolio_amounts_by_coin.keys())
             self.historical_portfolio_values_by_coin["total"] = []
             self.historical_portfolio_amounts_by_coin["total"] = []
+            self.historical_portfolio_values_by_coin["total_btc"] = []
+            btc_ref_market_symbol = None
+            if total_amount_in_btc:
+                btc_ref_market_symbol = f"BTC/{self.ref_market}"
+                btc_ref_market_price_data = (
+                    self.price_data[btc_ref_market_symbol]
+                    if btc_ref_market_symbol in self.price_data
+                    else None
+                )
+
+                btc_ref_market_price_data_len = len(btc_ref_market_price_data)
+                if longest_candles_len == btc_ref_market_price_data_len:
+                    pass
+                elif longest_candles_len > btc_ref_market_price_data_len:
+                    empty_candles_to_add = (
+                        longest_candles_len - btc_ref_market_price_data_len
+                    )
+                    btc_ref_market_price_data = [
+                        [0, 0, 0, 0, 0, 0]
+                    ] * empty_candles_to_add + btc_ref_market_price_data
+                else:
+                    get_base_data_logger().error(
+                        f"{btc_ref_market_symbol} cant be longer than the longest candle"
+                    )
             for index in range(longest_candles_len):
                 time = self.longest_candles[index][
                     commons_enums.PriceIndexes.IND_PRICE_TIME.value
@@ -353,6 +377,18 @@ class RunAnalysisBaseDataGenerator:
                 self.historical_portfolio_values_by_coin["total"].append(
                     this_candle_value
                 )
+                if btc_ref_market_symbol:
+                    try:
+                        self.historical_portfolio_values_by_coin["total_btc"].append(
+                            this_candle_value
+                            / btc_ref_market_price_data[index][
+                                commons_enums.PriceIndexes.IND_PRICE_CLOSE.value
+                            ]
+                        )
+                    except ZeroDivisionError:
+                        self.historical_portfolio_values_by_coin["total_btc"].append(
+                            None
+                        )
 
     def _set_longest_candles(self) -> list:
         longest_pair = None
@@ -452,7 +488,7 @@ class RunAnalysisBaseDataGenerator:
     #             if fees_currency is None:
     #                 fees_currency = transaction["currency"]
     #             if transaction["currency"] != fees_currency:
-    #                 get_logger().error(f"Unknown funding fee value: {transaction}")
+    #                 get_base_data_logger().error(f"Unknown funding fee value: {transaction}")
     #             else:
     #                 # - because funding fees are stored as negative number when paid (positive when "gained")
     #                 paid_fees -= transaction["quantity"]
@@ -568,7 +604,7 @@ class RunAnalysisBaseDataGenerator:
         raise NotImplementedError("generate_transactions() must be implemented")
 
 
-def get_logger(_=None):
+def get_base_data_logger(_=None):
     return commons_logging.get_logger("RunAnalysisBaseDataGenerator")
 
 

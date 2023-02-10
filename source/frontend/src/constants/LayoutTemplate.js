@@ -183,6 +183,69 @@ export const defaultBotTemplate = [
                                 ],
                                 "dontScroll": true,
                                 "title": "Backtesting"
+                            },
+                            {
+                                "component": "Tab",
+                                "content": [
+                                    {
+                                        "component": "ScrollableTabs",
+                                        "rightContent": [
+                                            {
+                                                "component": "OptimizerQueueSize"
+                                            },
+                                            {
+                                                "component": "OptimizerRunsToBeAdded"
+                                            },
+                                            {
+                                                "component": "AddToOptimizerQueueButton"
+                                            },
+                                            {
+                                                "component": "StopOptimizerButton"
+                                            },
+                                            {
+                                                "component": "StartOptimizerButton"
+                                            }
+                                        ],
+                                        "tabs": [
+                                            {
+                                                "component": "Tab",
+                                                "content": [
+                                                    {
+                                                        "component": "UIConfig",
+                                                        "configKeys": [
+                                                            "optimizer_run_settings",
+                                                            "optimization_campaign"
+                                                        ]
+                                                    }
+                                                ],
+                                                "dontScroll": false,
+                                                "title": "Optimizer settings"
+                                            },
+                                            {
+                                                "component": "Tab",
+                                                "content": [
+                                                    {
+                                                        "component": "OptimizerConfigForm"
+                                                    }
+                                                ],
+                                                "dontScroll": false,
+                                                "title": "Run config"
+                                            },
+                                            {
+                                                "component": "Tab",
+                                                "content": [
+                                                    {
+                                                        "component": "OptimizerQueueTable"
+                                                    }
+                                                ],
+                                                "dontScroll": false,
+                                                "title": "Queue"
+                                            }
+                                        ]
+                                    }
+                                ],
+                                "dontScroll": false,
+                                "title": "Optimizer"
                             }
                         ]
                     }
@@ -223,9 +286,6 @@ export const defaultBotTemplate = [
                             },
                             {
                                 "component": "TimeFrameSelector"
-                            },
-                            {
-                                "component": "ExchangeSelector"
                             }
                         ],
                         "rightContent": [

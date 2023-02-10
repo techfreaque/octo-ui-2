@@ -4,8 +4,8 @@ import {
 } from "@mui/material";
 import MenuItem from "@mui/material/MenuItem";
 import { useState } from "react";
-import { useSaveTentaclesConfig } from "../../../api/configs";
 import TabsWithSelector from "../../../components/Tabs/TabsWithSelector";
+import { useSaveTentaclesConfig } from "../../../context/config/TentaclesConfigProvider";
 import { useUpdateVisibleTimeFramesContext, useVisibleTimeFramesContext } from "../../../context/config/VisibleTimeFrameProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 
@@ -28,9 +28,9 @@ export default function TimeFrameSelector() {
   }
 
   function saveTimeFrameSettings() {
-    saveTentaclesConfig({ [botInfo.strategy_name]: { required_time_frames: enabledTimeFrame } })
+    saveTentaclesConfig({ [botInfo.strategy_names[0]]: { required_time_frames: enabledTimeFrame } })
   }
-  if (botInfo?.strategy_name && botInfo.time_frames) {
+  if (botInfo?.strategy_names && botInfo.time_frames) {
     return (
       <TabsWithSelector
         currentItem={visibleTimeframes}

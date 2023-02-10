@@ -37,27 +37,40 @@ export const useFetchOptimizerQueue = () => {
   const setOptimizerQueue = useUpdateOptimizerQueueContext();
   const botDomain = useBotDomainContext();
   const logic = useCallback(() => {
-    fetchAndStoreFromBot(
-      botDomain + backendRoutes.optimizerQueueUpdate,
-      setOptimizerQueue, "get", {}, false, false,
-    )
+    // fetchAndStoreFromBot(
+    //   botDomain + backendRoutes.optimizerQueueUpdate,
+    //   setOptimizerQueue, "get", {}, false, false,
+    // )
+    const fail = (updated_data, update_url, result, msg, status) => {
+      createNotification("Failed to load the optimizer queue", "danger")
+    }
+    const success = (updated_data, update_url, result, msg, status) => {
+      if (!msg?.success) {
+        return fail(updated_data, update_url, result, msg, status)
+      }
+      setOptimizerQueue(msg?.data)
+    }
+    sendAndInterpretBotUpdate({}, botDomain + backendRoutes.optimizerGetQueue, success, fail, "GET")
   }, [botDomain, setOptimizerQueue]);
   return logic;
 };
 
 export const useSaveOptimizerQueue = () => {
-  const setOptimizerQueue = useUpdateOptimizerQueueContext();
   const botDomain = useBotDomainContext();
+  const fetchOptimizerQueue = useFetchOptimizerQueue();
   const logic = useCallback((updatedQueue) => {
+    const fail = (updated_data, update_url, result, msg, status) => {
+      createNotification("Failed to update Optimizer queue", "danger", msg?.message)
+    }
     const success = (updated_data, update_url, result, msg, status) => {
-      setOptimizerQueue(msg)
+      if (!msg?.success) {
+        return fail(updated_data, update_url, result, msg, status)
+      }
+      // fetchOptimizerQueue()
       createNotification("Optimizer queue updated", "success")
     }
-    const fail = () => {
-      createNotification("Failed to update Optimizer queue", "danger")
-    }
     sendAndInterpretBotUpdate(updatedQueue, botDomain + backendRoutes.optimizerQueueUpdate, success, fail)
-  }, [setOptimizerQueue, botDomain]);
+  }, [botDomain, fetchOptimizerQueue]);
   return logic;
 };
 

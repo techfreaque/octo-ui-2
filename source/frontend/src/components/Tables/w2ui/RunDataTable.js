@@ -10,7 +10,7 @@ import { useDisplayedRunIdsContext, useUpdateDisplayedRunIdsContext } from "../.
 import createNotification from "../../Notifications/Notification";
 
 export default function RunDataTableW2UI({
-    tableTitle, tableId, runData, currentCampaignName, noData, reloadData, deleteBacktestingRuns,
+    tableTitle, tableId, runData, currentCampaignName, noData, reloadData, deleteRuns,
     hiddenMetadataColumns, setHiddenMetadataColumns, restoreSettings
 }) {
     const setDisplayedRunIds = useUpdateDisplayedRunIdsContext()
@@ -22,7 +22,7 @@ export default function RunDataTableW2UI({
                 tableTitle, tableId, runData.data,
                 false,
                 currentCampaignName, reloadData,
-                deleteBacktestingRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings)
+                deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [runData, currentCampaignName, hiddenMetadataColumns]);
     return useMemo(() => (
@@ -219,14 +219,13 @@ function _addBacktestingMetadataTableButtons(
             table.toolbar.check(buttonId);
         }
     }
-    function deleteShownRuns(deleteBacktestingRuns) {
-        const toDeleteRunIds = table.last.searchIds;
-        let toDeleteRuns = [];
-        if (toDeleteRunIds.length === 0) {
-            toDeleteRuns = table.records;
-        } else {
-            toDeleteRuns = toDeleteRunIds.map((id) => table.records[id]);
+
+    function _deleteRuns() {
+        const selectedIds = table.getSelection()
+        if (selectedIds?.length === 0) {
+            return createNotification("Select a run to delete first", "danger")
         }
+        const toDeleteRuns = selectedIds.map((recId) => table.get(recId))
         w2confirm(`Delete these ${toDeleteRuns.length} runs ?`)
             .yes(() => {
                 deleteBacktestingRuns(toDeleteRuns.map((run) => {
@@ -237,6 +236,10 @@ function _addBacktestingMetadataTableButtons(
                     }
                 }))
             });
+    }
+    function deleteSelectedRuns(event) {
+        event.force = true;
+        event.onComplete = _deleteRuns;
     }
     table.toolbar.add({ type: 'button', id: 'show-run-info', text: 'Run info', icon: 'fa fa-bolt', disabled: true, onClick: showRunInfo });
     table.toolbar.add({ type: 'button', id: 'show-user-inputs', text: 'User inputs', icon: 'fa fa-user-cog', onClick: showUserInputInfo })
@@ -251,9 +254,9 @@ function _addBacktestingMetadataTableButtons(
         const selectedRuns = table.getSelection()
         if (selectedRuns && selectedRuns.length === 1) {
             function removeSpacesOnlyFromKeys(inputs) {
-                Object.keys(inputs).forEach((inputKey) => {
-                    const newInputKey = inputKey.replace(/ /g, "_")
-                    if (newInputKey !== inputKey) {
+                inputs && Object.keys(inputs).forEach((inputKey) => {
+                    const newInputKey = inputKey && inputKey.replace(/ /g, "_")
+                    if (newInputKey && newInputKey !== inputKey) {
                         inputs[newInputKey] = inputs[inputKey]
                         delete inputs[inputKey]
                     }
@@ -269,7 +272,6 @@ function _addBacktestingMetadataTableButtons(
             createNotification("Error restoring user iputs", "danger", "You must select one run");
         }
     }
-
     table.toolbar.add({
         type: 'button', id: 'restore-run',
         text: 'Restore settings', icon: 'fa fa-download', onClick: _restoreSettings
@@ -279,13 +281,11 @@ function _addBacktestingMetadataTableButtons(
         text: 'Refresh', icon: 'w2ui-icon-reload', onClick: reloadData
     })
     table.toolbar.add({
-        type: 'button', id: 'delete_shown_runs',
+        type: 'button', id: 'delete_selected_runs',
         text: 'Delete', icon: 'fa fa-trash',
-        onClick: () => deleteShownRuns(deleteBacktestingRuns)
+        onClick: deleteSelectedRuns
     });
 }
-
-
 
 function mergeRunIdentifiers(backtestingId, optimizerId, campaignName) {
     return `${backtestingId}${ID_SEPARATOR}${optimizerId}${ID_SEPARATOR}${campaignName}`

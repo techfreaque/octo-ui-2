@@ -24,8 +24,11 @@ async def plot_unrealized_portfolio_value(
     own_yaxis: bool = False,
     all_coins_in_ref_market: bool = False,
     all_coins_amounts: bool = False,
+    total_amount_in_btc: bool = False,
 ):
-    await run_data.generate_historical_portfolio_value()
+    await run_data.generate_historical_portfolio_value(
+        total_amount_in_btc=total_amount_in_btc
+    )
     # TODO remove checks as it should work or break
     if run_data.historical_portfolio_times:
         if all_coins_in_ref_market and run_data.historical_portfolio_values_by_coin:
@@ -33,6 +36,8 @@ async def plot_unrealized_portfolio_value(
                 coin,
                 portfolio_values,
             ) in run_data.historical_portfolio_values_by_coin.items():
+                if coin in ("total", "total_btc"):
+                    continue
                 plotted_element.plot(
                     mode="scatter",
                     x=run_data.historical_portfolio_times,
@@ -52,7 +57,7 @@ async def plot_unrealized_portfolio_value(
                     title=f"Unrealized {coin} portfolio value in {run_data.ref_market}",
                     own_yaxis=own_yaxis,
                 )
-        elif (
+        if (
             run_data.historical_portfolio_values_by_coin
             and "total" in run_data.historical_portfolio_values_by_coin
         ):
@@ -61,5 +66,16 @@ async def plot_unrealized_portfolio_value(
                 x=run_data.historical_portfolio_times,
                 y=run_data.historical_portfolio_values_by_coin["total"],
                 title=f"Unrealized total portfolio value in {run_data.ref_market}",
+                own_yaxis=own_yaxis,
+            )
+        if (
+            run_data.historical_portfolio_values_by_coin
+            and "total_btc" in run_data.historical_portfolio_values_by_coin
+        ):
+            plotted_element.plot(
+                mode="scatter",
+                x=run_data.historical_portfolio_times,
+                y=run_data.historical_portfolio_values_by_coin["total_btc"],
+                title="Unrealized total portfolio value in BTC",
                 own_yaxis=own_yaxis,
             )

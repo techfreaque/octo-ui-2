@@ -1,4 +1,5 @@
 
+import { Button } from "@mui/material";
 import { useEffect } from "react";
 import { createTable } from "../../../components/Tables/w2ui/W2UI";
 import { userInputKey } from "../../../components/UserInputs/utils";
@@ -11,39 +12,43 @@ export default function OptimizerQueueTable() {
     const optimizerQueue = useOptimizerQueueContext()
     const updateOptimizerQueueCounter = useUpdateOptimizerQueueCounterContext()
     const saveOptimizerQueue = useSaveOptimizerQueue()
+    const containerId = "optimizer-queue-table"
     useEffect(() => {
         fetchOptimizerQueue()
-    }, [fetchOptimizerQueue]);
+    }, []);
     useEffect(() => {
-        optimizerQueue && optimizerQueue.queue && handleOptimizerQueue(optimizerQueue.queue, updateOptimizerQueueCounter, saveOptimizerQueue)
+        optimizerQueue
+            && updateOptimizerQueueEditor(
+                optimizerQueue, saveOptimizerQueue, containerId)
+        updateOptimizerQueueCount(optimizerQueue, updateOptimizerQueueCounter);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [optimizerQueue]);
 
-    return (
+    return (<>
+        <div className="text-center mx-4 my-4">
+            <Button onClick={fetchOptimizerQueue}>Reload optimizer queue</Button>
+        </div>
         <div id={"optimizer-queue-container"} style={{ height: "100%" }}>
             <div id={"optimizer-queue-no-message"} className="text-center mx-4 my-4">
                 <h4>
                     The optimizer queue is empty
                 </h4>
             </div>
-            <div id={"optimizer-queue-table"} style={{ height: "100%" }}></div>
+            <div id={containerId} style={{ height: "100%" }}></div>
         </div>
+    </>
     )
 }
 
-function handleOptimizerQueue(optimizerQueue, updateOptimizerQueueCounter, saveOptimizerQueue) {
-    updateOptimizerQueueEditor(optimizerQueue, "optimizer-queue-table", saveOptimizerQueue, updateOptimizerQueueCounter);
-}
-
-function updateOptimizerQueueEditor(optimizerQueue, containerId, saveOptimizerQueue, updateOptimizerQueueCounter) {
-    updateOptimizerQueueCount(optimizerQueue, updateOptimizerQueueCounter);
+function updateOptimizerQueueEditor(optimizerQueue, saveOptimizerQueue, containerId) {
     createOptimizerQueueTables(optimizerQueue, containerId, saveOptimizerQueue)
 }
 
 function updateOptimizerQueueCount(optimizerQueue, updateOptimizerQueueCounter) {
     let count = 0;
-    if (optimizerQueue.length) {
-        optimizerQueue.forEach(function (optimizerRun) {
+    if (optimizerQueue?.length) {
+        optimizerQueue.forEach(optimizerRun => {
             count += Object.keys(optimizerRun.runs).length;
         });
     }
@@ -79,10 +84,7 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
     const queueDiv = document.createElement('div');
     queueDiv.id = divID;
     queueDiv.style.height = "500px";
-    queueDiv.dataset.id = optimizerId
-    queueDiv.dataset.data_files = optimizerRun.data_files;
-    queueDiv.dataset.deletedRows = []
-    queueDiv.dataset.deleteEveryRun = false
+    const queueInfo = { id: optimizerId, deletedRows: [], deleteEveryRun: false }
     queueParentDiv.append(queueDiv);
 
     const keys = [];
@@ -145,28 +147,34 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
         }
     });
     function _onReorderRow(event) {
-        event.onComplete = _afterTableUpdate
+        event.onComplete = _updateOptimizerQueue
     }
     function _onDelete(event) {
         event.force = true;
         const table = window.w2ui[event.target];
-        if (table.getSelection().length === table.records.length) {
-            queueDiv.dataset.deleteEveryRun = true;
-            // force select none to avoid local deletion which can take a very long time (table will be updated anyway)
+        const recsToDelete = table.getSelection()
+        if (recsToDelete.length === table.records.length) {
             table.selectNone();
-            // call _afterTableUpdate as it will be skipped as nothing is selected now.
-            _afterTableUpdate(event);
+            queueInfo.deleteEveryRun = true;
+            _updateOptimizerQueue(event);
+            table.destroy();
         } else {
-            queueDiv.dataset.deleteEveryRun = false;
-            queueDiv.dataset.deletedRows = table.getSelection().map((recId) => table.get(recId));
-            event.onComplete = _afterTableUpdate;
+            const rawsToDelete = recsToDelete.map((recId) => table.get(recId))
+            queueInfo.deletedRows = rawsToDelete;
+            event.onComplete = _updateOptimizerQueue;
         }
     }
     const tableName = `${divID}-table`;
     const table = createTable(divID, tableTitle,
         tableName, searches, columns, records, columnGroups, [], [],
         true, false, true, true, _onReorderRow, _onDelete);
-    _addOptimizerQueueTableButtons(table, _updateOptimizerQueue)
+
+    function randomizeRecords() {
+        randomizeArray(table.records);
+        table.refresh();
+        _updateOptimizerQueue()
+    }
+    _addOptimizerQueueTableButtons(table, randomizeRecords)
 
     function _createRunData(record, deleted) {
         const run = [];
@@ -184,43 +192,27 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
         });
         return run;
     }
-    function _updateOptimizerQueue(queueInfo, records) {
-        let runs = [];
-        let deleteEveryRun = queueInfo.deleteEveryRun;
-        if (!deleteEveryRun) {
-            runs = records.map((record) => _createRunData(record, false));
-            runs = runs.concat(queueInfo.deletedRows.map((record) => _createRunData(record, true)));
+    function _updateOptimizerQueue(event) {
+        let UpdatedRuns = [];
+        if (!queueInfo.deleteEveryRun) {
+            UpdatedRuns = table.records.map((record) => _createRunData(record, false));
+            UpdatedRuns = UpdatedRuns.concat(queueInfo.deletedRows.map((record) => _createRunData(record, true)));
         }
-        queueInfo.deletedRows = [];
         const updatedQueue = {
-            queue: {
+            updatedQueue: {
                 id: parseInt(queueInfo.id),
-                delete_every_run: Boolean(deleteEveryRun),
-                runs: runs,
+                delete_every_run: Boolean(queueInfo.deleteEveryRun),
+                runs: UpdatedRuns,
             }
         }
-        if (queueInfo.data_files !== "undefined") {
-            updatedQueue.queue.data_files = queueInfo.data_files
-        }
         saveOptimizerQueue(updatedQueue);
+        queueInfo.deletedRows = [];
+        queueInfo.deleteEveryRun = false
     }
-    function _afterTableUpdate(event) {
-        const table = window.w2ui[event.target];
-        const tableDiv = document.getElementById(table.box.id)
-        const queueInfo = tableDiv.dataset
-        _updateOptimizerQueue(queueInfo, table.records)
-    }
-}
 
-function _addOptimizerQueueTableButtons(table, _updateOptimizerQueue) {
-    function randomizeRecords() {
-        randomizeArray(table.records);
-        table.refresh();
-        const tableDiv = document.getElementById(table.box.id)
-        const queueInfo = tableDiv.dataset
-        _updateOptimizerQueue(queueInfo, table.records)
+    function _addOptimizerQueueTableButtons() {
+        table.toolbar.add({ type: 'button', id: 'show-run-info', text: 'Randomize', img: 'fas fa-random', onClick: randomizeRecords });
     }
-    table.toolbar.add({ type: 'button', id: 'show-run-info', text: 'Randomize', img: 'fas fa-random', onClick: randomizeRecords });
 }
 
 

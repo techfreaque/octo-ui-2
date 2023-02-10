@@ -91,15 +91,20 @@ export async function startOptimizer(botDomain, optimizerRunSettings, optimizerS
   )
 }
 
-export async function addToOptimizerQueue(botDomain, optimizerRunSettings, optimizerSettingsForm, exchageId, setBotIsOptimizing) {
+export async function addToOptimizerQueue(botDomain, optimizerRunSettings, optimizerSettingsForm, exchageId, setBotIsOptimizing, fetchOptimizerQueue) {
   const success = (updated_data, update_url, result, msg, status) => {
-    createNotification(msg, "success")
+    fetchOptimizerQueue()
+    createNotification(msg.message, "success")
   }
   const failure = (updated_data, update_url, result, status, error) => {
-    createNotification(result.responseText, "danger")
+    createNotification(result.message, "danger")
   }
   sendAndInterpretBotUpdate(
-    { ...optimizerRunSettings, exchange_id: exchageId, config: optimizerSettingsForm },
+    {
+      ...optimizerRunSettings,
+      // exchange_id: exchageId,
+      optimizer_config: optimizerSettingsForm
+    },
     botDomain + backendRoutes.optimizerAddToQueue,
     success, failure
   )

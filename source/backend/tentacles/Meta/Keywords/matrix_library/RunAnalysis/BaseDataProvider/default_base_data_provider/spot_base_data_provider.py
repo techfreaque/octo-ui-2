@@ -46,7 +46,7 @@ class SpotRunAnalysisBaseDataGenerator(base_data_provider.RunAnalysisBaseDataGen
                 if not trade_volume:
                     # TODO investigate why some trades with 0 volume are
                     # in storage, but not on exchange
-                    base_data_provider.get_logger().warning(
+                    base_data_provider.get_base_data_logger().warning(
                         "Trade found without a volume"
                     )
                     continue
@@ -84,7 +84,7 @@ class SpotRunAnalysisBaseDataGenerator(base_data_provider.RunAnalysisBaseDataGen
                         self.price_data,
                     )
                 else:
-                    base_data_provider.get_logger().error(
+                    base_data_provider.get_base_data_logger().error(
                         f"Unknown trade side: {trade}"
                     )
 
@@ -166,7 +166,7 @@ def close_position(
     )
     if remaining_sell_volume > 0:
         if remaining_sell_volume < 0.000001:
-            base_data_provider.get_logger().error(
+            base_data_provider.get_base_data_logger().error(
                 f"Rounding issue detectected {trade['symbol']}, "
                 f"remaining sell volume {remaining_sell_volume} "
                 f"Run analysis will not be accurate - trade: {trade}"
@@ -183,7 +183,7 @@ def close_position(
                 if conversion_symbol not in price_data:
                     conversion_symbol = f"{ref_market}/{parsed_symbol.quote}"
                     if conversion_symbol not in price_data:
-                        base_data_provider.get_logger().error(
+                        base_data_provider.get_base_data_logger().error(
                             f"Unable to handle sell trade {trade['symbol']}, no pair "
                             "aivailable to convert value plots "
                             f"will not be accurate: {trade}"
@@ -207,7 +207,7 @@ def close_position(
                 )
 
     if not volume_by_bought_prices:
-        base_data_provider.get_logger().error(
+        base_data_provider.get_base_data_logger().error(
             f"Unable to handle sell trade, plots will not be accurate: {trade}"
         )
 

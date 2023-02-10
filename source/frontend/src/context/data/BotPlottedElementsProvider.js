@@ -80,6 +80,7 @@ function convertAnalysisSettings(analysis_settings, isLive = true) {
     plot_unrealized_portfolio_value: analysis_settings?.[key + "_plot_settings"]?.plot_unrealized_portfolio || false,
     plot_unrealized_portfolio_value_for_each_asset: analysis_settings?.[key + "_plot_settings"]?.plot_unrealized_portfolio_value_for_each_asset || false,
     plot_unrealized_portfolio_amount_for_each_asset: analysis_settings?.[key + "_plot_settings"]?.plot_unrealized_portfolio_amount_for_each_asset || false,
+    plot_unrealized_portfolio_amount_in_btc: analysis_settings?.[key + "_plot_settings"]?.plot_unrealized_portfolio_amount_in_btc || false,
     plot_realized_portfolio_value: analysis_settings?.[key + "_plot_settings"]?.plot_realized_portfolio || false,
     plot_realized_trade_gains: analysis_settings?.[key + "_plot_settings"]?.plot_trade_gains || false,
     plot_best_case_growth: analysis_settings?.[key + "_plot_settings"]?.plot_best_case_growth || false,

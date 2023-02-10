@@ -13,7 +13,6 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
 )
 import octobot_services.interfaces.util as interfaces_util
-import octobot_trading.api as trading_api
 
 TIME_TO_START = 20
 
@@ -49,16 +48,17 @@ def register_bot_info_routes(plugin):
 
         config_candles_count = 0
         trading_mode = trading_mode_name = None
-        (activated_strategy) = None
         exchange_name = None
         exchange_names = []
+        evaluator_names = []
         exchange_ids: dict = {}
         exchange_id = None
         available_api_actions = None
-        symbols = traded_time_frames = enabled_time_frames = activated_evaluators = []
+        symbols = traded_time_frames = activated_evaluators = []
         timeframes_dict = {}
-        strategy_name = None
+        strategy_names = []
         trigger_time_frames = None
+
         try:
             (
                 exchange_manager,
@@ -76,8 +76,16 @@ def register_bot_info_routes(plugin):
                 available_api_actions = trading_mode.AVAILABLE_API_ACTIONS
             symbols = models.get_enabled_trading_pairs()
             activated_evaluators = models.get_config_activated_evaluators()
+            evaluator_names = [
+                activated_evaluator.get_name()
+                for activated_evaluator in activated_evaluators
+            ]
             strategies = models.get_config_activated_strategies()
-            activated_strategy = strategies[0] if strategies else None
+            if strategies:
+                strategy_names = [strategy.get_name() for strategy in strategies]
+                # enabled_time_frames = models.get_strategy_required_time_frames(
+                #     strategies[0]
+                # )
 
             # enabled_time_frames = (
             #     models.get_strategy_required_time_frames(activated_strategy)
@@ -107,12 +115,7 @@ def register_bot_info_routes(plugin):
             config_candles_count = models.get_config_required_candles_count(
                 exchange_manager
             )
-            strategies = models.get_config_activated_strategies()
-            if strategies:
-                strategy_name = strategies[0].get_name()
-                enabled_time_frames = models.get_strategy_required_time_frames(
-                    strategies[0]
-                )
+
 
         except KeyError:
             is_starting = True
@@ -122,7 +125,6 @@ def register_bot_info_routes(plugin):
             "data": {
                 "is_starting": is_starting,
                 "trading_mode_name": trading_mode_name,
-                "tentacle_class": None,  # util.get_rest_reply(trading_mode),
                 "exchange_id": exchange_id,
                 "live_id": 1,  # todo
                 "exchange_name": exchange_name,
@@ -136,11 +138,12 @@ def register_bot_info_routes(plugin):
                         for s in symbols
                     ]
                 ),
+                "evaluator_names": evaluator_names,
                 "time_frames": timeframes_dict,
                 # "enabled_time_frames": enabled_time_frames,
                 "traded_time_frames": traded_time_frames,
                 "trigger_time_frames": trigger_time_frames,
-                "strategy_name": strategy_name,
+                "strategy_names": strategy_names,
                 "optimization_campaign": optimization_campaign.OptimizationCampaign.get_campaign_name(),
                 # "activated_evaluators": activated_evaluators,
                 # "activated_strategy": activated_strategy,

@@ -2,12 +2,12 @@ import { useEffect, useMemo } from "react";
 import RunDataTableW2UI from "../../../components/Tables/w2ui/RunDataTable";
 import { Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCog, faRedo } from "@fortawesome/free-solid-svg-icons";
+import { faRedo } from "@fortawesome/free-solid-svg-icons";
 import { useBacktestingRunDataContext, useDeleteBacktestingRunData, useFetchBacktestingRunData } from "../../../context/data/BacktestingRunDataProvider";
 import { useUiConfigContext } from "../../../context/config/UiConfigProvider";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import { useFetchPlotData, useHiddenBacktestingMetadataColumnsContext, useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
-import { useSaveTentaclesConfig } from "../../../api/configs";
+import { useHiddenBacktestingMetadataColumnsContext, useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
+import { useSaveTentaclesConfig } from "../../../context/config/TentaclesConfigProvider";
 
 export function BacktestingRunDataTable() {
     const runData = useBacktestingRunDataContext()
@@ -18,12 +18,10 @@ export function BacktestingRunDataTable() {
     const botDomain = useBotDomainContext()
     const hiddenBacktestingMetadataColumns = useHiddenBacktestingMetadataColumnsContext()
     const setHiddenBacktestingMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
-    const fetchPlotData = useFetchPlotData()
     const saveTentaclesConfig = useSaveTentaclesConfig()
 
     function restoreSettings(settings) {
-        saveTentaclesConfig(settings, botDomain)
-        fetchPlotData()
+        saveTentaclesConfig(settings, true)
     }
 
     useEffect(() => {

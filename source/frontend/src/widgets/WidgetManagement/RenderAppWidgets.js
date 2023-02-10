@@ -13,10 +13,12 @@ export default function AppWidgets(props) {
             return createElement(
               registeredComponents[element.component],
               { key: index, id: index, ...element }
-              );
-            } catch (error) {
-              console.error(error);
-            }
+            );
+          } catch (error) {
+            console.error("error loading widget: ", element.component, element, props, error);
+            return <></>;
+
+          }
         } else {
           console.log("error loading widget: ", element.component, element, props);
           return <></>;

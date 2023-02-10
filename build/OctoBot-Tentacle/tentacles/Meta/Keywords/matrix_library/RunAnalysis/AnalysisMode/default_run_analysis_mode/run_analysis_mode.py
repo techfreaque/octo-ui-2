@@ -62,6 +62,9 @@ class DefaultRunAnalysisMode:
                             all_coins_amounts=run_data.analysis_settings.get(
                                 "plot_unrealized_portfolio_amount_for_each_asset"
                             ),
+                            total_amount_in_btc=run_data.analysis_settings.get(
+                                "plot_unrealized_portfolio_amount_in_btc"
+                            ),
                         )
                     if (
                         run_data.analysis_settings["plot_realized_portfolio_value"]

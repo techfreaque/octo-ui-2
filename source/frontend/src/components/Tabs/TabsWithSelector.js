@@ -2,7 +2,6 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
     Menu,
-    Tab,
     Tabs,
     ToggleButton,
     ToggleButtonGroup,
@@ -26,6 +25,10 @@ export default function TabsWithSelector({ children, handleChange, items, curren
         maxWidth = "24vw"
 
     }
+    let itemsList = items
+    if (typeof items === 'string') {
+        itemsList = [items]
+    }
     return (
         <div style={{
             display: "flex",
@@ -41,13 +44,13 @@ export default function TabsWithSelector({ children, handleChange, items, curren
                     size="small"
                     value={currentItem}
                     exclusive={true}
-                    aria-label={items}
+                    aria-label={itemsList}
                     style={{
                         marginRight: "10px",
 
                     }}
                 >
-                    {items.map((item) => (
+                    {itemsList.map((item) => (
                         <ToggleButton
                             value={item}
                             key={item}

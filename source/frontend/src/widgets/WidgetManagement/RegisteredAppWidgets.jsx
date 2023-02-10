@@ -7,7 +7,6 @@ import SplitMainContent from "../LayoutWidgets/SplitMainContent";
 import CurrentPanelFullscreen from "../AppWidgets/Buttons/CurrentPanelFullscreen";
 import CurrentPanelMinimize from "../AppWidgets/Buttons/CurrentPanelMinimize";
 import Configuration from "../AppWidgets/Configuration/Form";
-import Legend from "../AppWidgets/PlotSources/Legend";
 import TimeFrameSelector from "../AppWidgets/TimeFrameSelector/TimeFrameSelector";
 import Header from "../LayoutWidgets/Header";
 import ColorModeSwitch from "../AppWidgets/Buttons/ColorModeSwitcher";
@@ -39,6 +38,7 @@ import SendActionCommandToTradingMode from "../AppWidgets/Buttons/SendActionComm
 import PlotlyChart from "../AppWidgets/Charts/MainCharts/Plotly";
 import RefreshBotData from "../AppWidgets/Buttons/RefreshData";
 import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
+import OptimizerQueueSize from "../AppWidgets/Stats/OptimizerQueueSize";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -62,10 +62,10 @@ export const registeredComponents = {
   CurrentPanelMinimize: CurrentPanelMinimize,
   Configuration: Configuration,
   RefreshBotData: RefreshBotData,
-  // Legend: Legend,
   TimeFrameSelector: TimeFrameSelector,
   ColorModeSwitch: ColorModeSwitch,
   CurrentPortfolioTable: CurrentPortfolioTable,
+  OptimizerQueueSize: OptimizerQueueSize,
   AppStore: AppStore,
   TradingConfig: TradingConfig,
   PairsSelector: PairsSelector,

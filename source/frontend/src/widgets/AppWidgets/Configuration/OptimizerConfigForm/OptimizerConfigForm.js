@@ -15,7 +15,7 @@ export default function OptimizerConfigForm() {
     const uiConfig = useUiConfigContext()
     const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
     const plotData = useBotPlottedElementsContext()
-    const userInputs = plotData.user_inputs
+    const userInputs = plotData.inputs
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
     useEffect(() => {
@@ -30,7 +30,7 @@ export default function OptimizerConfigForm() {
                 <div id="strategy-optimizer-inputs">
                     <OptimizerSettingTemplate />
                 </div>
-                <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
+                {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
                     <h4>
                         Run filters
                     </h4>
@@ -38,7 +38,7 @@ export default function OptimizerConfigForm() {
                         If a run validates any of these statements, it will be discarded.
                     </p>
                     <OptimizerRunFilterTemplate />
-                </div>
+                </div> */}
             </div>
         )
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -51,9 +51,9 @@ async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, upda
     // reset user inputs custom paths
     window.CUSTOM_PATH_USER_INPUTS = {};
 
-    _buildCustomPathSchema(schemaElements, optimizerConfig)
+    // _buildCustomPathSchema(schemaElements, optimizerConfig)
 
-    schemaElements.data.elements.forEach(function (element) {
+    schemaElements.forEach(function (element) {
         if (element.is_hidden) {
             return;
         }
@@ -73,16 +73,16 @@ async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, upda
             inputGroupElement.remove();
         }
     })
-    $("#optimizer-filters-root").empty();
-    _buildOptimizerFilters(optimizerConfig.filters_settings, false);
+    // $("#optimizer-filters-root").empty();
+    // _buildOptimizerFilters(optimizerConfig.filters_settings, false);
     _updateCounter(updateOptimizerEditorCounter);
     updateInputSettingsDisplay(settingsRoot);
-    settingsRoot.find("input, select").each((i, jsInputSetting) => {
-        $(jsInputSetting).on("change", () => _updateCounter(updateOptimizerEditorCounter));
-    })
-    $("#add-optimizer-filter").click(() => {
-        _buildOptimizerFilters(null, true);
-    })
+    // settingsRoot.find("input, select").each((i, jsInputSetting) => {
+    //     $(jsInputSetting).on("change", () => _updateCounter(updateOptimizerEditorCounter));
+    // })
+    // $("#add-optimizer-filter").click(() => {
+    //     _buildOptimizerFilters(null, true);
+    // })
 }
 
 export function getOptimizerSettingsValues() {

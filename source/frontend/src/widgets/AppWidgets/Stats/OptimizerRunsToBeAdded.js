@@ -13,7 +13,7 @@ export default function OptimizerRunsToBeAdded() {
                     <h6 style={{ margin: "auto" }}>
                         <Badge
                             bg="info" style={{ margin: "auto" }}
-                        >{optimizerCounter}</Badge> Runs to be added
+                        >{optimizerCounter}</Badge> possible combinations
                     </h6>
                 }>
             </Chip>

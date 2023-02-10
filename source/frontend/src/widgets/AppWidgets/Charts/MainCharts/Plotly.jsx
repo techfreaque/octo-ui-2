@@ -166,18 +166,16 @@ function formatSubData(
                             const xaxis_list = [];
                             const yaxis_list = [];
                             let yAxis
-                            if (backtestingId !== undefined && sub_element.name !== "backtesting-run-overview") {
-                                yAxis = 1;
-                            } else {
-                                yAxis = 0;
-                            }
+                            // if (backtestingId !== undefined && sub_element.name !== "backtesting-run-overview") {
+                            //     yAxis = 1;
+                            // } else {
+                            //     yAxis = 0;
+                            // }
 
                             let xAxis = 0;
                             sub_element.data.elements.forEach((chartDetails) => {
                                 if (chartDetails.own_yaxis && yAxis < 4) {
                                     yAxis += 1;
-                                } else if (yAxis === 0) {
-                                    yAxis = 1;
                                 }
                                 if (chartDetails.own_xaxis) {
                                     xAxis += 1;
@@ -190,6 +188,12 @@ function formatSubData(
                                     layout.xaxis.visible = false;
                                 }
                             })
+                            if (uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_use_log_scale === true) {
+                                layout.yaxis.type = "log"
+                                layout.yaxis2.type = "log"
+                                layout.yaxis3.type = "log"
+                                layout.yaxis4.type = "log"
+                            }
                         }
                     })
                 }
@@ -218,10 +222,6 @@ function createChart(chartDetails, chartData, yAxis, xAxis, xaxis_list, yaxis_li
     if (xAxis > 1) {
         xaxis.overlaying = "x"
     }
-    if (chartDetails.y_type !== null && uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_use_log_scale === true) {
-        yaxis.type = chartDetails.y_type;
-    }
-
     _createOrAdaptChartedElements(
         chartDetails, yAxis, xAxis, backtesting_id,
         optimizer_id, campaign_name, chartIdentifier, uiConfig).forEach(element => {
@@ -246,6 +246,7 @@ function createChart(chartDetails, chartData, yAxis, xAxis, xaxis_list, yaxis_li
             layout.xaxis = axis
         }
     });
+
 }
 
 function _createOrAdaptChartedElements(chartDetails, yAxis, xAxis, backtesting_id, optimizer_id, campaign_name, chartIdentifier, uiConfig) {

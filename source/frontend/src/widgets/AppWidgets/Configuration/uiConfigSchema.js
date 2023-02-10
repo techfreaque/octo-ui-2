@@ -60,6 +60,12 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                                 format: "checkbox",
                                 fieldType: "boolean"
                             },
+                            "plot_unrealized_portfolio_amount_in_btc": {
+                                type: "boolean",
+                                title: "Plot unrealized portfolio value in BTC",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
                             "plot_unrealized_portfolio_amount_for_each_asset": {
                                 type: "boolean",
                                 title: "Plot unrealized portfolio amount for each asset",
@@ -195,6 +201,12 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                             "plot_unrealized_portfolio_value_for_each_asset": {
                                 type: "boolean",
                                 title: "Plot unrealized portfolio value for each asset",
+                                format: "checkbox",
+                                fieldType: "boolean"
+                            },
+                            "plot_unrealized_portfolio_amount_in_btc": {
+                                type: "boolean",
+                                title: "Plot unrealized portfolio value in BTC",
                                 format: "checkbox",
                                 fieldType: "boolean"
                             },
