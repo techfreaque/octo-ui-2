@@ -88,20 +88,20 @@ export const useSaveTentaclesConfig = () => {
 };
 
 export const useSaveTentaclesConfigAndSendAction = () => {
-  const _fetchPlotData = useFetchPlotData();
+  const fetchPlotData = useFetchPlotData();
   const botDomain = useBotDomainContext()
-  const logic = useCallback((newConfigs, actionType, setIsLoading, reloadPlots = false) => {
+  const logic = useCallback((newConfigs, actionType, setIsLoading, reloadPlots = false, successCallback=undefined, failureCallback=undefined) => {
     const fail = (updated_data, update_url, result, msg, status) => {
       setIsLoading(false)
       createNotification("Failed to executed trading mode", "danger")
     }
     const success = (updated_data, update_url, result, msg, status) => {
-      reloadPlots && _fetchPlotData()
+      reloadPlots && fetchPlotData()
       setIsLoading(false)
       createNotification("Successfully executed trading mode")
     }
-    sendAndInterpretBotUpdate(newConfigs, botDomain + backendRoutes.updateTentaclesConfigAndSendCommand + "/" + actionType, success, fail)
-  }, [_fetchPlotData, botDomain]);
+    sendAndInterpretBotUpdate(newConfigs, botDomain + backendRoutes.updateTentaclesConfigAndSendCommand + "/" + actionType, successCallback || success, fail || failureCallback)
+  }, [fetchPlotData, botDomain]);
   return logic;
 };
 

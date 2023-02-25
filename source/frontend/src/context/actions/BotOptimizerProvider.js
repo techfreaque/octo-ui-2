@@ -46,13 +46,13 @@ export const useStartOptimizer = () => {
   const optimizerSettings = uiSettigs[OPTIMIZER_RUN_SETTINGS_KEY]
   const botDomain = useBotDomainContext();
   const botInfo = useBotInfoContext()
-  const exchageId = botInfo && botInfo.exchange_id
+  const idsByExchangeName = botInfo && botInfo.ids_by_exchange_name
   const getAndSaveOptimizerForm = useGetAndSaveOptimizerForm()
   const logic = useCallback(() => {
-    if (optimizerSettings && exchageId) {
-      startOptimizer(botDomain, optimizerSettings, getAndSaveOptimizerForm, exchageId, setBotIsOptimizing)
+    if (optimizerSettings && idsByExchangeName) {
+      startOptimizer(botDomain, optimizerSettings, getAndSaveOptimizerForm, idsByExchangeName, setBotIsOptimizing)
     }
-  }, [setBotIsOptimizing, botDomain, optimizerSettings, exchageId, getAndSaveOptimizerForm]);
+  }, [setBotIsOptimizing, botDomain, optimizerSettings, idsByExchangeName, getAndSaveOptimizerForm]);
   return logic;
 };
 

@@ -10,19 +10,20 @@ import select2 from "select2/dist/js/select2.js" // required
 import { useUpdateOptimizerEditorCounterContext } from "../../../../context/config/OptimizerEditorProvider";
 import { Button } from "@mui/material";
 import { useGetAndSaveOptimizerForm } from "../../../../context/actions/BotOptimizerProvider";
+import { useTentaclesConfigContext } from "../../../../context/config/TentaclesConfigProvider";
 
 export default function OptimizerConfigForm() {
     const uiConfig = useUiConfigContext()
     const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
-    const plotData = useBotPlottedElementsContext()
-    const userInputs = plotData.inputs
+    const currentTentaclesConfig = useTentaclesConfigContext()
+
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
     useEffect(() => {
-        plotData && userInputs && uiConfig &&
-            _buildOptimizerSettingsForm(userInputs, optimizerConfig, updateOptimizerEditorCounter);
+        currentTentaclesConfig && uiConfig &&
+            _buildOptimizerSettingsForm(currentTentaclesConfig, optimizerConfig, updateOptimizerEditorCounter);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [userInputs, optimizerConfig, uiConfig]);
+    }, [currentTentaclesConfig, optimizerConfig, uiConfig]);
     return useMemo(() => {
         return (
             <div>
@@ -41,19 +42,19 @@ export default function OptimizerConfigForm() {
                 </div> */}
             </div>
         )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [saveOptimizerForm, userInputs, optimizerConfig, uiConfig])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentTentaclesConfig, optimizerConfig, uiConfig])
 }
 
 async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, updateOptimizerEditorCounter) {
     const settingsRoot = $("#optimizer-settings-root");
     settingsRoot.empty();
     // reset user inputs custom paths
-    window.CUSTOM_PATH_USER_INPUTS = {};
+    // window.CUSTOM_PATH_USER_INPUTS = {};
 
     // _buildCustomPathSchema(schemaElements, optimizerConfig)
 
-    schemaElements.forEach(function (element) {
+    Object.values(schemaElements).forEach(function (element) {
         if (element.is_hidden) {
             return;
         }
@@ -95,7 +96,8 @@ export function getOptimizerSettingsValues() {
         const rawSettingName = inputSetting.data("input-setting-base-name")
         let tentacleValue = inputSetting.data("tentacle-name")
         let settingValue = inputSetting.val();
-        if (inputSetting.data("type") === "number") {
+        const valueType = inputSetting.data("type")
+        if (valueType === "number") {
             const minInputSetting = inputSetting
             const maxInputSetting = $(document.getElementById(`${tentacleValue}-${rawSettingName}-Input-setting-number-max`));
             const stepInputSetting = $(document.getElementById(`${tentacleValue}-${rawSettingName}-Input-setting-number-step`));
@@ -104,7 +106,7 @@ export function getOptimizerSettingsValues() {
                 max: Number(maxInputSetting.val()),
                 step: Number(stepInputSetting.val()),
             }
-        } else if (inputSetting.data("type") === "boolean") {
+        } else if (valueType === "boolean") {
             settingValue = inputSetting.val().map((x) => (x.toLowerCase() === "true"));
         }
         const enabled = $(document.getElementById(`${tentacleValue}-${rawSettingName}-Input-enabled-value`)).prop("checked");
@@ -117,15 +119,16 @@ export function getOptimizerSettingsValues() {
         //    restore the original path for this input (split by "_INPUT_SEPARATOR" if necessary) and store it into
         //    "rawSettingName" to be used in the following line
 
-        const originalTentacleValue = window.CUSTOM_PATH_USER_INPUTS[rawSettingName]
-        if (originalTentacleValue) {
-            tentacleValue = originalTentacleValue
-        }
+        // const originalTentacleValue = window.CUSTOM_PATH_USER_INPUTS[rawSettingName]
+        // if (originalTentacleValue) {
+        //     tentacleValue = originalTentacleValue
+        // }
 
         settings.user_inputs[_optimizeUserInputIdentifier(tentacleValue, rawSettingName)] = {
             value: settingValue,
             user_input: rawSettingName.replaceAll(" ", "_"),
             tentacle: tentacleValue,
+            type: valueType,
             enabled: enabled
         };
     })
@@ -189,7 +192,7 @@ function _buildUserInputConfigEntry(inputGroupContent, valueType, inputDetail, c
 function _buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetails, configValues,
     parentInputIdentifier, inputIdentifier) {
     if (inputDetails.options.in_optimizer) {
-        const valueType = _getValueType(inputDetails);
+        const valueType = _getValueType(inputDetails.type);
         if (valueType === "nested_config") {
             _buildOptimizerNestedConfigSettingsForm(inputGroupContent, inputDetails, configValues,
                 `${parentInputIdentifier}${_INPUT_SEPARATOR}${inputIdentifier}`);
@@ -283,8 +286,7 @@ function _getInputSettingTemplate(valueType) {
     return $(`#optimizer-settings-${valueType}-template`);
 }
 
-function _getValueType(inputDetail) {
-    const schemaValueType = inputDetail.type;
+function _getValueType(schemaValueType) {
     if (schemaValueType === "string") {
         return "options";
     } else if (schemaValueType === "array") {
@@ -303,11 +305,16 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
         configValue = rawValue.value;
         isEnabled = rawValue.enabled;
     }
-    if (valueType === "options" || valueType === "boolean") {
+    if (valueType === "options" || valueType === "multiple-options" || valueType === "boolean") {
         let values = typeof configValue === "undefined" ? [] : configValue
         const valuesSelect = $(document.getElementById(`${tentacleIdentifier}-${inputDetail.options.name}-Input-setting-${valueType}`));
         if (valueType === "options") {
             inputDetail.enum.forEach(function (value) {
+                const isSelected = values.indexOf(value) !== -1;
+                valuesSelect.append(new Option(value, value, false, isSelected));
+            })
+        } else if (valueType === "multiple-options") {
+            inputDetail.items.enum.forEach(function (value) {
                 const isSelected = values.indexOf(value) !== -1;
                 valuesSelect.append(new Option(value, value, false, isSelected));
             })
@@ -366,56 +373,56 @@ function _updateCounter(updateOptimizerEditorCounter) {
 function _optimizeUserInputIdentifier(tentacleValue, inputName) {
     return `${tentacleValue}-${inputName.replaceAll(" ", "_")}`
 }
-function _modifyStoredSettings(configValues, input_key, stored_settings_path, tentacle_name) {
-    const old_name = `${tentacle_name}-${input_key}`
-    if (configValues.user_inputs) {
-        const saved_input = configValues.user_inputs[old_name]
-        if (saved_input) {
-            const new_name = `${stored_settings_path}-${input_key}`
-            saved_input.tentacle = stored_settings_path
-            configValues.user_inputs[new_name] = saved_input
-            delete configValues.user_inputs[old_name]
-        }
-    }
-}
+// function _modifyStoredSettings(configValues, input_key, stored_settings_path, tentacle_name) {
+//     const old_name = `${tentacle_name}-${input_key}`
+//     if (configValues.user_inputs) {
+//         const saved_input = configValues.user_inputs[old_name]
+//         if (saved_input) {
+//             const new_name = `${stored_settings_path}-${input_key}`
+//             saved_input.tentacle = stored_settings_path
+//             configValues.user_inputs[new_name] = saved_input
+//             delete configValues.user_inputs[old_name]
+//         }
+//     }
+// }
 
-function _moveInputToPath(input_key, tentacle_schema, configValues) {
-    const path_list = tentacle_schema.schema.properties[input_key].options.custom_path.split(CUSTOM_USER_INPUT_PATH_SEPARATOR)
-    let target_obj = tentacle_schema.schema.properties
-    path_list.shift()
-    let stored_settings_path = tentacle_schema.tentacle;
-    for (let path in path_list) {
-        try {
-            target_obj = target_obj[path_list[path]].properties
-        } catch (e) {
-            target_obj[path_list[path]] = {
-                title: path_list[path],
-                type: "object",
-                options: {
-                    in_optimizer: true,
-                    name: path_list[path],
-                },
-                properties: {},
-            }
-            target_obj = target_obj[path_list[path]]["properties"]
-        }
-        stored_settings_path = `${stored_settings_path}${_INPUT_SEPARATOR}${path_list[path]}`
-    }
-    target_obj[input_key] = tentacle_schema.schema.properties[input_key]
-    window.CUSTOM_PATH_USER_INPUTS[target_obj[input_key].options.name] = tentacle_schema.tentacle
+// function _moveInputToPath(input_key, tentacle_schema, configValues) {
+//     const path_list = tentacle_schema.schema.properties[input_key].options.custom_path.split(CUSTOM_USER_INPUT_PATH_SEPARATOR)
+//     let target_obj = tentacle_schema.schema.properties
+//     path_list.shift()
+//     let stored_settings_path = tentacle_schema.tentacle;
+//     for (let path in path_list) {
+//         try {
+//             target_obj = target_obj[path_list[path]].properties
+//         } catch (e) {
+//             target_obj[path_list[path]] = {
+//                 title: path_list[path],
+//                 type: "object",
+//                 options: {
+//                     in_optimizer: true,
+//                     name: path_list[path],
+//                 },
+//                 properties: {},
+//             }
+//             target_obj = target_obj[path_list[path]]["properties"]
+//         }
+//         stored_settings_path = `${stored_settings_path}${_INPUT_SEPARATOR}${path_list[path]}`
+//     }
+//     target_obj[input_key] = tentacle_schema.schema.properties[input_key]
+//     window.CUSTOM_PATH_USER_INPUTS[target_obj[input_key].options.name] = tentacle_schema.tentacle
 
-    _modifyStoredSettings(configValues, input_key, stored_settings_path, tentacle_schema.tentacle)
+//     _modifyStoredSettings(configValues, input_key, stored_settings_path, tentacle_schema.tentacle)
 
-    delete tentacle_schema.schema.properties[input_key]
-}
+//     delete tentacle_schema.schema.properties[input_key]
+// }
 
-function _buildCustomPathSchema(schemaElements, configValues) {
-    schemaElements.data.elements.forEach(function (_tentacle) {
-        if (_tentacle.is_hidden) { return }
-        for (let input_key in _tentacle.schema.properties) {
-            if (_tentacle.schema.properties[input_key].options.custom_path) {
-                _moveInputToPath(input_key, _tentacle, configValues)
-            }
-        }
-    })
-}
+// function _buildCustomPathSchema(schemaElements, configValues) {
+//     schemaElements.data.elements.forEach(function (_tentacle) {
+//         if (_tentacle.is_hidden) { return }
+//         for (let input_key in _tentacle.schema.properties) {
+//             if (_tentacle.schema.properties[input_key].options.custom_path) {
+//                 _moveInputToPath(input_key, _tentacle, configValues)
+//             }
+//         }
+//     })
+// }

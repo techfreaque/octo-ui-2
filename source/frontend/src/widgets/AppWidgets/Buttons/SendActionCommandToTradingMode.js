@@ -24,3 +24,5 @@ export default function SendActionCommandToTradingMode({ command, title, faIcon,
     );
   }, [isAvailableApiAction, isOnline, isExecuting, variant, color, faIcon, title, saveTentaclesConfigAndSendAction, command])
 }
+
+

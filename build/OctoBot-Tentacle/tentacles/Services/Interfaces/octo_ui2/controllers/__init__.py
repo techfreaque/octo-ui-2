@@ -7,3 +7,4 @@ from .portfolio import *
 from .run_data import *
 from .semi_auto_trade import *
 from .tentacles_config import *
+from .daemons import *

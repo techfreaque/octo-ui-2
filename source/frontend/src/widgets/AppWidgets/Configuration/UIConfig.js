@@ -17,6 +17,7 @@ export default function UIConfig({ configKeys }) {
     const saveUiConfig = useSaveUiConfig()
     const dataFiles = botInfo?.data_files
     const currentSymbols = botInfo?.symbols
+    const availableExchanges = botInfo?.exchange_names
 
     function handleEditorsAutosave() {
         if (uiConfig) {
@@ -31,10 +32,10 @@ export default function UIConfig({ configKeys }) {
     };
     return useMemo(() => (
         <div>
-            {configKeys.map(configKey => {
+            {botInfo && configKeys.map(configKey => {
                 return <JsonEditor
                     {...defaultJsonEditorSettings()}
-                    schema={getUiConfigSchema(configKey, dataFiles, currentSymbols)}
+                    schema={getUiConfigSchema(configKey, dataFiles, currentSymbols, availableExchanges)}
                     startval={convertTimestamps(uiConfig[configKey])}
                     editorName={"uiConf-" + configKey}
                     onChange={handleEditorsAutosave}
@@ -43,7 +44,10 @@ export default function UIConfig({ configKeys }) {
                 />
             })} </div>
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), [])
+    ), [dataFiles,
+        currentSymbols,
+        availableExchanges,
+    ])
 
 }
 

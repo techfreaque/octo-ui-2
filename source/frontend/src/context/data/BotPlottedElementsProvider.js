@@ -54,7 +54,7 @@ export const useFetchPlotData = () => {
 
   const logic = useCallback((isLive = true) => {
     fetchPlotlyPlotData(
-      visiblePairs, visibleTimeframes, botInfo.exchange_ids[visibleExchanges],
+      visiblePairs, visibleTimeframes, botInfo.ids_by_exchange_name[visibleExchanges],
       visibleExchanges,
       botDomain,
       convertAnalysisSettings(isLive ? uiConfig.live_analysis_settings : uiConfig.backtesting_analysis_settings),
@@ -211,7 +211,7 @@ export const BotPlottedElementsProvider = ({ children }) => {
     if (displayedRunIds && botInfo && visibleTimeframes && visiblePairs && visibleExchanges && uiConfig?.backtesting_analysis_settings) {
       clearUnselectedRuns(displayedRunIds, botPlottedElements, setBotPlottedElements, visiblePairs, visibleTimeframes)
       loadMissingRuns(
-        displayedRunIds, botPlottedElements, visiblePairs, visibleTimeframes, botInfo.exchange_ids[visibleExchanges],
+        displayedRunIds, botPlottedElements, visiblePairs, visibleTimeframes, botInfo.ids_by_exchange_name[visibleExchanges],
         visibleExchanges,
         botDomain, uiConfig, setBotPlottedElements, botInfo
       )
@@ -222,7 +222,7 @@ export const BotPlottedElementsProvider = ({ children }) => {
   useEffect(() => { // live
     if (uiConfig?.live_analysis_settings && botInfo && visibleTimeframes && visiblePairs && visibleExchanges) {
       fetchPlotlyPlotData(
-        visiblePairs, visibleTimeframes, botInfo.exchange_ids[visibleExchanges],
+        visiblePairs, visibleTimeframes, botInfo.ids_by_exchange_name[visibleExchanges],
         visibleExchanges, botDomain,
         convertAnalysisSettings(uiConfig.live_analysis_settings),
         setBotPlottedElements, botInfo,

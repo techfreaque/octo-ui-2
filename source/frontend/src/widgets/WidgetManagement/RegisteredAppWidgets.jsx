@@ -39,6 +39,8 @@ import PlotlyChart from "../AppWidgets/Charts/MainCharts/Plotly";
 import RefreshBotData from "../AppWidgets/Buttons/RefreshData";
 import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
 import OptimizerQueueSize from "../AppWidgets/Stats/OptimizerQueueSize";
+import OptimizerConfigForm2 from "../AppWidgets/Configuration/OptimizerConfigForm2/OptimizerConfigForm";
+import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -84,4 +86,6 @@ export const registeredComponents = {
   CancelAllOrdersButton: CancelAllOrdersButton,
   PowerMenu: PowerMenu,
   SendActionCommandToTradingMode: SendActionCommandToTradingMode,
+  // OptimizerConfigForm2: OptimizerConfigForm2,
+  ToggleActivateRealTimeStrategy: ToggleActivateRealTimeStrategy,
 };

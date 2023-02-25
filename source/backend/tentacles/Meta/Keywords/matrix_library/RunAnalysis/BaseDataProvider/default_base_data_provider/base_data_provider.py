@@ -195,15 +195,14 @@ class RunAnalysisBaseDataGenerator:
 
     async def _get_candles(self, candles_sources, pair, time_frame) -> list:
         try:
-            if (
+            if not candles_sources or (
                 candles_sources[0][commons_enums.DBRows.VALUE.value]
                 == octobot_commons.constants.LOCAL_BOT_DATA
             ):
-                return self._get_live_candles(pair, time_frame)
-            else:
-                return await self._get_backtesting_candles(
-                    candles_sources, pair, time_frame
-                )
+                return self._get_live_candles(pair, time_frame=self.ctx.time_frame)
+            return await self._get_backtesting_candles(
+                candles_sources, pair, time_frame
+            )
         except IndexError as error:
             raise CandlesLoadingError from error
         except Exception as error:
@@ -216,7 +215,7 @@ class RunAnalysisBaseDataGenerator:
             get_exchange_ids()[0]
         )
         _raw_candles = trading_api.get_symbol_historical_candles(
-            trading_api.get_symbol_data(exchange_manager, symbol, allow_creation=False),
+            trading_api.get_symbol_data(exchange_manager, symbol, allow_creation=True),
             time_frame,
         )
         raw_candles = []

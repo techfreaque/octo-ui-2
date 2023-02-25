@@ -183,11 +183,11 @@ def close_position(
                 if conversion_symbol not in price_data:
                     conversion_symbol = f"{ref_market}/{parsed_symbol.quote}"
                     if conversion_symbol not in price_data:
-                        base_data_provider.get_base_data_logger().error(
-                            f"Unable to handle sell trade {trade['symbol']}, no pair "
-                            "aivailable to convert value plots "
-                            f"will not be accurate: {trade}"
-                        )
+                        # base_data_provider.get_base_data_logger().error(
+                        #     f"Unable to handle sell trade {trade['symbol']}, no pair "
+                        #     "aivailable to convert value plots "
+                        #     f"will not be accurate: {trade}"
+                        # )
                         break
                 for candle in price_data[conversion_symbol]:
                     if candle[0] <= trade["x"]:
@@ -206,10 +206,10 @@ def close_position(
                     conversion_value=converion_price,
                 )
 
-    if not volume_by_bought_prices:
-        base_data_provider.get_base_data_logger().error(
-            f"Unable to handle sell trade, plots will not be accurate: {trade}"
-        )
+    # if not volume_by_bought_prices:
+    #     base_data_provider.get_base_data_logger().error(
+    #         f"Unable to handle sell trade, plots will not be accurate: {trade}"
+    #     )
 
     buy_cost = sum(price * volume for price, volume in volume_by_bought_prices.items())
     local_pnl = trade[PlotAttrs.Y.value] * trade_volume - paid_fees - buy_cost

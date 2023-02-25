@@ -52,7 +52,7 @@ function OptimizerSetting({ valueType }) {
     if (valueType === "number") {
         input = <OptimizerSettingNumber />
     } else if (valueType === "options" || valueType === "multiple-options") {
-        input = <OptimizerSettingOptions />
+        input = <OptimizerSettingOptions valueType={valueType} />
     } else if (valueType === "boolean") {
         input = <OptimizerSettingBoolean />
     }
@@ -116,16 +116,17 @@ function OptimizerSettingArrayTemplate() {
         </div>)
 }
 
-function OptimizerSettingOptions() {
+function OptimizerSettingOptions({ valueType }) {
     return (
         <div className="col">
-            <label className="text-capitalize" htmlFor="TENTACLEABC-XYZ-Input-setting-options"></label>
-            <select id="TENTACLEABC-XYZ-Input-setting-options"
+            <label className="text-capitalize" htmlFor={`TENTACLEABC-XYZ-Input-setting-${valueType}`}></label>
+            <select id={`TENTACLEABC-XYZ-Input-setting-${valueType}`}
                 className="optimizer-input-setting"
                 data-tentacle-name="TENTACLEABC"
                 data-input-setting-name="XYZ"
                 data-input-setting-base-name="XYZ"
-                data-type="string"
+                data-inptype="string"
+                data-type={valueType}
                 data-tags="false"
                 multiple="multiple"
                 style={{ width: "99%" }}

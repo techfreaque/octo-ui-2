@@ -1,15 +1,20 @@
 import JsonEditor from "@techfreaque/json-editor-react"
 import defaultJsonEditorSettings from "../../../../components/Forms/JsonEditor/JsonEditorDefaults"
+import { OPTIMIZER_INPUTS_KEY } from "../../../../constants/backendConstants"
+import { useTentaclesConfigContext } from "../../../../context/config/TentaclesConfigProvider"
+import { useUiConfigContext } from "../../../../context/config/UiConfigProvider"
 
-export default function OptimizerConfigForm() {
-
-    return (
+export default function OptimizerConfigForm2() {
+    const currentTentaclesConfig = useTentaclesConfigContext()
+    const uiConfig = useUiConfigContext()
+    const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
+    return currentTentaclesConfig && (
         <div>
             <JsonEditor
                 {...defaultJsonEditorSettings()}
-                schema={pageBuilderSchema()}
-                startval={botLayout}
-                editorName={editorName}
+                schema={generateOptimizerConfigFormSchema(currentTentaclesConfig)}
+                startval={optimizerConfig}
+                editorName="Optimizer configurator"
                 disable_properties={false}
                 disable_array_add={false}
                 no_additional_properties={false}
@@ -21,85 +26,152 @@ export default function OptimizerConfigForm() {
 }
 
 function generateOptimizerConfigFormSchema(userInputs) {
+    const configSchema = {}
+    Object.values(userInputs).forEach(inputElement => {
+        configSchema[inputElement.tentacle] = {
+            type: "object",
+            title: inputElement.schema.title,
+            properties: generateConfigElements(inputElement.schema.properties),
+            options: { collapsed: true },
+
+        }
+    })
     return {
         type: "object",
         title: "Optimizer run configurator",
-        properties: generateConfigElement(userInputs),
+        properties: configSchema,
         options: { collapsed: true },
 
     }
 }
 
-function generateConfigElement(inputElements) {
+function generateConfigElements(inputElements) {
     const configSchema = {}
-    inputElements?.forEach(inputElement => {
+    Object.entries(inputElements).forEach(([inputKey, inputElement]) => {
         if (inputElement.type === "object") {
-            configSchema[inputElement.name] = generateObjectConfigElement(inputElement)
+            configSchema[inputKey] = generateObjectConfigElement(inputElement)
         } else if (inputElement.type === "int") {
-            configSchema[inputElement.name] = generateIntConfigElement(inputElement)
+            configSchema[inputKey] = generateIntegerConfigElement(inputElement)
         } else if (inputElement.type === "boolean") {
-            configSchema[inputElement.name] = generateBoolConfigElement(inputElement)
-        } else if (inputElement.type === "float") {
-            configSchema[inputElement.name] = generateFloatConfigElement(inputElement)
+            configSchema[inputKey] = generateBoolConfigElement(inputElement)
+        } else if (inputElement.type === "number") {
+            configSchema[inputKey] = generateFloatConfigElement(inputElement)
         } else if (inputElement.type === "array") {
-            configSchema[inputElement.name] = generateArrayConfigElement(inputElement)
+            configSchema[inputKey] = generateArrayConfigElement(inputElement)
         }
 
     })
-    return {
-        title: inputElements.title,
-        type: "object",
-        properties: configSchema,
-        options: { collapsed: true }
-    }
+    return configSchema
 }
 function generateBoolConfigElement(inputElement) {
-    return {
-        [inputElement.name]: {
-            type: "array",
-            title: inputElement.title,
-            properties: generateConfigElement(inputElement.properties),
-            options: { collapsed: true }
+    return generateInputConfigElement(
+        inputElement,
+        {
+            value: {
+                "type": "array",
+                "uniqueItems": true,
+                "format": "selectize",
+                "options": {
+                    "grid_columns": 12,
+                    "selectize": {
+                        "create": true
+                    }
+                },
+                "enum_titles": [
+                    "True",
+                    "False",
+                ],
+                "items": {
+                    "type": "string",
+                    "enum": [
+                        true,
+                        false
+                    ]
+                }
+            }
         }
-    }
+    )
 }
 function generateFloatConfigElement(inputElement) {
-    return {
-        [inputElement.name]: {
-            type: "float",
-            title: inputElement.title,
-            properties: generateConfigElement(inputElement.properties),
-            options: { collapsed: true }
+    return generateNumberConfigElement(inputElement, "number")
+}
+function generateIntegerConfigElement(inputElement) {
+    return generateNumberConfigElement(inputElement, "integer")
+}
+function generateNumberConfigElement(inputElement, numType) {
+    // numType = "number" || "integer"
+    return generateInputConfigElement(
+        inputElement,
+        {
+            value: {
+                title: "",
+                type: "object",
+                properties: {
+                    min: {
+                        type: numType,
+                        title: "Min",
+                        options: { collapsed: true },
+                        default: 0
+                    },
+                    max: {
+                        type: numType,
+                        title: "Max",
+                        options: { collapsed: true },
+                        default: 0
+                    },
+                    step: {
+                        type: numType,
+                        title: "Step",
+                        options: { collapsed: true },
+                        default: 1
+                    },
+                },
+                options: { collapsed: true }
+            }
         }
-    }
+    )
 }
 function generateArrayConfigElement(inputElement) {
-    return {
-        [inputElement.name]: {
-            type: "array",
-            title: inputElement.title,
-            properties: generateConfigElement(inputElement.properties),
-            options: { collapsed: true }
-        }
-    }
+    // return generateInputConfigElement(
+    //     inputElement,
+    //     {
+    //         [inputElement.name]: {
+    //             type: "array",
+    //             title: inputElement.title,
+    //             properties: generateConfigElement(inputElement.properties),
+    //             options: { collapsed: true }
+    //         }
+    //     }
+    // )
 }
 function generateObjectConfigElement(inputElement) {
     return {
-        [inputElement.name]: {
-            type: "object",
-            title: inputElement.title,
-            properties: generateConfigElement(inputElement.properties),
-            options: { collapsed: true }
-        }
+        type: "object",
+        title: inputElement.title,
+        properties: generateConfigElements(inputElement.properties),
+        options: { collapsed: true }
+
     }
 }
-function generateIntConfigElement(inputElement) {
+
+export function generateInputConfigElement(inputElement, configuratorElements) {
     return {
-        [inputElement.name]: {
-            type: "number",
-            title: inputElement.title,
-            properties: generateConfigElement(inputElement.properties),
-            options: { collapsed: true }
-        }
+        type: "object",
+        title: inputElement.title,
+        properties: {
+            ...configuratorElements,
+            enabled: {
+                type: "boolean",
+                title: "",
+                format: "checkbox",
+                fieldType: "boolean"
+            },
+        },
+        options: {
+            grid_columns: 12,
+            compact: true
+        },
     }
+    
 }
+

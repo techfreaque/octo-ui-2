@@ -45,12 +45,12 @@ export const useStartBacktesting = () => {
   const backtestingSettings = uiSettigs[BACKTESTING_RUN_SETTINGS_KEY]
   const botDomain = useBotDomainContext();
   const botInfo = useBotInfoContext()
-  const exchageId = botInfo && botInfo.exchange_id
+  const ids_by_exchange_name = botInfo?.ids_by_exchange_name
   const logic = useCallback(() => {
-    if (backtestingSettings && exchageId) {
-      startBacktesting(botDomain, backtestingSettings, exchageId, setBotIsBacktesting)
+    if (backtestingSettings && ids_by_exchange_name) {
+      startBacktesting(botDomain, backtestingSettings, ids_by_exchange_name, setBotIsBacktesting)
     }
-  }, [setBotIsBacktesting, botDomain, backtestingSettings, exchageId]);
+  }, [setBotIsBacktesting, botDomain, backtestingSettings, ids_by_exchange_name]);
   return logic;
 };
 

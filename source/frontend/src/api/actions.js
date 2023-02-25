@@ -2,7 +2,7 @@ import createNotification from "../components/Notifications/Notification"
 import { backendRoutes } from "../constants/backendConstants"
 import { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot"
 
-export async function startBacktesting(botDomain, backtestingSettings, exchageId, setBotIsBacktesting) {
+export async function startBacktesting(botDomain, backtestingSettings, ids_by_exchange_name, setBotIsBacktesting) {
   const success = (updated_data, update_url, result, msg, status) => {
     setBotIsBacktesting(true)
     createNotification(msg, "success")
@@ -13,7 +13,12 @@ export async function startBacktesting(botDomain, backtestingSettings, exchageId
     setBotIsBacktesting(true)
   }
   sendAndInterpretBotUpdate(
-    { ...backtestingSettings, exchange_id: exchageId },
+    {
+      ...backtestingSettings,
+      exchange_ids: backtestingSettings.exchange_names.map(exchangeName => (
+        ids_by_exchange_name[exchangeName])
+      )
+    },
     botDomain + backendRoutes.backtestingStart,
     success, failure
   )
@@ -74,7 +79,7 @@ export async function updateBot(botDomain, updateIsOnline, setIsloading) {
   )
 }
 
-export async function startOptimizer(botDomain, optimizerRunSettings, optimizerSettingsForm, exchageId, setBotIsOptimizing) {
+export async function startOptimizer(botDomain, optimizerRunSettings, optimizerSettingsForm, ids_by_exchange_name, setBotIsOptimizing) {
   const success = (updated_data, update_url, result, msg, status) => {
     setBotIsOptimizing(true)
     createNotification(msg, "success")
@@ -85,7 +90,13 @@ export async function startOptimizer(botDomain, optimizerRunSettings, optimizerS
     setBotIsOptimizing(true)
   }
   sendAndInterpretBotUpdate(
-    { ...optimizerRunSettings, exchange_id: exchageId, config: optimizerSettingsForm },
+    {
+      ...optimizerRunSettings,
+      exchange_ids: optimizerRunSettings.exchange_names.map(exchangeName => (
+        ids_by_exchange_name[exchangeName])
+      ),
+      config: optimizerSettingsForm
+    },
     botDomain + backendRoutes.optimizerStart,
     success, failure
   )

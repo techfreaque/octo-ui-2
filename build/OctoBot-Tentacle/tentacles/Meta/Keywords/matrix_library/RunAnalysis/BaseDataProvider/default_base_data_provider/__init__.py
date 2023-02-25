@@ -17,3 +17,4 @@ from .future_base_data_provider import FutureRunAnalysisBaseDataGenerator
 from .spot_base_data_provider import SpotRunAnalysisBaseDataGenerator
 from .init_base_data import get_base_data
 from .base_data_provider import RunAnalysisBaseDataGenerator
+from .run_analysis_tables import *

@@ -51,13 +51,15 @@ def register_bot_info_routes(plugin):
         exchange_name = None
         exchange_names = []
         evaluator_names = []
-        exchange_ids: dict = {}
+        ids_by_exchange_name: dict = {}
+        exchange_ids: list = []
         exchange_id = None
         available_api_actions = None
         symbols = traded_time_frames = activated_evaluators = []
         timeframes_dict = {}
         strategy_names = []
         trigger_time_frames = None
+        real_time_strategies_active = False
 
         try:
             (
@@ -68,54 +70,62 @@ def register_bot_info_routes(plugin):
             exchange_managers = interfaces.AbstractInterface.get_exchange_managers()
             for _exchange_manager in exchange_managers:
                 exchange_names.append(_exchange_manager.exchange_name)
-                exchange_ids[_exchange_manager.exchange_name] = _exchange_manager.id
+                exchange_ids.append(_exchange_manager.id)
+                ids_by_exchange_name[
+                    _exchange_manager.exchange_name
+                ] = _exchange_manager.id
+            if exchange_manager.trading_modes:
+                trading_mode = exchange_manager.trading_modes[0]
+                trading_mode_name = trading_mode.get_name()
+                if hasattr(trading_mode, "AVAILABLE_API_ACTIONS"):
+                    available_api_actions = trading_mode.AVAILABLE_API_ACTIONS
+                if hasattr(trading_mode, "real_time_strategy_data"):
+                    real_time_strategy_data = trading_mode.real_time_strategy_data
+                    if real_time_strategy_data:
+                        real_time_strategies_active = real_time_strategy_data.activated
+                symbols = models.get_enabled_trading_pairs()
+                activated_evaluators = models.get_config_activated_evaluators()
+                evaluator_names = [
+                    activated_evaluator.get_name()
+                    for activated_evaluator in activated_evaluators
+                ]
+                strategies = models.get_config_activated_strategies()
+                if strategies:
+                    strategy_names = [strategy.get_name() for strategy in strategies]
+                    # enabled_time_frames = models.get_strategy_required_time_frames(
+                    #     strategies[0]
+                    # )
 
-            trading_mode = exchange_manager.trading_modes[0]
-            trading_mode_name = trading_mode.get_name()
-            if hasattr(trading_mode, "AVAILABLE_API_ACTIONS"):
-                available_api_actions = trading_mode.AVAILABLE_API_ACTIONS
-            symbols = models.get_enabled_trading_pairs()
-            activated_evaluators = models.get_config_activated_evaluators()
-            evaluator_names = [
-                activated_evaluator.get_name()
-                for activated_evaluator in activated_evaluators
-            ]
-            strategies = models.get_config_activated_strategies()
-            if strategies:
-                strategy_names = [strategy.get_name() for strategy in strategies]
-                # enabled_time_frames = models.get_strategy_required_time_frames(
-                #     strategies[0]
+                # enabled_time_frames = (
+                #     models.get_strategy_required_time_frames(activated_strategy)
+                #     if activated_strategy
+                #     else []
                 # )
-
-            # enabled_time_frames = (
-            #     models.get_strategy_required_time_frames(activated_strategy)
-            #     if activated_strategy
-            #     else []
-            # )
-            traded_time_frames = [
-                tf.value for tf in models.get_traded_time_frames(exchange_manager)
-            ]
-            for tf in commons_enums.TimeFrames:
-                timeframes_dict[tf.value] = {
-                    "enabled": True if tf.value in traded_time_frames else False
-                }
-            if (
-                len(trading_mode.exchange_manager.trading_modes)
-                and len(trading_mode.exchange_manager.trading_modes[0].producers)
-                and hasattr(
-                    trading_mode.exchange_manager.trading_modes[0].producers[0],
-                    "trigger_time_frames",
-                )
-            ):
-                trigger_time_frames = (
-                    trading_mode.exchange_manager.trading_modes[0]
-                    .producers[0]
-                    .trigger_time_frames
-                )
-            config_candles_count = models.get_config_required_candles_count(
-                exchange_manager
-            )
-
+                traded_time_frames = [
+                    tf.value for tf in models.get_traded_time_frames(exchange_manager)
+                ]
+                for tf in commons_enums.TimeFrames:
+                    timeframes_dict[tf.value] = {
+                        "enabled": True if tf.value in traded_time_frames else False
+                    }
+                if (
+                    len(trading_mode.exchange_manager.trading_modes)
+                    and len(trading_mode.exchange_manager.trading_modes[0].producers)
+                    and hasattr(
+                        trading_mode.exchange_manager.trading_modes[0].producers[0],
+                        "trigger_time_frames",
+                    )
+                ):
+                    trigger_time_frames = (
+                        trading_mode.exchange_manager.trading_modes[0]
+                        .producers[0]
+                        .trigger_time_frames
+                    )
+                # config_candles_count = models.get_config_required_candles_count(
+                #     exchange_manager
+                # )
+            else:
+                trading_mode_name = None
 
         except KeyError:
             is_starting = True
@@ -130,6 +140,7 @@ def register_bot_info_routes(plugin):
                 "exchange_name": exchange_name,
                 "exchange_names": exchange_names,
                 "exchange_ids": exchange_ids,
+                "ids_by_exchange_name": ids_by_exchange_name,
                 "symbols": sorted(
                     [
                         symbol_util.convert_symbol(
@@ -148,6 +159,7 @@ def register_bot_info_routes(plugin):
                 # "activated_evaluators": activated_evaluators,
                 # "activated_strategy": activated_strategy,
                 # "config_candles_count": config_candles_count,
+                "real_time_strategies_active": real_time_strategies_active,
                 "available_api_actions": available_api_actions,
                 "data_files": models.get_data_files_with_description(),
                 "octobot_version": services_interfaces.AbstractInterface.project_version,

@@ -75,13 +75,16 @@ export const defaultBotTemplate = [
                                         "component": "TradingConfig",
                                         "content": [
                                             {
+                                                "component": "ToggleActivateRealTimeStrategy",
+                                            },
+                                            {
                                                 "command": "execute",
                                                 "component": "SendActionCommandToTradingMode",
                                                 "faIcon": "sack-dollar",
                                                 "title": "Execute Trading Mode"
-                                            }
+                                            },
                                         ]
-                                    }
+                                    },
                                 ],
                                 "dontScroll": true,
                                 "title": "Strategy Settings"
@@ -453,42 +456,42 @@ export const defaultBotTemplate = [
 ];
 
 export const defaultColors = {
-  dark: {
-    background: "#131722",
-    backgroundHover: "#2a2e39",
-    font: "#b2b5be",
-    fontHover: "#131722",
-    fontActive: "#1e53e5",
-    border: "#2a2e39",
-    borderActive: "#1e53e5",
-    warning: "#fb3",
-    success: "#00c851",
-    candles: {
-      wick: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-      body: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-      border: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-      // wick: {green: "#6BA583", red: "#DB0000"},
-      // body: {green: "#6BA583", red: "#DB0000"},
-      // border: {green: "#6BA583", red: "#DB0000"},
+    dark: {
+        background: "#131722",
+        backgroundHover: "#2a2e39",
+        font: "#b2b5be",
+        fontHover: "#131722",
+        fontActive: "#1e53e5",
+        border: "#2a2e39",
+        borderActive: "#1e53e5",
+        warning: "#fb3",
+        success: "#00c851",
+        candles: {
+            wick: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+            body: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+            border: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+            // wick: {green: "#6BA583", red: "#DB0000"},
+            // body: {green: "#6BA583", red: "#DB0000"},
+            // border: {green: "#6BA583", red: "#DB0000"},
+        },
     },
-  },
-  light: {
-    background: "#131722",
-    backgroundHover: "#2a2e39",
-    font: "#000",
-    fontHover: "#131722",
-    fontActive: "#1e53e5",
-    border: "#2a2e39",
-    borderActive: "#1e53e5",
-    warning: "#fb3",
-    success: "#00c851",
-    candles: {
-      wick: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-      body: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-      border: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-      // wick: {green: "#6BA583", red: "#DB0000"},
-      // body: {green: "#6BA583", red: "#DB0000"},
-      // border: {green: "#6BA583", red: "#DB0000"},
+    light: {
+        background: "#131722",
+        backgroundHover: "#2a2e39",
+        font: "#000",
+        fontHover: "#131722",
+        fontActive: "#1e53e5",
+        border: "#2a2e39",
+        borderActive: "#1e53e5",
+        warning: "#fb3",
+        success: "#00c851",
+        candles: {
+            wick: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+            body: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+            border: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+            // wick: {green: "#6BA583", red: "#DB0000"},
+            // body: {green: "#6BA583", red: "#DB0000"},
+            // border: {green: "#6BA583", red: "#DB0000"},
+        },
     },
-  },
 };

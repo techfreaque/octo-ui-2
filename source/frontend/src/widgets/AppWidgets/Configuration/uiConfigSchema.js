@@ -9,12 +9,12 @@ const DISPLAYED_ELEMENTS_TITLES = [
     "list-of-trades-part: Display elements on the list of trades section "]
 
 
-export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
+export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availableExchanges) {
     const dataFilevalues = [CURRENT_BOT_DATA]
-    const dataFilesTitles = [`Currently traded asset(s): ${currentSymbols}`,]
+    const dataFilesTitles = [`Currently traded time frame(s) & asset(s) on selected exchange(s): ${currentSymbols}`,]
     dataFiles?.forEach(dataFile => {
         dataFilevalues.push(dataFile[0])
-        dataFilesTitles.push(`${dataFile[1].symbols} for ${dataFile[1].time_frames} from ${dataFile[1].start_date} to from ${dataFile[1].end_date}`)
+        dataFilesTitles.push(`${dataFile[1].exchange} - ${dataFile[1].symbols} - ${dataFile[1].time_frames} from ${dataFile[1].start_date} to from ${dataFile[1].end_date}`)
     })
     function selectableChartlocation(name, title) {
         return {
@@ -293,11 +293,46 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                 type: "object",
                 title: "Backtesting Run Settings",
                 properties: {
-                    data_source: {
-                        type: "string",
-                        title: "Backtest on",
-                        enum: dataFilevalues,
-                        options: { enum_titles: dataFilesTitles }
+                    data_sources: {
+                        type: "array",
+                        uniqueItems: true,
+                        format: "select2",
+                        minItems: 1,
+                        options: {
+                            grid_columns: 12,
+                            select2: {
+                                tags: true
+                            }
+                        },
+                        default: [dataFilevalues[0]],
+                        title: "Backtest data file(s)",
+                        description: "Currently traded time frame(s) & asset(s) cant be combined with other data files! When using data files, make sure to select all pairs and timeframes that the strategy requires!",
+                        items: {
+                            type: "string",
+                            enum: dataFilevalues,
+                            "options": { enum_titles: dataFilesTitles },
+                        }
+                    },
+                    exchange_ids: {
+                        type: "array",
+                        uniqueItems: true,
+                        format: "select2",
+                        minItems: 1,
+                        options: {
+                            grid_columns: 12,
+                            select2: {
+                                tags: true
+                            }
+                        },
+                        description: 'Make sure to select "Currently traded time frame(s) & asset(s)" or the data files for each selected exchange',
+
+                        default: availableExchanges,
+                        title: "Exchanges to backtest on",
+                        items: {
+                            type: "string",
+                            enum: availableExchanges,
+                            "options": { enum_titles: availableExchanges },
+                        }
                     },
                     exchange_type: {
                         type: "string",
@@ -424,25 +459,29 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                         title: "CPU cores to leave idle :",
                         type: "number",
                         format: "number",
-                        minimum: 0
+                        minimum: 0,
+                        default: 1,
                     },
                     optimizer_id: {
                         title: "Optimizer id :",
                         type: "number",
                         format: "number",
-                        minimum: 1
+                        minimum: 1,
+                        default: 1
                     },
                     queue_size: {
                         title: "Amount of random runs added to the queue:",
                         type: "number",
                         format: "number",
-                        minimum: 1
+                        minimum: 1,
+                        default: 1000
                     },
                     notify_when_complete: {
                         title: "notify when completed",
                         type: "boolean",
                         format: "checkbox",
-                        fieldType: "boolean"
+                        fieldType: "boolean",
+                        default: true
                     },
                     exchange_type: {
                         type: "string",
@@ -464,11 +503,46 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols) {
                             ]
                         }
                     },
-                    data_source: {
-                        type: "string",
-                        title: "Backtest on",
-                        enum: dataFilevalues,
-                        options: { enum_titles: dataFilesTitles }
+                    data_files: {
+                        type: "array",
+                        uniqueItems: true,
+                        format: "select2",
+                        minItems: 1,
+                        options: {
+                            grid_columns: 12,
+                            select2: {
+                                tags: true
+                            }
+                        },
+                        default: [dataFilevalues[0]],
+                        title: "Backtest data file(s)",
+                        description: "Currently traded time frame(s) & asset(s) cant be combined with other data files! When using data files, make sure to select all pairs and timeframes that the strategy requires!",
+                        items: {
+                            type: "string",
+                            enum: dataFilevalues,
+                            "options": { enum_titles: dataFilesTitles },
+                        }
+                    },
+                    exchange_names: {
+                        type: "array",
+                        uniqueItems: true,
+                        format: "select2",
+                        minItems: 1,
+                        options: {
+                            grid_columns: 12,
+                            select2: {
+                                tags: true
+                            }
+                        },
+                        description: 'Make sure to select "Currently traded time frame(s) & asset(s)" or the data files for each selected exchange',
+
+                        default: availableExchanges,
+                        title: "Exchanges to backtest on",
+                        items: {
+                            type: "string",
+                            enum: availableExchanges,
+                            "options": { enum_titles: availableExchanges },
+                        }
                     },
                     start_timestamp: {
                         type: "integer",
