@@ -17,7 +17,11 @@ export async function startBacktesting(botDomain, backtestingSettings, ids_by_ex
       ...backtestingSettings,
       exchange_ids: backtestingSettings.exchange_names.map(exchangeName => (
         ids_by_exchange_name[exchangeName])
-      )
+      ),
+
+      // TODO remove when stock supports ids
+      data_source: backtestingSettings.data_sources[0],
+      exchange_id: ids_by_exchange_name[backtestingSettings.exchange_names[0]],
     },
     botDomain + backendRoutes.backtestingStart,
     success, failure
@@ -95,7 +99,11 @@ export async function startOptimizer(botDomain, optimizerRunSettings, optimizerS
       exchange_ids: optimizerRunSettings.exchange_names.map(exchangeName => (
         ids_by_exchange_name[exchangeName])
       ),
-      config: optimizerSettingsForm
+      config: optimizerSettingsForm,
+
+      // TODO remove when stock supports ids
+      data_source: optimizerRunSettings.data_sources[0],
+      exchange_id: ids_by_exchange_name[optimizerRunSettings.exchange_names[0]],
     },
     botDomain + backendRoutes.optimizerStart,
     success, failure
