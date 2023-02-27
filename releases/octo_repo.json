@@ -16,7 +16,7 @@
         },
         {
             "name": "Spot Master 3000",
-            "description": "Automated portfolio balancing and cross asset arbitrage. This trading mode requires you to import the profile here as well, you can find the documentation here: https://github.com/techfreaque/octobot-spot-master-3000",
+            "description": "Automated portfolio balancing and cross asset arbitrage. This trading mode requires you to import the profile into OctoBot as well, you can find the documentation here: https://github.com/techfreaque/octobot-spot-master-3000",
             "versions": [
                 {
                     "version": "latest stable",
@@ -31,6 +31,20 @@
                 "Strategies"
             ],
             "tentacle_package_name": "Spot-Master-3000"
+        },
+        {
+            "name": "Lorentzian Classification Trading Mode",
+            "description": "This trading mode requires you to import the profile into OctoBot as well, you can find the documentation here: https://github.com/techfreaque/octobot-lorentzian-classification",
+            "versions": [
+                {
+                    "version": "latest beta version",
+                    "url": "https://raw.githubusercontent.com/techfreaque/octobot-lorentzian-classification/main/releases/latest/any_platform.zip"
+                }
+            ],
+            "categories": [
+                "Strategies"
+            ],
+            "tentacle_package_name": "Lorentzian-Classification"
         },
         {
             "name": "Semi Auto Trading Mode",
