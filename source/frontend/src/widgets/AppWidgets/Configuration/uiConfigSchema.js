@@ -313,7 +313,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                             "options": { enum_titles: dataFilesTitles },
                         }
                     },
-                    exchange_ids: {
+                    exchange_names: {
                         type: "array",
                         uniqueItems: true,
                         format: "select2",
