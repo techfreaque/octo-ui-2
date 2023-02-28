@@ -30,6 +30,7 @@
     "react-split-pane": "github:techfreaque/react-split-pane",
     "react-stockcharts": "github:techfreaque/react-stock-charts-builds",
     "select2": "^4.1.0-rc.0",
+    "socket.io-client": "^4.6.1",
     "w2ui": "github:vitmalina/w2ui",
     "web-vitals": "^3.0.1"
   },

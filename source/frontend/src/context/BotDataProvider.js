@@ -19,53 +19,56 @@ import { OptimizerEditorProvider } from "./config/OptimizerEditorProvider";
 import { BotOptimizerProvider } from "./actions/BotOptimizerProvider";
 import { VisibleExchangesProvider } from "./config/VisibleExchangesProvider";
 import { TentaclesConfigProvider } from "./config/TentaclesConfigProvider";
+import { NotificationsContextProvider } from "./websockets/NotificationsContext";
 
 
 export default function BotDataProvider({ children }) {
   return (
     <BotDomainProvider>
       <IsBotOnlineProvider>
-        <UiConfigProvider>
-          <VisibleTimeFramesProvider>
-            <VisiblePairsProvider>
-              <VisibleExchangesProvider>
-                <BotInfoProvider>
-                  <BotLayoutProvider>
-                    <ColorModeProvider>
-                      <BotColorsProvider>
-                        <TentaclesConfigProvider>
-                          <BotPlottedElementsProvider>
-                            {/* <BotPlottedElementsPlotlyProvider> */}
-                            {/* <LiveRunDataProvider> */}
-                            <BacktestingRunDataProvider>
-                              <BotPortfolioProvider>
-                                <AppStoreDataProvider>
-                                  <BotConfigProvider>
-                                    <BotBacktestingProvider>
-                                      <OptimizerEditorProvider>
-                                        <OptimizerQueueProvider>
-                                          <BotOptimizerProvider>
-                                            {children}
-                                          </BotOptimizerProvider>
-                                        </OptimizerQueueProvider>
-                                      </OptimizerEditorProvider>
-                                    </BotBacktestingProvider>
-                                  </BotConfigProvider>
-                                </AppStoreDataProvider>
-                              </BotPortfolioProvider>
-                            </BacktestingRunDataProvider>
-                            {/* </LiveRunDataProvider> */}
-                            {/* </BotPlottedElementsPlotlyProvider> */}
-                          </BotPlottedElementsProvider>
-                        </TentaclesConfigProvider>
-                      </BotColorsProvider>
-                    </ColorModeProvider>
-                  </BotLayoutProvider>
-                </BotInfoProvider>
-              </VisibleExchangesProvider>
-            </VisiblePairsProvider>
-          </VisibleTimeFramesProvider>
-        </UiConfigProvider>
+        <NotificationsContextProvider>
+          <UiConfigProvider>
+            <VisibleTimeFramesProvider>
+              <VisiblePairsProvider>
+                <VisibleExchangesProvider>
+                  <BotInfoProvider>
+                    <BotLayoutProvider>
+                      <ColorModeProvider>
+                        <BotColorsProvider>
+                          <TentaclesConfigProvider>
+                            <BotPlottedElementsProvider>
+                              {/* <BotPlottedElementsPlotlyProvider> */}
+                              {/* <LiveRunDataProvider> */}
+                              <BacktestingRunDataProvider>
+                                <BotPortfolioProvider>
+                                  <AppStoreDataProvider>
+                                    <BotConfigProvider>
+                                      <BotBacktestingProvider>
+                                        <OptimizerEditorProvider>
+                                          <OptimizerQueueProvider>
+                                            <BotOptimizerProvider>
+                                              {children}
+                                            </BotOptimizerProvider>
+                                          </OptimizerQueueProvider>
+                                        </OptimizerEditorProvider>
+                                      </BotBacktestingProvider>
+                                    </BotConfigProvider>
+                                  </AppStoreDataProvider>
+                                </BotPortfolioProvider>
+                              </BacktestingRunDataProvider>
+                              {/* </LiveRunDataProvider> */}
+                              {/* </BotPlottedElementsPlotlyProvider> */}
+                            </BotPlottedElementsProvider>
+                          </TentaclesConfigProvider>
+                        </BotColorsProvider>
+                      </ColorModeProvider>
+                    </BotLayoutProvider>
+                  </BotInfoProvider>
+                </VisibleExchangesProvider>
+              </VisiblePairsProvider>
+            </VisibleTimeFramesProvider>
+          </UiConfigProvider>
+        </NotificationsContextProvider>
       </IsBotOnlineProvider>
     </BotDomainProvider>
   );

@@ -9,9 +9,12 @@ import { BACKTESTING_RUN_SETTINGS_KEY } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useBotInfoContext } from "../data/BotInfoProvider";
 import { useUiConfigContext } from "../config/UiConfigProvider";
+import { AbstractWebsocketContext } from "../websockets/AbstractWebsocketContext";
+import createNotification from "../../components/Notifications/Notification";
 
 const BotIsBacktestingContext = createContext();
 const UpdateBotIsBacktestingContext = createContext();
+const BacktestingProgressContext = createContext();
 
 export const useBotIsBacktestingContext = () => {
   return useContext(BotIsBacktestingContext);
@@ -21,14 +24,9 @@ export const useUpdateBotIsBacktestingContext = () => {
   return useContext(UpdateBotIsBacktestingContext);
 };
 
-// export const useCheckIsBacktesting = () => {
-//   const setBotIsBacktesting = useUpdateBotIsBacktestingContext();
-//   const botDomain = useBotDomainContext();
-//   const logic = useCallback(() => {
-//     return checkBotIsBacktesting(botDomain, setBotIsBacktesting);
-//   }, [setBotIsBacktesting, botDomain]);
-//   return logic;
-// };
+export const useBacktestingProgressContext = () => {
+  return useContext(BacktestingProgressContext);
+};
 
 export const useStopBacktesting = () => {
   const setBotIsBacktesting = useUpdateBotIsBacktestingContext();
@@ -56,11 +54,41 @@ export const useStartBacktesting = () => {
 
 export const BotBacktestingProvider = ({ children }) => {
   const [botIsBacktesting, setBotIsBacktesting] = useState(false);
-  // todo handle progress
+  const [backtestingProgress, setBacktestingProgress] = useState(0);
+  const botDomain = useBotDomainContext();
+  const socketUrl = botDomain + "/backtesting"
+
+  function onConnectionUpdate(data, socket) {
+    if (data) {
+      setBacktestingProgress(data)
+    }
+    if (data?.status === "starting" || data?.status === "computing") {
+      setBotIsBacktesting(true);
+      setTimeout(function () { socket.emit('backtesting_status') }, 50);
+    } else {
+      setBotIsBacktesting(prevState => {
+        if (data?.status === "finished" && prevState) {
+          createNotification("Backtest finished successfully")
+        }
+        return false
+      });
+    }
+  }
+  function onConnectionLost() {
+    setBotIsBacktesting(false)
+  }
+
   return (
     <BotIsBacktestingContext.Provider value={botIsBacktesting}>
       <UpdateBotIsBacktestingContext.Provider value={setBotIsBacktesting}>
-        {children}
+        <BacktestingProgressContext.Provider value={backtestingProgress}>
+          <AbstractWebsocketContext
+            socketUrl={socketUrl}
+            onConnectionUpdate={onConnectionUpdate}
+            onConnectionLost={onConnectionLost} onKey={"backtesting_status"}>
+            {children}
+          </AbstractWebsocketContext>
+        </BacktestingProgressContext.Provider>
       </UpdateBotIsBacktestingContext.Provider>
     </BotIsBacktestingContext.Provider>
   );

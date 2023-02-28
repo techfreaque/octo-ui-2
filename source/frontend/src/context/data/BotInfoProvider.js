@@ -10,6 +10,7 @@ import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useUpdateVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
 import { useUpdateVisiblePairsContext } from "../config/VisiblePairProvider";
 import { useUpdateVisibleExchangesContext, useVisibleExchangesContext } from "../config/VisibleExchangesProvider";
+import { useIsBotOnlineContext } from "./IsBotOnlineProvider";
 
 
 const BotInfoContext = createContext();
@@ -38,12 +39,13 @@ export const useFetchBotInfo = () => {
 export const BotInfoProvider = ({ children }) => {
   const [botInfo, setBotInfo] = useState();
   const botDomain = useBotDomainContext();
+  const isBotOnline = useIsBotOnlineContext();
   const setVisibleTimeframes = useUpdateVisibleTimeFramesContext();
   const setVisiblePairs = useUpdateVisiblePairsContext();
   const setVisibleExchanges = useUpdateVisibleExchangesContext();
   useEffect(() => {
-    fetchBotInfo(botDomain, setBotInfo);
-  }, [botDomain]);
+    isBotOnline && fetchBotInfo(botDomain, setBotInfo);
+  }, [botDomain, isBotOnline]);
   useEffect(() => {
     if (botInfo && (botInfo.trigger_time_frames || botInfo.traded_time_frames)) {
       setVisibleTimeframes((botInfo.trigger_time_frames && botInfo.trigger_time_frames[0]) || botInfo.traded_time_frames[0]);

@@ -50,7 +50,8 @@ def fetch_available_apps_from_repos():
                     "versions": app["versions"],
                     "categories": app["categories"],
                     "installed": True,
-                    "repo": repo["name"]
+                    "repo": repo["name"],
+                    "requires_auth": app.get("requires_auth", False)
                 })
                 for category in app["categories"]:
                     if category not in app_store_data["categories"]:

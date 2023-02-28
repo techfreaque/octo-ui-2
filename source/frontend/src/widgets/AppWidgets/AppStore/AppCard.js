@@ -17,6 +17,7 @@ import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useInstallAppPackage } from "../../../context/data/AppStoreDataProvider";
+import { TextField } from "@mui/material";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,10 +32,13 @@ const ExpandMore = styled((props) => {
 
 export default function AppCard({ app }) {
   const [expanded, setExpanded] = React.useState(false);
+  const [token, setToken] = React.useState();
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-
+  function handleSetToken(event) {
+    setToken(event.target.value);
+  }
   return (
     <Card sx={{ margin: 1 }}>
       <CardHeader
@@ -43,15 +47,29 @@ export default function AppCard({ app }) {
             {app.name[0]}
           </Avatar>
         }
-        action={<InstallAppMenu app={app} />}
+        action={(!app.requires_auth || token) && <InstallAppMenu app={app} token={token} />}
         title={app.name}
-        subheader="September 14, 2016"
+      // subheader="September 14, 2016"
       />
 
       <CardContent>
         <Typography variant="body2" color="text.secondary">
           {app.description}
         </Typography>
+        {app.requires_auth
+          && <>
+            <Typography variant="body2" color="text.secondary" style={{ marginTop: "10px" }}>
+              This app requires a license key to download
+            </Typography>
+            <TextField
+              id="token"
+              label="Enter your license key"
+              value={token}
+              onChange={handleSetToken}
+              style={{ marginTop: "10px" }}
+            />
+          </>}
+
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
@@ -78,7 +96,7 @@ export default function AppCard({ app }) {
   );
 }
 
-function InstallAppMenu({ app }) {
+function InstallAppMenu({ app, token }) {
   const [anchorEl, setAnchorEl] = React.useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -111,7 +129,7 @@ function InstallAppMenu({ app }) {
       >
         {app.versions.map((appVersion) => (
           <MenuItem key={appVersion.version}
-            onClick={() => installAppPackage(appVersion.url, app.name + " " + appVersion.version)}>
+            onClick={() => installAppPackage(appVersion.url, app.name + " " + appVersion.version, token)}>
             {appVersion.version} <FontAwesomeIcon icon={faDownload} style={{ marginLeft: "5px" }} />
           </MenuItem>
         ))}

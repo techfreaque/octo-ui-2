@@ -151,15 +151,20 @@ export async function stopOptimizer(botDomain, setBotIsOptimizing) {
   sendAndInterpretBotUpdate({}, botDomain + backendRoutes.optimizerStop, success, failure)
 }
 
-export async function installAppPackage(appUrl, appName, botDomain) {
+export async function installAppPackage(appUrl, appName, botDomain, token) {
   const success = (updated_data, update_url, result, msg, status) => {
     createNotification("Successfully installed " + appName)
   }
   const fail = (updated_data, update_url, result, msg, status) => {
     createNotification("Failed to install " + appName, "danger")
   }
+
+  const requestData = { [appUrl]: "register_and_install" }
+  if (token) {
+    requestData.token = token
+  }
   sendAndInterpretBotUpdate(
-    { [appUrl]: "register_and_install" },
+    requestData,
     botDomain + backendRoutes.installApp, success, fail)
 }
 
@@ -173,6 +178,18 @@ export async function deleteTrades(botDomain, exchange_id) {
   sendAndInterpretBotUpdate(
     { exchange_id: exchange_id },
     botDomain + backendRoutes.cacheActionDeleteTrades, success, fail)
+}
+
+export async function resetPingPongStorage(botDomain) {
+  const success = (updated_data, update_url, result, msg, status) => {
+    createNotification("Successfully cleared daemons storage")
+  }
+  const fail = (updated_data, update_url, result, msg, status) => {
+    createNotification("Failed to reset daemons storage", "danger")
+  }
+  sendAndInterpretBotUpdate(
+    {},
+    botDomain + backendRoutes.resetDaemons, success, fail, "GET")
 }
 export async function deleteCurrentCache(botDomain, exchange_id) {
   const success = (updated_data, update_url, result, msg, status) => {

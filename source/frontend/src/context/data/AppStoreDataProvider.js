@@ -27,8 +27,8 @@ export const useFetchAppStoreData = () => {
 
 export const useInstallAppPackage = () => {
   const botDomain = useBotDomainContext()
-  const logic = useCallback((packageUrl, packageNameAndVersion) => {
-    installAppPackage(packageUrl, packageNameAndVersion, botDomain)
+  const logic = useCallback((packageUrl, packageNameAndVersion, token) => {
+    installAppPackage(packageUrl, packageNameAndVersion, botDomain, token)
   }, [botDomain]);
   return logic;
 }
