@@ -47,22 +47,19 @@
             "tentacle_package_name": "Lorentzian-Classification"
         },
         {
-            "name": "Semi Auto Trading Mode",
-            "description": "This Trading Mode allows you to prepare complex trades in advance, for multiple pairs and execute by a click. It has a ton of options for entries, exits and position size. For example multiple grids, trailing stop losses and take profits based on indicators. It supports 50 indicators, It costs 100$, includes 1 year of updates and is available through email max@a42.ch. If you are interested, you'll get access to a free demo, before you pay me.",
-            "versions": [],
-            "categories": [
-                "Strategies"
-            ],
-            "tentacle_package_name": "Semi-Auto-Trading-Mode"
-        },
-        {
             "name": "Strategy Maker Trading Mode",
             "description": "This Trading Mode allows you create powerful strategies without a single line of code. It supports 50 indicators. It costs 250$, includes 1 year of updates and is available through email max@a42.ch. If you are interested, you'll get access to a free demo, before you pay me.",
-            "versions": [],
+            "versions": [
+                {
+                    "version": "stable stable",
+                    "url": "https://raw.githubusercontent.com/techfreaque/matrix-pro/main/releases/latest/any_platform.zip"
+                }
+            ],
             "categories": [
                 "Strategies"
             ],
-            "tentacle_package_name": "Matrix-Strategy-Maker"
+            "tentacle_package_name": "Matrix-Strategy-Maker",
+            "requires_auth": true
         }
     ]
 }
