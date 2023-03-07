@@ -11,7 +11,7 @@ import createNotification from "../../Notifications/Notification";
 
 export default function RunDataTableW2UI({
     tableTitle, tableId, runData, currentCampaignName, noData, reloadData, deleteRuns,
-    hiddenMetadataColumns, setHiddenMetadataColumns, restoreSettings
+    hiddenMetadataColumns, restoreSettings
 }) {
     const setDisplayedRunIds = useUpdateDisplayedRunIdsContext()
     const displayedRunIds = useDisplayedRunIdsContext()

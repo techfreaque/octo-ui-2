@@ -1,8 +1,8 @@
 import { Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowMinimize } from "@fortawesome/free-solid-svg-icons";
-import { useSetCurrentPanelPercent } from "../../LayoutWidgets/SplitMainContent";
 import { useMemo } from "react";
+import { useSetCurrentPanelPercent } from "../../../context/config/MainPanelContext";
 
 export default function CurrentPanelMinimize() {
   const setPanelSize = useSetCurrentPanelPercent()

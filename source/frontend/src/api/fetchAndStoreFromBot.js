@@ -48,9 +48,10 @@ export default async function fetchAndStoreFromBot(
   successNotification = false,
   keepPreviousValues = true,
   setIsFinished = undefined,
+  failNotification = true,
 ) {
   const fail = (updated_data, update_url, result, msg, status) => {
-    genericRequestFailureCallback(updated_data, update_url, result, msg, status)
+    failNotification && genericRequestFailureCallback(updated_data, update_url, result, msg, status)
     setIsFinished && setIsFinished(true)
   }
   const success = (updated_data, update_url, result, msg, status) => {
@@ -66,7 +67,7 @@ export default async function fetchAndStoreFromBot(
 
     }
   }
-  sendAndInterpretBotUpdate(dataToSend, url, success, fail, type)
+  return await sendAndInterpretBotUpdate(dataToSend, url, success, fail, type)
 }
 
 function genericRequestSuccessCallback(updated_data, update_url, result, msg, status) {

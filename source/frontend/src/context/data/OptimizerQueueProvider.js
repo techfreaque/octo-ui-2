@@ -4,7 +4,7 @@ import {
   createContext,
   useCallback,
 } from "react";
-import fetchAndStoreFromBot, { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
+import { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
@@ -57,7 +57,6 @@ export const useFetchOptimizerQueue = () => {
 
 export const useSaveOptimizerQueue = () => {
   const botDomain = useBotDomainContext();
-  const fetchOptimizerQueue = useFetchOptimizerQueue();
   const logic = useCallback((updatedQueue) => {
     const fail = (updated_data, update_url, result, msg, status) => {
       createNotification("Failed to update Optimizer queue", "danger", msg?.message)
@@ -66,11 +65,10 @@ export const useSaveOptimizerQueue = () => {
       if (!msg?.success) {
         return fail(updated_data, update_url, result, msg, status)
       }
-      // fetchOptimizerQueue()
       createNotification("Optimizer queue updated", "success")
     }
     sendAndInterpretBotUpdate(updatedQueue, botDomain + backendRoutes.optimizerQueueUpdate, success, fail)
-  }, [botDomain, fetchOptimizerQueue]);
+  }, [botDomain]);
   return logic;
 };
 

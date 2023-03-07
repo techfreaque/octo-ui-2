@@ -6,7 +6,7 @@ import { faRedo } from "@fortawesome/free-solid-svg-icons";
 import { useBacktestingRunDataContext, useDeleteBacktestingRunData, useFetchBacktestingRunData } from "../../../context/data/BacktestingRunDataProvider";
 import { useUiConfigContext } from "../../../context/config/UiConfigProvider";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import { useHiddenBacktestingMetadataColumnsContext, useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
+import { useHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
 import { useSaveTentaclesConfig } from "../../../context/config/TentaclesConfigProvider";
 
 export function BacktestingRunDataTable() {
@@ -17,7 +17,6 @@ export function BacktestingRunDataTable() {
     const currentOptimizerCampaignName = uiSettings.optimization_campaign && uiSettings.optimization_campaign.name
     const botDomain = useBotDomainContext()
     const hiddenBacktestingMetadataColumns = useHiddenBacktestingMetadataColumnsContext()
-    const setHiddenBacktestingMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
     const saveTentaclesConfig = useSaveTentaclesConfig()
 
     function restoreSettings(settings) {
@@ -37,7 +36,6 @@ export function BacktestingRunDataTable() {
             reloadData={fetchBacktestingRunData}
             deleteRuns={deleteBacktestingRunData}
             hiddenMetadataColumns={hiddenBacktestingMetadataColumns}
-            setHiddenMetadataColumns={setHiddenBacktestingMetadataColumns}
             restoreSettings={restoreSettings}
             noData={<NoBacktestingData fetchBacktestingRunData={fetchBacktestingRunData}/>}
         />

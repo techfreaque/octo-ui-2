@@ -1,64 +1,74 @@
-import { createContext, useContext, useEffect, useState, useCallback, useMemo } from "react";
-import SplitPane from "react-split-pane";
+import { useEffect, useState } from "react";
 import "./index.css";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
+import Splitter, { SplitDirection } from '@devbookhq/splitter'
+import { useColorModeContext } from "../../../context/config/ColorModeProvider";
+import { useMemo } from "react";
 
-const CurrentPanelContext = createContext();
-const UpdateCurrentPanelContext = createContext();
-
-export const useCurrentPanelContext = () => {
-  return useContext(CurrentPanelContext);
-};
-
-export const useUpdateCurrentPanelContext = () => {
-  return useContext(UpdateCurrentPanelContext);
-};
-
-export const useSetCurrentPanelPercent = () => {
-  const setPanelSize = useUpdateCurrentPanelContext()
-  const logic = useCallback((percent) => {
-    setPanelSize(prevSize => (
-      { ...prevSize, size: (prevSize.maxSize * percent / 100) }
-    ));
-  }, [setPanelSize]);
-  return logic;
+export default function SplitMainContent(
+  { panelPercent = { percent: 60, shouldUpdate: false, },
+    setPanelPercent, upperContent, lowerContent, minHeights = "0, 48" }
+) {
+  return <SplitResizableContent
+    panelPercent={panelPercent}
+    setPanelPercent={setPanelPercent}
+    upperContent={<AppWidgets layout={upperContent} />}
+    lowerContent={<AppWidgets layout={lowerContent} />}
+    minHeights={minHeights}
+  />
 }
 
-export default function SplitMainContent({ height, upperContent, lowerContent }) {
-  const maxSize = height - 49 - 4; // tabs + resizer
-  const [panelSize, setPanelSize] = useState({ maxSize: maxSize, size: maxSize * 0.4 });
+export function SplitResizableContent({
+  panelPercent = { percent: 60, shouldUpdate: false, },
+  setPanelPercent, upperContent, lowerContent, minHeights = "0, 48"
+}) {
+  const [panelSizes, setPanelSize] = useState([panelPercent.percent, 100 - panelPercent.percent]);
+  const _minHeights = minHeights.split(',').map(Number);
+  const [thispanelPercent, thisSetPanelPercent] = useState(panelPercent)
+  const _panelPercent = setPanelPercent ? panelPercent : thispanelPercent
+  const _setPanelPercent = setPanelPercent ? setPanelPercent : thisSetPanelPercent
   useEffect(() => {
-    setPanelSize((prevSize) => (
-      { maxSize: maxSize, size: (prevSize.size < maxSize ? prevSize.size : maxSize) }
+    _panelPercent.shouldUpdate && setPanelSize(() => (
+      _panelPercent.percent === 0
+        ? [_panelPercent.percent + 0.1, 100 - _panelPercent.percent - 0.1]
+        : [_panelPercent.percent, 100 - _panelPercent.percent]
     ));
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [height]);
-  const botColors = useBotColorsContext();
-  return (
-    <CurrentPanelContext.Provider value={panelSize}>
-      <UpdateCurrentPanelContext.Provider value={setPanelSize}>
-        <div
-          style={{ height: "100%", width: "100%", position: "relative" }}
-        >
-          <SplitPane
-            split="horizontal"
-            resizerStyle={{ borderColor: botColors.border }}
-            defaultSize="40%"
-            minSize={0}
-            maxSize={maxSize}
-            size={panelSize.size}
-            onChange={(size) => setPanelSize({ maxSize: maxSize, size: size })}
-          >
-            <div style={{ height: "100%", width: "100%", overflow: "hidden" }}>
-              {useMemo(() => (<AppWidgets layout={upperContent} panelSize={panelSize} />), [upperContent, panelSize])}
-            </div>
-            <div style={{ height: height - panelSize.size }}>
-              {useMemo(() => (<AppWidgets layout={lowerContent} />), [lowerContent])}
-            </div>
-          </SplitPane>
-        </div>
-      </UpdateCurrentPanelContext.Provider>
-    </CurrentPanelContext.Provider>
-  );
+  }, [_panelPercent]);
+  const botColorMode = useColorModeContext();
+  return useMemo(() => {
+    const gutterClassName = Math.random().toString(36).slice(2, 7)
+    return (
+      <Splitter
+        direction={SplitDirection.Vertical}
+        minHeights={_minHeights} initialSizes={panelSizes}
+        classes={getSplitterClasses(botColorMode)}
+        onResizeFinished={
+          ((_, newSizes) => handleResize(
+            gutterClassName, _setPanelPercent, newSizes
+          ))}
+        onResizeStarted={() => onResizeStarted(gutterClassName)}
+        gutterClassName={gutterClassName}
+      >
+        {upperContent}
+        {lowerContent}
+      </Splitter>)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [_minHeights, botColorMode, lowerContent, panelSizes, upperContent])
+}
+
+function handleResize(gutterClassName, setPanelPercent, newSizes) {
+  const total = newSizes[0] + newSizes[1]
+  const gutter = document.getElementsByClassName(gutterClassName)[0]
+  gutter.classList.remove("is-resizing")
+  setPanelPercent({ percent: newSizes[0] * 100 / total, shouldUpdate: true, })
+}
+
+function getSplitterClasses(botColorMode) {
+  return botColorMode === 'dark'
+    ? ["resize-content-dark", "resize-content-dark"]
+    : ["resize-content-light", "resize-content-light"]
+}
+function onResizeStarted(gutterClassName) {
+  const gutter = document.getElementsByClassName(gutterClassName)[0]
+  gutter.classList.add("is-resizing")
 }

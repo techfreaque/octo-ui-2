@@ -35,12 +35,13 @@ import CloseAllPositionsButton from "../AppWidgets/Buttons/CloseAllPositionsButt
 import CancelAllOrdersButton from "../AppWidgets/Buttons/CancelAllOrdersButton";
 import PowerMenu from "../AppWidgets/Modals/PowerMenu/PowerMenu";
 import SendActionCommandToTradingMode from "../AppWidgets/Buttons/SendActionCommandToTradingMode";
-import PlotlyChart from "../AppWidgets/Charts/MainCharts/Plotly";
 import RefreshBotData from "../AppWidgets/Buttons/RefreshData";
 import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
 import OptimizerQueueSize from "../AppWidgets/Stats/OptimizerQueueSize";
-import OptimizerConfigForm2 from "../AppWidgets/Configuration/OptimizerConfigForm2/OptimizerConfigForm";
 import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
+import SymbolsInfoTable from "../AppWidgets/Tables/SymbolsInfo";
+import PlotlyDualCharts from "../AppWidgets/Charts/MainCharts/PlotlyDualCharts";
+import ResetUiConfigButton from "../AppWidgets/Buttons/ResetUiConfigButton";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -81,11 +82,13 @@ export const registeredComponents = {
   PageBuilder: PageBuilder,
   ButtonWithModal: ButtonWithModal,
   RealTradingSwitch: RealTradingSwitch,
-  PlotlyChart: PlotlyChart,
   CloseAllPositionsButton: CloseAllPositionsButton,
   CancelAllOrdersButton: CancelAllOrdersButton,
   PowerMenu: PowerMenu,
+  PlotlyDualCharts: PlotlyDualCharts,
   SendActionCommandToTradingMode: SendActionCommandToTradingMode,
   // OptimizerConfigForm2: OptimizerConfigForm2,
   ToggleActivateRealTimeStrategy: ToggleActivateRealTimeStrategy,
+  SymbolsInfoTable: SymbolsInfoTable,
+  ResetUiConfigButton: ResetUiConfigButton,
 };

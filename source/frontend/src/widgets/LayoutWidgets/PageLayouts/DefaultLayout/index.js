@@ -1,16 +1,24 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
+import { useCurrentPanelContext, useSetCurrentPanelPercent } from "../../../../context/config/MainPanelContext";
 import AppWidgets from "../../../WidgetManagement/RenderAppWidgets";
 import SplitMainContent from "../../SplitMainContent";
 
 export default function DefaultLayout({ headerContent, upperContent, lowerContent, footerContent }) {
-  const [dimensions, setDimensions] = useState({ main: window.innerHeight - 108}) // ~108 is header + footer
-  const headerRef = useRef(null);
-  const footerRef = useRef(null);
-
+  const setPanelPercent = useSetCurrentPanelPercent()
+  const panelPercent = useCurrentPanelContext()
+  const headerRef = useRef()
+  const footerRef = useRef()
+  const [mainHeight, setMainHeight] = useState(window.innerHeight - 108) // ~108 is header + footer
   useEffect(() => {
-    handleWindowResize(headerRef, footerRef, setDimensions);
-    window.addEventListener("resize", () => handleWindowResize(headerRef, footerRef, setDimensions));
+    window.addEventListener(
+      "resize", () => handleWindowResize(
+        headerRef?.current?.clientHeight,
+        footerRef?.current?.clientHeight, setMainHeight
+      ));
   }, []);
+  useEffect(() => {
+    handleWindowResize(headerRef?.current?.clientHeight, footerRef?.current?.clientHeight, setMainHeight);
+  }, [headerRef?.current?.clientHeight, footerRef?.current?.clientHeight]);
   return (
     <div style={{ flex: 1, height: "100vh" }}>
       <div
@@ -23,31 +31,31 @@ export default function DefaultLayout({ headerContent, upperContent, lowerConten
         }}
       >
         <div ref={headerRef}>
-        <AppWidgets layout={headerContent} />
+          <AppWidgets layout={headerContent} />
         </div>
-        <div style={{ height: dimensions.main }}>
-          <SplitMainContent
+        <div style={{ height: mainHeight }}>
+          {useMemo(() => (<SplitMainContent
             upperContent={upperContent}
             lowerContent={lowerContent}
-            height={dimensions.main}
-          />
+            panelPercent={panelPercent}
+            setPanelPercent={setPanelPercent}
+          />), [lowerContent, panelPercent, setPanelPercent, upperContent])}
         </div>
         <div ref={footerRef}>
           {useMemo(() => (<AppWidgets layout={footerContent} />), [footerContent])}
         </div>
       </div>
     </div>
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   )
 }
 
-function handleWindowResize(headerRef, footerRef, setDimensions) {
-  headerRef.current
-    && footerRef.current
-    && setDimensions({
-      main:
-        window.innerHeight -
-        headerRef.current.clientHeight -
-        footerRef.current.clientHeight,
-    });
+
+function handleWindowResize(headerHeight, footerHeight, setMainHeight) {
+  headerHeight
+    && footerHeight
+    && setMainHeight(
+      window.innerHeight -
+      headerHeight -
+      footerHeight,
+    );
 }

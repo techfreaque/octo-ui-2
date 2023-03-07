@@ -11,8 +11,12 @@ export const useUpdateBotDomainContext = () => {
   return useContext(UpdateBotDomainContext);
 };
 
+export function getIsProduction() {
+  return process.env.NODE_ENV !== "development";
+}
+
 export const BotDomainProvider = ({ children }) => {
-  const isProduction = process.env.NODE_ENV !== "development";
+  const isProduction = getIsProduction()
   const [botDomain, setBotDomain] = useState(
     isProduction ? window.location.origin : process.env.REACT_APP_DEVELOPMENT_BOT_DOMAIN
   );

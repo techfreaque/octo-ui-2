@@ -15,6 +15,7 @@ from .controllers import (
     trading,
     daemons,
     tentacles_config,
+    symbols_info,
 )
 import octobot_services.interfaces.util as interfaces_util
 import octobot_trading.util as trading_util
@@ -39,6 +40,7 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
         trading.register_cancel_orders_routes(self)
         tentacles_config.register_tentacles_config_routes(self)
         daemons.register_daemons_routes(self)
+        symbols_info.register_symbols_info_routes(self)
 
     def get_tabs(self):
         return [

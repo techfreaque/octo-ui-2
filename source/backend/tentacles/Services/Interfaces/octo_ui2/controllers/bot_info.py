@@ -59,8 +59,8 @@ def register_bot_info_routes(plugin):
         timeframes_dict = {}
         strategy_names = []
         trigger_time_frames = None
-        real_time_strategies_active = False
-
+        real_time_strategies_active: bool = False
+        any_exchange_is_futures: bool = False
         try:
             (
                 exchange_manager,
@@ -69,6 +69,9 @@ def register_bot_info_routes(plugin):
             ) = models.get_first_exchange_data(exchange)
             exchange_managers = interfaces.AbstractInterface.get_exchange_managers()
             for _exchange_manager in exchange_managers:
+                any_exchange_is_futures = (
+                    any_exchange_is_futures or _exchange_manager.is_future
+                )
                 exchange_names.append(_exchange_manager.exchange_name)
                 exchange_ids.append(_exchange_manager.id)
                 ids_by_exchange_name[
@@ -149,6 +152,7 @@ def register_bot_info_routes(plugin):
                         for s in symbols
                     ]
                 ),
+                "any_exchange_is_futures": any_exchange_is_futures,
                 "evaluator_names": evaluator_names,
                 "time_frames": timeframes_dict,
                 # "enabled_time_frames": enabled_time_frames,

@@ -20,13 +20,13 @@ import KeyboardArrowDownOutlinedIcon from "@mui/icons-material/KeyboardArrowDown
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 import { useEffect, useState } from "react";
 
-export default function ReactTables({ nodes, cells }) {
+export default function ReactTables({ nodes, cells, layout }) {
   const botColors = useBotColorsContext();
   const data = { nodes };
   const [theme, setTheme] = useState({
     Table: `
-        color: ${botColors.font};
-    `,
+        // color: ${botColors.font};
+        `,
     // Header: ``,
     // Body: ``,
     // BaseRow: ``,
@@ -62,7 +62,7 @@ export default function ReactTables({ nodes, cells }) {
     <Table
       data={data}
       theme={_theme}
-      layout={{ fixedHeader: true }}
+      layout={{ fixedHeader: true, ...layout }}
       sort={sort}
     >
       {(tableList) => (

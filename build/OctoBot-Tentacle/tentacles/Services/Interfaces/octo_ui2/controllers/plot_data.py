@@ -4,7 +4,6 @@ import tentacles.Services.Interfaces.octo_ui2.models.plots as plots_models
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
-import octobot_commons.logging as commons_logging
 import octobot_commons.symbols.symbol_util as symbol_util
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,

@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faWindowMaximize } from "@fortawesome/free-solid-svg-icons";
 import React, { useMemo } from "react";
-import { useSetCurrentPanelPercent } from "../../LayoutWidgets/SplitMainContent";
+import { useSetCurrentPanelPercent } from "../../../context/config/MainPanelContext";
 
 export default function CurrentPanelFullscreen() {
   const setPanelPercent = useSetCurrentPanelPercent()

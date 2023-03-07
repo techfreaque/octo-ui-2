@@ -31,13 +31,12 @@ export const useFetchUiConfig = () => {
 export const useSaveUiConfig = () => {
   const setUiConfig = useUpdateUiConfigContext();
   const botDomain = useBotDomainContext();
-  const logic = useCallback((newConfig, callbackSucces) => {
-      let newCombinedConfig = {}
-      setUiConfig(prevConfig => {
-        newCombinedConfig = { ...prevConfig, ...newConfig }
-        saveUIConfig(botDomain, newCombinedConfig, callbackSucces);
-        return newCombinedConfig
-      })
+  const logic = useCallback((newConfig, callbackSucces, callbackFail, overwriteConfig = false) => {
+    setUiConfig(prevConfig => {
+      const _newConfig = { ...(overwriteConfig ? {} : prevConfig), ...newConfig }
+      saveUIConfig(botDomain, _newConfig, callbackSucces, callbackFail);
+      return _newConfig
+    })
   }, [setUiConfig, botDomain]);
   return logic;
 };

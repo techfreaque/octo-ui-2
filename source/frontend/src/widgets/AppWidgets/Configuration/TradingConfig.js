@@ -60,7 +60,7 @@ function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, bot
     window.customDisplayAsTabInputs = {}
     Object.keys(editedUserInputs).forEach(TentacleName => {
         create_custom_tabs(editedUserInputs[TentacleName], tabsData)
-        // _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
+        _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
         // _applyCustomPathUserInputs(editedUserInputs, tradingModeName);
         _createTentacleConfigTab(
             editedUserInputs[TentacleName].tentacle, editedUserInputs[TentacleName].tentacle,
@@ -137,7 +137,7 @@ function advancedTradingSettings(tabsData, exchangeId, botDomain) {
 
 function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {
     let hiddenMetadataColumns = [];
-    elements.forEach(function (inputDetails) {
+    Object.values(elements).forEach(function (inputDetails) {
         hiddenMetadataColumns = hiddenMetadataColumns.concat(
             _hideNotShownUserInputs(inputDetails.tentacle, inputDetails.schema, inputDetails.is_hidden)
         );
@@ -152,7 +152,7 @@ export function saveUserInputs(saveTentaclesConfig, setIsLoading) {
     Object.keys(window.$tradingConfig).forEach((editorKey) => {
         const editor = window.$tradingConfig[editorKey]
         if (editor) {
-            const [tentacleType, tentacle] = editorKey.split("##");
+            const tentacle = editorKey.split("##")[1];
             const errorsDesc = validateJSONEditor(editor)
             if (errorsDesc.length === 0) {
                 tentaclesConfigByTentacle[tentacle] = editor.getValue();

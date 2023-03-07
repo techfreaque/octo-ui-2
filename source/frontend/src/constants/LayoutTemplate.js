@@ -1,459 +1,480 @@
-export const defaultBotTemplate = [
-    {
-        "layout": [
-            {
-                "component": "DefaultLayout",
-                "footerContent": [
-                    {
-                        "component": "Footer",
-                        "rightContent": [
-                            {
-                                "component": "PowerMenu"
-                            }
-                        ]
-                    }
-                ],
-                "headerContent": [
-                    {
-                        "component": "Header",
-                        "leftContent": [
-                            {
-                                "component": "AppDrawerDropdown"
-                            },
-                            {
-                                "component": "PairsSelector"
-                            },
-                            {
-                                "component": "TimeFrameSelector"
-                            },
-                            {
-                                "component": "ExchangeSelector"
-                            }
-                        ],
-                        "rightContent": [
-                            {
-                                "component": "ColorModeSwitch"
-                            },
-                            {
-                                "component": "RealTradingSwitch"
-                            }
-                        ]
-                    }
-                ],
-                "lowerContent": [
-                    {
-                        "component": "ScrollableTabs",
-                        "rightContent": [
-                            {
-                                "component": "RefreshBotData"
-                            },
-                            {
-                                "component": "ButtonWithModal",
-                                "content": [
-                                    {
-                                        "component": "UIConfig",
-                                        "configKeys": [
-                                            "display_settings"
-                                        ]
-                                    }
-                                ],
-                                "faIcon": "cog",
-                                "title": ""
-                            },
-                            {
-                                "component": "CurrentPanelMinimize"
-                            },
-                            {
-                                "component": "CurrentPanelFullscreen"
-                            }
-                        ],
-                        "tabs": [
-                            {
-                                "component": "Tab",
-                                "content": [
-                                    {
-                                        "component": "TradingConfig",
-                                        "content": [
-                                            {
-                                                "component": "ToggleActivateRealTimeStrategy",
-                                            },
-                                            {
-                                                "command": "execute",
-                                                "component": "SendActionCommandToTradingMode",
-                                                "faIcon": "sack-dollar",
-                                                "title": "Execute Trading Mode"
-                                            },
-                                        ]
-                                    },
-                                ],
-                                "dontScroll": true,
-                                "title": "Strategy Settings"
-                            },
-                            {
-                                "component": "Tab",
-                                "content": [
-                                    {
-                                        "component": "ScrollableTabs",
-                                        "rightContent": [
-                                            {
-                                                "component": "CancelAllOrdersButton"
-                                            },
-                                            {
-                                                "component": "CloseAllPositionsButton"
-                                            }
-                                        ],
-                                        "tabs": [
-                                            {
-                                                "component": "Tab",
-                                                "content": [
-                                                    {
-                                                        "component": "UIConfig",
-                                                        "configKeys": [
-                                                            "live_analysis_settings"
-                                                        ]
-                                                    }
-                                                ],
-                                                "dontScroll": false,
-                                                "title": "Analysis Settings"
-                                            },
-                                            {
-                                                "component": "Tab",
-                                                "content": [
-                                                    {
-                                                        "component": "LiveRunMetaData"
-                                                    }
-                                                ],
-                                                "dontScroll": false,
-                                                "title": "Trading Overview"
-                                            },
-                                            {
-                                                "component": "Tab",
-                                                "content": [
-                                                    {
-                                                        "component": "CurrentPortfolioTable"
-                                                    }
-                                                ],
-                                                "dontScroll": false,
-                                                "title": "Portfolio"
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "dontScroll": true,
-                                "title": "Trading"
-                            },
-                            {
-                                "component": "Tab",
-                                "content": [
-                                    {
-                                        "component": "ScrollableTabs",
-                                        "rightContent": [],
-                                        "tabs": [
-                                            {
-                                                "component": "Tab",
-                                                "content": [
-                                                    {
-                                                        "component": "UIConfig",
-                                                        "configKeys": [
-                                                            "backtesting_run_settings",
-                                                            "backtesting_analysis_settings",
-                                                            "optimization_campaign",
-                                                            "optimizer_campaigns_to_load"
-                                                        ]
-                                                    }
-                                                ],
-                                                "dontScroll": false,
-                                                "title": "Backtesting Settings"
-                                            },
-                                            {
-                                                "component": "Tab",
-                                                "content": [
-                                                    {
-                                                        "component": "BacktestingRunDataTable"
-                                                    }
-                                                ],
-                                                "dontScroll": false,
-                                                "title": "Backtesting Overview"
-                                            },
-                                            {
-                                                "component": "StartBacktestingButton"
-                                            },
-                                            {
-                                                "component": "StopBacktestingButton"
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "dontScroll": true,
-                                "title": "Backtesting"
-                            },
-                            {
-                                "component": "Tab",
-                                "content": [
-                                    {
-                                        "component": "ScrollableTabs",
-                                        "rightContent": [
-                                            {
-                                                "component": "OptimizerQueueSize"
-                                            },
-                                            {
-                                                "component": "OptimizerRunsToBeAdded"
-                                            },
-                                            {
-                                                "component": "AddToOptimizerQueueButton"
-                                            },
-                                            {
-                                                "component": "StopOptimizerButton"
-                                            },
-                                            {
-                                                "component": "StartOptimizerButton"
-                                            }
-                                        ],
-                                        "tabs": [
-                                            {
-                                                "component": "Tab",
-                                                "content": [
-                                                    {
-                                                        "component": "UIConfig",
-                                                        "configKeys": [
-                                                            "optimizer_run_settings",
-                                                            "optimization_campaign"
-                                                        ]
-                                                    }
-                                                ],
-                                                "dontScroll": false,
-                                                "title": "Optimizer settings"
-                                            },
-                                            {
-                                                "component": "Tab",
-                                                "content": [
-                                                    {
-                                                        "component": "OptimizerConfigForm"
-                                                    }
-                                                ],
-                                                "dontScroll": false,
-                                                "title": "Run config"
-                                            },
-                                            {
-                                                "component": "Tab",
-                                                "content": [
-                                                    {
-                                                        "component": "OptimizerQueueTable"
-                                                    }
-                                                ],
-                                                "dontScroll": false,
-                                                "title": "Queue"
-                                            }
-                                        ]
-                                    }
-                                ],
-                                "dontScroll": false,
-                                "title": "Optimizer"
-                            }
-                        ]
-                    }
-                ],
-                "upperContent": [
-                    {
-                        "component": "PlotlyChart"
-                    }
-                ]
-            }
-        ],
-        "path": "/",
-        "title": "Home"
-    },
-    {
-        "layout": [
-            {
-                "component": "DefaultLayout",
-                "footerContent": [
-                    {
-                        "component": "Footer",
-                        "rightContent": [
-                            {
-                                "component": "PowerMenu"
-                            }
-                        ]
-                    }
-                ],
-                "headerContent": [
-                    {
-                        "component": "Header",
-                        "leftContent": [
-                            {
-                                "component": "AppDrawerDropdown"
-                            },
-                            {
-                                "component": "PairsSelector"
-                            },
-                            {
-                                "component": "TimeFrameSelector"
-                            }
-                        ],
-                        "rightContent": [
-                            {
-                                "component": "ColorModeSwitch"
-                            },
-                            {
-                                "component": "RealTradingSwitch"
-                            }
-                        ]
-                    }
-                ],
-                "lowerContent": [
-                    {
-                        "component": "ScrollableTabs",
-                        "rightContent": [
-                            {
-                                "component": "ButtonWithModal",
-                                "content": [
-                                    {
-                                        "component": "UIConfig",
-                                        "configKeys": [
-                                            "display_settings"
-                                        ]
-                                    }
-                                ],
-                                "faIcon": "cog",
-                                "title": ""
-                            },
-                            {
-                                "component": "CurrentPanelMinimize"
-                            },
-                            {
-                                "component": "CurrentPanelFullscreen"
-                            }
-                        ],
-                        "tabs": [
-                            {
-                                "component": "Tab",
-                                "content": [
-                                    {
-                                        "component": "Configuration",
-                                        "configKey": "profile/crypto-currencies"
-                                    }
-                                ],
-                                "dontScroll": false,
-                                "title": "Currencies"
-                            },
-                            {
-                                "component": "Tab",
-                                "content": [
-                                    {
-                                        "component": "Configuration",
-                                        "configKey": "profile/exchanges"
-                                    }
-                                ],
-                                "dontScroll": false,
-                                "title": "Exchanges"
-                            },
-                            {
-                                "component": "Tab",
-                                "content": [
-                                    {
-                                        "component": "Configuration",
-                                        "configKey": "profile/trading"
-                                    },
-                                    {
-                                        "component": "Configuration",
-                                        "configKey": "profile/trader"
-                                    },
-                                    {
-                                        "component": "Configuration",
-                                        "configKey": "profile/trader-simulator"
-                                    }
-                                ],
-                                "dontScroll": false,
-                                "title": "Trading"
-                            }
-                        ]
-                    }
-                ],
-                "upperContent": [
-                    {
-                        "component": "PlotlyChart"
-                    }
-                ]
-            }
-        ],
-        "path": "/profile",
-        "title": "Profiles"
-    },
-    {
-        "layout": [
-            {
-                "component": "SimpleLayout",
-                "footerContent": [
-                    {
-                        "component": "Footer",
-                        "rightContent": [
-                            {
-                                "component": "PowerMenu"
-                            }
-                        ]
-                    }
-                ],
-                "headerContent": [
-                    {
-                        "component": "Header",
-                        "leftContent": [
-                            {
-                                "component": "AppDrawerDropdown"
-                            }
-                        ],
-                        "rightContent": [
-                            {
-                                "component": "ColorModeSwitch"
-                            },
-                            {
-                                "component": "RealTradingSwitch"
-                            }
-                        ]
-                    }
-                ],
-                "pageContent": [
-                    {
-                        "component": "AppStore"
-                    }
-                ]
-            }
-        ],
-        "path": "/appstore",
-        "title": "App Store"
-    },
-    {
-        "layout": [
-            {
-                "component": "SimpleLayout",
-                "footerContent": [
-                    {
-                        "component": "Footer",
-                        "rightContent": []
-                    }
-                ],
-                "headerContent": [
-                    {
-                        "component": "Header",
-                        "leftContent": [
-                            {
-                                "component": "AppDrawerDropdown"
-                            }
-                        ],
-                        "rightContent": []
-                    }
-                ],
-                "pageContent": [
-                    {
-                        "component": "PageBuilder"
-                    }
-                ]
-            }
-        ],
-        "path": "/page-builder",
-        "title": "Page Builder"
-    }
-];
+export const defaultBotTemplate = {
+    isCustom: false, // set to true to keep your changes
+    layouts: [
+        {
+            "layout": [
+                {
+                    "component": "DefaultLayout",
+                    "footerContent": [
+                        {
+                            "component": "Footer",
+                            "rightContent": [
+                                {
+                                    "component": "PowerMenu"
+                                }
+                            ]
+                        }
+                    ],
+                    "headerContent": [
+                        {
+                            "component": "Header",
+                            "leftContent": [
+                                {
+                                    "component": "AppDrawerDropdown"
+                                },
+                                {
+                                    "component": "PairsSelector"
+                                },
+                                {
+                                    "component": "TimeFrameSelector"
+                                },
+                                {
+                                    "component": "ExchangeSelector"
+                                }
+                            ],
+                            "rightContent": [
+                                {
+                                    "component": "ColorModeSwitch"
+                                },
+                                {
+                                    "component": "RealTradingSwitch"
+                                }
+                            ]
+                        }
+                    ],
+                    "lowerContent": [
+                        {
+                            "component": "ScrollableTabs",
+                            "rightContent": [
+                                {
+                                    "component": "RefreshBotData"
+                                },
+                                {
+                                    "component": "ButtonWithModal",
+                                    "content": [
+                                        {
+                                            "component": "UIConfig",
+                                            "configKeys": [
+                                                "display_settings"
+                                            ]
+                                        },
+                                        {
+                                            "component": "ResetUiConfigButton"
+                                        }
+                                    ],
+                                    "faIcon": "cog",
+                                    "title": ""
+                                },
+                                {
+                                    "component": "CurrentPanelMinimize"
+                                },
+                                {
+                                    "component": "CurrentPanelFullscreen"
+                                }
+                            ],
+                            "tabs": [
+                                {
+                                    "component": "Tab",
+                                    "content": [
+                                        {
+                                            "component": "TradingConfig",
+                                            "content": [
+                                                {
+                                                    "component": "ToggleActivateRealTimeStrategy"
+                                                },
+                                                {
+                                                    "command": "execute",
+                                                    "component": "SendActionCommandToTradingMode",
+                                                    "faIcon": "sack-dollar",
+                                                    "title": "Execute Trading Mode"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "dontScroll": true,
+                                    "title": "Strategy Settings"
+                                },
+                                {
+                                    "component": "Tab",
+                                    "content": [
+                                        {
+                                            "component": "ScrollableTabs",
+                                            "rightContent": [
+                                                {
+                                                    "component": "CancelAllOrdersButton"
+                                                },
+                                                {
+                                                    "component": "CloseAllPositionsButton"
+                                                }
+                                            ],
+                                            "tabs": [
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "UIConfig",
+                                                            "configKeys": [
+                                                                "live_analysis_settings"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Analysis Settings"
+                                                },
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "LiveRunMetaData"
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Trading Overview"
+                                                },
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "CurrentPortfolioTable"
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Portfolio"
+                                                },
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "SymbolsInfoTable"
+                                                        }
+                                                    ],
+                                                    "dontScroll": true,
+                                                    "title": "Symbols Info"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "dontScroll": true,
+                                    "title": "Trading"
+                                },
+                                {
+                                    "component": "Tab",
+                                    "content": [
+                                        {
+                                            "component": "ScrollableTabs",
+                                            "rightContent": [],
+                                            "tabs": [
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "UIConfig",
+                                                            "configKeys": [
+                                                                "backtesting_run_settings",
+                                                                "backtesting_analysis_settings",
+                                                                "optimization_campaign",
+                                                                "optimizer_campaigns_to_load"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Backtesting Settings"
+                                                },
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "BacktestingRunDataTable"
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Backtesting Overview"
+                                                },
+                                                {
+                                                    "component": "StartBacktestingButton"
+                                                },
+                                                {
+                                                    "component": "StopBacktestingButton"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "dontScroll": true,
+                                    "title": "Backtesting"
+                                },
+                                {
+                                    "component": "Tab",
+                                    "content": [
+                                        {
+                                            "component": "ScrollableTabs",
+                                            "rightContent": [
+                                                {
+                                                    "component": "OptimizerQueueSize"
+                                                },
+                                                {
+                                                    "component": "OptimizerRunsToBeAdded"
+                                                },
+                                                {
+                                                    "component": "AddToOptimizerQueueButton"
+                                                },
+                                                {
+                                                    "component": "StopOptimizerButton"
+                                                },
+                                                {
+                                                    "component": "StartOptimizerButton"
+                                                }
+                                            ],
+                                            "tabs": [
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "UIConfig",
+                                                            "configKeys": [
+                                                                "optimizer_run_settings",
+                                                                "optimization_campaign"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Optimizer settings"
+                                                },
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "OptimizerConfigForm"
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Run config"
+                                                },
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "OptimizerQueueTable"
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Queue"
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "dontScroll": false,
+                                    "title": "Optimizer"
+                                }
+                            ]
+                        }
+                    ],
+                    "minHeights": "0, 50",
+                    "upperContent": [
+                        {
+                            "component": "PlotlyDualCharts"
+                        }
+                    ]
+                }
+            ],
+            "path": "/",
+            "title": "Home"
+        },
+        {
+            "layout": [
+                {
+                    "component": "DefaultLayout",
+                    "footerContent": [
+                        {
+                            "component": "Footer",
+                            "rightContent": [
+                                {
+                                    "component": "PowerMenu"
+                                }
+                            ]
+                        }
+                    ],
+                    "headerContent": [
+                        {
+                            "component": "Header",
+                            "leftContent": [
+                                {
+                                    "component": "AppDrawerDropdown"
+                                },
+                                {
+                                    "component": "PairsSelector"
+                                },
+                                {
+                                    "component": "TimeFrameSelector"
+                                }
+                            ],
+                            "rightContent": [
+                                {
+                                    "component": "ColorModeSwitch"
+                                },
+                                {
+                                    "component": "RealTradingSwitch"
+                                }
+                            ]
+                        }
+                    ],
+                    "lowerContent": [
+                        {
+                            "component": "ScrollableTabs",
+                            "rightContent": [
+                                {
+                                    "component": "ButtonWithModal",
+                                    "content": [
+                                        {
+                                            "component": "UIConfig",
+                                            "configKeys": [
+                                                "display_settings"
+                                            ]
+                                        }
+                                    ],
+                                    "faIcon": "cog",
+                                    "title": ""
+                                },
+                                {
+                                    "component": "CurrentPanelMinimize"
+                                },
+                                {
+                                    "component": "CurrentPanelFullscreen"
+                                }
+                            ],
+                            "tabs": [
+                                {
+                                    "component": "Tab",
+                                    "content": [
+                                        {
+                                            "component": "Configuration",
+                                            "configKey": "profile/crypto-currencies"
+                                        }
+                                    ],
+                                    "dontScroll": false,
+                                    "title": "Currencies"
+                                },
+                                {
+                                    "component": "Tab",
+                                    "content": [
+                                        {
+                                            "component": "Configuration",
+                                            "configKey": "profile/exchanges"
+                                        }
+                                    ],
+                                    "dontScroll": false,
+                                    "title": "Exchanges"
+                                },
+                                {
+                                    "component": "Tab",
+                                    "content": [
+                                        {
+                                            "component": "Configuration",
+                                            "configKey": "profile/trading"
+                                        },
+                                        {
+                                            "component": "Configuration",
+                                            "configKey": "profile/trader"
+                                        },
+                                        {
+                                            "component": "Configuration",
+                                            "configKey": "profile/trader-simulator"
+                                        }
+                                    ],
+                                    "dontScroll": false,
+                                    "title": "Trading"
+                                }
+                            ]
+                        }
+                    ],
+                    "minHeights": "0, 0",
+                    "upperContent": [
+                        {
+                            "component": "Tab",
+                            "content": [],
+                            "dontScroll": false,
+                            "title": ""
+                        }
+                    ]
+                }
+            ],
+            "path": "/profile",
+            "title": "Profiles"
+        },
+        {
+            "layout": [
+                {
+                    "component": "SimpleLayout",
+                    "footerContent": [
+                        {
+                            "component": "Footer",
+                            "rightContent": [
+                                {
+                                    "component": "PowerMenu"
+                                }
+                            ]
+                        }
+                    ],
+                    "headerContent": [
+                        {
+                            "component": "Header",
+                            "leftContent": [
+                                {
+                                    "component": "AppDrawerDropdown"
+                                }
+                            ],
+                            "rightContent": [
+                                {
+                                    "component": "ColorModeSwitch"
+                                },
+                                {
+                                    "component": "RealTradingSwitch"
+                                }
+                            ]
+                        }
+                    ],
+                    "pageContent": [
+                        {
+                            "component": "AppStore"
+                        }
+                    ]
+                }
+            ],
+            "path": "/appstore",
+            "title": "Package Manager"
+        },
+        {
+            "layout": [
+                {
+                    "component": "SimpleLayout",
+                    "footerContent": [
+                        {
+                            "component": "Footer",
+                            "rightContent": []
+                        }
+                    ],
+                    "headerContent": [
+                        {
+                            "component": "Header",
+                            "leftContent": [
+                                {
+                                    "component": "AppDrawerDropdown"
+                                }
+                            ],
+                            "rightContent": []
+                        }
+                    ],
+                    "pageContent": [
+                        {
+                            "component": "PageBuilder"
+                        }
+                    ]
+                }
+            ],
+            "path": "/page-builder",
+            "title": "Page Builder"
+        }
+    ]
+};
 
 export const defaultColors = {
     dark: {

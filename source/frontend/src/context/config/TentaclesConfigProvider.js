@@ -71,11 +71,11 @@ export const useSaveTentaclesConfig = () => {
   const botDomain = useBotDomainContext()
   const logic = useCallback((newConfigs, setIsSaving, reloadPlots = false) => {
     const failure = (updated_data, update_url, result, msg, status) => {
-      setIsSaving(false)
+      setIsSaving && setIsSaving(false)
       createNotification(msg)
     }
     const onFinish = (updated_data, update_url, result, msg, status) => {
-      setIsSaving(false)
+      setIsSaving && setIsSaving(false)
       createNotification("Successfully save tentacles config")
       reloadPlots && fetchPlotData()
     }
@@ -90,7 +90,7 @@ export const useSaveTentaclesConfig = () => {
 export const useSaveTentaclesConfigAndSendAction = () => {
   const fetchPlotData = useFetchPlotData();
   const botDomain = useBotDomainContext()
-  const logic = useCallback((newConfigs, actionType, setIsLoading, reloadPlots = false, successCallback=undefined, failureCallback=undefined) => {
+  const logic = useCallback((newConfigs, actionType, setIsLoading, reloadPlots = false, successCallback = undefined, failureCallback = undefined) => {
     const fail = (updated_data, update_url, result, msg, status) => {
       setIsLoading(false)
       createNotification("Failed to executed trading mode", "danger")

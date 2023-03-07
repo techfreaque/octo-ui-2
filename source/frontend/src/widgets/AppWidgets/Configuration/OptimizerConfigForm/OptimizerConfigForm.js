@@ -1,10 +1,8 @@
 import { useEffect, useMemo } from "react";
-import { CUSTOM_USER_INPUT_PATH_SEPARATOR, OPTIMIZER_INPUTS_KEY, _INPUT_SEPARATOR } from "../../../../constants/backendConstants";
+import { OPTIMIZER_INPUTS_KEY, _INPUT_SEPARATOR } from "../../../../constants/backendConstants";
 import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
-import { useBotPlottedElementsContext } from "../../../../context/data/BotPlottedElementsProvider";
 import $ from "jquery";
 import OptimizerSettingTemplate from "./OptimizerInputTemplate";
-import OptimizerRunFilterTemplate from "./OptimizerFilteremplate";
 // eslint-disable-next-line no-unused-vars
 import select2 from "select2/dist/js/select2.js" // required
 import { useUpdateOptimizerEditorCounterContext } from "../../../../context/config/OptimizerEditorProvider";
@@ -158,28 +156,28 @@ function _optimizerFilterPart(parent, selector) {
     }
 }
 
-function _buildOptimizerFilters(filtersSettings, blank) {
-    const optimizerSettings = getOptimizerSettingsValues().user_inputs;
-    const userInputIdentifiers = Object.values(optimizerSettings).map(userInput => {
-        return {
-            identifier: _optimizeUserInputIdentifier(userInput.tentacle, userInput.user_input),
-            text: `${userInput.user_input} [${userInput.tentacle.split(_INPUT_SEPARATOR).join(":")}]`
-        }
-    });
-    const filterGroupContent = $("#optimizer-filters-root");
-    if (blank) {
-        _buildUserInputFilterEntry(filterGroupContent, null, userInputIdentifiers);
-    } else if (typeof filtersSettings !== "undefined") {
-        filtersSettings.forEach(filterSetting => {
-            _buildUserInputFilterEntry(filterGroupContent, filterSetting, userInputIdentifiers);
-        })
-    }
-}
+// function _buildOptimizerFilters(filtersSettings, blank) {
+//     const optimizerSettings = getOptimizerSettingsValues().user_inputs;
+//     const userInputIdentifiers = Object.values(optimizerSettings).map(userInput => {
+//         return {
+//             identifier: _optimizeUserInputIdentifier(userInput.tentacle, userInput.user_input),
+//             text: `${userInput.user_input} [${userInput.tentacle.split(_INPUT_SEPARATOR).join(":")}]`
+//         }
+//     });
+//     const filterGroupContent = $("#optimizer-filters-root");
+//     if (blank) {
+//         _buildUserInputFilterEntry(filterGroupContent, null, userInputIdentifiers);
+//     } else if (typeof filtersSettings !== "undefined") {
+//         filtersSettings.forEach(filterSetting => {
+//             _buildUserInputFilterEntry(filterGroupContent, filterSetting, userInputIdentifiers);
+//         })
+//     }
+// }
 
-function _buildUserInputFilterEntry(filterGroupContent, filterSetting, userInputIdentifiers) {
-    const newInputFilter = _getInputFilterFromTemplate(userInputIdentifiers, filterSetting);
-    filterGroupContent.append(newInputFilter);
-}
+// function _buildUserInputFilterEntry(filterGroupContent, filterSetting, userInputIdentifiers) {
+//     const newInputFilter = _getInputFilterFromTemplate(userInputIdentifiers, filterSetting);
+//     filterGroupContent.append(newInputFilter);
+// }
 
 function _buildUserInputConfigEntry(inputGroupContent, valueType, inputDetail, configValues, tentacleName) {
     const newInputSetting = _getInputSettingFromTemplate(valueType, inputDetail, tentacleName)
@@ -254,33 +252,33 @@ function _getInputSettingFromTemplate(valueType, inputDetail, tentacleName) {
     }
 }
 
-function _getInputFilterFromTemplate(userInputIdentifiers, filterSetting) {
-    const filterEntry = $("#optimizer-filter-template").clone();
-    filterEntry.removeAttr("id");
-    filterEntry.find("select[data-type='user-input'], select[data-type='operator']").each((i, jsElement) => {
-        const element = $(jsElement);
-        const role = element.data("role");
-        if (element.data("type") === "user-input") {
-            userInputIdentifiers.forEach(identifier => {
-                element.append(new Option(identifier.text, identifier.identifier, false,
-                    filterSetting === null ? false : filterSetting[role].value === identifier.identifier));
-            })
-        } else if (filterSetting !== null) {
-            element.val(filterSetting[role].value);
-        }
-    });
-    filterEntry.find("input[data-type='text']").each((i, jsElement) => {
-        const element = $(jsElement);
-        const role = element.data("role");
-        if (filterSetting !== null && typeof filterSetting[role] !== "undefined") {
-            element.val(filterSetting[role].value);
-        }
-    });
-    filterEntry.find("button[data-action='delete']").click(() => {
-        filterEntry.remove();
-    })
-    return filterEntry
-}
+// function _getInputFilterFromTemplate(userInputIdentifiers, filterSetting) {
+//     const filterEntry = $("#optimizer-filter-template").clone();
+//     filterEntry.removeAttr("id");
+//     filterEntry.find("select[data-type='user-input'], select[data-type='operator']").each((i, jsElement) => {
+//         const element = $(jsElement);
+//         const role = element.data("role");
+//         if (element.data("type") === "user-input") {
+//             userInputIdentifiers.forEach(identifier => {
+//                 element.append(new Option(identifier.text, identifier.identifier, false,
+//                     filterSetting === null ? false : filterSetting[role].value === identifier.identifier));
+//             })
+//         } else if (filterSetting !== null) {
+//             element.val(filterSetting[role].value);
+//         }
+//     });
+//     filterEntry.find("input[data-type='text']").each((i, jsElement) => {
+//         const element = $(jsElement);
+//         const role = element.data("role");
+//         if (filterSetting !== null && typeof filterSetting[role] !== "undefined") {
+//             element.val(filterSetting[role].value);
+//         }
+//     });
+//     filterEntry.find("button[data-action='delete']").click(() => {
+//         filterEntry.remove();
+//     })
+//     return filterEntry
+// }
 
 function _getInputSettingTemplate(valueType) {
     return $(`#optimizer-settings-${valueType}-template`);

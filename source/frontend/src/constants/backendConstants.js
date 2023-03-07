@@ -7,6 +7,7 @@ export const backendRoutes = {
   plottedData: basePath + "/plotted_data",
   plottedRunData: basePath + "/plotted_run_data",
   botPortfolio: basePath + "/portfolio",
+  symbolsInfo: basePath + "/symbols-info",
   manageSymbol: "/profile",
   appStore: basePath + "/app-store",
   installApp: "/advanced/tentacle_packages?update_type=add_package",
@@ -69,4 +70,5 @@ export const GRAPHS_KEY = "graphs"
 export const CANDLES_PLOT_SOURCES = ["open", "high", "low", "close"];
 export const ALL_PLOT_SOURCES = ["y", "z", "volume"].concat(CANDLES_PLOT_SOURCES);
 
-export const botLayoutKey = "bot_ui_layout"
+export const botLayoutKey = "bot_ui_layout2"
+export const oldBotLayoutKey = "bot_ui_layout"

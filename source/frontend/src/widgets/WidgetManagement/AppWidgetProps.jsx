@@ -1,8 +1,9 @@
+import { allChartLocations } from "../AppWidgets/Charts/MainCharts/Plotly";
 import { availableConfigKeys } from "../AppWidgets/Configuration/Form";
 import { availableUIConfigKeys } from "../AppWidgets/Configuration/UIConfig";
 import { generateAppWidgetProp, generateSimpleProp } from "../AppWidgets/PageBuilder/PageBuilder";
 
-export default function appWidgetsProps(){
+export default function appWidgetsProps() {
     return {
         // add custom App Widget props here
         // add your component name to existing props or generate a new one
@@ -12,12 +13,14 @@ export default function appWidgetsProps(){
         ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeys),
         ...generateSimpleProp("configKeys", "UIConfig", "array", "select", availableUIConfigKeys, true),
         ...generateSimpleProp("faIcon", ["ButtonWithModal", "SendActionCommandToTradingMode"], "string"),
+        ...generateSimpleProp("chartLocation", "PlotlyChart", "string", undefined, allChartLocations),
+        ...generateSimpleProp("minHeights", ["DefaultLayout", "SplitMainContent"], "string", undefined, undefined, undefined, "0, 0"),
         ...generateAppWidgetProp("tabs", "ScrollableTabs"),
         ...generateAppWidgetProp("headerContent", ["DefaultLayout", "SimpleLayout"]),
         ...generateAppWidgetProp("content", ["Tab", "ButtonWithModal", "TradingConfig"]),
         ...generateAppWidgetProp("pageContent", "SimpleLayout"),
-        ...generateAppWidgetProp("upperContent", "DefaultLayout"),
-        ...generateAppWidgetProp("lowerContent", "DefaultLayout"),
+        ...generateAppWidgetProp("upperContent", ["DefaultLayout", "SplitMainContent"]),
+        ...generateAppWidgetProp("lowerContent", ["DefaultLayout", "SplitMainContent"]),
         ...generateAppWidgetProp("leftContent", ["Header"]),
         ...generateAppWidgetProp("rightContent", ["Header", "ScrollableTabs", "Footer"]),
         ...generateAppWidgetProp("footerContent", ["DefaultLayout", "SimpleLayout"]),

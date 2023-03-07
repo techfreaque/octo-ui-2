@@ -1,6 +1,6 @@
 import octobot_commons.logging as logging
 import octobot_commons.databases as databases
-import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.custom_context as custom_context
+import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.BaseDataProvider.custom_context as custom_context
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
 import octobot_commons.errors as commons_errors
 import octobot_services.interfaces.util as interfaces_util
@@ -9,10 +9,10 @@ import octobot_commons.display as commons_display
 import octobot_trading.api as trading_api
 
 try:
-    from tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.base_data_provider import (
+    from tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.base_data_provider import (
         CandlesLoadingError,
     )
-    from tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.init_base_data import (
+    from tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.init_base_data import (
         LiveMetaDataNotInitializedError,
     )
 except (ImportError, ModuleNotFoundError):
@@ -176,6 +176,6 @@ async def get_run_analysis_plots(
         return await trading_mode.get_script_from_module(
             trading_mode.BACKTESTING_SCRIPT_MODULE
         )(ctx)
-    import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisMode.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
+    import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.AnalysisMode.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
 
     return await run_analysis_mode.DefaultRunAnalysisMode().run_analysis_script(ctx)

@@ -1,7 +1,7 @@
 # from flask_cors import cross_origin
 import flask
 import octobot_commons.constants as commons_constants
-import octobot_commons.logging as commons_logging
+
 from tentacles.Services.Interfaces.octo_ui2.models import config
 from tentacles.Services.Interfaces.octo_ui2.models import octo_ui2
 import tentacles.Services.Interfaces.web_interface.login as login

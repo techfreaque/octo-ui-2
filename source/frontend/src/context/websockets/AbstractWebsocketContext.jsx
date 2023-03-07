@@ -14,7 +14,7 @@ export const AbstractWebsocketContext = ({
 };
 
 function initWebsocket(socketUrl, onConnectionUpdate, onConnectionLost, onKey) {
-    const socket = get_websocket(socketUrl)
+    const socket = getWebsocket(socketUrl.replace("http://", "ws://").replace("https://", "wss://"))
     socket.on(onKey, function (data) {
         onConnectionUpdate && onConnectionUpdate(data, socket)
     });
@@ -22,9 +22,12 @@ function initWebsocket(socketUrl, onConnectionUpdate, onConnectionLost, onKey) {
         onConnectionLost && onConnectionLost()
 
     });
+    
+    // CLEAN UP THE EFFECT
+    return () => socket.disconnect();
 }
 
-export function get_websocket(namespace) {
+export function getWebsocket(namespace) {
     // Connect to the Socket.IO server.
     // The connection URL has the following format, relative to the current page:
     //     http[s]://<domain>:<port>[/<namespace>]

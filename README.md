@@ -29,13 +29,13 @@ and here: /source/frontend/src/widgets/LayoutWidgets
 `cd octo-ui-2`
 ### 1. install requirements
 `cd source/frontend` \
-`npm install`
+`npm i`
 
 ### 2. Run dev Server for the frontend
 - make sure to update the env in /source/frontend/.env REACT_APP_DEVELOPMENT_BOT_DOMAIN which should be the domain/ip:port of your running OctoBot instance
 
 `cd source/frontend` \
-`npm start`\
+`npm run start`\
 the frontend should run now and is usually available on localhost:3000\
 It will fail to load until the backend runs and is properly configured
 

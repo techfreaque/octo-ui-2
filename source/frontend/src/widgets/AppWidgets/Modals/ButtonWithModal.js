@@ -20,6 +20,8 @@ const style = {
   boxShadow: 24,
   color: "white",
   p: 4,
+  overflowY: "scroll",
+  maxHeight: "100vh"
 };
 
 export default function ButtonWithModal({ title, content, faIcon }) {

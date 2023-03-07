@@ -1,8 +1,8 @@
-import { Button } from "@mui/material"
+import { Alert, Button } from "@mui/material"
 import JsonEditor from "@techfreaque/json-editor-react"
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults"
 import createNotification from "../../../components/Notifications/Notification"
-import { botLayoutKey } from "../../../constants/backendConstants"
+import { botLayoutKey, oldBotLayoutKey } from "../../../constants/backendConstants"
 import { defaultBotTemplate } from "../../../constants/LayoutTemplate"
 import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider"
 import { useSaveUiConfig } from "../../../context/config/UiConfigProvider"
@@ -14,30 +14,51 @@ export default function PageBuilder() {
     const saveUiConfig = useSaveUiConfig()
     const editorName = "Page-Builder"
     function handleResetLayout() {
-        const newConfig = { [botLayoutKey]: defaultBotTemplate }
+        const newConfig = {
+            [botLayoutKey]: defaultBotTemplate,
+            [oldBotLayoutKey]: [] // TODO remove someday
+        }
         const success = () => createNotification("Successfully restored default UI layout")
         saveUiConfig(newConfig, success)
     }
     function handlePageLayoutSaving() {
-        const newConfig = { [botLayoutKey]: window.$JsonEditors[editorName].getValue() }
+        const newConfig = {
+            [botLayoutKey]: {
+                isCustom: true,
+                layouts: window.$JsonEditors[editorName].getValue()
+            }
+        }
         const success = () => createNotification("Successfully saved new UI layout")
         saveUiConfig(newConfig, success)
     }
     return (
         <>
-            <Button style={{margin: "5px"}} variant="contained" onClick={handlePageLayoutSaving}>Save Page Layout</Button>
-            <Button style={{margin: "5px"}} variant="contained" color="warning" onClick={handleResetLayout}>Reset to default layout</Button>
-            <JsonEditor
-                {...defaultJsonEditorSettings()}
-                schema={pageBuilderSchema()}
-                startval={botLayout}
-                editorName={editorName}
-                disable_properties={false}
-                disable_array_add={false}
-                no_additional_properties={false}
-                use_name_attributes={true}
-                display_required_only={true}
-            />
+            <div style={{ margin: "20px", }}>
+                <h1>Page Builder</h1>
+                <Alert severity="info" style={{ maxWidth: "450px" }}>
+                    Once you have saved the page layout, it wont get overridded by a updated default layout in the future.
+                    You should reset your config after each update to make sure you'll get the latest futures.
+                    You can copy the config of your custom config with the help of the editor, and then past it after resetting.
+
+                </Alert>
+                <Button style={{ marginRight: "10px" }} variant="contained" onClick={handlePageLayoutSaving}>
+                    Save Page Layout
+                </Button>
+                <Button style={{}} variant="contained" color="warning" onClick={handleResetLayout}>
+                    Reset to default layout
+                </Button>
+                <JsonEditor
+                    {...defaultJsonEditorSettings()}
+                    schema={pageBuilderSchema()}
+                    startval={botLayout}
+                    editorName={editorName}
+                    disable_properties={false}
+                    disable_array_add={false}
+                    no_additional_properties={false}
+                    use_name_attributes={true}
+                    display_required_only={true}
+                />
+            </div>
         </>
     )
 }
@@ -100,7 +121,7 @@ export function generateAppWidgetProp(propName, dependentComponents) {
 
 }
 
-export function generateSimpleProp(propName, dependentComponents, type, format, enumList, enumMulti) {
+export function generateSimpleProp(propName, dependentComponents, type, format, enumList, enumMulti, defaultValue) {
     const items = enumList ?
         (enumMulti
             ? { items: { enum: enumList, type: "string" } }
@@ -111,6 +132,7 @@ export function generateSimpleProp(propName, dependentComponents, type, format, 
             type: type,
             format: format,
             ...items,
+            default: defaultValue,
             options: {
                 dependencies: {
                     component: dependentComponents

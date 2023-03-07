@@ -148,12 +148,15 @@ export async function fetchLiveRunData(
     success, undefined, "post")
 }
 
-export async function fetchBotPortfolio(_useSaveBotPortfolio, botDomain) {
-  await fetchAndStoreFromBot(botDomain + backendRoutes.botPortfolio, _useSaveBotPortfolio);
+export async function fetchBotPortfolio(setBotPortfolio, botDomain) {
+  await fetchAndStoreFromBot(botDomain + backendRoutes.botPortfolio, setBotPortfolio);
+}
+export async function fetchSymbolsInfo(setSymbolsInfo, botDomain) {
+  return await fetchAndStoreFromBot(botDomain + backendRoutes.symbolsInfo, setSymbolsInfo, "GET", {}, false, false, undefined, false);
 }
 
-export async function fetchAppStoreData(_useSaveAppStoreData, botDomain) {
-  await fetchAndStoreFromBot(botDomain + backendRoutes.appStore, _useSaveAppStoreData);
+export async function fetchAppStoreData(saveAppStoreData, botDomain) {
+  await fetchAndStoreFromBot(botDomain + backendRoutes.appStore, saveAppStoreData);
 }
 
 

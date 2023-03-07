@@ -15,6 +15,7 @@ export default function OptimizerQueueTable() {
     const containerId = "optimizer-queue-table"
     useEffect(() => {
         fetchOptimizerQueue()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
         optimizerQueue
