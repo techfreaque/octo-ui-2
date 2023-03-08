@@ -98,7 +98,7 @@ function formatplottedData(
                                     subElements: plottedElements[liveOrBacktest][optimizerCampaign][optimizerId][backtestingId],
                                     backtestingId: backtestingId, optimizerCampaign: optimizerCampaign,
                                     optimizerId: optimizerId, uiConfig: uiConfig,
-                                    plotData: plotData,
+                                    plotData: plotData, layouts: layouts,
                                     visibleTimeframes: visibleTimeframes, visiblePairs: visiblePairs,
                                     chartsInfo: chartsInfo
                                 })

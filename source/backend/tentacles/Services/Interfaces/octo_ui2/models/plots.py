@@ -173,9 +173,15 @@ async def get_run_analysis_plots(
         hasattr(trading_mode, "BACKTESTING_SCRIPT_MODULE")
         and trading_mode.BACKTESTING_SCRIPT_MODULE
     ):
-        return await trading_mode.get_script_from_module(
-            trading_mode.BACKTESTING_SCRIPT_MODULE
-        )(ctx)
+        try:
+            return await trading_mode.get_script_from_module(
+                trading_mode.BACKTESTING_SCRIPT_MODULE
+            )(ctx)
+        except Exception as error:
+            ctx.logger.info(
+                "Failed to use custom analysis script, will use the default one instead"
+                f" error: {error}"
+            )
     import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.AnalysisMode.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
 
     return await run_analysis_mode.DefaultRunAnalysisMode().run_analysis_script(ctx)

@@ -220,11 +220,7 @@ function _addBacktestingMetadataTableButtons(
         }
     }
 
-    function _deleteRuns() {
-        const selectedIds = table.getSelection()
-        if (selectedIds?.length === 0) {
-            return createNotification("Select a run to delete first", "danger")
-        }
+    function _deleteRuns(selectedIds) {
         const toDeleteRuns = selectedIds.map((recId) => table.get(recId))
         w2confirm(`Delete these ${toDeleteRuns.length} runs ?`)
             .yes(() => {
@@ -239,7 +235,18 @@ function _addBacktestingMetadataTableButtons(
     }
     function deleteSelectedRuns(event) {
         event.force = true;
-        event.onComplete = _deleteRuns;
+        event.onComplete = () => {
+            const selectedIds = table.getSelection()
+            if (selectedIds?.length === 0) {
+                return createNotification("Select a run to delete first", "danger")
+            }
+            _deleteRuns(selectedIds)
+        }
+    }
+    function deleteShownRuns(event) {
+        event.force = true;
+        event.onComplete = () => _deleteRuns(table.last.searchIds)
+
     }
     table.toolbar.add({ type: 'button', id: 'show-run-info', text: 'Run info', icon: 'fa fa-bolt', disabled: true, onClick: showRunInfo });
     table.toolbar.add({ type: 'button', id: 'show-user-inputs', text: 'User inputs', icon: 'fa fa-user-cog', onClick: showUserInputInfo })
@@ -284,6 +291,11 @@ function _addBacktestingMetadataTableButtons(
         type: 'button', id: 'delete_selected_runs',
         text: 'Delete', icon: 'fa fa-trash',
         onClick: deleteSelectedRuns
+    });
+    table.toolbar.add({
+        type: 'button', id: 'delete_visible_runs',
+        text: 'Delete visible', icon: 'fa fa-trash',
+        onClick: deleteShownRuns
     });
 }
 
