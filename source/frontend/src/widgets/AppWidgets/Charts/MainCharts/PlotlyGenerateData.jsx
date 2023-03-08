@@ -61,6 +61,7 @@ function getOrGenerateLayout(layouts, uiConfig, chartLocation) {
             font: {
                 color: "#b2b5be"
             },
+            width: window.innerWidth,
         };
         if (uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_unified_tooltip) {
             layout.hovermode = "x unified";

@@ -38,26 +38,37 @@ export default function PlotlyDualCharts({ chartLocations = allChartLocations })
             visiblePairs, setCharts, setLayouts)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [plottedElements, uiConfig])
-    let containerRefsInitialized = chartExist
+    // let containerRefsInitialized = chartExist
     const containerRefsDimensions = activeChartLocations.map((chartLocation => {
         const height = containerRefs[chartLocation]?.current?.clientHeight
-        const width = containerRefs[chartLocation]?.current?.clientWidth
-        containerRefsInitialized = Boolean(containerRefsInitialized && height && width)
+        // const width = containerRefs[chartLocation]?.current?.clientWidth
+        // containerRefsInitialized = Boolean(containerRefsInitialized && height)
         return {
             height: height,
-            width: width,
+            width: window.innerWidth,
         }
     }))
-    containerRefsInitialized = containerRefsDimensions ? containerRefsInitialized : false
+    // containerRefsInitialized = containerRefsDimensions ? containerRefsInitialized : false
     useEffect(() => {
+        // main chart
         updateChartDimensions(
-            containerRefsInitialized,
             activeChartLocations,
+            chartLocations[0],
             setLayouts,
-            containerRefsDimensions,
+            mainRef?.current?.clientHeight,
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(containerRefsDimensions), splitChartsPercent])
+    }, [mainRef?.current?.clientHeight, splitChartsPercent])
+    useEffect(() => {
+        // sub chart
+        updateChartDimensions(
+            activeChartLocations,
+            chartLocations[1],
+            setLayouts,
+            subRef?.current?.clientHeight
+        )
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [subRef?.current?.clientHeight, splitChartsPercent])
     return useMemo(() => (subChartExist
         ? <SplitResizableContent
             setPanelPercent={setSplitChartsPercent}
@@ -93,20 +104,21 @@ export default function PlotlyDualCharts({ chartLocations = allChartLocations })
 }
 
 function updateChartDimensions(
-    containerRefsInitialized,
     activeChartLocations,
+    chartLocation,
     setLayouts,
-    containerRefsDimensions,
+    height
 ) {
     // update layout when dimensions change
-    if (containerRefsInitialized) {
-        activeChartLocations.forEach((chartLocation, index) => {
+    if (activeChartLocations.includes(chartLocation)) {
+        if (height) {
             setLayouts[chartLocation](prevLayout => {
                 const newLayout = { ...prevLayout }
-                newLayout.height = containerRefsDimensions[index].height
-                newLayout.width = containerRefsDimensions[index].width
+                newLayout.height = height
+                newLayout.width = window.innerWidth
                 return newLayout
             })
-        })
+        }
     }
+
 }

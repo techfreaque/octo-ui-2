@@ -7,6 +7,6 @@ tags: []
 tentacles:
 - basic_tentacles@unknown_version
 - RunAnalysis@1.0.1
-- octo_ui2@0.8.0
+- octo_ui2@0.8.2
 type: tentacle_package
 version: unknown_version

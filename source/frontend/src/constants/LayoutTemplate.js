@@ -279,127 +279,127 @@ export const defaultBotTemplate = {
             "path": "/",
             "title": "Home"
         },
-        {
-            "layout": [
-                {
-                    "component": "DefaultLayout",
-                    "footerContent": [
-                        {
-                            "component": "Footer",
-                            "rightContent": [
-                                {
-                                    "component": "PowerMenu"
-                                }
-                            ]
-                        }
-                    ],
-                    "headerContent": [
-                        {
-                            "component": "Header",
-                            "leftContent": [
-                                {
-                                    "component": "AppDrawerDropdown"
-                                },
-                                {
-                                    "component": "PairsSelector"
-                                },
-                                {
-                                    "component": "TimeFrameSelector"
-                                }
-                            ],
-                            "rightContent": [
-                                {
-                                    "component": "ColorModeSwitch"
-                                },
-                                {
-                                    "component": "RealTradingSwitch"
-                                }
-                            ]
-                        }
-                    ],
-                    "lowerContent": [
-                        {
-                            "component": "ScrollableTabs",
-                            "rightContent": [
-                                {
-                                    "component": "ButtonWithModal",
-                                    "content": [
-                                        {
-                                            "component": "UIConfig",
-                                            "configKeys": [
-                                                "display_settings"
-                                            ]
-                                        }
-                                    ],
-                                    "faIcon": "cog",
-                                    "title": ""
-                                },
-                                {
-                                    "component": "CurrentPanelMinimize"
-                                },
-                                {
-                                    "component": "CurrentPanelFullscreen"
-                                }
-                            ],
-                            "tabs": [
-                                {
-                                    "component": "Tab",
-                                    "content": [
-                                        {
-                                            "component": "Configuration",
-                                            "configKey": "profile/crypto-currencies"
-                                        }
-                                    ],
-                                    "dontScroll": false,
-                                    "title": "Currencies"
-                                },
-                                {
-                                    "component": "Tab",
-                                    "content": [
-                                        {
-                                            "component": "Configuration",
-                                            "configKey": "profile/exchanges"
-                                        }
-                                    ],
-                                    "dontScroll": false,
-                                    "title": "Exchanges"
-                                },
-                                {
-                                    "component": "Tab",
-                                    "content": [
-                                        {
-                                            "component": "Configuration",
-                                            "configKey": "profile/trading"
-                                        },
-                                        {
-                                            "component": "Configuration",
-                                            "configKey": "profile/trader"
-                                        },
-                                        {
-                                            "component": "Configuration",
-                                            "configKey": "profile/trader-simulator"
-                                        }
-                                    ],
-                                    "dontScroll": false,
-                                    "title": "Trading"
-                                }
-                            ]
-                        }
-                    ],
-                    "minHeights": "0, 0",
-                    "upperContent": [
-                        {
-                            "component": "Tab",
-                            "content": [],
-                            "dontScroll": false,
-                            "title": ""
-                        }
-                    ]
-                }
-            ],
-            "path": "/profile",
-            "title": "Profiles"
-        },
+        // {
+        //     "layout": [
+        //         {
+        //             "component": "DefaultLayout",
+        //             "footerContent": [
+        //                 {
+        //                     "component": "Footer",
+        //                     "rightContent": [
+        //                         {
+        //                             "component": "PowerMenu"
+        //                         }
+        //                     ]
+        //                 }
+        //             ],
+        //             "headerContent": [
+        //                 {
+        //                     "component": "Header",
+        //                     "leftContent": [
+        //                         {
+        //                             "component": "AppDrawerDropdown"
+        //                         },
+        //                         {
+        //                             "component": "PairsSelector"
+        //                         },
+        //                         {
+        //                             "component": "TimeFrameSelector"
+        //                         }
+        //                     ],
+        //                     "rightContent": [
+        //                         {
+        //                             "component": "ColorModeSwitch"
+        //                         },
+        //                         {
+        //                             "component": "RealTradingSwitch"
+        //                         }
+        //                     ]
+        //                 }
+        //             ],
+        //             "lowerContent": [
+        //                 {
+        //                     "component": "ScrollableTabs",
+        //                     "rightContent": [
+        //                         {
+        //                             "component": "ButtonWithModal",
+        //                             "content": [
+        //                                 {
+        //                                     "component": "UIConfig",
+        //                                     "configKeys": [
+        //                                         "display_settings"
+        //                                     ]
+        //                                 }
+        //                             ],
+        //                             "faIcon": "cog",
+        //                             "title": ""
+        //                         },
+        //                         {
+        //                             "component": "CurrentPanelMinimize"
+        //                         },
+        //                         {
+        //                             "component": "CurrentPanelFullscreen"
+        //                         }
+        //                     ],
+        //                     "tabs": [
+        //                         {
+        //                             "component": "Tab",
+        //                             "content": [
+        //                                 {
+        //                                     "component": "Configuration",
+        //                                     "configKey": "profile/crypto-currencies"
+        //                                 }
+        //                             ],
+        //                             "dontScroll": false,
+        //                             "title": "Currencies"
+        //                         },
+        //                         {
+        //                             "component": "Tab",
+        //                             "content": [
+        //                                 {
+        //                                     "component": "Configuration",
+        //                                     "configKey": "profile/exchanges"
+        //                                 }
+        //                             ],
+        //                             "dontScroll": false,
+        //                             "title": "Exchanges"
+        //                         },
+        //                         {
+        //                             "component": "Tab",
+        //                             "content": [
+        //                                 {
+        //                                     "component": "Configuration",
+        //                                     "configKey": "profile/trading"
+        //                                 },
+        //                                 {
+        //                                     "component": "Configuration",
+        //                                     "configKey": "profile/trader"
+        //                                 },
+        //                                 {
+        //                                     "component": "Configuration",
+        //                                     "configKey": "profile/trader-simulator"
+        //                                 }
+        //                             ],
+        //                             "dontScroll": false,
+        //                             "title": "Trading"
+        //                         }
+        //                     ]
+        //                 }
+        //             ],
+        //             "minHeights": "0, 0",
+        //             "upperContent": [
+        //                 {
+        //                     "component": "Tab",
+        //                     "content": [],
+        //                     "dontScroll": false,
+        //                     "title": ""
+        //                 }
+        //             ]
+        //         }
+        //     ],
+        //     "path": "/profile",
+        //     "title": "Profiles"
+        // },
         {
             "layout": [
                 {

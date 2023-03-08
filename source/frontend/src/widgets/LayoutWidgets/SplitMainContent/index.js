@@ -44,7 +44,7 @@ export function SplitResizableContent({
         classes={getSplitterClasses(botColorMode)}
         onResizeFinished={
           ((_, newSizes) => handleResize(
-            gutterClassName, _setPanelPercent, newSizes
+            gutterClassName, _setPanelPercent, newSizes, setPanelSize
           ))}
         onResizeStarted={() => onResizeStarted(gutterClassName)}
         gutterClassName={gutterClassName}
@@ -52,15 +52,21 @@ export function SplitResizableContent({
         {upperContent}
         {lowerContent}
       </Splitter>)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [_minHeights, botColorMode, lowerContent, panelSizes, upperContent])
 }
 
-function handleResize(gutterClassName, setPanelPercent, newSizes) {
+function handleResize(gutterClassName, setPanelPercent, newSizes, setPanelSize) {
   const total = newSizes[0] + newSizes[1]
   const gutter = document.getElementsByClassName(gutterClassName)[0]
   gutter.classList.remove("is-resizing")
-  setPanelPercent({ percent: newSizes[0] * 100 / total, shouldUpdate: true, })
+  const newPercent = newSizes[0] * 100 / total
+  setPanelPercent({ percent: newPercent, shouldUpdate: false, })
+  setPanelSize(
+    newPercent === 0
+      ? [newPercent + 0.1, 100 - newPercent - 0.1]
+      : [newPercent, 100 - newPercent]
+  );
 }
 
 function getSplitterClasses(botColorMode) {
