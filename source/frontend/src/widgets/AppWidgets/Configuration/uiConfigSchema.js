@@ -16,7 +16,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
         dataFilevalues.push(dataFile[0])
         dataFilesTitles.push(`${dataFile[1].exchange} - ${dataFile[1].symbols} - ${dataFile[1].time_frames} from ${dataFile[1].start_date} to from ${dataFile[1].end_date}`)
     })
-    function selectableChartlocation(name, title) {
+    function selectableChartlocation(name, title, order) {
         return {
             [name]: {
                 type: "string",
@@ -31,8 +31,11 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         "Main Chart",
                         "Main Sub-Chart",
                         "Secondary-Chart"
-                    ]
-                }
+                    ],
+                    grid_columns: 6,
+                },
+                default: "sub-chart",
+                propertyOrder: order
             },
         }
     }
@@ -52,78 +55,123 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 type: "boolean",
                                 title: "Plot unrealized portfolio value",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 1
                             },
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value", 2),
                             "plot_unrealized_portfolio_value_for_each_asset": {
                                 type: "boolean",
                                 title: "Plot unrealized portfolio value for each asset",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 3
                             },
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_value_for_each_asset", "Chart location unrealized portfolio value", 4),
                             "plot_unrealized_portfolio_amount_in_btc": {
                                 type: "boolean",
                                 title: "Plot unrealized portfolio value in BTC",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 5
                             },
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_amount_in_btc", "Chart location unrealized portfolio value", 6),
                             "plot_unrealized_portfolio_amount_for_each_asset": {
                                 type: "boolean",
                                 title: "Plot unrealized portfolio amount for each asset",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 7
                             },
-                            ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value"),
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_amount_for_each_asset", "Chart location unrealized portfolio value", 8),
                             "plot_realized_portfolio": {
                                 type: "boolean",
                                 title: "Plot realized portfolio value",
                                 format: "checkbox",
                                 fieldType: "boolean",
-                                "default": true
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 9
                             },
-                            ...selectableChartlocation("chart_location_realized_portfolio_value", "Chart location realized portfolio value"),
+                            ...selectableChartlocation("chart_location_realized_portfolio_value", "Chart location realized portfolio value", 10),
                             "plot_trade_gains": {
                                 type: "boolean",
                                 title: "Plot realized gains per trade",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 11
                             },
-                            ...selectableChartlocation("chart_location_trade_gains", "Chart location realized gains per trade"),
+                            ...selectableChartlocation("chart_location_trade_gains", "Chart location realized gains per trade", 12),
                             "plot_funding_fees": {
                                 type: "boolean",
                                 title: "Plot funding fees",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 13
                             },
-                            ...selectableChartlocation("chart_location_funding_fees", "Chart location funding fees"),
+                            ...selectableChartlocation("chart_location_funding_fees", "Chart location funding fees", 14),
                             "plot_best_case_growth": {
                                 type: "boolean",
                                 title: "Plot best case portfolio value",
                                 format: "checkbox",
                                 fieldType: "boolean",
-                                "default": true
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 15
                             },
-                            ...selectableChartlocation("chart_location_best_case_growth", "Chart location best case portfolio value"),
+                            ...selectableChartlocation("chart_location_best_case_growth", "Chart location best case portfolio value", 16),
                             "plot_win_rate": {
                                 type: "boolean",
                                 title: "Plot best case portfolio value",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 17
                             },
-                            ...selectableChartlocation("chart_location_win_rate", "Chart location win rate"),
+                            ...selectableChartlocation("chart_location_win_rate", "Chart location win rate", 18),
                             "plot_wins_and_losses_count": {
                                 type: "boolean",
                                 title: "Plot wins and losses count",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 19
                             },
-                            ...selectableChartlocation("chart_location_wins_and_losses_count", "Chart location wins and losses count"),
+                            ...selectableChartlocation("chart_location_wins_and_losses_count", "Chart location wins and losses count", 20),
                             "plot_withdrawals": {
                                 type: "boolean",
                                 title: "Plot withdrawals",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 21
                             },
-                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals"),
+                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals", 22),
                         }
                     },
                     backtesting_table_settings: {
@@ -196,77 +244,122 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 title: "Plot unrealized portfolio value",
                                 format: "checkbox",
                                 fieldType: "boolean",
-                                "default": true
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 1
                             },
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value", 2),
                             "plot_unrealized_portfolio_value_for_each_asset": {
                                 type: "boolean",
                                 title: "Plot unrealized portfolio value for each asset",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 3
                             },
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_value_for_each_asset", "Chart location unrealized portfolio value", 4),
                             "plot_unrealized_portfolio_amount_in_btc": {
                                 type: "boolean",
                                 title: "Plot unrealized portfolio value in BTC",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 5
                             },
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_amount_in_btc", "Chart location unrealized portfolio value", 6),
                             "plot_unrealized_portfolio_amount_for_each_asset": {
                                 type: "boolean",
                                 title: "Plot unrealized portfolio amount for each asset",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 7
                             },
-                            ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value"),
+                            ...selectableChartlocation("chart_location_unrealized_portfolio_amount_for_each_asset", "Chart location unrealized portfolio value", 8),
                             "plot_realized_portfolio": {
                                 type: "boolean",
                                 title: "Plot realized portfolio value",
                                 format: "checkbox",
                                 fieldType: "boolean",
-                                "default": true
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 9
                             },
-                            ...selectableChartlocation("chart_location_realized_portfolio_value", "Chart location realized portfolio value"),
+                            ...selectableChartlocation("chart_location_realized_portfolio_value", "Chart location realized portfolio value", 10),
                             "plot_trade_gains": {
                                 type: "boolean",
                                 title: "Plot realized gains per trade",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 11
                             },
-                            ...selectableChartlocation("chart_location_trade_gains", "Chart location realized gains per trade"),
+                            ...selectableChartlocation("chart_location_trade_gains", "Chart location realized gains per trade", 12),
                             "plot_funding_fees": {
                                 type: "boolean",
                                 title: "Plot funding fees",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 13
                             },
-                            ...selectableChartlocation("chart_location_funding_fees", "Chart location funding fees"),
+                            ...selectableChartlocation("chart_location_funding_fees", "Chart location funding fees", 14),
                             "plot_best_case_growth": {
                                 type: "boolean",
                                 title: "Plot best case portfolio value",
                                 format: "checkbox",
                                 fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 15
                             },
-                            ...selectableChartlocation("chart_location_best_case_growth", "Chart location best case portfolio value"),
+                            ...selectableChartlocation("chart_location_best_case_growth", "Chart location best case portfolio value", 16),
                             "plot_win_rate": {
                                 type: "boolean",
                                 title: "Plot best case portfolio value",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 17
                             },
-                            ...selectableChartlocation("chart_location_win_rate", "Chart location win rate"),
+                            ...selectableChartlocation("chart_location_win_rate", "Chart location win rate", 18),
                             "plot_wins_and_losses_count": {
                                 type: "boolean",
                                 title: "Plot wins and losses count",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 19
                             },
-                            ...selectableChartlocation("chart_location_wins_and_losses_count", "Chart location wins and losses count"),
+                            ...selectableChartlocation("chart_location_wins_and_losses_count", "Chart location wins and losses count", 20),
                             "plot_withdrawals": {
                                 type: "boolean",
                                 title: "Plot withdrawals",
                                 format: "checkbox",
-                                fieldType: "boolean"
+                                fieldType: "boolean",
+                                options: {
+                                    grid_columns: 6,
+
+                                }, propertyOrder: 21
                             },
-                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals"),
+                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals", 22),
                         }
                     },
                     live_table_settings: {

@@ -5,6 +5,7 @@ export const allChartLocations = ["main-chart", "sub-chart"]
 
 export default function PlotlyChart({ chartLocation, setLayouts, layout, chartData }) {
     const divId = getDivId(chartLocation)
+
     return useMemo(() => (
         chartData && layout
         && <Plot
@@ -116,4 +117,17 @@ function getPlotlyConfig() {
         showEditInChartStudio: false,
         displaylogo: false // no logo to avoid 'rel="noopener noreferrer"' security issue (see https://webhint.io/docs/user-guide/hints/hint-disown-opener/)
     };
+}
+
+export function enableAxisSelect() {
+    // allow moving chart for selected y scale layer
+    const yaxis_resize_layers = document.getElementsByClassName('nsdrag drag cursor-ns-resize');
+    yaxis_resize_layers.forEach(function (yaxis_drag_layer) {
+        if (yaxis_drag_layer.getAttribute('listener') !== 'true') {
+            yaxis_drag_layer.addEventListener('click', function (e) {
+                yaxis_drag_layer.parentElement.parentElement.append(yaxis_drag_layer.parentElement)
+            });
+            yaxis_drag_layer.setAttribute('listener', 'true');
+        }
+    })
 }

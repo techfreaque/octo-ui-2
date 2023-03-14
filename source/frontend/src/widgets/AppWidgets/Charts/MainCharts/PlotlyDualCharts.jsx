@@ -1,7 +1,7 @@
 
 import { useMemo } from 'react';
 import { SplitResizableContent } from '../../../LayoutWidgets/SplitMainContent';
-import PlotlyChart, { allChartLocations } from './Plotly';
+import PlotlyChart, { allChartLocations, enableAxisSelect } from './Plotly';
 import { usePlotlyLayoutsContext, useUpdatePlotlyLayoutsContext } from './PlotlyContext';
 import { useEffect, useState } from 'react';
 import { useUiConfigContext } from '../../../../context/config/UiConfigProvider';
@@ -22,15 +22,9 @@ export default function PlotlyDualCharts({ chartLocations = allChartLocations })
     const visibleTimeframes = useVisibleTimeFramesContext();
     const mainRef = useRef()
     const subRef = useRef()
-
     const activeChartLocations = charts ? Object.keys(charts) : []
     const chartExist = activeChartLocations.length > 0
-    const containerRefs = { [chartLocations[0]]: mainRef }
     const subChartExist = activeChartLocations.length > 1
-    if (subChartExist) {
-        containerRefs[chartLocations[1]] = subRef
-    }
-
     useEffect(() => {
         setPlotData(
             plottedElements,
@@ -38,17 +32,6 @@ export default function PlotlyDualCharts({ chartLocations = allChartLocations })
             visiblePairs, setCharts, setLayouts)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [plottedElements, uiConfig])
-    // let containerRefsInitialized = chartExist
-    const containerRefsDimensions = activeChartLocations.map((chartLocation => {
-        const height = containerRefs[chartLocation]?.current?.clientHeight
-        // const width = containerRefs[chartLocation]?.current?.clientWidth
-        // containerRefsInitialized = Boolean(containerRefsInitialized && height)
-        return {
-            height: height,
-            width: window.innerWidth,
-        }
-    }))
-    // containerRefsInitialized = containerRefsDimensions ? containerRefsInitialized : false
     useEffect(() => {
         // main chart
         updateChartDimensions(
@@ -69,6 +52,9 @@ export default function PlotlyDualCharts({ chartLocations = allChartLocations })
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [subRef?.current?.clientHeight, splitChartsPercent])
+    useEffect(() => {
+        enableAxisSelect()
+    }, [charts]);
     return useMemo(() => (subChartExist
         ? <SplitResizableContent
             setPanelPercent={setSplitChartsPercent}

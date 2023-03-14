@@ -346,6 +346,8 @@ function getAxisTemplate(axisKey, uiConfig, axisType, chartDetails) {
     const axis = axisTemplate[axisKey]
     if (axisType === "y" && uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_use_log_scale === true) {
         axis.type = "log"
+    } else {
+        axis.type = "linear"
     }
     if (axisType === "x" && chartDetails.x_type !== null) {
         axis.type = chartDetails.x_type;
