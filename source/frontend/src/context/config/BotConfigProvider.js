@@ -73,7 +73,6 @@ export const useFetchBotConfigs = () => {
   return logic;
 }
 
-
 export const BotConfigProvider = ({ children }) => {
   const [botConfig, setBotConfig] = useState({});
   const botDomain = useBotDomainContext()

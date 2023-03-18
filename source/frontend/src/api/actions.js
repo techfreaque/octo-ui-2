@@ -2,7 +2,10 @@ import createNotification from "../components/Notifications/Notification"
 import { backendRoutes } from "../constants/backendConstants"
 import { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot"
 
-export async function startBacktesting(botDomain, backtestingSettings, ids_by_exchange_name, setBotIsBacktesting) {
+export async function startBacktesting(
+  botDomain, backtestingSettings,
+  setBotIsBacktesting
+) {
   const success = (updated_data, update_url, result, msg, status) => {
     setBotIsBacktesting(true)
     createNotification(msg, "success")
@@ -13,16 +16,7 @@ export async function startBacktesting(botDomain, backtestingSettings, ids_by_ex
     setBotIsBacktesting(true)
   }
   sendAndInterpretBotUpdate(
-    {
-      ...backtestingSettings,
-      exchange_ids: backtestingSettings.exchange_names.map(exchangeName => (
-        ids_by_exchange_name[exchangeName])
-      ),
-
-      // TODO remove when stock supports ids
-      data_source: backtestingSettings.data_sources[0],
-      exchange_id: ids_by_exchange_name[backtestingSettings.exchange_names[0]],
-    },
+    backtestingSettings,
     botDomain + backendRoutes.backtestingStart,
     success, failure
   )
@@ -140,6 +134,7 @@ export async function stopBacktesting(botDomain, setBotIsBacktesting) {
 
 export async function stopOptimizer(botDomain, setBotIsOptimizing) {
   const success = (updated_data, update_url, result, msg, status) => {
+    // TODO check why streing
     setBotIsOptimizing("isStopping")
     createNotification(msg);
   }
