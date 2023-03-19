@@ -83,11 +83,10 @@ class RunAnalysisBaseDataGenerator:
         await self.load_historical_values()
         await self.generate_transactions()
 
-        self.total_start_balance_in_ref_market = self.starting_portfolio[
-            self.ref_market
-        ][
-            "total"
-        ]  # todo all coins balance
+        # todo all coins balance
+        self.total_start_balance_in_ref_market = self.starting_portfolio.get(
+            self.ref_market, {}
+        ).get("total", 0)
         self.pairs = list(self.trades_data)
         self._set_longest_candles()
 
@@ -514,22 +513,22 @@ class RunAnalysisBaseDataGenerator:
     #         currency = symbol_util.parse_symbol(
     #             trade[commons_enums.DBTables.SYMBOL.value]
     #         ).base
-    #         if trade[commons_enums.DBTables.FEES_CURRENCY.value] == currency:
-    #             if trade[commons_enums.DBTables.FEES_CURRENCY.value] == fees_currency:
-    #                 paid_fees += trade[commons_enums.DBTables.FEES_AMOUNT.value]
+    #         if trade[commons_enums.DBRows.FEES_CURRENCY.value] == currency:
+    #             if trade[commons_enums.DBRows.FEES_CURRENCY.value] == fees_currency:
+    #                 paid_fees += trade[commons_enums.DBRows.FEES_AMOUNT.value]
     #             else:
     #                 paid_fees += (
-    #                     trade[commons_enums.DBTables.FEES_AMOUNT.value]
+    #                     trade[commons_enums.DBRows.FEES_AMOUNT.value]
     #                     * trade[commons_enums.PlotAttributes.Y.value]
     #                 )
     #         else:
-    #             if trade[commons_enums.DBTables.FEES_CURRENCY.value] == fees_currency:
+    #             if trade[commons_enums.DBRows.FEES_CURRENCY.value] == fees_currency:
     #                 paid_fees += (
-    #                     trade[commons_enums.DBTables.FEES_AMOUNT.value]
+    #                     trade[commons_enums.DBRows.FEES_AMOUNT.value]
     #                     / trade[commons_enums.PlotAttributes.Y.value]
     #                 )
     #             else:
-    #                 paid_fees += trade[commons_enums.DBTables.FEES_AMOUNT.value]
+    #                 paid_fees += trade[commons_enums.DBRows.FEES_AMOUNT.value]
     #     return paid_fees
 
     def generate_wins_and_losses(self, x_as_trade_count):

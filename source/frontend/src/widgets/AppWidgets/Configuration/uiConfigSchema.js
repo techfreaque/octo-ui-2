@@ -498,7 +498,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 type: "number",
                                 format: "number",
                                 minimum: 0,
-                                default: 50000,
+                                default: 10000,
                             },
                             max_candles_line_sources: {
                                 "type": "array",
@@ -511,7 +511,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                     },
                                 },
                                 title: "Line(s) sources",
-                                default: ["open", "high", "low", "close"],
+                                default: ["high", "low"],
 
                                 items: {
                                     enum: ["open", "high", "low", "close"],

@@ -5,6 +5,6 @@ repository: Unknown repository location
 short-name: any_platform.zip
 tags: []
 tentacles:
-- octo_ui2@0.8.4
+- octo_ui2@0.8.5
 type: tentacle_package
 version: unknown_version
