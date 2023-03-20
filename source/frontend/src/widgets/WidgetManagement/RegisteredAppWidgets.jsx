@@ -42,6 +42,7 @@ import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivate
 import SymbolsInfoTable from "../AppWidgets/Tables/SymbolsInfo";
 import PlotlyDualCharts from "../AppWidgets/Charts/MainCharts/PlotlyDualCharts";
 import ResetUiConfigButton from "../AppWidgets/Buttons/ResetUiConfigButton";
+import ResetTentaclesConfigsButton from "../AppWidgets/Buttons/ResetTentaclesConfigButton";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -91,4 +92,5 @@ export const registeredComponents = {
   ToggleActivateRealTimeStrategy: ToggleActivateRealTimeStrategy,
   SymbolsInfoTable: SymbolsInfoTable,
   ResetUiConfigButton: ResetUiConfigButton,
+  ReseTentaclesConfigsButton: ResetTentaclesConfigsButton,
 };

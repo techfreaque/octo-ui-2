@@ -19,6 +19,7 @@ export const backendRoutes = {
   resetDaemons: basePath + "daemons/reset",
   fetchTentaclesConfig: basePath + "/tentacles_config",
   updateTentaclesConfig: "/config_tentacles?action=update&reload=true",
+  resetTentaclesConfig: "/config_tentacles?action=factory_reset&reload=true",
   updateTentaclesConfigAndSendCommand: basePath + "/trading_mode_command",
   backtestingRunData: basePath + "/backtesting_runs",
   cancelAll_orders: basePath + "/orders/cancel_all",

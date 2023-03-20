@@ -263,4 +263,21 @@ export async function realTradingSwitch(botDomain, isRealTrading) {
     botDomain + backendRoutes.config, success, fail)
 }
 
-
+export function resetTentaclesConfig(
+  tentacles, botDomain, setIsResetting, fetchCurrentTentaclesConfig
+) {
+  const failure = (updated_data, update_url, result, msg, status) => {
+    createNotification("Failed to reset tentacles config for " + tentacles, "danger", msg?.message)
+    setIsResetting(false)
+  }
+  const success = (updated_data, update_url, result, msg, status) => {
+    if (msg?.success) {
+      createNotification("Sucessfully resetted tentacles config for " + tentacles)
+      fetchCurrentTentaclesConfig()
+      setIsResetting(false)
+    } else {
+      failure(updated_data, update_url, result, msg, status)
+    }
+  }
+  sendAndInterpretBotUpdate({ tentacles: tentacles }, botDomain + backendRoutes.resetTentaclesConfig, success, failure, "POST")
+}

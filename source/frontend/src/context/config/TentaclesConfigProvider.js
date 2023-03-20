@@ -51,14 +51,19 @@ export const useFetchTentaclesConfig = () => {
   return logic;
 };
 
+export function getEnabledTentaclesList(botInfo) {
+  const tentacles = []
+  botInfo?.strategy_names && tentacles.push(...botInfo.strategy_names)
+  botInfo?.evaluator_names && tentacles.push(...botInfo.evaluator_names)
+  botInfo?.trading_mode_name && tentacles.push(botInfo.trading_mode_name)
+  return tentacles
+}
+
 export const useFetchCurrentTentaclesConfig = () => {
   const loadTentaclesConfig = useFetchTentaclesConfig();
   const botInfo = useBotInfoContext()
   const logic = useCallback((successCallback = null) => {
-    const tentacles = []
-    botInfo?.strategy_names && tentacles.push(...botInfo.strategy_names)
-    botInfo?.evaluator_names && tentacles.push(...botInfo.evaluator_names)
-    botInfo?.trading_mode_name && tentacles.push(botInfo.trading_mode_name)
+    const tentacles = getEnabledTentaclesList(botInfo)
     loadTentaclesConfig(tentacles, successCallback)
   }, [botInfo, loadTentaclesConfig]);
   return logic;
