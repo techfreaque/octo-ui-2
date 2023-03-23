@@ -11,6 +11,7 @@ import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 import JsonEditor from "@techfreaque/json-editor-react";
 import { useFetchCurrentTentaclesConfig, useSaveTentaclesConfig, useTentaclesConfigContext } from "../../../context/config/TentaclesConfigProvider";
+import ResetTentaclesConfigsButton from "../Buttons/ResetTentaclesConfigButton";
 
 export default function TradingConfig({ content }) {
     const botInfo = useBotInfoContext()
@@ -69,7 +70,6 @@ function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, bot
         );
 
     })
-    advancedTradingSettings(tabsData, exchangeId, botDomain)
     return tabsData
 }
 
@@ -96,43 +96,6 @@ function destroyAllEditors() {
             window.$tradingConfig[editorKey].destroy()
             delete window.$tradingConfig[editorKey]
         })
-}
-
-function advancedTradingSettings(tabsData, exchangeId, botDomain) {
-    tabsData.push({
-        title: (
-            <Tab key="advanced-settings"
-                label={"Other Trading Mode Settinges"}
-                value={"advanced-settings"}
-                sx={{ textTransform: 'none' }} />
-        ),
-        tabId: "advanced-settings",
-        content: (
-            <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <h3>Delete current Script Cache</h3>
-                    <p>Deletes plotting cache for the current script version, doesnt delete Evaluator Cache and orders</p>
-                    <Button onClick={() => deleteCurrentCache(botDomain, exchangeId)} variant="outlined" color="warning">Delete cache from current Trading Mode</Button>
-                </Grid>
-                <Grid item xs={12}>
-                    <h3>Delete all Cache</h3>
-                    <p>Delete all cached values and plots for evaluators and trading scripts.</p>
-                    <p>Doesnt delete orders and simulated trades</p>
-                    <Button onClick={() => deleteAllCache(botDomain, exchangeId)} variant="outlined" color="error">Delete all cached values and plots for evaluators and trading modes</Button>
-                </Grid>
-                <Grid item xs={12}>
-                    <h3>Delete simulated orders</h3>
-                    <p>Deletes simulated orders from current forward test</p>
-                    <Button onClick={() => deleteOrders(botDomain, exchangeId)} variant="outlined" color="error">Delete orders from current forward test</Button>
-                </Grid>
-                <Grid item xs={12}>
-                    <h3>Delete simulated trades</h3>
-                    <p>Delete simulated trades from current forward test</p>
-                    <Button onClick={() => deleteTrades(botDomain, exchangeId)} variant="outlined" color="error">Delete simulated trades from current forward test</Button>
-                </Grid>
-            </Grid>
-        )
-    });
 }
 
 function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {

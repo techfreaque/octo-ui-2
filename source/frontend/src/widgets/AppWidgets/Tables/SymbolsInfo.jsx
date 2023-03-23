@@ -60,7 +60,7 @@ function Row(props) {
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {row.leverageTiers.map((leverageTierData) => (
+                  {row?.leverageTiers.map((leverageTierData) => (
                     <TableRow key={leverageTierData.tier}>
                       <TableCell>
                         Leverage Tier {leverageTierData.tier}

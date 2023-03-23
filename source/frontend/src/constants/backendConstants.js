@@ -1,46 +1,62 @@
 export const basePath = "/octo_ui2";
+export const apiPath = "/api";
+export const advancedPath = "/advanced";
 
 export const backendRoutes = {
-  frontendEntry: basePath + "/home",
-  botInfo: basePath + "/bot-info",
-  botConfig: basePath + "/bot-config",
-  plottedData: basePath + "/plotted_data",
-  plottedRunData: basePath + "/plotted_run_data",
-  botPortfolio: basePath + "/portfolio",
-  symbolsInfo: basePath + "/symbols-info",
-  manageSymbol: "/profile",
-  appStore: basePath + "/app-store",
-  installApp: "/advanced/tentacle_packages?update_type=add_package",
-  config: "/config",
-  restartBot: "/commands/restart",
-  stopBot: "/commands/stop",
-  updateBot: "/commands/update",
-  daemons: basePath + "/daemons",
-  resetDaemons: basePath + "daemons/reset",
-  fetchTentaclesConfig: basePath + "/tentacles_config",
-  updateTentaclesConfig: "/config_tentacles?action=update&reload=true",
-  resetTentaclesConfig: "/config_tentacles?action=factory_reset&reload=true",
-  updateTentaclesConfigAndSendCommand: basePath + "/trading_mode_command",
-  backtestingRunData: basePath + "/backtesting_runs",
-  cancelAll_orders: basePath + "/orders/cancel_all",
-  closeAllPositions: basePath + "/positions/close_all",
-  liveRunData: basePath + "/live_run_data",
-  UIConfig: basePath + "/ui_config",
-  backtesting: "/backtesting",
-  backtestingStart: "/backtesting?action_type=start_backtesting_with_current_bot_data&source=strategy_design&reset_tentacle_config=False&auto_stop=True",
-  backtestingStop: "/backtesting?action_type=stop_backtesting",
-  optimizerQueueUpdate: basePath + "/optimizer/update",
-  optimizerAddToQueue: basePath + "/optimizer/add",
-  optimizerGetQueue: basePath + "/optimizer/get",
+    frontendEntry: `${basePath}/home`,
+    botInfo: `${basePath}/bot-info`,
+    botConfig: `${basePath}/bot-config`,
+    plottedData: `${basePath}/plotted_data`,
+    plottedRunData: `${basePath}/plotted_run_data`,
+    botPortfolio: `${basePath}/portfolio`,
+    symbolsInfo: `${basePath}/symbols-info`,
+    appStore: `${basePath}/app-store`,
+    daemons: `${basePath}/daemons`,
+    resetDaemons: `${basePath}daemons/reset`,
+    fetchTentaclesConfig: `${basePath}/tentacles_config`,
+    updateTentaclesConfigAndSendCommand: `${basePath}/trading_mode_command`,
+    backtestingRunData: `${basePath}/backtesting_runs`,
+    cancelAllOrders: `${basePath}/orders/cancel_all`,
+    closeAllPositions: `${basePath}/positions/close_all`,
+    liveRunData: `${basePath}/live_run_data`,
+    UIConfig: `${basePath}/ui_config`,
+    optimizerQueueUpdate: `${basePath}/optimizer/update`,
+    optimizerAddToQueue: `${basePath}/optimizer/add`,
+    optimizerGetQueue: `${basePath}/optimizer/get`,
 
-  strategyDesignDeleteRunData: "/strategy_design/run_data?action=delete",
-  optimizerStart: "/strategy_design/strategy_design_start_optimizerstart",
-  optimizerStop: "/advanced/strategy-optimizer?update_type=cancel_optimizer",
-  cacheActionDeleteTrades: "/strategy_design/cacheclear_simulated_trades_cache",
-  cacheActionDeleteCurrentCache: "/strategy_design/cacheclear_plotted_cache",
-  cacheActionDeleteAllCache: "/strategy_design/cacheclear_all_cache",
-  cacheActionDeleteOrders: "/strategy_design/cacheclear_simulated_orders_cache",
+    installApp: `${advancedPath}/advanced/tentacle_packages?update_type=add_package`,
+    optimizerStop: `${advancedPath}/advanced/strategy-optimizer?update_type=cancel_optimizer`,
 
+    profileMedia: "/profile_media/user/profiles",
+    manageSymbol: "/profile",
+    config: "/config",
+    restartBot: "/commands/restart",
+    stopBot: "/commands/stop",
+    updateBot: "/commands/update",
+    logoutBot: "/logout",
+    loginBot: "/login",
+    
+    updateTentaclesConfig: "/config_tentacles?action=update&reload=true",
+    resetTentaclesConfig: "/config_tentacle?action=factory_reset&reload=true",
+
+    backtesting: "/backtesting",
+    backtestingStart: "/backtesting?action_type=start_backtesting_with_current_bot_data&source=strategy_design&reset_tentacle_config=False&auto_stop=True",
+    backtestingStop: "/backtesting?action_type=stop_backtesting",
+
+    clearPortfolioHistory: `${apiPath}/clear_portfolio_history`,
+    clearOrdersHistory: `${apiPath}/clear_orders_history`,
+    clearTradesHistory: `${apiPath}/clear_trades_history`,
+    clearTransactionsHistory: `${apiPath}/clear_transactions_history`,
+    getAllOrders: `${apiPath}/orders`,
+    cancelOrder: `${apiPath}/orders?action=cancel_order`,
+    getAllPositions: `${apiPath}/positions`,
+    closePosition: `${apiPath}/positions?action=close_position`,
+    getAllTrades: `${apiPath}/trades`,
+
+    strategyDesignDeleteRunData: "/strategy_design/run_data?action=delete",
+    optimizerStart: "/strategy_design/strategy_design_start_optimizerstart",
+    cacheActionDeleteCurrentCache: "/strategy_design/cacheclear_plotted_cache",
+    cacheActionDeleteAllCache: "/strategy_design/cacheclear_all_cache",
 
 
 }
@@ -48,7 +64,13 @@ export const backendRoutes = {
 export const ID_SEPARATOR = "_------_";
 export const TENTACLE_SEPARATOR = "###";
 export const MAX_SEARCH_LABEL_SIZE = 32;
-export const TIMESTAMP_DATA = ["timestamp", "start time", "end time", "start_time", "end_time"];
+export const TIMESTAMP_DATA = [
+    "timestamp",
+    "start time",
+    "end time",
+    "start_time",
+    "end_time"
+];
 export const ID_DATA = ["id", "backtesting id", "optimizer id"];
 export const METADATA_HIDDEN_FIELDS = ["backtesting files", "user inputs"]
 export const METADATA_UNDISPLAYED_FIELDS = ["children"]

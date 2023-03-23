@@ -1,7 +1,7 @@
 import React from "react";
 import { Tab } from "@mui/material";
-import MuiTabs from "../../../components/Tabs/MuiTabs";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
+import MuiTabs from "../../../components/Tabs/MuiTabs";
 
 export default function ResizableTabs(props) {
     const { tabs, rightContent, defaultTabId } = props;

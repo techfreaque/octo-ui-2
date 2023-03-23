@@ -1,15 +1,11 @@
-import { faRefresh } from "@fortawesome/free-solid-svg-icons"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { Alert, Button } from "@mui/material"
 import { useState } from "react"
 import createNotification from "../../../components/Notifications/Notification"
+import ResetConfig from "../../../components/UserInputs/ResetConfig"
 import { useFetchUiConfig, useSaveUiConfig } from "../../../context/config/UiConfigProvider"
-import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider"
 
 export default function ResetUiConfigButton() {
     const saveUiConfig = useSaveUiConfig()
     const fetchConfig = useFetchUiConfig()
-    const isOnline = useIsBotOnlineContext()
     const [isResetting, setIsResetting] = useState(false)
     function handleResetLayout() {
         setIsResetting(true)
@@ -37,12 +33,8 @@ export default function ResetUiConfigButton() {
 
         }, success, failed, true)
     }
-    return <>
-        <h3 class="card-title level-1 je-object__title" style={{ display: "inline-block", marginLeft: "5px" }}>
-            <label>Reset all octo UI2 Settings</label>
-        </h3>
-        <Alert severity="warning" style={{ maxWidth: "330px", marginLeft: "30px" }}>
-            Resets the following settings:
+    return <ResetConfig title={"Reset all octo UI2 Settings"}
+        description={<>Resets the following settings:
             <ul>
                 <li>
                     Backtesting Settings
@@ -59,15 +51,8 @@ export default function ResetUiConfigButton() {
                 <li>
                     Page Builder Page Layout
                 </li>
-            </ul>
-        </Alert>
-        <Button disabled={isResetting || !isOnline} onClick={handleResetLayout}
-            variant="outlined" color="error" style={{ marginLeft: "30px" }}>
-            <FontAwesomeIcon
-                icon={faRefresh}
-                style={{ marginRight: "5px" }}
-            />
-            Reset all octo UI2 Settings
-        </Button>
-    </>
+            </ul></>}
+        resetButtonText={"Reset all octo UI2 Settings"}
+        isResetting={isResetting}
+        handleReset={handleResetLayout}/>
 }

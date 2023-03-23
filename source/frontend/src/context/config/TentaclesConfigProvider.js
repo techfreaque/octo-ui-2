@@ -56,7 +56,7 @@ export function getEnabledTentaclesList(botInfo) {
   botInfo?.strategy_names && tentacles.push(...botInfo.strategy_names)
   botInfo?.evaluator_names && tentacles.push(...botInfo.evaluator_names)
   botInfo?.trading_mode_name && tentacles.push(botInfo.trading_mode_name)
-  return tentacles
+  return [...new Set(tentacles)]
 }
 
 export const useFetchCurrentTentaclesConfig = () => {

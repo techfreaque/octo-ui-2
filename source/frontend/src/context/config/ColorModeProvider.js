@@ -11,6 +11,38 @@ export const useToggleColorModeContext = () => {
 export const useColorModeContext = () => {
   return useContext(ColorModeContext);
 };
+const items = [{
+  label: "Strategy_1_Settings",
+  content: "user inputs of the thing",
+  key: "Strategy_1_Settings",
+  icon: "faStop",
+  children: [
+    {
+      label: "Evaluator 1",
+      content: "user inputs of the sub thing",
+      key: "Evaluator 1",
+      icon: "faStop",
+      children: [{
+        label: "Evaluator 1",
+        content: "user inputs of the sub thing",
+        key: "Evaluator 1",
+        icon: "faStop",
+      },
+      {
+        label: "Evaluator 1",
+        content: "user inputs of the sub thing",
+        key: "Evaluator 1",
+        icon: "faStop",
+      }
+      ]
+    }]
+}]
+
+// getItem({ label: label, content: content, key: key, icon: icon })
+
+// function getItem({ label, key }) {
+
+// }
 
 export function ColorModeProvider({ children }) {
   const [mode, setMode] = useState("dark");

@@ -143,6 +143,7 @@ def register_bot_info_routes(plugin):
                 "exchange_name": exchange_name,
                 "exchange_names": exchange_names,
                 "exchange_ids": exchange_ids,
+                "current_profile": models.get_current_profile().as_dict(),
                 "ids_by_exchange_name": ids_by_exchange_name,
                 "symbols": sorted(
                     [
@@ -152,6 +153,7 @@ def register_bot_info_routes(plugin):
                         for s in symbols
                     ]
                 ),
+                "can_logout": models.can_logout(),
                 "any_exchange_is_futures": any_exchange_is_futures,
                 "evaluator_names": evaluator_names,
                 "time_frames": timeframes_dict,

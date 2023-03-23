@@ -14,7 +14,7 @@ import AppStore from "../AppWidgets/AppStore/AppStore";
 import CurrentPortfolioTable from "../AppWidgets/Tables/CurrentPortfolio";
 import TradingConfig from "../AppWidgets/Configuration/TradingConfig";
 import PairsSelector from "../AppWidgets/PairsSelector/PairsSelector";
-import { BacktestingRunDataTable } from "../AppWidgets/Tables/RunDataTableW2UI";
+import {BacktestingRunDataTable} from "../AppWidgets/Tables/RunDataTableW2UI";
 import UIConfig from "../AppWidgets/Configuration/UIConfig";
 import StartBacktestingButton from "../AppWidgets/Buttons/StartBacktestingButton";
 import StopBacktestingButton from "../AppWidgets/Buttons/StopBacktestingButton";
@@ -43,54 +43,64 @@ import SymbolsInfoTable from "../AppWidgets/Tables/SymbolsInfo";
 import PlotlyDualCharts from "../AppWidgets/Charts/MainCharts/PlotlyDualCharts";
 import ResetUiConfigButton from "../AppWidgets/Buttons/ResetUiConfigButton";
 import ResetTentaclesConfigsButton from "../AppWidgets/Buttons/ResetTentaclesConfigButton";
+import ResetHistoryStorageButton from "../AppWidgets/Buttons/ResetHistoryStorageButton";
+import AntSidebar from "../../components/Layouts/Sidebars/AntSidebar";
+import DataTable from "../AppWidgets/Tables/DataTable";
+import LogoutButton from "../AppWidgets/Buttons/LogoutButton";
+import ResetTentaclesPlotCacheButton from "../AppWidgets/Buttons/ResetTentaclesPlotCacheButton";
 // import your custom widgets here
 
 export const registeredComponents = {
-  // define your custom widget here
-  DefaultLayout: DefaultLayout,
-  SimpleLayout: SimpleLayout,
-  Header: Header,
-  AppDrawerDropdown: AppDrawerDropdown,
-  LiveRunMetaData: LiveRunMetaData,
-  ScrollableTabs: ScrollableTabs,
-  Footer: Footer,
-  SplitMainContent: SplitMainContent,
-  RestartBotButton: RestartBotButton,
-  StopBotButton: StopBotButton,
-  UpdateBotButton: UpdateBotButton,
-  StartBacktestingButton: StartBacktestingButton,
-  StopBacktestingButton: StopBacktestingButton,
-  StartOptimizerButton: StartOptimizerButton,
-  StopOptimizerButton: StopOptimizerButton,
-  CurrentPanelFullscreen: CurrentPanelFullscreen,
-  CurrentPanelMinimize: CurrentPanelMinimize,
-  Configuration: Configuration,
-  RefreshBotData: RefreshBotData,
-  TimeFrameSelector: TimeFrameSelector,
-  ColorModeSwitch: ColorModeSwitch,
-  CurrentPortfolioTable: CurrentPortfolioTable,
-  OptimizerQueueSize: OptimizerQueueSize,
-  AppStore: AppStore,
-  TradingConfig: TradingConfig,
-  PairsSelector: PairsSelector,
-  ExchangeSelector: ExchangeSelector,
-  BacktestingRunDataTable: BacktestingRunDataTable,
-  UIConfig: UIConfig,
-  OptimizerQueueTable: OptimizerQueueTable,
-  OptimizerConfigForm: OptimizerConfigForm,
-  OptimizerRunsToBeAdded: OptimizerRunsToBeAdded,
-  AddToOptimizerQueueButton: AddToOptimizerQueueButton,
-  PageBuilder: PageBuilder,
-  ButtonWithModal: ButtonWithModal,
-  RealTradingSwitch: RealTradingSwitch,
-  CloseAllPositionsButton: CloseAllPositionsButton,
-  CancelAllOrdersButton: CancelAllOrdersButton,
-  PowerMenu: PowerMenu,
-  PlotlyDualCharts: PlotlyDualCharts,
-  SendActionCommandToTradingMode: SendActionCommandToTradingMode,
-  // OptimizerConfigForm2: OptimizerConfigForm2,
-  ToggleActivateRealTimeStrategy: ToggleActivateRealTimeStrategy,
-  SymbolsInfoTable: SymbolsInfoTable,
-  ResetUiConfigButton: ResetUiConfigButton,
-  ReseTentaclesConfigsButton: ResetTentaclesConfigsButton,
+    // define your custom widget here
+    DefaultLayout,
+    SimpleLayout,
+    Header,
+    AppDrawerDropdown,
+    LiveRunMetaData,
+    ScrollableTabs,
+    Footer,
+    SplitMainContent,
+    RestartBotButton,
+    StopBotButton,
+    UpdateBotButton,
+    StartBacktestingButton,
+    StopBacktestingButton,
+    StartOptimizerButton,
+    StopOptimizerButton,
+    CurrentPanelFullscreen,
+    CurrentPanelMinimize,
+    Configuration,
+    RefreshBotData,
+    TimeFrameSelector,
+    ColorModeSwitch,
+    CurrentPortfolioTable,
+    OptimizerQueueSize,
+    AppStore,
+    TradingConfig,
+    PairsSelector,
+    ExchangeSelector,
+    BacktestingRunDataTable,
+    UIConfig,
+    OptimizerQueueTable,
+    OptimizerConfigForm,
+    OptimizerRunsToBeAdded,
+    AddToOptimizerQueueButton,
+    PageBuilder,
+    ButtonWithModal,
+    RealTradingSwitch,
+    CloseAllPositionsButton,
+    CancelAllOrdersButton,
+    PowerMenu,
+    PlotlyDualCharts,
+    SendActionCommandToTradingMode,
+    // OptimizerConfigForm2: OptimizerConfigForm2,
+    ToggleActivateRealTimeStrategy,
+    SymbolsInfoTable,
+    ResetUiConfigButton,
+    ResetTentaclesConfigsButton,
+    AntSidebar,
+    DataTable,
+    ResetHistoryStorageButton,
+    LogoutButton,
+    ResetTentaclesPlotCacheButton,
 };

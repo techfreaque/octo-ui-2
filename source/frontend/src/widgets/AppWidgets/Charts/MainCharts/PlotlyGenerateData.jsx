@@ -149,10 +149,10 @@ function formatSubData({
                             let yAxisId = 1
                             let xAxisId = 1;
                             sub_element.data.elements.forEach((chartDetails) => {
-                                if (chartDetails.own_yaxis && yAxisId <= 4) {
+                                if (chartDetails.own_yaxis && yAxisId < 4) {
                                     yAxisId += 1;
                                 }
-                                if (chartDetails.own_xaxis && xAxisId <= 2) {
+                                if (chartDetails.own_xaxis && xAxisId < 2) {
                                     xAxisId += 1;
                                 }
                                 createAxisIfNotExists("y", yAxisId, layout, uiConfig, chartDetails)
