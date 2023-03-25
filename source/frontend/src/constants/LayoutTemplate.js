@@ -21,22 +21,18 @@ export const defaultBotTemplate = {
                             "leftContent": [
                                 {
                                     "component": "AppDrawerDropdown"
-                                },
-                                {
+                                }, {
                                     "component": "PairsSelector"
-                                },
-                                {
+                                }, {
                                     "component": "TimeFrameSelector"
-                                },
-                                {
+                                }, {
                                     "component": "ExchangeSelector"
                                 }
                             ],
                             "rightContent": [
                                 {
                                     "component": "ColorModeSwitch"
-                                },
-                                {
+                                }, {
                                     "component": "RealTradingSwitch"
                                 }
                             ]
@@ -48,8 +44,7 @@ export const defaultBotTemplate = {
                             "rightContent": [
                                 {
                                     "component": "RefreshBotData"
-                                },
-                                {
+                                }, {
                                     "component": "ButtonWithModal",
                                     "content": [
                                         {
@@ -61,15 +56,12 @@ export const defaultBotTemplate = {
                                                     "content": [
                                                         {
                                                             "component": "UIConfig",
-                                                            "configKeys": [
-                                                                "display_settings"
-                                                            ]
+                                                            "configKeys": ["display_settings"]
                                                         }
                                                     ],
                                                     "dontScroll": true,
                                                     "title": "Display Settings"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "Tab",
                                                     "content": [
                                                         {
@@ -84,16 +76,13 @@ export const defaultBotTemplate = {
                                                         {
                                                             "component": "ResetHistoryStorageButton",
                                                             "storageName": "portfolioHistory"
-                                                        },
-                                                        {
+                                                        }, {
                                                             "component": "ResetHistoryStorageButton",
                                                             "storageName": "ordersHistory"
-                                                        },
-                                                        {
+                                                        }, {
                                                             "component": "ResetHistoryStorageButton",
                                                             "storageName": "tradesHistory"
-                                                        },
-                                                        {
+                                                        }, {
                                                             "component": "ResetHistoryStorageButton",
                                                             "storageName": "transactionsHistory"
                                                         }
@@ -106,11 +95,9 @@ export const defaultBotTemplate = {
                                     ],
                                     "faIcon": "cog",
                                     "title": ""
-                                },
-                                {
+                                }, {
                                     "component": "CurrentPanelMinimize"
-                                },
-                                {
+                                }, {
                                     "component": "CurrentPanelFullscreen"
                                 }
                             ],
@@ -123,8 +110,7 @@ export const defaultBotTemplate = {
                                             "content": [
                                                 {
                                                     "component": "ToggleActivateRealTimeStrategy"
-                                                },
-                                                {
+                                                }, {
                                                     "command": "execute",
                                                     "component": "SendActionCommandToTradingMode",
                                                     "faIcon": "sack-dollar",
@@ -135,8 +121,7 @@ export const defaultBotTemplate = {
                                     ],
                                     "dontScroll": true,
                                     "title": "Strategy Settings"
-                                },
-                                {
+                                }, {
                                     "component": "Tab",
                                     "content": [
                                         {
@@ -144,8 +129,7 @@ export const defaultBotTemplate = {
                                             "rightContent": [
                                                 {
                                                     "component": "CancelAllOrdersButton"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "CloseAllPositionsButton"
                                                 }
                                             ],
@@ -155,9 +139,7 @@ export const defaultBotTemplate = {
                                                     "content": [
                                                         {
                                                             "component": "UIConfig",
-                                                            "configKeys": [
-                                                                "live_analysis_settings"
-                                                            ]
+                                                            "configKeys": ["live_analysis_settings"]
                                                         }
                                                     ],
                                                     "dontScroll": false,
@@ -192,8 +174,7 @@ export const defaultBotTemplate = {
                                                     ],
                                                     "dontScroll": true,
                                                     "title": "Symbols Info"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "Tab",
                                                     "content": [
                                                         {
@@ -203,8 +184,7 @@ export const defaultBotTemplate = {
                                                     ],
                                                     "dontScroll": false,
                                                     "title": "Orders"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "Tab",
                                                     "content": [
                                                         {
@@ -214,8 +194,7 @@ export const defaultBotTemplate = {
                                                     ],
                                                     "dontScroll": false,
                                                     "title": "Trades"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "Tab",
                                                     "content": [
                                                         {
@@ -231,8 +210,7 @@ export const defaultBotTemplate = {
                                     ],
                                     "dontScroll": true,
                                     "title": "Trading"
-                                },
-                                {
+                                }, {
                                     "component": "Tab",
                                     "content": [
                                         {
@@ -244,18 +222,12 @@ export const defaultBotTemplate = {
                                                     "content": [
                                                         {
                                                             "component": "UIConfig",
-                                                            "configKeys": [
-                                                                "backtesting_run_settings",
-                                                                "backtesting_analysis_settings",
-                                                                "optimization_campaign",
-                                                                "optimizer_campaigns_to_load"
-                                                            ]
+                                                            "configKeys": ["backtesting_run_settings", "backtesting_analysis_settings", "optimization_campaign", "optimizer_campaigns_to_load"]
                                                         }
                                                     ],
                                                     "dontScroll": false,
                                                     "title": "Backtesting Settings"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "Tab",
                                                     "content": [
                                                         {
@@ -264,11 +236,9 @@ export const defaultBotTemplate = {
                                                     ],
                                                     "dontScroll": false,
                                                     "title": "Backtesting Overview"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "StartBacktestingButton"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "StopBacktestingButton"
                                                 }
                                             ]
@@ -276,8 +246,7 @@ export const defaultBotTemplate = {
                                     ],
                                     "dontScroll": true,
                                     "title": "Backtesting"
-                                },
-                                {
+                                }, {
                                     "component": "Tab",
                                     "content": [
                                         {
@@ -294,8 +263,7 @@ export const defaultBotTemplate = {
                                                 },
                                                 {
                                                     "component": "StopOptimizerButton"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "StartOptimizerButton"
                                                 }
                                             ],
@@ -305,16 +273,12 @@ export const defaultBotTemplate = {
                                                     "content": [
                                                         {
                                                             "component": "UIConfig",
-                                                            "configKeys": [
-                                                                "optimizer_run_settings",
-                                                                "optimization_campaign"
-                                                            ]
+                                                            "configKeys": ["optimizer_run_settings", "optimization_campaign"]
                                                         }
                                                     ],
                                                     "dontScroll": false,
                                                     "title": "Optimizer settings"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "Tab",
                                                     "content": [
                                                         {
@@ -323,8 +287,7 @@ export const defaultBotTemplate = {
                                                     ],
                                                     "dontScroll": false,
                                                     "title": "Run config"
-                                                },
-                                                {
+                                                }, {
                                                     "component": "Tab",
                                                     "content": [
                                                         {
@@ -353,8 +316,7 @@ export const defaultBotTemplate = {
             ],
             "path": "/",
             "title": "Home"
-        },
-        {
+        }, {
             "layout": [
                 {
                     "component": "SimpleLayout",
@@ -379,8 +341,7 @@ export const defaultBotTemplate = {
                             "rightContent": [
                                 {
                                     "component": "ColorModeSwitch"
-                                },
-                                {
+                                }, {
                                     "component": "RealTradingSwitch"
                                 }
                             ]
@@ -395,8 +356,7 @@ export const defaultBotTemplate = {
             ],
             "path": "/appstore",
             "title": "Package Manager"
-        },
-        {
+        }, {
             "layout": [
                 {
                     "component": "SimpleLayout",
@@ -430,43 +390,68 @@ export const defaultBotTemplate = {
     ]
 };
 
+// change also in pages.css
 export const defaultColors = {
     dark: {
         background: "#131722",
+        backgroundSecondary: "rgba(255, 255, 255, 0.04)",
         backgroundHover: "#2a2e39",
+        backgroundActive: "#111a2c",
         font: "#b2b5be",
-        fontHover: "#131722",
-        fontActive: "#722ED1",
-        border: "#2a2e39",
-        borderActive: "#722ED1",
-        warning: "#fb3",
-        success: "#00c851",
-        candles: {
-            wick: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-            body: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-            border: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-            // wick: {green: "#6BA583", red: "#DB0000"},
-            // body: {green: "#6BA583", red: "#DB0000"},
-            // border: {green: "#6BA583", red: "#DB0000"},
-        },
-    },
-    light: {
-        background: "#131722",
-        backgroundHover: "#2a2e39",
-        font: "#000",
-        fontHover: "#131722",
+        fontHover: "#fff",
         fontActive: "#1e53e5",
         border: "#2a2e39",
         borderActive: "#1e53e5",
+        borderGlow:"#1d1d5f",
         warning: "#fb3",
         success: "#00c851",
         candles: {
-            wick: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-            body: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
-            border: { green: "rgb(178, 235, 242)", red: "rgb(103, 58, 183)" },
+            wick: {
+                green: "rgb(178, 235, 242)",
+                red: "rgb(103, 58, 183)"
+            },
+            body: {
+                green: "rgb(178, 235, 242)",
+                red: "rgb(103, 58, 183)"
+            },
+            border: {
+                green: "rgb(178, 235, 242)",
+                red: "rgb(103, 58, 183)"
+            },
             // wick: {green: "#6BA583", red: "#DB0000"},
             // body: {green: "#6BA583", red: "#DB0000"},
             // border: {green: "#6BA583", red: "#DB0000"},
-        },
+        }
     },
+    light: {
+        background: "#131722",
+        backgroundSecondary: "rgba(0, 0, 0, 0.02)",
+        backgroundHover: "rgba(0,0,0,.06)",
+        backgroundActive: "#e6f4ff",
+        font: "#000",
+        fontHover: "#000",
+        fontActive: "#1e53e5",
+        border: "#2a2e39",
+        borderActive: "#1e53e5",
+        borderGlow:"#1d1d5f",
+        warning: "#fb3",
+        success: "#00c851",
+        candles: {
+            wick: {
+                green: "rgb(178, 235, 242)",
+                red: "rgb(103, 58, 183)"
+            },
+            body: {
+                green: "rgb(178, 235, 242)",
+                red: "rgb(103, 58, 183)"
+            },
+            border: {
+                green: "rgb(178, 235, 242)",
+                red: "rgb(103, 58, 183)"
+            },
+            // wick: {green: "#6BA583", red: "#DB0000"},
+            // body: {green: "#6BA583", red: "#DB0000"},
+            // border: {green: "#6BA583", red: "#DB0000"},
+        }
+    }
 };

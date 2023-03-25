@@ -1,160 +1,231 @@
-import { Collapse, Menu, Space } from "antd"
-import { Button } from "antd/es/radio";
-import { useState } from "react";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { useColorModeContext } from "../../../context/config/ColorModeProvider";
+import {Collapse, Button} from "antd"
+import {useMemo} from "react";
+import {useState} from "react";
+import {useBotColorsContext} from "../../../context/config/BotColorsProvider";
+import {useColorModeContext} from "../../../context/config/ColorModeProvider";
 import "./antSidebar.css"
-const { Panel } = Collapse;
+const {Panel} = Collapse;
 
 
-const menuItems = [{
-    label: "Strategy_1_Settings",
-    content: "gfhgffgfg inputs of the thing",
-    key: "hfghfgh",
-    icon: "faStop",
-    children: [
-        {
-            label: "Evaluator 1",
-            content: "user inputs of the sub fgfghghffghfghfghfg",
-            key: "dfghfg",
-            icon: "faStop",
-            children: [{
-                label: "Evaluator 1",
-                content: "user inputs of the sub fghfghfhgfghf",
-                key: "ghfgh",
-                icon: "faStop",
-            },
+const dummyMenuItems = [
+    {
+        label: "Strategy_1_Settings",
+        content: "gfhgffgfg inputs of the thing",
+        key: "s1",
+        icon: "faStop",
+        children: [
             {
                 label: "Evaluator 1",
-                content: "user inputs of the sub fghfhgfhgf",
-                key: "fghfghf",
+                content: "user inputs of the sub fgfghghffghfghfghfg",
+                key: "e1",
                 icon: "faStop",
-            }
-            ]
-        },
+                children: [
+                    {
+                        label: "Evaluator 1",
+                        content: "user inputs of the sub fghfghfhgfghf",
+                        key: "c1",
+                        icon: "faStop"
+                    }, {
+                        label: "Evaluator 1",
+                        content: "user inputs of the sub fghfhgfhgf",
+                        key: "c2",
+                        icon: "faStop"
+                    }
+                ]
+            },
 
 
-    ]
-},
-{
-    label: "Evaluator 1",
-    content: "user inputs of the sub thing",
-    key: "dffdfds1",
-    icon: "faStop",
-    children: [{
+        ]
+    }, {
         label: "Evaluator 1",
-        content: "user fghgfhgfhgfhfggfhfginputs of the sub thing",
-        key: "dfgdfgdfgdfg",
+        content: "user inputs of the sub thing",
+        key: "s2",
         icon: "faStop",
+        // children: [
+        //     {
+        //         label: "Evaluator 1",
+        //         content: "user fghgfhgfhgfhfggfhfginputs of the sub thing",
+        //         key: "dfgdfgdfgdfg",
+        //         icon: "faStop"
+        //     }, {
+        //         label: "Evaluator 1",
+        //         content: "user fdghfghghfgfhgfhgfh of the sub thing",
+        //         key: "dfgdfgdf",
+        //         icon: "faStop"
+        //     }
+        // ]
     },
-    {
-        label: "Evaluator 1",
-        content: "user fdghfghghfgfhgfhgfh of the sub thing",
-        key: "dfgdfgdf",
-        icon: "faStop",
-    }
-    ]
-},
 
 ]
 
-export default function AntSidebar({ content }) {
+export function TestAntSidebar() {
+    return <AntSidebar menuItems={dummyMenuItems}/>
+}
+export default function AntSidebar({menuItems}) {
     const botColors = useBotColorsContext();
     const [currentlySelectedMenu, setCurrentlySelectedMenu] = useState();
-    const activeMenus = []
-    const currentContent = findCurrentContent(
-        menuItems, currentlySelectedMenu, activeMenus
-    )
-    return (
-        <div style={{ height: "100%", width: "100%", display: "flex" }}>
-            <div style={{ width: "300px" }}>
-                <MenuItems menuItems={menuItems}
-                    currentlySelectedMenu={currentlySelectedMenu}
-                    activeMenus={activeMenus}
-                    setCurrentlySelectedMenu={setCurrentlySelectedMenu} />
-            </div>
-            <div style={{ width: "calc(100% - 300px)", borderLeft: "4px solid " + botColors.border }}>
-                {currentContent}
+    return useMemo(() => {
+        const activeMenus = []
+        const hasContent = Boolean(menuItems ?. length)
+        const currentContent = hasContent && findCurrentContent(menuItems, currentlySelectedMenu, activeMenus)
+        return hasContent && (
+            <div style={
+                {
+                    height: "100%",
+                    width: "100%",
+                    display: "flex"
+                }
+            }>
+                <div style={
+                        {width: "280px"}
+                    }
+                    className={"ant-side-bar"}>
+                    <MenuItems menuItems={menuItems}
+                        currentlySelectedMenu={currentlySelectedMenu}
+                        activeMenus={activeMenus}
+                        setCurrentlySelectedMenu={setCurrentlySelectedMenu}/>
+                </div>
+                <div style={
+                    {
+                        width: "calc(100% - 300px)",
+                        borderLeft: "4px solid " + botColors.border
+                    }
+                }>
+                    {currentContent} </div>
             </div>
 
-        </div>
-
-    )
+        )
+    }, [botColors.border, currentlySelectedMenu, menuItems])
 }
 
-function findCurrentContent(
-    menuItemsData, currentlySelectedMenu, activeMenus
-) {
-    for (let currentItemIndex = 0; currentItemIndex < menuItemsData.length; currentItemIndex++) {
-        if (menuItemsData[currentItemIndex].key === currentlySelectedMenu) {
-            activeMenus.push(menuItemsData[currentItemIndex].key)
-            return menuItemsData[currentItemIndex].content
-        } else if (menuItemsData[currentItemIndex].children) {
-            const foundContent = findCurrentContent(
-                menuItemsData[currentItemIndex].children, currentlySelectedMenu, activeMenus
-            )
+function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
+    for (const menuItemData of menuItemsData) {
+        if (menuItemData.key === currentlySelectedMenu) {
+            activeMenus.push(menuItemData.key)
+            return menuItemData.content
+        } else if (menuItemData.children) {
+            const foundContent = findCurrentContent(menuItemData.children, currentlySelectedMenu, activeMenus)
             if (foundContent) {
-                activeMenus.push(menuItemsData[currentItemIndex].key)
+                activeMenus.push(menuItemData.key)
                 return foundContent
-            } else {
-                // return undefined
             }
-        } else {
-            // return undefined
         }
     }
 }
 
 
-function MenuItems({ menuItems, currentlySelectedMenu, setCurrentlySelectedMenu, activeMenus }) {
+function MenuItems({
+    menuItems,
+    currentlySelectedMenu,
+    setCurrentlySelectedMenu,
+    activeMenus,
+    isSubMenu
+}) {
     return menuItems.map((menuItem) => {
-        return <div style={{ padding: "10px" }}>
-            <MenuItem
-                  mode="inline"
-                menuItem={menuItem} currentlySelectedMenu={currentlySelectedMenu}
-                setCurrentlySelectedMenu={setCurrentlySelectedMenu}
-                activeMenus={activeMenus}
-            />
-        </div>
-        // <Space direction="vertical" style={{ width: "100%" }} >
-        // {/* </Space> */ }
+        const style = isSubMenu ? {
+            margin: "5px"
+        } : {}
+        return (
+            <div key={
+                    menuItem.key
+                }
+                style={style}
+                className={
+                    isSubMenu ? "sub-menu" : "root-menu"
+            }>
+                <MenuItem mode="inline"
+                    menuItem={menuItem}
+                    isSubMenu={isSubMenu}
+                    currentlySelectedMenu={currentlySelectedMenu}
+                    setCurrentlySelectedMenu={setCurrentlySelectedMenu}
+                    activeMenus={activeMenus}/>
+            </div>
+        )
     })
 }
 
-function MenuItem({ menuItem, currentlySelectedMenu, setCurrentlySelectedMenu, activeMenus }) {
-    function handleCUrenntChange() {
-        console.log("fsdfsdfsdf")
+function MenuItem({
+    menuItem,
+    currentlySelectedMenu,
+    setCurrentlySelectedMenu,
+    activeMenus,
+    isSubMenu
+}) {
+    function handleCurentChange() {
         setCurrentlySelectedMenu(menuItem.key)
     }
-
-    const background = currentlySelectedMenu === menuItem.key ? "#ddd" : "#fff"
-    const botColors = useBotColorsContext();
     const colorMode = useColorModeContext()
-    return menuItem.children ?
-        <Collapse  className={`sidebar-collapse-${colorMode}`} activeKey={activeMenus} collapsible="header"
-            onChange={handleCUrenntChange} style={{  border: "none",color: botColors.font }}
-        >
-            <Panel className={`sidebar-panel-${colorMode}`} header={<span style={{ color: botColors.font }}>{menuItem.label}</span>} key={menuItem.key}
-                style={{
-                    border: "none",
-                    color: botColors.font
-                }}
-            >
-                <MenuItems menuItems={menuItem.children}
+    const colors = useBotColorsContext()
+    const buttonStyle = menuItem.key === currentlySelectedMenu ? {
+        // backgroundColor: colors ?. backgroundActive,
+        color: colors ?. fontActive
+    } : {}
+    const buttonContainerStyle = isSubMenu ? {} : {
+        padding: "5px"
+    }
 
+    return useMemo(() => (menuItem.children ? (
+        <Collapse prefixCls={
+                `${colorMode}`
+            }
+            activeKey={activeMenus}
+            onChange={handleCurentChange}
+            style={
+                {border: "none"}
+            }
+            expandIconPosition="end"
+            destroyInactivePanel={true}
+            // showArrow={true}
+        >
+            <Panel header={
+                    (
+                        <span>{
+                            menuItem.label
+                        }</span>
+                    )
+                }
+                key={
+                    menuItem.key
+                }
+                style={
+                    {border: "none"}
+            }>
+                <MenuItems menuItems={
+                        menuItem.children
+                    }
+                    activeMenus={activeMenus}
+                    isSubMenu={true}
                     currentlySelectedMenu={currentlySelectedMenu}
-                    setCurrentlySelectedMenu={setCurrentlySelectedMenu} />
-                {/* <p>rtzrtz</p> */}
+                    setCurrentlySelectedMenu={setCurrentlySelectedMenu}/>
             </Panel>
         </Collapse>
-        : <div style={{ width: "100%" }}>
-            <Button
-                
-                // style={{ background }}
-                onClick={handleCUrenntChange} >
-                {menuItem.label}
-            </Button>
+    ) : (
+        <div style={
+            {
+                width: "100%",
+                ... buttonContainerStyle
+            }
+        }>
+            <Button style={
+                    {
+                        ... buttonStyle,
+                        textAlign: "start"
+                    }
+                }
+                size={"large"}
+                type="text"
+                onClick={handleCurentChange}
+                block>
+                {
+                menuItem.label
+            } </Button>
         </div>
-
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    )), [
+        activeMenus,
+        buttonStyle,
+        colorMode,
+        currentlySelectedMenu,
+        menuItem
+    ])
 }

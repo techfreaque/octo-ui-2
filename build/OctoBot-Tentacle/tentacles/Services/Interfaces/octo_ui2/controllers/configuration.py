@@ -116,7 +116,11 @@ def register_bot_config_routes(plugin):
                                     "additionalProperties": {
                                         "type": "object",
                                         "properties": {
-                                            "enabled": {"type": "boolean"},
+                                            "enabled": {
+                                                "type": "boolean",
+                                                "format": "checkbox",
+                                                "fieldType": "boolean",
+                                            },
                                             "exchange-type": {"type": "string"},
                                         },
                                         "required": ["enabled"],
@@ -124,27 +128,45 @@ def register_bot_config_routes(plugin):
                                 },
                                 "trader": {
                                     "type": "object",
-                                    "title": "Trader",
+                                    "title": "Real Trading Settings",
                                     "properties": {
-                                        "enabled": {"type": "boolean"},
-                                        "load-trade-history": {"type": "boolean"},
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "format": "checkbox",
+                                            "fieldType": "boolean",
+                                            "title": "Enable real trading",
+                                        },
+                                        "load-trade-history": {
+                                            "type": "boolean",
+                                            "format": "checkbox",
+                                            "fieldType": "boolean",
+                                            "title": "Load trade history from exchange",
+                                        },
                                     },
                                 },
                                 "trader-simulator": {
                                     "type": "object",
-                                    "title": "Trader Simulator",
+                                    "title": "Simulated Trading Settings",
                                     "properties": {
-                                        "enabled": {"type": "boolean"},
+                                        "enabled": {
+                                            "type": "boolean",
+                                            "format": "checkbox",
+                                            "fieldType": "boolean",
+                                            "title": "Enable simulated trading",
+                                        },
                                         "fees": {
                                             "type": "object",
+                                            "title": "Simulated exchange fees",
                                             "properties": {
                                                 "maker": {
                                                     "type": "number",
+                                                    "title": "Maker Fees (Market Orders)",
                                                     "minimum": -100,
                                                     "maximum": 100,
                                                 },
                                                 "taker": {
                                                     "type": "number",
+                                                    "title": "Taker Fees (Limit Orders)",
                                                     "minimum": -100,
                                                     "maximum": 100,
                                                 },
@@ -153,6 +175,7 @@ def register_bot_config_routes(plugin):
                                         },
                                         "starting-portfolio": {
                                             "type": "object",
+                                            "title": "Simulated Starting Portfolio",
                                             "additionalProperties": {
                                                 "type": "number",
                                                 "minimum": 0,
@@ -163,25 +186,28 @@ def register_bot_config_routes(plugin):
                                 },
                                 "trading": {
                                     "type": "object",
-                                    "title": "Trading",
+                                    "title": "Trading Settings",
                                     "properties": {
-                                        "reference-market": {"type": "string"},
+                                        "reference-market": {
+                                            "type": "string",
+                                            "title": "Reference market",
+                                        },
                                         "risk": {
                                             "type": "number",
                                             "minimum": 0,
                                             "maximum": 1,
+                                            "default": 1,
+                                            "options": {"hidden": True},
                                         },
-                                        "current-bot-recording-id": {
-                                            "type": "integer",
-                                            "minimum": 1,
-                                        },
+                                        # "current-bot-recording-id": {
+                                        #     "type": "integer",
+                                        #     "minimum": 1,
+                                        # },
                                     },
-                                    "required": ["reference-market", "risk"],
+                                    "required": ["reference-market"],
                                 },
                             },
                         },
-                        "evaluator_config": {},
-                        "tentacle_configs": {},
                     },
                 },
                 "data": {

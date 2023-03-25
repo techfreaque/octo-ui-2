@@ -2,7 +2,7 @@ import { useTheme } from "@mui/material";
 import React from "react";
 import { useMemo } from "react";
 import { Helmet } from "react-helmet";
-import AntSidebar from "../../components/Layouts/Sidebars/AntSidebar";
+import { TestAntSidebar } from "../../components/Layouts/Sidebars/AntSidebar";
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 import AppWidgets from "../../widgets/WidgetManagement/RenderAppWidgets";
 
@@ -19,7 +19,7 @@ export default function Page({ currentPage }) {
       <Helmet defaultTitle={currentPage.title + " - OctoBot"}>
         <meta name="description" content="OctoBot trading bot" />
       </Helmet>
-      <AntSidebar/>
+      {/* <TestAntSidebar/> */}
       <AppWidgets
         currentPage={currentPage}
         layout={currentPage.layout}

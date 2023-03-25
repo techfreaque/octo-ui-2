@@ -1,4 +1,50 @@
-body, html, #root {
+:root {
+    --dark-background: #131722;
+    --dark-backgroundSecondary:#ffffff0a;
+    --dark-backgroundHover: #2a2e39;
+    --dark-backgroundActive: #111a2c;
+    --dark-font: #b2b5be;
+    --dark-fontHover: #fff;
+    --dark-fontActive: #1e53e5;
+    --dark-border: #2a2e39;
+    --dark-borderActive: #1e53e5;
+    --dark-borderGlow:#1d1d5f;
+    --dark-warning: #fb3;
+    --dark-success: #00c851;
+
+    --dark-candles-wick-green: rgb(178, 235, 242);
+    --dark-candles-wick-red: rgb(103, 58, 183);
+    --dark-candles-body-green: rgb(178, 235, 242);
+    --dark-candles-body-red: rgb(103, 58, 183);
+    --dark-candles-border-green: rgb(178, 235, 242);
+    --dark-candles-border-red: rgb(103, 58, 183);
+    
+
+    --light-background: #fff;
+    --light-backgroundSecondary: #00000005;
+    --light-backgroundHover: #0000000f;
+    --light-backgroundActive: #e6f4ff;
+    --light-font: #000;
+    --light-fontHover: #000;
+    --light-fontActive: #1e53e5;
+    --light-border: #2a2e39;
+    --light-borderActive: #1e53e5;
+    --light-borderGlow:#1d1d5f;
+    --light-warning: #fb3;
+    --light-success: #00c851;
+
+    --light-candles-wick-green: rgb(178, 235, 242);
+    --light-candles-wick-red: rgb(103, 58, 183);
+    --light-candles-body-green: rgb(178, 235, 242);
+    --light-candles-body-red: rgb(103, 58, 183);
+    --light-candles-border-green: rgb(178, 235, 242);
+    --light-candles-border-red: rgb(103, 58, 183);
+
+}
+
+body,
+html,
+#root {
     width: 100%;
     height: 100%;
 }
