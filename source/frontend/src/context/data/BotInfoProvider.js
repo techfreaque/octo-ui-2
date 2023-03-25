@@ -24,6 +24,11 @@ export const useUpdateBotInfoContext = () => {
   return useContext(UpdateBotInfoContext);
 };
 
+export function useCurrentProfile() {
+  const botInfo = useBotInfoContext()
+  return botInfo?.current_profile
+}
+
 export const useFetchBotInfo = () => {
   const setBotInfo = useUpdateBotInfoContext();
   const botDomain = useBotDomainContext();

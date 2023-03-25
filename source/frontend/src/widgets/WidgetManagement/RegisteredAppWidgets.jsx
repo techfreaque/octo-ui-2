@@ -48,6 +48,7 @@ import AntSidebar from "../../components/Layouts/Sidebars/AntSidebar";
 import DataTable from "../AppWidgets/Tables/DataTable";
 import LogoutButton from "../AppWidgets/Buttons/LogoutButton";
 import ResetTentaclesPlotCacheButton from "../AppWidgets/Buttons/ResetTentaclesPlotCacheButton";
+import ProfileModal from "../AppWidgets/Modals/ProfileModal/ProfileModal";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -103,4 +104,5 @@ export const registeredComponents = {
     ResetHistoryStorageButton,
     LogoutButton,
     ResetTentaclesPlotCacheButton,
+    ProfileModal,
 };

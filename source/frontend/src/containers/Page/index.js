@@ -19,7 +19,7 @@ export default function Page({ currentPage }) {
       <Helmet defaultTitle={currentPage.title + " - OctoBot"}>
         <meta name="description" content="OctoBot trading bot" />
       </Helmet>
-      {/* <AntSidebar/> */}
+      <AntSidebar/>
       <AppWidgets
         currentPage={currentPage}
         layout={currentPage.layout}

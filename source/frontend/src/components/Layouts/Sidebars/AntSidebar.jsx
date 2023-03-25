@@ -1,8 +1,9 @@
-import { Collapse, Space } from "antd"
+import { Collapse, Menu, Space } from "antd"
 import { Button } from "antd/es/radio";
 import { useState } from "react";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-
+import { useColorModeContext } from "../../../context/config/ColorModeProvider";
+import "./antSidebar.css"
 const { Panel } = Collapse;
 
 
@@ -108,8 +109,8 @@ function findCurrentContent(
 function MenuItems({ menuItems, currentlySelectedMenu, setCurrentlySelectedMenu, activeMenus }) {
     return menuItems.map((menuItem) => {
         return <div style={{ padding: "10px" }}>
-
             <MenuItem
+                  mode="inline"
                 menuItem={menuItem} currentlySelectedMenu={currentlySelectedMenu}
                 setCurrentlySelectedMenu={setCurrentlySelectedMenu}
                 activeMenus={activeMenus}
@@ -125,13 +126,15 @@ function MenuItem({ menuItem, currentlySelectedMenu, setCurrentlySelectedMenu, a
         console.log("fsdfsdfsdf")
         setCurrentlySelectedMenu(menuItem.key)
     }
+
     const background = currentlySelectedMenu === menuItem.key ? "#ddd" : "#fff"
     const botColors = useBotColorsContext();
+    const colorMode = useColorModeContext()
     return menuItem.children ?
-        <Collapse activeKey={activeMenus} collapsible="header"
+        <Collapse  className={`sidebar-collapse-${colorMode}`} activeKey={activeMenus} collapsible="header"
             onChange={handleCUrenntChange} style={{  border: "none",color: botColors.font }}
         >
-            <Panel header={<span style={{ color: botColors.font }}>{menuItem.label}</span>} key={menuItem.key}
+            <Panel className={`sidebar-panel-${colorMode}`} header={<span style={{ color: botColors.font }}>{menuItem.label}</span>} key={menuItem.key}
                 style={{
                     border: "none",
                     color: botColors.font
@@ -145,7 +148,9 @@ function MenuItem({ menuItem, currentlySelectedMenu, setCurrentlySelectedMenu, a
             </Panel>
         </Collapse>
         : <div style={{ width: "100%" }}>
-            <Button style={{ background: background }}
+            <Button
+                
+                // style={{ background }}
                 onClick={handleCUrenntChange} >
                 {menuItem.label}
             </Button>

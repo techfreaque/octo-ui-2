@@ -436,9 +436,9 @@ export const defaultColors = {
         backgroundHover: "#2a2e39",
         font: "#b2b5be",
         fontHover: "#131722",
-        fontActive: "#1e53e5",
+        fontActive: "#722ED1",
         border: "#2a2e39",
-        borderActive: "#1e53e5",
+        borderActive: "#722ED1",
         warning: "#fb3",
         success: "#00c851",
         candles: {

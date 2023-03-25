@@ -84,8 +84,10 @@ export async function startOptimizer(botDomain, optimizerRunSettings, optimizerS
         setBotIsOptimizing(true)
     }
     sendAndInterpretBotUpdate({
-        ... optimizerRunSettings,
-        exchange_ids: optimizerRunSettings.exchange_names.map(exchangeName => (ids_by_exchange_name[exchangeName])),
+        ...optimizerRunSettings,
+        exchange_ids: optimizerRunSettings.exchange_names.map(exchangeName => (
+            ids_by_exchange_name[exchangeName]
+            )),
         config: optimizerSettingsForm,
 
         // TODO remove when stock supports ids
@@ -94,7 +96,9 @@ export async function startOptimizer(botDomain, optimizerRunSettings, optimizerS
     }, botDomain + backendRoutes.optimizerStart, success, failure)
 }
 
-export async function addToOptimizerQueue(botDomain, optimizerRunSettings, optimizerSettingsForm, exchageId, setBotIsOptimizing, fetchOptimizerQueue) {
+export async function addToOptimizerQueue(
+    botDomain, optimizerRunSettings, optimizerSettingsForm,
+    exchageId, setBotIsOptimizing, fetchOptimizerQueue) {
     const success = (updated_data, update_url, result, msg, status) => {
         fetchOptimizerQueue()
         createNotification(msg.message, "success")
@@ -103,7 +107,7 @@ export async function addToOptimizerQueue(botDomain, optimizerRunSettings, optim
         createNotification(result.message, "danger")
     }
     sendAndInterpretBotUpdate({
-        ... optimizerRunSettings,
+        ...optimizerRunSettings,
         // exchange_id: exchageId,
         optimizer_config: optimizerSettingsForm
     }, botDomain + backendRoutes.optimizerAddToQueue, success, failure)
@@ -119,7 +123,8 @@ export async function stopBacktesting(botDomain, setBotIsBacktesting) {
 }
 
 export async function stopOptimizer(botDomain, setBotIsOptimizing) {
-    const success = (updated_data, update_url, result, msg, status) => { // TODO check why streing
+    const success = (updated_data, update_url, result, msg, status) => {
+        // TODO check why streing
         setBotIsOptimizing("isStopping")
         createNotification(msg);
     }

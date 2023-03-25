@@ -1,6 +1,6 @@
 import { availableStorages } from "../AppWidgets/Buttons/ResetHistoryStorageButton";
 import {allChartLocations} from "../AppWidgets/Charts/MainCharts/Plotly";
-import {availableConfigKeys} from "../AppWidgets/Configuration/Form";
+import {availableConfigKeysList} from "../AppWidgets/Configuration/Form";
 import {availableUIConfigKeys} from "../AppWidgets/Configuration/UIConfig";
 import {generateAppWidgetProp, generateSimpleProp} from "../AppWidgets/PageBuilder/PageBuilder";
 import {dataTableSourcesList} from "../AppWidgets/Tables/DataTable";
@@ -14,7 +14,7 @@ export default function appWidgetsProps() {
         ], "string"),
         ...generateSimpleProp("command", ["SendActionCommandToTradingMode"], "string"),
         ...generateSimpleProp("dontScroll", "Tab", "boolean", "checkbox"),
-        ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeys),
+        ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeysList),
         ...generateSimpleProp("configKeys", "UIConfig", "array", "select", availableUIConfigKeys, true),
         ...generateSimpleProp("faIcon", [
             "ButtonWithModal", "SendActionCommandToTradingMode"

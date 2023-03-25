@@ -28,6 +28,7 @@ export const backendRoutes = {
     optimizerStop: `${advancedPath}/advanced/strategy-optimizer?update_type=cancel_optimizer`,
 
     profileMedia: "/profile_media/user/profiles",
+    staticImg: "/static/img",
     manageSymbol: "/profile",
     config: "/config",
     restartBot: "/commands/restart",
