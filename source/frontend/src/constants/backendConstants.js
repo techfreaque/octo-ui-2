@@ -24,8 +24,8 @@ export const backendRoutes = {
     optimizerAddToQueue: `${basePath}/optimizer/add`,
     optimizerGetQueue: `${basePath}/optimizer/get`,
 
-    installApp: `${advancedPath}/advanced/tentacle_packages?update_type=add_package`,
-    optimizerStop: `${advancedPath}/advanced/strategy-optimizer?update_type=cancel_optimizer`,
+    installApp: `${advancedPath}/tentacle_packages?update_type=add_package`,
+    optimizerStop: `${advancedPath}/strategy-optimizer?update_type=cancel_optimizer`,
 
     profileMedia: "/profile_media/user/profiles",
     staticImg: "/static/img",

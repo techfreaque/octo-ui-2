@@ -5,7 +5,7 @@
             "description": "The web interface for OctoBot based on react, you are currently using",
             "versions": [
                 {
-                    "version": "latest",
+                    "version": "latest stable version",
                     "url": "https://raw.githubusercontent.com/techfreaque/octo-ui-2/main/releases/octo-ui2-latest/any_platform.zip"
                 }
             ],
@@ -19,11 +19,11 @@
             "description": "Automated portfolio balancing and cross asset arbitrage. This trading mode requires you to import the profile into OctoBot as well, you can find the documentation here: https://github.com/techfreaque/octobot-spot-master-3000",
             "versions": [
                 {
-                    "version": "latest stable",
+                    "version": "latest stable version",
                     "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/main/releases/latest/any_platform.zip"
                 },
                 {
-                    "version": "latest beta",
+                    "version": "latest beta version",
                     "url": "https://raw.githubusercontent.com/techfreaque/octobot-spot-master-3000/dev/releases/latest/any_platform.zip"
                 }
             ],
@@ -37,7 +37,7 @@
             "description": "This trading mode requires you to import the profile into OctoBot as well, you can find the documentation here: https://github.com/techfreaque/octobot-lorentzian-classification",
             "versions": [
                 {
-                    "version": "latest beta version",
+                    "version": "latest stable version",
                     "url": "https://raw.githubusercontent.com/techfreaque/octobot-lorentzian-classification/main/releases/latest/any_platform.zip"
                 }
             ],
@@ -51,7 +51,7 @@
             "description": "This Trading Mode allows you create powerful strategies without a single line of code. It supports 50 indicators. It costs 250$, includes 1 year of updates and is available through email max@a42.ch. If you are interested, you'll get access to a free demo, before you pay me.",
             "versions": [
                 {
-                    "version": "stable stable",
+                    "version": "latest stable version",
                     "url": "https://raw.githubusercontent.com/techfreaque/matrix-pro/main/releases/latest/any_platform.zip"
                 }
             ],

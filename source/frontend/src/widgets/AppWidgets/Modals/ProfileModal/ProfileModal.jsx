@@ -37,15 +37,15 @@ export default function ProfileModal() {
     const [loading, setIsloading] = useState(false);
     const currentProfile = useCurrentProfile()
     const currentProfileTitle = currentProfile?.profile?.name
-    const [newProfileSettings, setNewProfileSettings] = useState({...currentProfile})
-    const hasChanged = JSON.stringify(currentProfile) !== JSON.stringify(newProfileSettings)
+    const [newProfileSettings, setNewProfileSettings] = useState(JSON.parse(JSON.stringify(currentProfile)))
+    const hasChanged = false //JSON.stringify(currentProfile) !== JSON.stringify(newProfileSettings)
     
     function saveProfile() {setIsloading(true)}
     function saveProfileAndRestart() {setIsloading(true)}
 
     const handleOpen = () => setOpen(true);
     const handleClose = () => {
-        setNewProfileSettings({...currentProfile})
+        setNewProfileSettings(JSON.parse(JSON.stringify(currentProfile)))
         setOpen(false)
     };
     return useMemo(() => (
@@ -232,29 +232,25 @@ export function ProfileTradingTypeSettings({tradingType, onChange}) {
 export function ProfileReferenceMarketSettings({newProfileSettings, onChange}) {
     const refMarket = newProfileSettings?.config?.trading?.["reference-market"];
     // TODO replace with all available
-    const quoteAssets = [
+    const quoteAssets = [... new Set([
+        refMarket,
         "USDT",
         "BTC",
         "ETH",
         "USD",
         "BUSD",
         "USDC"
-    ]
-    if (! quoteAssets.includes(refMarket)) {
-        quoteAssets.push(refMarket)
-    }
+    ])]
+
 
     const defaultOptions = convertStringArrayToOptions(quoteAssets)
     const [options, setOptions] = useState(defaultOptions);
     function setAutoCompleteOptions(searchText) {
         const searchTextU = searchText?.toUpperCase()
-        const newOptions = searchTextU ? convertStringArrayToOptions(quoteAssets.filter((quoteAsset) => quoteAsset.includes(searchTextU))) : defaultOptions
-        if (! newOptions.includes(searchTextU)) {
-            newOptions.push({label: searchTextU, value: searchTextU})
-        }
+        const newOptions = searchTextU ? convertStringArrayToOptions([...new Set([...quoteAssets.filter((quoteAsset) => quoteAsset.includes(searchTextU)), searchTextU])]) : defaultOptions
         setOptions(newOptions)
     }
-    return <Grid xs={12}
+    return (<Grid xs={12}
         sm={6}
         item>
         <Title level={5}>
@@ -270,7 +266,7 @@ export function ProfileReferenceMarketSettings({newProfileSettings, onChange}) {
             }
             onSearch={setAutoCompleteOptions}
             placeholder="enter a reference market like USDT or BTC"/>
-    </Grid>
+    </Grid>)
 }
 
 function convertStringArrayToOptions(stringArray) {

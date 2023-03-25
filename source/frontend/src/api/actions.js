@@ -148,7 +148,7 @@ export async function installAppPackage(appUrl, appName, botDomain, token) {
         [appUrl]: "register_and_install"
     }
     if (token) {
-        requestData.token = token
+        // requestData.token = token
     }
     sendAndInterpretBotUpdate(requestData, botDomain + backendRoutes.installApp, success, fail)
 }
