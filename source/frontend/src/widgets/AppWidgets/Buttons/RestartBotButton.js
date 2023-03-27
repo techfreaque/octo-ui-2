@@ -1,28 +1,30 @@
-import React, { useMemo, useState } from "react";
+import React, {useMemo} from "react";
 import Button from "@mui/material/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faArrowRotateRight } from "@fortawesome/free-solid-svg-icons";
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import { restartBot } from "../../../api/actions";
-import { useIsBotOnlineContext, useUpdateIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faArrowRotateRight} from "@fortawesome/free-solid-svg-icons";
+import {useIsBotOnlineContext, useRestartBot} from "../../../context/data/IsBotOnlineProvider";
 
 export default function RestartBotButton() {
-  const [isLoading, setIsloading] = useState(false);
-  const updateIsOnline = useUpdateIsBotOnlineContext()
-  const isOnline = useIsBotOnlineContext()
-  const botDomain = useBotDomainContext();
-  const disabled = isLoading || !isOnline
+    const isOnline = useIsBotOnlineContext()
+    const restartBot = useRestartBot()
     return useMemo(() => {
-  return (
-    <Button disabled={disabled} onClick={() => restartBot(botDomain, updateIsOnline, setIsloading)}
-      variant="outlined" color="warning">
-      <FontAwesomeIcon
-        icon={faArrowRotateRight}
-        className={disabled ? "fa-spin" : ""}
-        style={{ marginRight: "5px" }}
-      />
-      Restart Bot
-    </Button>
-  );
-    }, [botDomain, disabled, updateIsOnline])
+        return (
+            <Button disabled={
+                    ! isOnline
+                }
+                onClick={restartBot}
+                variant="outlined"
+                color="warning">
+                <FontAwesomeIcon icon={faArrowRotateRight}
+                    className={
+                        isOnline ? "" : "fa-spin"
+                    }
+                    style={
+                        {marginRight: "5px"}
+                    }/>
+                Restart Bot
+            </Button>
+        );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOnline])
 }

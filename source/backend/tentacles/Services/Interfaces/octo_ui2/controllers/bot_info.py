@@ -1,7 +1,10 @@
 import asyncio
 import time
+
+import flask_login
 from octobot_commons import optimization_campaign
 import octobot_services.interfaces as interfaces
+from tentacles.Services.Interfaces.octo_ui2.utils import basic_utils
 
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
@@ -153,7 +156,7 @@ def register_bot_info_routes(plugin):
                         for s in symbols
                     ]
                 ),
-                "can_logout": models.can_logout(),
+                "can_logout": flask_login.current_user.is_authenticated,
                 "any_exchange_is_futures": any_exchange_is_futures,
                 "evaluator_names": evaluator_names,
                 "time_frames": timeframes_dict,
@@ -171,3 +174,25 @@ def register_bot_info_routes(plugin):
                 "octobot_version": services_interfaces.AbstractInterface.project_version,
             },
         }
+
+    route = "/logout"
+    if cross_origin := import_cross_origin_if_enabled():
+
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        @flask_login.login_required
+        def logout():
+            return _logout()
+
+    else:
+
+        @plugin.blueprint.route(route)
+        @flask_login.login_required
+        def logout():
+            return _logout()
+
+    def _logout():
+        flask_login.logout_user()
+        return basic_utils.get_response(
+            message="Successfully logged out",
+        )

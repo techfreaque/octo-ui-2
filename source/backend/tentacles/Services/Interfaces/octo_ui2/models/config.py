@@ -23,3 +23,16 @@ def save_ui_config(config_update):
 
 def get_ui_config():
     return octo_ui2_plugin.OctoUi2Plugin.get_ui_config()
+
+def update_profile(profile_id, json_profile):
+    config = interfaces_util.get_edited_config(dict_only=False)
+    profile = config.profile_by_id[profile_id]
+    new_name = json_profile.get("name", profile.name)
+    renamed = profile.name != new_name
+    profile.name = new_name
+    profile.description = json_profile.get("description", profile.description)
+    profile.avatar = json_profile.get("avatar", profile.avatar)
+    profile.validate_and_save_config()
+    if renamed:
+        profile.rename_folder(new_name.replace(" ", "_"), False)
+    return True, "Profile updated"

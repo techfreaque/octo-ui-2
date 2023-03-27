@@ -25,14 +25,12 @@ export default function LogoutButton() {
         return botInfo?.can_logout && (
             <Button disabled={disabled}
                 onClick={
+                    // onLoggedOut
                     () => logOutBot(botDomain, updateIsOnline, setIsloading, onLoggedOut)
                 }
                 variant="outlined"
                 color="warning">
                 <FontAwesomeIcon icon={faLock}
-                    className={
-                        disabled ? "fa-spin" : ""
-                    }
                     style={
                         {marginRight: "5px"}
                     }/>

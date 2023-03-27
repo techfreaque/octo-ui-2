@@ -16,6 +16,7 @@ export default function ProfileAvatar({
     }/${
         currentProfile?.profile?.name
     }/${currentAvatar}`
+    // eslint-disable-next-line jsx-a11y/alt-text
     return <img style={
             {
                 margin: "auto",
@@ -24,8 +25,6 @@ export default function ProfileAvatar({
                 width: "auto"
             }
         }
-        src={avatarUrl}
-        alt={
-            currentProfile?.profile?.name
-        }/>
+        src={avatarUrl}      
+        />
 }

@@ -1,6 +1,5 @@
 import $ from "jquery";
 import createNotification from "../components/Notifications/Notification";
-// import { useIsBotOnlineContext } from "../context/IsBotOnlineProvider";
 
 export async function sendAndInterpretBotUpdate(updated_data, update_url, success_callback, error_callback, method = "POST") {
   return $.ajax({

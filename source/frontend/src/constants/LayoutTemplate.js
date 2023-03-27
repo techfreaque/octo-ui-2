@@ -355,7 +355,7 @@ export const defaultBotTemplate = {
                 }
             ],
             "path": "/",
-            "title": "Home"
+            "title": "Strategy Designer"
         },
         {
             "layout": [

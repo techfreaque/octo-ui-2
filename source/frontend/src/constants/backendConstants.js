@@ -23,6 +23,7 @@ export const backendRoutes = {
     optimizerQueueUpdate: `${basePath}/optimizer/update`,
     optimizerAddToQueue: `${basePath}/optimizer/add`,
     optimizerGetQueue: `${basePath}/optimizer/get`,
+    logoutBot: `${basePath}/logout`,
 
     installApp: `${advancedPath}/tentacle_packages?update_type=add_package`,
     optimizerStop: `${advancedPath}/strategy-optimizer?update_type=cancel_optimizer`,
@@ -30,16 +31,19 @@ export const backendRoutes = {
     profileMedia: "/profile_media/user/profiles",
     staticImg: "/static/img",
     manageSymbol: "/profile",
+    updateProfileInfo: `${basePath}/update_profile_info`,
+    duplicateProfile: "/profiles_management/duplicate?profile_id=",
+    deleteProfile: "/profiles_management/remove",
+    importProfile: "/profiles_management/download",
+    exportProfile: "/profiles_management/export?profile_id=",
     config: "/config",
     restartBot: "/commands/restart",
     stopBot: "/commands/stop",
     updateBot: "/commands/update",
-    logoutBot: "/logout",
     loginBot: "/login",
-    
+
     updateTentaclesConfig: "/config_tentacles?action=update&reload=true",
     resetTentaclesConfig: "/config_tentacle?action=factory_reset&reload=true",
-
     backtesting: "/backtesting",
     backtestingStart: "/backtesting?action_type=start_backtesting_with_current_bot_data&source=strategy_design&reset_tentacle_config=False&auto_stop=True",
     backtestingStop: "/backtesting?action_type=stop_backtesting",
@@ -57,7 +61,7 @@ export const backendRoutes = {
     strategyDesignDeleteRunData: "/strategy_design/run_data?action=delete",
     optimizerStart: "/strategy_design/strategy_design_start_optimizerstart",
     cacheActionDeleteCurrentCache: "/strategy_design/cacheclear_plotted_cache",
-    cacheActionDeleteAllCache: "/strategy_design/cacheclear_all_cache",
+    cacheActionDeleteAllCache: "/strategy_design/cacheclear_all_cache"
 
 
 }
