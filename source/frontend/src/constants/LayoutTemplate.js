@@ -11,6 +11,69 @@ export const defaultBotTemplate = {
                             "rightContent": [
                                 {
                                     "component": "PowerMenu"
+                                },
+                                {
+                                    "component": "RefreshBotData"
+                                },
+                                {
+                                    "component": "ButtonWithModal",
+                                    "content": [
+                                        {
+                                            "component": "ScrollableTabs",
+                                            "rightContent": [],
+                                            "tabs": [
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "UIConfig",
+                                                            "configKeys": [
+                                                                "display_settings"
+                                                            ]
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Display Settings",
+                                                    "toolBarContent": []
+                                                },
+                                                {
+                                                    "component": "Tab",
+                                                    "content": [
+                                                        {
+                                                            "component": "ResetUiConfigButton"
+                                                        },
+                                                        {
+                                                            "component": "ResetTentaclesPlotCacheButton"
+                                                        },
+                                                        {
+                                                            "component": "ResetTentaclesConfigsButton"
+                                                        },
+                                                        {
+                                                            "component": "ResetHistoryStorageButton",
+                                                            "storageName": "portfolioHistory"
+                                                        },
+                                                        {
+                                                            "component": "ResetHistoryStorageButton",
+                                                            "storageName": "ordersHistory"
+                                                        },
+                                                        {
+                                                            "component": "ResetHistoryStorageButton",
+                                                            "storageName": "tradesHistory"
+                                                        },
+                                                        {
+                                                            "component": "ResetHistoryStorageButton",
+                                                            "storageName": "transactionsHistory"
+                                                        }
+                                                    ],
+                                                    "dontScroll": false,
+                                                    "title": "Reset Settings",
+                                                    "toolBarContent": []
+                                                }
+                                            ]
+                                        }
+                                    ],
+                                    "icon": "SettingOutlined",
+                                    "title": ""
                                 }
                             ]
                         }
@@ -50,71 +113,14 @@ export const defaultBotTemplate = {
                             "component": "ScrollableTabs",
                             "rightContent": [
                                 {
-                                    "component": "RefreshBotData"
+                                    "Icon": null,
+                                    "component": "CurrentPanelMinimize",
+                                    "faIcon": null
                                 },
                                 {
-                                    "component": "ButtonWithModal",
-                                    "content": [
-                                        {
-                                            "component": "ScrollableTabs",
-                                            "rightContent": [],
-                                            "tabs": [
-                                                {
-                                                    "component": "Tab",
-                                                    "content": [
-                                                        {
-                                                            "component": "UIConfig",
-                                                            "configKeys": [
-                                                                "display_settings"
-                                                            ]
-                                                        }
-                                                    ],
-                                                    "dontScroll": true,
-                                                    "title": "Display Settings"
-                                                },
-                                                {
-                                                    "component": "Tab",
-                                                    "content": [
-                                                        {
-                                                            "component": "ResetUiConfigButton"
-                                                        },
-                                                        {
-                                                            "component": "ResetTentaclesPlotCacheButton"
-                                                        },
-                                                        {
-                                                            "component": "ResetTentaclesConfigsButton"
-                                                        },
-                                                        {
-                                                            "component": "ResetHistoryStorageButton",
-                                                            "storageName": "portfolioHistory"
-                                                        },
-                                                        {
-                                                            "component": "ResetHistoryStorageButton",
-                                                            "storageName": "ordersHistory"
-                                                        },
-                                                        {
-                                                            "component": "ResetHistoryStorageButton",
-                                                            "storageName": "tradesHistory"
-                                                        },
-                                                        {
-                                                            "component": "ResetHistoryStorageButton",
-                                                            "storageName": "transactionsHistory"
-                                                        }
-                                                    ],
-                                                    "dontScroll": true,
-                                                    "title": "Reset Settings"
-                                                }
-                                            ]
-                                        }
-                                    ],
-                                    "faIcon": "cog",
-                                    "title": ""
-                                },
-                                {
-                                    "component": "CurrentPanelMinimize"
-                                },
-                                {
-                                    "component": "CurrentPanelFullscreen"
+                                    "Icon": null,
+                                    "component": "CurrentPanelFullscreen",
+                                    "faIcon": null
                                 }
                             ],
                             "tabs": [
@@ -128,16 +134,19 @@ export const defaultBotTemplate = {
                                                     "component": "ToggleActivateRealTimeStrategy"
                                                 },
                                                 {
+                                                    "Icon": "AccountBookFilled",
                                                     "command": "execute",
                                                     "component": "SendActionCommandToTradingMode",
                                                     "faIcon": "sack-dollar",
+                                                    "icon": "iconStringNoIcon",
                                                     "title": "Execute Trading Mode"
                                                 }
                                             ]
                                         }
                                     ],
                                     "dontScroll": true,
-                                    "title": "Strategy Settings"
+                                    "title": "Strategy Settings",
+                                    "toolBarContent": []
                                 },
                                 {
                                     "component": "Tab",
@@ -164,7 +173,8 @@ export const defaultBotTemplate = {
                                                         }
                                                     ],
                                                     "dontScroll": false,
-                                                    "title": "Analysis Settings"
+                                                    "title": "Analysis Settings",
+                                                    "toolBarContent": []
                                                 },
                                                 {
                                                     "component": "Tab",
@@ -174,7 +184,8 @@ export const defaultBotTemplate = {
                                                         }
                                                     ],
                                                     "dontScroll": false,
-                                                    "title": "Trading Overview"
+                                                    "title": "Trading Overview",
+                                                    "toolBarContent": []
                                                 },
                                                 {
                                                     "component": "Tab",
@@ -184,7 +195,8 @@ export const defaultBotTemplate = {
                                                         }
                                                     ],
                                                     "dontScroll": false,
-                                                    "title": "Portfolio"
+                                                    "title": "Portfolio",
+                                                    "toolBarContent": []
                                                 },
                                                 {
                                                     "component": "Tab",
@@ -194,7 +206,8 @@ export const defaultBotTemplate = {
                                                         }
                                                     ],
                                                     "dontScroll": true,
-                                                    "title": "Symbols Info"
+                                                    "title": "Symbols Info",
+                                                    "toolBarContent": []
                                                 },
                                                 {
                                                     "component": "Tab",
@@ -205,7 +218,8 @@ export const defaultBotTemplate = {
                                                         }
                                                     ],
                                                     "dontScroll": false,
-                                                    "title": "Orders"
+                                                    "title": "Orders",
+                                                    "toolBarContent": []
                                                 },
                                                 {
                                                     "component": "Tab",
@@ -216,7 +230,8 @@ export const defaultBotTemplate = {
                                                         }
                                                     ],
                                                     "dontScroll": false,
-                                                    "title": "Trades"
+                                                    "title": "Trades",
+                                                    "toolBarContent": []
                                                 },
                                                 {
                                                     "component": "Tab",
@@ -227,13 +242,15 @@ export const defaultBotTemplate = {
                                                         }
                                                     ],
                                                     "dontScroll": false,
-                                                    "title": "Positions"
+                                                    "title": "Positions",
+                                                    "toolBarContent": []
                                                 }
                                             ]
                                         }
                                     ],
                                     "dontScroll": true,
-                                    "title": "Trading"
+                                    "title": "Trading",
+                                    "toolBarContent": []
                                 },
                                 {
                                     "component": "Tab",
@@ -256,7 +273,8 @@ export const defaultBotTemplate = {
                                                         }
                                                     ],
                                                     "dontScroll": false,
-                                                    "title": "Backtesting Settings"
+                                                    "title": "Backtesting Settings",
+                                                    "toolBarContent": []
                                                 },
                                                 {
                                                     "component": "Tab",
@@ -266,7 +284,8 @@ export const defaultBotTemplate = {
                                                         }
                                                     ],
                                                     "dontScroll": false,
-                                                    "title": "Backtesting Overview"
+                                                    "title": "Backtesting Overview",
+                                                    "toolBarContent": []
                                                 },
                                                 {
                                                     "component": "StartBacktestingButton"
@@ -278,33 +297,19 @@ export const defaultBotTemplate = {
                                         }
                                     ],
                                     "dontScroll": true,
-                                    "title": "Backtesting"
+                                    "title": "Backtesting",
+                                    "toolBarContent": []
                                 },
                                 {
                                     "component": "Tab",
                                     "content": [
                                         {
-                                            "component": "ScrollableTabs",
-                                            "rightContent": [
+                                            "component": "Sidebar",
+                                            "sideBarContent": [
                                                 {
-                                                    "component": "OptimizerQueueSize"
-                                                },
-                                                {
-                                                    "component": "OptimizerRunsToBeAdded"
-                                                },
-                                                {
-                                                    "component": "AddToOptimizerQueueButton"
-                                                },
-                                                {
-                                                    "component": "StopOptimizerButton"
-                                                },
-                                                {
-                                                    "component": "StartOptimizerButton"
-                                                }
-                                            ],
-                                            "tabs": [
-                                                {
-                                                    "component": "Tab",
+                                                    "Icon": "AccountBookFilled",
+                                                    "children": [],
+                                                    "component": "SidebarMenuItem",
                                                     "content": [
                                                         {
                                                             "component": "UIConfig",
@@ -314,34 +319,58 @@ export const defaultBotTemplate = {
                                                             ]
                                                         }
                                                     ],
-                                                    "dontScroll": false,
-                                                    "title": "Optimizer settings"
+                                                    "faIcon": "",
+                                                    "icon": "iconStringNoIcon",
+                                                    "label": "Optimizer Settings"
                                                 },
                                                 {
-                                                    "component": "Tab",
+                                                    "Icon": "AccountBookFilled",
+                                                    "children": [],
+                                                    "component": "SidebarMenuItem",
                                                     "content": [
                                                         {
                                                             "component": "OptimizerConfigForm"
                                                         }
                                                     ],
-                                                    "dontScroll": false,
-                                                    "title": "Run config"
+                                                    "faIcon": "",
+                                                    "icon": "iconStringNoIcon",
+                                                    "label": "Run Config"
                                                 },
                                                 {
-                                                    "component": "Tab",
+                                                    "Icon": "AccountBookFilled",
+                                                    "children": [],
+                                                    "component": "SidebarMenuItem",
                                                     "content": [
                                                         {
                                                             "component": "OptimizerQueueTable"
                                                         }
                                                     ],
-                                                    "dontScroll": false,
-                                                    "title": "Queue"
+                                                    "faIcon": "",
+                                                    "icon": "iconStringNoIcon",
+                                                    "label": "Optimizer Queue"
                                                 }
                                             ]
                                         }
                                     ],
                                     "dontScroll": false,
-                                    "title": "Optimizer"
+                                    "title": "Optimizer",
+                                    "toolBarContent": [
+                                        {
+                                            "component": "OptimizerQueueSize"
+                                        },
+                                        {
+                                            "component": "OptimizerRunsToBeAdded"
+                                        },
+                                        {
+                                            "component": "AddToOptimizerQueueButton"
+                                        },
+                                        {
+                                            "component": "StopOptimizerButton"
+                                        },
+                                        {
+                                            "component": "StartOptimizerButton"
+                                        }
+                                    ]
                                 }
                             ]
                         }
