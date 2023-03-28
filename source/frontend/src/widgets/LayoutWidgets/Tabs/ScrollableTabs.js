@@ -20,6 +20,11 @@ export default function ResizableTabs(props) {
                         layout={
                             tab.content
                         } />,
+                toolBarContent: tab.toolBarContent && tab.toolBarContent[0]
+                    && <AppWidgets {...props}
+                        layout={
+                            tab.toolBarContent
+                        } />,
                 dontScroll: tab.dontScroll
             }
         } else {

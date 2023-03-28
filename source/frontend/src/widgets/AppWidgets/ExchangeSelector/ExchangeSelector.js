@@ -5,6 +5,7 @@ import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useMemo } from "react";
 import { useUpdateVisibleExchangesContext, useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
+import { Card, List } from "antd";
 
 export default function ExchangeSelector() {
   const botInfo = useBotInfoContext();
@@ -18,6 +19,7 @@ export default function ExchangeSelector() {
           items={botInfo.exchange_names}
           handleChange={(event, newExchange) => setVisibleExchanges(newExchange)}
         >
+          
           <Button href={botDomain + backendRoutes.manageSymbol}>Manage exchange settings</Button>
         </TabsWithSelector>
       );

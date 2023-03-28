@@ -3,6 +3,7 @@ import {useMemo} from "react";
 import {useState} from "react";
 import {useBotColorsContext} from "../../../context/config/BotColorsProvider";
 import {useColorModeContext} from "../../../context/config/ColorModeProvider";
+import FontAwesomeIconByString from "../../Icons/FontAwesome";
 import "./antSidebar.css"
 const {Panel} = Collapse;
 
@@ -11,25 +12,21 @@ const dummyMenuItems = [
     {
         label: "Strategy_1_Settings",
         content: "gfhgffgfg inputs of the thing",
-        key: "s1",
-        icon: "faStop",
+        faIcon: "faStop",
         children: [
             {
                 label: "Evaluator 1",
                 content: "user inputs of the sub fgfghghffghfghfghfg",
-                key: "e1",
-                icon: "faStop",
+                faIcon: "faStop",
                 children: [
                     {
                         label: "Evaluator 1",
                         content: "user inputs of the sub fghfghfhgfghf",
-                        key: "c1",
-                        icon: "faStop"
+                        faIcon: "faStop"
                     }, {
                         label: "Evaluator 1",
                         content: "user inputs of the sub fghfhgfhgf",
-                        key: "c2",
-                        icon: "faStop"
+                        faIcon: "faStop"
                     }
                 ]
             },
@@ -39,19 +36,17 @@ const dummyMenuItems = [
     }, {
         label: "Evaluator 1",
         content: "user inputs of the sub thing",
-        key: "s2",
-        icon: "faStop",
+        faIcon: "faStop",
+        children: []
         // children: [
         //     {
         //         label: "Evaluator 1",
         //         content: "user fghgfhgfhgfhfggfhfginputs of the sub thing",
-        //         key: "dfgdfgdfgdfg",
-        //         icon: "faStop"
+        //         faIcon: "faStop"
         //     }, {
         //         label: "Evaluator 1",
         //         content: "user fdghfghghfgfhgfhgfh of the sub thing",
-        //         key: "dfgdfgdf",
-        //         icon: "faStop"
+        //         faIcon: "faStop"
         //     }
         // ]
     },
@@ -100,13 +95,13 @@ export default function AntSidebar({menuItems}) {
 
 function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
     for (const menuItemData of menuItemsData) {
-        if (menuItemData.key === currentlySelectedMenu) {
-            activeMenus.push(menuItemData.key)
+        if (getKeyFromLabel(menuItemData.label) === currentlySelectedMenu) {
+            activeMenus.push(getKeyFromLabel(menuItemData.label))
             return menuItemData.content
         } else if (menuItemData.children) {
             const foundContent = findCurrentContent(menuItemData.children, currentlySelectedMenu, activeMenus)
             if (foundContent) {
-                activeMenus.push(menuItemData.key)
+                activeMenus.push(getKeyFromLabel(menuItemData.label))
                 return foundContent
             }
         }
@@ -127,7 +122,7 @@ function MenuItems({
         } : {}
         return (
             <div key={
-                    menuItem.key
+                    getKeyFromLabel(menuItem.label)
                 }
                 style={style}
                 className={
@@ -152,11 +147,11 @@ function MenuItem({
     isSubMenu
 }) {
     function handleCurentChange() {
-        setCurrentlySelectedMenu(menuItem.key)
+        setCurrentlySelectedMenu(getKeyFromLabel(menuItem.label))
     }
     const colorMode = useColorModeContext()
     const colors = useBotColorsContext()
-    const buttonStyle = menuItem.key === currentlySelectedMenu ? {
+    const buttonStyle = getKeyFromLabel(menuItem.label) === currentlySelectedMenu ? {
         // backgroundColor: colors ?. backgroundActive,
         color: colors ?. fontActive
     } : {}
@@ -164,7 +159,7 @@ function MenuItem({
         padding: "5px"
     }
 
-    return useMemo(() => (menuItem.children ? (
+    return useMemo(() => (menuItem.children?.length ? (
         <Collapse prefixCls={
                 `${colorMode}`
             }
@@ -178,14 +173,16 @@ function MenuItem({
             // showArrow={true}
         >
             <Panel header={
-                    (
-                        <span>{
+                (<>
+                    
+                        <FontAwesomeIconByString faIcon={menuItem.faIcon}/> <span>{
                             menuItem.label
                         }</span>
+                    </>
                     )
                 }
                 key={
-                    menuItem.key
+                    getKeyFromLabel(menuItem.label)
                 }
                 style={
                     {border: "none"}
@@ -228,4 +225,13 @@ function MenuItem({
         currentlySelectedMenu,
         menuItem
     ])
+}
+
+function getKeyFromLabel(label) {
+    if (label) {
+        return label?.replace(" ","_")
+        
+    } else {
+        console.error("A sidebar menu item has no label")
+    }
 }

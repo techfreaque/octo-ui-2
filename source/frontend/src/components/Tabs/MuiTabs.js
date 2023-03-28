@@ -17,8 +17,11 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
             <Box sx={{ borderBottom: "solid 1px " + botColors.border }}
                 style={{ display: "flex" }}>
                 <TabsContainer>
-                    <TabsElement isBigScreen={isBigScreen}>
+                    <TabsElement isBigScreen={isBigScreen}
+                        // style={{ marginRight: "auto" }}
+                    >
                         <Tabs
+                            //  style={{ marginRight: "auto"}}
                             value={currentTabId}
                             onChange={handleTabChange}
                             variant="scrollable"
@@ -30,6 +33,7 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                         </Tabs>
                     </TabsElement>
                     <TabsElement isBigScreen={isBigScreen} isRightContent={true} >
+                        {tabs[currentTabId]?.toolBarContent}
                         {rightContent && rightContent}
                     </TabsElement>
                 </TabsContainer>
@@ -82,6 +86,6 @@ function TabsContainer({ children, isBigScreen }) {
 
 function TabsElement({ children, isBigScreen, isRightContent }) {
     return isBigScreen
-        ? <div className="ms-auto d-flex">{children}</div>
+        ? <div className="me-auto d-flex">{children}</div>
         : <Grid item xs={12} >  <div className="ms-auto d-flex" style={isRightContent && { float: "right" }} >{children}</div> </Grid >
 }

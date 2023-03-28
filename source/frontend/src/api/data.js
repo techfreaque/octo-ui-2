@@ -10,6 +10,12 @@ export async function fetchBotInfo(
     "get", {}, successNotification, false, setIsFinished);
 }
 
+export async function getCurrencyLogos(botDomain, currencyIds, setCurrencyLogos) {
+  await fetchAndStoreFromBot(
+    botDomain + backendRoutes.currencyLogos, setCurrencyLogos,
+    "post", {currency_ids: currencyIds});
+}
+
 export async function fetchPlotData(
   setBotPlotData,
   exchange_id,

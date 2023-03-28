@@ -3,6 +3,7 @@
   "version": "0.2.7",
   "private": true,
   "dependencies": {
+    "@ant-design/icons": "^5.0.1",
     "@devbookhq/splitter": "^1.4.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",

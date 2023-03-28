@@ -49,6 +49,7 @@ import DataTable from "../AppWidgets/Tables/DataTable";
 import LogoutButton from "../AppWidgets/Buttons/LogoutButton";
 import ResetTentaclesPlotCacheButton from "../AppWidgets/Buttons/ResetTentaclesPlotCacheButton";
 import ProfileModal from "../AppWidgets/Modals/ProfileModal/ProfileModal";
+import Sidebar, {SidebarMenuItem} from "../LayoutWidgets/Sidebar/Sidebar";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -105,4 +106,6 @@ export const registeredComponents = {
     LogoutButton,
     ResetTentaclesPlotCacheButton,
     ProfileModal,
+    Sidebar,
+    SidebarMenuItem
 };

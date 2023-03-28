@@ -31,6 +31,8 @@ export const backendRoutes = {
     profileMedia: "/profile_media/user/profiles",
     staticImg: "/static/img",
     manageSymbol: "/profile",
+    exchangeLogo: "/exchange_logo",
+    currencyLogos: "/currency_logos",
     updateProfileInfo: `${basePath}/update_profile_info`,
     duplicateProfile: "/profiles_management/duplicate?profile_id=",
     deleteProfile: "/profiles_management/remove",

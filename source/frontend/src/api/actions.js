@@ -247,18 +247,6 @@ export async function duplicateProfile(botDomain, profileId, profileName, onSucc
     await sendAndInterpretBotUpdate({}, botDomain + backendRoutes.duplicateProfile + profileId, success, fail, "GET")
 }
 
-export async function exportProfile(botDomain, profileId, profileName, onSuccess, onFail) {
-    const success = (updated_data, update_url, result, msg, status) => {
-        onSuccess && onSuccess()
-        createNotification(`Successfully exported ${profileName} profile`)
-    }
-    const fail = (updated_data, update_url, result, msg, status) => {
-        onFail && onFail()
-        createNotification(`Failed to export ${profileName} profile`, "danger")
-    }
-    await sendAndInterpretBotUpdate({}, botDomain + backendRoutes.exportProfile + profileId, success, fail, "GET")
-}
-
 export async function deleteProfile(botDomain, profileId, profileName, onSuccess, onFail) {
     const success = (updated_data, update_url, result, msg, status) => {
         onSuccess && onSuccess()
