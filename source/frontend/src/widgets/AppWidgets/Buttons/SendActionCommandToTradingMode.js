@@ -4,8 +4,7 @@ import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 import {saveUserInputs} from "../Configuration/TradingConfig";
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import {useSaveTentaclesConfigAndSendAction} from "../../../context/config/TentaclesConfigProvider";
-import FontAwesomeIconByString from "../../../components/Icons/FontAwesome";
-import {AntIconByString} from "../../../components/Icons/AntIcon";
+import IconFromString from "../../../components/Icons/IconFromString";
 
 export default function SendActionCommandToTradingMode({
     command,
@@ -33,14 +32,8 @@ export default function SendActionCommandToTradingMode({
                 variant={variant}
                 color={color}>
                 {
-                faIcon && (
-                    <FontAwesomeIconByString faIcon={faIcon}/>
-                )
-            }
-                {
-                icon && (
-                    <AntIconByString iconString={icon}/>
-                )
+            <IconFromString  faIcon={faIcon}
+                        antIcon={icon} />
             }
                 {title} </Button>
         );

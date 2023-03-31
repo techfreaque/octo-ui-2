@@ -10,19 +10,20 @@ export default function RefreshBotData() {
   const fetchBotInfo = useFetchBotInfo()
   const botIsOnline = useIsBotOnlineContext()
   const [isFinished, setIsFinished] = useState(true)
-  const [isSearching, setIsSearching] = useState(false);
+  const [didJustStartFetching, setDidJustStartFetching] = useState(false);
 
-  const isFetching = !isFinished || !botIsOnline || isSearching;
+  const isFetching = !isFinished || !botIsOnline || didJustStartFetching;
 
   useEffect(() => {
     let timer;
-    if (isSearching) {
+    if (didJustStartFetching) {
       timer = setTimeout(() => {
-        setIsSearching(false);
-      }, 1800);
+        setDidJustStartFetching(false);
+      }, 1500);
     }
+
     return () => clearTimeout(timer);
-  }, [isSearching]);
+  }, [didJustStartFetching]);
 
   return useMemo(() => {
     return (
@@ -35,13 +36,13 @@ export default function RefreshBotData() {
         justifyContent: "center"}} 
         disabled={isFetching} 
         onClick={() => {
-          setIsSearching(true);
-          fetchBotInfo(true, setIsFinished);
+          setDidJustStartFetching(true);
+        fetchBotInfo(true, setIsFinished);
       }}>
-        <SyncOutlined spin={isSearching} style={{fontSize:buttonStyles.size.medium.fontSize}}/>
+        <SyncOutlined spin={isFetching} style={{fontSize:buttonStyles.size.medium.fontSize}}/>
       </Button>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isFinished, botIsOnline, isSearching])
+  }, [isFetching, botIsOnline])
 }
 

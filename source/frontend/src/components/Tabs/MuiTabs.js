@@ -2,7 +2,6 @@ import React from "react";
 import Tabs from "@mui/material/Tabs";
 import Box from "@mui/material/Box";
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
-import { Grid } from "@mui/material";
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 export default function MuiTabs({ tabs, rightContent, defaultTabId }) {

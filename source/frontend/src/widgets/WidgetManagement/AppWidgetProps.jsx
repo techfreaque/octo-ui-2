@@ -18,8 +18,8 @@ export default function appWidgetsProps() {
         ...generateSimpleProp("dontScroll", "Tab", "boolean", "checkbox"),
         ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeysList),
         ...generateSimpleProp("configKeys", "UIConfig", "array", "select", availableUIConfigKeys, true),
-        ...generateSimpleProp("faIcon", ["SendActionCommandToTradingMode"], "string"),
-        ...generateSimpleProp("icon", [
+        ...generateSimpleProp("faIcon", ["Tab","ButtonWithModal","SendActionCommandToTradingMode", "SidebarMenuItem"], "string"),
+        ...generateSimpleProp("icon", ["Tab",
             "ButtonWithModal", "SendActionCommandToTradingMode", "SidebarMenuItem"
         ], "string", undefined, Object.keys(iconStringToComponent), undefined),
         ...generateSimpleProp("chartLocation", "PlotlyChart", "string", undefined, allChartLocations),

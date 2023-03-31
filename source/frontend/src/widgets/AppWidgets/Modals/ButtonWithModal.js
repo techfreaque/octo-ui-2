@@ -6,6 +6,7 @@ import {faClose} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
 import {AntIconByString, iconStyles} from '../../../components/Icons/AntIcon';
+import IconFromString from '../../../components/Icons/IconFromString';
 
 
 const style = {
@@ -25,7 +26,7 @@ const style = {
 };
 
 
-export default function ButtonWithModal({title, content, icon}) {
+export default function ButtonWithModal({title, content, icon, faIcon}) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
@@ -42,10 +43,9 @@ export default function ButtonWithModal({title, content, icon}) {
                 style={
                     {height: "100%"}
             }>
-                <AntIconByString iconString={icon}
-                    size={
-                        iconStyles.size.large
-                    }/> {title} </Button>
+          <IconFromString  faIcon={faIcon}
+                        antIcon={icon} />
+                {title} </Button>
             <Modal open={open}
                 onClose={handleClose}
                 aria-labelledby={

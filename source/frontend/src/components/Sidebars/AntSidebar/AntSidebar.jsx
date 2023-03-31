@@ -4,12 +4,14 @@ import {useState} from "react";
 import {useBotColorsContext} from "../../../context/config/BotColorsProvider";
 import {useColorModeContext} from "../../../context/config/ColorModeProvider";
 import {AntIconByString} from "../../Icons/AntIcon";
+import IconFromString from "../../Icons/IconFromString";
 import "./antSidebar.css"
 const {Panel} = Collapse;
 
 export default function AntSidebar({menuItems}) {
     const botColors = useBotColorsContext();
     const [currentlySelectedMenu, setCurrentlySelectedMenu] = useState(getKeyFromLabel(Object.values(menuItems)[0].label));
+    const [sideBarWidth, setSideBarWidth] = useState(250)
     return useMemo(() => {
         const activeMenus = []
         const hasContent = Boolean(menuItems ?. length)
@@ -23,7 +25,11 @@ export default function AntSidebar({menuItems}) {
                 }
             }>
                 <div style={
-                        {width: "280px"}
+                        {
+                        width: `${sideBarWidth}px`,
+                            height: "100%",
+                            borderRight: `4px solid ${botColors.border}`
+                        }
                     }
                     className={"ant-side-bar"}>
                     <div style={
@@ -37,16 +43,13 @@ export default function AntSidebar({menuItems}) {
                     </div>
                 </div>
                 <div style={
-                    {
-                        width: "calc(100% - 300px)",
-                        borderLeft: "4px solid " + botColors.border
-                    }
+                    {width: `calc(100% - ${sideBarWidth}px)`}
                 }>
                     {currentContent} </div>
             </div>
 
         )
-    }, [botColors.border, currentlySelectedMenu, menuItems])
+    }, [botColors.border, currentlySelectedMenu, menuItems, sideBarWidth])
 }
 
 function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
@@ -158,11 +161,13 @@ function NestedSideBarMenuItem({
         >
             <Panel header={
                     (
-                        <> {
-                            menuItem.icon &&< AntIconByString iconString = {
-                                menuItem.icon
-                            } />
-                        }
+                        <>
+                            <IconFromString faIcon={
+                                    menuItem.faIcon
+                                }
+                                antIcon={
+                                    menuItem.icon
+                                }/>
                             <span style={
                                 menuItem.icon ? {
                                     marginLeft: "5px"
@@ -212,7 +217,12 @@ function SideBarButton({buttonStyle, handleCurentChange, menuItem, isSubMenu}) {
                 type="text"
                 onClick={handleCurentChange}
                 block>
-                {
+                <IconFromString faIcon={
+                        menuItem.faIcon
+                    }
+                    antIcon={
+                        menuItem.icon
+                    }/> {
                 menuItem.label
             } </Button>
         </div>
