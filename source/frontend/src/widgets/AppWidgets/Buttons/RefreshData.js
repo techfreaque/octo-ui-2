@@ -1,6 +1,6 @@
-import { Tooltip} from 'antd';
+import {Tooltip} from 'antd';
 import Button from '@mui/material/Button';
-import { useMemo, useState, useEffect } from "react";
+import {useMemo, useState, useEffect} from "react";
 import {useFetchBotInfo} from "../../../context/data/BotInfoProvider";
 import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 import {sizes} from '../../../constants/frontendConstants';
@@ -31,8 +31,7 @@ export default function RefreshBotData() {
         return (<Tooltip placement="top"
             title={"Soft Refresh"}
             arrow={false}>
-            <Button
-                disabled={isFetching}
+            <Button disabled={isFetching}
                 onClick={
                     () => {
                         setDidJustStartFetching(true);
@@ -40,8 +39,7 @@ export default function RefreshBotData() {
                     }
             }>
                 <AntIconByReactFunc AntReactIcon={SyncOutlined}
-                    size
-                    ={ sizes.medium}
+                    size={sizes.medium}
                     spin={isFetching}/>
 
             </Button>
