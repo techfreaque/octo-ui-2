@@ -14,19 +14,31 @@ for (const [_icon, iconModule] of Object.entries(icons)) {
 const iconStyles = {
     size: {
         [sizes.small]: {
-            fontSize: "20px",
-            buttonSize: '35px'
+            fontSize: "20px"
         },
         [sizes.medium]: {
-            fontSize: "22px",
-            buttonSize: '40px'
+            fontSize: "22px"
         },
         [sizes.large]: {
-            fontSize: "30px",
-            buttonSize: '50px'
+            fontSize: "30px"
         }
     }
 
+}
+
+export function AntIconByReactFunc({
+    AntReactIcon,
+    size = sizes.medium,
+    spin = false
+}) {
+    return AntReactIcon && createElement(AntReactIcon, {
+        style: {
+            ... iconStyles.size[size],
+            // marginTop: "auto",
+            // marginBottom: "auto"
+        },
+        spin
+    })
 }
 
 export function AntIconByString({

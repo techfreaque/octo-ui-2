@@ -5,6 +5,6 @@
     "OctoUi2Plugin"
   ],
   "tentacles-requirements": [
-    "RunAnalysis"
+    "RunAnalysis", "RunAnalysisModePlugin"
   ]
 }

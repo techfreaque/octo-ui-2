@@ -1,33 +1,19 @@
 import octobot_commons.logging as logging
 import octobot_commons.databases as databases
-import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.BaseDataProvider.custom_context as custom_context
-import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
-import octobot_commons.errors as commons_errors
-import octobot_services.interfaces.util as interfaces_util
-import tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 as octo_ui2
 import octobot_commons.display as commons_display
+import octobot_commons.errors as commons_errors
 import octobot_trading.api as trading_api
-
-try:
-    from tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.base_data_provider import (
-        CandlesLoadingError,
-    )
-    from tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.BaseDataProvider.default_base_data_provider.init_base_data import (
-        LiveMetaDataNotInitializedError,
-    )
-except (ImportError, ModuleNotFoundError):
-
-    class LiveMetaDataNotInitializedError(Exception):
-        pass
-
-    class CandlesLoadingError(Exception):
-        pass
+import octobot_services.interfaces.util as interfaces_util
+import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
+import tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 as octo_ui2
 
 
-DEBUG_PLOTS = False
+from tentacles.Services.Interfaces.run_analysis_mode.run_analysis_modes_plugin import (
+    RunAnalysisModePlugin,
+)
 
 
-def get_plotted_data(
+def get_plots(
     trading_mode,
     symbol,
     time_frame,
@@ -40,59 +26,36 @@ def get_plotted_data(
     analysis_settings={},
 ):
 
-    elements = interfaces_util.run_in_bot_async_executor(
-        get_base_data(
-            exchange_id,
-            trading_mode,
-            exchange_name,
-            symbol,
-            time_frame,
-            optimization_campaign_name,
-            backtesting_id,
-            live_id,
-            optimizer_id,
-        )
+    # elements = interfaces_util.run_in_bot_async_executor(
+    #     get_base_data(
+    #         exchange_id,
+    #         trading_mode,
+    #         exchange_name,
+    #         symbol,
+    #         time_frame,
+    #         optimization_campaign_name,
+    #         backtesting_id,
+    #         live_id,
+    #         optimizer_id,
+    #     )
+    # )
+    
+    return RunAnalysisModePlugin.get_and_execute_run_analysis_mode(
+        trading_mode_class=trading_mode,
+        exchange_name=exchange_name,
+        exchange_id=exchange_id,
+        symbol=symbol,
+        time_frame=time_frame,
+        backtesting_id=backtesting_id,
+        optimizer_id=optimizer_id,
+        optimization_campaign=optimization_campaign_name if not live_id else None,
+        live_id=live_id,
     )
 
-    try:
-        elements2 = interfaces_util.run_in_bot_async_executor(
-            get_run_analysis_plots(
-                trading_mode,
-                exchange_name,
-                symbol,
-                time_frame,
-                backtesting_id=backtesting_id,
-                optimizer_id=optimizer_id,
-                optimization_campaign=optimization_campaign_name
-                if not live_id
-                else None,
-                analysis_settings=analysis_settings,
-                live_id=live_id,
-            )
-        )
-        elements2 = elements2.to_json()
-        elements["data"]["sub_elements"] += elements2["data"]["sub_elements"]
-    except CandlesLoadingError as error:
-        if DEBUG_PLOTS:
-            octo_ui2.get_octo_ui_2_logger().exception(
-                error, True, f"Failed to load run analysis plots - error: {error}"
-            )
-    except LiveMetaDataNotInitializedError as error:
-        if DEBUG_PLOTS:
-            octo_ui2.get_octo_ui_2_logger().exception(
-                error, True, f"Failed to load run analysis plots - error: {error}"
-            )
-    except (ImportError, ModuleNotFoundError) as error:
-        if DEBUG_PLOTS:
-            octo_ui2.get_octo_ui_2_logger().exception(
-                error, True, f"Failed to load run analysis plots - error: {error}"
-            )
-    except Exception as error:
-        if DEBUG_PLOTS:
-            octo_ui2.get_octo_ui_2_logger().exception(
-                error, True, f"Failed to load run analysis plots - error: {error}"
-            )
-    return elements
+    #     elements2 = elements2.to_json()
+    #     elements["data"]["sub_elements"] += elements2["data"]["sub_elements"]
+
+    # return elements
 
 
 async def get_base_data(
@@ -142,46 +105,3 @@ async def get_base_data(
         )
         raise error
     return elements.to_json()
-
-
-async def get_run_analysis_plots(
-    trading_mode,
-    exchange,
-    symbol,
-    time_frame,
-    analysis_settings,
-    backtesting_id=None,
-    optimizer_id=None,
-    live_id=None,
-    optimization_campaign=None,
-):
-    ctx = custom_context.Context.minimal(
-        trading_mode,
-        logging.get_logger(trading_mode.get_name()),
-        exchange,
-        symbol,
-        backtesting_id,
-        optimizer_id,
-        optimization_campaign,
-        analysis_settings,
-        live_id=live_id,
-    )
-    ctx.time_frame = time_frame
-    # TODO: replace with RunAnalysis Mode/Evaluators Factory
-    # TODO add scripted RunAnalysis Mode which should be compatible with all trading modes
-    if (
-        hasattr(trading_mode, "BACKTESTING_SCRIPT_MODULE")
-        and trading_mode.BACKTESTING_SCRIPT_MODULE
-    ):
-        try:
-            return await trading_mode.get_script_from_module(
-                trading_mode.BACKTESTING_SCRIPT_MODULE
-            )(ctx)
-        except Exception as error:
-            ctx.logger.info(
-                "Failed to use custom analysis script, will use the default one instead"
-                f" error: {error}"
-            )
-    import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.AnalysisMode.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
-
-    return await run_analysis_mode.DefaultRunAnalysisMode().run_analysis_script(ctx)

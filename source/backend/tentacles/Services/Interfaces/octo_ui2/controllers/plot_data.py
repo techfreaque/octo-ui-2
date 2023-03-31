@@ -47,7 +47,7 @@ def register_plot_data_routes(plugin):
                 {
                     "success": True,
                     "message": "Successfully fetched plotted data",
-                    "data": plots_models.get_plotted_data(
+                    "data": plots_models.get_plots(
                         trading_mode=trading_mode,
                         exchange_name=exchange,
                         symbol=symbol,

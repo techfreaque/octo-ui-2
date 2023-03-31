@@ -1,4 +1,10 @@
 import os
+import octobot_trading.util as trading_util
+import octobot_tentacles_manager.api as tentacles_manager_api
+import octobot_commons.constants as commons_constants
+import octobot_services.interfaces.util as interfaces_util
+
+
 import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.enums as web_enums
@@ -17,11 +23,6 @@ from .controllers import (
     tentacles_config,
     symbols_info,
 )
-import octobot_services.interfaces.util as interfaces_util
-import octobot_trading.util as trading_util
-import octobot_tentacles_manager.api as tentacles_manager_api
-import octobot_commons.constants as commons_constants
-
 
 class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
     NAME = "octo_ui2"
