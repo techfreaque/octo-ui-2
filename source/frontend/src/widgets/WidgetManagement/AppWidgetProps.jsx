@@ -1,4 +1,4 @@
-import {iconStringNoIcon, iconStringToComponent} from "../../components/Icons/AntIcon";
+import {iconStringToComponent} from "../../components/Icons/AntIcon";
 import {availableStorages} from "../AppWidgets/Buttons/ResetHistoryStorageButton";
 import {allChartLocations} from "../AppWidgets/Charts/MainCharts/Plotly";
 import {availableConfigKeysList} from "../AppWidgets/Configuration/Form";
@@ -16,10 +16,11 @@ export default function appWidgetsProps() {
         ...generateSimpleProp("label", ["SidebarMenuItem"], "string"),
         ...generateSimpleProp("command", ["SendActionCommandToTradingMode"], "string"),
         ...generateSimpleProp("dontScroll", "Tab", "boolean", "checkbox"),
+        ...generateSimpleProp("iconOnly", "ButtonWithModal", "boolean", "checkbox", undefined, undefined, true),
         ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeysList),
         ...generateSimpleProp("configKeys", "UIConfig", "array", "select", availableUIConfigKeys, true),
         ...generateSimpleProp("faIcon", ["Tab","ButtonWithModal","SendActionCommandToTradingMode", "SidebarMenuItem"], "string"),
-        ...generateSimpleProp("icon", ["Tab",
+        ...generateSimpleProp("antIcon", ["Tab",
             "ButtonWithModal", "SendActionCommandToTradingMode", "SidebarMenuItem"
         ], "string", undefined, Object.keys(iconStringToComponent), undefined),
         ...generateSimpleProp("chartLocation", "PlotlyChart", "string", undefined, allChartLocations),

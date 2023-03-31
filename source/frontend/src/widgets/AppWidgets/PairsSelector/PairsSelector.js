@@ -4,7 +4,7 @@ import {useUpdateVisiblePairsContext, useVisiblePairsContext} from "../../../con
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import {backendRoutes} from "../../../constants/backendConstants";
 import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
-import {useEffect, useMemo, useState} from "react";
+import {useMemo} from "react";
 import {
     Card,
     List,
@@ -12,10 +12,10 @@ import {
     Space,
     Switch
 } from "antd";
-import {getCurrencyLogos} from "../../../api/data";
+// import {getCurrencyLogos} from "../../../api/data";
 
 export default function PairsSelector() {
-    const [currencyLogos, setCurrencyLogos] = useState()
+    // const [currencyLogos, setCurrencyLogos] = useState()
     const botInfo = useBotInfoContext();
     const botDomain = useBotDomainContext();
     const visiblePairs = useVisiblePairsContext();
@@ -23,8 +23,8 @@ export default function PairsSelector() {
     const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
     const pairsData = Object.keys(currencySettings).map(currency => {
         return {
-            ... currencySettings[currency],
-            currency: currency
+            ...currencySettings[currency],
+            currency
         }
     })
     // useEffect(() => {
@@ -58,7 +58,7 @@ export default function PairsSelector() {
                                     label: "ree",
                                     value: "ree"
                                 }]
-                            const selectedOptions = item ?. pairs ?. map(pair => ({label: pair, value: pair}))
+                            const selectedOptions = item?.pairs?.map(pair => ({label: pair, value: pair}))
                             return (
                                 <List.Item>
                                     <Card title={
@@ -95,5 +95,6 @@ export default function PairsSelector() {
                 }>Manage Currency Settings</Button>
             </TabsWithSelector>
         );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botDomain, botInfo, setVisiblePairs, visiblePairs])
 }

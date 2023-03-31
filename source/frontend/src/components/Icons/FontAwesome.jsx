@@ -5,6 +5,11 @@ const iconStyles = {
         [sizes.small]: undefined,
         [sizes.medium]: "1x",
         [sizes.large]: "2x"
+    },
+    margin: {
+        [sizes.small]: undefined,
+        [sizes.medium]: "1x",
+        [sizes.large]: "2x"
     }
 
 }
@@ -12,7 +17,7 @@ const iconStyles = {
 export default function FontAwesomeIconByString({
     faIcon,
     size = sizes.medium,
-    marginRight = "5px"
+    marginRight = "7px"
 }) {
     return faIcon && (
         <i className={
@@ -21,7 +26,7 @@ export default function FontAwesomeIconByString({
                 } fas fa-${faIcon}`
             }
             style={
-                {marginRight: marginRight}
+                {marginRight}
             }/>
     )
 }

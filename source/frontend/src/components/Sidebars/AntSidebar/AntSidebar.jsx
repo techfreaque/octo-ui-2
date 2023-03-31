@@ -3,7 +3,7 @@ import {useMemo} from "react";
 import {useState} from "react";
 import {useBotColorsContext} from "../../../context/config/BotColorsProvider";
 import {useColorModeContext} from "../../../context/config/ColorModeProvider";
-import {AntIconByString} from "../../Icons/AntIcon";
+import {iconStringNoIcon} from "../../Icons/AntIcon";
 import IconFromString from "../../Icons/IconFromString";
 import "./antSidebar.css"
 const {Panel} = Collapse;
@@ -12,9 +12,14 @@ export default function AntSidebar({menuItems}) {
     const botColors = useBotColorsContext();
     const [currentlySelectedMenu, setCurrentlySelectedMenu] = useState(getKeyFromLabel(Object.values(menuItems)[0].label));
     const [sideBarWidth, setSideBarWidth] = useState(250)
+
+    function updateSidebarSize() {
+        setSideBarWidth(250)
+    }
+
     return useMemo(() => {
         const activeMenus = []
-        const hasContent = Boolean(menuItems ?. length)
+        const hasContent = Boolean(menuItems?.length)
         const currentContent = hasContent && findCurrentContent(menuItems, currentlySelectedMenu, activeMenus)
         return hasContent && (
             <div style={
@@ -26,9 +31,11 @@ export default function AntSidebar({menuItems}) {
             }>
                 <div style={
                         {
-                        width: `${sideBarWidth}px`,
+                            width: `${sideBarWidth}px`,
                             height: "100%",
-                            borderRight: `4px solid ${botColors.border}`
+                            borderRight: `4px solid ${
+                                botColors.border
+                            }`
                         }
                     }
                     className={"ant-side-bar"}>
@@ -111,11 +118,11 @@ function MenuItem({
     const colorMode = useColorModeContext()
     const colors = useBotColorsContext()
     const buttonStyle = getKeyFromLabel(menuItem.label) === currentlySelectedMenu ? { // backgroundColor: colors ?. backgroundActive,
-        color: colors ?. fontActive
+        color: colors?.fontActive
     } : {}
 
 
-    return useMemo(() => (menuItem.children ?. length ? (
+    return useMemo(() => (menuItem.children?.length ? (
         <NestedSideBarMenuItem colorMode={colorMode}
             activeMenus={activeMenus}
             currentlySelectedMenu={currentlySelectedMenu}
@@ -161,22 +168,24 @@ function NestedSideBarMenuItem({
         >
             <Panel header={
                     (
-                        <>
+                        <div style={
+                            {display: "flex"}
+                        }>
                             <IconFromString faIcon={
                                     menuItem.faIcon
                                 }
                                 antIcon={
-                                    menuItem.icon
+                                    menuItem.antIcon
                                 }/>
                             <span style={
-                                menuItem.icon ? {
+                                menuItem.antIcon ? {
                                     marginLeft: "5px"
                                 } : {}
                             }>
                                 {
                                 menuItem.label
                             }</span>
-                        </>
+                        </div>
                     )
                 }
                 key={
@@ -200,17 +209,22 @@ function SideBarButton({buttonStyle, handleCurentChange, menuItem, isSubMenu}) {
     const buttonContainerStyle = isSubMenu ? {} : {
         padding: "5px"
     }
+    const buttonStyleForIcon = (menuItem.antIcon && menuItem.antIcon !== iconStringNoIcon) ? {
+        display: "flex"
+    } : {}
     return (
         <div style={
             {
                 width: "100%",
-                ... buttonContainerStyle
+                ...buttonContainerStyle
             }
         }>
             <Button style={
                     {
                         ...buttonStyle,
+                        ...buttonStyleForIcon,
                         textAlign: "start"
+
                     }
                 }
                 size={"large"}
@@ -221,7 +235,7 @@ function SideBarButton({buttonStyle, handleCurentChange, menuItem, isSubMenu}) {
                         menuItem.faIcon
                     }
                     antIcon={
-                        menuItem.icon
+                        menuItem.antIcon
                     }/> {
                 menuItem.label
             } </Button>
@@ -231,7 +245,7 @@ function SideBarButton({buttonStyle, handleCurentChange, menuItem, isSubMenu}) {
 
 function getKeyFromLabel(label) {
     if (label) {
-        return label ?. replace(" ", "_")
+        return label?.replace(" ", "_")
 
     } else {
         console.error("A sidebar menu item has no label")

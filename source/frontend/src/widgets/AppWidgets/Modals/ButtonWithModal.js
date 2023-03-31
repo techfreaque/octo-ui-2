@@ -1,12 +1,12 @@
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Modal from '@mui/material/Modal';
-import {createElement, useState} from "react";
+import {useState} from "react";
 import {faClose} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
-import {AntIconByString, iconStyles} from '../../../components/Icons/AntIcon';
 import IconFromString from '../../../components/Icons/IconFromString';
+import {Tooltip} from 'antd';
 
 
 const style = {
@@ -26,11 +26,17 @@ const style = {
 };
 
 
-export default function ButtonWithModal({title, content, icon, faIcon}) {
+export default function ButtonWithModal({
+    title,
+    content,
+    antIcon,
+    faIcon,
+    iconOnly
+}) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const id = title && title.replace(" ", "-")
+    const id = title ?. replace(" ", "-")
     return (
         <div style={
             {
@@ -38,21 +44,25 @@ export default function ButtonWithModal({title, content, icon, faIcon}) {
                 height: "100%"
             }
         }>
-
-            <Button onClick={handleOpen}
-                style={
-                    {height: "100%"}
-            }>
-          <IconFromString  faIcon={faIcon}
-                        antIcon={icon} />
-                {title} </Button>
+            <Tooltip placement="top"
+                title={title}
+                arrow={false}>
+                <Button onClick={handleOpen}
+                    style={
+                        {height: "100%"}
+                }>
+                    <IconFromString faIcon={faIcon}
+                        antIcon={antIcon}/> {
+                    !iconOnly && title
+                } </Button>
+            </Tooltip>
             <Modal open={open}
                 onClose={handleClose}
                 aria-labelledby={
-                    "modal-" + id + "-title"
+                    `modal-${id}-title`
                 }
                 aria-describedby={
-                    `modal-${id}` + "-description"
+                    `modal-${id}-description`
             }>
                 <Box sx={style}>
                     <Button onClick={handleClose}

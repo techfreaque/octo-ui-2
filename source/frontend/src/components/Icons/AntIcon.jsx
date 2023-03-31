@@ -1,6 +1,6 @@
 import * as icons from '@ant-design/icons';
 import {createElement} from 'react';
-import { sizes } from '../../constants/frontendConstants';
+import {sizes} from '../../constants/frontendConstants';
 
 export const iconStringNoIcon = "noIcon"
 export const iconStringToComponent = {
@@ -25,20 +25,19 @@ const iconStyles = {
             fontSize: "30px",
             buttonSize: '50px'
         }
-
     }
 
 }
 
 export function AntIconByString({
     iconString,
-    size = sizes.medium,
-    marginRight = "5px"
+    size = sizes.medium
 }) {
     return iconString && iconStringNoIcon !== iconString && createElement(iconStringToComponent[iconString], {
         style: {
             ... iconStyles.size[size],
-            marginRight
+            marginTop: "auto",
+            marginBottom: "auto"
         }
     })
 }

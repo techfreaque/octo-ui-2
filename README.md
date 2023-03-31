@@ -1,20 +1,40 @@
-# What is octo-ui2?
-- this is an extension (Tentacle) for OctoBot
-- it adds a customizable Web UI to OctoBot
-- it supports plotting for live trading and backtests
-- this is in early stages so there are still bugs to fix and lots of features to add
+# octo ui2
+License: GPL V3
+## Project Overview
 
-# Getting started
-## Install octo ui2 tentacle
-- the current version doesnt support plotting on stock OctoBot. It requires my forks of OctoBot (my master branches on each Octobot repository), once my custom code is merged into OctoBot it will work with stock OctoBot
-1. to be able to install Tentacles, you need to enable a login password for your OctoBot under "Accounts -> Interface"
-2. then go to yourOctobotDomain.com:5001/advanced/tentacle_packages - paste the URL for the latest version (se at the bottom) and install it
+Octo UI2 is a web-based user interface for OctoBot, designed to provide users with a centralized platform to manage and automate their trading strategies. Just like how the gnome desktop environment is an essential component of the Linux/GNU operating system, Octo UI2 plays a crucial role in the OctoBot ecosystem. It provides a similar level of functionality and integration, enabling users to effectively manage and automate their trading strategies.
+
+## Current State
+
+Octo UI2 is presently in the beta phase and functions as a Tentacle extension for OctoBot. It offers users a customizable web UI that supports plotting, editing, and testing both real and simulated trading strategies. \
+Additionally, the UI includes features for backtesting and analyzing trading results. Since the project is still in its early stages, there might be some bugs that need fixing, and many new features are still being added to enhance the user experience.
+
+## Roadmap
+The Octo UI2 project has an ambitious roadmap, including the following objectives:
+
+- Integrate all of OctoBot's frontend features into its web UI
+- Improve stability, usability and aesthetics of the platform for all screen sizes
+- Provide a mode for run analysis for simulated, real and backtesting trading data
+- Add features to create/copy and edit tentacles with a code editor built in
+
+## Change Log
+* You can take a look a the [latest changes here](https://github.com/techfreaque/octo-ui-2/commits/main)
+
+# Getting started / Installation
+* To install the Octo UI2 tentacle, follow these steps:
+1. Make sure you have the latest OctoBot version ready to go
+2. Enable a login password under "Accounts -> Interface" to be able to install Tentacles on OctoBot
+3. Go to yourOctobotDomain.com:5001/advanced/tentacle_packages and paste the URL (it's at the bottom of the page) for the latest version, then install it
+
+# Update Octo UI2
+* You can simply use the built in package manager to update your octo ui2 version
+* If you have any issues with a new version, you can try to download [any version from here](https://github.com/techfreaque/octo-ui-2/tree/dev/releases) 
 
 # Ask any questions
-if you have any question, bug report, feature request, etc just open an issue here:\
-https://github.com/techfreaque/octo-ui-2/issues
+If you have any questions, bug reports, or feature requests, please open an [issue in the Octo UI2 GitHub repository](https://github.com/techfreaque/octo-ui-2/issues).
 
 # Customize and install from source
+* If you are serious about contributing and you have previous experience with javascript/react (python is a +), then just ping us and you can be part of the team (max@a42.ch)
 ## It's very easy to customize and create your own custom AppWidgets
 
 - If you take a look at /source/frontend/src/widgets/WidgetManagement you should see how to add AppWidgets with custom props
@@ -24,14 +44,14 @@ and here: /source/frontend/src/widgets/LayoutWidgets
 
 
 ## Bulding from source
-- if you want to use the dev branch, usually it will require my forked branches of the Octobot packages and tentacles\
+- if you want to use the dev server, it will require [my forked tentacles](https://github.com/techfreaque/OctoBot-Tentacles) to enable cross origin on your octobot instance for the apis \
 `git clone https://github.com/techfreaque/octo-ui-2`\
 `cd octo-ui-2`
 ### 1. install requirements
 `cd source/frontend` \
 `npm i`
 
-### 2. Run dev Server for the frontend
+### 2. Run the dev Server for the frontend
 - make sure to update the env in /source/frontend/.env REACT_APP_DEVELOPMENT_BOT_DOMAIN which should be the domain/ip:port of your running OctoBot instance
 
 `cd source/frontend` \
@@ -92,9 +112,9 @@ example VSCode launch.json:\
 `	]`\
 `}`
 
-## License: GPL
+## License: GPL V3
 
-If you decide to customize my code, please note that it is licensed under the GNU General Public License (GPL). This means that you have the right to use, modify, and distribute the code as long as you also distribute any modified versions under the same GPL license. If you would like to contribute your modifications back to the original codebase, please open a pull request on the repository. This allows the community to review and potentially merge your changes, while also ensuring that any improvements or modifications are shared with others. Thank you for considering using my code, and I hope it serves you well.
+If you decide to customize my code, please note that it is licensed under the GNU General Public License (GPL V3). This means that you have the right to use, modify, and distribute the code as long as you also distribute any modified versions under the same GPL license. If you would like to contribute your modifications back to the original codebase, please open a pull request on the repository. This allows the community to review and potentially merge your changes, while also ensuring that any improvements or modifications are shared with others. Thank you for considering using my code, and I hope it serves you well.
 
 ## Your Donation Makes a Difference
 

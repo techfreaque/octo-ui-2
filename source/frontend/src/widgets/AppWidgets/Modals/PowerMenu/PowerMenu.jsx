@@ -13,6 +13,7 @@ import UpdateBotButton from '../../Buttons/UpdateBotButton';
 import StopBotButton from '../../Buttons/StopBotButton';
 import LogoutButton from '../../Buttons/LogoutButton';
 import { useBotInfoContext } from '../../../../context/data/BotInfoProvider';
+import { Tooltip } from 'antd';
 
 export default function PowerMenu() {
     const [open, setOpen] = React.useState(false);
@@ -25,7 +26,7 @@ export default function PowerMenu() {
     };
 
     const handleClose = (event) => {
-        if (anchorRef.current && anchorRef.current.contains(event.target)) {
+        if (anchorRef.current?.contains(event.target)) {
             return;
         }
 
@@ -53,15 +54,19 @@ export default function PowerMenu() {
 
     return (
         <>
-            <Button
-                aria-controls={open ? 'composition-menu' : undefined}
-                aria-expanded={open ? 'true' : undefined}
-                aria-haspopup="true"
-                onClick={handleToggle}
-                ref={anchorRef}
-            >
-                <FontAwesomeIcon icon={faPowerOff} size="lg" />
-            </Button>
+            <Tooltip placement="top"
+                title={"Power Menu"}
+                arrow={false}>
+                <Button
+                    aria-controls={open ? 'composition-menu' : undefined}
+                    aria-expanded={open ? 'true' : undefined}
+                    aria-haspopup="true"
+                    onClick={handleToggle}
+                    ref={anchorRef}
+                >
+                    <FontAwesomeIcon icon={faPowerOff} size="lg" />
+                </Button>
+            </Tooltip>
             <Popper
                 open={open}
                 anchorEl={anchorRef.current}

@@ -10,7 +10,7 @@ export default function SendActionCommandToTradingMode({
     command,
     title,
     faIcon,
-    icon,
+    antIcon,
     color = "warning",
     variant = "outlined"
 }) {
@@ -33,7 +33,7 @@ export default function SendActionCommandToTradingMode({
                 color={color}>
                 {
             <IconFromString  faIcon={faIcon}
-                        antIcon={icon} />
+                        antIcon={antIcon} />
             }
                 {title} </Button>
         );
@@ -44,7 +44,7 @@ export default function SendActionCommandToTradingMode({
         variant,
         color,
         faIcon,
-        icon,
+        antIcon,
         title,
         command,
         saveTentaclesConfigAndSendAction

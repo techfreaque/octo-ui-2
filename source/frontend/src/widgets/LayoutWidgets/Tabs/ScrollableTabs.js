@@ -18,7 +18,7 @@ export default function ResizableTabs(props) {
                                     tab.faIcon
                                 }
                                 antIcon={
-                                    tab.icon
+                                    tab.antIcon
                                 }/> {
                             tab.title
                         } </>
@@ -30,11 +30,11 @@ export default function ResizableTabs(props) {
                         textTransform: 'none',
                         display:"-webkit-box"}
                 }/>,
-            content: tab.content ?. [0] && <AppWidgets {...props}
+            content: tab.content?.[0] && <AppWidgets {...props}
                 layout={
                     tab.content
                 }/>,
-            toolBarContent: tab.toolBarContent ?. [0] && <AppWidgets {...props}
+            toolBarContent: tab.toolBarContent?.[0] && <AppWidgets {...props}
                 layout={
                     tab.toolBarContent
                 }/>,
@@ -53,7 +53,7 @@ export default function ResizableTabs(props) {
     return (
         <MuiTabs tabs={tabsData}
             rightContent={
-                rightContent ?. [0] && (
+                rightContent?.[0] && (
                     <AppWidgets {...props}
                         layout={rightContent}/>
                 )
