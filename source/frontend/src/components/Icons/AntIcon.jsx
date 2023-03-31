@@ -11,9 +11,12 @@ for (const [_icon, iconModule] of Object.entries(icons)) {
 
 export const buttonStyles = {
     size: {
-        small: {fontSize: "20px"},
-        medium: {fontSize: "25px"}, 
-        large: {fontSize: "30px"}
+        small: {fontSize: "20px",
+                buttonSize: '35px'},
+        medium: {fontSize: "22px",
+                buttonSize: '40px'}, 
+        large: {fontSize: "30px",
+                buttonSize: '50px'}
     }
 
 }
