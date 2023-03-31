@@ -28,6 +28,7 @@ export default function DefaultLayout({ headerContent, upperContent, lowerConten
           flex: "1",
           display: "flex",
           flexDirection: "column",
+          overflow: "hidden"
         }}
       >
         <div ref={headerRef}>

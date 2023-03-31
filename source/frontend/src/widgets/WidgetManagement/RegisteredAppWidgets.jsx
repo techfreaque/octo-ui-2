@@ -44,12 +44,12 @@ import PlotlyDualCharts from "../AppWidgets/Charts/MainCharts/PlotlyDualCharts";
 import ResetUiConfigButton from "../AppWidgets/Buttons/ResetUiConfigButton";
 import ResetTentaclesConfigsButton from "../AppWidgets/Buttons/ResetTentaclesConfigButton";
 import ResetHistoryStorageButton from "../AppWidgets/Buttons/ResetHistoryStorageButton";
-import AntSidebar from "../../components/Layouts/Sidebars/AntSidebar";
 import DataTable from "../AppWidgets/Tables/DataTable";
 import LogoutButton from "../AppWidgets/Buttons/LogoutButton";
 import ResetTentaclesPlotCacheButton from "../AppWidgets/Buttons/ResetTentaclesPlotCacheButton";
 import ProfileModal from "../AppWidgets/Modals/ProfileModal/ProfileModal";
 import Sidebar, {SidebarMenuItem} from "../LayoutWidgets/Sidebar/Sidebar";
+import NotificationCenter from "../AppWidgets/Modals/NotificationCenter/NotificationCenter";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -95,17 +95,17 @@ export const registeredComponents = {
     PowerMenu,
     PlotlyDualCharts,
     SendActionCommandToTradingMode,
-    // OptimizerConfigForm2: OptimizerConfigForm2,
+    // OptimizerConfigForm2,
     ToggleActivateRealTimeStrategy,
     SymbolsInfoTable,
     ResetUiConfigButton,
     ResetTentaclesConfigsButton,
-    AntSidebar,
     DataTable,
     ResetHistoryStorageButton,
     LogoutButton,
     ResetTentaclesPlotCacheButton,
     ProfileModal,
     Sidebar,
-    SidebarMenuItem
+    SidebarMenuItem,
+    NotificationCenter
 };

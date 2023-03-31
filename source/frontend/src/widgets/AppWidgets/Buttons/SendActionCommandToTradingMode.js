@@ -5,11 +5,13 @@ import {saveUserInputs} from "../Configuration/TradingConfig";
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import {useSaveTentaclesConfigAndSendAction} from "../../../context/config/TentaclesConfigProvider";
 import FontAwesomeIconByString from "../../../components/Icons/FontAwesome";
+import {AntIconByString} from "../../../components/Icons/AntIcon";
 
 export default function SendActionCommandToTradingMode({
     command,
     title,
     faIcon,
+    icon,
     color = "warning",
     variant = "outlined"
 }) {
@@ -18,7 +20,7 @@ export default function SendActionCommandToTradingMode({
     const saveTentaclesConfigAndSendAction = useSaveTentaclesConfigAndSendAction()
     const botInfo = useBotInfoContext()
     const availableApiActions = botInfo.available_api_actions
-    const isAvailableApiAction = botInfo.available_api_actions && availableApiActions.indexOf(command) !== -1
+    const isAvailableApiAction = availableApiActions?.includes(command)
 
     return useMemo(() => {
         return isAvailableApiAction && (
@@ -30,7 +32,17 @@ export default function SendActionCommandToTradingMode({
                 }
                 variant={variant}
                 color={color}>
-                <FontAwesomeIconByString faIcon={faIcon}/> {title} </Button>
+                {
+                faIcon && (
+                    <FontAwesomeIconByString faIcon={faIcon}/>
+                )
+            }
+                {
+                icon && (
+                    <AntIconByString iconString={icon}/>
+                )
+            }
+                {title} </Button>
         );
     }, [
         isAvailableApiAction,
@@ -39,9 +51,10 @@ export default function SendActionCommandToTradingMode({
         variant,
         color,
         faIcon,
+        icon,
         title,
-        saveTentaclesConfigAndSendAction,
-        command
+        command,
+        saveTentaclesConfigAndSendAction
     ])
 }
 

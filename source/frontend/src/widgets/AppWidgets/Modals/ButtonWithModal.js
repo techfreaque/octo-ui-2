@@ -5,7 +5,7 @@ import {createElement, useState} from "react";
 import {faClose} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
-import {AntIconByString, buttonStyles} from '../../../components/Icons/AntIcon';
+import {AntIconByString, iconStyles} from '../../../components/Icons/AntIcon';
 
 
 const style = {
@@ -42,7 +42,10 @@ export default function ButtonWithModal({title, content, icon}) {
                 style={
                     {height: "100%"}
             }>
-                <AntIconByString iconString={icon} size={buttonStyles.size.large} /> {title} </Button>
+                <AntIconByString iconString={icon}
+                    size={
+                        iconStyles.size.large
+                    }/> {title} </Button>
             <Modal open={open}
                 onClose={handleClose}
                 aria-labelledby={

@@ -1,4 +1,4 @@
-import AntSidebar from "../../../components/Layouts/Sidebars/AntSidebar"
+import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets"
 
 const dummyMenuItems = [
@@ -52,7 +52,7 @@ const dummyMenuItems = [
 
 ]
 
-export default function Sidebar({ sideBarContent }) {
+export default function Sidebar({sideBarContent}) {
     const _sideBarContent = JSON.parse(JSON.stringify(sideBarContent));
     hydrateSideBarContent(_sideBarContent)
     return <AntSidebar menuItems={_sideBarContent}/>

@@ -1,0 +1,102 @@
+.ant-side-bar .light-header {
+    background-color: var(--light-background);
+    border-radius: 8px 8px !important;
+    margin: 5px;
+}
+
+.ant-side-bar .dark-header {
+    background-color: var(--dark-background);
+    border-radius: 8px 8px !important;
+    margin: 5px;
+}
+
+.ant-side-bar .light-item {
+    border-radius: 8px 8px !important;
+}
+
+.sub-menu .ant-side-bar .dark-item {
+    border-radius: 8px 8px !important;
+}
+
+/* .sub-menu .dark-item.dark-item-active {
+    border: 1px solid var(--dark-borderGlow) !important;
+}
+
+.light-item.light-item-active {
+    border: 1px solid var(--light-borderGlow) !important;
+} */
+
+.light-item.light-item-active>.light-header {
+    /* background-color: var(--light-backgroundActive); */
+    color: var(--light-fontActive) !important;
+}
+
+.dark-item.dark-item-active>.dark-header {
+    /* background-color: var(--dark-backgroundActive); */
+    color: var(--dark-fontActive) !important;
+}
+
+.sub-menu .light-item.light-item-active>.light-header {
+    background-color: var(--light-backgroundActive);
+    /* color: var(--light-fontActive) !important */
+}
+
+.sub-menu .dark-item.dark-item-active>.dark-header {
+    background-color: var(--dark-backgroundActive);
+    /* color: var(--dark-fontActive) !important */
+}
+
+.light-header.light-header:hover {
+    background-color: var(--light-backgroundHover) !important;
+    color: var(--light-fontHover);
+}
+
+.dark-header.dark-header:hover {
+    background-color: var(--dark-backgroundHover) !important;
+    border-radius: 8px 8px;
+    color: var(--dark-fontHover);
+}
+
+.ant-side-bar .dark-content {
+    border-top: 0;
+    background-color: unset;
+}
+
+.ant-side-bar .light-content {
+    border-top: 0;
+    background-color: unset;
+}
+
+.ant-side-bar .dark.dark-icon-position-start {
+    background-color: unset;
+}
+
+.ant-side-bar .light.light-icon-position-start {
+    background-color: unset;
+}
+
+.ant-side-bar .dark-content-box {
+    padding: 1px 0px !important;
+    background-color: unset;
+}
+
+.ant-side-bar .light-content-box {
+    padding: 1px 0px !important;
+    background-color: unset;
+}
+
+.ant-side-bar .root-menu > div > div > div > .dark-content-box {
+    background-color: var(--dark-backgroundSecondary);
+}
+
+.ant-side-bar .root-menu > div > div > div > .light-content-box {
+    background-color: var(--dark-backgroundSecondary);
+}
+
+.ant-side-bar .dark.dark-icon-position-end {
+    background-color: unset;
+}
+
+.ant-side-bar .light.light-icon-position-end {
+    background-color: unset;
+}

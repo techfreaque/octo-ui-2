@@ -13,11 +13,16 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
         setCurrentTabId(newCurrentTabId);
     };
     return tabs && (
-        <div style={{ height: "calc(100%)" }}>
-            <Box sx={{ borderBottom: "solid 1px " + botColors.border }}
-                style={{ display: "flex" }}>
+        <div style={{ height: "100%" }}>
+            <Box sx={{ borderBottom: `solid 1px ${botColors?.border}` }}
+                style={{
+                    // display: "flex"
+                }}>
                 <TabsContainer>
-                    <TabsElement isBigScreen={isBigScreen}
+                    <TabsElement isBigScreen={isBigScreen} isRightContent={true} >
+                        {rightContent && rightContent}
+                    </TabsElement>
+                    <TabsElement isBigScreen={isBigScreen} isLeftContent={true}
                         // style={{ marginRight: "auto" }}
                     >
                         <Tabs
@@ -32,9 +37,8 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                             {tabs.map((tab) => (tab.title))}
                         </Tabs>
                     </TabsElement>
-                    <TabsElement isBigScreen={isBigScreen} isRightContent={true} >
+                    <TabsElement isBigScreen={isBigScreen} >
                         {tabs[currentTabId]?.toolBarContent}
-                        {rightContent && rightContent}
                     </TabsElement>
                 </TabsContainer>
             </Box>                {
@@ -44,12 +48,10 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                         if (tab?.tabId !== currentTabId) {
                             display.display = "none"
                         }
-                    } else {
-                        if (index !== currentTabId) {
-                            display.display = "none"
-                        }
+                    } else if (index !== currentTabId) {
+                        display.display = "none"
                     }
-                    return <div
+                    return (<div
                         className="w-100"
                         key={index}
                         style={
@@ -69,7 +71,7 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                             {
                                 tab.content
                             }</div>
-                    </div>
+                    </div>)
                 })
             }
         </div>
@@ -77,15 +79,14 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
 }
 
 function TabsContainer({ children, isBigScreen }) {
-    return isBigScreen
-        ? <>{children}</>
-        : <Grid container>
+    return (<div style={{width: "100%", display:"flow-root"}}>
             {children}
-        </Grid>
+        </div>)
 }
 
-function TabsElement({ children, isBigScreen, isRightContent }) {
-    return isBigScreen
-        ? <div className="me-auto d-flex">{children}</div>
-        : <Grid item xs={12} >  <div className="ms-auto d-flex" style={isRightContent && { float: "right" }} >{children}</div> </Grid >
+function TabsElement({ children, isBigScreen, isRightContent, isLeftContent }) {
+    return (<div className={isRightContent ? "" : (isLeftContent ? "":"me-auto")}
+            style={isRightContent ? { float: "right", height: "48px", maxWidth:"40%", display: "flex", marginLeft: "10px" } : (isLeftContent ? (isBigScreen?{float: "left"}:{}):{float: "right",  maxWidth: "100%",   minHeight: "48px",display: "flex",flexWrap: "wrap"})}
+        >{children}</div>)
+        // :   (<div className={isRightContent ?"ms-auto ":"me-auto "} style={isRightContent && { float: "right", maxWidth: "100%", flexWrap: "wrap" }} >{children}</div>)
 }

@@ -14,7 +14,7 @@ export const AbstractReactWebsocketContext = ({
     } else if (socket?.active && !connected) {
       onConnectionLost && onConnectionLost(error)
     } else {
-      console.log("Websocket is starting")
+      // console.log("Websocket is starting")
       onConnecting && onConnecting()
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -12,10 +12,13 @@ import RestartBotButton from '../../Buttons/RestartBotButton';
 import UpdateBotButton from '../../Buttons/UpdateBotButton';
 import StopBotButton from '../../Buttons/StopBotButton';
 import LogoutButton from '../../Buttons/LogoutButton';
+import { useBotInfoContext } from '../../../../context/data/BotInfoProvider';
 
 export default function PowerMenu() {
     const [open, setOpen] = React.useState(false);
     const anchorRef = React.useRef(null);
+    const botInfo = useBotInfoContext();
+
 
     const handleToggle = () => {
         setOpen((prevOpen) => !prevOpen);
@@ -83,7 +86,7 @@ export default function PowerMenu() {
                                     aria-labelledby="composition-button"
                                     onKeyDown={handleListKeyDown}
                                 >
-                                    <MenuItem onClick={handleClose}><LogoutButton /></MenuItem>
+                                    {botInfo?.can_logout&&<MenuItem onClick={handleClose}><LogoutButton /></MenuItem>}
                                     <MenuItem onClick={handleClose}><RestartBotButton /></MenuItem>
                                     <MenuItem onClick={handleClose}><UpdateBotButton /></MenuItem>
                                     <MenuItem onClick={handleClose}><StopBotButton /></MenuItem>

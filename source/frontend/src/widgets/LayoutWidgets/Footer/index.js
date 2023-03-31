@@ -1,29 +1,25 @@
 import React from "react";
-import Container from "react-bootstrap/Container";
-import Navbar from "react-bootstrap/Navbar";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faGithub,
-  faTwitter,
-  faTelegram,
-  faDiscord,
-  faYoutube,
-  faBitcoin,
-  faEthereum,
-} from "@fortawesome/free-brands-svg-icons";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import {useBotColorsContext} from "../../../context/config/BotColorsProvider";
+import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
-export default function Footer({ rightContent }) {
-  const botColors = useBotColorsContext();
-  const botInfo = useBotInfoContext()
-  return (
-    <div style={{ borderTop: "solid 2px " + botColors.border }}>
-      <Navbar>
-        <Container fluid>
-          <div className="mx-auto">
-            <span className="d-none d-xl-inline">Follow the </span>
+export default function Footer({rightContent}) {
+    const botColors = useBotColorsContext();
+    const botInfo = useBotInfoContext()
+    return (
+        <div style={
+            {
+                borderTop: "solid 2px " + botColors.border
+            }
+        }>
+
+            <div style={
+                {
+                    width: "100%",
+                    display: "flex"
+                }
+            }>
+                {/* <span className="d-none d-xl-inline">Follow the </span>
             <a href="https://www.octobot.online">OctoBot project</a>
             <span className="d-none d-xl-inline"> updates</span>
             <span> on </span>
@@ -64,12 +60,22 @@ export default function Footer({ rightContent }) {
               <span className="d-none d-xl-inline">Support the project </span>
               <FontAwesomeIcon className="me-1" icon={faBitcoin} />
               <FontAwesomeIcon className="me-1" icon={faEthereum} />
-            </a>
-            <span style={{marginRight: "10px"}}>OctoBot {botInfo && botInfo.octobot_version}</span>
-            {rightContent && <AppWidgets layout={rightContent} />}
-          </div>
-        </Container>
-      </Navbar>
-    </div>
-  );
+            </a> */}
+                <span style={
+                    {margin: "auto 15px"}
+                }>OctoBot {
+                    botInfo ?. octobot_version
+                }</span>
+                <span style={
+                    {
+                        marginLeft: "auto",
+                        display: "flex"
+                    }
+                }>
+                    {
+                    rightContent && <AppWidgets layout={rightContent}/>
+                } </span>
+            </div>
+        </div>
+    );
 }

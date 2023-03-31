@@ -1,7 +1,7 @@
 import Page from "../Page";
 import NotFoundPage from "../NotFoundPage";
 import { useBotLayoutContext } from "../../context/config/BotLayoutProvider";
-import React, { useMemo } from "react";
+import { useMemo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { backendRoutes } from "../../constants/backendConstants";
 import { ReactNotifications } from "react-notifications-component";

@@ -36,7 +36,7 @@ export const NotificationsContextProvider = ({ children }) => {
     const socketUrl = botDomain.replace("http://", "ws://").replace("https://", "wss://") + "/notifications"
     const setIsBotOnline = useUpdateIsBotOnlineContext()
     function onReconnect() {
-        console.log("Bot connected")
+        // console.log("Bot connected")
         setIsBotOnline(prevState => {
             if (!prevState) {
                 createNotification("Your bot is now online again")
@@ -45,7 +45,7 @@ export const NotificationsContextProvider = ({ children }) => {
         })
     }
     function onNewMessage(newMessage) {
-        console.log("New notification")
+        // console.log("New notification")
         setMessageHistory(prevMessages => [...(prevMessages || []), newMessage])
     }
     function onConnectionLost() {
@@ -65,7 +65,7 @@ export const NotificationsContextProvider = ({ children }) => {
         } else if (socket?.active && !connected) {
             onConnectionLost && onConnectionLost(error)
         } else {
-            console.log("Websocket is starting")
+            // console.log("Websocket is starting")
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [connected]);
