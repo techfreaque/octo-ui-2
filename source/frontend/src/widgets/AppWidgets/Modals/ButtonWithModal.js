@@ -36,7 +36,7 @@ export default function ButtonWithModal({
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const id = title ?. replace(" ", "-")
+    const id = title?.replace(" ", "-")
     return (
         <div style={
             {

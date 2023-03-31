@@ -8,7 +8,7 @@ export async function fetchBotConfigs(useSaveBotConfig, botDomain, configKeys) {
 
 export async function fetchUIConfig(botDomain, saveUIConfig) {
     const success = (updated_data, update_url, result, msg, status) => {
-        if (!msg ?. [botLayoutKey] ?. isCustom) {
+        if (!msg?.[botLayoutKey]?.isCustom) {
             msg[botLayoutKey] = defaultBotTemplate
         }
         saveUIConfig(msg)

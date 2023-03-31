@@ -50,6 +50,7 @@ import ResetTentaclesPlotCacheButton from "../AppWidgets/Buttons/ResetTentaclesP
 import ProfileModal from "../AppWidgets/Modals/ProfileModal/ProfileModal";
 import Sidebar, {SidebarMenuItem} from "../LayoutWidgets/Sidebar/Sidebar";
 import NotificationCenter from "../AppWidgets/Modals/NotificationCenter/NotificationCenter";
+import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -107,5 +108,6 @@ export const registeredComponents = {
     ProfileModal,
     Sidebar,
     SidebarMenuItem,
-    NotificationCenter
+    NotificationCenter,
+    TentaclesConfig
 };

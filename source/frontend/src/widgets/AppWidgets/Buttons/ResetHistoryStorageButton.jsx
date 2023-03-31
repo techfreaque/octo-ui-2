@@ -3,7 +3,7 @@ import {resetStorage} from "../../../api/actions"
 import ResetConfig from "../../../components/UserInputs/ResetConfig"
 import {backendRoutes} from "../../../constants/backendConstants"
 import {useBotDomainContext} from "../../../context/config/BotDomainProvider"
-import {useFetchCurrentTentaclesConfig} from "../../../context/config/TentaclesConfigProvider"
+import {useFetchCurrentTradingTentaclesConfig} from "../../../context/config/TentaclesConfigProvider"
 
 const storages = {
 
@@ -38,7 +38,7 @@ export const availableStorages = [storages.portfolioHistory.name, storages.order
 export default function ResetHistoryStorageButton({storageName}) {
     const botDomain = useBotDomainContext()
     const [isResetting, setIsResetting] = useState(false)
-    const fetchCurrentTentaclesConfig = useFetchCurrentTentaclesConfig()
+    const fetchCurrentTentaclesConfig = useFetchCurrentTradingTentaclesConfig()
     const storage = storages[storageName]
     function handleResetStorage() {
         setIsResetting(true)

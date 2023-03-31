@@ -1,10 +1,10 @@
 import React, {useMemo, useState} from "react";
 import Button from "@mui/material/Button";
 import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
-import {saveUserInputs} from "../Configuration/TradingConfig";
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import {useSaveTentaclesConfigAndSendAction} from "../../../context/config/TentaclesConfigProvider";
 import IconFromString from "../../../components/Icons/IconFromString";
+import { saveUserInputs } from "../Configuration/TentaclesConfig";
 
 export default function SendActionCommandToTradingMode({
     command,

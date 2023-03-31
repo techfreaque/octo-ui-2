@@ -33,7 +33,7 @@ export function AntIconByReactFunc({
 }) {
     return AntReactIcon && createElement(AntReactIcon, {
         style: {
-            ... iconStyles.size[size],
+            ...iconStyles.size[size],
             // marginTop: "auto",
             // marginBottom: "auto"
         },
@@ -47,7 +47,7 @@ export function AntIconByString({
 }) {
     return iconString && iconStringNoIcon !== iconString && createElement(iconStringToComponent[iconString], {
         style: {
-            ... iconStyles.size[size],
+            ...iconStyles.size[size],
             marginTop: "auto",
             marginBottom: "auto"
         }

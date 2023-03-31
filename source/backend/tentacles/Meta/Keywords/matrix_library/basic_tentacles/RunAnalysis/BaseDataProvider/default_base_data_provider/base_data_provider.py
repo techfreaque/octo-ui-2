@@ -16,23 +16,85 @@ import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.RunAna
 
 
 class RunAnalysisBaseDataGenerator:
-    _candles_by_symbol_and_time_frame: typing.Dict[
-        str,
-        typing.Dict[str, typing.List[npt.NDArray[numpy.float64]]],
-    ] = {}
-    _metadata = None
-    _trades = None
-    _orders = None
-    _transactions = None
-    _cached_values_by_symbols: dict = {}
-    _symbols_dbs: dict = {}
-    _plotted_elements_by_chart: dict = {}
-    _portfolio_history = None
-
-    start_time: typing.Union[float, int] = None
-    end_time: typing.Union[float, int] = None
 
     logger: BotLogger = commons_logging.get_logger("RunAnalysisBaseDataGenerator")
+
+    def __init__(
+        self,
+        ctx,
+        run_database,
+        run_display,
+        metadata,
+        is_backtesting,
+        main_plotted_element,
+        sub_plotted_element,
+    ):
+        self._candles_by_symbol_and_time_frame: typing.Dict[
+            str,
+            typing.Dict[str, typing.List[npt.NDArray[numpy.float64]]],
+        ] = {}
+        self._metadata = None
+        self._trades = None
+        self._orders = None
+        self._transactions = None
+        self._cached_values_by_symbols: dict = {}
+        self._symbols_dbs: dict = {}
+        self._plotted_elements_by_chart: dict = {}
+        self._portfolio_history = None
+
+        self.start_time: typing.Union[float, int] = None
+        self.end_time: typing.Union[float, int] = None
+
+        # TODO remove
+        self._plotted_elements_by_chart["main-chart"] = main_plotted_element
+        self._plotted_elements_by_chart["sub-chart"] = sub_plotted_element
+
+        self.run_database = run_database
+        self.run_display = run_display
+        self.ctx: custom_context.Context = ctx
+        self.exchange_name: str = ctx.exchange_name
+        self.config: dict = ctx.analysis_settings
+        self.metadata = metadata
+        self.account_type = None
+        self.is_backtesting = is_backtesting
+        self.ref_market: str = None
+        self.trading_type = None
+        self.pairs = None
+        
+        # TODO check if needed
+        self.price_data = None
+        self.trades_data = None
+        self.starting_portfolio: dict = None
+        self.moving_portfolio_data = None
+        self.trading_transactions_history: list = None
+        self.portfolio_history_by_currency: dict = None
+        self.buy_fees_by_currency: dict = None
+        self.sell_fees_by_currency: dict = None
+        self.total_start_balance_in_ref_market = None
+        self.longest_candles = None
+        self.funding_fees_history_by_pair = None
+        self.realized_pnl_x_data: list = None
+        self.realized_pnl_trade_gains_data: list = None
+        self.realized_pnl_cumulative: list = None
+        self.wins_and_losses_x_data: list = []
+        self.wins_and_losses_data: list = []
+        self.win_rates_x_data: list = []
+        self.win_rates_data: list = []
+        self.best_case_growth_x_data: list = []
+        self.best_case_growth_data: list = []
+        self.historical_portfolio_values_by_coin: dict = None
+        self.historical_portfolio_amounts_by_coin: dict = None
+        self.historical_portfolio_times: list = None
+
+        self.trading_transactions_history: list = None
+        self.buy_fees_by_currency: dict = None
+        self.sell_fees_by_currency: dict = None
+        self.portfolio_history_by_currency: dict = None
+
+        self.trading_transactions_history: list = None
+        self.buy_fees_by_currency: dict = None
+        self.sell_fees_by_currency: dict = None
+        self.portfolio_history_by_currency: dict = None
 
     def get_plotted_element(self, chart_location="main-chart"):
         return self._plotted_elements_by_chart[chart_location]
@@ -188,70 +250,6 @@ class RunAnalysisBaseDataGenerator:
 
     def _load_portfolio_history(self):
         pass
-
-    price_data = None
-    trades_data = None
-    ref_market: str = None
-    starting_portfolio: dict = None
-    moving_portfolio_data = None
-    trading_type = None
-    metadata = None
-    trading_transactions_history: list = None
-    portfolio_history_by_currency: dict = None
-    buy_fees_by_currency: dict = None
-    sell_fees_by_currency: dict = None
-    total_start_balance_in_ref_market = None
-    pairs = None
-    longest_candles = None
-    funding_fees_history_by_pair = None
-    exchange = None
-    realized_pnl_x_data: list = None
-    realized_pnl_trade_gains_data: list = None
-    realized_pnl_cumulative: list = None
-    wins_and_losses_x_data: list = []
-    wins_and_losses_data: list = []
-    win_rates_x_data: list = []
-    win_rates_data: list = []
-    best_case_growth_x_data: list = []
-    best_case_growth_data: list = []
-    historical_portfolio_values_by_coin: dict = None
-    historical_portfolio_amounts_by_coin: dict = None
-    historical_portfolio_times: list = None
-    run_database = None
-    run_display = None
-    ctx: custom_context.Context = None
-    analysis_settings = None
-    trading_transactions_history: list = None
-    buy_fees_by_currency: dict = None
-    sell_fees_by_currency: dict = None
-    portfolio_history_by_currency: dict = None
-
-    def __init__(
-        self,
-        ctx,
-        run_database,
-        run_display,
-        metadata,
-        is_backtesting,
-        main_plotted_element,
-        sub_plotted_element,
-    ):
-        self._plotted_elements_by_chart["main-chart"] = main_plotted_element
-        self._plotted_elements_by_chart["sub-chart"] = sub_plotted_element
-
-        self.run_database = run_database
-        self.run_display = run_display
-        self.ctx = ctx
-        self.exchange_name: str = ctx.exchange_name
-        self.config: dict = ctx.analysis_settings
-        self.metadata = metadata
-        self.analysis_settings = ctx.analysis_settings
-        self.trading_transactions_history: list = None
-        self.buy_fees_by_currency: dict = None
-        self.sell_fees_by_currency: dict = None
-        self.portfolio_history_by_currency: dict = None
-        self.account_type = None
-        self.is_backtesting = is_backtesting
 
     async def load_base_data(self, exchange_id: str):
         # await self.load_historical_values()

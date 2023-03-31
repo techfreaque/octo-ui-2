@@ -1,18 +1,20 @@
 import JsonEditor from "@techfreaque/json-editor-react"
 import defaultJsonEditorSettings from "../../../../components/Forms/JsonEditor/JsonEditorDefaults"
 import { OPTIMIZER_INPUTS_KEY } from "../../../../constants/backendConstants"
-import { useTentaclesConfigContext } from "../../../../context/config/TentaclesConfigProvider"
+import { tentacleConfigType, useTentaclesConfigContext } from "../../../../context/config/TentaclesConfigProvider"
 import { useUiConfigContext } from "../../../../context/config/UiConfigProvider"
 
 export default function OptimizerConfigForm2() {
     const currentTentaclesConfig = useTentaclesConfigContext()
+    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+
     const uiConfig = useUiConfigContext()
     const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
-    return currentTentaclesConfig && (
+    return currentTentaclesTradingConfig && (
         <div>
             <JsonEditor
                 {...defaultJsonEditorSettings()}
-                schema={generateOptimizerConfigFormSchema(currentTentaclesConfig)}
+                schema={generateOptimizerConfigFormSchema(currentTentaclesTradingConfig)}
                 startval={optimizerConfig}
                 editorName="Optimizer configurator"
                 disable_properties={false}

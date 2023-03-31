@@ -2,12 +2,12 @@
 import React, { useMemo, useState } from "react";
 import Button from "@mui/material/Button";
 import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
-import { saveUserInputs } from "../Configuration/TradingConfig";
 import { useBotInfoContext, useFetchBotInfo } from "../../../context/data/BotInfoProvider";
 import { useSaveTentaclesConfigAndSendAction } from "../../../context/config/TentaclesConfigProvider";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import createNotification from "../../../components/Notifications/Notification";
+import { saveUserInputs } from "../Configuration/TentaclesConfig";
 
 export default function ToggleActivateRealTimeStrategy() {
   const COMMAND_ACTIVATE_REALTIME_STRATEGY = "activate_realtime_strategy"

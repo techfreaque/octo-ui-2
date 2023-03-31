@@ -21,12 +21,12 @@ export default function PairsSelector() {
     const visiblePairs = useVisiblePairsContext();
     const setVisiblePairs = useUpdateVisiblePairsContext();
     const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
-    const pairsData = Object.keys(currencySettings).map(currency => {
+    const pairsData = currencySettings ? Object.keys(currencySettings).map(currency => {
         return {
             ...currencySettings[currency],
             currency
         }
-    })
+    }) : []
     // useEffect(() => {
     //     getCurrencyLogos(botDomain, Object.keys(currencySettings).map(currency => currency), setCurrencyLogos)
     // }, [currencySettings]);

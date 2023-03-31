@@ -64,7 +64,7 @@ export default function Footer({rightContent}) {
                 <span style={
                     {margin: "auto 15px"}
                 }>OctoBot {
-                    botInfo ?. octobot_version
+                    botInfo?.octobot_version
                 }</span>
                 <span style={
                     {

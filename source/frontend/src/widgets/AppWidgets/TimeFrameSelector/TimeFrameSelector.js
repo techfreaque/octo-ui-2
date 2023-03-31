@@ -28,7 +28,7 @@ export default function TimeFrameSelector() {
   }
 
   function saveTimeFrameSettings() {
-    saveTentaclesConfig({ [botInfo.strategy_names[0]]: { required_time_frames: enabledTimeFrame } })
+    saveTentaclesConfig({ [botInfo.strategy_names[0]]: { required_time_frames: enabledTimeFrame } }, undefined, false, true)
   }
   if (botInfo?.strategy_names && botInfo.time_frames) {
     return (

@@ -166,7 +166,7 @@ export function generateSimpleProp(propName, dependentComponents, type, format, 
         [propName]: {
             type: type,
             format: format,
-            ... items,
+            ...items,
             default: defaultValue,
             options: {
                 dependencies: {

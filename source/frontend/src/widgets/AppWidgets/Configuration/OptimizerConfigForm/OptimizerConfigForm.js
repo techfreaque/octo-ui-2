@@ -1,35 +1,37 @@
-import { useEffect, useMemo } from "react";
-import { OPTIMIZER_INPUTS_KEY, _INPUT_SEPARATOR } from "../../../../constants/backendConstants";
-import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
+import {useEffect, useMemo} from "react";
+import {OPTIMIZER_INPUTS_KEY, _INPUT_SEPARATOR} from "../../../../constants/backendConstants";
+import {useUiConfigContext} from "../../../../context/config/UiConfigProvider";
 import $ from "jquery";
 import OptimizerSettingTemplate from "./OptimizerInputTemplate";
 // eslint-disable-next-line no-unused-vars
 import select2 from "select2/dist/js/select2.js" // required
-import { useUpdateOptimizerEditorCounterContext } from "../../../../context/config/OptimizerEditorProvider";
-import { Button } from "@mui/material";
-import { useGetAndSaveOptimizerForm } from "../../../../context/actions/BotOptimizerProvider";
-import { useTentaclesConfigContext } from "../../../../context/config/TentaclesConfigProvider";
+import {useUpdateOptimizerEditorCounterContext} from "../../../../context/config/OptimizerEditorProvider";
+import {Button} from "@mui/material";
+import {useGetAndSaveOptimizerForm} from "../../../../context/actions/BotOptimizerProvider";
+import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
 
 export default function OptimizerConfigForm() {
     const uiConfig = useUiConfigContext()
     const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
     const currentTentaclesConfig = useTentaclesConfigContext()
+    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
 
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
     useEffect(() => {
-        currentTentaclesConfig && uiConfig &&
-            _buildOptimizerSettingsForm(currentTentaclesConfig, optimizerConfig, updateOptimizerEditorCounter);
+        currentTentaclesTradingConfig && uiConfig && _buildOptimizerSettingsForm(currentTentaclesTradingConfig, optimizerConfig, updateOptimizerEditorCounter);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentTentaclesConfig, optimizerConfig, uiConfig]);
+    }, [currentTentaclesTradingConfig, optimizerConfig, uiConfig]);
     return useMemo(() => {
-        return (
+        return (<div>
             <div>
-                <div><Button variant="outlined" onClick={saveOptimizerForm}>Save Optimizer Form</Button></div>
-                <div id="strategy-optimizer-inputs">
-                    <OptimizerSettingTemplate />
-                </div>
-                {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
+                <Button variant="outlined"
+                    onClick={saveOptimizerForm}>Save Optimizer Form</Button>
+            </div>
+            <div id="strategy-optimizer-inputs">
+                <OptimizerSettingTemplate/>
+            </div>
+            {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
                     <h4>
                         Run filters
                     </h4>
@@ -37,9 +39,7 @@ export default function OptimizerConfigForm() {
                         If a run validates any of these statements, it will be discarded.
                     </p>
                     <OptimizerRunFilterTemplate />
-                </div> */}
-            </div>
-        )
+                </div> */} </div>)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTentaclesConfig, optimizerConfig, uiConfig])
 }
@@ -63,12 +63,11 @@ async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, upda
         const inputGroupContent = inputGroupElement.find(".input-content");
         const configInputs = typeof optimizerConfig.user_inputs === "undefined" ? {} : optimizerConfig.user_inputs
         Object.values(element.schema.properties).forEach(function (inputDetail) {
-            if (_buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetail,
-                configInputs, tentacleName, inputDetail.options.name)) {
+            if (_buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetail, configInputs, tentacleName, inputDetail.options.name)) {
                 atLeastOneUserInput = true;
             }
         });
-        if (!atLeastOneUserInput) {
+        if (! atLeastOneUserInput) {
             inputGroupElement.remove();
         }
     })
@@ -102,7 +101,7 @@ export function getOptimizerSettingsValues() {
             settingValue = {
                 min: Number(minInputSetting.val()),
                 max: Number(maxInputSetting.val()),
-                step: Number(stepInputSetting.val()),
+                step: Number(stepInputSetting.val())
             }
         } else if (valueType === "boolean") {
             settingValue = inputSetting.val().map((x) => (x.toLowerCase() === "true"));
@@ -141,7 +140,7 @@ function _getOptimizerFiltersValues(settingsRoot) {
             user_input_left_operand: _optimizerFilterPart(filterEntryElement, "[data-role='user_input_left_operand']"),
             operator: _optimizerFilterPart(filterEntryElement, "[data-role='operator']"),
             user_input_right_operand: _optimizerFilterPart(filterEntryElement, "[data-role='user_input_right_operand']"),
-            text_right_operand: _optimizerFilterPart(filterEntryElement, "[data-role='text_right_operand']"),
+            text_right_operand: _optimizerFilterPart(filterEntryElement, "[data-role='text_right_operand']")
         })
     });
     return filterValues;
@@ -149,11 +148,7 @@ function _getOptimizerFiltersValues(settingsRoot) {
 
 function _optimizerFilterPart(parent, selector) {
     const element = $(parent.find(selector)[0]);
-    return {
-        role: element.data("role"),
-        type: element.data("type"),
-        value: element.val()
-    }
+    return {role: element.data("role"), type: element.data("type"), value: element.val()}
 }
 
 // function _buildOptimizerFilters(filtersSettings, blank) {
@@ -187,16 +182,13 @@ function _buildUserInputConfigEntry(inputGroupContent, valueType, inputDetail, c
     }
 }
 
-function _buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetails, configValues,
-    parentInputIdentifier, inputIdentifier) {
+function _buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetails, configValues, parentInputIdentifier, inputIdentifier) {
     if (inputDetails.options.in_optimizer) {
         const valueType = _getValueType(inputDetails.type);
         if (valueType === "nested_config") {
-            _buildOptimizerNestedConfigSettingsForm(inputGroupContent, inputDetails, configValues,
-                `${parentInputIdentifier}${_INPUT_SEPARATOR}${inputIdentifier}`);
+            _buildOptimizerNestedConfigSettingsForm(inputGroupContent, inputDetails, configValues, `${parentInputIdentifier}${_INPUT_SEPARATOR}${inputIdentifier}`);
         } else {
-            _buildUserInputConfigEntry(inputGroupContent, valueType, inputDetails, configValues,
-                parentInputIdentifier);
+            _buildUserInputConfigEntry(inputGroupContent, valueType, inputDetails, configValues, parentInputIdentifier);
         }
         return true;
     }
@@ -209,12 +201,11 @@ function _buildOptimizerNestedConfigSettingsForm(inputGroupContent, inputDetail,
     const nestedInputGroupContent = nestedInputGroupElement.find(".input-content");
     Object.keys(inputDetail.properties).forEach(function (nestedInput) {
         const nestedInputDetails = inputDetail.properties[nestedInput];
-        if (_buildOptimizerConfigElementSettingForm(nestedInputGroupContent, nestedInputDetails,
-            configValues, parentInputIdentifier, nestedInput)) {
+        if (_buildOptimizerConfigElementSettingForm(nestedInputGroupContent, nestedInputDetails, configValues, parentInputIdentifier, nestedInput)) {
             atLeastOneUserInput = true;
         }
     });
-    if (!atLeastOneUserInput) {
+    if (! atLeastOneUserInput) {
         nestedInputGroupElement.remove();
     }
 }
@@ -245,8 +236,7 @@ function _getInputSettingFromTemplate(valueType, inputDetail, tentacleName) {
         inputSettings = inputSettings.replace(new RegExp("ZYXDefaultValue", "g"), inputDetail.default);
         inputSettings = inputSettings.replace(new RegExp("TENTACLEABC", "g"), tentacleName);
         return inputSettings;
-    }
-    else {
+    } else {
         console.log(`Unhandled value type: "${valueType}": no strategy optimizer template found.`)
         return null;
     }
@@ -296,7 +286,9 @@ function _getValueType(schemaValueType) {
 }
 
 function _updateInputDetailValues(valueType, inputDetail, configValues, tentacleIdentifier) {
-    const rawValue = configValues[`${tentacleIdentifier}-${inputDetail.options.name.replaceAll(" ", "_")}`];
+    const rawValue = configValues[`${tentacleIdentifier}-${
+            inputDetail.options.name.replaceAll(" ", "_")
+        }`];
     let configValue = undefined;
     let isEnabled = false;
     if (typeof rawValue !== "undefined") {
@@ -305,7 +297,9 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
     }
     if (valueType === "options" || valueType === "multiple-options" || valueType === "boolean") {
         let values = typeof configValue === "undefined" ? [] : configValue
-        const valuesSelect = $(document.getElementById(`${tentacleIdentifier}-${inputDetail.options.name}-Input-setting-${valueType}`));
+        const valuesSelect = $(document.getElementById(`${tentacleIdentifier}-${
+            inputDetail.options.name
+        }-Input-setting-${valueType}`));
         if (valueType === "options") {
             inputDetail.enum.forEach(function (value) {
                 const isSelected = values.indexOf(value) !== -1;
@@ -325,14 +319,22 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
             })
         }
     } else if (valueType === "number") {
-        let values = typeof configValue === "undefined" ? { min: 0, max: 0, step: 1 } : configValue;
+        let values = typeof configValue === "undefined" ? {
+            min: 0,
+            max: 0,
+            step: 1
+        } : configValue;
         ["min", "max", "step"].forEach(function (suffix) {
-            const element = $(document.getElementById(`${tentacleIdentifier}-${inputDetail.options.name}-Input-setting-number-${suffix}`));
+            const element = $(document.getElementById(`${tentacleIdentifier}-${
+                inputDetail.options.name
+            }-Input-setting-number-${suffix}`));
             const value = values[suffix];
             element.val(value);
         })
     }
-    $(document.getElementById(`${tentacleIdentifier}-${inputDetail.options.name}-Input-enabled-value`)).prop("checked", isEnabled);
+    $(document.getElementById(`${tentacleIdentifier}-${
+        inputDetail.options.name
+    }-Input-enabled-value`)).prop("checked", isEnabled);
 }
 
 function updateInputSettingsDisplay(settingsRoot) {
@@ -369,7 +371,9 @@ function _updateCounter(updateOptimizerEditorCounter) {
 }
 
 function _optimizeUserInputIdentifier(tentacleValue, inputName) {
-    return `${tentacleValue}-${inputName.replaceAll(" ", "_")}`
+    return `${tentacleValue}-${
+        inputName.replaceAll(" ", "_")
+    }`
 }
 // function _modifyStoredSettings(configValues, input_key, stored_settings_path, tentacle_name) {
 //     const old_name = `${tentacle_name}-${input_key}`
