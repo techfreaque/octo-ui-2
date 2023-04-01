@@ -32,19 +32,21 @@ export default function RefreshBotData() {
             <Tooltip placement="top"
                 title={"Soft Refresh"}
                 arrow={false}>
-                <MuiIconButton disabled={isFetching}
-                    onClick={
-                        (() => {
-                            setDidJustStartFetching(true);
-                            fetchBotInfo(true, setIsFinished);
-                        })
-                }>
-                    <AntIconByReactFunc AntReactIcon={SyncOutlined}
-                        size={
-                            sizes.medium
-                        }
-                        spin={isFetching}/>
-                </MuiIconButton>
+                <div>
+                    <MuiIconButton disabled={isFetching}
+                        onClick={
+                            (() => {
+                                setDidJustStartFetching(true);
+                                fetchBotInfo(true, setIsFinished);
+                            })
+                    }>
+                        <AntIconByReactFunc AntReactIcon={SyncOutlined}
+                            size={
+                                sizes.medium
+                            }
+                            spin={isFetching}/>
+                    </MuiIconButton>
+                </div>
             </Tooltip>
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps

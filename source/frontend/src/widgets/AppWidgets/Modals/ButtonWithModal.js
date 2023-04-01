@@ -7,7 +7,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
 import IconFromString from '../../../components/Icons/IconFromString';
 import {Tooltip} from 'antd';
-import { MuiIconButton } from '../../../components/Buttons/IconButton';
+import {MuiIconButton} from '../../../components/Buttons/IconButton';
 
 
 const style = {
@@ -15,7 +15,7 @@ const style = {
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
-    maxWidth: 800,
+    maxWidth: 1000,
     width: "100%",
     bgcolor: 'background.paper',
     border: '2px solid #000',
@@ -48,11 +48,14 @@ export default function ButtonWithModal({
             <Tooltip placement="top"
                 title={title}
                 arrow={false}>
-                <MuiIconButton onClick={handleOpen}>
-                    <IconFromString faIcon={faIcon}
-                        antIcon={antIcon} marginRight={"0px"} /> {
-                    !iconOnly && title
-                } </MuiIconButton>
+                <div>
+                    <MuiIconButton onClick={handleOpen}>
+                        <IconFromString faIcon={faIcon}
+                            antIcon={antIcon}
+                            marginRight={"0px"}/> {
+                        !iconOnly && title
+                    } </MuiIconButton>
+                </div>
             </Tooltip>
             <Modal open={open}
                 onClose={handleClose}

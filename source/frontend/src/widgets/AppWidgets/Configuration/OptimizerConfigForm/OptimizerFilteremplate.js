@@ -1,16 +1,20 @@
+import { useBotColorsContext } from "../../../../context/config/BotColorsProvider"
+
 export default function OptimizerRunFilterTemplate() {
+    const botColors = useBotColorsContext()
+    const borderStyle = {border: "1px solid "+botColors.border}
     return (
         <div className="mx-4">
-            <div className="row border">
+            <div className="row" style={borderStyle}>
                 <div className="col-4 p-2">Input name</div>
                 <div className="col-1 p-2">Condition</div>
                 <div className="col-4 p-2">Other input name</div>
                 <div className="col-2 p-2">Value</div>
                 <div className="col-1 p-2">Remove</div>
             </div>
-            <div className="row border" id="optimizer-filters-root">
+            <div className="row"  style={borderStyle} id="optimizer-filters-root">
             </div>
-            <div className="row border d-none" id="optimizer-filters-default-values">
+            <div className="row d-none"  style={borderStyle} id="optimizer-filters-default-values">
                 <OptimizerRunFilter />
             </div>
             <div className="text-right">
@@ -23,8 +27,10 @@ export default function OptimizerRunFilterTemplate() {
 }
 
 function OptimizerRunFilter() {
+    const botColors = useBotColorsContext()
+    const borderStyle = {border: "1px solid "+botColors.border}
     return (
-        <div className="row w-100 mx-0 border" id="optimizer-filter-template">
+        <div className="row w-100 mx-0"  style={borderStyle} id="optimizer-filter-template">
             <div className="col-12 optimizer-filter-entry row p-2">
                 <OptimizerRunFilterValues />
 

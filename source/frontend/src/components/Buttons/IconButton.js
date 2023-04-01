@@ -25,9 +25,9 @@ export default function IconButton({
     )
 };
 
-export function MuiIconButton({children, onClick, disabled}) {
+export function MuiIconButton({children, onClick, disabled, onFocusVisible, style}) {
     return (
-        <MuiButton onClick={onClick}
+        <MuiButton onClick={onClick} onFocusVisible={onFocusVisible}
             disabled={disabled}
             style={
                 {
@@ -35,7 +35,8 @@ export function MuiIconButton({children, onClick, disabled}) {
                     marginLeft: "0px",
                     paddingRight: "15px",
                     paddingLeft: "15px",
-                    minWidth: "auto"
+                    minWidth: "auto",
+                    ...style
                 }
         }>
             {children} </MuiButton>

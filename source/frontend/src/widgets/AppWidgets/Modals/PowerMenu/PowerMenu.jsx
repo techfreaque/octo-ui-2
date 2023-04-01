@@ -1,22 +1,15 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Grow from '@mui/material/Grow';
-import Paper from '@mui/material/Paper';
-import Popper from '@mui/material/Popper';
-import MenuItem from '@mui/material/MenuItem';
-import MenuList from '@mui/material/MenuList';
 import {faPowerOff} from '@fortawesome/free-solid-svg-icons';
 import RestartBotButton from '../../Buttons/RestartBotButton';
 import UpdateBotButton from '../../Buttons/UpdateBotButton';
 import StopBotButton from '../../Buttons/StopBotButton';
 import LogoutButton from '../../Buttons/LogoutButton';
 import {useBotInfoContext} from '../../../../context/data/BotInfoProvider';
-import {Dropdown, Tooltip} from 'antd';
+import {Dropdown, Tooltip, Button} from 'antd';
 import {FaIconByReactFunc} from '../../../../components/Icons/FontAwesome';
 import {sizes} from '../../../../constants/frontendConstants';
 import {useBotDomainContext} from '../../../../context/config/BotDomainProvider';
-import { MuiIconButton } from '../../../../components/Buttons/IconButton';
+import {MuiIconButton} from '../../../../components/Buttons/IconButton';
 
 export default function PowerMenu() {
     const botInfo = useBotInfoContext();
@@ -63,11 +56,12 @@ export default function PowerMenu() {
             <Tooltip placement="topRight"
                 title={"Power Menu"}
                 arrow={false}>
-
-                <MuiIconButton><FaIconByReactFunc icon={faPowerOff}
-                        size={
-                            sizes.medium
-                        }/></MuiIconButton>
+                <div>
+                    <MuiIconButton><FaIconByReactFunc icon={faPowerOff}
+                            size={
+                                sizes.medium
+                            }/></MuiIconButton>
+                </div>
             </Tooltip>
         </Dropdown>
     )

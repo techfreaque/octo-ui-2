@@ -25,16 +25,16 @@ export default function ProfileModal() {
     const [requiresInstantRestart, setRequiresInstantRestart] = useState(false);
     const botInfo = useBotInfoContext()
     const isOnline = useIsBotOnlineContext()
-    const currentProfile = botInfo?.current_profile
+    // use JSON to avoid working on original object
+    const currentProfile = JSON.parse(JSON.stringify(botInfo?.current_profile || {}))
     const restartBot = useRestartBot()
     const botDomain = useBotDomainContext()
     const currentProfileTitle = currentProfile?.profile?.name
-    // use JSON to avoid working on original object
-    const [newProfileSettings, setNewProfileSettings] = useState(JSON.parse(JSON.stringify(currentProfile)))
+    const [newProfileSettings, setNewProfileSettings] = useState(currentProfile)
     const hasChanged = JSON.stringify(currentProfile) !== JSON.stringify(newProfileSettings)
     
     useEffect(() => {
-        setNewProfileSettings(JSON.parse(JSON.stringify(currentProfile)))
+        setNewProfileSettings(currentProfile)
     }, [currentProfile])
     
     async function saveProfile(event, restart = false) {
