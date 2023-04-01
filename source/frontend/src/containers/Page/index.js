@@ -10,14 +10,19 @@ export default function Page({currentPage}) {
     const botColors = useBotColorsContext();
     const colorMode = useColorModeContext();
     return useMemo(() => (
-        <main style={
-            {
-                backgroundColor: colorMode === "dark" && botColors.background,
-                color: colorMode === "dark" && botColors.font
+        <main className={
+                colorMode === "dark" ? "dark" : "light"
             }
+            style={
+                {
+                    backgroundColor: colorMode === "dark" && botColors.background,
+                    color: colorMode === "dark" && botColors.font
+                }
         }>
             <Helmet defaultTitle={
-                `${currentPage.title} - ${projectName}`
+                `${
+                    currentPage.title
+                } - ${projectName}`
             }>
                 <meta name="description"
                     content={projectDescription}/>

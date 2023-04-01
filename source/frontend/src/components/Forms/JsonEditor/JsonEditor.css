@@ -1,3 +1,15 @@
 .card.card-body.bg-light {
     background-color: unset !important;
 }
+
+.je-object__container input {
+    background: unset;
+}
+
+.dark .je-object__container input {
+    color: #ffff;
+}
+
+.light .je-object__container input {
+    /* color: #000; */
+}
