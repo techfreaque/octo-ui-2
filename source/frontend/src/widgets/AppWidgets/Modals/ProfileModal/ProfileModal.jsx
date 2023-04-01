@@ -25,22 +25,20 @@ export default function ProfileModal() {
     const [requiresInstantRestart, setRequiresInstantRestart] = useState(false);
     const botInfo = useBotInfoContext()
     const isOnline = useIsBotOnlineContext()
-    // use JSON to avoid working on original object
-    const currentProfile = JSON.parse(JSON.stringify(botInfo?.current_profile || {}))
     const restartBot = useRestartBot()
     const botDomain = useBotDomainContext()
-    const currentProfileTitle = currentProfile?.profile?.name
-    const [newProfileSettings, setNewProfileSettings] = useState(currentProfile)
-    const hasChanged = JSON.stringify(currentProfile) !== JSON.stringify(newProfileSettings)
+    const currentProfileTitle = (botInfo?.current_profile || {})?.profile?.name
+    const [newProfileSettings, setNewProfileSettings] = useState(JSON.parse(JSON.stringify(botInfo?.current_profile || {})))
+    const hasChanged = JSON.stringify(botInfo?.current_profile || {}) !== JSON.stringify(newProfileSettings)
     
     useEffect(() => {
-        setNewProfileSettings(JSON.parse(JSON.stringify(currentProfile)))
-    }, [currentProfile])
+        setNewProfileSettings(JSON.parse(JSON.stringify(botInfo?.current_profile || {})))
+    }, [botInfo?.current_profile])
     
     async function saveProfile(event, restart = false) {
         setIsloading(true)
-        const infoHasChanged = JSON.stringify(currentProfile.profile) !== JSON.stringify(newProfileSettings.profile)
-        const configHasChanged = JSON.stringify(currentProfile.config) !== JSON.stringify(newProfileSettings.config)
+        const infoHasChanged = JSON.stringify((botInfo?.current_profile || {}).profile) !== JSON.stringify(newProfileSettings.profile)
+        const configHasChanged = JSON.stringify((botInfo?.current_profile || {}).config) !== JSON.stringify(newProfileSettings.config)
         function onFail() {
 
             setIsloading(false)
@@ -61,7 +59,7 @@ export default function ProfileModal() {
             const newPortfolio = newProfileSettings.config["trader-simulator"]["starting-portfolio"]
             const portfolioCoins = new Set([
                 ...Object.keys(newProfileSettings.config["trader-simulator"]["starting-portfolio"]),
-                ...Object.keys(currentProfile.config["trader-simulator"]["starting-portfolio"])
+                ...Object.keys((botInfo?.current_profile || {}).config["trader-simulator"]["starting-portfolio"])
             ])
             portfolioCoins.forEach(coin => {
                 const coinKey = `trader-simulator_starting-portfolio_${coin}`
@@ -92,7 +90,7 @@ export default function ProfileModal() {
         saveProfile(undefined, true)
     }
     function resetUnsavedConfig() {
-        setNewProfileSettings(JSON.parse(JSON.stringify(currentProfile)))
+        setNewProfileSettings(JSON.parse(JSON.stringify(botInfo?.current_profile)))
     }
 
     const handleClose = () => {
@@ -127,7 +125,7 @@ export default function ProfileModal() {
                     (
                         <ProfileTitle newProfileSettings={newProfileSettings}
                             setNewProfileSettings={setNewProfileSettings}
-                            currentProfile={currentProfile}
+                            currentProfile={botInfo?.current_profile || {}}
                             setRequiresInstantRestart={setRequiresInstantRestart}/>
                     )
                 }
@@ -216,7 +214,7 @@ export default function ProfileModal() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [
         currentProfileTitle,
-        currentProfile,
+        botInfo?.current_profile,
         hasChanged,
         loading,
         newProfileSettings,

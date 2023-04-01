@@ -9,6 +9,7 @@ export default function defaultJsonEditorSettings() {
     no_additional_properties: true,
     object_layout: "grid",
     disable_properties: true,
+    disable_edit_json: true,
     required_by_default: true,
     customThemes: [{ name: 'octobot', theme: OctoBotTheme }],
     editorsArray: ConfirmArray

@@ -16,7 +16,7 @@ export default function CurrentPanelFullscreen() {
                     marginBottom: "auto"
                 }
             }>
-                <Tooltip placement="top"
+                <Tooltip placement="topRight"
                     title={"Maximize Panel"}
               arrow={false}>
               <div>

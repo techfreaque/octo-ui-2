@@ -10,12 +10,13 @@ import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 import JsonEditor from "@techfreaque/json-editor-react";
 import {tentacleConfigType, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
 import {useFetchTentaclesConfig} from "../../../context/config/TentaclesConfigProvider";
-import { SaveOutlined } from "@ant-design/icons";
-import { Button, Space } from 'antd';
-import { sizes } from "../../../constants/frontendConstants";
+import {SaveOutlined} from "@ant-design/icons";
+import {Button, Space} from 'antd';
+import {sizes} from "../../../constants/frontendConstants";
+import {AntIconByReactFunc} from "../../../components/Icons/AntIcon";
 
 
-export function useCurrentTentacleConfig(tentacleType=tentacleConfigType.tentacles) {
+export function useCurrentTentacleConfig(tentacleType = tentacleConfigType.tentacles) {
     const currentTentaclesConfig = useTentaclesConfigContext()
     return currentTentaclesConfig?.[tentacleType]
 }
@@ -28,7 +29,7 @@ export default function TentaclesConfig({
     const fetchTentaclesConfig = useFetchTentaclesConfig()
     const currentTentaclesConfig = useTentaclesConfigContext()
     const currentTentaclesNonTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tentacles]
-
+    const tentacles = tentacleNames.split(",")
 
     const saveTentaclesConfig = useSaveTentaclesConfig()
     function handleTentaclesUpdate() {
@@ -36,16 +37,18 @@ export default function TentaclesConfig({
     }
     useEffect(() => {
         handleTentaclesUpdate()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botInfo])
+
+    const configs = {}
+    tentacles.forEach(tentacle => {
+        configs[tentacle] = currentTentaclesNonTradingConfig?.[tentacle] || {}
+    })
+
     return useMemo(() => (
         <AbstractTentaclesConfig botInfo={botInfo}
             fetchCurrentTentaclesConfig={handleTentaclesUpdate}
-            currentTentaclesTradingConfig={
-                {
-                    [tentacleNames]: currentTentaclesNonTradingConfig?.[tentacleNames] || {}
-                }
-            }
+            currentTentaclesTradingConfig={configs}
             saveTentaclesConfig={saveTentaclesConfig}
             content={content}
             storageName={tentacleNames}/>
@@ -78,9 +81,9 @@ export function AbstractTentaclesConfig({
         fetchCurrentTentaclesConfig()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [exchangeId, botDomain, botInfo]);
-    const defaultTabId = botInfo?.trading_mode_name || botInfo?.strategy_name
+    const defaultTabId = storageName === "tradingConfig" ? botInfo?.trading_mode_name || botInfo?.strategy_name : (tabs ? tabs?.[0]?.tabId : "")
     function handleUserInputSave() {
-        saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, storageName==="tradingConfig"), setIsSaving, storageName)
+        saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, storageName === "tradingConfig"), setIsSaving, storageName)
     }
 
     return useMemo(() => {
@@ -94,13 +97,20 @@ export function AbstractTentaclesConfig({
                                 <Button type="primary"
                                     disabled={isSaving}
                                     onClick={handleUserInputSave}
-                                style={{margin:'5px',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center'}}>
-                            <SaveOutlined size={sizes.medium}/>
-                        </Button>
-                        </Space>
+                                    style={
+                                        {
+                                            margin: '5px',
+                                            display: 'flex',
+                                            justifyContent: 'center',
+                                            alignItems: 'center'
+                                        }
+                                }>
+                                    <AntIconByReactFunc AntReactIcon={SaveOutlined}
+                                        size={
+                                            sizes.medium
+                                        }/>
+                                </Button>
+                            </Space>
                         </>
                     )
                 }
@@ -148,20 +158,21 @@ function create_custom_tabs(tentacleInputs, tabsData, storageName) {
     // gather custom user inputs
     tentacleInputs?.schema?.properties && Object.keys(tentacleInputs.schema.properties).forEach((key) => {
         const property = tentacleInputs.schema.properties[key]
-        if (property.display_as_tab) {
-            window[tentaclesInfoStorage][tentacleInputs.tentacle].push(key)
-            _createTentacleConfigTab({
-                configTitle: tentacleInputs.schema.properties[key].title,
-                configName: key,
-                config: tentacleInputs.config[key],
-                schema: tentacleInputs.schema.properties[key],
-                editorKey: tentacleInputs.tentacle,
-                tabsData,
-                storageName
-            })
-            delete tentacleInputs.config[key];
-            delete tentacleInputs.schema.properties[key]
+        if (! property.display_as_tab) {
+            return;
         }
+        window[tentaclesInfoStorage][tentacleInputs.tentacle].push(key)
+        _createTentacleConfigTab({
+            configTitle: tentacleInputs.schema.properties[key].title,
+            configName: key,
+            config: tentacleInputs.config[key],
+            schema: tentacleInputs.schema.properties[key],
+            editorKey: tentacleInputs.tentacle,
+            tabsData,
+            storageName
+        })
+        delete tentacleInputs.config[key];
+        delete tentacleInputs.schema.properties[key]
     })
 }
 
