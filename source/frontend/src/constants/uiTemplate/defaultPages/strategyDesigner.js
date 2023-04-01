@@ -190,24 +190,24 @@ export const defaultStrategyDesignerPageLayout = {
                             "component": "Tab",
                             "content": [
                                 {
+                                    "component": "TentaclesConfig",
+                                    "content": [],
+                                    "tentacleNames": "RunAnalysisModePlugin"
+                                }
+                            ],
+                            "dontScroll": false,
+                            "faIcon": "magnifying-glass-chart",
+                            "title": "Run Analysis",
+                            "toolBarContent": []
+                        },
+                        {
+                            "antIcon": "noIcon",
+                            "component": "Tab",
+                            "content": [
+                                {
                                     "component": "ScrollableTabs",
                                     "rightContent": [],
                                     "tabs": [
-                                        {
-                                            "antIcon": "noIcon",
-                                            "component": "Tab",
-                                            "content": [
-                                                {
-                                                    "component": "TentaclesConfig",
-                                                    "content": [],
-                                                    "tentacleNames": "RunAnalysisModePlugin"
-                                                }
-                                            ],
-                                            "dontScroll": false,
-                                            "faIcon": "",
-                                            "title": "Analysis Settings",
-                                            "toolBarContent": []
-                                        },
                                         {
                                             "antIcon": "noIcon",
                                             "component": "Tab",
