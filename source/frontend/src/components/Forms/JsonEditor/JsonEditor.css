@@ -7,7 +7,7 @@
 }
 
 .dark .je-object__container input {
-    color: #ffff;
+    color: var(--dark-font);
 }
 
 .light .je-object__container input {
