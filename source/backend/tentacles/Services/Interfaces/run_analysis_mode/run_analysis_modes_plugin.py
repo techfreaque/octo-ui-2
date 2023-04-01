@@ -2,8 +2,8 @@ import os
 import typing
 import octobot_commons.logging as logging
 import octobot_services.interfaces.util as interfaces_util
-import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.AnalysisModes.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
-import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisModes.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
 import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.run_analysis_mode.controllers.plotted_data as plotted_data
 
