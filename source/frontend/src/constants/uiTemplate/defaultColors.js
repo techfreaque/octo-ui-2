@@ -12,8 +12,11 @@ export const defaultColors = {
         border: "#2a2e39",
         borderActive: "#1e53e5",
         borderGlow:"#1d1d5f",
-        warning: "#fb3",
-        success: "#00c851",
+        warning: "#faad14",
+        success: "#5aef70",
+        error: "#ff4d4f",
+        primary: "#1677ff",
+        // primary: "#722ED1",
         candles: {
             wick: {
                 green: "rgb(178, 235, 242)",

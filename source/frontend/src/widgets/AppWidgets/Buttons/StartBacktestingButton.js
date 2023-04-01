@@ -1,17 +1,22 @@
-import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { useBotIsBacktestingContext, useStartBacktesting } from "../../../context/actions/BotBacktestingProvider";
 import { useMemo } from "react";
+import WarningButton from "../../../components/Buttons/WarningButton";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 
 export default function StartBacktestingButton() {
   const isBacktesting = useBotIsBacktestingContext()
   const startBacktesting = useStartBacktesting()
+  const botColors = useBotColorsContext();
   return useMemo(() => {
   return !isBacktesting && (
-    <Button onClick={startBacktesting} variant="outlined" color="success">
-      <FontAwesomeIcon icon={faPlay} /><span style={{ marginLeft: "5px" }}>Start Backtest</span>
-    </Button>
+    <WarningButton 
+    onClick={startBacktesting} 
+    color={botColors.success}
+    icon={<FontAwesomeIcon icon={faPlay} style={{marginRight:"8px"}}/>}
+    text="Start Backtest"
+    />
   );
-      }, [isBacktesting, startBacktesting])
+      }, [botColors.success, isBacktesting, startBacktesting])
 }

@@ -1,22 +1,25 @@
-import { Chip } from "@mui/material";
-import Badge from 'react-bootstrap/Badge';
 import { useMemo } from "react";
 import { useOptimizerQueueCounterContext } from "../../../context/data/OptimizerQueueProvider";
+import {Tag, Space, Badge} from 'antd'
 
 export default function OptimizerQueueSize() {
     const optimizerQueueSize = useOptimizerQueueCounterContext()
     return useMemo(() => {
         return (
-            <Chip
-                variant="outlined" style={{ margin: "auto", marginRight: "10px" }}
-                color="primary" label={
-                    <h6 style={{ margin: "auto" }}>
-                        <Badge
-                            bg="info" style={{ margin: "auto" }}
-                        >{optimizerQueueSize}</Badge> to run
-                    </h6>
-                }>
-            </Chip>
+            <Space>
+                <Tag color="blue" 
+                            style={{fontSize:'15px', display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',}}>
+                    {<Badge count={optimizerQueueSize} showZero 
+                    style={{width: '15px', 
+                            height: '15px', 
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            color: '#ffffff',
+                            margin:'5px'}}/> } To run</Tag>
+            </Space>
         )
     }, [optimizerQueueSize])
 }

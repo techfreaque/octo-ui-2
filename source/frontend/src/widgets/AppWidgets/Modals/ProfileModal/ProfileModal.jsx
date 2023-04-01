@@ -169,7 +169,7 @@ export default function ProfileModal() {
                             <AntButton disabled={
                                     ! hasChanged || loading 
                                 }
-                                key="save"
+                                key="save2"
                                 type="primary"
                                 icon={
                                     (

@@ -1,4 +1,4 @@
-import {Button, Tab} from "@mui/material";
+import {Tab} from "@mui/material";
 import MuiTabs from "../../../components/Tabs/MuiTabs";
 import {useEffect, useMemo, useState} from "react";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
@@ -10,6 +10,9 @@ import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 import JsonEditor from "@techfreaque/json-editor-react";
 import {tentacleConfigType, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
 import {useFetchTentaclesConfig} from "../../../context/config/TentaclesConfigProvider";
+import { SaveOutlined } from "@ant-design/icons";
+import { Button, Space } from 'antd';
+import { sizes } from "../../../constants/frontendConstants";
 
 
 export function useCurrentTentacleConfig(tentacleType=tentacleConfigType.tentacles) {
@@ -87,17 +90,23 @@ export function AbstractTentaclesConfig({
                     (
                         <>
                             <AppWidgets layout={content}/>
-                            <Button disabled={isSaving}
-                                style={
-                                    {marginLeft: "5px"}
-                                }
-                                variant="contained"
-                                onClick={handleUserInputSave}>Save</Button>
+                            <Space wrap>
+                                <Button type="primary"
+                                    disabled={isSaving}
+                                    onClick={handleUserInputSave}
+                                style={{margin:'5px',
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'}}>
+                            <SaveOutlined size={sizes.medium}/>
+                        </Button>
+                        </Space>
                         </>
                     )
                 }
                 defaultTabId={defaultTabId}/>
         )
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [content, tabs, defaultTabId])
 }

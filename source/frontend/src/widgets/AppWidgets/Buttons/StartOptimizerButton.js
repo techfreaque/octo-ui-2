@@ -1,17 +1,22 @@
-import Button from "@mui/material/Button";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { useBotIsOptimizingContext, useStartOptimizer } from "../../../context/actions/BotOptimizerProvider";
 import { useMemo } from "react";
+import WarningButton from "../../../components/Buttons/WarningButton";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 
 export default function StartOptimizerButton() {
   const isOptimizer = useBotIsOptimizingContext()
   const startOptimizer = useStartOptimizer()
+  const botColors = useBotColorsContext();
   return useMemo(() => {
     return !isOptimizer && (
-      <Button onClick={startOptimizer} variant="outlined" color="success" style={{ marginLeft: "10px" }}>
-        <FontAwesomeIcon icon={faPlay} /><span style={{ marginLeft: "5px" }}>Start Optimizer</span>
-      </Button>
+      <WarningButton 
+        onClick={startOptimizer} 
+        color={botColors.success}
+        icon={<FontAwesomeIcon icon={faPlay} style={{ marginRight: "5px" }}/>}
+        text= "Start Optimizer"
+      />
     );
-  }, [isOptimizer, startOptimizer])
+  }, [botColors.success, isOptimizer, startOptimizer])
 }
