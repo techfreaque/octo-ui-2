@@ -12,34 +12,42 @@ import {tentacleConfigType, useSaveTentaclesConfig, useTentaclesConfigContext} f
 import {useFetchTentaclesConfig} from "../../../context/config/TentaclesConfigProvider";
 
 
+export function useCurrentTentacleConfig(tentacleType=tentacleConfigType.tentacles) {
+    const currentTentaclesConfig = useTentaclesConfigContext()
+    return currentTentaclesConfig?.[tentacleType]
+}
+
 export default function TentaclesConfig({
     content,
     tentacleNames = "RunAnalysisModePlugin"
 }) {
     const botInfo = useBotInfoContext()
     const fetchTentaclesConfig = useFetchTentaclesConfig()
-
-
     const currentTentaclesConfig = useTentaclesConfigContext()
     const currentTentaclesNonTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tentacles]
+
+
     const saveTentaclesConfig = useSaveTentaclesConfig()
     function handleTentaclesUpdate() {
         fetchTentaclesConfig(tentacleNames.split(","))
     }
     useEffect(() => {
         handleTentaclesUpdate()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botInfo])
-
-    return (<AbstractTentaclesConfig botInfo={botInfo}
-        fetchCurrentTentaclesConfig={handleTentaclesUpdate}
-        currentTentaclesTradingConfig={
-            {
-                [tentacleNames]: currentTentaclesNonTradingConfig?.[tentacleNames] || {}
+    return useMemo(() => (
+        <AbstractTentaclesConfig botInfo={botInfo}
+            fetchCurrentTentaclesConfig={handleTentaclesUpdate}
+            currentTentaclesTradingConfig={
+                {
+                    [tentacleNames]: currentTentaclesNonTradingConfig?.[tentacleNames] || {}
+                }
             }
-        }
-        saveTentaclesConfig={saveTentaclesConfig}
-        content={content}
-        storageName={tentacleNames}/>)
+            saveTentaclesConfig={saveTentaclesConfig}
+            content={content}
+            storageName={tentacleNames}/>
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    ), [botInfo, content, currentTentaclesNonTradingConfig, tentacleNames])
 }
 
 export function AbstractTentaclesConfig({
@@ -69,23 +77,27 @@ export function AbstractTentaclesConfig({
     }, [exchangeId, botDomain, botInfo]);
     const defaultTabId = botInfo?.trading_mode_name || botInfo?.strategy_name
     function handleUserInputSave() {
-        saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, true, storageName), setIsSaving, storageName)
+        saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, storageName==="tradingConfig"), setIsSaving, storageName)
     }
 
     return useMemo(() => {
-        return tabs && defaultTabId && (<MuiTabs tabs={tabs}
-            rightContent={
-                (<>
-                    <AppWidgets layout={content}/>
-                    <Button disabled={isSaving}
-                        style={
-                            {marginLeft: "5px"}
-                        }
-                        variant="contained"
-                        onClick={handleUserInputSave}>Save</Button>
-                </>)
-            }
-            defaultTabId={defaultTabId}/>)
+        return tabs && defaultTabId && (
+            <MuiTabs tabs={tabs}
+                rightContent={
+                    (
+                        <>
+                            <AppWidgets layout={content}/>
+                            <Button disabled={isSaving}
+                                style={
+                                    {marginLeft: "5px"}
+                                }
+                                variant="contained"
+                                onClick={handleUserInputSave}>Save</Button>
+                        </>
+                    )
+                }
+                defaultTabId={defaultTabId}/>
+        )
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [content, tabs, defaultTabId])
 }
@@ -98,8 +110,7 @@ function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, bot
 
     // avoid working on original elements as they will be edited for custom user inputs
     const editedUserInputs = JSON.parse(JSON.stringify(userInputs));
-
-    window.customDisplayAsTabInputs = {}
+    window[getCustomDisplayAsTabInputsStorage(storageName)] = {}
     Object.keys(editedUserInputs).forEach(TentacleName => {
         create_custom_tabs(editedUserInputs[TentacleName], tabsData, storageName)
         _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
@@ -118,13 +129,18 @@ function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, bot
     return tabsData
 }
 
+function getCustomDisplayAsTabInputsStorage(storageName) {
+    return `${storageName}customDisplayAsTabInputs`
+}
+
 function create_custom_tabs(tentacleInputs, tabsData, storageName) {
-    window.customDisplayAsTabInputs[tentacleInputs.tentacle] = []
+    const tentaclesInfoStorage = getCustomDisplayAsTabInputsStorage(storageName)
+    window[tentaclesInfoStorage][tentacleInputs.tentacle] = []
     // gather custom user inputs
     tentacleInputs?.schema?.properties && Object.keys(tentacleInputs.schema.properties).forEach((key) => {
         const property = tentacleInputs.schema.properties[key]
         if (property.display_as_tab) {
-            window.customDisplayAsTabInputs[tentacleInputs.tentacle].push(key)
+            window[tentaclesInfoStorage][tentacleInputs.tentacle].push(key)
             _createTentacleConfigTab({
                 configTitle: tentacleInputs.schema.properties[key].title,
                 configName: key,
@@ -173,14 +189,18 @@ export function saveUserInputs(saveTentaclesConfig, setIsLoading, storageName = 
         }
     });
     if (save) { // _restoreCustomUserInputs(tentaclesConfigByTentacle);
-        _restoreCustomDisplayAsTabInputs(tentaclesConfigByTentacle);
+        _restoreCustomDisplayAsTabInputs(tentaclesConfigByTentacle, storageName);
         saveTentaclesConfig(tentaclesConfigByTentacle)
     }
 }
 
-function _restoreCustomDisplayAsTabInputs(tentaclesConfigByTentacle) {
-    Object.keys(window.customDisplayAsTabInputs).forEach((tentacleName) => {
-        window.customDisplayAsTabInputs[tentacleName].forEach((configKey) => {
+function _restoreCustomDisplayAsTabInputs(tentaclesConfigByTentacle, storageName) {
+    const storage = window[getCustomDisplayAsTabInputsStorage(storageName)]
+    Object.keys(storage).forEach((tentacleName) => {
+        storage[tentacleName].forEach((configKey) => {
+            if (! tentaclesConfigByTentacle[tentacleName]) {
+                tentaclesConfigByTentacle[tentacleName] = {}
+            }
             tentaclesConfigByTentacle[tentacleName][configKey] = tentaclesConfigByTentacle[configKey]
             delete tentaclesConfigByTentacle[configKey]
         })
@@ -203,24 +223,28 @@ function _createTentacleConfigTab({
             Object.values(schema?.properties).forEach(property => property && _addGridDisplayOptions(property, null));
             window.$$counter = window.$$counter + 1 || 1
             Object.keys(schema?.properties).length !== 0 && tabsData.push({
-                title: (<Tab key={configName}
-                    label={configTitle}
-                    value={configName}
-                    sx={
-                        {textTransform: 'none'}
-                    }/>),
+                title: (
+                    <Tab key={configName}
+                        label={configTitle}
+                        value={configName}
+                        sx={
+                            {textTransform: 'none'}
+                        }/>
+                ),
                 tabId: configName,
-                content: (<JsonEditor schema={schema}
-                    startval={config}
-                    editorName={
-                        editorKey + "##" + configName
-                    }
-                    {...defaultJsonEditorSettings()}
-                    display_required_only={true}
-                    counter={
-                        window.$$counter
-                    }
-                    storageName={storageName}/>)
+                content: (
+                    <JsonEditor schema={schema}
+                        startval={config}
+                        editorName={
+                            editorKey + "##" + configName
+                        }
+                        {...defaultJsonEditorSettings()}
+                        display_required_only={true}
+                        counter={
+                            window.$$counter
+                        }
+                        storageName={storageName}/>
+                )
             });
         } catch (error) {
             window.console && console.error(error);
@@ -437,7 +461,7 @@ function _hideNotShownUserInputs(tentacle, schema, is_hidden) {
 //         currentInputSchema.properties[customInput.key] = customInput.property;
 //     })
 //     window.customPathUserInputs = customPathUserInputs
-//     window.customDisplayAsTabInputs = customDisplayAsTabInputs
+//     window[getCustomDisplayAsTabInputsStorage(storageName)] = customDisplayAsTabInputs
 //     return customDisplayAsTabInputs
 // }
 

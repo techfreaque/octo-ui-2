@@ -25,14 +25,11 @@ export default function TabsWithSelector({ children, handleChange, items, curren
         maxWidth = "24vw"
 
     }
-    let itemsList = items
-    if (typeof items === 'string') {
-        itemsList = [items]
-    }
+    const itemsList = typeof items === 'string' ? [items] : items
     return (
         <div style={{
             display: "flex",
-            maxWidth: maxWidth,
+            maxWidth,
         }} >
             <Tabs
                 value="0"
@@ -80,7 +77,7 @@ function SelectorMenu({ children, id, onClose }) {
     };
     const handleClose = () => {
         setAnchorEl(null);
-        onClose();
+        onClose && onClose();
     };
     return (
         <>
@@ -97,7 +94,7 @@ function SelectorMenu({ children, id, onClose }) {
                 <FontAwesomeIcon icon={faEllipsisVertical} size="xl" />
             </ToggleButton>
             <Menu
-                id={id + "selector-menu"}
+                id={`${id}selector-menu`}
                 MenuListProps={{
                     "aria-labelledby": id + "-selector-more-button",
                 }}

@@ -5,7 +5,6 @@ import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useMemo } from "react";
 import { useUpdateVisibleExchangesContext, useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
-import { Card, List } from "antd";
 
 export default function ExchangeSelector() {
   const botInfo = useBotInfoContext();

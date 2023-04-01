@@ -1,12 +1,11 @@
 import {Tooltip} from 'antd';
-import Button from '@mui/material/Button';
 import {useMemo, useState, useEffect} from "react";
 import {useFetchBotInfo} from "../../../context/data/BotInfoProvider";
 import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 import {sizes} from '../../../constants/frontendConstants';
 import {SyncOutlined} from '@ant-design/icons';
 import {AntIconByReactFunc} from '../../../components/Icons/AntIcon';
-import { MuiIconButton } from '../../../components/Buttons/IconButton';
+import {MuiIconButton} from '../../../components/Buttons/IconButton';
 
 
 export default function RefreshBotData() {
@@ -29,22 +28,25 @@ export default function RefreshBotData() {
     }, [didJustStartFetching]);
 
     return useMemo(() => {
-        return (<Tooltip placement="top"
-            title={"Soft Refresh"}
-            arrow={false}>
-            <MuiIconButton disabled={isFetching}
-                onClick={
-                    () => {
-                        setDidJustStartFetching(true);
-                        fetchBotInfo(true, setIsFinished);
-                    }
-            }>
-                <AntIconByReactFunc AntReactIcon={SyncOutlined}
-                    size={sizes.medium}
-                    spin={isFetching}/>
-
-            </MuiIconButton>
-        </Tooltip>);
+        return (
+            <Tooltip placement="top"
+                title={"Soft Refresh"}
+                arrow={false}>
+                <MuiIconButton disabled={isFetching}
+                    onClick={
+                        (() => {
+                            setDidJustStartFetching(true);
+                            fetchBotInfo(true, setIsFinished);
+                        })
+                }>
+                    <AntIconByReactFunc AntReactIcon={SyncOutlined}
+                        size={
+                            sizes.medium
+                        }
+                        spin={isFetching}/>
+                </MuiIconButton>
+            </Tooltip>
+        );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isFetching, botIsOnline])
 }

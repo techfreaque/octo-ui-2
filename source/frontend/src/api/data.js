@@ -41,7 +41,6 @@ export async function fetchPlotlyPlotData(
   exchange_id,
   exchange_name,
   botDomain,
-  analysisSettings,
   setBotPlottedElements,
   botInfo,
   setHiddenMetadataFromInputs,
@@ -55,7 +54,6 @@ export async function fetchPlotlyPlotData(
     symbol: symbol,
     time_frame: timeFrame,
     exchange: exchange_name,
-    analysis_settings: analysisSettings,
   }
   if (isLive) {
     data.live_id = botInfo.live_id
