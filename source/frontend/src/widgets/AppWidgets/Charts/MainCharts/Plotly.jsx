@@ -122,9 +122,9 @@ function getPlotlyConfig() {
 export function enableAxisSelect() {
     // allow moving chart for selected y scale layer
     const yaxis_resize_layers = document.getElementsByClassName('nsdrag drag cursor-ns-resize');
-    yaxis_resize_layers.forEach(function (yaxis_drag_layer) {
+    Object.values(yaxis_resize_layers).forEach((yaxis_drag_layer) => {
         if (yaxis_drag_layer.getAttribute('listener') !== 'true') {
-            yaxis_drag_layer.addEventListener('click', function (e) {
+            yaxis_drag_layer.addEventListener('click', (e) => {
                 yaxis_drag_layer.parentElement.parentElement.append(yaxis_drag_layer.parentElement)
             });
             yaxis_drag_layer.setAttribute('listener', 'true');

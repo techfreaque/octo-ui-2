@@ -43,7 +43,7 @@ export const defaultColors = {
         font: "#000",
         fontHover: "#000",
         fontActive: "#1e53e5",
-        border: "#2a2e39",
+        border: "#0000002B",
         borderActive: "#1e53e5",
         borderGlow:"#1d1d5f",
         warning: "#fb3",

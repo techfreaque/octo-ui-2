@@ -2,14 +2,24 @@
     background-color: unset !important;
 }
 
-.je-object__container input {
-    background: unset;
+.json-editor input {
+    background: unset !important;
 }
 
-.dark .je-object__container input {
+
+.dark .json-editor input {
+    color: var(--dark-font) !important;
+}
+
+.light .json-editor input {
+    color: var(--light-font);
+}
+
+
+/* .dark .je-object__container {
     color: var(--dark-font);
 }
 
-.light .je-object__container input {
-    /* color: #000; */
-}
+.light .je-object__container {
+    color: var(--light-font);
+} */
