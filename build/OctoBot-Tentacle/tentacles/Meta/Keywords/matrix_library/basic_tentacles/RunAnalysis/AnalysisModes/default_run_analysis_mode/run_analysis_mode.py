@@ -13,6 +13,9 @@ import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.RunAna
 import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.RunAnalysisFactory.init_base_data as init_base_data
 import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.RunAnalysisFactory.custom_context as custom_context
 import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.RunAnalysisFactory.run_analysis_factory as run_analysis_factory
+from tentacles.Meta.Keywords.matrix_library.basic_tentacles.matrix_basic_keywords import (
+    matrix_enums,
+)
 
 
 class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode):
@@ -37,6 +40,9 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             editor_options={
                 commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
             },
+            other_schema_values={
+                matrix_enums.UserInputOtherSchemaValuesTypes.DISPLAY_AS_TAB.value
+            },
             title="Live Run Analysis Mode",
         )
         analysis_mode_plugin.CLASS_UI.user_input(
@@ -46,6 +52,9 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             inputs,
             editor_options={
                 commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
+            },
+            other_schema_values={
+                matrix_enums.UserInputOtherSchemaValuesTypes.DISPLAY_AS_TAB.value
             },
             title="Backtesting Run Analysis Mode",
         )

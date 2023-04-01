@@ -59,7 +59,7 @@ export function SplitResizableContent({
 function handleResize(gutterClassName, setPanelPercent, newSizes, setPanelSize) {
   const total = newSizes[0] + newSizes[1]
   const gutter = document.getElementsByClassName(gutterClassName)[0]
-  gutter.classList.remove("is-resizing")
+  gutter?.classList?.remove("is-resizing")
   const newPercent = newSizes[0] * 100 / total
   setPanelPercent({ percent: newPercent, shouldUpdate: false, })
   setPanelSize(
@@ -76,5 +76,5 @@ function getSplitterClasses(botColorMode) {
 }
 function onResizeStarted(gutterClassName) {
   const gutter = document.getElementsByClassName(gutterClassName)[0]
-  gutter.classList.add("is-resizing")
+  gutter?.classList?.add("is-resizing")
 }

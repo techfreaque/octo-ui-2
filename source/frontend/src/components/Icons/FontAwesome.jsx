@@ -1,17 +1,25 @@
-import { sizes } from "../../constants/frontendConstants"
+import {createElement} from "react"
+import {sizes} from "../../constants/frontendConstants"
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const iconStyles = {
     size: {
-        [sizes.small]: undefined,
-        [sizes.medium]: "1x",
-        [sizes.large]: "2x"
-    },
-    margin: {
-        [sizes.small]: undefined,
-        [sizes.medium]: "1x",
+        [sizes.small]: "lg",
+        [sizes.medium]: "xl",
         [sizes.large]: "2x"
     }
+}
 
+export function FaIconByReactFunc({
+    icon,
+    size = sizes.medium,
+    spin = false
+}) {
+    return icon && createElement(FontAwesomeIcon, {
+        size: iconStyles.size[size],
+        icon,
+        spin
+    })
 }
 
 export default function FontAwesomeIconByString({
@@ -19,14 +27,12 @@ export default function FontAwesomeIconByString({
     size = sizes.medium,
     marginRight = "7px"
 }) {
-    return faIcon && (
-        <i className={
-                `fa-${
-                    iconStyles.size[size]
-                } fas fa-${faIcon}`
-            }
-            style={
-                {marginRight}
-            }/>
-    )
+    return faIcon && (<i className={
+            `fa-${
+                iconStyles.size[size]
+            } fas fa-${faIcon}`
+        }
+        style={
+            {marginRight, lineHeight: "normal"}
+        }/>)
 }

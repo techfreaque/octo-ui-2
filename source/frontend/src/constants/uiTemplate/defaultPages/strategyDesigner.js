@@ -10,6 +10,18 @@ export const defaultStrategyDesignerPageLayout = {
                             "component": "RefreshBotData"
                         },
                         {
+                            "antIcon": "noIcon",
+                            "component": "ButtonWithModal",
+                            "content": [
+                                {
+                                    "component": "AppStore"
+                                }
+                            ],
+                            "faIcon": "puzzle-piece",
+                            "iconOnly": true,
+                            "title": "Package Manager"
+                        },
+                        {
                             "antIcon": "SettingOutlined",
                             "component": "ButtonWithModal",
                             "content": [
@@ -31,6 +43,19 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": false,
                                             "faIcon": "",
                                             "title": "Display Settings",
+                                            "toolBarContent": []
+                                        },
+                                        {
+                                            "antIcon": "noIcon",
+                                            "component": "Tab",
+                                            "content": [
+                                                {
+                                                    "component": "PageBuilder"
+                                                }
+                                            ],
+                                            "dontScroll": false,
+                                            "faIcon": "wand-magic-sparkles",
+                                            "title": "UI Editor",
                                             "toolBarContent": []
                                         },
                                         {
@@ -73,7 +98,7 @@ export const defaultStrategyDesignerPageLayout = {
                             ],
                             "faIcon": "",
                             "iconOnly": true,
-                            "title": "Profile Settings"
+                            "title": "Bot Settings"
                         },
                         {
                             "antIcon": "NotificationOutlined",
@@ -98,7 +123,7 @@ export const defaultStrategyDesignerPageLayout = {
                     "component": "Header",
                     "leftContent": [
                         {
-                            "component": "AppDrawerDropdown"
+                            "component": "Logo"
                         },
                         {
                             "component": "PairsSelector"
@@ -173,10 +198,9 @@ export const defaultStrategyDesignerPageLayout = {
                                             "component": "Tab",
                                             "content": [
                                                 {
-                                                    "component": "UIConfig",
-                                                    "configKeys": [
-                                                        "live_analysis_settings"
-                                                    ]
+                                                    "component": "TentaclesConfig",
+                                                    "content": [],
+                                                    "tentacleNames": "RunAnalysisModePlugin"
                                                 }
                                             ],
                                             "dontScroll": false,
@@ -415,5 +439,5 @@ export const defaultStrategyDesignerPageLayout = {
         }
     ],
     "path": "/",
-    "title": "Strategy Designer"
+    "title": "O UI"
 }

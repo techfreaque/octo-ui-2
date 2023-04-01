@@ -2,14 +2,13 @@ import {Button, Tab} from "@mui/material";
 import MuiTabs from "../../../components/Tabs/MuiTabs";
 import {useEffect, useMemo, useState} from "react";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
-import {useUpdateHiddenBacktestingMetadataColumnsContext} from "../../../context/data/BotPlottedElementsProvider";
 import {userInputKey, validateJSONEditor} from "../../../components/UserInputs/utils";
 import createNotification from "../../../components/Notifications/Notification";
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 import JsonEditor from "@techfreaque/json-editor-react";
-import {tentacleConfigType, useFetchCurrentTradingTentaclesConfig, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
+import {tentacleConfigType, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
 import {useFetchTentaclesConfig} from "../../../context/config/TentaclesConfigProvider";
 
 
@@ -22,7 +21,7 @@ export default function TentaclesConfig({
 
 
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesNonTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tentacles]
+    const currentTentaclesNonTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tentacles]
     const saveTentaclesConfig = useSaveTentaclesConfig()
     function handleTentaclesUpdate() {
         fetchTentaclesConfig(tentacleNames.split(","))
@@ -35,27 +34,30 @@ export default function TentaclesConfig({
         fetchCurrentTentaclesConfig={handleTentaclesUpdate}
         currentTentaclesTradingConfig={
             {
-                [tentacleNames]: currentTentaclesNonTradingConfig ?. [tentacleNames] || {}
+                [tentacleNames]: currentTentaclesNonTradingConfig?.[tentacleNames] || {}
             }
         }
         saveTentaclesConfig={saveTentaclesConfig}
-        content={content}/>)
+        content={content}
+        storageName={tentacleNames}/>)
 }
+
 export function AbstractTentaclesConfig({
     botInfo,
     fetchCurrentTentaclesConfig,
     currentTentaclesTradingConfig,
     saveTentaclesConfig,
     setHiddenMetadataColumns,
-    content
+    content,
+    storageName = "tradingConfig"
 }) {
     const botDomain = useBotDomainContext()
-    const exchangeId = botInfo ?. exchange_id
+    const exchangeId = botInfo?.exchange_id
     const [tabs, setTabs] = useState()
     const [isSaving, setIsSaving] = useState(false)
     useEffect(() => {
         if (currentTentaclesTradingConfig) 
-            setTabs(tradingConfigTabs(currentTentaclesTradingConfig, setHiddenMetadataColumns, exchangeId, botDomain));
+            setTabs(tradingConfigTabs(currentTentaclesTradingConfig, setHiddenMetadataColumns, exchangeId, botDomain, storageName));
         
 
 
@@ -65,7 +67,11 @@ export function AbstractTentaclesConfig({
         fetchCurrentTentaclesConfig()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [exchangeId, botDomain, botInfo]);
-    const defaultTabId = botInfo ?. trading_mode_name || botInfo ?. strategy_name
+    const defaultTabId = botInfo?.trading_mode_name || botInfo?.strategy_name
+    function handleUserInputSave() {
+        saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, true, storageName), setIsSaving, storageName)
+    }
+
     return useMemo(() => {
         return tabs && defaultTabId && (<MuiTabs tabs={tabs}
             rightContent={
@@ -76,9 +82,7 @@ export function AbstractTentaclesConfig({
                             {marginLeft: "5px"}
                         }
                         variant="contained"
-                        onClick={
-                            () => saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, true), setIsSaving)
-                    }>Save</Button>
+                        onClick={handleUserInputSave}>Save</Button>
                 </>)
             }
             defaultTabId={defaultTabId}/>)
@@ -86,43 +90,60 @@ export function AbstractTentaclesConfig({
     }, [content, tabs, defaultTabId])
 }
 
-function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, botDomain) {
+function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, botDomain, storageName) {
     const tabsData = []
-    window.trading_mode_objects = {}
-    destroyAllEditors()
+    // window.trading_mode_objects = {}
+
+    destroyAllEditors(storageName)
 
     // avoid working on original elements as they will be edited for custom user inputs
     const editedUserInputs = JSON.parse(JSON.stringify(userInputs));
 
     window.customDisplayAsTabInputs = {}
     Object.keys(editedUserInputs).forEach(TentacleName => {
-        create_custom_tabs(editedUserInputs[TentacleName], tabsData)
+        create_custom_tabs(editedUserInputs[TentacleName], tabsData, storageName)
         _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
         // _applyCustomPathUserInputs(editedUserInputs, tradingModeName);
-        _createTentacleConfigTab(editedUserInputs[TentacleName].tentacle, editedUserInputs[TentacleName].tentacle, editedUserInputs[TentacleName].config, editedUserInputs[TentacleName].schema, editedUserInputs[TentacleName].tentacle_type, tabsData);
+        _createTentacleConfigTab({
+            configTitle: editedUserInputs[TentacleName].tentacle,
+            configName: editedUserInputs[TentacleName].tentacle,
+            config: editedUserInputs[TentacleName].config,
+            schema: editedUserInputs[TentacleName].schema,
+            editorKey: editedUserInputs[TentacleName].tentacle_type,
+            tabsData,
+            storageName
+        });
 
     })
     return tabsData
 }
 
-function create_custom_tabs(tentacleInputs, tabsData) {
+function create_custom_tabs(tentacleInputs, tabsData, storageName) {
     window.customDisplayAsTabInputs[tentacleInputs.tentacle] = []
     // gather custom user inputs
-    tentacleInputs ?. schema ?. properties && Object.keys(tentacleInputs.schema.properties).forEach((key) => {
+    tentacleInputs?.schema?.properties && Object.keys(tentacleInputs.schema.properties).forEach((key) => {
         const property = tentacleInputs.schema.properties[key]
         if (property.display_as_tab) {
             window.customDisplayAsTabInputs[tentacleInputs.tentacle].push(key)
-            _createTentacleConfigTab(tentacleInputs.schema.properties[key].title, key, tentacleInputs.config[key], tentacleInputs.schema.properties[key], tentacleInputs.tentacle, tabsData)
+            _createTentacleConfigTab({
+                configTitle: tentacleInputs.schema.properties[key].title,
+                configName: key,
+                config: tentacleInputs.config[key],
+                schema: tentacleInputs.schema.properties[key],
+                editorKey: tentacleInputs.tentacle,
+                tabsData,
+                storageName
+            })
             delete tentacleInputs.config[key];
             delete tentacleInputs.schema.properties[key]
         }
     })
 }
 
-function destroyAllEditors() {
-    window.$tradingConfig && Object.keys(window.$tradingConfig).forEach(editorKey => {
-        window.$tradingConfig[editorKey].destroy()
-        delete window.$tradingConfig[editorKey]
+function destroyAllEditors(storageName) {
+    window[`$${storageName}`] && Object.keys(window[`$${storageName}`]).forEach(editorKey => {
+        window[`$${storageName}`][editorKey].destroy()
+        delete window[`$${storageName}`][editorKey]
     })
 }
 
@@ -134,12 +155,12 @@ function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {
     setHiddenMetadataColumns && setHiddenMetadataColumns(hiddenMetadataColumns)
 }
 
-export function saveUserInputs(saveTentaclesConfig, setIsLoading) {
+export function saveUserInputs(saveTentaclesConfig, setIsLoading, storageName = "tradingConfig") {
     setIsLoading && setIsLoading(true)
     const tentaclesConfigByTentacle = {};
     let save = true;
-    Object.keys(window.$tradingConfig).forEach((editorKey) => {
-        const editor = window.$tradingConfig[editorKey]
+    Object.keys(window[`$${storageName}`]).forEach((editorKey) => {
+        const editor = window[`$${storageName}`][editorKey]
         if (editor) {
             const tentacle = editorKey.split("##")[1];
             const errorsDesc = validateJSONEditor(editor)
@@ -147,7 +168,7 @@ export function saveUserInputs(saveTentaclesConfig, setIsLoading) {
                 tentaclesConfigByTentacle[tentacle] = editor.getValue();
             } else {
                 save = false;
-                createNotification(`Error when saving ${editorKey} configuration`, "danger", `Invalid configuration: ${errorsDesc}`);
+                createNotification(`Error when saving ${editorKey} configuration`, "danger", `${errorsDesc}`);
             }
         }
     });
@@ -167,33 +188,43 @@ function _restoreCustomDisplayAsTabInputs(tentaclesConfigByTentacle) {
 }
 
 
-function _createTentacleConfigTab(configTitle, configName, config, schema, editorKey, tabsData) {
+function _createTentacleConfigTab({
+    configTitle,
+    configName,
+    config,
+    schema,
+    editorKey,
+    tabsData,
+    storageName
+}) {
     schema && _addGridDisplayOptions(schema, editorKey);
-    try {
-        Object.values(schema.properties).forEach(property => property && _addGridDisplayOptions(property, null));
-        window.$$counter = window.$$counter + 1 || 1
-        Object.keys(schema.properties).length !== 0 && tabsData.push({
-            title: (<Tab key={configName}
-                label={configTitle}
-                value={configName}
-                sx={
-                    {textTransform: 'none'}
-                }/>),
-            tabId: configName,
-            content: (<JsonEditor schema={schema}
-                startval={config}
-                editorName={
-                    editorKey + "##" + configName
-                }
-                {...defaultJsonEditorSettings()}
-                display_required_only={true}
-                counter={
-                    window.$$counter
-                }
-                storageName="tradingConfig"/>)
-        });
-    } catch (error) {
-        window.console && console.error(error);
+    if (schema?.properties) {
+        try {
+            Object.values(schema?.properties).forEach(property => property && _addGridDisplayOptions(property, null));
+            window.$$counter = window.$$counter + 1 || 1
+            Object.keys(schema?.properties).length !== 0 && tabsData.push({
+                title: (<Tab key={configName}
+                    label={configTitle}
+                    value={configName}
+                    sx={
+                        {textTransform: 'none'}
+                    }/>),
+                tabId: configName,
+                content: (<JsonEditor schema={schema}
+                    startval={config}
+                    editorName={
+                        editorKey + "##" + configName
+                    }
+                    {...defaultJsonEditorSettings()}
+                    display_required_only={true}
+                    counter={
+                        window.$$counter
+                    }
+                    storageName={storageName}/>)
+            });
+        } catch (error) {
+            window.console && console.error(error);
+        }
     }
 }
 

@@ -51,6 +51,7 @@ import ProfileModal from "../AppWidgets/Modals/ProfileModal/ProfileModal";
 import Sidebar, {SidebarMenuItem} from "../LayoutWidgets/Sidebar/Sidebar";
 import NotificationCenter from "../AppWidgets/Modals/NotificationCenter/NotificationCenter";
 import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
+import Logo from "../AppWidgets/other/Logo";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -109,5 +110,6 @@ export const registeredComponents = {
     Sidebar,
     SidebarMenuItem,
     NotificationCenter,
-    TentaclesConfig
+    TentaclesConfig,
+    Logo,
 };

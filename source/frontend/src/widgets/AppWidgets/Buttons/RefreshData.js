@@ -6,6 +6,7 @@ import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 import {sizes} from '../../../constants/frontendConstants';
 import {SyncOutlined} from '@ant-design/icons';
 import {AntIconByReactFunc} from '../../../components/Icons/AntIcon';
+import { MuiIconButton } from '../../../components/Buttons/IconButton';
 
 
 export default function RefreshBotData() {
@@ -31,7 +32,7 @@ export default function RefreshBotData() {
         return (<Tooltip placement="top"
             title={"Soft Refresh"}
             arrow={false}>
-            <Button disabled={isFetching}
+            <MuiIconButton disabled={isFetching}
                 onClick={
                     () => {
                         setDidJustStartFetching(true);
@@ -42,7 +43,7 @@ export default function RefreshBotData() {
                     size={sizes.medium}
                     spin={isFetching}/>
 
-            </Button>
+            </MuiIconButton>
         </Tooltip>);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isFetching, botIsOnline])

@@ -11,7 +11,7 @@ import octobot_backtesting.api as backtesting_api
 import octobot_commons.constants
 import octobot_commons.enums as commons_enums
 import octobot_commons.logging as commons_logging
-from tentacles.Evaluator.RunAnalysis.RunAnalysisFactory import custom_context
+from tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.RunAnalysisFactory import custom_context
 import tentacles.Meta.Keywords.matrix_library.basic_tentacles.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
 
 
