@@ -39,6 +39,10 @@
                 {
                     "version": "latest stable version",
                     "url": "https://raw.githubusercontent.com/techfreaque/octobot-lorentzian-classification/main/releases/latest/any_platform.zip"
+                },
+                {
+                    "version": "latest beta version",
+                    "url": "https://raw.githubusercontent.com/techfreaque/octobot-lorentzian-classification/dev/releases/latest/any_platform.zip"
                 }
             ],
             "categories": [
