@@ -34,7 +34,7 @@ export default function ProfileModal() {
     const hasChanged = JSON.stringify(currentProfile) !== JSON.stringify(newProfileSettings)
     
     useEffect(() => {
-        setNewProfileSettings(currentProfile)
+        setNewProfileSettings(JSON.parse(JSON.stringify(currentProfile)))
     }, [currentProfile])
     
     async function saveProfile(event, restart = false) {
