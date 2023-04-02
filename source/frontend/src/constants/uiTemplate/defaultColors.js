@@ -17,6 +17,9 @@ export const defaultColors = {
         error: "#ff4d4f",
         primary: "#1677ff",
         // primary: "#722ED1",
+        tags: {
+            primary: 'blue',
+        },
         candles: {
             wick: {
                 green: "rgb(178, 235, 242)",

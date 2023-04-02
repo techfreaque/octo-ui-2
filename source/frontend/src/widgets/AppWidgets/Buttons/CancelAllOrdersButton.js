@@ -16,7 +16,7 @@ export default function CancelAllOrdersButton() {
   return useMemo(() => {
     return (
       <WarningButton 
-      disabled={!isOnline || isCancelling}
+        disabled={!isOnline || isCancelling}
         onClick={() => cancelAllOrders(botDomain, setIsCancelling)}
         color={botColors.warning}
         icon = {<FontAwesomeIcon icon={faStop} style={{ marginRight: "5px" }}/>}

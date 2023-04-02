@@ -6,15 +6,17 @@ import OptimizerSettingTemplate from "./OptimizerInputTemplate";
 // eslint-disable-next-line no-unused-vars
 import select2 from "select2/dist/js/select2.js" // required
 import {useUpdateOptimizerEditorCounterContext} from "../../../../context/config/OptimizerEditorProvider";
-import {Button} from "@mui/material";
 import {useGetAndSaveOptimizerForm} from "../../../../context/actions/BotOptimizerProvider";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
+import WarningButton from "../../../../components/Buttons/WarningButton";
+import {useBotColorsContext} from "../../../../context/config/BotColorsProvider";
 
 export default function OptimizerConfigForm() {
     const uiConfig = useUiConfigContext()
     const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
     const currentTentaclesConfig = useTentaclesConfigContext()
     const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+    const botColors = useBotColorsContext();
 
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
@@ -25,8 +27,11 @@ export default function OptimizerConfigForm() {
     return useMemo(() => {
         return (<div>
             <div>
-                <Button variant="outlined"
-                    onClick={saveOptimizerForm}>Save Optimizer Form</Button>
+                <WarningButton
+                    color={botColors.primary}
+                    onClick={saveOptimizerForm}
+                    text="Save Optimizer Form"
+                />
             </div>
             <div id="strategy-optimizer-inputs">
                 <OptimizerSettingTemplate/>

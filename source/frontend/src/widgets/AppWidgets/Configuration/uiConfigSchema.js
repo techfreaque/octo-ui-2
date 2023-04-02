@@ -549,7 +549,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                 title: "Optimizer Run Settings",
                 properties: {
                     idle_cores: {
-                        title: "CPU cores to leave idle :",
+                        title: "Idle CPU cores :",
                         type: "number",
                         format: "number",
                         minimum: 0,
@@ -563,14 +563,14 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         default: 1
                     },
                     queue_size: {
-                        title: "Amount of random runs added to the queue:",
+                        title: "Random runs queued:",
                         type: "number",
                         format: "number",
                         minimum: 1,
                         default: 1000
                     },
                     notify_when_complete: {
-                        title: "notify when completed",
+                        title: "Notify when completed",
                         type: "boolean",
                         format: "checkbox",
                         fieldType: "boolean",

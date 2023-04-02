@@ -182,7 +182,7 @@ export const defaultStrategyDesignerPageLayout = {
                                     "command": "execute",
                                     "component": "SendActionCommandToTradingMode",
                                     "faIcon": "sack-dollar",
-                                    "title": "Execute Trading Mode"
+                                    "title": "Execute trading mode"
                                 },
                                 {
                                     "component": "ToggleActivateRealTimeStrategy"

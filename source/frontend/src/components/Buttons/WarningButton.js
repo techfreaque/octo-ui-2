@@ -11,7 +11,7 @@ export default function WarningButton (props) {
     }>
       <Button danger 
           onClick={props.onClick}
-          style={{margin:'5px'}}>
+          style={{margin:'5px', padding:'4px 10px'}}>
           {props.icon} {props.text}
       </Button>
     </ConfigProvider>

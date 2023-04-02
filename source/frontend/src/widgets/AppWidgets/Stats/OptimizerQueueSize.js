@@ -1,25 +1,19 @@
 import { useMemo } from "react";
 import { useOptimizerQueueCounterContext } from "../../../context/data/OptimizerQueueProvider";
-import {Tag, Space, Badge} from 'antd'
+import NumberTag from "../../../components/Notifications/NumberTag";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+
 
 export default function OptimizerQueueSize() {
     const optimizerQueueSize = useOptimizerQueueCounterContext()
+    const botColors = useBotColorsContext();
     return useMemo(() => {
         return (
-            <Space>
-                <Tag color="blue" 
-                            style={{fontSize:'15px', display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',}}>
-                    {<Badge count={optimizerQueueSize} showZero 
-                    style={{width: '15px', 
-                            height: '15px', 
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            color: '#ffffff',
-                            margin:'5px'}}/> } To run</Tag>
-            </Space>
+            <NumberTag
+                color={botColors.tags.primary}
+                count={optimizerQueueSize}
+                text="To run"
+            />
         )
-    }, [optimizerQueueSize])
+    }, [botColors.tags.primary, optimizerQueueSize])
 }

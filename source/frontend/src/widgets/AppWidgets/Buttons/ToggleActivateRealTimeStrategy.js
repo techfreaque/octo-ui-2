@@ -1,6 +1,5 @@
 
 import React, { useMemo, useState } from "react";
-import Button from "@mui/material/Button";
 import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 import { useBotInfoContext, useFetchBotInfo } from "../../../context/data/BotInfoProvider";
 import { useSaveTentaclesConfigAndSendAction } from "../../../context/config/TentaclesConfigProvider";
@@ -8,6 +7,8 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import createNotification from "../../../components/Notifications/Notification";
 import { saveUserInputs } from "../Configuration/TentaclesConfig";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import WarningButton from "../../../components/Buttons/WarningButton";
 
 export default function ToggleActivateRealTimeStrategy() {
   const COMMAND_ACTIVATE_REALTIME_STRATEGY = "activate_realtime_strategy"
@@ -17,6 +18,7 @@ export default function ToggleActivateRealTimeStrategy() {
   const saveTentaclesConfigAndSendAction = useSaveTentaclesConfigAndSendAction()
   const botInfo = useBotInfoContext()
   const fetchBotInfo = useFetchBotInfo();
+  const botColors = useBotColorsContext();
 
   const isActivated = botInfo?.real_time_strategies_active
   const availableApiActions = botInfo.available_api_actions
@@ -36,20 +38,22 @@ export default function ToggleActivateRealTimeStrategy() {
       createNotification("Successfully activated real time strategy")
     }
     return isAvailableApiAction && (isActivated ? (
-      <Button disabled={!isOnline || isExecuting}
+      <WarningButton 
+        disabled={!isOnline || isExecuting}
         onClick={() => saveUserInputs((currentConfig) => saveTentaclesConfigAndSendAction(currentConfig, command, setIsExecuting, true, success, failed), setIsExecuting)}
-        variant="outlined" color="warning" style={{ marginRight: "5px" }}>
-        <FontAwesomeIcon icon={faStop} style={{ marginRight: "5px" }} />
-        Stop Real Time Strategy
-      </Button>
+        color={botColors.warning}
+        icon= {<FontAwesomeIcon icon={faStop} style={{ marginRight: "5px" }}/>}
+        text= "Stop Real Time Strategy"
+      />
     )
       : (
-        <Button disabled={!isOnline || isExecuting}
+        <WarningButton 
+          disabled={!isOnline || isExecuting}
           onClick={() => saveUserInputs((currentConfig) => saveTentaclesConfigAndSendAction(currentConfig, command, setIsExecuting, true, success, failed), setIsExecuting)}
-          variant="outlined" color="warning" style={{ marginRight: "5px" }}>
-          <FontAwesomeIcon icon={faPlay} style={{ marginRight: "5px" }} />
-          Start Real Time Strategy
-        </Button>
+          color={botColors.warning}
+          icon={<FontAwesomeIcon icon={faPlay} style={{ marginRight: "5px" }} />}
+          text="Start Real Time Strategy"
+        />
       ))
-  }, [isAvailableApiAction, isActivated, isOnline, isExecuting, fetchBotInfo, saveTentaclesConfigAndSendAction, command])
+  }, [isAvailableApiAction, isActivated, isOnline, isExecuting, botColors.warning, fetchBotInfo, saveTentaclesConfigAndSendAction, command])
 }
