@@ -126,7 +126,7 @@ export function getOptimizerSettingsValues() {
             user_input: rawSettingName.replaceAll(" ", "_"),
             tentacle: tentacleValue,
             type: valueType,
-            enabled: enabled
+            enabled
         };
     })
     return settings;

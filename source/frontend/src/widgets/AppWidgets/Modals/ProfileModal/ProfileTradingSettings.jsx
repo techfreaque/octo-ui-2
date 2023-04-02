@@ -1,8 +1,8 @@
 import {Grid} from "@mui/material"
-import { AutoComplete, Radio, Typography } from "antd"
-import { useState } from "react"
-import { ProfileRealSettings } from "./ProfileRealTradingSettings"
-import { ProfileSimulatedSettings } from "./ProfileSimulatedTradingSettings"
+import {AutoComplete, Radio, Typography} from "antd"
+import {useState} from "react"
+import {ProfileRealSettings} from "./ProfileRealTradingSettings"
+import {ProfileSimulatedSettings} from "./ProfileSimulatedTradingSettings"
 
 const tradingTypes = {
     realTrading: {
@@ -20,10 +20,7 @@ const tradingTypes = {
 }
 const tradingTypeStr = "tradingType"
 
-export function ProfileTradingSettings({
-    newProfileSettings,
-    setNewProfileSettings,
-}) {
+export function ProfileTradingSettings({newProfileSettings, setNewProfileSettings}) {
 
     const isRealTrading = newProfileSettings?.config?.trader?.enabled
     const isSimulatedTrading = newProfileSettings?.config?.["trader-simulator"].enabled
@@ -82,8 +79,7 @@ export function ProfileTradingSettings({
     return <Grid container
         spacing={1}>
         <Grid item
-            xs={12}
-            spacing={1}>
+            xs={12}>
             <Typography.Title level={3}>
                 Trading Settings
             </Typography.Title>

@@ -12,6 +12,7 @@ import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.abs
 
 
 class PlotCachedValues(abstract_analysis_evaluator.AnalysisEvaluator):
+    PRIORITY: float = 800
     PLOT_CACHED_VALUES_NAME = "_cached_values"
     PLOT_CACHED_VALUES_TITLE = "Cached Values"
 
@@ -26,6 +27,7 @@ class PlotCachedValues(abstract_analysis_evaluator.AnalysisEvaluator):
             inputs=inputs,
             parent_input_name=parent_input_name,
             default_data_source_enabled=True,
+            has_chart_location=False,
         )
 
     async def evaluate(
@@ -73,12 +75,13 @@ class PlotCachedValues(abstract_analysis_evaluator.AnalysisEvaluator):
                             ),
                             key=lambda x: x[commons_enums.PlotAttributes.X.value],
                         )
-                        values[0] = {**cached_value_metadata, **values[0]}
-                        plot_from_standard_data(
-                            data_set=values,
-                            plotted_element=plotted_element,
-                            title=cached_value_metadata["title"],
-                        )
+                        if values and len(values):
+                            values[0] = {**cached_value_metadata, **values[0]}
+                            plot_from_standard_data(
+                                data_set=values,
+                                plotted_element=plotted_element,
+                                title=cached_value_metadata["title"],
+                            )
                     except Exception as error:
                         run_data.logger.exception(
                             error,

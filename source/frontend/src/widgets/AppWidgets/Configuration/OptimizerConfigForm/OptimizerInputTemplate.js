@@ -10,8 +10,7 @@ export default function OptimizerSettingTemplate() {
                 <div className="col-7 p-2">Values</div>
                 <div className="col-2 p-2">Enabled</div>
             </div>
-            <div className="row"  style={borderStyle} id="optimizer-settings-root">
-            </div>
+            <div className="row"  style={borderStyle} id="optimizer-settings-root" />
             <div className="row d-none"  style={borderStyle} id="optimizer-settings-default-values">
                 <OptimizerSettingTentacleGroupTemplate borderStyle={borderStyle} />
                 <OptimizerSettingNestedTentacleConfigTemplate  borderStyle={borderStyle} />
@@ -33,8 +32,7 @@ function OptimizerSettingTentacleGroupTemplate({borderStyle}) {
                 <div className="row">
                     XYZT
                 </div>
-                <div className="row input-content w-100 mx-0">
-                </div>
+                <div className="row input-content w-100 mx-0" />
             </div>
         </div>
     )
@@ -46,8 +44,7 @@ function OptimizerSettingNestedTentacleConfigTemplate({borderStyle}) {
                 <div className="row">
                     XYZT
                 </div>
-                <div className="row input-content w-100 mx-0">
-                </div>
+                <div className="row input-content w-100 mx-0" />
             </div>
         </div>
     )
@@ -76,9 +73,8 @@ function OptimizerSetting({ valueType, borderStyle }) {
                         data-tentacle-name="TENTACLEABC"
                         id="TENTACLEABC-XYZ-Input-enabled-value" />
                     <label className="custom-control-label text-capitalize"
-                        htmlFor="TENTACLEABC-XYZ-Input-enabled-value"
-                        data-toggle="tooltip" title="Enabled">
-                    </label>
+                htmlFor="TENTACLEABC-XYZ-Input-enabled-value"
+                data-toggle="tooltip" title="Enabled" />
                 </div>
             </div>
         </div>
@@ -88,7 +84,7 @@ function OptimizerSetting({ valueType, borderStyle }) {
 function OptimizerSettingBoolean() {
     return (
         <div className="col">
-            <label className="text-capitalize" htmlFor="TENTACLEABC-XYZ-Input-setting-boolean"></label>
+            <label className="text-capitalize" htmlFor="TENTACLEABC-XYZ-Input-setting-boolean" />
             <select id="TENTACLEABC-XYZ-Input-setting-boolean"
                 className="w-100 optimizer-input-setting"
                 data-tentacle-name="TENTACLEABC"
@@ -115,8 +111,7 @@ function OptimizerSettingArrayTemplate({borderStyle}) {
                 <div className="row">
                     XYZT
                 </div>
-                <div className="row input-content w-100 mx-0">
-                </div>
+                <div className="row input-content w-100 mx-0" />
             </div>
         </div>)
 }

@@ -105,7 +105,7 @@ export default function SymbolsInfoTable() {
       Object.keys(symbolsInfo[exchangeName].leverage_tiers || symbolsInfo[exchangeName].funding).forEach((symbol) => {
         const fundingData = symbolsInfo[exchangeName].funding?.[symbol]
         const infoData = {
-          symbol: symbol,
+          symbol,
           fundingRate: fundingData?.funding_rate,
           // lastUpdated: fundingData?.last_updated && String(new Date(fundingData.last_updated)),
           nextUpdate: fundingData?.next_update && String(new Date(fundingData.next_update)),

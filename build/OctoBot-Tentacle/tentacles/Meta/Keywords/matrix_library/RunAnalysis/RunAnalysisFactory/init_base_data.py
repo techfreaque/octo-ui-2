@@ -1,11 +1,7 @@
 import octobot_commons.enums as commons_enums
-from tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider import (
-    future_base_data_provider,
-    spot_base_data_provider,
-)
-from tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors import (
-    LiveMetaDataNotInitializedError,
-)
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.future_base_data_provider as future_base_data_provider
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.spot_base_data_provider as spot_base_data_provider
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
 
 
 async def get_base_data(
@@ -54,4 +50,4 @@ async def _get_metadata(run_database):
             await run_database.get_run_db().all(commons_enums.DBTables.METADATA.value)
         )[0]
     except IndexError as error:
-        raise LiveMetaDataNotInitializedError from error
+        raise analysis_errors.LiveMetaDataNotInitializedError from error

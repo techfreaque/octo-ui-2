@@ -2,6 +2,9 @@ import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.defau
 
 
 class AnalysisEvaluator:
+    # highest priority gets rendered first
+    PRIORITY: float = 0
+
     @classmethod
     def init_user_inputs(
         cls, analysis_mode_plugin, inputs: dict, parent_input_name: str

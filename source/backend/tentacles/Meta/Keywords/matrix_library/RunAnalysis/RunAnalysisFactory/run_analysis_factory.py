@@ -1,9 +1,5 @@
 from types import ModuleType
 
-from tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.abstract_analysis_evaluator import (
-    AnalysisEvaluator,
-)
-
 
 def get_installed_run_analyzer_modules(modules_root):
     available_run_analyzer_modules = {
@@ -11,6 +7,8 @@ def get_installed_run_analyzer_modules(modules_root):
             sub_module_name: sub_module
             for sub_module_name, sub_module in module.__dict__.items()
             if isinstance(sub_module, type)
+            and hasattr(sub_module, "evaluate")
+            and hasattr(sub_module, "init_user_inputs")
         }
         for module_name, module in modules_root.__dict__.items()
         if isinstance(module, ModuleType)

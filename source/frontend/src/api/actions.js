@@ -151,7 +151,7 @@ export async function deleteTrades(botDomain, exchange_id) {
         createNotification("Failed to delete trades", "danger")
     }
     sendAndInterpretBotUpdate({
-        exchange_id: exchange_id
+        exchange_id
     }, botDomain + backendRoutes.cacheActionDeleteTrades, success, fail)
 }
 
@@ -172,7 +172,7 @@ export async function deleteCurrentCache(botDomain, exchange_id) {
         createNotification("Failed to delete current trading mode cache", "danger")
     }
     sendAndInterpretBotUpdate({
-        exchange_id: exchange_id
+        exchange_id
     }, botDomain + backendRoutes.cacheActionDeleteCurrentCache, success, fail)
 }
 export async function deleteAllCache(botDomain, exchange_id) {
@@ -183,7 +183,7 @@ export async function deleteAllCache(botDomain, exchange_id) {
         createNotification("Failed to delete all cached values", "danger")
     }
     sendAndInterpretBotUpdate({
-        exchange_id: exchange_id
+        exchange_id
     }, botDomain + backendRoutes.cacheActionDeleteAllCache, success, fail)
 }
 export async function deleteOrders(botDomain, exchange_id) {
@@ -194,7 +194,7 @@ export async function deleteOrders(botDomain, exchange_id) {
         createNotification("Failed to delete trades", "danger")
     }
     sendAndInterpretBotUpdate({
-        exchange_id: exchange_id
+        exchange_id
     }, botDomain + backendRoutes.cacheActionDeleteOrders, success, fail)
 }
 

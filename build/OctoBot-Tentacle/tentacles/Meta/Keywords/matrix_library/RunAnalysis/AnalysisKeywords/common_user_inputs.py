@@ -69,7 +69,7 @@ def user_select_chart_location(
         inputs,
         title=f"{data_source_input_title} Chart Location",
         editor_options={
-            commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 6
+            commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
         },
         options=["main-chart", "sub-chart"],
         parent_input_name=parent_input_name,
@@ -111,7 +111,7 @@ def user_enable_data_source(
         inputs,
         title=f"Enable {data_source_input_title}",
         editor_options={
-            commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 6
+            commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
         },
         parent_input_name=parent_input_name,
     )

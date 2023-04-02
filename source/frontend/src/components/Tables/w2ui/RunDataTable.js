@@ -30,7 +30,7 @@ export default function RunDataTableW2UI({
             <div id={tableId + "-no-message"} className="text-center mx-4 my-4">
                 {noData}
             </div>
-            <div id={tableId + "-table"} style={{ height: "100%" }}></div>
+            <div id={tableId + "-table"} style={{ height: "100%" }} />
         </div>
         // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [])

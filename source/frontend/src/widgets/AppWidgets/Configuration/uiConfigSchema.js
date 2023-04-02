@@ -20,7 +20,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
         return {
             [name]: {
                 type: "string",
-                title: title,
+                title,
                 enum: [
                     "main-chart",
                     "sub-chart",
@@ -498,7 +498,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 type: "number",
                                 format: "number",
                                 minimum: 0,
-                                default: 10000,
+                                default: 10_000,
                             },
                             max_candles_line_sources: {
                                 "type": "array",

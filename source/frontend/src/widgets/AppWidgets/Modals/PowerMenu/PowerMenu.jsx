@@ -4,21 +4,25 @@ import RestartBotButton from '../../Buttons/RestartBotButton';
 import UpdateBotButton from '../../Buttons/UpdateBotButton';
 import StopBotButton from '../../Buttons/StopBotButton';
 import LogoutButton from '../../Buttons/LogoutButton';
-import {useBotInfoContext} from '../../../../context/data/BotInfoProvider';
 import {Dropdown, Tooltip, Button} from 'antd';
 import {FaIconByReactFunc} from '../../../../components/Icons/FontAwesome';
 import {sizes} from '../../../../constants/frontendConstants';
 import {useBotDomainContext} from '../../../../context/config/BotDomainProvider';
 import {MuiIconButton} from '../../../../components/Buttons/IconButton';
+import { useState } from 'react';
+import { useBotColorsContext } from '../../../../context/config/BotColorsProvider';
+import { useBotInfoContext } from '../../../../context/data/BotInfoProvider';
 
 export default function PowerMenu() {
-    const botInfo = useBotInfoContext();
     const botDomain = useBotDomainContext();
+    const [open, setOpen] = useState()
+    const botColors = useBotColorsContext()
+    const botInfo = useBotInfoContext();
     return (
-        <Dropdown menu={
+        <Dropdown onOpenChange={(state)=>setOpen(state)} menu={
                 {
-                    items: [
-                        {
+                    items: open ? [
+                        botInfo?.can_logout && {
                             key: 'logout',
                             label: (
                                 <LogoutButton/>)
@@ -44,11 +48,14 @@ export default function PowerMenu() {
                                     href={botDomain}>Back to OctoBot</Button>
                             )
                         },
-                    ]
+                    ] : []
                 }
             }
             overlayStyle={
-                {minWidth: "230px"}
+                {
+                    minWidth: "230px",
+                    // backgroundColor: botColors?.background
+                }
             }
             trigger="click"
             placement="topRight"

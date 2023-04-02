@@ -59,7 +59,7 @@ export default function InstalledAppCard({ tentacle }) {
           <Typography paragraph>
             Origin Package: {tentacle.origin_package}
           </Typography>
-          <Typography paragraph></Typography>
+          <Typography paragraph />
         </Typography>
       </CardContent>
       <CardActions disableSpacing>

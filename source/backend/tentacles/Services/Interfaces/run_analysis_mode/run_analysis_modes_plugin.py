@@ -15,6 +15,7 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
     RUN_ANALYSIS_MODE: run_analysis_mode.DefaultRunAnalysisMode = (
         run_analysis_mode.DefaultRunAnalysisMode
     )
+    logger: logging.BotLogger = logging.get_logger("RunAnalysisModePlugin")
 
     def register_routes(self):
         plotted_data.register_plot_routes(self)
@@ -84,8 +85,4 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
         exception,
         message="Failed to load run analysis plots",
     ):
-        cls.get_logger().exception(exception, True, message + " - error: {error}")
-
-    @staticmethod
-    def get_logger(logger_name="RunAnalysisModePlugin"):
-        return logging.get_logger(logger_name)
+        cls.logger.exception(exception, True, message + " - error: {error}")

@@ -17,7 +17,7 @@ export default function CurrentPortfolioTable() {
     const currentHoldings = [];
     Object.keys(botPortfolio.displayed_portfolio).forEach((symbol, id) => {
       currentHoldings.push({
-        id: id,
+        id,
         asset: symbol,
         total: botPortfolio.displayed_portfolio[symbol].total,
         available: botPortfolio.displayed_portfolio[symbol].free,
@@ -43,9 +43,6 @@ export default function CurrentPortfolioTable() {
             variant="outlined"
           />
         </h2>
-        <div
-        //  style={{ float: "right" }}
-        ></div>
         <ReactTables
           nodes={currentHoldings}
           cells={[

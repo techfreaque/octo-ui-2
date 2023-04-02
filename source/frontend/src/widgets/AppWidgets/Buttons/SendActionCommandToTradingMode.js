@@ -18,7 +18,7 @@ export default function SendActionCommandToTradingMode({
     const [isExecuting, setIsExecuting] = useState(false)
     const saveTentaclesConfigAndSendAction = useSaveTentaclesConfigAndSendAction()
     const botInfo = useBotInfoContext()
-    const availableApiActions = botInfo.available_api_actions
+    const availableApiActions = botInfo?.available_api_actions
     const isAvailableApiAction = availableApiActions?.includes(command)
 
     return useMemo(() => {

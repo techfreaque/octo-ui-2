@@ -96,15 +96,13 @@ function updateChartDimensions(
     height
 ) {
     // update layout when dimensions change
-    if (activeChartLocations.includes(chartLocation)) {
-        if (height) {
-            setLayouts[chartLocation](prevLayout => {
-                const newLayout = { ...prevLayout }
-                newLayout.height = height
-                newLayout.width = window.innerWidth
-                return newLayout
-            })
-        }
+    if (activeChartLocations.includes(chartLocation) && height) {
+        setLayouts[chartLocation](prevLayout => {
+            const newLayout = { ...prevLayout }
+            newLayout.height = height
+            newLayout.width = window.innerWidth
+            return newLayout
+        })
     }
 
 }

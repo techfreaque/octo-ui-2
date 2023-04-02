@@ -5,7 +5,9 @@ export function setPlotData(
     plottedElements,
     uiConfig, visibleTimeframes,
     visiblePairs, setCharts, setLayouts) {
-    if (plottedElements.live || plottedElements.backtesting) {
+    if (!(plottedElements.live || plottedElements.backtesting)) {
+            return;
+        }
         const layouts = {}
         const chartsInfo = {
             maxRange: { start: undefined, end: undefined },
@@ -30,16 +32,15 @@ export function setPlotData(
                 setLayouts[thisChartLocation](layouts[thisChartLocation])
                 plotDataToStore[thisChartLocation] = plotData[thisChartLocation]
                 hasCharts = true
-            } else {
-                setLayouts[thisChartLocation]()
+                return;
             }
+            setLayouts[thisChartLocation]()
         })
         if (hasCharts) {
             setCharts(plotDataToStore)
         } else {
             setCharts()
         }
-    }
 }
 
 function setLayout(layouts, layout, chartLocation) {
@@ -49,31 +50,30 @@ function setLayout(layouts, layout, chartLocation) {
 function getOrGenerateLayout(layouts, uiConfig, chartLocation) {
     if (layouts[chartLocation]) {
         return layouts[chartLocation]
-    } else {
-        const layout = {
-            autosize: true,
-            margin: { l: 50, r: 50, b: 30, t: 0, pad: 0 },
-            showlegend: true,
-            legend: { x: 0.01, xanchor: 'left', y: 0.99, yanchor: "top" },
-            paper_bgcolor: 'rgba(0,0,0,0)',
-            plot_bgcolor: 'rgba(0,0,0,0)',
-            dragmode: "pan",
-            font: {
-                color: "#b2b5be"
-            },
-            width: window.innerWidth,
-        };
-        if (uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_unified_tooltip) {
-            layout.hovermode = "x unified";
-            layout.hoverlabel = {
-                bgcolor: "#131722",
-                bordercolor: "#2a2e39"
-            };
-        } else {
-            layout.hovermode = false;
-        }
-        return layout;
     }
+    const layout = {
+        autosize: true,
+        margin: { l: 50, r: 50, b: 30, t: 0, pad: 0 },
+        showlegend: true,
+        legend: { x: 0.01, xanchor: 'left', y: 0.99, yanchor: "top" },
+        paper_bgcolor: 'rgba(0,0,0,0)',
+        plot_bgcolor: 'rgba(0,0,0,0)',
+        dragmode: "pan",
+        font: {
+            color: "#b2b5be"
+        },
+        width: window.innerWidth,
+    };
+    if (uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_unified_tooltip) {
+        layout.hovermode = "x unified";
+        layout.hoverlabel = {
+            bgcolor: "#131722",
+            bordercolor: "#2a2e39"
+        };
+    } else {
+        layout.hovermode = false;
+    }
+    return layout;
 }
 
 
@@ -96,11 +96,11 @@ function formatplottedData(
                             && Object.keys(plottedElements[liveOrBacktest][optimizerCampaign][optimizerId]).forEach((backtestingId) => {
                                 formatSubData({
                                     subElements: plottedElements[liveOrBacktest][optimizerCampaign][optimizerId][backtestingId],
-                                    backtestingId: backtestingId, optimizerCampaign: optimizerCampaign,
-                                    optimizerId: optimizerId, uiConfig: uiConfig,
-                                    plotData: plotData, layouts: layouts,
-                                    visibleTimeframes: visibleTimeframes, visiblePairs: visiblePairs,
-                                    chartsInfo: chartsInfo
+                                    backtestingId, optimizerCampaign,
+                                    optimizerId, uiConfig,
+                                    plotData, layouts,
+                                    visibleTimeframes, visiblePairs,
+                                    chartsInfo
                                 })
                             })
                     })
@@ -109,12 +109,12 @@ function formatplottedData(
             plottedElements[liveOrBacktest] && Object.keys(plottedElements[liveOrBacktest]).forEach((liveId) => {
                 formatSubData({
                     subElements: plottedElements[liveOrBacktest][liveId],
-                    liveId: liveId,
-                    uiConfig: uiConfig, layouts: layouts,
-                    plotData: plotData,
-                    visibleTimeframes: visibleTimeframes,
-                    visiblePairs: visiblePairs,
-                    chartsInfo: chartsInfo
+                    liveId,
+                    uiConfig, layouts,
+                    plotData,
+                    visibleTimeframes,
+                    visiblePairs,
+                    chartsInfo
                 })
             })
         }
@@ -132,46 +132,48 @@ function formatSubData({
     subElements && Object.keys(subElements).forEach((pair) => {
         if (pair === visiblePairs) {
             subElements[pair] && Object.keys(subElements[pair]).forEach((timeframe) => {
-                if (timeframe === visibleTimeframes) {
-                    const chartIdentifier = backtestingId
-                        ? optimizerId
-                            ? `${backtestingId}:${optimizerId} - ${optimizerCampaign}`
-                            : `${backtestingId} - ${optimizerCampaign}`
-                        : `live ${liveId}`;
-                    const thisData = subElements[pair][timeframe].data.sub_elements;
-                    thisData.forEach((sub_element) => {
-                        if (sub_element.type === "chart") {
-                            const chartLocation = sub_element.name
-                            if (!plotData[chartLocation]) {
-                                plotData[chartLocation] = []
-                            }
-                            const layout = getOrGenerateLayout(layouts, uiConfig, chartLocation)
-                            let yAxisId = 1
-                            let xAxisId = 1;
-                            sub_element.data.elements.forEach((chartDetails) => {
-                                if (chartDetails.own_yaxis && yAxisId < 4) {
-                                    yAxisId += 1;
-                                }
-                                if (chartDetails.own_xaxis && xAxisId < 2) {
-                                    xAxisId += 1;
-                                }
-                                createAxisIfNotExists("y", yAxisId, layout, uiConfig, chartDetails)
-                                createAxisIfNotExists("x", xAxisId, layout, uiConfig, chartDetails)
-                                _createCharts(
-                                    {
-                                        chartDetails: chartDetails, plotData: plotData,
-                                        yAxisId: yAxisId, xAxisId: xAxisId, layout: layout,
-                                        backtestingId: backtestingId, optimizerId: optimizerId,
-                                        optimizerCampaign: optimizerCampaign,
-                                        chartIdentifier: chartIdentifier,
-                                        uiConfig: uiConfig, chartsInfo: chartsInfo,
-                                        chartLocation: chartLocation
-                                    });
-                            })
-                            setLayout(layouts, layout, chartLocation)
-                        }
-                    })
+                if (timeframe !== visibleTimeframes) {
+                    return;
                 }
+                const chartIdentifier = backtestingId
+                ? optimizerId
+                    ? `${backtestingId}:${optimizerId} - ${optimizerCampaign}`
+                    : `${backtestingId} - ${optimizerCampaign}`
+                : `live ${liveId}`;
+                const thisData = subElements[pair][timeframe]?.data?.sub_elements;
+                thisData.forEach((sub_element) => {
+                    if (sub_element.type !== "chart") {
+                        return;
+                    }
+                    const chartLocation = sub_element.name
+                    if (!plotData[chartLocation]) {
+                        plotData[chartLocation] = []
+                    }
+                    const layout = getOrGenerateLayout(layouts, uiConfig, chartLocation)
+                    let yAxisId = 1
+                    let xAxisId = 1;
+                    sub_element.data.elements.forEach((chartDetails) => {
+                        if (chartDetails.own_yaxis && yAxisId < 4) {
+                            yAxisId++;
+                        }
+                        if (chartDetails.own_xaxis && xAxisId < 2) {
+                            xAxisId++;
+                        }
+                        createAxisIfNotExists("y", yAxisId, layout, uiConfig, chartDetails)
+                        createAxisIfNotExists("x", xAxisId, layout, uiConfig, chartDetails)
+                        _createCharts(
+                            {
+                                chartDetails, plotData,
+                                yAxisId, xAxisId, layout,
+                                backtestingId, optimizerId,
+                                optimizerCampaign,
+                                chartIdentifier,
+                                uiConfig, chartsInfo,
+                                chartLocation
+                            });
+                    })
+                    setLayout(layouts, layout, chartLocation)
+                })
             })
         }
     })
@@ -185,15 +187,15 @@ function _createCharts({
     uiConfig, chartsInfo, chartLocation
 }) {
     _createChartedElements({
-        chartDetails: chartDetails,
-        yAxisId: yAxisId, xAxisId: xAxisId,
-        backtestingId: backtestingId,
-        optimizerId: optimizerId,
-        optimizerCampaign: optimizerCampaign,
-        chartIdentifier: chartIdentifier,
-        uiConfig: uiConfig,
-        chartsInfo: chartsInfo,
-        chartLocation: chartLocation
+        chartDetails,
+        yAxisId, xAxisId,
+        backtestingId,
+        optimizerId,
+        optimizerCampaign,
+        chartIdentifier,
+        uiConfig,
+        chartsInfo,
+        chartLocation
     }).forEach(element => {
         plotData[chartLocation].push(element);
     })
@@ -215,30 +217,31 @@ function _createChartedElements({
         const originTitle = chartDetails.title;
         const displayedCandlesSources = getDisplayedCandlesLinesSources(uiConfig);
         CANDLES_PLOT_SOURCES.forEach(plotSource => {
-            if (displayedCandlesSources.indexOf(plotSource) !== -1) {
-                chartDetails.y = chartDetails[plotSource];
-                chartDetails.title = `${originTitle} [${plotSource}]`
-                createdChartedElements.push(
-                    _createChartedElement({
-                        chartDetails: chartDetails, yAxisId: yAxisId,
-                        xAxisId: xAxisId, backtestingId: backtestingId,
-                        optimizerId: optimizerId,
-                        optimizerCampaign: optimizerCampaign,
-                        chartIdentifier: chartIdentifier, plotOnlyY: true,
-                        chartsInfo: chartsInfo, chartLocation: chartLocation
-                    })
-                );
+            if (!displayedCandlesSources.includes(plotSource)) {
+                return;
             }
+            chartDetails.y = chartDetails[plotSource];
+            chartDetails.title = `${originTitle} [${plotSource}]`
+            createdChartedElements.push(
+                _createChartedElement({
+                    chartDetails, yAxisId,
+                    xAxisId, backtestingId,
+                    optimizerId,
+                    optimizerCampaign,
+                    chartIdentifier, plotOnlyY: true,
+                    chartsInfo, chartLocation
+                })
+            );
         })
     } else {
         createdChartedElements.push(
             _createChartedElement({
-                chartDetails: chartDetails, yAxisId: yAxisId,
-                xAxisId: xAxisId, backtestingId: backtestingId,
-                optimizerId: optimizerId,
-                optimizerCampaign: optimizerCampaign,
-                chartIdentifier: chartIdentifier, plotOnlyY: false,
-                chartsInfo: chartsInfo, chartLocation: chartLocation
+                chartDetails, yAxisId,
+                xAxisId, backtestingId,
+                optimizerId,
+                optimizerCampaign,
+                chartIdentifier, plotOnlyY: false,
+                chartsInfo, chartLocation
             })
         );
     }
@@ -278,7 +281,7 @@ function _createChartedElement({
         line: { shape: chartDetails.line_shape },
         marker: {}
     }
-    MARKER_ATTRIBUTES.forEach(function (attribute) {
+    MARKER_ATTRIBUTES.forEach((attribute) => {
         if (chartDetails[attribute] !== null) {
             chartedElement.marker[attribute] = chartDetails[attribute];
         }
@@ -286,7 +289,7 @@ function _createChartedElement({
     if (plotOnlyY) {
         chartedElement.y = chartDetails.y;
     } else {
-        ALL_PLOT_SOURCES.forEach(function (element) {
+        ALL_PLOT_SOURCES.forEach((element) => {
             if (chartDetails[element] !== null) {
                 chartedElement[element] = chartDetails[element]
             }
@@ -338,17 +341,13 @@ function createAxisIfNotExists(axisType, axisId, layout, uiConfig, chartDetails)
 
 function formatAsRangeTime(timestamp) {
     return new Date(
-        timestamp - (new Date(timestamp).getTimezoneOffset() * 60000)
+        timestamp - (new Date(timestamp).getTimezoneOffset() * 60_000)
     ).toISOString().substr(0, 19).replace('T', ' ');
 }
 
 function getAxisTemplate(axisKey, uiConfig, axisType, chartDetails) {
     const axis = axisTemplate[axisKey]
-    if (axisType === "y" && uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_use_log_scale === true) {
-        axis.type = "log"
-    } else {
-        axis.type = "linear"
-    }
+    axis.type = axisType === "y" && uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_use_log_scale === true ? "log" : "linear";
     if (axisType === "x" && chartDetails.x_type !== null) {
         axis.type = chartDetails.x_type;
     }

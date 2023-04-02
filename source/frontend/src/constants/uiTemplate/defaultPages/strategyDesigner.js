@@ -320,7 +320,6 @@ export const defaultStrategyDesignerPageLayout = {
                                                     "component": "UIConfig",
                                                     "configKeys": [
                                                         "backtesting_run_settings",
-                                                        "backtesting_analysis_settings",
                                                         "optimization_campaign",
                                                         "optimizer_campaigns_to_load"
                                                     ]

@@ -36,7 +36,7 @@ export default function OptimizerQueueTable() {
                     The optimizer queue is empty
                 </h4>
             </div>
-            <div id={containerId} style={{ height: "100%" }}></div>
+            <div id={containerId} style={{ height: "100%" }} />
         </div>
     </>
     )
@@ -187,7 +187,7 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
                     user_input: inputName,
                     tentacle: splitKey[1].split(","),
                     value: record[key],
-                    deleted: deleted,
+                    deleted,
                 });
             }
         });

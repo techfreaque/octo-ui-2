@@ -16,7 +16,7 @@ export const useUpdateCurrentPanelContext = () => {
 export const useSetCurrentPanelPercent = () => {
     const setPanelSize = useUpdateCurrentPanelContext()
     const logic = useCallback((percent) => {
-        setPanelSize({ percent: percent, shouldUpdate: true, });
+        setPanelSize({ percent, shouldUpdate: true, });
     }, [setPanelSize]);
     return logic;
 }

@@ -12,8 +12,7 @@ export default function OptimizerRunFilterTemplate() {
                 <div className="col-2 p-2">Value</div>
                 <div className="col-1 p-2">Remove</div>
             </div>
-            <div className="row"  style={borderStyle} id="optimizer-filters-root">
-            </div>
+            <div className="row"  style={borderStyle} id="optimizer-filters-root" />
             <div className="row d-none"  style={borderStyle} id="optimizer-filters-default-values">
                 <OptimizerRunFilter />
             </div>
@@ -45,7 +44,7 @@ function OptimizerRunFilterValues() {
             <select className="w-100 form-control"
                 data-type="user-input"
                 data-role="user_input_left_operand">
-                <option value="null"></option>
+                <option value="null" />
             </select>
         </div>
         <div className="col-1 form-group">
@@ -76,7 +75,7 @@ function OptimizerRunFilterValues() {
             <select className="w-100 form-control"
                 data-type="user-input"
                 data-role="user_input_right_operand">
-                <option value="null"></option>
+                <option value="null" />
             </select>
         </div>
         <div className="col-2 form-group">
@@ -90,7 +89,7 @@ function OptimizerRunFilterValues() {
                 className="btn btn-sm btn-outline-danger waves-effect"
                 data-action="delete"
             >
-                <i className="fas fa-ban"></i>
+                <i className="fas fa-ban" />
             </button>
         </div></>
     )

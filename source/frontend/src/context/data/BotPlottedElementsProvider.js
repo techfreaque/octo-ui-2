@@ -68,16 +68,16 @@ export const useFetchPlotData = () => {
 
 function clearUnselectedRuns(displayedRunIds, botPlottedElements, setBotPlottedElements, visiblePairs, visibleTimeframes) { // clear not selected runs
     const newPlottedElements = {
-        ... botPlottedElements
+        ...botPlottedElements
     }
-    const backtesting = newPlottedElements ?. backtesting
-    if (displayedRunIds.backtesting ?. length) {
-        backtesting && displayedRunIds ?. backtesting && Object.keys(backtesting).forEach(thisCampaign => {
+    const backtesting = newPlottedElements?.backtesting
+    if (displayedRunIds.backtesting?.length) {
+        backtesting && displayedRunIds?.backtesting && Object.keys(backtesting).forEach(thisCampaign => {
             if (displayedRunIds.backtesting.some(runId => runId.endsWith(thisCampaign))) {
-                const thisCampaignData = backtesting ?. [thisCampaign]
+                const thisCampaignData = backtesting?.[thisCampaign]
                 thisCampaignData && Object.keys(thisCampaignData).forEach(thisOptimizerId => {
                     if (displayedRunIds.backtesting.some(runId => (runId.endsWith(thisOptimizerId + ID_SEPARATOR + thisCampaign)))) {
-                        const thisOptimizerData = thisCampaignData ?. [thisOptimizerId]
+                        const thisOptimizerData = thisCampaignData?.[thisOptimizerId]
                         thisOptimizerData && Object.keys(thisOptimizerData).forEach(thisBacktestingId => {
                             if (displayedRunIds.backtesting.some(runId => (runId === thisBacktestingId + ID_SEPARATOR + thisOptimizerId + ID_SEPARATOR + thisCampaign))) {
                                 const thisBacktestingData = thisOptimizerData[thisBacktestingId]
@@ -114,9 +114,9 @@ function clearUnselectedRuns(displayedRunIds, botPlottedElements, setBotPlottedE
 }
 
 function loadMissingRuns(displayedRunIds, botPlottedElements, visiblePairs, visibleTimeframes, visibleExchangeIds, visibleExchanges, botDomain, setBotPlottedElements, botInfo) { // load missing runs
-    displayedRunIds ?. backtesting && displayedRunIds.backtesting.forEach(runIdentifier => {
+    displayedRunIds?.backtesting && displayedRunIds.backtesting.forEach(runIdentifier => {
         const [backtesting_id, optimizer_id, optimization_campaign] = runIdentifier.split(ID_SEPARATOR)
-        if (! botPlottedElements ?. backtesting ?. [optimization_campaign] ?. [optimizer_id] ?. [backtesting_id] ?. [visiblePairs] ?. [visibleTimeframes]) {
+        if (! botPlottedElements?.backtesting?.[optimization_campaign]?.[optimizer_id]?.[backtesting_id]?.[visiblePairs]?.[visibleTimeframes]) {
             fetchPlotlyPlotData(visiblePairs, visibleTimeframes, visibleExchangeIds, visibleExchanges, botDomain, setBotPlottedElements, botInfo, undefined, false, optimization_campaign, backtesting_id, optimizer_id,);
         }
     })
@@ -126,7 +126,7 @@ function setHiddenMetadataFromInputs(elements, setHiddenBacktestingMetadataColum
     const hiddenBacktestingMetadataColumns = []
     function addIfHidden(properties, tentacle) {
         Object.keys(properties).forEach(input => {
-            if (properties[input] ?. options ?. in_summary === false) {
+            if (properties[input]?.options?.in_summary === false) {
                 hiddenBacktestingMetadataColumns.push(userInputKey(input.replaceAll("_", " "), tentacle))
             }
             if (properties[input].properties) {
@@ -156,6 +156,7 @@ export const BotPlottedElementsProvider = ({children}) => {
             clearUnselectedRuns(displayedRunIds, botPlottedElements, setBotPlottedElements, visiblePairs, visibleTimeframes)
             loadMissingRuns(displayedRunIds, botPlottedElements, visiblePairs, visibleTimeframes, botInfo.ids_by_exchange_name[visibleExchanges], visibleExchanges, botDomain, setBotPlottedElements, botInfo)
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         displayedRunIds,
         visiblePairs,
@@ -163,7 +164,6 @@ export const BotPlottedElementsProvider = ({children}) => {
         visibleExchanges,
         botDomain,
         botInfo,
-        botPlottedElements
     ]);
 
     useEffect(() => { // live
@@ -172,7 +172,7 @@ export const BotPlottedElementsProvider = ({children}) => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        botInfo ?. exchange_id,
+        botInfo?.exchange_id,
         botDomain,
         visibleTimeframes,
         visiblePairs,

@@ -2,9 +2,9 @@ import { Store } from "react-notifications-component";
 
 export default function createNotification(title, type="success", message) {
   Store.addNotification({
-    title: title,
-    message: message,
-    type: type,
+    title,
+    message,
+    type,
     insert: "top",
     container: "bottom-left",
     animationIn: ["animate__animated", "animate__fadeIn"],

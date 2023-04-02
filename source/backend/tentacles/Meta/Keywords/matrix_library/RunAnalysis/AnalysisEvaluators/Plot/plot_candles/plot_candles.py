@@ -6,6 +6,7 @@ import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.abs
 
 
 class PlotCandles(abstract_analysis_evaluator.AnalysisEvaluator):
+    PRIORITY: float = 1000
     PLOT_CANDLES_NAME = "_candles"
     PLOT_CANDLES_TILE = "Candles"
 

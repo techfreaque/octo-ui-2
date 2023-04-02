@@ -28,9 +28,9 @@ export async function fetchPlotData(
     setBotPlotData,
     "post",
     {
-      exchange_id: exchange_id,
-      symbol: symbol,
-      time_frame: time_frame,
+      exchange_id,
+      symbol,
+      time_frame,
     }
   );
 }
@@ -47,11 +47,11 @@ export async function fetchPlotlyPlotData(
   isLive = true,
   optimization_campaign = undefined,
   backtesting_id = undefined,
-  optimizer_id = undefined,
+  optimizer_id = undefined
 ) {
   const data = {
-    exchange_id: exchange_id,
-    symbol: symbol,
+    exchange_id,
+    symbol,
     time_frame: timeFrame,
     exchange: exchange_name,
   }
@@ -68,34 +68,32 @@ export async function fetchPlotlyPlotData(
     setBotPlottedElements(prevData => {
       const newData = { ...prevData }
       if (isLive) {
-        msg.data.data.sub_elements.forEach(sub_data => {
-          if (sub_data.type === "input") {
-            newData.inputs = sub_data.data.elements
-            setHiddenMetadataFromInputs(sub_data.data.elements)
-          }
-        })
+        // msg?.data?.data?.sub_elements?.forEach(sub_data => {
+        //   if (sub_data.type === "input") {
+        //     newData.inputs = sub_data.data.elements
+        //     setHiddenMetadataFromInputs(sub_data.data.elements)
+        //   }
+        // })
         newData.live = {
-          [botInfo.live_id]: { [symbol]: { [timeFrame]: msg.data } }
+          [botInfo.live_id]: { [symbol]: { [timeFrame]: msg?.data } }
+        }
+      } else if (!newData.backtesting) {
+        newData.backtesting = {
+          [optimization_campaign]: {
+            [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg?.data } } }
+          }
+        }
+      } else if (!newData.backtesting[optimization_campaign]) {
+        newData.backtesting[optimization_campaign] = {
+          [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg?.data } } }
+        }
+      } else if (!newData.backtesting[optimization_campaign][optimizer_id]) {
+        newData.backtesting[optimization_campaign][optimizer_id] = {
+          [backtesting_id]: { [symbol]: { [timeFrame]: msg?.data } }
         }
       } else {
-        if (!newData.backtesting) {
-          newData.backtesting = {
-            [optimization_campaign]: {
-              [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg.data } } }
-            }
-          }
-        } else if (!newData.backtesting[optimization_campaign]) {
-          newData.backtesting[optimization_campaign] = {
-            [optimizer_id]: { [backtesting_id]: { [symbol]: { [timeFrame]: msg.data } } }
-          }
-        } else if (!newData.backtesting[optimization_campaign][optimizer_id]) {
-          newData.backtesting[optimization_campaign][optimizer_id] = {
-            [backtesting_id]: { [symbol]: { [timeFrame]: msg.data } }
-          }
-        } else {
-          newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
-            [symbol]: { [timeFrame]: msg.data }
-          }
+        newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
+          [symbol]: { [timeFrame]: msg?.data }
         }
       }
       return newData
@@ -119,7 +117,7 @@ export async function fetchBacktestingRunData(
   setUiConfig,
   botDomain,
   forceSelectLatestBacktesting,
-  campaigns,
+  campaigns
 ) {
 
   const success = (updated_data, update_url, result, msg, status) => {
@@ -130,8 +128,8 @@ export async function fetchBacktestingRunData(
   }
   sendAndInterpretBotUpdate(
     {
-      forceSelectLatestBacktesting: forceSelectLatestBacktesting,
-      campaigns: campaigns
+      forceSelectLatestBacktesting,
+      campaigns
     },
     botDomain + backendRoutes.backtestingRunData,
     success, undefined, "post")

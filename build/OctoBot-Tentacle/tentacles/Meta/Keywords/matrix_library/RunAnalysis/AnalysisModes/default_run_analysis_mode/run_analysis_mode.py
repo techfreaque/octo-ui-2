@@ -4,21 +4,21 @@ import typing
 import octobot_commons.logging as logging
 import octobot_commons.enums as commons_enums
 import octobot_trading.api as trading_api
-from tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisKeywords.analysis_enums import (
-    AnalysisModePlotSettingsTypes,
-    AnalysisModeSettingsTypes,
-)
 
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisKeywords.analysis_enums as analysis_enums
+from tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory import (
+    abstract_analysis_evaluator,
+)
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.abstract_run_analysis_mode as abstract_run_analysis_mode
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.init_base_data as init_base_data
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.custom_context as custom_context
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.run_analysis_factory as run_analysis_factory
-from tentacles.Meta.Keywords.matrix_library.basic_tentacles.matrix_basic_keywords import (
-    matrix_enums,
-)
+import tentacles.Meta.Keywords.matrix_library.basic_tentacles.matrix_basic_keywords.matrix_enums as matrix_enums
 
 
 class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode):
+
+    logger: logging.BotLogger = logging.get_logger("DefaultRunAnalysisMode")
     available_run_analyzer_plot_modules: dict = None
     available_run_analyzer_table_modules: dict = None
     available_run_analyzer_dictionaries_modules: dict = None
@@ -28,12 +28,13 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
     initialized_group_input_name: list = []
 
     ENABLED_RUN_ANALYZERS_SETTING_NAME: str = "enabled_run_analyzers"
+    ENABLE_RUN_ANALYSIS_MODE_SETTING_NAME: str = "enable_run_analysis_mode"
 
     @staticmethod
     def init_user_inputs(cls, analysis_mode_plugin, inputs: dict) -> None:
         cls.reload_available_run_analyzers()
         analysis_mode_plugin.CLASS_UI.user_input(
-            AnalysisModeSettingsTypes.LIVE_RUN_ANALYSIS_MODE_SETTINGS_NAME,
+            analysis_enums.AnalysisModeSettingsTypes.LIVE_RUN_ANALYSIS_MODE_SETTINGS_NAME,
             commons_enums.UserInputTypes.OBJECT,
             None,
             inputs,
@@ -46,7 +47,7 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             title="Live Run Analysis Mode",
         )
         analysis_mode_plugin.CLASS_UI.user_input(
-            AnalysisModeSettingsTypes.BACKTESTING_RUN_ANALYSIS_MODE_SETTINGS_NAME,
+            analysis_enums.AnalysisModeSettingsTypes.BACKTESTING_RUN_ANALYSIS_MODE_SETTINGS_NAME,
             commons_enums.UserInputTypes.OBJECT,
             None,
             inputs,
@@ -61,34 +62,52 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         cls._init_run_analyzers_user_inputs(
             analysis_mode_plugin,
             inputs,
-            parent_input_name=AnalysisModeSettingsTypes.LIVE_RUN_ANALYSIS_MODE_SETTINGS_NAME,
+            parent_input_name=analysis_enums.AnalysisModeSettingsTypes.LIVE_RUN_ANALYSIS_MODE_SETTINGS_NAME,
         )
         cls._init_run_analyzers_user_inputs(
             analysis_mode_plugin,
             inputs,
-            parent_input_name=AnalysisModeSettingsTypes.BACKTESTING_RUN_ANALYSIS_MODE_SETTINGS_NAME,
+            parent_input_name=analysis_enums.AnalysisModeSettingsTypes.BACKTESTING_RUN_ANALYSIS_MODE_SETTINGS_NAME,
         )
 
     @classmethod
     def _init_run_analyzers_user_inputs(
         cls, analysis_mode_plugin, inputs: dict, parent_input_name: str
     ) -> None:
-        enabled_run_analyzers = analysis_mode_plugin.CLASS_UI.user_input(
-            cls.ENABLED_RUN_ANALYZERS_SETTING_NAME,
-            commons_enums.UserInputTypes.MULTIPLE_OPTIONS,
-            cls.available_run_analyzer_module_names,
+        enable_run_analysis_mode = analysis_mode_plugin.CLASS_UI.user_input(
+            parent_input_name + cls.ENABLE_RUN_ANALYSIS_MODE_SETTING_NAME,
+            commons_enums.UserInputTypes.BOOLEAN,
+            True,
             inputs,
-            title="Enabled Run Analyzers",
-            options=cls.available_run_analyzer_module_names,
+            title=f"Enable {parent_input_name} Run Analysis Mode",
             parent_input_name=parent_input_name,
+            editor_options={
+                commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
+            },
         )
-        for run_analyzer_module_name in enabled_run_analyzers:
-            cls._init_run_analyzer_user_inputs(
-                analysis_mode_plugin,
-                run_analyzer_module_name,
+        if enable_run_analysis_mode:
+            enabled_run_analyzers = analysis_mode_plugin.CLASS_UI.user_input(
+                parent_input_name + cls.ENABLED_RUN_ANALYZERS_SETTING_NAME,
+                commons_enums.UserInputTypes.MULTIPLE_OPTIONS,
+                cls.available_run_analyzer_module_names,
                 inputs,
-                parent_input_name,
+                title=f"Enabled {parent_input_name} Run Analyzers",
+                options=cls.available_run_analyzer_module_names,
+                parent_input_name=parent_input_name,
+                editor_options={
+                    commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
+                },
             )
+            sorted_analyzers: typing.List[str] = cls.get_sorted_run_analyzers(
+                enabled_run_analyzers
+            )
+            for run_analyzer_module_name in sorted_analyzers:
+                cls._init_run_analyzer_user_inputs(
+                    analysis_mode_plugin,
+                    run_analyzer_module_name,
+                    inputs,
+                    parent_input_name,
+                )
 
     @classmethod
     def _init_run_analyzer_user_inputs(
@@ -102,22 +121,30 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         group_input_title: str = None
         if cls.available_run_analyzer_plot_modules.get(run_analyzer_module_name):
             group_input_name = (
-                parent_input_name + AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_NAME
+                parent_input_name
+                + analysis_enums.AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_NAME
             )
-            group_input_title = AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_TITLE
+            group_input_title = (
+                analysis_enums.AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_TITLE
+            )
         elif cls.available_run_analyzer_table_modules.get(run_analyzer_module_name):
             group_input_name = (
-                parent_input_name + AnalysisModePlotSettingsTypes.TABLE_SETTINGS_NAME
+                parent_input_name
+                + analysis_enums.AnalysisModePlotSettingsTypes.TABLE_SETTINGS_NAME
             )
-            group_input_title = AnalysisModePlotSettingsTypes.TABLE_SETTINGS_TITLE
+            group_input_title = (
+                analysis_enums.AnalysisModePlotSettingsTypes.TABLE_SETTINGS_TITLE
+            )
         elif cls.available_run_analyzer_dictionaries_modules.get(
             run_analyzer_module_name
         ):
             group_input_name = (
                 parent_input_name
-                + AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_NAME
+                + analysis_enums.AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_NAME
             )
-            group_input_title = AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_TITLE
+            group_input_title = (
+                analysis_enums.AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_TITLE
+            )
         else:
             return
         cls._init_run_analyzer_user_inputs_group(
@@ -168,7 +195,16 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         for sub_module in cls.available_run_analyzer_plot_modules.get(
             run_analyzer_module_name, {}
         ).values():
-            sub_module.init_user_inputs(analysis_mode_plugin, inputs, parent_input_name)
+            try:
+                sub_module.init_user_inputs(
+                    analysis_mode_plugin, inputs, parent_input_name
+                )
+            except Exception as error:
+                cls.logger.exception(
+                    error,
+                    True,
+                    f"Failed to initialize {run_analyzer_module_name} run analyzer",
+                )
 
     @classmethod
     def reload_available_run_analyzers(cls, force_reload: bool = False) -> None:
@@ -192,11 +228,30 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
                     analysis_dictionaries
                 )
             )
-            cls.available_run_analyzer_module_names: list = (
-                list(cls.available_run_analyzer_plot_modules.keys())
-                + list(cls.available_run_analyzer_table_modules.keys())
-                + list(cls.available_run_analyzer_dictionaries_modules.keys())
+            cls.available_run_analyzer_module_names: list = list(
+                set(
+                    list(cls.available_run_analyzer_plot_modules.keys())
+                    + list(cls.available_run_analyzer_table_modules.keys())
+                    + list(cls.available_run_analyzer_dictionaries_modules.keys())
+                )
             )
+
+    @classmethod
+    def get_run_analyzer_priority(cls, analyzer_name):
+        analyzer_module: typing.Dict[abstract_analysis_evaluator.AnalysisEvaluator] = (
+            cls.available_run_analyzer_plot_modules.get(analyzer_name)
+            or cls.available_run_analyzer_plot_modules.get(analyzer_name)
+            or cls.available_run_analyzer_plot_modules.get(analyzer_name)
+        )
+        return next(iter(analyzer_module.values())).PRIORITY if analyzer_module else 0
+
+    @classmethod
+    def get_sorted_run_analyzers(
+        cls, enabled_run_analyzers: typing.List[str]
+    ) -> typing.List[str]:
+        return sorted(
+            enabled_run_analyzers, key=cls.get_run_analyzer_priority, reverse=True
+        )
 
     @classmethod
     async def get_and_execute_run_analysis_mode(
@@ -212,26 +267,35 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         live_id: typing.Optional[int] = None,
         optimization_campaign: typing.Optional[str] = None,
     ):
-        logger = logging.get_logger("DefaultRunAnalysisMode")
+
         try:
-            await cls.init_mode_features(exchange_id, logger)
+            await cls.init_mode_features(exchange_id)
         except Exception as error:
-            logger.warning(f"Failed to activate candles storage {error}")
+            cls.logger.warning(f"Failed to activate candles storage {error}")
             # try to continue
 
         cls.reload_available_run_analyzers()
         if live_id:
-            config_name = AnalysisModeSettingsTypes.LIVE_RUN_ANALYSIS_MODE_SETTINGS_NAME
+            config_name = (
+                analysis_enums.AnalysisModeSettingsTypes.LIVE_RUN_ANALYSIS_MODE_SETTINGS_NAME
+            )
             is_backtesting = False
+            parent_input_name = (
+                analysis_enums.AnalysisModeSettingsTypes.LIVE_RUN_ANALYSIS_MODE_SETTINGS_NAME
+            )
         else:
             is_backtesting = True
             config_name = (
-                AnalysisModeSettingsTypes.BACKTESTING_RUN_ANALYSIS_MODE_SETTINGS_NAME
+                analysis_enums.AnalysisModeSettingsTypes.BACKTESTING_RUN_ANALYSIS_MODE_SETTINGS_NAME
             )
+            parent_input_name = (
+                analysis_enums.AnalysisModeSettingsTypes.BACKTESTING_RUN_ANALYSIS_MODE_SETTINGS_NAME
+            )
+
         # TODO replace with default context when merged
         ctx: custom_context.Context = custom_context.Context.minimal(
             trading_mode_class=trading_mode_class,
-            logger=logger,
+            logger=cls.logger,
             exchange_name=exchange_name,
             traded_pair=symbol,
             backtesting_id=backtesting_id,
@@ -255,38 +319,42 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
                     )
                     enabled_run_analyzers = (
                         ctx.analysis_settings.get(
-                            cls.ENABLED_RUN_ANALYZERS_SETTING_NAME
+                            parent_input_name + cls.ENABLED_RUN_ANALYZERS_SETTING_NAME
                         )
                         or cls.available_run_analyzer_module_names
                     )
-                    for run_analyzer_module_name in enabled_run_analyzers:
-                        await cls._get_and_execute_run_analyzer_module(
-                            run_analyzer_module_name, run_data
-                        )
+                    sorted_analyzers: typing.List[str] = cls.get_sorted_run_analyzers(
+                        enabled_run_analyzers
+                    )
+                    if ctx.analysis_settings.get(
+                        parent_input_name + cls.ENABLE_RUN_ANALYSIS_MODE_SETTING_NAME,
+                        True,
+                    ):
+                        for run_analyzer_module_name in sorted_analyzers:
+                            await cls._get_and_execute_run_analyzer_module(
+                                run_analyzer_module_name=run_analyzer_module_name,
+                                run_data=run_data,
+                                parent_input_name=parent_input_name,
+                            )
                     return run_data.run_display.to_json()
 
     @classmethod
     async def _get_and_execute_run_analyzer_module(
-        cls, run_analyzer_module_name: str, run_data
+        cls, run_analyzer_module_name: str, run_data, parent_input_name: str
     ):
-        parent_input_name = (
-            AnalysisModeSettingsTypes.BACKTESTING_RUN_ANALYSIS_MODE_SETTINGS_NAME
-            if run_data.is_backtesting
-            else AnalysisModeSettingsTypes.LIVE_RUN_ANALYSIS_MODE_SETTINGS_NAME
-        )
         if cls.available_run_analyzer_plot_modules.get(run_analyzer_module_name):
             await cls._evaluate_all_run_analyzers_in_module(
                 run_analyzer_module_name,
                 run_data,
                 parent_input_name=parent_input_name
-                + AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_NAME,
+                + analysis_enums.AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_NAME,
             )
         elif cls.available_run_analyzer_table_modules.get(run_analyzer_module_name):
             await cls._evaluate_all_run_analyzers_in_module(
                 run_analyzer_module_name,
                 run_data,
                 parent_input_name=parent_input_name
-                + AnalysisModePlotSettingsTypes.TABLE_SETTINGS_NAME,
+                + analysis_enums.AnalysisModePlotSettingsTypes.TABLE_SETTINGS_NAME,
             )
         elif cls.available_run_analyzer_dictionaries_modules.get(
             run_analyzer_module_name
@@ -295,7 +363,7 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
                 run_analyzer_module_name,
                 run_data,
                 parent_input_name=parent_input_name
-                + AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_NAME,
+                + analysis_enums.AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_NAME,
             )
 
     @classmethod
@@ -305,10 +373,17 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         for sub_module in cls.available_run_analyzer_plot_modules.get(
             run_analyzer_module_name, {}
         ).values():
-            await sub_module.evaluate(sub_module, run_data, parent_input_name)
+            try:
+                await sub_module.evaluate(sub_module, run_data, parent_input_name)
+            except Exception as error:
+                cls.logger.exception(
+                    error,
+                    True,
+                    f"Failed to evaluate {run_analyzer_module_name} run analyzer",
+                )
 
-    @staticmethod
-    async def init_mode_features(exchange_id, logger):
+    @classmethod
+    async def init_mode_features(cls, exchange_id):
         try:
             exchange_manager = trading_api.get_exchange_manager_from_exchange_id(
                 exchange_id
@@ -319,10 +394,11 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
 
         except KeyError:
             raise RuntimeError(
-                f"Failed to activate candles storage, exchange ID is not valid {exchange_id}"
+                "Failed to activate candles storage, exchange "
+                f"ID is not valid {exchange_id}"
             )
         except Exception as error:
-            logger.exception(error, True, "Failed to activate candles storage")
+            cls.logger.exception(error, True, "Failed to activate candles storage")
 
     # async def run_analysis_script(self, run_data):
     #     pass

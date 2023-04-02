@@ -64,7 +64,7 @@ export function ProfilePortfolioSettings({newProfileSettings, onChange, setNewPr
     const data = [
         ...Object.keys(newProfileSettings.config["trader-simulator"]["starting-portfolio"]).map(coin => {
             return {
-                coin: coin, value: newProfileSettings.config["trader-simulator"]["starting-portfolio"][coin]
+                coin, value: newProfileSettings.config["trader-simulator"]["starting-portfolio"][coin]
             }
         }), {
             key: addKey

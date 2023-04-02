@@ -42,18 +42,16 @@ export default function SyncFusionCharts(props) {
     const charts = props.data.map((element) => {
       if (element.kind === "candlestick") {
         return (
-          <SeriesDirective
-            key={element.title}
-            dataSource={element.data}
-            xName="x"
-            yName="low"
-            name={element.title}
-            type="HiloOpenClose"
-            low="low"
-            high="high"
-            open="open"
-            close="close"
-          ></SeriesDirective>
+          <SeriesDirective key={element.title}
+          dataSource={element.data}
+          xName="x"
+          yName="low"
+          name={element.title}
+          type="HiloOpenClose"
+          low="low"
+          high="high"
+          open="open"
+          close="close" />
         );
       } else if (element.mode === "lines") {
         return (

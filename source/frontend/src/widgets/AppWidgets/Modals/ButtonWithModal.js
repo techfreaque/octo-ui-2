@@ -57,28 +57,38 @@ export default function ButtonWithModal({
                     } </MuiIconButton>
                 </div>
             </Tooltip>
-            <Modal open={open}
-                onClose={handleClose}
-                aria-labelledby={
-                    `modal-${id}-title`
-                }
-                aria-describedby={
-                    `modal-${id}-description`
-            }>
-                <Box sx={style}>
-                    <Button onClick={handleClose}
-                        style={
-                            {
-                                float: "right",
-                                zIndex: 100
-                            }
-                    }><FontAwesomeIcon size="xl"
-                            icon={faClose}/></Button>
-                    {
-                    content && <AppWidgets layout={content}/>
-                }
-                    {/* <Button variant="contained" onClick={handleClose}>Close</Button> */} </Box>
-            </Modal>
-        </div>
+            {
+            open && <ModalContent open={open}
+                id={id}
+                handleClose={handleClose}
+                content={content}/>
+        } </div>
     );
+}
+
+function ModalContent({open, id, handleClose, content}) {
+    return (
+        <Modal open={open}
+            onClose={handleClose}
+            aria-labelledby={
+                `modal-${id}-title`
+            }
+            aria-describedby={
+                `modal-${id}-description`
+        }>
+            <Box sx={style}>
+                <Button onClick={handleClose}
+                    style={
+                        {
+                            float: "right",
+                            zIndex: 100
+                        }
+                }><FontAwesomeIcon size="xl"
+                        icon={faClose}/></Button>
+                {
+                content && <AppWidgets layout={content}/>
+            }
+                {/* <Button variant="contained" onClick={handleClose}>Close</Button> */} </Box>
+        </Modal>
+    )
 }
