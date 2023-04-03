@@ -1,6 +1,5 @@
 import flask
 from tentacles.Services.Interfaces.octo_ui2.models import octo_ui2
-import tentacles.Services.Interfaces.octo_ui2.models.plots as plots_models
 from tentacles.Services.Interfaces.run_analysis_mode.run_analysis_modes_plugin import RunAnalysisModePlugin
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models

@@ -1,30 +1,29 @@
 import os
 import typing
 import octobot_commons.logging as logging
-import octobot_services.interfaces.util as interfaces_util
-import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisModes.default_run_analysis_mode.run_analysis_mode as run_analysis_mode
-import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
-import tentacles.Services.Interfaces.web_interface.plugins as plugins
-import tentacles.Services.Interfaces.run_analysis_mode.controllers.plotted_data as plotted_data
 import octobot_commons.databases as databases
 import octobot_commons.display as commons_display
 import octobot_commons.errors as commons_errors
 import octobot_trading.api as trading_api
+import octobot_services.interfaces.util as interfaces_util
+import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
-import tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 as octo_ui2
+import tentacles.Services.Interfaces.run_analysis_mode.controllers.plotted_data as plotted_data
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisModes.default_run_analysis_mode.run_analysis_mode_default as run_analysis_mode_default
 
 
 class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
     NAME = "run_analysis_modes"
     PLUGIN_ROOT_FOLDER = os.path.dirname(os.path.abspath(__file__))
     DEBUG_PLOTS = True
-    RUN_ANALYSIS_MODE: run_analysis_mode.DefaultRunAnalysisMode = (
-        run_analysis_mode.DefaultRunAnalysisMode
+    RUN_ANALYSIS_MODE: run_analysis_mode_default.DefaultRunAnalysisMode = (
+        run_analysis_mode_default.DefaultRunAnalysisMode
     )
     logger: logging.BotLogger = logging.get_logger("RunAnalysisModePlugin")
 
     def register_routes(self):
-        plotted_data.register_plot_routes(self)
+        pass
+        # plotted_data.register_plot_routes(self)
 
     @classmethod
     def is_configureable(cls):
