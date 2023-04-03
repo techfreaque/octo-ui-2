@@ -6,14 +6,11 @@ import octobot_commons.enums as commons_enums
 import octobot_trading.api as trading_api
 
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisKeywords.analysis_enums as analysis_enums
-from tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory import (
-    abstract_analysis_evaluator,
-)
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.abstract_analysis_evaluator as abstract_analysis_evaluator
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.abstract_run_analysis_mode as abstract_run_analysis_mode
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.init_base_data as init_base_data
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.custom_context as custom_context
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.run_analysis_factory as run_analysis_factory
-import tentacles.Meta.Keywords.matrix_library.basic_tentacles.matrix_basic_keywords.matrix_enums as matrix_enums
 
 
 class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode):
@@ -42,7 +39,7 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
                 commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
             },
             other_schema_values={
-                matrix_enums.UserInputOtherSchemaValuesTypes.DISPLAY_AS_TAB.value: True
+                analysis_enums.UserInputOtherSchemaValuesTypes.DISPLAY_AS_TAB.value: True
             },
             title="Live Run Analysis Mode",
         )
@@ -55,7 +52,7 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
                 commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
             },
             other_schema_values={
-                matrix_enums.UserInputOtherSchemaValuesTypes.DISPLAY_AS_TAB.value: True
+                analysis_enums.UserInputOtherSchemaValuesTypes.DISPLAY_AS_TAB.value: True
             },
             title="Backtesting Run Analysis Mode",
         )

@@ -6,6 +6,12 @@ import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisModes.default_
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
 import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.run_analysis_mode.controllers.plotted_data as plotted_data
+import octobot_commons.databases as databases
+import octobot_commons.display as commons_display
+import octobot_commons.errors as commons_errors
+import octobot_trading.api as trading_api
+import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
+import tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 as octo_ui2
 
 
 class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
@@ -59,21 +65,23 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
                     optimization_campaign=optimization_campaign,
                 )
             )
-        except analysis_errors.CandlesLoadingError as error:
-            if cls.DEBUG_PLOTS:
-                cls.log_exception(error)
-
-        except analysis_errors.LiveMetaDataNotInitializedError as error:
-            if cls.DEBUG_PLOTS:
-                cls.log_exception(error)
-
-        except (ImportError, ModuleNotFoundError) as error:
-            if cls.DEBUG_PLOTS:
-                cls.log_exception(error)
-
         except Exception as error:
             if cls.DEBUG_PLOTS:
                 cls.log_exception(error)
+                # TODO remove at some point
+            return interfaces_util.run_in_bot_async_executor(
+                cls.get_old_version_plot_data(
+                    exchange_id=exchange_id,
+                    trading_mode=trading_mode_class,
+                    exchange_name=exchange_name,
+                    symbol=symbol,
+                    time_frame=time_frame,
+                    optimization_campaign_name=optimization_campaign,
+                    backtesting_id=backtesting_id,
+                    live_id=live_id,
+                    optimizer_id=optimizer_id,
+                )
+            )
         return {}
 
     def get_tabs(self):
@@ -86,3 +94,49 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
         message="Failed to load run analysis plots",
     ):
         cls.logger.exception(exception, True, message + " - error: {error}")
+
+    @classmethod
+    async def get_old_version_plot_data(
+        cls,
+        exchange_id,
+        trading_mode,
+        exchange_name,
+        symbol,
+        time_frame,
+        optimization_campaign_name,
+        backtesting_id,
+        live_id,
+        optimizer_id,
+    ):
+        try:
+            trading_model.ensure_valid_exchange_id(exchange_id)
+            elements = commons_display.display_translator_factory()
+            database_manager = databases.RunDatabasesIdentifier(
+                trading_mode,
+                optimization_campaign_name=optimization_campaign_name,
+                backtesting_id=backtesting_id,
+                live_id=live_id,
+                optimizer_id=optimizer_id,
+            )
+            exchange_manager = trading_api.get_exchange_manager_from_exchange_id(
+                exchange_id
+            )
+            if not exchange_manager.storage_manager.candles_storage.enabled:
+                exchange_manager.storage_manager.candles_storage.enabled = True
+                await exchange_manager.storage_manager.candles_storage.start()
+            await elements.fill_from_database(
+                trading_mode,
+                database_manager,
+                exchange_name,
+                symbol,
+                time_frame,
+                exchange_id,
+                with_inputs=backtesting_id is None,
+            )
+        except commons_errors.DatabaseNotFoundError as error:
+            cls.logger.exception(error, True, f"Error when opening database: {error}")
+            return {}
+        except commons_errors.MissingExchangeDataError as error:
+            cls.logger.exception(error, True, f"Error when opening database: {error}")
+            return {}
+        return elements.to_json()
