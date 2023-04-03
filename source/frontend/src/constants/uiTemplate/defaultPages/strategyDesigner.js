@@ -43,7 +43,11 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": false,
                                             "faIcon": "",
                                             "title": "Display Settings",
-                                            "toolBarContent": []
+                                            "toolBarContent": [
+                                                {
+                                                    "component": "ColorModeSwitch"
+                                                }
+                                            ]
                                         },
                                         {
                                             "antIcon": "noIcon",
@@ -113,6 +117,9 @@ export const defaultStrategyDesignerPageLayout = {
                             "title": "Notification Center"
                         },
                         {
+                            "component": "RealTradingSwitch"
+                        },
+                        {
                             "component": "PowerMenu"
                         }
                     ]
@@ -137,10 +144,7 @@ export const defaultStrategyDesignerPageLayout = {
                     ],
                     "rightContent": [
                         {
-                            "component": "ColorModeSwitch"
-                        },
-                        {
-                            "component": "RealTradingSwitch"
+                            "component": "ChartTypeSelector"
                         },
                         {
                             "component": "ProfileModal"
@@ -326,7 +330,8 @@ export const defaultStrategyDesignerPageLayout = {
                                                 }
                                             ],
                                             "faIcon": "microscope",
-                                            "label": "Backtesting Settings"
+                                            "label": "Backtesting Settings",
+                                            "noPadding": false
                                         },
                                         {
                                             "antIcon": "noIcon",
@@ -338,7 +343,8 @@ export const defaultStrategyDesignerPageLayout = {
                                                 }
                                             ],
                                             "faIcon": "table-list",
-                                            "label": "Backtesting Runs"
+                                            "label": "Backtesting Runs",
+                                            "noPadding": true
                                         }
                                     ]
                                 }
@@ -376,7 +382,8 @@ export const defaultStrategyDesignerPageLayout = {
                                                 }
                                             ],
                                             "faIcon": "cogs",
-                                            "label": "Optimizer Settings"
+                                            "label": "Optimizer Settings",
+                                            "noPadding": false
                                         },
                                         {
                                             "antIcon": "noIcon",
@@ -388,7 +395,8 @@ export const defaultStrategyDesignerPageLayout = {
                                                 }
                                             ],
                                             "faIcon": "road",
-                                            "label": "Run Config"
+                                            "label": "Run Config",
+                                            "noPadding": false
                                         },
                                         {
                                             "antIcon": "OrderedListOutlined",
@@ -400,7 +408,8 @@ export const defaultStrategyDesignerPageLayout = {
                                                 }
                                             ],
                                             "faIcon": "",
-                                            "label": "Optimizer Queue"
+                                            "label": "Optimizer Queue",
+                                            "noPadding": true
                                         }
                                     ]
                                 }
@@ -432,7 +441,7 @@ export const defaultStrategyDesignerPageLayout = {
             "minHeights": "0, 50",
             "upperContent": [
                 {
-                    "component": "PlotlyDualCharts"
+                    "component": "ChartTablePieCombo"
                 }
             ]
         }
