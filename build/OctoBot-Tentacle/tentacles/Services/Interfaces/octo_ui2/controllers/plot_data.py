@@ -1,6 +1,7 @@
 import flask
 from tentacles.Services.Interfaces.octo_ui2.models import octo_ui2
 import tentacles.Services.Interfaces.octo_ui2.models.plots as plots_models
+from tentacles.Services.Interfaces.run_analysis_mode.run_analysis_modes_plugin import RunAnalysisModePlugin
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
@@ -42,22 +43,22 @@ def register_plot_data_routes(plugin):
             exchange_id = request_data.get("exchange_id", None)
             time_frame = request_data.get("time_frame", None)
             exchange = request_data.get("exchange", None)
-            analysis_settings = request_data.get("analysis_settings", {})
             return util.get_rest_reply(
                 {
                     "success": True,
                     "message": "Successfully fetched plotted data",
-                    "data": plots_models.get_plots(
-                        trading_mode=trading_mode,
+                    "data": RunAnalysisModePlugin.get_and_execute_run_analysis_mode(
+                        trading_mode_class=trading_mode,
                         exchange_name=exchange,
+                        exchange_id=exchange_id,
                         symbol=symbol,
                         time_frame=time_frame,
-                        optimizer_id=optimizer_id,
-                        exchange_id=exchange_id,
                         backtesting_id=backtesting_id,
+                        optimizer_id=optimizer_id,
+                        optimization_campaign=optimization_campaign
+                        if not live_id
+                        else None,
                         live_id=live_id,
-                        optimization_campaign_name=optimization_campaign,
-                        analysis_settings=analysis_settings,
                     ),
                 },
                 200,
