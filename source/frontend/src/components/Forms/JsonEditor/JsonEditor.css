@@ -6,6 +6,31 @@
     background: unset !important;
 }
 
+.json-editor select {
+    background: unset !important;
+    /* background-image: url("/src/components/Icons/select-arrow.svg"); /* add the arrow icon as a data URI */
+    /* background-repeat: no-repeat; */
+    /* background-position: right 12px center; position the icon on the right side */
+    /* background-size: 8px 8px; set the size of the icon  */
+}
+
+.dark .json-editor select {
+    color: var(--dark-font) !important;
+}
+
+.light .json-editor select {
+    color: var(--light-font);
+}
+
+.dark select option {
+    color: #fff;
+    background-color: #333;
+    position: absolute;
+    z-index: 1;
+    border: 1px solid #444; /* set border color to a darker shade of gray */
+    box-shadow: 0 2px 8px rgba(255, 255, 255, 0.15); /* set box-shadow to white */
+}
+
 
 .dark .json-editor input {
     color: var(--dark-font) !important;
