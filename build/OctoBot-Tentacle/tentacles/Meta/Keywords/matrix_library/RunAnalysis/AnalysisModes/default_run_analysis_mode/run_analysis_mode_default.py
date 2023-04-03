@@ -94,6 +94,7 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
                 editor_options={
                     commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
                 },
+                order=1000,
             )
             sorted_analyzers: typing.List[str] = cls.get_sorted_run_analyzers(
                 enabled_run_analyzers
@@ -347,32 +348,33 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
     async def _get_and_execute_run_analyzer_module(
         cls, run_analyzer_module_name: str, run_data, parent_input_name: str
     ):
+
         if cls.available_run_analyzer_plot_modules.get(run_analyzer_module_name):
-            await cls._evaluate_all_run_analyzers_in_module(
-                run_analyzer_module_name=run_analyzer_module_name,
-                run_analyzer_module=cls.available_run_analyzer_plot_modules,
-                run_data=run_data,
-                parent_input_name=parent_input_name
-                + analysis_enums.AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_NAME,
+            run_analyzer_module = cls.available_run_analyzer_plot_modules
+            _parent_input_name = (
+                parent_input_name
+                + analysis_enums.AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_NAME
             )
         elif cls.available_run_analyzer_table_modules.get(run_analyzer_module_name):
-            await cls._evaluate_all_run_analyzers_in_module(
-                run_analyzer_module_name=run_analyzer_module_name,
-                run_analyzer_module=cls.available_run_analyzer_table_modules,
-                run_data=run_data,
-                parent_input_name=parent_input_name
-                + analysis_enums.AnalysisModePlotSettingsTypes.TABLE_SETTINGS_NAME,
+            run_analyzer_module = cls.available_run_analyzer_table_modules
+            _parent_input_name = (
+                parent_input_name
+                + analysis_enums.AnalysisModePlotSettingsTypes.TABLE_SETTINGS_NAME
             )
         elif cls.available_run_analyzer_dictionaries_modules.get(
             run_analyzer_module_name
         ):
-            await cls._evaluate_all_run_analyzers_in_module(
-                run_analyzer_module_name=run_analyzer_module_name,
-                run_analyzer_module=cls.available_run_analyzer_dictionaries_modules,
-                run_data=run_data,
-                parent_input_name=parent_input_name
-                + analysis_enums.AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_NAME,
+            run_analyzer_module = cls.available_run_analyzer_dictionaries_modules
+            _parent_input_name = (
+                parent_input_name
+                + analysis_enums.AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_NAME
             )
+        await cls._evaluate_all_run_analyzers_in_module(
+            run_analyzer_module_name=run_analyzer_module_name,
+            run_analyzer_module=run_analyzer_module,
+            run_data=run_data,
+            parent_input_name=_parent_input_name,
+        )
 
     @classmethod
     async def _evaluate_all_run_analyzers_in_module(

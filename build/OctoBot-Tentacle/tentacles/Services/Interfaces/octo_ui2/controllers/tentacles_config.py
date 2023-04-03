@@ -1,4 +1,5 @@
 import flask
+import tentacles.Services.Interfaces.octo_ui2.models.config as config
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.octo_ui2.utils.basic_utils as basic_utils
 import tentacles.Services.Interfaces.octo_ui2.models as octo_ui2_models
@@ -73,7 +74,7 @@ def register_tentacles_config_routes(plugin):
 
     def _update_profiles_info():
         data = flask.request.get_json()
-        success, err = models.update_profile(flask.request.get_json()["id"], data)
+        success, err = config.update_profile(flask.request.get_json()["id"], data)
         if not success:
             return util.get_rest_reply(flask.jsonify(str(err)), code=400)
         return util.get_rest_reply(flask.jsonify(data))
