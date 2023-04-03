@@ -1,0 +1,39 @@
+.dark .optimizer-input-setting {
+    background: var(--dark-background);
+    border-color: var(--dark-border);
+    color: var(--dark-font);
+}
+
+.light .optimizer-input-setting {
+    background: var(--light-background);
+    border-color: var(--light-border);
+    color: var(--light-font);
+}
+
+.dark .optimizer-input-setting option:checked {
+    background-color: var(--dark-backgroundActive);
+    color: var(--dark-fontActive);
+}
+
+.light .optimizer-input-setting option:checked {
+    background-color: var(--light-backgroundActive);
+    color: var(--light-fontActive);
+}
+
+.dark .optimizer-input-setting:focus-visible {
+    border-color: var(--dark-border) !important;
+    outline: unset !important;
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
+}
+
+.dark .setting-values label.input-group-text {
+    background: unset;
+    color: var(--dark-font);
+    border-color: var(--dark-border);
+}
+
+.dark .setting-values input {
+    background: unset !important;
+    border-color: var(--dark-border) !important;
+    color: var(--dark-font) !important;
+}

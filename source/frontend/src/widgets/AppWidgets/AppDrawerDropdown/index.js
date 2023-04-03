@@ -6,7 +6,7 @@ import { LinkContainer } from "react-router-bootstrap";
 import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider";
-import { useColorModeContext } from "../../../context/config/ColorModeProvider";
+import { colorModes, useColorModeContext } from "../../../context/config/ColorModeProvider";
 
 export default function AppDrawerDropdown() {
   const botLayout = useBotLayoutContext();
@@ -57,7 +57,7 @@ export default function AppDrawerDropdown() {
               </LinkContainer>
             );
           })}
-          <a href={botDomain} style={{ color: colorMode === "dark" ? "#fff" : "#000" }}>
+          <a href={botDomain} style={{ color: colorMode === colorModes.dark ? "#fff" : "#000" }}>
             <li>
               <MenuItem onClick={handleClose}>back to OctoBot</MenuItem>
             </li>

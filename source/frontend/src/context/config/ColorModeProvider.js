@@ -26,15 +26,16 @@ export function ColorModeProvider({children}) {
             setMode((prevMode) => (prevMode === colorModes.light ? colorModes.dark : colorModes.light));
         }
     }), []);
-    const theme = useMemo(() => createTheme({palette: {
-            mode
-        }}), [mode]);
-    return (
-        <ToggleColorModeContext.Provider value={colorMode}>
-            <ColorModeContext.Provider value={mode}>
-                <ThemeProvider theme={theme}>
-                    {children}</ThemeProvider>
-            </ColorModeContext.Provider>
-        </ToggleColorModeContext.Provider>
-    );
+    const theme = useMemo(() => {
+        document.body.classList.remove(mode === colorModes.dark ? colorModes.light : colorModes.dark);
+        document.body.classList.add(mode);
+        return createTheme({palette: {
+                mode
+            }})
+    }, [mode]);
+    return (<ToggleColorModeContext.Provider value={colorMode}>
+        <ColorModeContext.Provider value={mode}>
+            <ThemeProvider theme={theme}> {children}</ThemeProvider>
+        </ColorModeContext.Provider>
+    </ToggleColorModeContext.Provider>);
 }

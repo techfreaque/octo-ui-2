@@ -1,4 +1,6 @@
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider"
+import "./OptimizerInputTemplate.css"
+
 
 export default function OptimizerSettingTemplate() {
     const botColors = useBotColorsContext()
