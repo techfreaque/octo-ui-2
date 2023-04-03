@@ -3,35 +3,38 @@
 # import octobot_commons.errors as commons_errors
 
 
-# def plot_table_data(
-#     data,
-#     plotted_element,
-#     data_name,
-#     additional_key_to_label,
-#     additional_columns,
-#     datum_columns_callback,
-# ):
-#     if not data:
-#         get_base_data_logger().debug(
-#             f"Nothing to create a table from when reading {data_name}"
-#         )
-#         return
-#     column_render = _get_default_column_render()
-#     types = _get_default_types()
-#     key_to_label = {
-#         **plotted_element.TABLE_KEY_TO_COLUMN,
-#         **additional_key_to_label,
-#     }
-#     columns = (
-#         _get_default_columns(plotted_element, data, column_render, key_to_label)
-#         + additional_columns
-#     )
-#     if datum_columns_callback:
-#         for datum in data:
-#             datum_columns_callback(datum)
-#     rows = _get_default_rows(data, columns)
-#     searches = _get_default_searches(columns, types)
-#     plotted_element.table(data_name, columns=columns, rows=rows, searches=searches)
+from tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider import base_data_provider
+
+
+def plot_table_data(
+    data,
+    data_name: str,
+    run_data: base_data_provider.RunAnalysisBaseDataGenerator,
+    additional_key_to_label,
+    additional_columns,
+    datum_columns_callback,
+):
+    if not data:
+        run_data.debug(
+            f"Nothing to create a table from when reading {data_name}"
+        )
+        return
+    column_render = _get_default_column_render()
+    types = _get_default_types()
+    key_to_label = {
+        **run_data.table_plotted_element.TABLE_KEY_TO_COLUMN,
+        **additional_key_to_label,
+    }
+    columns = (
+        _get_default_columns(run_data.table_plotted_element, data, column_render, key_to_label)
+        + additional_columns
+    )
+    if datum_columns_callback:
+        for datum in data:
+            datum_columns_callback(datum)
+    rows = _get_default_rows(data, columns)
+    searches = _get_default_searches(columns, types)
+    run_data.table_plotted_element.table(data_name, columns=columns, rows=rows, searches=searches)
 
 
 # async def plot_table(
@@ -107,40 +110,40 @@
 #     plotted_element.table(data_source, columns=columns, rows=rows, searches=searches)
 
 
-# def _get_default_column_render():
-#     return {"Time": "datetime", "Entry time": "datetime", "Exit time": "datetime"}
+def _get_default_column_render():
+    return {"Time": "datetime", "Entry time": "datetime", "Exit time": "datetime"}
 
 
-# def _get_default_types():
-#     return {"Time": "datetime", "Entry time": "datetime", "Exit time": "datetime"}
+def _get_default_types():
+    return {"Time": "datetime", "Entry time": "datetime", "Exit time": "datetime"}
 
 
-# def _get_default_columns(plotted_element, data, column_render, key_to_label=None):
-#     key_to_label = key_to_label or plotted_element.TABLE_KEY_TO_COLUMN
-#     return [
-#         {
-#             "field": row_key,
-#             "label": key_to_label[row_key],
-#             "render": column_render.get(key_to_label[row_key], None),
-#         }
-#         for row_key, row_value in data[0].items()
-#         if row_key in key_to_label and row_value is not None
-#     ]
+def _get_default_columns(plotted_element, data, column_render, key_to_label=None):
+    key_to_label = key_to_label or plotted_element.TABLE_KEY_TO_COLUMN
+    return [
+        {
+            "field": row_key,
+            "label": key_to_label[row_key],
+            "render": column_render.get(key_to_label[row_key], None),
+        }
+        for row_key, row_value in data[0].items()
+        if row_key in key_to_label and row_value is not None
+    ]
 
 
-# def _get_default_rows(data, columns):
-#     column_fields = set(col["field"] for col in columns)
-#     return [
-#         {key: val for key, val in row.items() if key in column_fields} for row in data
-#     ]
+def _get_default_rows(data, columns):
+    column_fields = set(col["field"] for col in columns)
+    return [
+        {key: val for key, val in row.items() if key in column_fields} for row in data
+    ]
 
 
-# def _get_default_searches(columns, types):
-#     return [
-#         {
-#             "field": col["field"],
-#             "label": col["label"],
-#             "type": types.get(col["label"]),
-#         }
-#         for col in columns
-#     ]
+def _get_default_searches(columns, types):
+    return [
+        {
+            "field": col["field"],
+            "label": col["label"],
+            "type": types.get(col["label"]),
+        }
+        for col in columns
+    ]

@@ -1,6 +1,3 @@
-
-
-
 import enum
 
 
@@ -17,6 +14,14 @@ class AnalysisModePlotSettingsTypes:
     DICTIONARY_SETTINGS_NAME: str = "_dictionary"
     DICTIONARY_SETTINGS_TITLE: str = "Other Displays"
 
-    
+
 class UserInputOtherSchemaValuesTypes(enum.Enum):
     DISPLAY_AS_TAB = "display_as_tab"  # used by octo ui2
+
+
+class SymbolsOptions:
+    CURRENT_SYMBOL = "Current Symbol"
+    ALL_SYMBOLS = "All Symbols"
+
+
+ENABLE_SYMBOLS_SUFFIX = "_enabled_symbols"

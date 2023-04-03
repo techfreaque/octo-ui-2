@@ -16,5 +16,6 @@ class DisplayMetadata(abstract_analysis_evaluator.AnalysisEvaluator):
         run_data: base_data_provider.RunAnalysisBaseDataGenerator,
         analysis_type: str,
     ):
-        with run_data.run_display.part("metadata", "dictionary") as plotted_element:
-            plotted_element.dictionary("metadata", dictionary=run_data.metadata)
+        pass
+        # with run_data.run_display.part("metadata", "dictionary") as plotted_element:
+        #     plotted_element.dictionary("metadata", dictionary=run_data.metadata)

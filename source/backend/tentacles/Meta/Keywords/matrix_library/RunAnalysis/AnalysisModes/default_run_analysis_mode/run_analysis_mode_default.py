@@ -116,7 +116,9 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
     ) -> None:
         group_input_name: str = None
         group_input_title: str = None
+        modules: dict = None
         if cls.available_run_analyzer_plot_modules.get(run_analyzer_module_name):
+            modules = cls.available_run_analyzer_plot_modules
             group_input_name = (
                 parent_input_name
                 + analysis_enums.AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_NAME
@@ -125,6 +127,7 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
                 analysis_enums.AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_TITLE
             )
         elif cls.available_run_analyzer_table_modules.get(run_analyzer_module_name):
+            modules = cls.available_run_analyzer_table_modules
             group_input_name = (
                 parent_input_name
                 + analysis_enums.AnalysisModePlotSettingsTypes.TABLE_SETTINGS_NAME
@@ -135,6 +138,7 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         elif cls.available_run_analyzer_dictionaries_modules.get(
             run_analyzer_module_name
         ):
+            modules = cls.available_run_analyzer_dictionaries_modules
             group_input_name = (
                 parent_input_name
                 + analysis_enums.AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_NAME
@@ -152,9 +156,10 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             parent_input_name=parent_input_name,
         )
         cls._init_run_analyzer_user_inputs_in_module(
-            analysis_mode_plugin,
-            run_analyzer_module_name,
-            inputs,
+            analysis_mode_plugin=analysis_mode_plugin,
+            run_analyzer_module_name=run_analyzer_module_name,
+            modules=modules,
+            inputs=inputs,
             parent_input_name=group_input_name,
         )
 
@@ -187,11 +192,10 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         analysis_mode_plugin,
         run_analyzer_module_name: str,
         inputs: dict,
+        modules: dict,
         parent_input_name: str,
     ) -> None:
-        for sub_module in cls.available_run_analyzer_plot_modules.get(
-            run_analyzer_module_name, {}
-        ).values():
+        for sub_module in modules.get(run_analyzer_module_name, {}).values():
             try:
                 sub_module.init_user_inputs(
                     analysis_mode_plugin, inputs, parent_input_name
@@ -305,35 +309,39 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         async with ctx.backtesting_results() as (run_database, run_display):
             with run_display.part("main-chart") as main_plotted_element:
                 with run_display.part("sub-chart") as sub_plotted_element:
-                    run_data = await init_base_data.get_base_data(
-                        ctx=ctx,
-                        exchange_id=exchange_id,
-                        is_backtesting=is_backtesting,
-                        run_database=run_database,
-                        run_display=run_display,
-                        main_plotted_element=main_plotted_element,
-                        sub_plotted_element=sub_plotted_element,
-                    )
-                    enabled_run_analyzers = (
-                        ctx.analysis_settings.get(
-                            parent_input_name + cls.ENABLED_RUN_ANALYZERS_SETTING_NAME
+                    with run_display.part("table") as table_plotted_element:
+                        run_data = await init_base_data.get_base_data(
+                            ctx=ctx,
+                            exchange_id=exchange_id,
+                            is_backtesting=is_backtesting,
+                            run_database=run_database,
+                            run_display=run_display,
+                            main_plotted_element=main_plotted_element,
+                            sub_plotted_element=sub_plotted_element,
+                            table_plotted_element=table_plotted_element,
                         )
-                        or cls.available_run_analyzer_module_names
-                    )
-                    sorted_analyzers: typing.List[str] = cls.get_sorted_run_analyzers(
-                        enabled_run_analyzers
-                    )
-                    if ctx.analysis_settings.get(
-                        parent_input_name + cls.ENABLE_RUN_ANALYSIS_MODE_SETTING_NAME,
-                        True,
-                    ):
-                        for run_analyzer_module_name in sorted_analyzers:
-                            await cls._get_and_execute_run_analyzer_module(
-                                run_analyzer_module_name=run_analyzer_module_name,
-                                run_data=run_data,
-                                parent_input_name=parent_input_name,
+                        enabled_run_analyzers = (
+                            run_data.config.get(
+                                parent_input_name
+                                + cls.ENABLED_RUN_ANALYZERS_SETTING_NAME
                             )
-                    return run_data.run_display.to_json()
+                            or cls.available_run_analyzer_module_names
+                        )
+                        sorted_analyzers: typing.List[
+                            str
+                        ] = cls.get_sorted_run_analyzers(enabled_run_analyzers)
+                        if run_data.config.get(
+                            parent_input_name
+                            + cls.ENABLE_RUN_ANALYSIS_MODE_SETTING_NAME,
+                            True,
+                        ):
+                            for run_analyzer_module_name in sorted_analyzers:
+                                await cls._get_and_execute_run_analyzer_module(
+                                    run_analyzer_module_name=run_analyzer_module_name,
+                                    run_data=run_data,
+                                    parent_input_name=parent_input_name,
+                                )
+                        return run_data.run_display.to_json()
 
     @classmethod
     async def _get_and_execute_run_analyzer_module(
@@ -341,15 +349,17 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
     ):
         if cls.available_run_analyzer_plot_modules.get(run_analyzer_module_name):
             await cls._evaluate_all_run_analyzers_in_module(
-                run_analyzer_module_name,
-                run_data,
+                run_analyzer_module_name=run_analyzer_module_name,
+                run_analyzer_module=cls.available_run_analyzer_plot_modules,
+                run_data=run_data,
                 parent_input_name=parent_input_name
                 + analysis_enums.AnalysisModePlotSettingsTypes.PLOTS_SETTINGS_NAME,
             )
         elif cls.available_run_analyzer_table_modules.get(run_analyzer_module_name):
             await cls._evaluate_all_run_analyzers_in_module(
-                run_analyzer_module_name,
-                run_data,
+                run_analyzer_module_name=run_analyzer_module_name,
+                run_analyzer_module=cls.available_run_analyzer_table_modules,
+                run_data=run_data,
                 parent_input_name=parent_input_name
                 + analysis_enums.AnalysisModePlotSettingsTypes.TABLE_SETTINGS_NAME,
             )
@@ -357,19 +367,22 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             run_analyzer_module_name
         ):
             await cls._evaluate_all_run_analyzers_in_module(
-                run_analyzer_module_name,
-                run_data,
+                run_analyzer_module_name=run_analyzer_module_name,
+                run_analyzer_module=cls.available_run_analyzer_dictionaries_modules,
+                run_data=run_data,
                 parent_input_name=parent_input_name
                 + analysis_enums.AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_NAME,
             )
 
     @classmethod
     async def _evaluate_all_run_analyzers_in_module(
-        cls, run_analyzer_module_name, run_data, parent_input_name: str
+        cls,
+        run_analyzer_module: dict,
+        run_analyzer_module_name: str,
+        run_data,
+        parent_input_name: str,
     ):
-        for sub_module in cls.available_run_analyzer_plot_modules.get(
-            run_analyzer_module_name, {}
-        ).values():
+        for sub_module in run_analyzer_module[run_analyzer_module_name].values():
             try:
                 await sub_module.evaluate(sub_module, run_data, parent_input_name)
             except Exception as error:

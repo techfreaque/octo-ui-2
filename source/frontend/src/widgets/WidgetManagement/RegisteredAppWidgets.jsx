@@ -52,6 +52,7 @@ import Sidebar, {SidebarMenuItem} from "../LayoutWidgets/Sidebar/Sidebar";
 import NotificationCenter from "../AppWidgets/Modals/NotificationCenter/NotificationCenter";
 import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
 import Logo from "../AppWidgets/other/Logo";
+import ChartTablePieCombo, {ChartTypeSelector} from "../AppWidgets/Charts/ChartTablePieCombo";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -112,4 +113,6 @@ export const registeredComponents = {
     NotificationCenter,
     TentaclesConfig,
     Logo,
+    ChartTablePieCombo,
+    ChartTypeSelector,
 };

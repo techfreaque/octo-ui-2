@@ -15,7 +15,7 @@ class PlotCandles(abstract_analysis_evaluator.AnalysisEvaluator):
         cls, analysis_mode_plugin, inputs: dict, parent_input_name: str
     ) -> None:
         common_user_inputs.init_data_source_settings(
-            data_source_input_name=parent_input_name + cls.PLOT_CANDLES_NAME,
+            data_source_input_name=cls.PLOT_CANDLES_NAME,
             data_source_input_title=cls.PLOT_CANDLES_TILE,
             analysis_mode_plugin=analysis_mode_plugin,
             inputs=inputs,

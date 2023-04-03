@@ -12,6 +12,7 @@ async def get_base_data(
     run_display,
     main_plotted_element,
     sub_plotted_element,
+    table_plotted_element,
 ):
     # load and generate unified base data
 
@@ -25,6 +26,7 @@ async def get_base_data(
             is_backtesting=is_backtesting,
             main_plotted_element=main_plotted_element,
             sub_plotted_element=sub_plotted_element,
+            table_plotted_element=table_plotted_element,
         )
     elif metadata["trading_type"] == "future":
         run_data = future_base_data_provider.FutureRunAnalysisBaseDataGenerator(
@@ -35,6 +37,7 @@ async def get_base_data(
             is_backtesting=is_backtesting,
             main_plotted_element=main_plotted_element,
             sub_plotted_element=sub_plotted_element,
+            table_plotted_element=table_plotted_element,
         )
     else:
         raise NotImplementedError(

@@ -17,6 +17,7 @@ export default function appWidgetsProps() {
         ...generateSimpleProp("command", ["SendActionCommandToTradingMode"], "string"),
         ...generateSimpleProp("tentacleNames", ["TentaclesConfig"], "string", undefined,undefined,undefined,"RunAnalysisModePlugin" ),
         ...generateSimpleProp("dontScroll", "Tab", "boolean", "checkbox"),
+        ...generateSimpleProp("noPadding", "SidebarMenuItem", "boolean", "checkbox", undefined, undefined, false),
         ...generateSimpleProp("iconOnly", "ButtonWithModal", "boolean", "checkbox", undefined, undefined, true),
         ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeysList),
         ...generateSimpleProp("configKeys", "UIConfig", "array", "select", availableUIConfigKeys, true),

@@ -23,26 +23,26 @@ import {NotificationsContextProvider} from "./websockets/NotificationsContext";
 import {IoProvider} from "socket.io-react-hook";
 import {PlotlyLayoutsProvider} from "../widgets/AppWidgets/Charts/MainCharts/PlotlyContext";
 import {MainPanelProvider} from "./config/MainPanelContext";
-import {ConfigProvider} from "antd";
 import AntConfigProvider from "./config/AntThemeContext";
+import {CurrentChartTypeProvider} from "./config/CurrentChartTypeProvider";
 
 
 export default function BotDataProvider({children}) {
-    return (
-        <BotDomainProvider>
-            <IoProvider>
-                <IsBotOnlineProvider>
-                    <NotificationsContextProvider>
-                        <UiConfigProvider>
-                            <VisibleTimeFramesProvider>
-                                <VisiblePairsProvider>
-                                    <VisibleExchangesProvider>
-                                        <BotInfoProvider>
-                                            <BotLayoutProvider>
-                                                <ColorModeProvider>
-                                                    <BotColorsProvider>
-                                                        <TentaclesConfigProvider>
-                                                            <BotPlottedElementsProvider>
+    return (<BotDomainProvider>
+        <IoProvider>
+            <IsBotOnlineProvider>
+                <NotificationsContextProvider>
+                    <UiConfigProvider>
+                        <VisibleTimeFramesProvider>
+                            <VisiblePairsProvider>
+                                <VisibleExchangesProvider>
+                                    <BotInfoProvider>
+                                        <BotLayoutProvider>
+                                            <ColorModeProvider>
+                                                <BotColorsProvider>
+                                                    <TentaclesConfigProvider>
+                                                        <BotPlottedElementsProvider>
+                                                            <CurrentChartTypeProvider>
                                                                 <BacktestingRunDataProvider>
                                                                     <BotPortfolioProvider>
                                                                         <AppStoreDataProvider>
@@ -64,19 +64,19 @@ export default function BotDataProvider({children}) {
                                                                         </AppStoreDataProvider>
                                                                     </BotPortfolioProvider>
                                                                 </BacktestingRunDataProvider>
-                                                            </BotPlottedElementsProvider>
-                                                        </TentaclesConfigProvider>
-                                                    </BotColorsProvider>
-                                                </ColorModeProvider>
-                                            </BotLayoutProvider>
-                                        </BotInfoProvider>
-                                    </VisibleExchangesProvider>
-                                </VisiblePairsProvider>
-                            </VisibleTimeFramesProvider>
-                        </UiConfigProvider>
-                    </NotificationsContextProvider>
-                </IsBotOnlineProvider>
-            </IoProvider>
-        </BotDomainProvider>
-    );
+                                                            </CurrentChartTypeProvider>
+                                                        </BotPlottedElementsProvider>
+                                                    </TentaclesConfigProvider>
+                                                </BotColorsProvider>
+                                            </ColorModeProvider>
+                                        </BotLayoutProvider>
+                                    </BotInfoProvider>
+                                </VisibleExchangesProvider>
+                            </VisiblePairsProvider>
+                        </VisibleTimeFramesProvider>
+                    </UiConfigProvider>
+                </NotificationsContextProvider>
+            </IsBotOnlineProvider>
+        </IoProvider>
+    </BotDomainProvider>);
 }

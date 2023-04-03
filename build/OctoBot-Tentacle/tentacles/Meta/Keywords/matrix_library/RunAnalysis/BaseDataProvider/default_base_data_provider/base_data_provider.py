@@ -21,13 +21,14 @@ class RunAnalysisBaseDataGenerator:
 
     def __init__(
         self,
-        ctx,
+        ctx: custom_context.Context,
         run_database,
         run_display,
         metadata,
-        is_backtesting,
+        is_backtesting: bool,
         main_plotted_element,
         sub_plotted_element,
+        table_plotted_element,
     ):
         self._candles_by_symbol_and_time_frame: typing.Dict[
             str,
@@ -48,7 +49,7 @@ class RunAnalysisBaseDataGenerator:
         # TODO remove
         self._plotted_elements_by_chart["main-chart"] = main_plotted_element
         self._plotted_elements_by_chart["sub-chart"] = sub_plotted_element
-
+        self.table_plotted_element = table_plotted_element
         self.run_database: meta_database.MetaDatabase = run_database
         self.run_display = run_display
         self.ctx: custom_context.Context = ctx
