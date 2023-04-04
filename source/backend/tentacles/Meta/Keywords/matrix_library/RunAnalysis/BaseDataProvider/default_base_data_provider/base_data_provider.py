@@ -315,13 +315,13 @@ class RunAnalysisBaseDataGenerator:
             )
         )
 
-        contracts = (
-            self.metadata[commons_enums.DBRows.FUTURE_CONTRACTS.value][
-                self.exchange_name
-            ]
-            if self.trading_type == "future"
-            else {}
-        )
+        # contracts = (
+        #     self.metadata[commons_enums.DBRows.FUTURE_CONTRACTS.value][
+        #         self.exchange_name
+        #     ]
+        #     if self.trading_type == "future"
+        #     else {}
+        # )
 
         if self.metadata["end_time"] == -1:
             self.end_time = 10000000000000
