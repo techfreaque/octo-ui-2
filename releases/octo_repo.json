@@ -64,6 +64,21 @@
             ],
             "tentacle_package_name": "Matrix-Strategy-Maker",
             "requires_auth": true
+        },
+        {
+            "name": "Octo UI2 Pro",
+            "description": "",
+            "versions": [
+                {
+                    "version": "latest stable version",
+                    "url": "https://raw.githubusercontent.com/techfreaque/octo-ui2-pro/main/releases/octo-ui2-pro-latest/any_platform.zip"
+                }
+            ],
+            "categories": [
+                "UI"
+            ],
+            "tentacle_package_name": "Matrix-Strategy-Maker",
+            "requires_auth": true
         }
     ]
 }
