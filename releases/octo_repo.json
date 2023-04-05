@@ -71,7 +71,7 @@
             "versions": [
                 {
                     "version": "latest stable version",
-                    "url": "https://raw.githubusercontent.com/techfreaque/octo-ui2-pro/main/releases/octo-ui2-pro-latest/any_platform.zip"
+                    "url": "https://github.com/techfreaque/octo-ui2-pro/blob/main/releases/octo-ui2-pro-latest/any_platform.zip"
                 }
             ],
             "categories": [
