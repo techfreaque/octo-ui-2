@@ -1,10 +1,11 @@
 import {Radio} from "antd";
 import W2uiDataTable from "../Tables/W2uiDataTable";
 import PlotlyDualCharts from "./MainCharts/PlotlyDualCharts";
-import {faChartLine, faChartPie, faListUl} from "@fortawesome/free-solid-svg-icons";
+import {faChartLine, faListUl} from "@fortawesome/free-solid-svg-icons";
 import {FaIconByReactFunc} from "../../../components/Icons/FontAwesome";
 import {sizes} from "../../../constants/frontendConstants";
 import {useChartTypeContext, useUpdateChartTypeContext} from "../../../context/config/CurrentChartTypeProvider";
+import {useState} from "react";
 
 export const chartTypes = {
     CHART: "chart",
@@ -62,9 +63,12 @@ export function ChartTypeSelector() {
 }
 
 export default function ChartTablePieCombo() {
+    const [charts, setCharts] = useState()
+
     const chartType = useChartTypeContext()
     if (chartType === chartTypes.CHART) {
-        return (<PlotlyDualCharts/>)
+        return (<PlotlyDualCharts charts={charts}
+            setCharts={setCharts}/>)
     } else if (chartType === chartTypes.TABLE) {
         return (<W2uiDataTable/>)
     }

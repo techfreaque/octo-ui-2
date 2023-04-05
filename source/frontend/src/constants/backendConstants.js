@@ -1,4 +1,5 @@
 export const basePath = "/octo_ui2";
+export const proBasePath = "/octo_ui2_pro";
 export const apiPath = "/api";
 export const advancedPath = "/advanced";
 
@@ -20,10 +21,12 @@ export const backendRoutes = {
     closeAllPositions: `${basePath}/positions/close_all`,
     liveRunData: `${basePath}/live_run_data`,
     UIConfig: `${basePath}/ui_config`,
-    optimizerQueueUpdate: `${basePath}/optimizer/update`,
-    optimizerAddToQueue: `${basePath}/optimizer/add`,
-    optimizerGetQueue: `${basePath}/optimizer/get`,
     logoutBot: `${basePath}/logout`,
+
+    optimizerQueueUpdate: `${proBasePath}/optimizer/update`,
+    optimizerAddToQueue: `${proBasePath}/optimizer/add`,
+    optimizerGetQueue: `${proBasePath}/optimizer/get`,
+    optimizerStart: `${proBasePath}/optimizer/start`,
 
     installApp: `${advancedPath}/tentacle_packages?update_type=add_package`,
     optimizerStop: `${advancedPath}/strategy-optimizer?update_type=cancel_optimizer`,
@@ -61,7 +64,7 @@ export const backendRoutes = {
     getAllTrades: `${apiPath}/trades`,
 
     strategyDesignDeleteRunData: "/strategy_design/run_data?action=delete",
-    optimizerStart: "/strategy_design/strategy_design_start_optimizerstart",
+
     cacheActionDeleteCurrentCache: "/strategy_design/cacheclear_plotted_cache",
     cacheActionDeleteAllCache: "/strategy_design/cacheclear_all_cache"
 

@@ -33,6 +33,7 @@ class PlotCandles(abstract_analysis_evaluator.AnalysisEvaluator):
             run_data,
             analysis_type=analysis_type,
             data_source_input_name=self.PLOT_CANDLES_NAME,
+            default_data_source_enabled=True,
             default_chart_location="main-chart",
         )
         if plotted_element is not None:

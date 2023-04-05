@@ -1,7 +1,5 @@
 import {faCoins, faPause, faRobot} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Alert, Button, Modal} from "@mui/material";
-import useMediaQuery from '@mui/material/useMediaQuery';
 import {Box} from "@mui/system";
 import {useMemo, useState} from "react";
 import {realTradingSwitch} from "../../../../api/actions";
@@ -18,8 +16,8 @@ export default function RealTradingSwitch() {
     const handleClose = () => setOpen(false);
     const botDomain = useBotDomainContext()
     const botConfigs = useBotConfigContext()
-    const isRealTrading = botConfigs ?. data ?. profile.trader.enabled
-    const isSimulatedTrading = botConfigs ?. data ?. profile["trader-simulator"].enabled
+    const isRealTrading = botConfigs?.data?.profile.trader.enabled
+    const isSimulatedTrading = botConfigs?.data?.profile["trader-simulator"].enabled
     const title = isRealTrading ? "Real trading" : isSimulatedTrading ? "Simulated trading" : "Trading paused"
     const icon = isRealTrading ? faCoins : isSimulatedTrading ? faRobot : faPause;
     return useMemo(() => {

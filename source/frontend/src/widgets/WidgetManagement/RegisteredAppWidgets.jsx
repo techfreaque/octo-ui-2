@@ -40,7 +40,6 @@ import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
 import OptimizerQueueSize from "../AppWidgets/Stats/OptimizerQueueSize";
 import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
 import SymbolsInfoTable from "../AppWidgets/Tables/SymbolsInfo";
-import PlotlyDualCharts from "../AppWidgets/Charts/MainCharts/PlotlyDualCharts";
 import ResetUiConfigButton from "../AppWidgets/Buttons/ResetUiConfigButton";
 import ResetTentaclesConfigsButton from "../AppWidgets/Buttons/ResetTentaclesConfigButton";
 import ResetHistoryStorageButton from "../AppWidgets/Buttons/ResetHistoryStorageButton";
@@ -96,7 +95,6 @@ export const registeredComponents = {
     CloseAllPositionsButton,
     CancelAllOrdersButton,
     PowerMenu,
-    PlotlyDualCharts,
     SendActionCommandToTradingMode,
     // OptimizerConfigForm2,
     ToggleActivateRealTimeStrategy,

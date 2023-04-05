@@ -1,8 +1,9 @@
 import ProfileAvatar from "../../Stats/ProfileAvatar"
-import { Typography } from "antd";
+import {Typography} from "antd";
 
 export function ProfileTitle({newProfileSettings, setNewProfileSettings, currentProfile, setRequiresInstantRestart}) {
     function handleTitleChange(newName) {
+        // TODO also change profile id
         setNewProfileSettings(prevSettings => {
             const newSettings = {
                 ...prevSettings

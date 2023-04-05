@@ -11,8 +11,7 @@ import { useBotPlottedElementsContext } from '../../../../context/data/BotPlotte
 import { setPlotData } from './PlotlyGenerateData';
 import { useRef } from 'react';
 
-export default function PlotlyDualCharts({ chartLocations = allChartLocations }) {
-    const [charts, setCharts] = useState()
+export default function PlotlyDualCharts({ chartLocations = allChartLocations, charts, setCharts }) {
     const [splitChartsPercent, setSplitChartsPercent] = useState({ percent: 60, shouldUpdate: false, })
     const layouts = usePlotlyLayoutsContext()
     const setLayouts = useUpdatePlotlyLayoutsContext()

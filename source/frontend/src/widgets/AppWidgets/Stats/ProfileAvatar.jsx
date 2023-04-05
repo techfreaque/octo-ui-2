@@ -14,7 +14,7 @@ export default function ProfileAvatar({
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        currentProfile?.profile?.name
+        currentProfile?.profile?.name?.replace(/ /g, "_")
     }/${currentAvatar}`
     // eslint-disable-next-line jsx-a11y/alt-text
     return <img style={

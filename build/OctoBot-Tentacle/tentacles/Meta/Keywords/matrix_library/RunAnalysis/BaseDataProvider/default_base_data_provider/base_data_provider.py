@@ -11,6 +11,7 @@ import octobot_backtesting.api as backtesting_api
 import octobot_commons.constants
 import octobot_commons.enums as commons_enums
 import octobot_commons.logging as commons_logging
+from tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors import CandlesLoadingError
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.custom_context as custom_context
 
 
@@ -165,10 +166,14 @@ class RunAnalysisBaseDataGenerator:
         exchange_manager = trading_api.get_exchange_manager_from_exchange_id(
             exchange_api.get_exchange_ids()[0]
         )
-        raw_candles = trading_api.get_symbol_historical_candles(
+        try:
+            raw_candles = trading_api.get_symbol_historical_candles(
             trading_api.get_symbol_data(exchange_manager, symbol, allow_creation=True),
             time_frame,
+    
         )
+        except KeyError as error:
+            raise CandlesLoadingError from error
         for index in range(
             len(raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value])
         ):

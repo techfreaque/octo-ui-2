@@ -71,13 +71,15 @@ export async function updateBot(botDomain, updateIsOnline, setIsloading) {
 
 export async function startOptimizer(botDomain, optimizerRunSettings, optimizerSettingsForm, ids_by_exchange_name, setBotIsOptimizing) {
     const success = (updated_data, update_url, result, msg, status) => {
-        setBotIsOptimizing(true)
-        createNotification(msg, "success")
+        if (msg.success === true) {
+            setBotIsOptimizing(true)
+            createNotification(msg.message, "success")
+        } else {
+            failure(updated_data, update_url, result, status, status)
+        }
     }
     const failure = (updated_data, update_url, result, status, error) => {
-        createNotification(result.responseText, "danger")
-        // todo check if running
-        setBotIsOptimizing(true)
+        createNotification(result.message, "danger")
     }
     sendAndInterpretBotUpdate({
         ...optimizerRunSettings,
@@ -85,7 +87,7 @@ export async function startOptimizer(botDomain, optimizerRunSettings, optimizerS
         config: optimizerSettingsForm,
 
         // TODO remove when stock supports ids
-        data_source: optimizerRunSettings.data_sources[0],
+        data_source: optimizerRunSettings?.data_files?.[0] || "current_bot_data",
         exchange_id: ids_by_exchange_name[optimizerRunSettings.exchange_names[0]]
     }, botDomain + backendRoutes.optimizerStart, success, failure)
 }

@@ -36,6 +36,7 @@ class PlotTrades(abstract_analysis_evaluator.AnalysisEvaluator):
             analysis_type=analysis_type,
             data_source_input_name=self.PLOT_TRADES_NAME,
             default_chart_location="main-chart",
+            default_data_source_enabled=True,
         )
         if plotted_element is not None:
             symbols_settings = common_user_inputs.get_enabled_symbols(

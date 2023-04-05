@@ -45,8 +45,8 @@ function generateTablesAndSidebarItems({
         const thisRun = plottedElements[runId]
         thisRun && Object.keys(thisRun).forEach(symbol => {
             thisRun[symbol] && Object.keys(thisRun[symbol]).forEach(timeframe => {
-                const subElements = thisRun[symbol][timeframe] ?. data ?. sub_elements
-                subElements ?. forEach(subElement => {
+                const subElements = thisRun[symbol][timeframe]?.data?.sub_elements
+                subElements?.forEach(subElement => {
                     if (subElement.name === "table") {
                         _generateTablesAndSidebarItems({
                             subElement,
@@ -70,7 +70,7 @@ function _generateTablesAndSidebarItems({
     optimizerId,
     runId
 }) {
-    subElement ?. data ?. elements ?. forEach(element => {
+    subElement?.data?.elements?.forEach(element => {
         if (!newMenuItems[liveOrBacktest]) {
             newMenuItems[liveOrBacktest] = {
                 label: `${liveOrBacktest} results`,
@@ -84,7 +84,7 @@ function _generateTablesAndSidebarItems({
         const tableId = `${
             element.title.replace(/ /g, "_").replace(/\//g, "_")
         }-table`
-        element ?. rows ?. forEach((row, index) => {
+        element?.rows?.forEach((row, index) => {
             row.recid = index
         })
         newMenuItems[liveOrBacktest].children.push({

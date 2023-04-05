@@ -12,15 +12,6 @@ def get_backtesting_run_data(campaigns_to_load):
             include_optimizer_runs=True,
         )
     )
+    # for run in metadata.values():
+
     return {"data": metadata, "campaigns": campaign_names}
-
-
-# def get_live_run_data(live_id):
-#     trading_mode = models.get_config_activated_trading_mode()
-#     metadata = interfaces_util.run_in_bot_async_executor(
-#         backtesting.read_bot_recording_runs_metadata(
-#             trading_mode=trading_mode,
-#             live_id=live_id,
-#         )
-#     )
-#     return {"data": metadata}

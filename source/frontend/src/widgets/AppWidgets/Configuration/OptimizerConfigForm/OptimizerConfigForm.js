@@ -25,18 +25,19 @@ export default function OptimizerConfigForm() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTentaclesTradingConfig, optimizerConfig, uiConfig]);
     return useMemo(() => {
-        return (<div>
+        return (
             <div>
-                <WarningButton
-                    color={botColors.primary}
-                    onClick={saveOptimizerForm}
-                    text="Save Optimizer Form"
-                />
-            </div>
-            <div id="strategy-optimizer-inputs">
-                <OptimizerSettingTemplate/>
-            </div>
-            {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
+                <div>
+                    <WarningButton color={
+                            botColors.primary
+                        }
+                        onClick={saveOptimizerForm}
+                        text="Save Optimizer Form"/>
+                </div>
+                <div id="strategy-optimizer-inputs">
+                    <OptimizerSettingTemplate/>
+                </div>
+                {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
                     <h4>
                         Run filters
                     </h4>
@@ -44,7 +45,8 @@ export default function OptimizerConfigForm() {
                         If a run validates any of these statements, it will be discarded.
                     </p>
                     <OptimizerRunFilterTemplate />
-                </div> */} </div>)
+                </div> */} </div>
+        )
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTentaclesConfig, optimizerConfig, uiConfig])
 }
@@ -300,24 +302,29 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
         configValue = rawValue.value;
         isEnabled = rawValue.enabled;
     }
-    if (valueType === "options" || valueType === "multiple-options" || valueType === "boolean") {
+    if (["options", "multiple-options", "boolean"].includes(valueType)) {
         let values = typeof configValue === "undefined" ? [] : configValue
         const valuesSelect = $(document.getElementById(`${tentacleIdentifier}-${
             inputDetail.options.name
         }-Input-setting-${valueType}`));
         if (valueType === "options") {
-            inputDetail.enum.forEach(function (value) {
-                const isSelected = values.indexOf(value) !== -1;
-                valuesSelect.append(new Option(value, value, false, isSelected));
-            })
+            if (inputDetail?.enum) {
+                inputDetail.enum.forEach((value) => {
+                    const isSelected = values.includes(value);
+                    valuesSelect.append(new Option(value, value, false, isSelected));
+                })
+
+            } else {
+                // TODO add string support
+            }
         } else if (valueType === "multiple-options") {
-            inputDetail.items.enum.forEach(function (value) {
-                const isSelected = values.indexOf(value) !== -1;
+            inputDetail.items.enum.forEach((value) => {
+                const isSelected = values.includes(value);
                 valuesSelect.append(new Option(value, value, false, isSelected));
             })
         } else if (valueType === "boolean") {
             values = values.map((x) => String(x))
-            valuesSelect.find("option").each(function (i, jsOption) {
+            valuesSelect.find("option").each((i, jsOption) => {
                 const option = $(jsOption);
                 const isSelected = values.indexOf(option.attr("value")) !== -1;
                 option.attr("selected", isSelected);

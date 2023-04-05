@@ -16,7 +16,6 @@ from .controllers import (
     bot_info,
     app_store,
     run_data,
-    optimizer,
     semi_auto_trade,
     trading,
     daemons,
@@ -37,7 +36,6 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
         app_store.register_appstore_routes(self)
         run_data.register_run_data_routes(self)
         semi_auto_trade.register_semi_auto_trade_routes(self)
-        optimizer.register_optimizer_routes(self)
         trading.register_cancel_orders_routes(self)
         tentacles_config.register_tentacles_config_routes(self)
         daemons.register_daemons_routes(self)

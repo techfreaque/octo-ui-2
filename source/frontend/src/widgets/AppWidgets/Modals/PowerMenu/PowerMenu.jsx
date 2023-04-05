@@ -10,13 +10,12 @@ import {sizes} from '../../../../constants/frontendConstants';
 import {useBotDomainContext} from '../../../../context/config/BotDomainProvider';
 import {MuiIconButton} from '../../../../components/Buttons/IconButton';
 import { useState } from 'react';
-import { useBotColorsContext } from '../../../../context/config/BotColorsProvider';
 import { useBotInfoContext } from '../../../../context/data/BotInfoProvider';
 
 export default function PowerMenu() {
     const botDomain = useBotDomainContext();
     const [open, setOpen] = useState()
-    const botColors = useBotColorsContext()
+    // const botColors = useBotColorsContext()
     const botInfo = useBotInfoContext();
     return (
         <Dropdown onOpenChange={(state)=>setOpen(state)} menu={
