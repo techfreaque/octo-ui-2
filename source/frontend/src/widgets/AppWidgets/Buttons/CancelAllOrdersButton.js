@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { cancelAllOrders } from "../../../api/actions";

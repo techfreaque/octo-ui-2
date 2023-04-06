@@ -1,4 +1,3 @@
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useBotIsOptimizingContext, useAddToOptimizerQueue } from "../../../context/actions/BotOptimizerProvider";
 import { useMemo } from "react";
@@ -12,7 +11,7 @@ export default function AddToOptimizerQueueButton() {
       <AntButton 
         onClick={AddToOptimizerQueue} 
         buttonType= {buttonTypes.success}
-        icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: "5px" }}/>}
+        faIconComponent={faPlus}
         text= "Add to Queue"
       />
     );

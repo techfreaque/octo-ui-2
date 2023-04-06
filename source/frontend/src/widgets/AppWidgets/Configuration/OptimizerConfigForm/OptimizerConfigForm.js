@@ -8,15 +8,13 @@ import select2 from "select2/dist/js/select2.js" // required
 import {useUpdateOptimizerEditorCounterContext} from "../../../../context/config/OptimizerEditorProvider";
 import {useGetAndSaveOptimizerForm} from "../../../../context/actions/BotOptimizerProvider";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
-import AntButton from "../../../../components/Buttons/AntButton";
-import {useBotColorsContext} from "../../../../context/config/BotColorsProvider";
+import AntButton , { buttonTypes } from "../../../../components/Buttons/AntButton";
 
 export default function OptimizerConfigForm() {
     const uiConfig = useUiConfigContext()
     const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
-    const botColors = useBotColorsContext();
+    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
 
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
@@ -27,8 +25,8 @@ export default function OptimizerConfigForm() {
     return useMemo(() => {
         return (<div>
             <div>
-                <AntButton color={
-                        botColors.primary
+                <AntButton buttonType={
+                        buttonTypes.primary
                     }
                     onClick={saveOptimizerForm}
                     text="Save Optimizer Form"/>
@@ -306,7 +304,7 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
             inputDetail.options.name
         }-Input-setting-${valueType}`));
         if (valueType === "options") {
-            if (inputDetail ?. enum) {
+            if (inputDetail?.enum) {
                 inputDetail.enum.forEach((value) => {
                     const isSelected = values.includes(value);
                     valuesSelect.append(new Option(value, value, false, isSelected));

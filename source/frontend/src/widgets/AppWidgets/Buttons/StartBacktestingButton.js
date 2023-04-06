@@ -1,25 +1,15 @@
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faPlay} from "@fortawesome/free-solid-svg-icons";
 import {useBotIsBacktestingContext, useStartBacktesting} from "../../../context/actions/BotBacktestingProvider";
 import {useMemo} from "react";
-import AntButton from "../../../components/Buttons/AntButton";
-import {useBotColorsContext} from "../../../context/config/BotColorsProvider";
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 
 export default function StartBacktestingButton() {
     const isBacktesting = useBotIsBacktestingContext()
     const startBacktesting = useStartBacktesting()
-    const botColors = useBotColorsContext();
     return useMemo(() => {
         return ! isBacktesting && (<AntButton onClick={startBacktesting}
-            color={
-                botColors.success
-            }
-            icon={
-                (<FontAwesomeIcon icon={faPlay}
-                    style={
-                        {marginRight: "8px"}
-                    }/>)
-            }
+            buttonType={buttonTypes.success}
+            faIconComponent={faPlay}
             text="Start Backtest"/>);
-    }, [botColors.success, isBacktesting, startBacktesting])
+    }, [isBacktesting, startBacktesting])
 }
