@@ -1,5 +1,5 @@
 import {createContext, useContext, useState} from "react";
-import { chartTypes } from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
+import {chartTypes} from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
 
 const updateChartTypeContext = createContext();
 const ChartTypeContext = createContext();

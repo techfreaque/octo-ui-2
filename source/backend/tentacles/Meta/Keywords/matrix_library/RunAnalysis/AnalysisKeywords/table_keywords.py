@@ -115,7 +115,18 @@ def _get_default_column_render():
 
 
 def _get_default_types():
-    return {"Time": "datetime", "Entry time": "datetime", "Exit time": "datetime"}
+    return {
+        "Time": "datetime",
+        "Entry time": "datetime",
+        "Exit time": "datetime",
+        "Symbol":"text",
+        "Type": "text",
+        "Side": "text",
+        "Price": "float",
+        "Fees": "float",
+        "Total": "float",
+        "Volume": "float",
+        }
 
 
 def _get_default_columns(plotted_element, data, column_render, key_to_label=None):
@@ -125,6 +136,7 @@ def _get_default_columns(plotted_element, data, column_render, key_to_label=None
             "field": row_key,
             "text": key_to_label[row_key],
             "render": column_render.get(key_to_label[row_key], None),
+            "sortable": True
         }
         for row_key, row_value in data[0].items()
         if row_key in key_to_label and row_value is not None
@@ -143,7 +155,7 @@ def _get_default_searches(columns, types):
         {
             "field": col["field"],
             "label": col["text"],
-            "type": types.get(col["field"]),
+            "type": types.get(col["text"]),
         }
         for col in columns
     ]

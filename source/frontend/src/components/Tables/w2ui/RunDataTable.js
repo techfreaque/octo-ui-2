@@ -149,12 +149,12 @@ function createMetadataTable(
         _ensureBacktestingMetadataColumnsOrder(runDataSearches);
         const searches = runDataSearches.concat(userInputSearches);
         const searchData = [
-            // {
-            //     field: 'optimization campaign',
-            //     value: currentCampaignName,
-            //     operator: 'is',
-            //     type: 'text'
-            // }
+            {
+                field: 'optimization campaign',
+                value: currentCampaignName,
+                operator: 'is',
+                type: 'text'
+            }
         ]
         const sortData = [
             {
@@ -173,8 +173,8 @@ function createMetadataTable(
         table.on("select", (event) => handleSelection(tableId, event))
         table.on("unselect", (event) => handleSelection(tableId, event))
         if (records.length) {
-            // _filterOptimizationCampaign(table, currentCampaignName);
-            // table.toolbar.check('show-current-optimization-campaign');
+            _filterOptimizationCampaign(table, currentCampaignName);
+            table.toolbar.check('show-current-optimization-campaign');
             if (forceSelectLatest) {
                 table.click(table.getFirst());
             }
