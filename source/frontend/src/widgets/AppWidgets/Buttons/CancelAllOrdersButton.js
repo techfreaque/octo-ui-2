@@ -4,7 +4,7 @@ import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { cancelAllOrders } from "../../../api/actions";
 import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
-import WarningButton from "../../../components/Buttons/WarningButton";
+import AntButton from "../../../components/Buttons/AntButton";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 
 export default function CancelAllOrdersButton() {
@@ -15,11 +15,11 @@ export default function CancelAllOrdersButton() {
 
   return useMemo(() => {
     return (
-      <WarningButton 
+      <AntButton 
         disabled={!isOnline || isCancelling}
         onClick={() => cancelAllOrders(botDomain, setIsCancelling)}
         color={botColors.warning}
-        icon = {<FontAwesomeIcon icon={faStop} style={{ marginRight: "5px" }}/>}
+        icon = {(<FontAwesomeIcon icon={faStop} style={{ marginRight: "5px" }}/>)}
         text="Cancel All Orders"
       />
     );

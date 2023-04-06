@@ -13,12 +13,17 @@ const iconStyles = {
 export function FaIconByReactFunc({
     icon,
     size = sizes.medium,
-    spin = false
+    spin = false,
+    marginRight = "0px"
+
 }) {
     return icon && createElement(FontAwesomeIcon, {
         size: iconStyles.size[size],
         icon,
-        spin
+        spin,
+        style: {
+            marginRight
+        }
     })
 }
 

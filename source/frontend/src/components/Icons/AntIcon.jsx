@@ -34,8 +34,8 @@ export function AntIconByReactFunc({
     return AntReactIcon && createElement(AntReactIcon, {
         style: {
             ...iconStyles.size[size],
-            // marginTop: "auto",
-            // marginBottom: "auto"
+            marginTop: "auto",
+            marginBottom: "auto"
         },
         spin
     })

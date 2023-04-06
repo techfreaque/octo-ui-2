@@ -8,14 +8,14 @@ import select2 from "select2/dist/js/select2.js" // required
 import {useUpdateOptimizerEditorCounterContext} from "../../../../context/config/OptimizerEditorProvider";
 import {useGetAndSaveOptimizerForm} from "../../../../context/actions/BotOptimizerProvider";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
-import WarningButton from "../../../../components/Buttons/WarningButton";
+import AntButton from "../../../../components/Buttons/AntButton";
 import {useBotColorsContext} from "../../../../context/config/BotColorsProvider";
 
 export default function OptimizerConfigForm() {
     const uiConfig = useUiConfigContext()
     const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
     const botColors = useBotColorsContext();
 
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
@@ -25,19 +25,18 @@ export default function OptimizerConfigForm() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTentaclesTradingConfig, optimizerConfig, uiConfig]);
     return useMemo(() => {
-        return (
+        return (<div>
             <div>
-                <div>
-                    <WarningButton color={
-                            botColors.primary
-                        }
-                        onClick={saveOptimizerForm}
-                        text="Save Optimizer Form"/>
-                </div>
-                <div id="strategy-optimizer-inputs">
-                    <OptimizerSettingTemplate/>
-                </div>
-                {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
+                <AntButton color={
+                        botColors.primary
+                    }
+                    onClick={saveOptimizerForm}
+                    text="Save Optimizer Form"/>
+            </div>
+            <div id="strategy-optimizer-inputs">
+                <OptimizerSettingTemplate/>
+            </div>
+            {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
                     <h4>
                         Run filters
                     </h4>
@@ -45,8 +44,7 @@ export default function OptimizerConfigForm() {
                         If a run validates any of these statements, it will be discarded.
                     </p>
                     <OptimizerRunFilterTemplate />
-                </div> */} </div>
-        )
+                </div> */} </div>)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTentaclesConfig, optimizerConfig, uiConfig])
 }
@@ -308,14 +306,13 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
             inputDetail.options.name
         }-Input-setting-${valueType}`));
         if (valueType === "options") {
-            if (inputDetail?.enum) {
+            if (inputDetail ?. enum) {
                 inputDetail.enum.forEach((value) => {
                     const isSelected = values.includes(value);
                     valuesSelect.append(new Option(value, value, false, isSelected));
                 })
 
-            } else {
-                // TODO add string support
+            } else { // TODO add string support
             }
         } else if (valueType === "multiple-options") {
             inputDetail.items.enum.forEach((value) => {
