@@ -11,7 +11,7 @@ export default function StartOptimizerButton() {
       <AntButton 
         onClick={startOptimizer} 
         buttonType={buttonTypes.success}
-            faIconComponent={faPlay}
+        faIconComponent={faPlay}
         text= "Start Optimizer"
       />
     );

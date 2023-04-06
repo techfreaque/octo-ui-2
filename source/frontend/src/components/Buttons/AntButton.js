@@ -39,6 +39,7 @@ export default function AntButton({
           style={{ margin: '5px', padding: '4px 10px', display: "flex" }}>
           {(faIcon || antIcon) && (<IconFromString faIcon={faIcon} antIcon={antIcon}  size={sizes.small } />)}
           {antIconComponent && <AntIconByReactFunc AntReactIcon={antIconComponent} size={sizes.small }/>}
+
           {faIconComponent && <FaIconByReactFunc icon={faIconComponent}  size={sizes.small } marginRight= "5px" />}
           {text}
       </Button>
