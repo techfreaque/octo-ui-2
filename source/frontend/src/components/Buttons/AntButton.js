@@ -16,7 +16,6 @@ export const buttonTypes = {
 export default function AntButton({
   buttonType = buttonTypes.success,
   onClick,
-  // icon,
   text,
 
   // icon components
@@ -38,9 +37,9 @@ export default function AntButton({
       <Button danger 
           onClick={onClick}
           style={{ margin: '5px', padding: '4px 10px', display: "flex" }}>
-          {(faIcon || antIcon) && (<IconFromString faIcon={faIcon} antIcon={antIcon}  size={sizes.medium } />)}
-          {antIconComponent && <AntIconByReactFunc AntReactIcon={antIconComponent} size={sizes.medium }/>}
-          {faIconComponent && <FaIconByReactFunc icon={faIconComponent}  size={sizes.medium } marginRight= "5px" />}
+          {(faIcon || antIcon) && (<IconFromString faIcon={faIcon} antIcon={antIcon}  size={sizes.small } />)}
+          {antIconComponent && <AntIconByReactFunc AntReactIcon={antIconComponent} size={sizes.small }/>}
+          {faIconComponent && <FaIconByReactFunc icon={faIconComponent}  size={sizes.small } marginRight= "5px" />}
           {text}
       </Button>
     </ConfigProvider>

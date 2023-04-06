@@ -1,8 +1,8 @@
 import { w2ui, w2grid } from "w2ui/dist/w2ui.es6.js"
 import "./W2UI.css"
 
-export function createTable(elementID, name, tableName, searches, columns, records, columnGroups, searchData, sortData,
-    selectable, addToTable, reorderRows, deleteRows, onReorderRowCallback, onDeleteCallback) {
+export function createTable({elementID, name, tableName, searches, columns, records, columnGroups, searchData, sortData,
+    selectable, addToTable, reorderRows, deleteRows, onReorderRowCallback, onDeleteCallback}) {
     window.w2ui = window.w2ui ? window.w2ui : w2ui
     let table = window.w2ui[tableName]
     const tableExists = typeof table !== "undefined";
@@ -54,7 +54,7 @@ export function createTable(elementID, name, tableName, searches, columns, recor
 
 function _downloadRecords(name, columns, rows) {
     const columnFields = columns.map((col) => col.field);
-    let csv = columns.map((col) => col.text).join(",") + "\n";
+    let csv = `${columns.map((col) => col.text).join(",")}\n`;
     csv += rows.map((row) => {
         return columnFields.map((field) => {
             const value = row[field];
@@ -65,7 +65,7 @@ function _downloadRecords(name, columns, rows) {
         }).join(",")
     }).join("\n");
     const hiddenElement = document.createElement('a');
-    hiddenElement.href = 'data:text/csv;charset=utf-8,' + encodeURI(csv);
+    hiddenElement.href = `data:text/csv;charset=utf-8,${encodeURI(csv)}`;
     hiddenElement.target = '_blank';
     hiddenElement.download = `${name}.csv`;
     hiddenElement.click();

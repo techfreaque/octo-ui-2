@@ -17,20 +17,19 @@ export default function RunDataTableW2UI({
     const displayedRunIds = useDisplayedRunIdsContext()
 
     useEffect(() => {
-        runData.data && hiddenMetadataColumns &&
-            createMetadataTable(
-                tableTitle, tableId, runData.data,
-                false,
-                currentCampaignName, reloadData,
-                deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings)
+        if (runData.data && hiddenMetadataColumns) createMetadataTable(
+        tableTitle, tableId, runData.data,
+        false,
+        currentCampaignName, reloadData,
+        deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [runData, currentCampaignName, hiddenMetadataColumns]);
     return useMemo(() => (
-        <div id={tableId + "-container"} style={{ height: "100%" }}>
-            <div id={tableId + "-no-message"} className="text-center mx-4 my-4">
+        <div id={`${tableId}-container`} style={{ height: "100%" }}>
+            <div id={`${tableId}-no-message`} className="text-center mx-4 my-4">
                 {noData}
             </div>
-            <div id={tableId + "-table"} style={{ height: "100%" }} />
+            <div id={`${tableId}-table`} style={{ height: "100%" }} />
         </div>
         // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [])
@@ -42,7 +41,7 @@ function createMetadataTable(
     reloadData, deleteBacktestingRuns, hiddenMetadataColumns,
     setDisplayedRunIds, displayedRunIds, restoreSettings
 ) {
-    document.getElementsByClassName(tableId + "-container").innerHTML = undefined;
+    document.getElementsByClassName(`${tableId}-container`).innerHTML = undefined;
     if (metadata !== null && metadata.length) {
         function handleSelection(tableName, event) {
             function handleSelection2() {
@@ -54,17 +53,17 @@ function createMetadataTable(
             event.onComplete = handleSelection2
         }
         const sortedMetadata = metadata.sort((a, b) => b.timestamp - a.timestamp);
-        document.getElementById(tableId + "-no-message").classList.add(hidden_class);
-        const keys = Object.keys(sortedMetadata[0]).filter(key => METADATA_UNDISPLAYED_FIELDS.indexOf(key) === -1);
+        document.getElementById(`${tableId}-no-message`).classList.add(hidden_class);
+        const keys = Object.keys(sortedMetadata[0]).filter(key => !METADATA_UNDISPLAYED_FIELDS.includes(key));
         const runDataColumns = keys.map((key) => {
             return {
                 field: key,
                 text: key,
                 size: `${1 / keys.length * 100}%`,
                 sortable: true,
-                hidden: METADATA_HIDDEN_FIELDS.indexOf(key) !== -1,
-                render: TIMESTAMP_DATA.indexOf(key) !== -1 ? "datetime" :
-                    ID_DATA.indexOf(key) !== -1 ? "int" : undefined,
+                hidden: METADATA_HIDDEN_FIELDS.includes(key),
+                render: TIMESTAMP_DATA.includes(key) ? "datetime" :
+                    ID_DATA.includes(key) ? "int" : undefined,
             }
         })
         // Always put the id attribute first
@@ -85,7 +84,7 @@ function createMetadataTable(
         sortedMetadata.forEach((run_metadata) => {
             if (typeof run_metadata["user inputs"] !== "undefined") {
                 Object.keys(run_metadata["user inputs"]).forEach((inputTentacle) => {
-                    const hasTentacle = addedTentacles.indexOf(inputTentacle) === -1;
+                    const hasTentacle = !addedTentacles.includes(inputTentacle);
                     _getUserInputColumns(userInputColumns, inputTentacle, userInputKeys, userInputSampleValueByKey,
                         inputPerTentacle, run_metadata["user inputs"], hiddenMetadataColumns);
                     if (!hasTentacle) {
@@ -130,7 +129,7 @@ function createMetadataTable(
             return {
                 field: key,
                 label: `${label} (${splitKey[1]})`,
-                type: TIMESTAMP_DATA.indexOf(key) !== -1 ? "datetime" : _getTableDataType(null,
+                type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(null,
                     { type: null, field: key }, "text", sampleValue),
             }
         })
@@ -143,7 +142,7 @@ function createMetadataTable(
             return {
                 field: key,
                 label: key,
-                type: TIMESTAMP_DATA.indexOf(key) !== -1 ? "datetime" : _getTableDataType(records,
+                type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(records,
                     { type: null, field: key }, "text", null),
             };
         });
@@ -163,9 +162,9 @@ function createMetadataTable(
                 direction: "asc"
             }
         ];
-        const table = createTable(tableId + "-table", tableTitle, tableId,
+        const table = createTable({elementID:`${tableId}-table`, name:tableTitle, tableName:tableId,
             searches, columns, records, columnGroups, searchData, sortData,
-            true, false, false, false, null, null);
+            selectable:true, addToTable:false, reorderRows:false, deleteRows:false, onReorderRowCallback:null, onDeleteCallback:null});
         _addBacktestingMetadataTableButtons(
             table, runDataHidableColumns, userInputColumns,
             forceSelectLatest, currentCampaignName, reloadData,
@@ -186,7 +185,7 @@ function createMetadataTable(
     if (typeof table !== "undefined") {
         table.destroy();
     }
-    document.getElementById(tableId + "-no-message").classList.remove(hidden_class);
+    document.getElementById(`${tableId}-no-message`).classList.remove(hidden_class);
 }
 
 
@@ -262,22 +261,21 @@ function _addBacktestingMetadataTableButtons(
         if (selectedRuns && selectedRuns.length === 1) {
             function removeSpacesOnlyFromKeys(inputs) {
                 inputs && Object.keys(inputs).forEach((inputKey) => {
-                    const newInputKey = inputKey && inputKey.replace(/ /g, "_")
+                    const newInputKey = inputKey?.replace(/ /g, "_")
                     if (newInputKey && newInputKey !== inputKey) {
                         inputs[newInputKey] = inputs[inputKey]
                         delete inputs[inputKey]
                     }
-                    typeof inputs[newInputKey] === 'object'
-                        && removeSpacesOnlyFromKeys(inputs[newInputKey])
+                    if (typeof inputs[newInputKey] === 'object') removeSpacesOnlyFromKeys(inputs[newInputKey]);
                 })
                 return inputs
             }
             const run = selectedRuns[0];
             const userInputs = removeSpacesOnlyFromKeys(JSON.parse(records[run]["user inputs"]))
             restoreSettings(userInputs)
-        } else {
-            createNotification("Error restoring user iputs", "danger", "You must select one run");
+            return;
         }
+        createNotification("Error restoring user iputs", "danger", "You must select one run");
     }
     table.toolbar.add({
         type: 'button', id: 'restore-run',
@@ -350,7 +348,7 @@ function _getUserInputColumns(
 ) {
     Object.keys(inputsByConfig[inputTentacle]).forEach((userInput) => {
         const key = userInputKey(userInput, inputTentacle);
-        if (userInputKeys.indexOf(key) === -1 && hiddenMetadataColumns.indexOf(key.replaceAll("_", " ")) === -1) {
+        if (!userInputKeys.includes(key) && !hiddenMetadataColumns.includes(key.replaceAll("_", " "))) {
             userInputSampleValueByKey[key] = inputsByConfig[inputTentacle][userInput]
             if (userInputSampleValueByKey[key] instanceof Object && !(userInputSampleValueByKey[key] instanceof Array)) {
                 _getUserInputColumns(userInputColumns, userInput, userInputKeys, userInputSampleValueByKey,
@@ -364,10 +362,10 @@ function _getUserInputColumns(
                     sortable: true,
                     hidden: true
                 });
-                if (typeof inputPerTentacle[inputTentacle] !== "undefined") {
-                    inputPerTentacle[inputTentacle] += 1;
-                } else {
+                if (typeof inputPerTentacle[inputTentacle] === "undefined") {
                     inputPerTentacle[inputTentacle] = 1;
+                } else {
+                    inputPerTentacle[inputTentacle] += 1;
                 }
             }
         }
@@ -375,7 +373,7 @@ function _getUserInputColumns(
 }
 
 function _getTableDataType(records, search, defaultValue, sampleValue) {
-    if (ID_DATA.indexOf(search.field) !== -1) {
+    if (ID_DATA.includes(search.field)) {
         return "int";
     }
     if (search.type !== null) {
@@ -410,21 +408,23 @@ function _formatUserInputRow(parent, userInputData, parentIdentifier) {
 
 function _formatMetadataRow(row, recordId) {
     row.timestamp = typeof row.timestamp === "undefined" ? undefined : Math.round(row.timestamp * 1000);
-    row["start_time"] = typeof row["start_time"] === "undefined" ? undefined : Math.round(row["start_time"] * 1000);
-    row["end_time"] = typeof row["end_time"] === "undefined" ? undefined : Math.round(row["end_time"] * 1000);
+    row.start_time = typeof row.start_time === "undefined" ? undefined : Math.round(row.start_time * 1000);
+    row.end_time = typeof row.end_time === "undefined" ? undefined : Math.round(row.end_time * 1000);
     if (typeof row["user inputs"] !== "undefined") {
         _formatUserInputRow(row, row["user inputs"], null);
     }
-    Object.keys(row).forEach(function (key) {
+    Object.keys(row).forEach((key) => {
         if (typeof row[key] === "object" && key !== "children") {
             row[key] = JSON.stringify(row[key]);
         }
     })
-    if (typeof row.children !== "undefined") {
+    if (typeof row.children === "undefined") {
+        row.id = `${row.id}`
+    } else {
         const optimizerId = row.children[0]["optimizer id"]
         row.id = `${row.id} [optimizer ${optimizerId}]`
         const subRows = [];
-        row.children.forEach(function (rowChild) {
+        row.children.forEach((rowChild) => {
             recordId = _formatMetadataRow(rowChild, recordId)
             subRows.push(rowChild)
         })
@@ -432,8 +432,6 @@ function _formatMetadataRow(row, recordId) {
             children: subRows
         }
         delete row.children
-    } else {
-        row.id = `${row.id}`
     }
     row.recid = recordId++;
     return recordId
@@ -445,7 +443,7 @@ function _filterOptimizationCampaign(table, currentOptimizerCampaignName) {
         [{ field: 'optimization campaign', value: currentOptimizerCampaignName, operator: 'is' }], 'AND'
     )
     // force "is" operator as it is not used in text searches by default
-    table.searchData[0]['operator'] = "is"
+    table.searchData[0].operator = "is"
     table.localSearch()
     table.refresh()
 }

@@ -103,7 +103,23 @@ function _generateTablesAndSidebarItems({
 
 function TableFromElement({tableId, element}) {
     useEffect(() => {
-        createTable(tableId, element.title, tableId, element.searches, element.columns, element.rows, [], [], [], true, false, false, false, null, null);
+        createTable({
+            elementID: tableId,
+            name: element.title,
+            tableName: tableId,
+            searches: element.searches,
+            columns: element.columns,
+            records: element.rows,
+            columnGroups: [],
+            searchData: [],
+            sortData: [],
+            selectable: true,
+            addToTable: false,
+            reorderRows: false,
+            deleteRows: false,
+            onReorderRowCallback: null,
+            onDeleteCallback: null
+        });
     }, [tableId, element])
     return (<div id={tableId}
         style={

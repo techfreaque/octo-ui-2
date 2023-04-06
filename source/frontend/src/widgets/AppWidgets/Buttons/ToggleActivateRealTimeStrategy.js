@@ -20,8 +20,8 @@ export default function ToggleActivateRealTimeStrategy() {
     const botColors = useBotColorsContext();
 
     const isActivated = botInfo ?. real_time_strategies_active
-    const availableApiActions = botInfo.available_api_actions
-    const isAvailableApiAction = botInfo.available_api_actions && availableApiActions.indexOf(COMMAND_ACTIVATE_REALTIME_STRATEGY) !== -1 && availableApiActions.indexOf(COMMAND_DISABLE_REALTIME_STRATEGY) !== -1
+    const availableApiActions = botInfo?.available_api_actions
+    const isAvailableApiAction = availableApiActions?.includes(COMMAND_ACTIVATE_REALTIME_STRATEGY)
 
     const command = isActivated ? COMMAND_DISABLE_REALTIME_STRATEGY : COMMAND_ACTIVATE_REALTIME_STRATEGY
     return useMemo(() => {

@@ -123,7 +123,7 @@ def _get_default_columns(plotted_element, data, column_render, key_to_label=None
     return [
         {
             "field": row_key,
-            "label": key_to_label[row_key],
+            "text": key_to_label[row_key],
             "render": column_render.get(key_to_label[row_key], None),
         }
         for row_key, row_value in data[0].items()
@@ -142,8 +142,8 @@ def _get_default_searches(columns, types):
     return [
         {
             "field": col["field"],
-            "label": col["label"],
-            "type": types.get(col["label"]),
+            "label": col["text"],
+            "type": types.get(col["field"]),
         }
         for col in columns
     ]

@@ -166,9 +166,9 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
         }
     }
     const tableName = `${divID}-table`;
-    const table = createTable(divID, tableTitle,
-        tableName, searches, columns, records, columnGroups, [], [],
-        true, false, true, true, _onReorderRow, _onDelete);
+    const table = createTable({elementID:divID, name:tableTitle,
+        tableName, searches, columns, records, columnGroups, searchData:[], sortData:[],
+        selectable:true, addToTable:false, reorderRows:true, deleteRows:true, onReorderRowCallback:_onReorderRow, onDeleteCallback:_onDelete});
 
     function randomizeRecords() {
         randomizeArray(table.records);

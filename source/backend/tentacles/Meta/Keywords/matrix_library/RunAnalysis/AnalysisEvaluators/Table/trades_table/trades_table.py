@@ -53,8 +53,8 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
                     "side": "Side",
                 }
                 additional_columns = [
-                    {"field": "total", "label": "Total", "render": None},
-                    {"field": "fees", "label": "Fees", "render": None},
+                    {"field": "total", "text": "Total", "render": None},
+                    {"field": "fees", "text": "Fees", "render": None},
                 ]
 
                 def datum_columns_callback(datum):
