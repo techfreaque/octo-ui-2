@@ -22,7 +22,9 @@ export function FaIconByReactFunc({
         icon,
         spin,
         style: {
-            marginRight
+            marginRight,
+            marginTop: "auto",
+            marginBottom: "auto",
         }
     })
 }
