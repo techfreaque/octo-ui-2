@@ -13,10 +13,10 @@ export default function AddToOptimizerQueueButton() {
   return useMemo(() => {
     return !isOptimizer && (
       <WarningButton 
-      onClick={AddToOptimizerQueue} 
-      color= {botColors.success}
-      icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: "5px" }}/>}
-      text= "Add to Queue"
+        onClick={AddToOptimizerQueue} 
+        color= {botColors.success}
+        icon={<FontAwesomeIcon icon={faPlus} style={{ marginRight: "5px" }}/>}
+        text= "Add to Queue"
       />
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps

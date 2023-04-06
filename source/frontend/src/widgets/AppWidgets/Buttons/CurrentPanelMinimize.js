@@ -1,10 +1,9 @@
-import {faWindowMinimize} from "@fortawesome/free-solid-svg-icons";
 import {useMemo} from "react";
 import {useSetCurrentPanelPercent} from "../../../context/config/MainPanelContext";
 import {MuiIconButton} from "../../../components/Buttons/IconButton";
-import {FaIconByReactFunc} from "../../../components/Icons/FontAwesome";
-import {sizes} from "../../../constants/frontendConstants";
+// import {sizes} from "../../../constants/frontendConstants";
 import {Tooltip} from "antd";
+import { VerticalAlignBottomOutlined } from "@ant-design/icons";
 
 export default function CurrentPanelMinimize() {
     const setPanelSize = useSetCurrentPanelPercent()
@@ -23,10 +22,7 @@ export default function CurrentPanelMinimize() {
                         <MuiIconButton onClick={
                             () => setPanelSize(100)
                         }>
-                            <FaIconByReactFunc icon={faWindowMinimize}
-                                size={
-                                    sizes.large
-                                }/>
+                          <VerticalAlignBottomOutlined style={{fontSize:'22px'}}/>
                         </MuiIconButton>
                     </div>
                 </Tooltip>

@@ -1,16 +1,15 @@
 import * as React from 'react';
-import {faPowerOff} from '@fortawesome/free-solid-svg-icons';
 import RestartBotButton from '../../Buttons/RestartBotButton';
 import UpdateBotButton from '../../Buttons/UpdateBotButton';
 import StopBotButton from '../../Buttons/StopBotButton';
 import LogoutButton from '../../Buttons/LogoutButton';
 import {Dropdown, Tooltip, Button} from 'antd';
-import {FaIconByReactFunc} from '../../../../components/Icons/FontAwesome';
 import {sizes} from '../../../../constants/frontendConstants';
 import {useBotDomainContext} from '../../../../context/config/BotDomainProvider';
 import {MuiIconButton} from '../../../../components/Buttons/IconButton';
 import { useState } from 'react';
 import { useBotInfoContext } from '../../../../context/data/BotInfoProvider';
+import { PoweroffOutlined } from '@ant-design/icons';
 
 export default function PowerMenu() {
     const botDomain = useBotDomainContext();
@@ -63,10 +62,9 @@ export default function PowerMenu() {
                 title={"Power Menu"}
                 arrow={false}>
                 <div>
-                    <MuiIconButton><FaIconByReactFunc icon={faPowerOff}
-                            size={
-                                sizes.medium
-                            }/></MuiIconButton>
+                    <MuiIconButton>
+                        <PoweroffOutlined style={{fontSize:'22px'}} />    
+                    </MuiIconButton>
                 </div>
             </Tooltip>
         </Dropdown>

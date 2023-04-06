@@ -10,14 +10,14 @@ export const defaultStrategyDesignerPageLayout = {
                             "component": "RefreshBotData"
                         },
                         {
-                            "antIcon": "noIcon",
+                            "antIcon": "AppstoreAddOutlined",
                             "component": "ButtonWithModal",
                             "content": [
                                 {
                                     "component": "AppStore"
                                 }
                             ],
-                            "faIcon": "puzzle-piece",
+                            "faIcon": "noIcon",
                             "iconOnly": true,
                             "title": "Package Manager"
                         },
@@ -165,7 +165,7 @@ export const defaultStrategyDesignerPageLayout = {
                     ],
                     "tabs": [
                         {
-                            "antIcon": "noIcon",
+                            "antIcon": "ControlOutlined",
                             "component": "Tab",
                             "content": [
                                 {
@@ -174,14 +174,14 @@ export const defaultStrategyDesignerPageLayout = {
                                 }
                             ],
                             "dontScroll": true,
-                            "faIcon": "gears",
+                            "faIcon": "NoIcon",
                             "title": "Strategy Settings",
                             "toolBarContent": [
                                 {
-                                    "antIcon": "noIcon",
+                                    "antIcon": "DollarOutlined",
                                     "command": "execute",
                                     "component": "SendActionCommandToTradingMode",
-                                    "faIcon": "sack-dollar",
+                                    "faIcon": "noIcon",
                                     "title": "Execute trading mode"
                                 },
                                 {
@@ -190,7 +190,7 @@ export const defaultStrategyDesignerPageLayout = {
                             ]
                         },
                         {
-                            "antIcon": "noIcon",
+                            "antIcon": "FileSearchOutlined",
                             "component": "Tab",
                             "content": [
                                 {
@@ -200,12 +200,12 @@ export const defaultStrategyDesignerPageLayout = {
                                 }
                             ],
                             "dontScroll": false,
-                            "faIcon": "magnifying-glass-chart",
+                            "faIcon": "noIcon",
                             "title": "Run Analysis",
                             "toolBarContent": []
                         },
                         {
-                            "antIcon": "noIcon",
+                            "antIcon": "LineChartOutlined",
                             "component": "Tab",
                             "content": [
                                 {
@@ -297,7 +297,7 @@ export const defaultStrategyDesignerPageLayout = {
                                 }
                             ],
                             "dontScroll": true,
-                            "faIcon": "chart-line",
+                            "faIcon": "noIcon",
                             "title": "Trading",
                             "toolBarContent": [
                                 {
@@ -309,14 +309,14 @@ export const defaultStrategyDesignerPageLayout = {
                             ]
                         },
                         {
-                            "antIcon": "noIcon",
+                            "antIcon": "ExperimentOutlined",
                             "component": "Tab",
                             "content": [
                                 {
                                     "component": "Sidebar",
                                     "sideBarContent": [
                                         {
-                                            "antIcon": "noIcon",
+                                            "antIcon": "ExperimentOutlined",
                                             "children": [],
                                             "component": "SidebarMenuItem",
                                             "content": [
@@ -329,12 +329,12 @@ export const defaultStrategyDesignerPageLayout = {
                                                     ]
                                                 }
                                             ],
-                                            "faIcon": "microscope",
+                                            "faIcon": "noIcon",
                                             "label": "Backtesting Settings",
                                             "noPadding": false
                                         },
                                         {
-                                            "antIcon": "noIcon",
+                                            "antIcon": "UnorderedListOutlined",
                                             "children": [],
                                             "component": "SidebarMenuItem",
                                             "content": [
@@ -342,7 +342,7 @@ export const defaultStrategyDesignerPageLayout = {
                                                     "component": "BacktestingRunDataTable"
                                                 }
                                             ],
-                                            "faIcon": "table-list",
+                                            "faIcon": "noIcon",
                                             "label": "Backtesting Runs",
                                             "noPadding": true
                                         }
@@ -350,7 +350,7 @@ export const defaultStrategyDesignerPageLayout = {
                                 }
                             ],
                             "dontScroll": false,
-                            "faIcon": "microscope",
+                            "faIcon": "noIcon",
                             "title": "Backtesting",
                             "toolBarContent": [
                                 {
@@ -362,14 +362,14 @@ export const defaultStrategyDesignerPageLayout = {
                             ]
                         },
                         {
-                            "antIcon": "noIcon",
+                            "antIcon": "RocketOutlined",
                             "component": "Tab",
                             "content": [
                                 {
                                     "component": "Sidebar",
                                     "sideBarContent": [
                                         {
-                                            "antIcon": "noIcon",
+                                            "antIcon": "ToolOutlined",
                                             "children": [],
                                             "component": "SidebarMenuItem",
                                             "content": [
@@ -381,12 +381,12 @@ export const defaultStrategyDesignerPageLayout = {
                                                     ]
                                                 }
                                             ],
-                                            "faIcon": "cogs",
+                                            "faIcon": "noIcon",
                                             "label": "Optimizer Settings",
                                             "noPadding": false
                                         },
                                         {
-                                            "antIcon": "noIcon",
+                                            "antIcon": "PlayCircleOutlined",
                                             "children": [],
                                             "component": "SidebarMenuItem",
                                             "content": [
@@ -394,7 +394,7 @@ export const defaultStrategyDesignerPageLayout = {
                                                     "component": "OptimizerConfigForm"
                                                 }
                                             ],
-                                            "faIcon": "road",
+                                            "faIcon": "noIcon",
                                             "label": "Run Config",
                                             "noPadding": false
                                         },
@@ -415,7 +415,7 @@ export const defaultStrategyDesignerPageLayout = {
                                 }
                             ],
                             "dontScroll": false,
-                            "faIcon": "user-astronaut",
+                            "faIcon": "noIcon",
                             "title": "Optimizer",
                             "toolBarContent": [
                                 {

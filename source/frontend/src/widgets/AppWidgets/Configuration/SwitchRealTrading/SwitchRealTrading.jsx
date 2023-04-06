@@ -1,4 +1,3 @@
-import {faCoins, faPause, faRobot} from "@fortawesome/free-solid-svg-icons";
 import {Alert, Button, Modal} from "@mui/material";
 import {Box} from "@mui/system";
 import {useMemo, useState} from "react";
@@ -7,8 +6,10 @@ import {useBotConfigContext} from "../../../../context/config/BotConfigProvider"
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
 import {Tooltip} from "antd";
 import {MuiIconButton} from "../../../../components/Buttons/IconButton";
-import {FaIconByReactFunc} from "../../../../components/Icons/FontAwesome";
 import {sizes} from "../../../../constants/frontendConstants";
+import {DollarOutlined, PauseOutlined, RobotOutlined} from "@ant-design/icons";
+import {AntIconByReactFunc} from "../../../../components/Icons/AntIcon";
+
 
 export default function RealTradingSwitch() {
     const [open, setOpen] = useState(false);
@@ -19,8 +20,17 @@ export default function RealTradingSwitch() {
     const isRealTrading = botConfigs?.data?.profile.trader.enabled
     const isSimulatedTrading = botConfigs?.data?.profile["trader-simulator"].enabled
     const title = isRealTrading ? "Real trading" : isSimulatedTrading ? "Simulated trading" : "Trading paused"
-    const icon = isRealTrading ? faCoins : isSimulatedTrading ? faRobot : faPause;
     return useMemo(() => {
+        const icon = isRealTrading ? (<AntIconByReactFunc AntReactIcon={DollarOutlined}
+            size={
+                sizes.medium
+            }/>) : isSimulatedTrading ? (<AntIconByReactFunc AntReactIcon={RobotOutlined}
+            size={
+                sizes.medium
+            }/>) : (<AntIconByReactFunc AntReactIcon={PauseOutlined}
+            size={
+                sizes.medium
+            }/>);
         return (<div style={
             {
                 margin: "auto",
@@ -31,11 +41,8 @@ export default function RealTradingSwitch() {
                 title={title}
                 arrow={false}>
                 <div>
-                    <MuiIconButton onClick={handleOpen}>
-                        <FaIconByReactFunc icon={icon}
-                            size={
-                                sizes.medium
-                            }/> {} </MuiIconButton>
+                    <MuiIconButton onClick={handleOpen}> {icon}
+                        {} </MuiIconButton>
                 </div>
             </Tooltip>
             <Modal open={open}
@@ -68,7 +75,7 @@ export default function RealTradingSwitch() {
                 </Box>
             </Modal>
         </div>);
-    }, [botDomain, icon, isRealTrading, open, title])
+    }, [botDomain, isRealTrading, isSimulatedTrading, open, title])
 }
 
 

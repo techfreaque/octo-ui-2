@@ -1,11 +1,11 @@
 import {Radio} from "antd";
 import W2uiDataTable from "../Tables/W2uiDataTable";
 import PlotlyDualCharts from "./MainCharts/PlotlyDualCharts";
-import {faChartLine, faListUl} from "@fortawesome/free-solid-svg-icons";
-import {FaIconByReactFunc} from "../../../components/Icons/FontAwesome";
 import {sizes} from "../../../constants/frontendConstants";
 import {useChartTypeContext, useUpdateChartTypeContext} from "../../../context/config/CurrentChartTypeProvider";
 import {useState} from "react";
+import { LineChartOutlined, UnorderedListOutlined } from "@ant-design/icons";
+import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
 
 export const chartTypes = {
     CHART: "chart",
@@ -20,20 +20,18 @@ export function ChartTypeSelector() {
 
     const chartTypes = [
         {
-            label: (<FaIconByReactFunc icon={faChartLine}
-                size={
-                    sizes.medium
-                }/>),
+            label: (<AntIconByReactFunc AntReactIcon={LineChartOutlined} size={sizes.medium}  />),
             value: 'chart',
             // disabled: true
         }, {
-            label: (<FaIconByReactFunc icon={faListUl}
-                size={
-                    sizes.medium
-                }/>),
+            label: (<AntIconByReactFunc AntReactIcon={UnorderedListOutlined} size={sizes.medium} />),
             value: 'table',
             // disabled: true
         },
+
+        // <PieChartOutlined />
+
+
         // {
         //     label: (<FaIconByReactFunc icon={faChartPie}
         //         size={

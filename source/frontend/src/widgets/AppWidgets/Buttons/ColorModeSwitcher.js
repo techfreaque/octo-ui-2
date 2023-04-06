@@ -4,6 +4,7 @@ import {useTheme} from "@mui/material/styles";
 import {faMoon, faSun} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {colorModes, useToggleColorModeContext} from "../../../context/config/ColorModeProvider";
+import Moon from "../../../components/Icons/Moon";
 
 export default function ColorModeSwitch() {
     const theme = useTheme();
@@ -16,7 +17,7 @@ export default function ColorModeSwitch() {
                 colorMode.toggleColorMode
             }
             color="inherit"> {
-            theme.palette.mode === colorModes.dark ? (<FontAwesomeIcon icon={faMoon}/>) : (<FontAwesomeIcon icon={faSun}/>)
+            theme.palette.mode === colorModes.dark ? (<Moon height='24px' width='24px'/>) : (<FontAwesomeIcon icon={faSun}/>)
         } </IconButton>);
     }, [theme, colorMode])
 }
