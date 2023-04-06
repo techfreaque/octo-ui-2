@@ -1,5 +1,14 @@
-from tentacles.Services.Interfaces.octo_ui2.models import app_store as app_store_models
+import abc
+import aiohttp
+import flask
+
+import octobot_commons.authentication as authentication
+import octobot_services.constants as services_constants
+import tentacles.Services.Interfaces.web_interface.util as util
+import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.login as login
+
+import tentacles.Services.Interfaces.octo_ui2.models.app_store as app_store_models
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
     dev_mode_is_on,
@@ -40,3 +49,162 @@ def register_appstore_routes(plugin):
                 "available_apps": app_store_models.fetch_available_apps_from_repos(),
             },
         }
+
+    tentacles_package_route = "/tentacle_packages"
+    methods = ["POST"]
+    if cross_origin := import_cross_origin_if_enabled():
+        if dev_mode_is_on():
+
+            @plugin.blueprint.route(tentacles_package_route, methods=methods)
+            @login.login_required_when_activated
+            @cross_origin(origins="*")
+            def tentacle_packages():
+                return _tentacle_packages()
+
+        else:
+
+            @plugin.blueprint.route(tentacles_package_route, methods=methods)
+            @login.active_login_required
+            @cross_origin(origins="*")
+            def tentacle_packages():
+                return _tentacle_packages()
+
+    else:
+
+        @plugin.blueprint.route(tentacles_package_route, methods=methods)
+        @login.active_login_required
+        def tentacle_packages():
+            return _tentacle_packages()
+
+    def _tentacle_packages():
+        if flask.request.method == "POST":
+            update_type = flask.request.args["update_type"]
+            return _handle_tentacles_pages_post(update_type)
+
+
+class TentacleInstallAuthenticator(authentication.Authenticator):
+    AUTHORIZATION_HEADER = "Authorization"
+    _authenticated_session: aiohttp.ClientSession = None
+
+    def add_authentication_token(self, password_token):
+        self.password_token = password_token
+
+    @abc.abstractmethod
+    def is_logged_in(self):
+        """
+        :return: True when authenticated
+        """
+        return True if self.password_token else False
+
+    @abc.abstractmethod
+    def logout(self):
+        self._authenticated_session.close()
+
+    @abc.abstractmethod
+    def get_aiohttp_session(self):
+        if self.password_token:
+            self._authenticated_session = aiohttp.ClientSession(
+                headers={self.AUTHORIZATION_HEADER: f"token {self.password_token}"}
+            )
+            return self._authenticated_session
+        return None
+
+    @abc.abstractmethod
+    def must_be_authenticated_through_authenticator(self):
+        """
+        :return: True when this authenticator has to be validated
+        """
+        return True
+
+
+def _handle_package_operation(update_type):
+    if update_type == "add_package":
+        request_data = flask.request.get_json()
+        success = False
+        if request_data:
+            version = None
+            url_key = "url"
+            if url_key in request_data:
+                path_or_url = request_data[url_key]
+                version = request_data.get("version", None)
+                action = "register_and_install"
+            else:
+                path_or_url, action = next(iter(request_data.items()))
+                path_or_url = path_or_url.strip()
+            if action == "register_and_install":
+                token = request_data.get(services_constants.CONFIG_TOKEN)
+                if token:
+                    authenticator: TentacleInstallAuthenticator = (
+                        TentacleInstallAuthenticator.instance()
+                    )
+                    authenticator.add_authentication_token(token)
+                else:
+                    authenticator = authentication.Authenticator.instance()
+                installation_result = models.install_packages(
+                    path_or_url, version, authenticator=authenticator
+                )
+                if installation_result:
+                    return util.get_rest_reply(flask.jsonify(installation_result))
+                else:
+                    return util.get_rest_reply(
+                        "Impossible to install the given tentacles package. "
+                        "Please see logs for more details.",
+                        500,
+                    )
+
+        if not success:
+            return util.get_rest_reply('{"operation": "ko"}', 500)
+    elif update_type in ["install_packages", "update_packages", "reset_packages"]:
+
+        packages_operation_result = {}
+        if update_type == "install_packages":
+            packages_operation_result = models.install_packages()
+        elif update_type == "update_packages":
+            packages_operation_result = models.update_packages()
+        elif update_type == "reset_packages":
+            packages_operation_result = models.reset_packages()
+
+        if packages_operation_result:
+            return util.get_rest_reply(flask.jsonify(packages_operation_result))
+        else:
+            action = update_type.split("_")[0]
+            return util.get_rest_reply(
+                f"Impossible to {action} packages, check the logs for more information.",
+                500,
+            )
+
+
+def _handle_module_operation(update_type):
+    request_data = flask.request.get_json()
+    if request_data:
+        packages_operation_result = {}
+        if update_type == "update_modules":
+            packages_operation_result = models.update_modules(request_data)
+        elif update_type == "uninstall_modules":
+            packages_operation_result = models.uninstall_modules(request_data)
+
+        if packages_operation_result is not None:
+            return util.get_rest_reply(flask.jsonify(packages_operation_result))
+        else:
+            action = update_type.split("_")[0]
+            return util.get_rest_reply(
+                f"Impossible to {action} module(s), check the logs for more information.",
+                500,
+            )
+    else:
+        return util.get_rest_reply(
+            '{"Need at least one element be selected": "ko"}', 500
+        )
+
+
+def _handle_tentacles_pages_post(update_type):
+    if update_type in [
+        "add_package",
+        "install_packages",
+        "update_packages",
+        "reset_packages",
+    ]:
+        return _handle_package_operation(update_type)
+
+    elif update_type in ["update_modules", "uninstall_modules"]:
+        return _handle_module_operation(update_type)

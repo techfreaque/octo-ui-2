@@ -16,7 +16,8 @@ export const backendRoutes = {
     resetDaemons: `${basePath}daemons/reset`,
     fetchTentaclesConfig: `${basePath}/tentacles_config`,
     updateTentaclesConfigAndSendCommand: `${basePath}/trading_mode_command`,
-    backtestingRunData: `${basePath}/backtesting_runs`,
+    backtestingRunData: `${basePath}/backtesting_runs/get`,
+    deleteRunData: `${basePath}/backtesting_runs/delete`,
     cancelAllOrders: `${basePath}/orders/cancel_all`,
     closeAllPositions: `${basePath}/positions/close_all`,
     liveRunData: `${basePath}/live_run_data`,
@@ -28,10 +29,10 @@ export const backendRoutes = {
     optimizerGetQueue: `${proBasePath}/optimizer/get`,
     optimizerStart: `${proBasePath}/optimizer/start`,
 
-    installApp: `${advancedPath}/tentacle_packages?update_type=add_package`,
+    installApp: `${basePath}/tentacle_packages?update_type=add_package`,
     optimizerStop: `${advancedPath}/strategy-optimizer?update_type=cancel_optimizer`,
 
-    profileMedia: "/profile_media/user/profiles",
+    profileMedia: `${basePath}/profile_media/user/profiles`,
     staticImg: "/static/img",
     manageSymbol: "/profile",
     exchangeLogo: "/exchange_logo",
@@ -63,7 +64,6 @@ export const backendRoutes = {
     closePosition: `${apiPath}/positions?action=close_position`,
     getAllTrades: `${apiPath}/trades`,
 
-    strategyDesignDeleteRunData: "/strategy_design/run_data?action=delete",
 
     cacheActionDeleteCurrentCache: "/strategy_design/cacheclear_plotted_cache",
     cacheActionDeleteAllCache: "/strategy_design/cacheclear_all_cache"

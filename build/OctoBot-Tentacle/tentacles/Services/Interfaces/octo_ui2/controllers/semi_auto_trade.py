@@ -1,9 +1,9 @@
 import flask
+from tentacles.Services.Interfaces.octo_ui2.utils import basic_utils
 from tentacles.Services.Interfaces.web_interface import models
 import tentacles.Services.Interfaces.web_interface.login as login
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     dev_mode_is_on,
-    get_octo_ui_2_logger,
     import_cross_origin_if_enabled,
 )
 import octobot_services.api as services_api
@@ -63,7 +63,7 @@ def register_semi_auto_trade_routes(plugin):
                     "data": response,
                 }
             except Exception as error:
-                get_octo_ui_2_logger().exception(
+                basic_utils.get_octo_ui_2_logger().exception(
                     error, True, "Failed to execute trades"
                 )
                 raise

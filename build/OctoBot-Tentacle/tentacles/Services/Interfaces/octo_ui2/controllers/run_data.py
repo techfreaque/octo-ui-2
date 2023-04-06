@@ -1,5 +1,6 @@
 import flask
-from tentacles.Services.Interfaces.octo_ui2.models import octo_ui2
+
+from tentacles.Services.Interfaces.octo_ui2.utils import basic_utils
 import tentacles.Services.Interfaces.web_interface.login as login
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     dev_mode_is_on,
@@ -47,5 +48,5 @@ def register_run_data_routes(plugin):
                 200,
             )
         except Exception as error:
-            octo_ui2.get_octo_ui_2_logger("run_data").exception(error)
+            basic_utils.get_octo_ui_2_logger("run_data").exception(error)
             return util.get_rest_reply(str(error), 500)

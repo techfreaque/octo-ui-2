@@ -1,21 +1,23 @@
 import asyncio
+import os
 import time
-
+import flask
 import flask_login
-from octobot_commons import optimization_campaign
-import octobot_services.interfaces as interfaces
-from tentacles.Services.Interfaces.octo_ui2.utils import basic_utils
 
-import tentacles.Services.Interfaces.web_interface.login as login
-import tentacles.Services.Interfaces.web_interface.models as models
-import octobot_services.interfaces as services_interfaces
+import octobot_commons
+import octobot_commons.optimization_campaign as optimization_campaign
 import octobot_commons.enums as commons_enums
 import octobot_commons.symbols.symbol_util as symbol_util
-import octobot_commons
+import octobot_services.interfaces as interfaces
+import octobot_services.interfaces as services_interfaces
+import octobot_services.interfaces.util as interfaces_util
+
+import tentacles.Services.Interfaces.octo_ui2.utils.basic_utils as basic_utils
+import tentacles.Services.Interfaces.web_interface.login as login
+import tentacles.Services.Interfaces.web_interface.models as models
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
 )
-import octobot_services.interfaces.util as interfaces_util
 
 TIME_TO_START = 20
 
@@ -196,3 +198,37 @@ def register_bot_info_routes(plugin):
         return basic_utils.get_response(
             message="Successfully logged out",
         )
+
+    route = "/profile_media/<path:path>"
+    if cross_origin := import_cross_origin_if_enabled():
+
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def profile_media(path):
+            return _profile_media(path)
+
+    else:
+
+        @plugin.blueprint.route(route)
+        @login.login_required_when_activated
+        def profile_media(path):
+            return _profile_media(path)
+
+    def _profile_media(path):
+        # images
+        if models.is_valid_profile_image_path(path):
+            # reference point is the web interface directory: 
+            #   use OctoBot root folder as a reference
+            return _send_file("../../../..", path)
+        else:
+            # use default profile image
+            basic_utils.get_octo_ui_2_logger().error(
+                f"Failed to get profile image, path {path} not found"
+            )
+            return _send_file("../../../..", "daily_trading")
+
+
+def _send_file(base_dir, file_path):
+    base_path, file_name = os.path.split(file_path)
+    return flask.send_from_directory(os.path.join(base_dir, base_path), file_name)

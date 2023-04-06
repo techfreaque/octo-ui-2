@@ -2,7 +2,6 @@ import flask
 import tentacles.Services.Interfaces.octo_ui2.models.config as config
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.octo_ui2.utils.basic_utils as basic_utils
-import tentacles.Services.Interfaces.octo_ui2.models as octo_ui2_models
 import tentacles.Services.Interfaces.web_interface.util as util
 
 import tentacles.Services.Interfaces.web_interface.models as models
@@ -42,11 +41,11 @@ def register_tentacles_config_routes(plugin):
                     "data"
                 ]["elements"][0]
             except IndexError:
-                octo_ui2_models.get_octo_ui_2_logger().error(
+                basic_utils.get_octo_ui_2_logger().error(
                     f"Failed to load config for {tentacle_name}"
                 )
             except Exception as error:
-                octo_ui2_models.get_octo_ui_2_logger().exception(
+                basic_utils.get_octo_ui_2_logger().exception(
                     error, True, f"Failed to load config for {tentacle_name}"
                 )
         return basic_utils.get_response(
