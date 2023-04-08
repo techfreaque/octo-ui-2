@@ -1,17 +1,19 @@
-import Button from "@mui/material/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useBotIsBacktestingContext, useStopBacktesting } from "../../../context/actions/BotBacktestingProvider";
 import { useMemo } from "react";
+import AntButton , { buttonTypes } from "../../../components/Buttons/AntButton";
 
 export default function StopBacktestingButton() {
   const isBacktesting = useBotIsBacktestingContext()
   const stopBacktesting = useStopBacktesting()
   return useMemo(() => {
   return isBacktesting && (
-    <Button onClick={stopBacktesting} variant="outlined" color="warning">
-      <FontAwesomeIcon icon={faStop} /><span style={{ marginLeft: "5px" }}>Stop Backtest</span>
-    </Button>
+    <AntButton 
+      onClick={stopBacktesting}
+      buttonType={buttonTypes.warning}
+      faIconComponent={faStop}
+      text="Stop Backtest"
+    />
   );
       }, [isBacktesting, stopBacktesting])
 }

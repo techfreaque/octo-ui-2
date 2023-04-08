@@ -1,4 +1,4 @@
-import {Alert, Button} from "@mui/material"
+import {Alert} from "@mui/material"
 import JsonEditor from "@techfreaque/json-editor-react"
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults"
 import createNotification from "../../../components/Notifications/Notification"
@@ -8,6 +8,11 @@ import {useBotLayoutContext} from "../../../context/config/BotLayoutProvider"
 import {useSaveUiConfig} from "../../../context/config/UiConfigProvider"
 import appWidgetsProps from "../../WidgetManagement/AppWidgetProps"
 import {registeredComponents} from "../../WidgetManagement/RegisteredAppWidgets"
+import { Button, Space } from 'antd';
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton"
+
+
+
 
 export default function PageBuilder() {
     const botLayout = useBotLayoutContext()
@@ -38,29 +43,29 @@ export default function PageBuilder() {
             }>
                 <h1>Page Builder</h1>
                 <Alert severity="info"
-                    style={
-                        {maxWidth: "450px"}
-                }>
+                //     style={
+                //         {maxWidth: "450px"}
+                // }
+                >
                     Once you have saved the page layout, it wont get overridded by a updated default layout in the future.
                                                                                                     You should reset your config after each update to make sure you'll get the latest futures.
                                                                                                     You can copy the config of your custom config with the help of the editor, and then past it after resetting.
 
                 </Alert>
-                <Button style={
-                        {marginRight: "10px"}
-                    }
-                    variant="contained"
-                    onClick={handlePageLayoutSaving}>
-                    Save Page Layout
-                </Button>
-                <Button style={
-                        {}
-                    }
-                    variant="contained"
-                    color="warning"
+                <Space wrap>
+                <AntButton 
+                    buttonVariant="primary"
+                    buttonType={buttonTypes.primary}
+                    style={{margin: "20px 10px 20px 0"}}
+                    onClick={handlePageLayoutSaving}
+                    text="Save Page Layout"
+                />
+                <Button 
+                    type="primary" danger
                     onClick={handleResetLayout}>
                     Reset to default layout
                 </Button>
+                </Space>
                 <JsonEditor {...defaultJsonEditorSettings()}
                     schema={
                         pageBuilderSchema()

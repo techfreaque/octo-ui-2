@@ -43,13 +43,15 @@ export function AntIconByReactFunc({
 
 export function AntIconByString({
     iconString,
-    size = sizes.medium
+    size = sizes.medium,
+    spin
 }) {
     return iconString && iconStringNoIcon !== iconString && createElement(iconStringToComponent[iconString], {
         style: {
             ...iconStyles.size[size],
             marginTop: "auto",
             marginBottom: "auto"
-        }
+        },
+        spin:spin
     })
 }

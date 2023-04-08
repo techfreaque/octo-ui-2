@@ -10,13 +10,23 @@ import { FaIconByReactFunc } from "../Icons/FontAwesome";
 export const buttonTypes = {
   success: "success",
   warning: "warning",
-  danger: "danger",
+  error: "error",
+  primary: "primary",
+}
+
+export const buttonVariants = {
+  primary: "primary",
+  outline: "outline",
 }
 
 export default function AntButton({
   buttonType = buttonTypes.success,
   onClick,
   text,
+  style,
+  buttonVariant = buttonVariants.outline,
+  block = false,
+  disabled = false,
 
   // icon components
   faIconComponent,
@@ -26,6 +36,7 @@ export default function AntButton({
   faIcon,
   antIcon,
 
+  spin
 
 }) {
   const botColors = useBotColorsContext();
@@ -33,15 +44,20 @@ export default function AntButton({
   <Space wrap>
     <ConfigProvider theme={{
           "token": {
-          "colorError": botColors[buttonType]}}
+          "colorError": botColors[buttonType],
+          "colorPrimary": botColors[buttonType]}}
     }>
-      <Button danger  type
+      <Button 
+          danger={buttonVariant === buttonVariants.outline} 
+          type={buttonVariant === buttonVariants.outline ? 'default' : buttonVariant}
+          block={block}
+          disabled={disabled}
           onClick={onClick}
-          style={{ margin: '5px', padding: '4px 10px', display: "flex" }}>
-          {(faIcon || antIcon) && (<IconFromString faIcon={faIcon} antIcon={antIcon}  size={sizes.small } />)}
-          {antIconComponent && <AntIconByReactFunc AntReactIcon={antIconComponent} size={sizes.small }/>}
+          style={{ margin: '5px', padding: '4px 10px', display: "flex", ...style }}>
+          {(faIcon || antIcon) && (<IconFromString faIcon={faIcon} antIcon={antIcon}  size={sizes.small } spin={spin}/>)}
+          {antIconComponent && <AntIconByReactFunc AntReactIcon={antIconComponent} size={sizes.small } spin={spin}/>}
 
-          {faIconComponent && <FaIconByReactFunc icon={faIconComponent}  size={sizes.small } marginRight= "5px" />}
+          {faIconComponent && <FaIconByReactFunc icon={faIconComponent}  size={sizes.small } marginRight= "5px" spin={spin}/>}
           {text}
       </Button>
     </ConfigProvider>

@@ -6,17 +6,18 @@ export default function IconFromString({
     faIcon,
     antIcon,
     size = sizes.medium,
-    marginRight = "5px"
+    marginRight = "5px",
+    spin
 }) {
     if (antIcon && antIcon !== iconStringNoIcon) {
         return (
             <AntIconByString iconString={antIcon}
-                size={size}/>
+                size={size} spin={spin}/>
         )
     } else if (faIcon) {
         return (
             <FontAwesomeIconByString faIcon={faIcon}
-                marginRight={marginRight}/>
+                marginRight={marginRight} spin={spin}/>
         )
     }
 }

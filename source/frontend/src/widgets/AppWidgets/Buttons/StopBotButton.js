@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from "react";
-import Button from "@mui/material/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { stopBot } from "../../../api/actions";
 import { useIsBotOnlineContext, useUpdateIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 import { Trans } from "react-i18next";
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 
 export default function StopBotButton() {
   const [isLoading, setIsloading] = useState(false);
@@ -14,13 +13,14 @@ export default function StopBotButton() {
   const botDomain = useBotDomainContext();
   return useMemo(() => {
     return (
-      <Button disabled={isLoading || !isOnline} onClick={() => stopBot(botDomain, updateIsOnline, setIsloading)} variant="outlined" color="error">
-        <FontAwesomeIcon
-          icon={faStop}
-          style={{ marginRight: "5px" }}
-        />
-    <Trans i18nKey="buttons.stopBot" />    
-      </Button>
+      <AntButton 
+        disabled={isLoading || !isOnline} 
+        onClick={() => stopBot(botDomain, updateIsOnline, setIsloading)} 
+        style={{justifyContent: "center", width:"180px"}}
+        buttonType={buttonTypes.error}
+        faIconComponent={faStop}
+        text={ <Trans i18nKey="buttons.stopBot" />  }
+      />
     );
   }, [botDomain, isLoading, isOnline, updateIsOnline])
 }

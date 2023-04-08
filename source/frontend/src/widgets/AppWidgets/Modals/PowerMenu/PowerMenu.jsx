@@ -4,7 +4,6 @@ import UpdateBotButton from '../../Buttons/UpdateBotButton';
 import StopBotButton from '../../Buttons/StopBotButton';
 import LogoutButton from '../../Buttons/LogoutButton';
 import {Dropdown, Tooltip, Button} from 'antd';
-import {sizes} from '../../../../constants/frontendConstants';
 import {useBotDomainContext} from '../../../../context/config/BotDomainProvider';
 import {MuiIconButton} from '../../../../components/Buttons/IconButton';
 import { useState } from 'react';
@@ -43,7 +42,7 @@ export default function PowerMenu() {
                         }, {
                             key: 'back',
                             label: (
-                                <Button variant="outlined"
+                                <Button variant="outlined" style={{justifyContent: "center", width:"180px"}}
                                     href={botDomain}><Trans i18nKey="buttons.backToOctoBot" /></Button>
                             )
                         },
@@ -52,7 +51,10 @@ export default function PowerMenu() {
             }
             overlayStyle={
                 {
-                    minWidth: "230px",
+                    minWidth: "200px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
                     // backgroundColor: botColors?.background
                 }
             }

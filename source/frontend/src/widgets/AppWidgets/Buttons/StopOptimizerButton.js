@@ -1,24 +1,25 @@
-import Button from "@mui/material/Button";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useBotIsOptimizingContext, useStopOptimizer } from "../../../context/actions/BotOptimizerProvider";
 import { useMemo } from "react";
+import AntButton , { buttonTypes } from "../../../components/Buttons/AntButton";
 
 export default function StopOptimizerButton() {
   const isOptimizer = useBotIsOptimizingContext()
   const stopOptimizer = useStopOptimizer()
   return useMemo(() => {
     return isOptimizer === "isStopping"
-      ? <Button variant="outlined" color="warning">
-        <FontAwesomeIcon
-          icon={faStop}
-          className={"fa-spin"}
-        /><span style={{ marginLeft: "5px" }}>Optimizer is Pausing</span>
-      </Button>
+      ? <AntButton
+          buttonType={buttonTypes.warning}
+          faIconComponent={faStop}
+          text="Optimizer is Pausing"
+      />
       : isOptimizer && (
-        <Button onClick={stopOptimizer} variant="outlined" color="warning">
-          <FontAwesomeIcon icon={faStop} /><span style={{ marginLeft: "5px" }}>Pause Optimizer</span>
-        </Button>
+        <AntButton 
+          onClick={stopOptimizer} 
+          buttonType={buttonTypes.warning}
+          faIconComponent={faStop}
+          text="Pause Optimizer"
+        />
       );
   }, [isOptimizer, stopOptimizer])
 }

@@ -32,13 +32,11 @@ export function FaIconByReactFunc({
 export default function FontAwesomeIconByString({
     faIcon,
     size = sizes.medium,
-    marginRight = "7px"
+    marginRight = "7px",
+    spin
 }) {
-    return faIcon && (<i className={
-            `fa-${
-                iconStyles.size[size]
-            } fas fa-${faIcon}`
-        }
+    const className = spin ? `fa-spin fa-${iconStyles.size[size]} far fa-${faIcon}` : `fa-${iconStyles.size[size]} fas fa-${faIcon}`
+    return faIcon && (<i className={className}
         style={
             {marginRight, lineHeight: "normal"}
         }/>)
