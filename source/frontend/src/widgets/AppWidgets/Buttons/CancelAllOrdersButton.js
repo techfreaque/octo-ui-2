@@ -19,6 +19,8 @@ export default function CancelAllOrdersButton() {
         buttonType={color}
         faIconComponent = {faStop}
         text="Cancel All Orders"
+        marginRight="5px"
+
       />
     );
   }, [botDomain, color, isCancelling, isOnline])

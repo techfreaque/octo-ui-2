@@ -1,13 +1,13 @@
 {
-	"buttons": {
-		"backToOctoBot": "Back to OctoBot",
-		"restartBot": "Restart Bot",
-		"softRefresh": "Soft Refresh",
-		"stopBot": "Stop Bot",
-		"updateBot": "Update Bot"
-	},
-	"notFoundPage": {
-		"goHome": "go home",
-		"title": "Page not found"
-	}
+  "buttons": {
+    "backToOctoBot": "Back to OctoBot",
+    "restartBot": "Restart Bot",
+    "softRefresh": "Soft Refresh",
+    "stopBot": "Stop Bot",
+    "updateBot": "Update Bot"
+  },
+  "notFoundPage": {
+    "goHome": "go home",
+    "title": "Page not found"
+  }
 }

@@ -15,8 +15,8 @@ export default function StopBotButton() {
     return (
       <AntButton 
         disabled={isLoading || !isOnline} 
+        block={true}
         onClick={() => stopBot(botDomain, updateIsOnline, setIsloading)} 
-        style={{justifyContent: "center", width:"180px"}}
         buttonType={buttonTypes.error}
         faIconComponent={faStop}
         text={ <Trans i18nKey="buttons.stopBot" />  }

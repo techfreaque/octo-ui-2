@@ -12,7 +12,8 @@ export default function AddToOptimizerQueueButton() {
         onClick={AddToOptimizerQueue} 
         buttonType= {buttonTypes.success}
         faIconComponent={faPlus}
-        text= "Add to Queue"
+        text="Add to Queue"
+        marginRight="5px"
       />
     );
   // eslint-disable-next-line react-hooks/exhaustive-deps

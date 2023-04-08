@@ -36,12 +36,14 @@ export default function AntButton({
   faIcon,
   antIcon,
 
-  spin
+  spin,
+
+  marginRight= "0px"
 
 }) {
+  const _style = block ? {justifyContent: "center"}: {} 
   const botColors = useBotColorsContext();
   return (
-  <Space wrap>
     <ConfigProvider theme={{
           "token": {
           "colorError": botColors[buttonType],
@@ -53,7 +55,13 @@ export default function AntButton({
           block={block}
           disabled={disabled}
           onClick={onClick}
-          style={{ margin: '5px', padding: '4px 10px', display: "flex", ...style }}>
+        style={{
+          marginRight: marginRight, 
+          padding: '4px 10px',
+          marginTop: "auto",
+          marginBottom: "auto",
+          display: "flex", ..._style, ...style
+        }}>
           {(faIcon || antIcon) && (<IconFromString faIcon={faIcon} antIcon={antIcon}  size={sizes.small } spin={spin}/>)}
           {antIconComponent && <AntIconByReactFunc AntReactIcon={antIconComponent} size={sizes.small } spin={spin}/>}
 
@@ -61,6 +69,5 @@ export default function AntButton({
           {text}
       </Button>
     </ConfigProvider>
-  </Space>
 )};
 

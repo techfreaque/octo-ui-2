@@ -42,7 +42,7 @@ export default function PowerMenu() {
                         }, {
                             key: 'back',
                             label: (
-                                <Button variant="outlined" style={{justifyContent: "center", width:"180px"}}
+                                <Button variant="outlined"         block={true}
                                     href={botDomain}><Trans i18nKey="buttons.backToOctoBot" /></Button>
                             )
                         },
@@ -51,7 +51,9 @@ export default function PowerMenu() {
             }
             overlayStyle={
                 {
-                    minWidth: "200px",
+                    // minWidth: "150px",
+                    // width: "150px",
+
                     display: "flex",
                     justifyContent: "center",
                     alignItems: "center",
