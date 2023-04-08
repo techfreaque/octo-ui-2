@@ -6,6 +6,7 @@ import {sizes} from '../../../constants/frontendConstants';
 import {SyncOutlined} from '@ant-design/icons';
 import {AntIconByReactFunc} from '../../../components/Icons/AntIcon';
 import {MuiIconButton} from '../../../components/Buttons/IconButton';
+import { Trans } from 'react-i18next';
 
 
 export default function RefreshBotData() {
@@ -30,7 +31,7 @@ export default function RefreshBotData() {
     return useMemo(() => {
         return (
             <Tooltip placement="top"
-                title={"Soft Refresh"}
+                title={<Trans i18nKey="buttons.softRefresh" />}
                 arrow={false}>
                 <div>
                     <MuiIconButton disabled={isFetching}

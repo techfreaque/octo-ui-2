@@ -11,11 +11,14 @@ import "../../components/Forms/JsonEditor/JsonEditor.css"
 import "select2/dist/css/select2.min.css"
 import LoadingPage from "../LoadingPage";
 import "./pages.css"
+import { useTranslation } from "react-i18next";
 
 export default function Pages() {
   const botLayout = useBotLayoutContext();
+  const {i18n} = useTranslation();
+ 
   return useMemo(() => {
-    return <BrowserRouter>
+    return  <BrowserRouter>
       <ReactNotifications />
       <Routes>
         {botLayout
@@ -33,5 +36,6 @@ export default function Pages() {
         <Route key="notFound" path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
-  }, [botLayout])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [botLayout,  i18n.resolvedLanguage])
 }

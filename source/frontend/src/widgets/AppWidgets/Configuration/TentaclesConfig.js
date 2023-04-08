@@ -185,27 +185,28 @@ function destroyAllEditors(storageName) {
 
 function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {
     let hiddenMetadataColumns = [];
-    Object.values(elements).forEach(function (inputDetails) {
+    Object.values(elements).forEach((inputDetails) => {
         hiddenMetadataColumns = hiddenMetadataColumns.concat(_hideNotShownUserInputs(inputDetails.tentacle, inputDetails.schema, inputDetails.is_hidden));
     });
-    setHiddenMetadataColumns && setHiddenMetadataColumns(hiddenMetadataColumns)
+    setHiddenMetadataColumns?.(hiddenMetadataColumns)
 }
 
 export function saveUserInputs(saveTentaclesConfig, setIsLoading, storageName = "tradingConfig") {
-    setIsLoading && setIsLoading(true)
+    setIsLoading?.(true)
     const tentaclesConfigByTentacle = {};
     let save = true;
     Object.keys(window[`$${storageName}`]).forEach((editorKey) => {
         const editor = window[`$${storageName}`][editorKey]
-        if (editor) {
-            const tentacle = editorKey.split("##")[1];
-            const errorsDesc = validateJSONEditor(editor)
-            if (errorsDesc.length === 0) {
-                tentaclesConfigByTentacle[tentacle] = editor.getValue();
-            } else {
-                save = false;
-                createNotification(`Error when saving ${editorKey} configuration`, "danger", `${errorsDesc}`);
-            }
+        if (!editor) {
+            return;
+        }
+        const tentacle = editorKey.split("##")[1];
+        const errorsDesc = validateJSONEditor(editor)
+        if (errorsDesc.length === 0) {
+            tentaclesConfigByTentacle[tentacle] = editor.getValue();
+        } else {
+            save = false;
+            createNotification(`Error when saving ${editorKey} configuration`, "danger", `${errorsDesc}`);
         }
     });
     if (save) { // _restoreCustomUserInputs(tentaclesConfigByTentacle);
@@ -237,7 +238,7 @@ function _createTentacleConfigTab({
     tabsData,
     storageName
 }) {
-    schema && _addGridDisplayOptions(schema, editorKey);
+    if (schema) _addGridDisplayOptions(schema, editorKey);
     if (schema?.properties) {
         try {
             Object.values(schema?.properties).forEach(property => property && _addGridDisplayOptions(property, null));
@@ -256,7 +257,7 @@ function _createTentacleConfigTab({
                     <JsonEditor schema={schema}
                         startval={config}
                         editorName={
-                            editorKey + "##" + configName
+                            `${editorKey}##${configName}`
                         }
                         {...defaultJsonEditorSettings()}
                         display_required_only={true}

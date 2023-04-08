@@ -23,7 +23,7 @@ export default function Page({currentPage}) {
                 } - ${projectName}`
             }>
                 <meta name="description"
-                    content={projectDescription}/>
+                    content={projectDescription} />
             </Helmet>
             <AppWidgets currentPage={currentPage}
                 layout={

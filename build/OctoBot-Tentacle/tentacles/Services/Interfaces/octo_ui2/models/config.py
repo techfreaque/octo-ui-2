@@ -4,20 +4,13 @@ import octobot_tentacles_manager.api as tentacles_manager_api
 
 
 def save_ui_config(config_update):
-    try:
-        tentacles_manager_api.update_tentacle_config(
-            interfaces_util.get_edited_tentacles_config(),
-            octo_ui2_plugin.OctoUi2Plugin,
-            config_update,
-            keep_existing=False,
-        )
-    except:
-        # TODO remove when octoboto supports keep_existing
-        tentacles_manager_api.update_tentacle_config(
-            interfaces_util.get_edited_tentacles_config(),
-            octo_ui2_plugin.OctoUi2Plugin,
-            config_update,
-        )
+    tentacles_manager_api.update_tentacle_config(
+        interfaces_util.get_edited_tentacles_config(),
+        octo_ui2_plugin.OctoUi2Plugin,
+        config_update,
+        keep_existing=False,
+    )
+
     return {"success": "UI configuration updated"}
 
 

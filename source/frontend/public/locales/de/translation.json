@@ -1,0 +1,13 @@
+{
+  "buttons": {
+    "softRefresh": "Sanfte Aktualisierung",
+    "restartBot": "Bot neu starten",
+    "updateBot": "Bot aktualisieren",
+    "stopBot": "Bot stoppen",
+    "backToOctoBot": "Zurück zu OctoBot"
+  },
+  "notFoundPage": {
+    "goHome": "zur Startseite",
+    "title": "Seite nicht gefunden"
+  }
+}

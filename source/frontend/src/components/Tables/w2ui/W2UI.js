@@ -2,7 +2,7 @@ import { w2ui, w2grid } from "w2ui/dist/w2ui.es6.js"
 import "./W2UI.css"
 
 export function createTable({elementID, name, tableName, searches, columns, records, columnGroups, searchData, sortData,
-    selectable, addToTable, reorderRows, deleteRows, onReorderRowCallback, onDeleteCallback}) {
+    selectable, addToTable, reorderRows, deleteRows, onReorderRowCallback, onDeleteCallback, additionalToolbarButtons={}}) {
     window.w2ui = window.w2ui ? window.w2ui : w2ui
     let table = window.w2ui[tableName]
     const tableExists = typeof table !== "undefined";
@@ -47,7 +47,10 @@ export function createTable({elementID, name, tableName, searches, columns, reco
             onDelete: onDeleteCallback,
             onReorderRow: onReorderRowCallback,
         });
-        table.toolbar.add({ type: 'button', id: 'exportTable', text: 'Export', img: 'fas fa-file-download', onClick: downloadRecords });
+        table.toolbar.add(
+            { type: 'button', id: 'exportTable', text: 'Export', img: 'fas fa-file-download', onClick: downloadRecords },
+            ...additionalToolbarButtons
+        );
     }
     return table;
 }

@@ -1,4 +1,6 @@
 import os
+import octobot.constants as octobot_constants
+from octobot_commons import optimization_campaign
 import octobot_trading.util as trading_util
 import octobot_tentacles_manager.api as tentacles_manager_api
 import octobot_commons.constants as commons_constants
@@ -54,12 +56,33 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
     @classmethod
     def get_ui_config(
         cls,
-        tentacles_setup_config=None,
     ):
+        campaign_config = cls._get_campaign_config()
         config = tentacles_manager_api.get_tentacle_config(
-            tentacles_setup_config or interfaces_util.get_edited_tentacles_config(), cls
+            interfaces_util.get_edited_tentacles_config(), cls
         )
+        config[octobot_constants.OPTIMIZATION_CAMPAIGN_KEY] = campaign_config
         config[
             commons_constants.CONFIG_CURRENT_LIVE_ID
         ] = trading_util.get_current_bot_live_id(interfaces_util.get_edited_config())
         return config
+
+    @classmethod
+    def optimization_campaign_name(cls, tentacles_setup_config=None):
+        return cls._get_campaign_config(tentacles_setup_config)[commons_constants.CONFIG_NAME]
+
+    @classmethod
+    def _get_campaign_config(cls, tentacles_setup_config=None):
+        config = tentacles_manager_api.get_tentacle_config(tentacles_setup_config or
+                                                           interfaces_util.get_edited_tentacles_config(), cls)
+        campaign_config = config.get(octobot_constants.OPTIMIZATION_CAMPAIGN_KEY, {})
+        campaign_config[commons_constants.CONFIG_NAME] = campaign_config.get(
+            commons_constants.CONFIG_NAME,
+            commons_constants.DEFAULT_CAMPAIGN
+        )
+        return campaign_config
+
+
+optimization_campaign.register_optimization_campaign_name_proxy(
+    OctoUi2Plugin.optimization_campaign_name
+)

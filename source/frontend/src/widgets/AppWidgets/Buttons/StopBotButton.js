@@ -5,6 +5,7 @@ import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { stopBot } from "../../../api/actions";
 import { useIsBotOnlineContext, useUpdateIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
+import { Trans } from "react-i18next";
 
 export default function StopBotButton() {
   const [isLoading, setIsloading] = useState(false);
@@ -18,7 +19,7 @@ export default function StopBotButton() {
           icon={faStop}
           style={{ marginRight: "5px" }}
         />
-        Stop Bot
+    <Trans i18nKey="buttons.stopBot" />    
       </Button>
     );
   }, [botDomain, isLoading, isOnline, updateIsOnline])

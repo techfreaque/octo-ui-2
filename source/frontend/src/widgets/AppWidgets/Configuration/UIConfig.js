@@ -20,15 +20,16 @@ export default function UIConfig({ configKeys }) {
     const availableExchanges = botInfo?.exchange_names
 
     function handleEditorsAutosave() {
-        if (uiConfig) {
-            const newConfigs = { ...uiConfig }
-            configKeys.forEach(configKey => {
-                const newConfig = window.$JsonEditors["uiConf-" + configKey].getValue()
-                const finalNewConfig = convertTimestamps(newConfig, true)
-                newConfigs[configKey] = finalNewConfig
-            })
-            newConfigs && saveUiConfig(newConfigs)
+        if (!uiConfig) {
+            return;
         }
+        const newConfigs = { ...uiConfig }
+        configKeys.forEach(configKey => {
+            const newConfig = window.$JsonEditors[`uiConf-${configKey}`].getValue()
+            const finalNewConfig = convertTimestamps(newConfig, true)
+            newConfigs[configKey] = finalNewConfig
+        })
+        if (newConfigs) saveUiConfig(newConfigs);
     };
     return useMemo(() => (
         <div>
@@ -37,10 +38,19 @@ export default function UIConfig({ configKeys }) {
                     {...defaultJsonEditorSettings()}
                     schema={getUiConfigSchema(configKey, dataFiles, currentSymbols, availableExchanges)}
                     startval={convertTimestamps(uiConfig[configKey])}
-                    editorName={"uiConf-" + configKey}
+                    editorName={`uiConf-${configKey}`}
                     onChange={handleEditorsAutosave}
-                    disable_edit_json={true}
+                    disable_collapse={true}
                     key={configKey}
+                    // language="es"
+                    // languages={{
+                    //     es: {
+                    //         button_save: "Save",
+                    //         button_copy: "Copy",
+                    //         button_cancel: "Cancel",
+                    //         button_add: "Add",
+                    //     }
+                    // }}
                 />
             })} </div>
         // eslint-disable-next-line react-hooks/exhaustive-deps

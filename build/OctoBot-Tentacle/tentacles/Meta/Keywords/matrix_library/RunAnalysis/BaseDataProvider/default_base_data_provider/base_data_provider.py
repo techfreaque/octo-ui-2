@@ -1,17 +1,18 @@
-import json
 import typing
 import numpy
 import numpy.typing as npt
+
 import octobot_commons.databases.implementations.meta_database as meta_database
 import octobot_commons.logging.logging_util as logging_util
-import octobot_trading.api.exchange as exchange_api
-
-import octobot_trading.api as trading_api
-import octobot_backtesting.api as backtesting_api
 import octobot_commons.constants
 import octobot_commons.enums as commons_enums
 import octobot_commons.logging as commons_logging
-from tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors import CandlesLoadingError
+import octobot_trading.api.exchange as exchange_api
+import octobot_trading.api as trading_api
+import octobot_backtesting.api as backtesting_api
+import tentacles.Meta.Keywords.scripting_library.UI.plots.displayed_elements as displayed_elements
+
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.custom_context as custom_context
 
 
@@ -27,9 +28,9 @@ class RunAnalysisBaseDataGenerator:
         run_display,
         metadata,
         is_backtesting: bool,
-        main_plotted_element,
-        sub_plotted_element,
-        table_plotted_element,
+        main_plotted_element: displayed_elements.DisplayedElements,
+        sub_plotted_element: displayed_elements.DisplayedElements,
+        table_plotted_element: displayed_elements.DisplayedElements,
     ):
         self._candles_by_symbol_and_time_frame: typing.Dict[
             str,
@@ -41,7 +42,9 @@ class RunAnalysisBaseDataGenerator:
         self._transactions = None
         self._cached_values_by_symbols: dict = {}
         self._symbols_dbs: dict = {}
-        self._plotted_elements_by_chart: dict = {}
+        self._plotted_elements_by_chart: typing.Dict[
+            str, displayed_elements.DisplayedElements
+        ] = {}
         self._portfolio_history = None
 
         self.start_time: typing.Union[float, int] = None
@@ -50,7 +53,9 @@ class RunAnalysisBaseDataGenerator:
         # TODO remove
         self._plotted_elements_by_chart["main-chart"] = main_plotted_element
         self._plotted_elements_by_chart["sub-chart"] = sub_plotted_element
-        self.table_plotted_element = table_plotted_element
+        self.table_plotted_element: displayed_elements.DisplayedElements = (
+            table_plotted_element
+        )
         self.run_database: meta_database.MetaDatabase = run_database
         self.run_display = run_display
         self.ctx: custom_context.Context = ctx
@@ -168,12 +173,13 @@ class RunAnalysisBaseDataGenerator:
         )
         try:
             raw_candles = trading_api.get_symbol_historical_candles(
-            trading_api.get_symbol_data(exchange_manager, symbol, allow_creation=True),
-            time_frame,
-    
-        )
+                trading_api.get_symbol_data(
+                    exchange_manager, symbol, allow_creation=True
+                ),
+                time_frame,
+            )
         except KeyError as error:
-            raise CandlesLoadingError from error
+            raise analysis_errors.CandlesLoadingError from error
         for index in range(
             len(raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value])
         ):
@@ -188,6 +194,7 @@ class RunAnalysisBaseDataGenerator:
         ]
 
     async def get_trades(self, symbols: typing.Optional[typing.List[str]] = None):
+        # TODO when live load trades from bot 
         if not self._trades:
             await self._load_trades()
         if symbols:

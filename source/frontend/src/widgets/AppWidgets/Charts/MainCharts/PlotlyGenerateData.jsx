@@ -347,9 +347,10 @@ function formatAsRangeTime(timestamp) {
 
 function getAxisTemplate(axisKey, uiConfig, axisType, chartDetails) {
     const axis = axisTemplate[axisKey]
-    axis.type = axisType === "y" && uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_use_log_scale === true ? "log" : "linear";
     if (axisType === "x" && chartDetails.x_type !== null) {
         axis.type = chartDetails.x_type;
+    } else if (axisType === "y"){
+        axis.type = uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_use_log_scale === true ? "log" : "linear";
     }
     return axis
 }

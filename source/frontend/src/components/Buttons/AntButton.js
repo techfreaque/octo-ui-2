@@ -24,7 +24,8 @@ export default function AntButton({
   ,
   // string icons
   faIcon,
-  antIcon
+  antIcon,
+
 
 }) {
   const botColors = useBotColorsContext();
@@ -34,7 +35,7 @@ export default function AntButton({
           "token": {
           "colorError": botColors[buttonType]}}
     }>
-      <Button danger 
+      <Button danger  type
           onClick={onClick}
           style={{ margin: '5px', padding: '4px 10px', display: "flex" }}>
           {(faIcon || antIcon) && (<IconFromString faIcon={faIcon} antIcon={antIcon}  size={sizes.small } />)}

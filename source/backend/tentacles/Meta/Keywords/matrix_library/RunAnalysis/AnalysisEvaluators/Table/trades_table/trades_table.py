@@ -47,18 +47,38 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
             )
             trades = await run_data.get_trades(symbols)
             if bool(trades):
+                # TODO use constants
                 key_to_label = {
+                    "id": "ID",
                     "y": "Price",
                     "type": "Type",
                     "side": "Side",
                 }
+                additional_column_types = {
+                    "Time": "datetime",
+                    "Entry time": "datetime",
+                    "Exit time": "datetime",
+                    "Symbol": "text",
+                    "Type": "text",
+                    "Side": "text",
+                    "Price": "float",
+                    "Fees": "float",
+                    "Total": "float",
+                    "Volume": "float",
+                }
                 additional_columns = [
-                    {"field": "total", "text": "Total", "render": None, "sortable": True},
+                    {
+                        "field": "total",
+                        "text": "Total",
+                        "render": None,
+                        "sortable": True,
+                    },
                     {"field": "fees", "text": "Fees", "render": None, "sortable": True},
                 ]
 
                 def datum_columns_callback(datum):
-                    datum["total"] = datum["cost"]
+                    datum["total"] = f"{datum['cost']} {datum['origin_value']['market']}"
+                    datum["volume"] = f"{datum['volume']} {datum['origin_value']['quantity_currency']}"
                     datum["fees"] = f'{datum["fees_amount"]} {datum["fees_currency"]}'
 
                 table_keywords.plot_table_data(
@@ -67,5 +87,6 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
                     run_data=run_data,
                     additional_key_to_label=key_to_label,
                     additional_columns=additional_columns,
+                    additional_column_types=additional_column_types,
                     datum_columns_callback=datum_columns_callback,
                 )

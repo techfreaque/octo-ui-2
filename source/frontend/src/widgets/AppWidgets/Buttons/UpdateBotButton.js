@@ -5,6 +5,7 @@ import { faDownload } from "@fortawesome/free-solid-svg-icons";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useIsBotOnlineContext, useUpdateIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 import { updateBot } from "../../../api/actions";
+import { Trans } from "react-i18next";
 
 export default function UpdateBotButton() {
   const [isLoading, setIsloading] = useState(false);
@@ -19,7 +20,7 @@ export default function UpdateBotButton() {
           icon={faDownload}
           style={{ marginRight: "5px" }}
         />
-        Update Bot
+       <Trans i18nKey="buttons.updateBot" /> 
       </Button>
     );
   }, [botDomain, disabled, updateIsOnline])

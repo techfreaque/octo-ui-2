@@ -1,6 +1,6 @@
-import { backendRoutes } from "../../../constants/backendConstants"
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider"
-import { useCurrentProfile } from "../../../context/data/BotInfoProvider"
+import {backendRoutes} from "../../../constants/backendConstants"
+import {useBotDomainContext} from "../../../context/config/BotDomainProvider"
+import {useCurrentProfile} from "../../../context/data/BotInfoProvider"
 
 export default function ProfileAvatar({
     size = "20px",
@@ -17,14 +17,15 @@ export default function ProfileAvatar({
         currentProfile?.profile?.name?.replace(/ /g, "_")
     }/${currentAvatar}`
     // eslint-disable-next-line jsx-a11y/alt-text
-    return <img style={
+    return currentAvatar && (<img style={
             {
                 margin: "auto",
-                marginRight: {marginRight},
+                marginRight: {
+                    marginRight
+                },
                 height: size,
                 width: "auto"
             }
         }
-        src={avatarUrl}      
-        />
+        src={avatarUrl}/>)
 }

@@ -129,3 +129,33 @@
 .dark .select2-dropdown {
     border-color: var(--dark-border);
 }
+
+.dark .custom-control-label::before {
+    background-color: unset;
+    border: var(--dark-border) solid 1px;
+}
+
+.light .custom-control-label::before {
+    background-color: unset;
+    border: var(--light-border) solid 1px;
+}
+
+.light .select2-container--default .select2-selection--multiple {
+    background-color: unset;
+    border: var(--light-border) solid 1px;
+}
+
+.dark .select2-container--default .select2-selection--multiple {
+    background-color: unset;
+    border: var(--dark-border) solid 1px;
+}
+
+.dark .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: var(--dark-border) 1px solid;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}
+
+.light .select2-container--default.select2-container--focus .select2-selection--multiple {
+    border: var(--light-border) 1px solid;
+    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+}

@@ -1,4 +1,5 @@
 import octobot_commons.enums as commons_enums
+import tentacles.Meta.Keywords.scripting_library.UI.plots.displayed_elements as displayed_elements
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.future_base_data_provider as future_base_data_provider
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.spot_base_data_provider as spot_base_data_provider
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
@@ -10,9 +11,9 @@ async def get_base_data(
     is_backtesting: bool,
     run_database,
     run_display,
-    main_plotted_element,
-    sub_plotted_element,
-    table_plotted_element,
+    main_plotted_element: displayed_elements.DisplayedElements,
+    sub_plotted_element: displayed_elements.DisplayedElements,
+    table_plotted_element: displayed_elements.DisplayedElements,
 ):
     # load and generate unified base data
 

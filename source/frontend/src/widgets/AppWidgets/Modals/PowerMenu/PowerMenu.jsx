@@ -10,6 +10,7 @@ import {MuiIconButton} from '../../../../components/Buttons/IconButton';
 import { useState } from 'react';
 import { useBotInfoContext } from '../../../../context/data/BotInfoProvider';
 import { PoweroffOutlined } from '@ant-design/icons';
+import { Trans } from 'react-i18next';
 
 export default function PowerMenu() {
     const botDomain = useBotDomainContext();
@@ -43,7 +44,7 @@ export default function PowerMenu() {
                             key: 'back',
                             label: (
                                 <Button variant="outlined"
-                                    href={botDomain}>Back to OctoBot</Button>
+                                    href={botDomain}><Trans i18nKey="buttons.backToOctoBot" /></Button>
                             )
                         },
                     ] : []

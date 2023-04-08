@@ -1,32 +1,31 @@
-# import octobot_commons.enums as commons_enums
-# import octobot_commons.databases as databases
-# import octobot_commons.errors as commons_errors
-
-
-from tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider import base_data_provider
+import typing
+from tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider import (
+    base_data_provider,
+)
 
 
 def plot_table_data(
     data,
     data_name: str,
     run_data: base_data_provider.RunAnalysisBaseDataGenerator,
-    additional_key_to_label,
-    additional_columns,
+    additional_key_to_label: dict,
+    additional_columns: list,
+    additional_column_types: typing.Dict[str, str],
     datum_columns_callback,
 ):
     if not data:
-        run_data.debug(
-            f"Nothing to create a table from when reading {data_name}"
-        )
+        run_data.logger.debug(f"Nothing to create a table from when reading {data_name}")
         return
     column_render = _get_default_column_render()
-    types = _get_default_types()
+    types = {**_get_default_types(), **additional_column_types}
     key_to_label = {
         **run_data.table_plotted_element.TABLE_KEY_TO_COLUMN,
         **additional_key_to_label,
     }
     columns = (
-        _get_default_columns(run_data.table_plotted_element, data, column_render, key_to_label)
+        _get_default_columns(
+            run_data.table_plotted_element, data, column_render, key_to_label
+        )
         + additional_columns
     )
     if datum_columns_callback:
@@ -34,7 +33,12 @@ def plot_table_data(
             datum_columns_callback(datum)
     rows = _get_default_rows(data, columns)
     searches = _get_default_searches(columns, types)
-    run_data.table_plotted_element.table(data_name, columns=columns, rows=rows, searches=searches)
+    run_data.table_plotted_element.table(
+        data_name,
+        columns=columns,
+        rows=rows,
+        searches=searches,
+    )
 
 
 # async def plot_table(
@@ -119,14 +123,7 @@ def _get_default_types():
         "Time": "datetime",
         "Entry time": "datetime",
         "Exit time": "datetime",
-        "Symbol":"text",
-        "Type": "text",
-        "Side": "text",
-        "Price": "float",
-        "Fees": "float",
-        "Total": "float",
-        "Volume": "float",
-        }
+    }
 
 
 def _get_default_columns(plotted_element, data, column_render, key_to_label=None):
@@ -136,7 +133,7 @@ def _get_default_columns(plotted_element, data, column_render, key_to_label=None
             "field": row_key,
             "text": key_to_label[row_key],
             "render": column_render.get(key_to_label[row_key], None),
-            "sortable": True
+            "sortable": True,
         }
         for row_key, row_value in data[0].items()
         if row_key in key_to_label and row_value is not None

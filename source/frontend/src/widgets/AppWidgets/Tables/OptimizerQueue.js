@@ -18,9 +18,8 @@ export default function OptimizerQueueTable() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
     useEffect(() => {
-        optimizerQueue
-            && updateOptimizerQueueEditor(
-                optimizerQueue, saveOptimizerQueue, containerId)
+        if (optimizerQueue) updateOptimizerQueueEditor(
+        optimizerQueue, saveOptimizerQueue, containerId);
         updateOptimizerQueueCount(optimizerQueue, updateOptimizerQueueCounter);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -62,7 +61,7 @@ function createOptimizerQueueTables(optimizerQueue, containerId, saveOptimizerQu
     mainContainer.innerHTML = "";
     if (optimizerQueue.length) {
         noRunMessage.classList.add(hidden_class);
-        optimizerQueue.forEach(function (optimizerRun) {
+        optimizerQueue.forEach((optimizerRun) => {
             if (Object.values(optimizerRun.runs).length) {
                 _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimizerQueue);
             }
@@ -92,22 +91,23 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
     const addedLabels = [];
     const tentaclesInputsCounts = {};
     Object.values(optimizerRun.runs).forEach((run) => {
-        Object.values(run).forEach(function (inputDetail) {
+        Object.values(run).forEach((inputDetail) => {
             const label = inputDetail.user_input.length > MAX_SEARCH_LABEL_SIZE ? `${inputDetail.user_input.slice(0,
                 MAX_SEARCH_LABEL_SIZE)} ...` : inputDetail.user_input;
             const addedLabel = `${label} (${inputDetail.tentacle})`
-            if (addedLabels.indexOf(addedLabel) === -1) {
-                keys.push({
-                    text: addedLabel,
-                    field: userInputKey(inputDetail.user_input, inputDetail.tentacle)
-                });
-                if (typeof tentaclesInputsCounts[inputDetail.tentacle] !== "undefined") {
-                    tentaclesInputsCounts[inputDetail.tentacle]++;
-                } else {
-                    tentaclesInputsCounts[inputDetail.tentacle] = 1;
-                }
-                addedLabels.push(addedLabel);
+            if (addedLabels.includes(addedLabel)) {
+                return;
             }
+            keys.push({
+                text: addedLabel,
+                field: userInputKey(inputDetail.user_input, inputDetail.tentacle)
+            });
+            if (typeof tentaclesInputsCounts[inputDetail.tentacle] === "undefined") {
+                tentaclesInputsCounts[inputDetail.tentacle] = 1;
+            } else {
+                tentaclesInputsCounts[inputDetail.tentacle]++;
+            }
+            addedLabels.push(addedLabel);
         });
     })
     const columns = keys.map((key) => {
@@ -118,12 +118,10 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
             sortable: true,
         }
     });
-    const columnGroups = Object.keys(tentaclesInputsCounts).map(function (key) {
-        return {
-            text: key,
-            span: tentaclesInputsCounts[key]
-        }
-    });
+    const columnGroups = Object.keys(tentaclesInputsCounts).map((key) => ({
+        text: key,
+        span: tentaclesInputsCounts[key]
+    }));
     const records = []
     let recId = 0;
     const userInputSamples = {};
@@ -131,7 +129,7 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
         const row = {
             recid: recId++
         };
-        run.forEach(function (runUserInputDetails) {
+        run.forEach((runUserInputDetails) => {
             const field = userInputKey(runUserInputDetails.user_input, runUserInputDetails.tentacle)
             row[field] = runUserInputDetails.value;
             userInputSamples[field] = runUserInputDetails.value;
@@ -143,7 +141,7 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
         return {
             field: key.field,
             label: key.text,
-            type: TIMESTAMP_DATA.indexOf(key) !== -1 ? "datetime" : _getTableDataType(null,
+            type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(null,
                 { type: null, field: key }, "text", sampleValue),
         }
     });
@@ -159,16 +157,18 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
             queueInfo.deleteEveryRun = true;
             _updateOptimizerQueue(event);
             table.destroy();
-        } else {
-            const rawsToDelete = recsToDelete.map((recId) => table.get(recId))
-            queueInfo.deletedRows = rawsToDelete;
-            event.onComplete = _updateOptimizerQueue;
+            return;
         }
+        const rawsToDelete = recsToDelete.map((recId) => table.get(recId))
+        queueInfo.deletedRows = rawsToDelete;
+        event.onComplete = _updateOptimizerQueue;
     }
     const tableName = `${divID}-table`;
     const table = createTable({elementID:divID, name:tableTitle,
         tableName, searches, columns, records, columnGroups, searchData:[], sortData:[],
-        selectable:true, addToTable:false, reorderRows:true, deleteRows:true, onReorderRowCallback:_onReorderRow, onDeleteCallback:_onDelete});
+        selectable: true, addToTable: false, reorderRows: true, deleteRows: true,
+        onReorderRowCallback: _onReorderRow, onDeleteCallback: _onDelete
+    });
 
     function randomizeRecords() {
         randomizeArray(table.records);
@@ -180,16 +180,17 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
     function _createRunData(record, deleted) {
         const run = [];
         Object.keys(record).forEach((key) => {
-            if (key !== "recid") {
-                const splitKey = key.split(TENTACLE_SEPARATOR);
-                const inputName = splitKey[0];
-                run.push({
-                    user_input: inputName,
-                    tentacle: splitKey[1].split(","),
-                    value: record[key],
-                    deleted,
-                });
+            if (key === "recid") {
+                return;
             }
+            const splitKey = key.split(TENTACLE_SEPARATOR);
+            const inputName = splitKey[0];
+            run.push({
+                user_input: inputName,
+                tentacle: splitKey[1].split(","),
+                value: record[key],
+                deleted,
+            });
         });
         return run;
     }
@@ -219,7 +220,7 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
 
 
 function _getTableDataType(records, search, defaultValue, sampleValue) {
-    if (ID_DATA.indexOf(search.field) !== -1) {
+    if (ID_DATA.includes(search.field)) {
         return "float";
     }
     if (search.type !== null) {

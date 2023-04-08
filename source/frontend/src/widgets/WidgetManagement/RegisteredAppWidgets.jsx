@@ -52,6 +52,7 @@ import NotificationCenter from "../AppWidgets/Modals/NotificationCenter/Notifica
 import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
 import Logo from "../AppWidgets/other/Logo";
 import ChartTablePieCombo, {ChartTypeSelector} from "../AppWidgets/Charts/ChartTablePieCombo";
+import LanguageSwitch from "../AppWidgets/Buttons/LanguageSwitch";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -113,4 +114,5 @@ export const registeredComponents = {
     Logo,
     ChartTablePieCombo,
     ChartTypeSelector,
+    LanguageSwitch,
 };

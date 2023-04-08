@@ -7,12 +7,12 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { backendRoutes } from "../../constants/backendConstants";
-
+import { Trans } from 'react-i18next';
 export default function NotFoundPage() {
   return (
     <div>
-      <h1>Page not found</h1>
-      <Link to={backendRoutes.frontendEntry} ><h2>go home</h2></Link>
+      <h1><Trans i18nKey="notFoundPage.title" /></h1>
+      <Link to={backendRoutes.frontendEntry} ><h2><Trans i18nKey="notFoundPage.goHome"/></h2></Link>
     </div>
   );
 }
