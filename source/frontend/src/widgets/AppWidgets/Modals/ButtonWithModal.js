@@ -73,6 +73,7 @@ function ModalContent({open, id, handleClose, content}) {
             aria-labelledby={
                 `modal-${id}-title`
             }
+            style={{zIndex: "1000"}}
             aria-describedby={
                 `modal-${id}-description`
         }>

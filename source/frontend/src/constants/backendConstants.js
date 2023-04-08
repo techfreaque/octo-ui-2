@@ -23,7 +23,9 @@ export const backendRoutes = {
     liveRunData: `${basePath}/live_run_data`,
     UIConfig: `${basePath}/ui_config`,
     logoutBot: `${basePath}/logout`,
-
+    getLogs: `${basePath}/logs`,
+    exportLogs: "/export_logs",
+    
     optimizerQueueUpdate: `${proBasePath}/optimizer/update`,
     optimizerAddToQueue: `${proBasePath}/optimizer/add`,
     optimizerGetQueue: `${proBasePath}/optimizer/get`,

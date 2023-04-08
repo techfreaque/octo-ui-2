@@ -44,12 +44,12 @@ import DataTable from "../AppWidgets/Tables/DataTable";
 import LogoutButton from "../AppWidgets/Buttons/LogoutButton";
 import ProfileModal from "../AppWidgets/Modals/ProfileModal/ProfileModal";
 import Sidebar, {SidebarMenuItem} from "../LayoutWidgets/Sidebar/Sidebar";
-import NotificationCenter from "../AppWidgets/Modals/NotificationCenter/NotificationCenter";
 import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
 import Logo from "../AppWidgets/other/Logo";
 import ChartTablePieCombo, {ChartTypeSelector} from "../AppWidgets/Charts/ChartTablePieCombo";
 import LanguageSwitch from "../AppWidgets/Buttons/LanguageSwitch";
 import ResetConfigs from "../AppWidgets/ResetConfigs/ResetConfigs";
+import NotificationCenter from "../AppWidgets/NotificationCenter/NotificationCenter";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -108,5 +108,5 @@ export const registeredComponents = {
     ChartTablePieCombo,
     ChartTypeSelector,
     LanguageSwitch,
-    ResetConfigs
+    ResetConfigs,
 };

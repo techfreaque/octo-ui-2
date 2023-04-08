@@ -161,6 +161,7 @@ export async function fetchAppStoreData(saveAppStoreData, botDomain) {
   await fetchAndStoreFromBot(botDomain + backendRoutes.appStore, saveAppStoreData);
 }
 
-
-
+export async function fetchBotLogs(saveLogs, botDomain) {
+  await fetchAndStoreFromBot(botDomain + backendRoutes.getLogs, saveLogs);
+}
 
