@@ -60,6 +60,7 @@ export const backendRoutes = {
     clearTransactionsHistory: `${apiPath}/clear_transactions_history`,
     getAllOrders: `${apiPath}/orders`,
     cancelOrder: `${apiPath}/orders?action=cancel_order`,
+    cancelOrders: `${apiPath}/orders?action=cancel_orders`,
     getAllPositions: `${apiPath}/positions`,
     closePosition: `${apiPath}/positions?action=close_position`,
     getAllTrades: `${apiPath}/trades`,

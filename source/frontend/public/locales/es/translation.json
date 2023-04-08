@@ -1,0 +1,13 @@
+{
+	"buttons": {
+		"backToOctoBot": "Volver a OctoBot",
+		"restartBot": "Reiniciar robot",
+		"softRefresh": "Actualización suave",
+		"stopBot": "Detener robot",
+		"updateBot": "Actualizar robot"
+	},
+	"notFoundPage": {
+		"goHome": "Vete a casa",
+		"title": "Página no encontrada"
+	}
+}

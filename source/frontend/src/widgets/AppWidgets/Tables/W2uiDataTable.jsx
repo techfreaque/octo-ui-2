@@ -4,15 +4,20 @@ import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import {useState} from "react";
 import {Typography} from "antd";
 import {createTable} from "../../../components/Tables/w2ui/W2UI";
+import { cancelOrders } from "../../../api/actions";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 
 export default function W2uiDataTable() {
     const [menuItems, setMenuItems] = useState()
     const plottedElements = useBotPlottedElementsContext()
+    const botDomain = useBotDomainContext()
     useEffect(() => {
         const newMenuItems = {}
         plottedElements && Object.keys(plottedElements).forEach(liveOrBacktest => {
             if (liveOrBacktest === "live") {
-                generateTablesAndSidebarItems({plottedElements: plottedElements[liveOrBacktest], liveOrBacktest, newMenuItems})
+                generateTablesAndSidebarItems({
+                    plottedElements: plottedElements[liveOrBacktest], liveOrBacktest, newMenuItems, botDomain
+                })
             } else {
                 plottedElements && Object.keys(plottedElements[liveOrBacktest]).forEach(campaignName => {
                     plottedElements && Object.keys(plottedElements[liveOrBacktest][campaignName]).forEach(optimizerId => {
@@ -21,7 +26,8 @@ export default function W2uiDataTable() {
                             liveOrBacktest,
                             newMenuItems,
                             campaignName,
-                            optimizerId
+                            optimizerId,
+                            botDomain
                         })
 
                     })
@@ -29,7 +35,7 @@ export default function W2uiDataTable() {
             }
         })
         setMenuItems(Object.values(newMenuItems))
-    }, [plottedElements]);
+    }, [botDomain, plottedElements]);
     return (<AntSidebar menuItems={menuItems}/>)
 }
 
@@ -39,14 +45,15 @@ function generateTablesAndSidebarItems({
     liveOrBacktest,
     newMenuItems,
     campaignName,
-    optimizerId
+    optimizerId,
+    botDomain
 }) {
     plottedElements && Object.keys(plottedElements).forEach(runId => {
         const thisRun = plottedElements[runId]
         thisRun && Object.keys(thisRun).forEach(symbol => {
             thisRun[symbol] && Object.keys(thisRun[symbol]).forEach(timeframe => {
-                const subElements = thisRun[symbol][timeframe] ?. data ?. sub_elements
-                subElements ?. forEach(subElement => {
+                const subElements = thisRun[symbol][timeframe]?.data?.sub_elements
+                subElements?.forEach(subElement => {
                     if (subElement.name === "table") {
                         _generateTablesAndSidebarItems({
                             subElement,
@@ -54,7 +61,8 @@ function generateTablesAndSidebarItems({
                             newMenuItems,
                             campaignName,
                             optimizerId,
-                            runId
+                            runId,
+                            botDomain
                         })
                     }
                 })
@@ -68,9 +76,10 @@ function _generateTablesAndSidebarItems({
     newMenuItems,
     campaignName,
     optimizerId,
-    runId
+    runId,
+    botDomain
 }) {
-    subElement ?. data ?. elements ?. forEach(element => {
+    subElement?.data?.elements?.forEach(element => {
         if (!newMenuItems[liveOrBacktest]) {
             newMenuItems[liveOrBacktest] = {
                 label: `${
@@ -86,28 +95,28 @@ function _generateTablesAndSidebarItems({
         const tableId = `${
             element.title.replace(/ /g, "_").replace(/\//g, "_")
         }-table`
-        element ?. rows ?. forEach((row, index) => {
+        element?.rows?.forEach((row, index) => {
             row.recid = index
         })
         let label
         const additionalToolbarButtons = {}
+        let cancelCallback
         if (liveOrBacktest === "live") {
             label = `${
                 element.title
             } ${runId}`
-            if (element.title.startsWith("Trades")) {
+            if (element.title.startsWith("Orders")) {
                 additionalToolbarButtons['delete'] = {
                     type: 'button',
-                    id: 'w2ui-delete',
-                    text: 'reee',
-                    tooltip: 'Delete selected records',
+                    id: "w2ui-delete",
+                    text: 'Cancel selected orders',
+                    tooltip: 'Cancel selected orders',
                     icon: 'w2ui-icon-cross',
                     batch: true,
-                    onClick: onOrderCancel
                 }
+                cancelCallback=(event)=> onOrderCancel(event, botDomain, tableId)
             }
         } else {
-
             label = `${
                 element.title
             } ${campaignName} ${optimizerId} ${runId}`
@@ -117,16 +126,16 @@ function _generateTablesAndSidebarItems({
             label,
             noPadding: true,
             content: (<TableFromElement tableId={tableId}
-                element={element}
+                element={element} cancelCallback={cancelCallback}
                 additionalToolbarButtons={additionalToolbarButtons}/>)
         })
     })
 }
 
 
-function TableFromElement({tableId, element, additionalToolbarButtons}) {
+function TableFromElement({tableId, element, additionalToolbarButtons, cancelCallback}) {
     useEffect(() => {
-        createTable({
+        const table = createTable({
             elementID: tableId,
             name: element.title,
             tableName: tableId,
@@ -140,9 +149,12 @@ function TableFromElement({tableId, element, additionalToolbarButtons}) {
             addToTable: false,
             reorderRows: false,
             onReorderRowCallback: null,
-            additionalToolbarButtons
+            onDeleteCallback:cancelCallback
         });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        Object.values(additionalToolbarButtons).forEach(additionalButton => {
+            table.toolbar.add(additionalButton);
+        })
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tableId, element])
     return (<div id={tableId}
         style={
@@ -153,12 +165,11 @@ function TableFromElement({tableId, element, additionalToolbarButtons}) {
         }/>)
 }
 
-function onOrderCancel(event) {
-    const table = window.w2ui[event.target];
+function onOrderCancel(event, botDomain, tableId) {
+    const table = window.w2ui[tableId];
     const recsToDelete = table.getSelection()
     const orderIdsToCancel = recsToDelete.map(recordId => {
         return table.records[recordId].id
     })
-    return event
-    // event.onComplete = _onDelete
+    event.onComplete = () => cancelOrders(botDomain, orderIdsToCancel)
 }

@@ -226,6 +226,19 @@ export async function cancelOrder(botDomain, orderId, setIsCancelling) {
     sendAndInterpretBotUpdate(orderId, botDomain + backendRoutes.cancelOrder, success, fail, "POST")
 }
 
+export async function cancelOrders(botDomain, orderIdsArray, setIsCancelling) {
+    setIsCancelling?.(true)
+    const success = (updated_data, update_url, result, msg, status) => {
+        createNotification("Successfully canceled orders")
+        setIsCancelling?.(false)
+    }
+    const fail = (updated_data, update_url, result, msg, status) => {
+        createNotification("Failed to cancel orders", "danger")
+        setIsCancelling?.(false)
+    }
+    sendAndInterpretBotUpdate(orderIdsArray, botDomain + backendRoutes.cancelOrders, success, fail, "POST")
+}
+
 export async function updateProfileInfo(botDomain, newProfileInfo, onFail) {
     const success = (updated_data, update_url, result, msg, status) => {
         createNotification("Successfully updated profile info")

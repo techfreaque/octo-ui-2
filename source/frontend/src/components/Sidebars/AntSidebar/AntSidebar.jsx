@@ -61,7 +61,9 @@ export default function AntSidebar({menuItems}) {
             <div style={
                 { // width: `calc(100% - ${sideBarWidth}px)`,
                     width: "100%",
-                    padding: currentContent?.noPadding ? "" : "15px"
+                    padding: currentContent?.noPadding ? "" : "15px",
+                    height: "100%",
+                    overflowY: currentContent?.scroll ? "scroll" : undefined
                 }
             }> {
                 currentContent?.content

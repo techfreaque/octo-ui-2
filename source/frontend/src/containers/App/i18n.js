@@ -6,6 +6,7 @@ import { getIsProduction } from '../../context/config/BotDomainProvider';
 
 export const languages = {
   en: { nativeName: 'English' },
+  es: { nativeName: 'Español' },
   de: { nativeName: 'Deutsch' },
   zh: { nativeName: 'Chinese' }
 };

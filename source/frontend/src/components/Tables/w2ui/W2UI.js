@@ -1,8 +1,23 @@
-import { w2ui, w2grid } from "w2ui/dist/w2ui.es6.js"
+import {w2ui, w2grid} from "w2ui/dist/w2ui.es6.js"
 import "./W2UI.css"
 
-export function createTable({elementID, name, tableName, searches, columns, records, columnGroups, searchData, sortData,
-    selectable, addToTable, reorderRows, deleteRows, onReorderRowCallback, onDeleteCallback, additionalToolbarButtons={}}) {
+export function createTable({
+    elementID,
+    name,
+    tableName,
+    searches,
+    columns,
+    records,
+    columnGroups,
+    searchData,
+    sortData,
+    selectable,
+    addToTable,
+    reorderRows,
+    deleteRows,
+    onReorderRowCallback,
+    onDeleteCallback
+}) {
     window.w2ui = window.w2ui ? window.w2ui : w2ui
     let table = window.w2ui[tableName]
     const tableExists = typeof table !== "undefined";
@@ -13,8 +28,8 @@ export function createTable({elementID, name, tableName, searches, columns, reco
             table.destroy();
         }
         const downloadRecords = () => {
-            _downloadRecords(name, table.columns, table.records);
-        }
+            _downloadRecords(name, table);
+        };
         table = new w2grid({
             name: tableName,
             box: document.getElementById(elementID),
@@ -34,7 +49,7 @@ export function createTable({elementID, name, tableName, searches, columns, reco
                 columnHeaders: true,
                 // expandColumn: true,
                 emptyRecords: true,
-                toolbarColumns: true,
+                toolbarColumns: true
             },
             multiSearch: true,
             searches,
@@ -45,19 +60,37 @@ export function createTable({elementID, name, tableName, searches, columns, reco
             columnGroups,
             reorderRows,
             onDelete: onDeleteCallback,
-            onReorderRow: onReorderRowCallback,
+            onReorderRow: onReorderRowCallback
         });
-        table.toolbar.add(
-            { type: 'button', id: 'exportTable', text: 'Export', img: 'fas fa-file-download', onClick: downloadRecords },
-            ...additionalToolbarButtons
-        );
+        table.toolbar.add({
+            type: 'button',
+            id: 'exportTable',
+            text: 'Export',
+            img: 'fas fa-file-download',
+            onClick: (name, columns, rows) => downloadRecords(name, columns, rows, tableName)
+        });
     }
     return table;
 }
 
-function _downloadRecords(name, columns, rows) {
+function _downloadRecords(name, table) {
+    const columns = table.columns
+    const selectedRecIds = table.getSelection()
+    let rows
+    if (selectedRecIds.length) {
+        rows = []
+        table.records.forEach(row => {
+            if (selectedRecIds.includes(row.recid)) {
+                rows.push(row)
+            }
+        })
+    } else {
+        rows = table.records
+    }
     const columnFields = columns.map((col) => col.field);
-    let csv = `${columns.map((col) => col.text).join(",")}\n`;
+    let csv = `${
+        columns.map((col) => col.text).join(",")
+    }\n`;
     csv += rows.map((row) => {
         return columnFields.map((field) => {
             const value = row[field];
@@ -68,7 +101,9 @@ function _downloadRecords(name, columns, rows) {
         }).join(",")
     }).join("\n");
     const hiddenElement = document.createElement('a');
-    hiddenElement.href = `data:text/csv;charset=utf-8,${encodeURI(csv)}`;
+    hiddenElement.href = `data:text/csv;charset=utf-8,${
+        encodeURI(csv)
+    }`;
     hiddenElement.target = '_blank';
     hiddenElement.download = `${name}.csv`;
     hiddenElement.click();
