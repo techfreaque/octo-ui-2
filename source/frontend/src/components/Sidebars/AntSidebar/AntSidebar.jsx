@@ -63,7 +63,7 @@ export default function AntSidebar({menuItems}) {
                     width: "100%",
                     padding: currentContent?.noPadding ? "" : "15px",
                     height: "100%",
-                    overflowY: currentContent?.scroll ? "scroll" : undefined
+                    overflowY: currentContent?.dontScroll ? undefined : "scroll"
                 }
             }> {
                 currentContent?.content
@@ -249,7 +249,6 @@ function getKeyFromLabel(label) {
     if (label) {
         return label?.replace(" ", "_")
 
-    } else {
-        console.error("A sidebar menu item has no label")
     }
+    console.error("A sidebar menu item has no label")
 }
