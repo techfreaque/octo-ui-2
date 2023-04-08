@@ -5,6 +5,7 @@ import {projectDescription, projectName} from "../../constants/frontendConstants
 import {useBotColorsContext} from "../../context/config/BotColorsProvider";
 import {colorModes, useColorModeContext} from "../../context/config/ColorModeProvider";
 import AppWidgets from "../../widgets/WidgetManagement/RenderAppWidgets";
+import ResetConfig1 from "../../components/UserInputs/ResetConfig1";
 
 export default function Page({currentPage}) {
     const botColors = useBotColorsContext();
@@ -25,6 +26,8 @@ export default function Page({currentPage}) {
                 <meta name="description"
                     content={projectDescription} />
             </Helmet>
+
+            <ResetConfig1/>
             <AppWidgets currentPage={currentPage}
                 layout={
                     currentPage.layout

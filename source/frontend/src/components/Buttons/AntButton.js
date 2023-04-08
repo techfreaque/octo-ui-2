@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Space, ConfigProvider } from 'antd';
+import { Button, ConfigProvider } from 'antd';
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 import IconFromString from "../Icons/IconFromString";
 import { sizes } from "../../constants/frontendConstants";

@@ -1,13 +1,12 @@
 import React, {useMemo, useState} from "react";
-import Button from "@mui/material/Button";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faLock} from "@fortawesome/free-solid-svg-icons";
 import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
 import {useIsBotOnlineContext, useUpdateIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 import {useNavigate} from "react-router-dom";
 import {backendRoutes} from "../../../constants/backendConstants";
 import {logOutBot} from "../../../api/actions";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import { Trans } from "react-i18next";
 
 export default function LogoutButton() {
     const [isLoading, setIsloading] = useState(false);
@@ -23,19 +22,16 @@ export default function LogoutButton() {
     }
     return useMemo(() => {
         return botInfo?.can_logout && (
-            <Button disabled={disabled}
+            <AntButton disabled={disabled}
                 onClick={
                     // onLoggedOut
                     () => logOutBot(botDomain, updateIsOnline, setIsloading, onLoggedOut)
                 }
-                variant="outlined"
-                color="warning">
-                <FontAwesomeIcon icon={faLock}
-                    style={
-                        {marginRight: "5px"}
-                    }/>
-                Log out from Bot
-            </Button>
+                block={true}
+                buttonType={buttonTypes.warning}
+                antIcon= "LogoutOutlined"
+                text= {<Trans i18nKey="buttons.logout"/>}
+            />
         );
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botDomain, disabled, updateIsOnline])

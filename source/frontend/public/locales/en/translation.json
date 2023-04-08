@@ -4,7 +4,8 @@
     "restartBot": "Restart Bot",
     "softRefresh": "Soft Refresh",
     "stopBot": "Stop Bot",
-    "updateBot": "Update Bot"
+    "updateBot": "Update Bot",
+    "logout": "Log out from Bot"
   },
   "notFoundPage": {
     "goHome": "go home",

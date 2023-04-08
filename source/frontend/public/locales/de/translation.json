@@ -4,7 +4,8 @@
     "restartBot": "Bot neu starten",
     "softRefresh": "Sanfte Aktualisierung",
     "stopBot": "Bot stoppen",
-    "updateBot": "Bot aktualisieren"
+    "updateBot": "Bot aktualisieren",
+    "logout": "Melden Sie sich vom Bot ab"
   },
   "notFoundPage": {
     "goHome": "zur Startseite",

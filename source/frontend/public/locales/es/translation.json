@@ -4,7 +4,8 @@
     "restartBot": "Reiniciar robot",
     "softRefresh": "Actualización suave",
     "stopBot": "Detener robot",
-    "updateBot": "Actualizar robot"
+    "updateBot": "Actualizar robot",
+    "logout": "Cerrar sesión de Bot"
   },
   "notFoundPage": {
     "goHome": "Vete a casa",
