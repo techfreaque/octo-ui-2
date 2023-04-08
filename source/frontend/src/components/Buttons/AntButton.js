@@ -56,15 +56,13 @@ export default function AntButton({
           disabled={disabled}
           onClick={onClick}
         style={{
-          marginRight: marginRight, 
-          padding: '4px 10px',
+          marginRight, 
           marginTop: "auto",
           marginBottom: "auto",
           display: "flex", ..._style, ...style
         }}>
           {(faIcon || antIcon) && (<IconFromString faIcon={faIcon} antIcon={antIcon}  size={sizes.small } spin={spin}/>)}
           {antIconComponent && <AntIconByReactFunc AntReactIcon={antIconComponent} size={sizes.small } spin={spin}/>}
-
           {faIconComponent && <FaIconByReactFunc icon={faIconComponent}  size={sizes.small } marginRight= "5px" spin={spin}/>}
           {text}
       </Button>

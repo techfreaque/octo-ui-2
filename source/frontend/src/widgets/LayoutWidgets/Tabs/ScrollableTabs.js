@@ -19,16 +19,20 @@ export default function ResizableTabs(props) {
                                 }
                                 antIcon={
                                     tab.antIcon
-                                }/> {
-                            tab.title
-                        } </>
+                                } />
+                            <span style={{verticalAlign: "text-bottom"}}>
+                            {tab.title}
+                            </span>
+                        </>
                     )
                 }
                 value={index}
                 sx={
                     {
                         textTransform: 'none',
-                        display:"-webkit-box"}
+                        display: "-webkit-box"
+                        // display: "flex"
+                    }
                 }/>,
             content: tab.content?.[0] && <AppWidgets {...props}
                 layout={

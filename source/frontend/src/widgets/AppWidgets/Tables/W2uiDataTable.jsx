@@ -84,12 +84,11 @@ function _generateTablesAndSidebarItems({
             newMenuItems[liveOrBacktest] = {
                 label: `${
                     liveOrBacktest.charAt(0).toUpperCase() + liveOrBacktest.slice(1)
-                } trading`,
+                    } trading`,
+                antIcon: liveOrBacktest === "live" ? "DollarOutlined" : "RobotOutlined",
                 content: (<Typography.Title level={2}>
                     Select a table from the sidebar</Typography.Title>),
                 children: [],
-                faIcon: undefined,
-                antIcon: undefined
             }
         }
         const tableId = `${
@@ -124,6 +123,8 @@ function _generateTablesAndSidebarItems({
 
         newMenuItems[liveOrBacktest].children.push({
             label,
+            antIcon:element.config?.antIcon,
+            faIcon:element.config?.faIcon,
             noPadding: true,
             content: (<TableFromElement tableId={tableId}
                 element={element} cancelCallback={cancelCallback}

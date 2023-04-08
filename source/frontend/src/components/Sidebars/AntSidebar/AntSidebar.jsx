@@ -1,4 +1,4 @@
-import {Collapse, Button} from "antd"
+import {Collapse, Button, Tooltip} from "antd"
 import {useMemo} from "react";
 import {useState} from "react";
 import {useBotColorsContext} from "../../../context/config/BotColorsProvider";
@@ -7,6 +7,7 @@ import {iconStringNoIcon} from "../../Icons/AntIcon";
 import IconFromString from "../../Icons/IconFromString";
 import "./antSidebar.css"
 import {useEffect} from "react";
+import {useMediaQuery} from "@mui/material";
 const {Panel} = Collapse;
 
 export default function AntSidebar({menuItems}) {
@@ -14,17 +15,24 @@ export default function AntSidebar({menuItems}) {
     const hasContent = menuItems && Boolean(menuItems?.length)
     const defaultSelected = hasContent && getKeyFromLabel(Object.values(menuItems)[0].label)
     const [currentlySelectedMenu, setCurrentlySelectedMenu] = useState();
-    const [sideBarWidth, setSideBarWidth] = useState(250)
+    const [hideText, setHideText] = useState(false);
+    const iSmallScreen = useMediaQuery('(max-width:800px)');
+
+    useEffect(() => {
+        if (iSmallScreen) {
+            setHideText(true);
+        } else {
+            setHideText(false);
+        }
+    }, [iSmallScreen]);
     useEffect(() => {
         if (defaultSelected) 
             setCurrentlySelectedMenu(defaultSelected);
         
-
     }, [defaultSelected]);
-    function updateSidebarSize() {
-        setSideBarWidth(250)
+    function toggleHideMenuItemText() {
+        setHideText(prevState => (!prevState));
     }
-
     return useMemo(() => {
         const activeMenus = []
         const currentContent = hasContent && findCurrentContent(menuItems, currentlySelectedMenu, activeMenus)
@@ -48,13 +56,15 @@ export default function AntSidebar({menuItems}) {
                 className={"ant-side-bar"}>
                 <div style={
                     {
-                        // position: "fixed"
+                        overflowY: "auto",
+                        height: "100%"
                     }
                 }>
 
                     <MenuItems menuItems={menuItems}
                         currentlySelectedMenu={currentlySelectedMenu}
                         activeMenus={activeMenus}
+                        hideText={hideText}
                         setCurrentlySelectedMenu={setCurrentlySelectedMenu}/>
                 </div>
             </div>
@@ -63,14 +73,14 @@ export default function AntSidebar({menuItems}) {
                     width: "100%",
                     padding: currentContent?.noPadding ? "" : "15px",
                     height: "100%",
-                    overflowY: currentContent?.dontScroll ? undefined : "scroll"
+                    overflowY: currentContent?.dontScroll ? undefined : "auto"
                 }
             }> {
                 currentContent?.content
             } </div>
         </div>)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [botColors.border, currentlySelectedMenu, menuItems, sideBarWidth])
+    }, [botColors.border, currentlySelectedMenu, menuItems, hideText])
 }
 
 function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
@@ -94,7 +104,8 @@ function MenuItems({
     currentlySelectedMenu,
     setCurrentlySelectedMenu,
     activeMenus,
-    isSubMenu
+    isSubMenu,
+    hideText
 }) {
     return menuItems.map((menuItem) => {
         const style = isSubMenu ? {
@@ -108,6 +119,7 @@ function MenuItems({
                 isSubMenu ? "sub-menu" : "root-menu"
         }>
             <MenuItem mode="inline"
+                hideText={hideText}
                 menuItem={menuItem}
                 isSubMenu={isSubMenu}
                 currentlySelectedMenu={currentlySelectedMenu}
@@ -122,7 +134,8 @@ function MenuItem({
     currentlySelectedMenu,
     setCurrentlySelectedMenu,
     activeMenus,
-    isSubMenu
+    isSubMenu,
+    hideText
 }) {
     function handleCurentChange() {
         setCurrentlySelectedMenu(getKeyFromLabel(menuItem.label))
@@ -137,10 +150,12 @@ function MenuItem({
 
     return useMemo(() => (menuItem.children?.length ? (<NestedSideBarMenuItem colorMode={colorMode}
         activeMenus={activeMenus}
+        hideText={hideText}
         currentlySelectedMenu={currentlySelectedMenu}
         setCurrentlySelectedMenu={setCurrentlySelectedMenu}
         handleCurentChange={handleCurentChange}
         menuItem={menuItem}/>) : (<SideBarButton isSubMenu={isSubMenu}
+        hideText={hideText}
         buttonStyle={buttonStyle}
         handleCurentChange={handleCurentChange}
         menuItem={menuItem}/>)),
@@ -150,7 +165,8 @@ function MenuItem({
         buttonStyle,
         colorMode,
         currentlySelectedMenu,
-        menuItem
+        menuItem,
+        hideText
     ])
 }
 
@@ -160,7 +176,8 @@ function NestedSideBarMenuItem({
     currentlySelectedMenu,
     setCurrentlySelectedMenu,
     handleCurentChange,
-    menuItem
+    menuItem,
+    hideText
 }) {
     return (<Collapse prefixCls={
             `${colorMode}`
@@ -175,7 +192,15 @@ function NestedSideBarMenuItem({
         // showArrow={true}
     >
         <Panel header={
-                (<div style={
+            (
+                <Tooltip title={
+            hideText && menuItem.label
+        } trigger={[
+                        "hover",
+                        // "focus",
+                        // "click"
+                    ]}  >
+                <div style={
                     {display: "flex"}
                 }>
                     <IconFromString faIcon={
@@ -189,9 +214,11 @@ function NestedSideBarMenuItem({
                             marginLeft: "5px"
                         } : {}
                     }> {
-                        menuItem.label
+                        !hideText && menuItem.label
                     }</span>
-                </div>)
+                    </div>
+                    </Tooltip>
+                    )
             }
             key={
                 getKeyFromLabel(menuItem.label)
@@ -202,6 +229,7 @@ function NestedSideBarMenuItem({
             <MenuItems menuItems={
                     menuItem.children
                 }
+                hideText={hideText}
                 activeMenus={activeMenus}
                 isSubMenu={true}
                 currentlySelectedMenu={currentlySelectedMenu}
@@ -209,7 +237,13 @@ function NestedSideBarMenuItem({
         </Panel>
     </Collapse>)
 }
-function SideBarButton({buttonStyle, handleCurentChange, menuItem, isSubMenu}) {
+function SideBarButton({
+    buttonStyle,
+    handleCurentChange,
+    menuItem,
+    isSubMenu,
+    hideText
+}) {
     const buttonContainerStyle = isSubMenu ? {} : {
         padding: "5px"
     }
@@ -222,26 +256,30 @@ function SideBarButton({buttonStyle, handleCurentChange, menuItem, isSubMenu}) {
             ...buttonContainerStyle
         }
     }>
-        <Button style={
-                {
-                    ...buttonStyle,
-                    ...buttonStyleForIcon,
-                    textAlign: "start"
+        <Tooltip title={
+            hideText && menuItem.label
+        }>
+            <Button style={
+                    {
+                        ...buttonStyle,
+                        ...buttonStyleForIcon,
+                        textAlign: "start"
 
+                    }
                 }
-            }
-            size={"large"}
-            type="text"
-            onClick={handleCurentChange}
-            block>
-            <IconFromString faIcon={
-                    menuItem.faIcon
-                }
-                antIcon={
-                    menuItem.antIcon
-                }/> {
-            menuItem.label
-        } </Button>
+                size={"large"}
+                type="text"
+                onClick={handleCurentChange}
+                block>
+                <IconFromString faIcon={
+                        menuItem.faIcon
+                    }
+                    antIcon={
+                        menuItem.antIcon
+                    }/> {
+                !hideText && menuItem.label
+            } </Button>
+        </Tooltip>
     </div>)
 }
 
