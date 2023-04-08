@@ -34,18 +34,18 @@ export default function ResizableTabs(props) {
                         // display: "flex"
                     }
                 }/>,
-            content: tab.content?.[0] && <AppWidgets {...props}
+            content: tab.content?.[0] && <AppWidgets  {...props}
                 layout={
                     tab.content
                 }/>,
-            toolBarContent: tab.toolBarContent?.[0] && <AppWidgets {...props}
+            toolBarContent: tab.toolBarContent?.[0] && <AppWidgets  {...props}
                 layout={
                     tab.toolBarContent
                 }/>,
             dontScroll: tab.dontScroll
         } : {
             title: <AppWidgets key={
-                    index + 20
+                    tab.title.replace(/ /g, "_")
                 }
                 {...props}
                 layout={

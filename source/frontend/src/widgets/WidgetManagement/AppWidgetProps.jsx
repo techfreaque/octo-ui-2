@@ -1,5 +1,4 @@
 import {iconStringToComponent} from "../../components/Icons/AntIcon";
-import {availableStorages} from "../AppWidgets/Buttons/ResetHistoryStorageButton";
 import {allChartLocations} from "../AppWidgets/Charts/MainCharts/Plotly";
 import {availableConfigKeysList} from "../AppWidgets/Configuration/Form";
 import {availableUIConfigKeys} from "../AppWidgets/Configuration/UIConfig";
@@ -27,7 +26,6 @@ export default function appWidgetsProps() {
         ], "string", undefined, Object.keys(iconStringToComponent), undefined),
         ...generateSimpleProp("chartLocation", "PlotlyChart", "string", undefined, allChartLocations),
         ...generateSimpleProp("dataSource", "DataTable", "string", undefined, dataTableSourcesList),
-        ...generateSimpleProp("storageName", "ResetHistoryStorageButton", "string", undefined, availableStorages),
         ...generateSimpleProp("minHeights", [
             "DefaultLayout", "SplitMainContent"
         ], "string", undefined, undefined, undefined, "0, 0"),

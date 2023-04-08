@@ -40,12 +40,8 @@ import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
 import OptimizerQueueSize from "../AppWidgets/Stats/OptimizerQueueSize";
 import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
 import SymbolsInfoTable from "../AppWidgets/Tables/SymbolsInfo";
-import ResetUiConfigButton from "../AppWidgets/Buttons/ResetUiConfigButton";
-import ResetTentaclesConfigsButton from "../AppWidgets/Buttons/ResetTentaclesConfigButton";
-import ResetHistoryStorageButton from "../AppWidgets/Buttons/ResetHistoryStorageButton";
 import DataTable from "../AppWidgets/Tables/DataTable";
 import LogoutButton from "../AppWidgets/Buttons/LogoutButton";
-import ResetTentaclesPlotCacheButton from "../AppWidgets/Buttons/ResetTentaclesPlotCacheButton";
 import ProfileModal from "../AppWidgets/Modals/ProfileModal/ProfileModal";
 import Sidebar, {SidebarMenuItem} from "../LayoutWidgets/Sidebar/Sidebar";
 import NotificationCenter from "../AppWidgets/Modals/NotificationCenter/NotificationCenter";
@@ -53,6 +49,7 @@ import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
 import Logo from "../AppWidgets/other/Logo";
 import ChartTablePieCombo, {ChartTypeSelector} from "../AppWidgets/Charts/ChartTablePieCombo";
 import LanguageSwitch from "../AppWidgets/Buttons/LanguageSwitch";
+import ResetConfigs from "../AppWidgets/ResetConfigs/ResetConfigs";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -100,12 +97,8 @@ export const registeredComponents = {
     // OptimizerConfigForm2,
     ToggleActivateRealTimeStrategy,
     SymbolsInfoTable,
-    ResetUiConfigButton,
-    ResetTentaclesConfigsButton,
     DataTable,
-    ResetHistoryStorageButton,
     LogoutButton,
-    ResetTentaclesPlotCacheButton,
     ProfileModal,
     Sidebar,
     SidebarMenuItem,
@@ -115,4 +108,5 @@ export const registeredComponents = {
     ChartTablePieCombo,
     ChartTypeSelector,
     LanguageSwitch,
+    ResetConfigs
 };

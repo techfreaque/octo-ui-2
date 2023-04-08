@@ -1,10 +1,13 @@
 import React from 'react'
 import { ConfigProvider, Switch, Tooltip } from 'antd';
-import { useBotColorsContext } from '../../context/config/BotColorsProvider';
+import { useBotColorsContext } from '../../../context/config/BotColorsProvider';
 
 export default function ResetIndividual( {
     title,
     description,
+    handleCheckboxClick,
+    checkedList,
+    titleKey    
 }) {
     const botColors = useBotColorsContext()
     return (
@@ -16,7 +19,7 @@ export default function ResetIndividual( {
                 "token": {
                 "colorPrimary": botColors.error}}
             }>
-                <Switch checkedChildren="Reset"/>
+                <Switch checked={checkedList[titleKey]}  onChange={(state)=>handleCheckboxClick(titleKey, state)}   checkedChildren="Reset"/>
             </ConfigProvider>
         </div>
     )
