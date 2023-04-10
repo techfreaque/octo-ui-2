@@ -1,4 +1,4 @@
-import {Button} from 'antd'
+import {Button, Card, Popconfirm} from 'antd'
 import React, {useState} from 'react'
 import { useBotDomainContext } from '../../../context/config/BotDomainProvider'
 import { useBotInfoContext } from '../../../context/data/BotInfoProvider'
@@ -10,6 +10,7 @@ import { sendActionCommandToTradingMode } from '../Buttons/SendActionCommandToTr
 import { resetStorage, resetTentaclesConfig } from '../../../api/actions'
 import ResetIndividual from './ResetIndividual'
 import { projectName } from '../../../constants/frontendConstants'
+import { Trans } from 'react-i18next'
 
 
 export default function ResetConfigs() {
@@ -187,6 +188,24 @@ export default function ResetConfigs() {
             handleResetStorage(storages.resetTransactionsHistory.key)
         }
     }
+    const [open, setOpen] = useState(false);
+    
+    const [confirmLoading, setConfirmLoading] = useState(false);
+    const showPopconfirm = () => {
+        setOpen(true);
+    };
+    const handleOk = () => {
+        setConfirmLoading(true);
+        setTimeout(() => {
+            setOpen(false);
+            handleReset()
+            setConfirmLoading(false);
+        }, 2000);
+    };
+    const handleCancel = () => {
+        console.log('Clicked cancel button');
+        setOpen(false);
+  };
     return (<div style={
         {
             margin: "25px"
@@ -215,16 +234,28 @@ export default function ResetConfigs() {
                 }
             }>
                 <Button onClick={toggleSelectAll}
-                    danger>Select All</Button>
-                <Button disabled={
-                        isResetting || !Boolean(Object.keys(checkedList).length)
-                    }
-                    onClick={handleReset}
-                    type="primary"
-                    danger
-                    style={
-                        {marginLeft: '10px'}
-                }>Reset Selected</Button>
+                    danger><Trans i18nKey='select.all' /></Button>
+                                    
+                    <Popconfirm
+                            title={<Trans i18nKey="title.warning" />}
+                            description={<Trans i18nKey="description.warning" />}
+                            open={open}
+                            onConfirm={handleOk}
+                            okButtonProps={{
+                                loading: confirmLoading,
+                            }}
+                            onCancel={handleCancel}
+                    >
+                        <Button disabled={
+                                isResetting || !Boolean(Object.keys(checkedList).length)
+                            }
+                            onClick={showPopconfirm}
+                            type="primary"
+                            danger
+                            style={
+                                {marginLeft: '10px'}
+                        }><Trans i18nKey='Reset.Selected' /></Button>
+                    </Popconfirm>
             </div>
     </div>)
 }

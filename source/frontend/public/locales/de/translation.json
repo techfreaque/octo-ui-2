@@ -25,5 +25,17 @@
   },
   "pairExchangeSettings": {
     "currentPairTooltip": "Währungen und Symbole auswählen und einrichten"
+  },
+  "title": {
+    "warning": "Warnung"
+  },
+  "description": {
+    "warning": "Sie sind dabei, alle ausgewählten Einstellungen zurückzusetzen. \nMöchtest du fortfahren?"
+  },
+  "Reset": {
+    "Selected": "Ausgewählte zurücksetzen"
+  },
+  "select": {
+    "all": "Wählen Sie Alle"
   }
 }

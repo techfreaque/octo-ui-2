@@ -25,5 +25,17 @@
   },
   "pairExchangeSettings": {
     "currentPairTooltip": "Seleccionar y configurar monedas y símbolos"
+  },
+  "title": {
+    "warning": "Advertencia"
+  },
+  "description": {
+    "warning": "Está a punto de restablecer todas las configuraciones seleccionadas. \n¿Quieres continuar?"
+  },
+  "Reset": {
+    "Selected": "Restablecer seleccionado"
+  },
+  "select": {
+    "all": "Seleccionar todo"
   }
 }
