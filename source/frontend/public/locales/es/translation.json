@@ -10,5 +10,9 @@
   "notFoundPage": {
     "goHome": "Vete a casa",
     "title": "Página no encontrada"
+  },
+  "notificationCenter": {
+    "botErrorLog": "Registro de errores del bot",
+    "botNotifications": "Notificaciones de bots"
   }
 }

@@ -390,6 +390,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         type: "array",
                         uniqueItems: true,
                         format: "select2",
+                        propertyOrder: 1,
                         minItems: 1,
                         options: {
                             grid_columns: 12,
@@ -410,6 +411,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         type: "array",
                         uniqueItems: true,
                         format: "select2",
+                        propertyOrder: 2,
                         minItems: 1,
                         options: {
                             grid_columns: 12,
@@ -430,6 +432,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                     exchange_type: {
                         type: "string",
                         title: "Exchange type",
+                        propertyOrder: 3,
                         enum: [
                             "use_current_profile",
                             "spot",
@@ -450,12 +453,14 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                     start_timestamp: {
                         type: "integer",
                         format: "date",
+                        propertyOrder: 4,
                         title: "Start Date"
 
                     },
                     end_timestamp: {
                         type: "integer",
                         format: "date",
+                        propertyOrder: 5,
                         title: "End Date"
                     }
                 }
@@ -553,6 +558,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         type: "number",
                         format: "number",
                         minimum: 0,
+                         propertyOrder: 1,
                         default: 1,
                     },
                     optimizer_id: {
@@ -560,12 +566,14 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         type: "number",
                         format: "number",
                         minimum: 1,
+                         propertyOrder: 2,
                         default: 1
                     },
                     queue_size: {
                         title: "Random runs queued:",
                         type: "number",
                         format: "number",
+                         propertyOrder: 3,
                         minimum: 1,
                         default: 1000
                     },
@@ -573,12 +581,14 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         title: "Notify when completed",
                         type: "boolean",
                         format: "checkbox",
+                         propertyOrder: 4,
                         fieldType: "boolean",
                         default: true
                     },
                     exchange_type: {
                         type: "string",
                         title: "Exchange type",
+                         propertyOrder: 5,
                         enum: [
                             "use_current_profile",
                             "spot",
@@ -600,6 +610,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         type: "array",
                         uniqueItems: true,
                         format: "select2",
+                         propertyOrder: 6,
                         minItems: 1,
                         options: {
                             grid_columns: 12,
@@ -620,6 +631,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         type: "array",
                         uniqueItems: true,
                         format: "select2",
+                         propertyOrder: 7,
                         minItems: 1,
                         options: {
                             grid_columns: 12,
@@ -640,12 +652,14 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                     start_timestamp: {
                         type: "integer",
                         format: "date",
-                        title: "Start Date"
+                        title: "Start Date",
+                         propertyOrder: 10
                     },
                     end_timestamp: {
                         type: "integer",
                         format: "date",
-                        title: "End Date"
+                        title: "End Date",
+                        propertyOrder: 11
                     },
                 }
             },

@@ -10,5 +10,9 @@
   "notFoundPage": {
     "goHome": "zur Startseite",
     "title": "Seite nicht gefunden"
+  },
+  "notificationCenter": {
+    "botErrorLog": "Bot-Fehlerprotokoll",
+    "botNotifications": "Bot-Benachrichtigungen"
   }
 }

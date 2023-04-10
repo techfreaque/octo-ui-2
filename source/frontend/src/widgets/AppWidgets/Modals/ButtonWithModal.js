@@ -22,7 +22,7 @@ const style = {
     boxShadow: 24,
     color: "white",
     p: 4,
-    overflowY: "scroll",
+    overflowY: "auto",
     maxHeight: "100vh"
 };
 

@@ -10,58 +10,57 @@ export default function ResizableTabs(props) {
     const tabsData = []
     tabs.forEach((tab, index) => {
         tabsData[index] = tab.component === "Tab" ? {
-            title: <Tab key={index}
+            title: (<Tab key={index}
                 label={
-                    (
-                        <>
-                            <IconFromString faIcon={
-                                    tab.faIcon
-                                }
-                                antIcon={
-                                    tab.antIcon
-                                } />
-                            <span style={{verticalAlign: "text-bottom"}}>
-                            {tab.title}
-                            </span>
-                        </>
-                    )
+                    (<>
+                        <IconFromString faIcon={
+                                tab.faIcon
+                            }
+                            antIcon={
+                                tab.antIcon
+                            }
+                            marginRight="5px"/>
+                        <span style={
+                            {
+                                lineHeight: "25px",
+                                verticalAlign: "bottom"
+                            }
+                        }> {
+                            tab.title
+                        } </span>
+                    </>)
                 }
                 value={index}
                 sx={
                     {
                         textTransform: 'none',
                         display: "-webkit-box"
-                        // display: "flex"
                     }
-                }/>,
-            content: tab.content?.[0] && <AppWidgets  {...props}
+                }/>),
+            content: tab.content?.[0] && (<AppWidgets {...props}
                 layout={
                     tab.content
-                }/>,
-            toolBarContent: tab.toolBarContent?.[0] && <AppWidgets  {...props}
+                }/>),
+            toolBarContent: tab.toolBarContent?.[0] && (<AppWidgets {...props}
                 layout={
                     tab.toolBarContent
-                }/>,
+                }/>),
             dontScroll: tab.dontScroll
         } : {
-            title: <AppWidgets key={
+            title: (<AppWidgets key={
                     tab.title.replace(/ /g, "_")
                 }
                 {...props}
                 layout={
                     [tab]
-                }/>,
+                }/>),
             content: undefined
         };
     })
-    return (
-        <MuiTabs tabs={tabsData}
-            rightContent={
-                rightContent?.[0] && (
-                    <AppWidgets {...props}
-                        layout={rightContent}/>
-                )
-            }
-            defaultTabId={defaultTabId}/>
-    )
+    return (<MuiTabs tabs={tabsData}
+        rightContent={
+            rightContent?.[0] && (<AppWidgets {...props}
+                layout={rightContent}/>)
+        }
+        defaultTabId={defaultTabId}/>)
 }

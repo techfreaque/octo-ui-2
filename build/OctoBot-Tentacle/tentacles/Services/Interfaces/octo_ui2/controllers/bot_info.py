@@ -11,6 +11,7 @@ import octobot_commons.symbols.symbol_util as symbol_util
 import octobot_services.interfaces as interfaces
 import octobot_services.interfaces as services_interfaces
 import octobot_services.interfaces.util as interfaces_util
+import tentacles.Services.Interfaces.web_interface as web_interface
 
 import tentacles.Services.Interfaces.octo_ui2.utils.basic_utils as basic_utils
 import tentacles.Services.Interfaces.web_interface.login as login
@@ -218,7 +219,7 @@ def register_bot_info_routes(plugin):
     def _profile_media(path):
         # images
         if models.is_valid_profile_image_path(path):
-            # reference point is the web interface directory: 
+            # reference point is the web interface directory:
             #   use OctoBot root folder as a reference
             return _send_file("../../../..", path)
         else:
@@ -228,7 +229,37 @@ def register_bot_info_routes(plugin):
             )
             return _send_file("../../../..", "daily_trading")
 
+    def _send_file(base_dir, file_path):
+        base_path, file_name = os.path.split(file_path)
+        return flask.send_from_directory(os.path.join(base_dir, base_path), file_name)
 
-def _send_file(base_dir, file_path):
-    base_path, file_name = os.path.split(file_path)
-    return flask.send_from_directory(os.path.join(base_dir, base_path), file_name)
+    route = "/logs"
+    if cross_origin := import_cross_origin_if_enabled():
+
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def logs():
+            return _logs()
+
+    else:
+
+        @plugin.blueprint.route(route)
+        @login.login_required_when_activated
+        def logs():
+            return _logs()
+
+    def _logs():
+        web_interface.flush_errors_count()
+        return basic_utils.get_response(
+            message="Successfully fetched logs",
+            data=web_interface.get_logs()
+            or {
+                1: {
+                    "Level": "INFO",
+                    "Source": "The logs are empty",
+                    "Message": "",
+                    "Time": "",
+                }
+            },
+        )

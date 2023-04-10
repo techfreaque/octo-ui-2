@@ -1,13 +1,18 @@
 {
-	"buttons": {
-		"backToOctoBot": "Zurück zu OctoBot",
-		"restartBot": "Bot neu starten",
-		"softRefresh": "Sanfte Aktualisierung",
-		"stopBot": "Bot stoppen",
-		"updateBot": "Bot aktualisieren"
-	},
-	"notFoundPage": {
-		"goHome": "zur Startseite",
-		"title": "Seite nicht gefunden"
-	}
+  "buttons": {
+    "backToOctoBot": "Zurück zu OctoBot",
+    "restartBot": "Bot neu starten",
+    "softRefresh": "Sanfte Aktualisierung",
+    "stopBot": "Bot stoppen",
+    "updateBot": "Bot aktualisieren",
+    "logout": "Melden Sie sich vom Bot ab"
+  },
+  "notFoundPage": {
+    "goHome": "zur Startseite",
+    "title": "Seite nicht gefunden"
+  },
+  "notificationCenter": {
+    "botErrorLog": "Bot-Fehlerprotokoll",
+    "botNotifications": "Bot-Benachrichtigungen"
+  }
 }

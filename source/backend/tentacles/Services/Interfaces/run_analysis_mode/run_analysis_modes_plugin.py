@@ -92,7 +92,7 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
         exception,
         message="Failed to load run analysis plots",
     ):
-        cls.logger.exception(exception, True, message + " - error: {error}")
+        cls.logger.exception(exception, True, message + f" - error: {exception}")
 
     @classmethod
     async def get_old_version_plot_data(

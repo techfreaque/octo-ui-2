@@ -56,8 +56,6 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                         style={
                             {
                                 // TODO use toolbar height
-                                overflowY: tab.dontScroll ? "inherit" : "auto",
-                                overflowX: tab.dontScroll ? "unset" : "hidden",
                                 
                                 height: tab.dontScroll ? "calc(100% - 54px)" : "calc(100% - 54px)",
                                 ...display
@@ -66,6 +64,8 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                         <div
                             style={
                                 {
+                                overflowY: tab.dontScroll ? "inherit" : "auto",
+                                overflowX: tab.dontScroll ? "unset" : "hidden",
                                     height: "100%",
                                 }
                             }>

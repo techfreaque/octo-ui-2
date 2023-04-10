@@ -14,6 +14,7 @@ import {SaveOutlined} from "@ant-design/icons";
 import {Button, Space} from 'antd';
 import {sizes} from "../../../constants/frontendConstants";
 import {AntIconByReactFunc} from "../../../components/Icons/AntIcon";
+import AntButton from "../../../components/Buttons/AntButton";
 
 
 export function useCurrentTentacleConfig(tentacleType = tentacleConfigType.tentacles) {
@@ -93,32 +94,20 @@ export function AbstractTentaclesConfig({
                     (
                         <>
                             <AppWidgets layout={content}/>
-                            <Space wrap>
-                                <Button type="primary"
+                                <AntButton type="primary"
                                     disabled={isSaving}
                                     onClick={handleUserInputSave}
-                                    style={
-                                        {
-                                            margin: '5px',
-                                            display: 'flex',
-                                            justifyContent: 'center',
-                                            alignItems: 'center'
-                                        }
-                                }>
-                                    <AntIconByReactFunc AntReactIcon={SaveOutlined}
-                                        size={
-                                            sizes.medium
-                                        }/>
-                                </Button>
-                            </Space>
+                                    antIconComponent={SaveOutlined}
+                                    iconSize={sizes.medium}
+                                >
+                                </AntButton>
                         </>
                     )
                 }
                 defaultTabId={defaultTabId}/>
         )
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [content, tabs, defaultTabId])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [tabs, defaultTabId, content, isSaving])
 }
 
 function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, botDomain, storageName) {

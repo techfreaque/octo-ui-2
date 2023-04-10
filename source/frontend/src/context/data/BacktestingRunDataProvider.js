@@ -25,7 +25,7 @@ export const useFetchBacktestingRunData = () => {
     const setUiConfig = useUpdateUiConfigContext()
     const logic = useCallback(() => {
         uiConfig.optimization_campaign && fetchBacktestingRunData(setBacktestingRunData, setUiConfig, botDomain, false, {
-            ... uiConfig.optimizer_campaigns_to_load
+            ...uiConfig.optimizer_campaigns_to_load
         })
     }, [setBacktestingRunData, botDomain, uiConfig, setUiConfig]);
     return logic;

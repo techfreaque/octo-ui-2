@@ -29,14 +29,15 @@ const iconStyles = {
 export function AntIconByReactFunc({
     AntReactIcon,
     size = sizes.medium,
-    spin = false
+    spin = false,
+    marginRight= "0px"
 }) {
     return AntReactIcon && createElement(AntReactIcon, {
         style: {
             ...iconStyles.size[size],
             marginTop: "auto",
             marginBottom: "auto",
-            marginRight: "5px",
+            marginRight,
         },
         spin
     })

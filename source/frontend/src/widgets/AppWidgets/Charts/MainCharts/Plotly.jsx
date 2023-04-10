@@ -35,15 +35,35 @@ function relayout(ed, chartLocation, setLayouts) {
                 const newLayout = { ...chartDiv.layout }
                 const x = newLayout.xaxis
                 const y = newLayout.yaxis
+                const y2 = newLayout.yaxis2
+                const y3 = newLayout.yaxis3
+                const y4 = newLayout.yaxis4
 
                 if (ed[xAutorange] && ed[yAutorange]) {
                     x.range = []
                     x.range[0] = thisChartDiv.layout.xaxis.maxRange[0]
                     x.range[1] = thisChartDiv.layout.xaxis.maxRange[1]
                     x.autorange = false
-                    y.autorange = true
-                    y.range[0] = undefined
-                    y.range[1] = undefined
+                    if (y) {
+                        y.autorange = true
+                        y.range[0] = undefined
+                        y.range[1] = undefined
+                    }
+                    if (y2) {
+                        y2.autorange = true
+                        y2.range[0] = undefined
+                        y2.range[1] = undefined
+                    }
+                    if (y3) {
+                        y3.autorange = true
+                        y3.range[0] = undefined
+                        y3.range[1] = undefined
+                    }
+                    if (y4) {
+                        y4.autorange = true
+                        y4.range[0] = undefined
+                        y4.range[1] = undefined
+                    }
 
                     setLayouts[otherChartLocation](newLayout)
                 } else if (ed[xRange0]) {
@@ -53,9 +73,26 @@ function relayout(ed, chartLocation, setLayouts) {
                     x.range = []
                     x.range[0] = ed[xRange0];
                     x.range[1] = ed[xRange1]
-                    y.autorange = true
-                    y.range[0] = undefined
-                    y.range[1] = undefined
+                    if (y) {
+                        y.autorange = true
+                        y.range[0] = undefined
+                        y.range[1] = undefined
+                    }
+                    if (y2) {
+                        y2.autorange = true
+                        y2.range[0] = undefined
+                        y2.range[1] = undefined
+                    }
+                    if (y3) {
+                        y3.autorange = true
+                        y3.range[0] = undefined
+                        y3.range[1] = undefined
+                    }
+                    if (y4) {
+                        y4.autorange = true
+                        y4.range[0] = undefined
+                        y4.range[1] = undefined
+                    }
                     setLayouts[otherChartLocation](newLayout)
                 } else if (ed[yAutorange]) {
                     // x.range = []
@@ -101,7 +138,7 @@ function relayout(ed, chartLocation, setLayouts) {
 const xAutorange = 'xaxis.autorange'
 const xRange0 = 'xaxis.range[0]'
 const xRange1 = 'xaxis.range[1]'
-const yAutorange = 'xaxis.autorange'
+const yAutorange = 'yaxis.autorange'
 const yRange0 = 'yaxis.range[0]'
 const yRange1 = 'yaxis.range[1]'
 

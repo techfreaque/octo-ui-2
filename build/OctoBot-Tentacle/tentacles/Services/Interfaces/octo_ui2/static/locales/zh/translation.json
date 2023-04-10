@@ -1,13 +1,18 @@
 {
-	"buttons": {
-		"backToOctoBot": "返回八爪鱼",
-		"restartBot": "重启机器人",
-		"softRefresh": "软刷新",
-		"stopBot": "停止机器人",
-		"updateBot": "更新机器人"
-	},
-	"notFoundPage": {
-		"goHome": "回家",
-		"title": "找不到网页"
-	}
+  "buttons": {
+    "backToOctoBot": "返回八爪鱼",
+    "restartBot": "重启机器人",
+    "softRefresh": "软刷新",
+    "stopBot": "停止机器人",
+    "updateBot": "更新机器人",
+    "logout": "从机器人注销"
+  },
+  "notFoundPage": {
+    "goHome": "回家",
+    "title": "找不到网页"
+  },
+  "notificationCenter": {
+    "botErrorLog": "机器人错误日志",
+    "botNotifications": "机器人通知"
+  }
 }

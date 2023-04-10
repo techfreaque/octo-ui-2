@@ -10,5 +10,9 @@
   "notFoundPage": {
     "goHome": "回家",
     "title": "找不到网页"
+  },
+  "notificationCenter": {
+    "botErrorLog": "机器人错误日志",
+    "botNotifications": "机器人通知"
   }
 }

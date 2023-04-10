@@ -45,8 +45,10 @@ export const NotificationsContextProvider = ({ children }) => {
         })
     }
     function onNewMessage(newMessage) {
-        // console.log("New notification")
-        setMessageHistory(prevMessages => [...(prevMessages || []), newMessage])
+        newMessage?.notifications?.forEach(notification => {
+            createNotification(notification.Title, notification.Level, notification.Message?.split("<br>")?.map(row=>(<div>{row}</div>)))
+        });
+        setMessageHistory(prevMessages => [...(prevMessages || []), {...newMessage, Time: new Date()}])
     }
     function onConnectionLost() {
         console.log("Bot disconnected")

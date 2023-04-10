@@ -33,12 +33,23 @@ def plot_table_data(
             datum_columns_callback(datum)
     rows = _get_default_rows(data, columns)
     searches = _get_default_searches(columns, types)
-    run_data.table_plotted_element.table(
-        data_name,
-        columns=columns,
-        rows=rows,
-        searches=searches,
-    )
+    try:
+        run_data.table_plotted_element.table(
+            data_name,
+            columns=columns,
+            rows=rows,
+            searches=searches,
+            config={"antIcon": "ShoppingCartOutlined"},
+        )
+    except Exception:
+        # TODO remove when merged
+        run_data.table_plotted_element.table(
+            data_name,
+            columns=columns,
+            rows=rows,
+            searches=searches,
+        )
+        
 
 
 # async def plot_table(

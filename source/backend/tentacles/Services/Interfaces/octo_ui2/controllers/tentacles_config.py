@@ -40,6 +40,8 @@ def register_tentacles_config_routes(plugin):
                 tentacle_configs[tentacle_name] = this_tentacle["displayed_elements"][
                     "data"
                 ]["elements"][0]
+                if not tentacle_configs[tentacle_name]["config"]:
+                    tentacle_configs[tentacle_name]["config"] = this_tentacle["config"]
             except IndexError:
                 basic_utils.get_octo_ui_2_logger().error(
                     f"Failed to load config for {tentacle_name}"
