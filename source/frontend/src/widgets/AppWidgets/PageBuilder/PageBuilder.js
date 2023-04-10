@@ -43,9 +43,9 @@ export default function PageBuilder() {
             }>
                 <h1>Page Builder</h1>
                 <Alert severity="info"
-                //     style={
-                //         {maxWidth: "450px"}
-                // }
+                    style={
+                        {backgroundColor: 'transparent'}
+                }
                 >
                     Once you have saved the page layout, it wont get overridded by a updated default layout in the future.
                                                                                                     You should reset your config after each update to make sure you'll get the latest futures.

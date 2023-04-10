@@ -101,7 +101,9 @@ export default function AntButton({
         }>
 
             <span style={
-                {margin: "auto"}
+                {margin: "auto",
+                height: '6px',
+                lineHeight: '5px',}
             }> {text}
                 {children} </span>
         </Button>
