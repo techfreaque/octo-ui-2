@@ -364,6 +364,7 @@ const axisTemplate = {
         rangeslider: {
             visible: false,
         },
+        showspikes: false,
         domain: [0.02, 0.98]
     },
     xaxis2: {
@@ -377,6 +378,7 @@ const axisTemplate = {
         domain: [0.02, 0.98],
         side: 'top',
         overlaying: "x",
+        showspikes: false,
     },
     yaxis: {
         gridcolor: "#2a2e39",
@@ -387,6 +389,7 @@ const axisTemplate = {
         side: 'left',
         position: 0,
         autorange: true,
+        showspikes: false,
     },
     yaxis2: {
         gridcolor: "#2a2e39",
@@ -397,6 +400,7 @@ const axisTemplate = {
         side: 'right',
         position: 1,
         autorange: true,
+        showspikes: false,
     },
     yaxis3: {
         gridcolor: "#2a2e39",
@@ -407,6 +411,7 @@ const axisTemplate = {
         side: 'right',
         position: 0.985,
         autorange: true,
+        showspikes: false,
     },
     yaxis4: {
         gridcolor: "#2a2e39",
@@ -417,5 +422,6 @@ const axisTemplate = {
         side: 'left',
         position: 0.015,
         autorange: true,
+        showspikes: false,
     }
 }

@@ -9,7 +9,8 @@ export default function Footer({rightContent}) {
     return (
         <div style={
             {
-                borderTop: "solid 2px " + botColors.border
+          borderTop: "solid 2px " + botColors.border,
+              backgroundColor: botColors.background
             }
         }>
 

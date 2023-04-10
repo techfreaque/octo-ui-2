@@ -28,7 +28,8 @@ export default function DefaultLayout({ headerContent, upperContent, lowerConten
           flex: "1",
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden"
+          overflow: "hidden",
+          zIndex: 1
         }}
       >
         <div ref={headerRef}>
@@ -42,7 +43,7 @@ export default function DefaultLayout({ headerContent, upperContent, lowerConten
             setPanelPercent={setPanelPercent}
           />), [lowerContent, panelPercent, setPanelPercent, upperContent])}
         </div>
-        <div ref={footerRef}>
+        <div ref={footerRef} style={{zIndex: 1}} >
           {useMemo(() => (<AppWidgets layout={footerContent} />), [footerContent])}
         </div>
       </div>

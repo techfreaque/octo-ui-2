@@ -3,7 +3,7 @@
 }
 
 .__dbk__gutter.Vertical {
-  background: none !important;
+  /* background: none !important; */
   z-index: 100;
 }
 
@@ -27,10 +27,10 @@
 
 }
 
-.dark .__dbk__container {
+.dark .__dbk__gutter {
   background: var(--dark-border);
 }
-.light .__dbk__container {
+.light .__dbk__gutter {
   background: var(--light-border);
 }
 

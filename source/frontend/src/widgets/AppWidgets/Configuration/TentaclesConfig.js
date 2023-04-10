@@ -11,9 +11,7 @@ import JsonEditor from "@techfreaque/json-editor-react";
 import {tentacleConfigType, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
 import {useFetchTentaclesConfig} from "../../../context/config/TentaclesConfigProvider";
 import {SaveOutlined} from "@ant-design/icons";
-import {Button, Space} from 'antd';
 import {sizes} from "../../../constants/frontendConstants";
-import {AntIconByReactFunc} from "../../../components/Icons/AntIcon";
 import AntButton from "../../../components/Buttons/AntButton";
 
 

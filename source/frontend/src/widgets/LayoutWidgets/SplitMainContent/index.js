@@ -30,7 +30,7 @@ export function SplitResizableContent({
   useEffect(() => {
     _panelPercent.shouldUpdate && setPanelSize(() => (
       _panelPercent.percent === 0
-        ? [_panelPercent.percent + 0.1, 100 - _panelPercent.percent - 0.1]
+        ? [_panelPercent.percent, 100 - _panelPercent.percent]
         : [_panelPercent.percent, 100 - _panelPercent.percent]
     ));
   }, [_panelPercent]);
@@ -63,9 +63,9 @@ function handleResize(gutterClassName, setPanelPercent, newSizes, setPanelSize) 
   const newPercent = newSizes[0] * 100 / total
   setPanelPercent({ percent: newPercent, shouldUpdate: false, })
   setPanelSize(
-    newPercent === 0
-      ? [newPercent + 0.1, 100 - newPercent - 0.1]
-      : [newPercent, 100 - newPercent]
+    newSizes[0] === 0
+      ? [newSizes[0], 100 - newSizes[0]]
+      : [newSizes[0], 100 - newSizes[0]]
   );
 }
 

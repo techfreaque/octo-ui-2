@@ -1,0 +1,21 @@
+.dark #crosshair-h{
+    width:100%;
+    border:dashed 1px var(--dark-font);
+}
+.dark #crosshair-v{
+    height:100%;
+    border:dashed 1px var(--dark-font);
+}
+.light #crosshair-h{
+    width:100%;
+    border:dashed 1px var(--light-font);
+}
+.light #crosshair-v{
+    height:100%;
+    border:dashed 1px var(--light-font);
+}
+.hair{
+    position:fixed;
+    z-index: 0;
+    display: none;
+}
