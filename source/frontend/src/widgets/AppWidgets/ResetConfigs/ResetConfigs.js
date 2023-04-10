@@ -247,7 +247,7 @@ export default function ResetConfigs() {
                             onCancel={handleCancel}
                     >
                         <Button disabled={
-                                isResetting || !Boolean(Object.keys(checkedList).length)
+                                isResetting || !Boolean(Object.values(checkedList).reduce((partialSum, a) => partialSum + a, 0))
                             }
                             onClick={showPopconfirm}
                             type="primary"
