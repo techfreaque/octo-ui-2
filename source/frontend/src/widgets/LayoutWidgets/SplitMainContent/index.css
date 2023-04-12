@@ -30,12 +30,13 @@
 .dark .__dbk__gutter {
   background: var(--dark-border);
 }
+
 .light .__dbk__gutter {
   background: var(--light-border);
 }
 
 .resize-content-dark {
-  background:  var(--dark-background);
+  background: var(--dark-background);
 }
 
 .resize-content-light {
