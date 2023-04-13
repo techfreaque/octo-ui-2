@@ -20,7 +20,7 @@ export const defaultColors = {
         white: "#b2b5be",
         // primary: "#722ED1",
         tags: {
-            primary: "#0d6efd",
+            primary: "blue",
         },
         candles: {
             wick: {
@@ -58,7 +58,7 @@ export const defaultColors = {
         black: "#131722",
         white: "#e6f4ff",
         tags: {
-            primary: "#0d6efd",
+            primary: "blue",
         },
         candles: {
             wick: {
