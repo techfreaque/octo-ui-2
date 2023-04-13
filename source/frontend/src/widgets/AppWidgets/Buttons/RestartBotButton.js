@@ -3,7 +3,7 @@ import {useIsBotOnlineContext, useRestartBot} from "../../../context/data/IsBotO
 import {Trans} from "react-i18next";
 import AntButton, {buttonTypes} from "../../../components/Buttons/AntButton";
 
-export default function RestartBotButton() {
+export default function RestartBotButton({buttonType=buttonTypes.warning}) {
     const isOnline = useIsBotOnlineContext()
     const restartBot = useRestartBot()
     return useMemo(() => {
@@ -13,7 +13,7 @@ export default function RestartBotButton() {
             onClick={restartBot}
             block={true}
             buttonType={
-                buttonTypes.warning
+                buttonType
             }
             antIcon={"ReloadOutlined"}
             spin={

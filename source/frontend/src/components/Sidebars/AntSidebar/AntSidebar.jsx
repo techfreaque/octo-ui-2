@@ -29,10 +29,11 @@ export default function AntSidebar({menuItems}) {
         if (defaultSelected) 
             setCurrentlySelectedMenu(defaultSelected);
         
+
     }, [defaultSelected]);
-    function toggleHideMenuItemText() {
-        setHideText(prevState => (!prevState));
-    }
+    // function toggleHideMenuItemText() {
+    //     setHideText(prevState => (!prevState));
+    // }
     return useMemo(() => {
         const activeMenus = []
         const currentContent = hasContent && findCurrentContent(menuItems, currentlySelectedMenu, activeMenus)
@@ -49,7 +50,7 @@ export default function AntSidebar({menuItems}) {
                         // `${sideBarWidth}px`,
                         height: "100%",
                         borderRight: `4px solid ${
-                            botColors.border
+                            botColors?.border
                         }`
                     }
                 }
@@ -80,7 +81,12 @@ export default function AntSidebar({menuItems}) {
             } </div>
         </div>)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [botColors.border, currentlySelectedMenu, menuItems, hideText])
+    }, [
+        botColors?.border,
+        currentlySelectedMenu,
+        menuItems,
+        hideText
+    ])
 }
 
 function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
@@ -192,33 +198,34 @@ function NestedSideBarMenuItem({
         // showArrow={true}
     >
         <Panel header={
-            (
-                <Tooltip title={
-            hideText && menuItem.label
-        } trigger={[
-                        "hover",
-                        // "focus",
-                        // "click"
-                    ]}  >
-                <div style={
-                    {display: "flex"}
+                (<Tooltip title={
+                        hideText && menuItem.label
+                    }
+                    trigger={
+                        [
+                            "hover",
+                            // "focus",
+                            // "click"
+                        ]
                 }>
-                    <IconFromString faIcon={
-                            menuItem.faIcon
-                        }
-                        antIcon={
-                            menuItem.antIcon
-                        }/>
-                    <span style={
-                        menuItem.antIcon ? {
-                            marginLeft: "5px"
-                        } : {}
-                    }> {
-                        !hideText && menuItem.label
-                    }</span>
+                    <div style={
+                        {display: "flex"}
+                    }>
+                        <IconFromString faIcon={
+                                menuItem.faIcon
+                            }
+                            antIcon={
+                                menuItem.antIcon
+                            }/>
+                        <span style={
+                            menuItem.antIcon ? {
+                                marginLeft: "5px"
+                            } : {}
+                        }> {
+                            !hideText && menuItem.label
+                        }</span>
                     </div>
-                    </Tooltip>
-                    )
+                </Tooltip>)
             }
             key={
                 getKeyFromLabel(menuItem.label)

@@ -35,7 +35,11 @@ def register_plot_data_routes(plugin):
         try:
             request_data = flask.request.get_json()
             trading_mode = models.get_config_activated_trading_mode()
-            symbol = symbol_util.convert_symbol(request_data["symbol"], "|")
+            symbol = (
+                symbol_util.convert_symbol(request_data["symbol"], "|")
+                if request_data.get("symbol")
+                else None
+            )
             optimizer_id = None
             backtesting_id = None
             if not (live_id := int(request_data.get("live_id", 0)) or None):

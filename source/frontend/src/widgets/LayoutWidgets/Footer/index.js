@@ -6,21 +6,19 @@ import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 export default function Footer({rightContent}) {
     const botColors = useBotColorsContext();
     const botInfo = useBotInfoContext()
-    return (
+    return (<div style={
+        {
+            borderTop: "solid 2px " + botColors?.border,
+            backgroundColor: botColors?.background
+        }
+    }>
+
         <div style={
             {
-          borderTop: "solid 2px " + botColors.border,
-              backgroundColor: botColors.background
+                width: "100%",
+                display: "flex"
             }
-        }>
-
-            <div style={
-                {
-                    width: "100%",
-                    display: "flex"
-                }
-            }>
-                {/* <span className="d-none d-xl-inline">Follow the </span>
+        }> {/* <span className="d-none d-xl-inline">Follow the </span>
             <a href="https://www.octobot.online">OctoBot project</a>
             <span className="d-none d-xl-inline"> updates</span>
             <span> on </span>
@@ -62,21 +60,19 @@ export default function Footer({rightContent}) {
               <FontAwesomeIcon className="me-1" icon={faBitcoin} />
               <FontAwesomeIcon className="me-1" icon={faEthereum} />
             </a> */}
-                <span style={
-                    {margin: "auto 15px"}
-                }>OctoBot {
-                    botInfo?.octobot_version
-                }</span>
-                <span style={
-                    {
-                        marginLeft: "auto",
-                        display: "flex"
-                    }
-                }>
-                    {
-                    rightContent && <AppWidgets layout={rightContent}/>
-                } </span>
-            </div>
+            <span style={
+                {margin: "auto 15px"}
+            }>OctoBot {
+                botInfo?.octobot_version
+            }</span>
+            <span style={
+                {
+                    marginLeft: "auto",
+                    display: "flex"
+                }
+            }> {
+                rightContent && <AppWidgets layout={rightContent}/>
+            } </span>
         </div>
-    );
+    </div>);
 }

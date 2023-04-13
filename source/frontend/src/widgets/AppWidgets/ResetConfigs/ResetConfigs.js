@@ -1,4 +1,4 @@
-import {Button, Card} from 'antd'
+import {Button} from 'antd'
 import React, {useState} from 'react'
 import { useBotDomainContext } from '../../../context/config/BotDomainProvider'
 import { useBotInfoContext } from '../../../context/data/BotInfoProvider'
@@ -9,6 +9,7 @@ import createNotification from '../../../components/Notifications/Notification'
 import { sendActionCommandToTradingMode } from '../Buttons/SendActionCommandToTradingMode'
 import { resetStorage, resetTentaclesConfig } from '../../../api/actions'
 import ResetIndividual from './ResetIndividual'
+import { projectName } from '../../../constants/frontendConstants'
 
 
 export default function ResetConfigs() {
@@ -22,7 +23,7 @@ export default function ResetConfigs() {
     const storages = {
         resetAllUIConfig: {
             key: "resetAllUIConfig",
-            title: "Reset all octo UI2 Settings",
+            title: `Reset all ${projectName} Settings`,
             description: (<>
                 Resets the following settings:
                 <ul>
@@ -55,7 +56,7 @@ export default function ResetConfigs() {
             description: (<>
                 Resets the following tentacle settings to the defaults:
                 <ul>
-                    {tentacles.map(tentacle=>(<li>tentacle</li>))}
+                    {tentacles.map(tentacle=>(<li key={tentacle}>{tentacle}</li>))}
                 </ul>
             </>
                 )
@@ -117,11 +118,11 @@ export default function ResetConfigs() {
         const success = () => {
             fetchConfig()
             setIsResetting(false)
-            createNotification("Successfully resetted octo UI2 config")
+            createNotification(`Successfully resetted ${projectName} config`)
         }
         const failed = () => {
             setIsResetting(false)
-            createNotification("Failed to reset octo UI2 config")
+            createNotification(`Failed to reset ${projectName} config`)
         }
         saveUiConfig({
             backtesting_analysis_settings: {},
@@ -188,17 +189,14 @@ export default function ResetConfigs() {
     }
     return (<div style={
         {
-            maxWidth: '600px',
-            margin: 'auto'
+            margin: "25px"
         }
     }>
-        <Card style={
-            {border: 'none'}
-        }>
             {Object.keys(storages).map(storageKey => (
                 <ResetIndividual title={
                     storages[storageKey].title
                 }
+                    key={storages[storageKey].key}
                 titleKey={
                     storages[storageKey].key
                 }
@@ -228,6 +226,5 @@ export default function ResetConfigs() {
                         {marginLeft: '10px'}
                 }>Reset Selected</Button>
             </div>
-        </Card>
     </div>)
 }

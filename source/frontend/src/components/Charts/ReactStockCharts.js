@@ -165,16 +165,16 @@ class ReactStockCharts extends React.Component {
               <XAxis
                 axisAt="bottom"
                 orient="bottom"
-                tickStroke={this.props.botColors.font}
-                stroke={this.props.botColors.border}
+                tickStroke={this.props.botColors?.font}
+                stroke={this.props.botColors?.border}
                 {...xGrid}
               />
             )}
             <YAxis
               axisAt="left"
               orient="left"
-              tickStroke={this.props.botColors.font}
-              stroke={this.props.botColors.border}
+              tickStroke={this.props.botColors?.font}
+              stroke={this.props.botColors?.border}
               {...yGrid}
               onDoubleClick={this.resetYDomain}
             />
@@ -202,18 +202,18 @@ class ReactStockCharts extends React.Component {
                       yAccessor={(d) => candlesYAccessor(d, plot.title)}
                       stroke={(d) =>
                         d.close > d.open
-                          ? this.props.botColors.candles.border.green
-                          : this.props.botColors.candles.border.red
+                          ? this.props.botColors?.candles.border.green
+                          : this.props.botColors?.candles.border.red
                       }
                       wickStroke={(d) =>
                         d.close > d.open
-                          ? this.props.botColors.candles.wick.green
-                          : this.props.botColors.candles.wick.red
+                          ? this.props.botColors?.candles.wick.green
+                          : this.props.botColors?.candles.wick.red
                       }
                       fill={(d) =>
                         d.close > d.open
-                          ? this.props.botColors.candles.body.green
-                          : this.props.botColors.candles.body.red
+                          ? this.props.botColors?.candles.body.green
+                          : this.props.botColors?.candles.body.red
                       }
                     />
                     <OHLCTooltip
@@ -221,8 +221,8 @@ class ReactStockCharts extends React.Component {
                       key={plotIndex + "tt"}
                       accessor={(d) => candlesYAccessor(d, plot.title)}
                       origin={[10, -10]}
-                      textFill={this.props.botColors.font}
-                      // labelFill={this.props.botColors.fontActive}
+                      textFill={this.props.botColors?.font}
+                      // labelFill={this.props.botColors?.fontActive}
                     />
                   </div>
                 );
@@ -274,7 +274,7 @@ class ReactStockCharts extends React.Component {
         // clamp={true}
       >
         {charts}
-        <CrossHairCursor stroke={this.props.botColors.font} />
+        <CrossHairCursor stroke={this.props.botColors?.font} />
       </ChartCanvas>
     );
   }

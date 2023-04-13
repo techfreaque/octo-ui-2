@@ -30,6 +30,7 @@ export default function appWidgetsProps() {
             "DefaultLayout", "SplitMainContent"
         ], "string", undefined, undefined, undefined, "0, 0"),
         ...generateAppWidgetProp("tabs", "ScrollableTabs"),
+        ...generateAppWidgetProp("settingsContent", "ChartTablePieCombo"),
         ...generateAppWidgetProp("headerContent", ["DefaultLayout", "SimpleLayout"]),
         ...generateAppWidgetProp("content", ["SidebarMenuItem", "Tab", "ButtonWithModal", "TradingConfig"]),
         ...generateAppWidgetProp("content", ["SidebarMenuItem", "Tab", "ButtonWithModal", "TradingConfig", "TentaclesConfig"]),

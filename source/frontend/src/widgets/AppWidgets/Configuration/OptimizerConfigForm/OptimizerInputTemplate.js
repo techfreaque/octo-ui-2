@@ -4,7 +4,7 @@ import "./OptimizerInputTemplate.css"
 
 export default function OptimizerSettingTemplate() {
     const botColors = useBotColorsContext()
-    const borderStyle = {border: "1px solid "+botColors.border}
+    const borderStyle = {border: "1px solid "+botColors?.border}
     return (
         <div className="mx-4">
             <div className="row"  style={borderStyle}>

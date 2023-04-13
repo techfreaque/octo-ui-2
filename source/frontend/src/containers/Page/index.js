@@ -13,8 +13,8 @@ export default function Page({currentPage}) {
         <main
             style={
                 {
-                    backgroundColor: (colorMode === colorModes.dark && botColors.background),
-                    color: (colorMode === colorModes.dark && botColors.font)
+                    backgroundColor: (colorMode === colorModes.dark && botColors?.background),
+                    color: (colorMode === colorModes.dark && botColors?.font)
                 }
         }>
             <Helmet defaultTitle={

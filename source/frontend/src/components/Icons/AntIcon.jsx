@@ -13,6 +13,9 @@ for (const [_icon, iconModule] of Object.entries(icons)) {
 
 const iconStyles = {
     size: {
+        [sizes.extraSmall]: {
+            fontSize: "14px"
+        },
         [sizes.small]: {
             fontSize: "20px"
         },
@@ -38,6 +41,7 @@ export function AntIconByReactFunc({
             marginTop: "auto",
             marginBottom: "auto",
             marginRight,
+            marginLeft: "unset",
         },
         spin
     })
@@ -55,6 +59,7 @@ export function AntIconByString({
             marginTop: "auto",
             marginBottom: "auto",
             marginRight,
+
         },
         spin
     })

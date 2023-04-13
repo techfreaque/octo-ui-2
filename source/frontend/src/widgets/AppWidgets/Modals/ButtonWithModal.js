@@ -8,6 +8,7 @@ import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
 import IconFromString from '../../../components/Icons/IconFromString';
 import {Tooltip} from 'antd';
 import {MuiIconButton} from '../../../components/Buttons/IconButton';
+import {useBotColorsContext} from '../../../context/config/BotColorsProvider';
 
 
 const style = {
@@ -17,7 +18,7 @@ const style = {
     transform: 'translate(-50%, -50%)',
     maxWidth: 1000,
     width: "100%",
-    bgcolor: 'background.paper',
+    // bgcolor: 'background.paper',
     border: '2px solid #000',
     boxShadow: 24,
     color: "white",
@@ -38,58 +39,62 @@ export default function ButtonWithModal({
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const id = title?.replace(" ", "-")
-    return (
-        <div style={
-            {
-                margin: "auto",
-                height: "100%"
-            }
-        }>
-            <Tooltip placement="top"
-                title={title}
-                arrow={false}>
-                <div>
-                    <MuiIconButton onClick={handleOpen}>
-                        <IconFromString faIcon={faIcon}
-                            antIcon={antIcon}
-                            marginRight={"0px"}/> {
-                        !iconOnly && title
-                    } </MuiIconButton>
-                </div>
-            </Tooltip>
-            {
-            open && <ModalContent open={open}
-                id={id}
-                handleClose={handleClose}
-                content={content}/>
-        } </div>
-    );
+    return (<div style={
+        {
+            margin: "auto",
+            height: "100%"
+        }
+    }>
+        <Tooltip placement="top"
+            title={title}
+            arrow={false}>
+            <div>
+                <MuiIconButton onClick={handleOpen}>
+                    <IconFromString faIcon={faIcon}
+                        antIcon={antIcon}
+                        marginRight={"0px"}/> {
+                    !iconOnly && title
+                } </MuiIconButton>
+            </div>
+        </Tooltip>
+        {
+        open && <ModalContent open={open}
+            id={id}
+            handleClose={handleClose}
+            content={content}/>
+    } </div>);
 }
 
 function ModalContent({open, id, handleClose, content}) {
-    return (
-        <Modal open={open}
-            onClose={handleClose}
-            aria-labelledby={
-                `modal-${id}-title`
+    const botColors = useBotColorsContext()
+    return (<Modal open={open}
+        onClose={handleClose}
+        aria-labelledby={
+            `modal-${id}-title`
+        }
+        style={
+            {zIndex: "1000"}
+        }
+        aria-describedby={
+            `modal-${id}-description`
+    }>
+        <Box sx={
+            {
+                ...style,
+                bgcolor: botColors?.background
             }
-            style={{zIndex: "1000"}}
-            aria-describedby={
-                `modal-${id}-description`
         }>
-            <Box sx={style}>
-                <Button onClick={handleClose}
-                    style={
-                        {
-                            float: "right",
-                            zIndex: 100
-                        }
-                }><FontAwesomeIcon size="xl"
-                        icon={faClose}/></Button>
-                {
-                content && <AppWidgets layout={content}/>
-            }
-                {/* <Button variant="contained" onClick={handleClose}>Close</Button> */} </Box>
-        </Modal>
-    )
+            <Button onClick={handleClose}
+                style={
+                    {
+                        float: "right",
+                        zIndex: 100
+                    }
+            }><FontAwesomeIcon size="xl"
+                    icon={faClose}/></Button>
+            {
+            content && <AppWidgets layout={content}/>
+        }
+            {/* <Button variant="contained" onClick={handleClose}>Close</Button> */} </Box>
+    </Modal>)
 }

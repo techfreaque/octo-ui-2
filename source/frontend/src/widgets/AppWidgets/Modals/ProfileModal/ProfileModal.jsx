@@ -1,7 +1,7 @@
 import {faSave, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {Button} from "@mui/material";
-import {Modal, Button as AntButton} from "antd";
+import {Modal, Button as AntButton, Tooltip} from "antd";
 import {useEffect, useMemo, useState} from "react";
 import {updateConfig, updateProfileInfo} from "../../../../api/actions";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
@@ -10,6 +10,7 @@ import {useIsBotOnlineContext, useRestartBot} from "../../../../context/data/IsB
 import ProfileAvatar from "../../Stats/ProfileAvatar";
 import {ProfileSettings} from "./ProfileSettings";
 import {ProfileTitle} from "./ProfileTitle";
+import { Trans } from "react-i18next";
 
 
 export default function ProfileModal() {
@@ -95,6 +96,9 @@ export default function ProfileModal() {
         setOpen(false)
     };
     return useMemo(() => (
+        <Tooltip  
+        title={(<Trans  i18nKey="profile.profileInfoButtonToolTip" />)} 
+        >
         <div style={
             {
                 margin: "auto",
@@ -132,7 +136,8 @@ export default function ProfileModal() {
                 saveProfile={saveProfile}
                 hasChanged={hasChanged}
                 saveProfileAndRestart={saveProfileAndRestart}/>
-        } </div>
+            } </div>
+        </Tooltip>
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [
         currentProfileTitle,

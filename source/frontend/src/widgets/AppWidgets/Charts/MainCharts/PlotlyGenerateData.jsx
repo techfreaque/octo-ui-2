@@ -141,7 +141,7 @@ function formatSubData({
                     : `${backtestingId} - ${optimizerCampaign}`
                 : `live ${liveId}`;
                 const thisData = subElements[pair][timeframe]?.data?.sub_elements;
-                thisData.forEach((sub_element) => {
+                thisData?.forEach((sub_element) => {
                     if (sub_element.type !== "chart") {
                         return;
                     }
@@ -152,7 +152,7 @@ function formatSubData({
                     const layout = getOrGenerateLayout(layouts, uiConfig, chartLocation)
                     let yAxisId = 1
                     let xAxisId = 1;
-                    sub_element.data.elements.forEach((chartDetails) => {
+                    sub_element?.data?.elements?.forEach((chartDetails) => {
                         if (chartDetails.own_yaxis && yAxisId < 4) {
                             yAxisId++;
                         }

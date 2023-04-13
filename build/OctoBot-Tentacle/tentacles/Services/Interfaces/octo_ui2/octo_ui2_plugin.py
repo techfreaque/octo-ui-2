@@ -48,7 +48,7 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
             models.WebInterfaceTab(
                 "octo_ui2",
                 "octo_ui2.home",
-                "Octo UI 2",
+                "O UI",
                 web_enums.TabsLocation.START,
             )
         ]

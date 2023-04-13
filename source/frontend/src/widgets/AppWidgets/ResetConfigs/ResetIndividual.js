@@ -13,11 +13,11 @@ export default function ResetIndividual( {
     return (
         <div style={{display: 'flex', justifyContent: 'space-between', margin:'10px auto'}}>
                 <Tooltip title={description} placement="right">
-                    <spam>{title}</spam>
+                    <span>{title}</span>
                 </Tooltip>
             <ConfigProvider theme={{
                 "token": {
-                "colorPrimary": botColors.error}}
+                "colorPrimary": botColors?.error}}
             }>
                 <Switch checked={checkedList[titleKey]}  onChange={(state)=>handleCheckboxClick(titleKey, state)}   checkedChildren="Reset"/>
             </ConfigProvider>

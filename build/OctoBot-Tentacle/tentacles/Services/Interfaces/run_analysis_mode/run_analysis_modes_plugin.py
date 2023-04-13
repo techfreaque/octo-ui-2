@@ -1,5 +1,7 @@
 import os
 import typing
+
+import octobot_commons.os_util as os_util
 import octobot_commons.logging as logging
 import octobot_commons.databases as databases
 import octobot_commons.display as commons_display
@@ -8,14 +10,13 @@ import octobot_trading.api as trading_api
 import octobot_services.interfaces.util as interfaces_util
 import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
-import tentacles.Services.Interfaces.run_analysis_mode.controllers.plotted_data as plotted_data
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisModes.default_run_analysis_mode.run_analysis_mode_default as run_analysis_mode_default
 
 
 class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
     NAME = "run_analysis_modes"
     PLUGIN_ROOT_FOLDER = os.path.dirname(os.path.abspath(__file__))
-    DEBUG_PLOTS = True
+    DEBUG_PLOTS = os_util.parse_boolean_environment_var("DEBUG_PLOTS", "False")
     RUN_ANALYSIS_MODE: run_analysis_mode_default.DefaultRunAnalysisMode = (
         run_analysis_mode_default.DefaultRunAnalysisMode
     )
@@ -68,7 +69,8 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
             if cls.DEBUG_PLOTS:
                 cls.log_exception(error)
                 # TODO remove at some point
-            return interfaces_util.run_in_bot_async_executor(
+            try:
+                return interfaces_util.run_in_bot_async_executor(
                 cls.get_old_version_plot_data(
                     exchange_id=exchange_id,
                     trading_mode=trading_mode_class,
@@ -81,6 +83,8 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
                     optimizer_id=optimizer_id,
                 )
             )
+            except Exception:
+                pass
         return {}
 
     def get_tabs(self):
@@ -109,6 +113,10 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
     ):
         try:
             trading_model.ensure_valid_exchange_id(exchange_id)
+        except KeyError:
+            # frontend will handle this
+            return {}
+        try:
             elements = commons_display.display_translator_factory()
             database_manager = databases.RunDatabasesIdentifier(
                 trading_mode,

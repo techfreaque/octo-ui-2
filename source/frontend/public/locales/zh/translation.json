@@ -14,5 +14,16 @@
   "notificationCenter": {
     "botErrorLog": "机器人错误日志",
     "botNotifications": "机器人通知"
+  },
+  "plotting": {
+    "switchtotheDisplaySettings": "切换到显示设置",
+    "switchtotheTablesView": "切换到表视图",
+    "switchtotheChartsView": "切换到图表视图"
+  },
+  "profile": {
+    "profileInfoButtonToolTip": "打开配置文件设置"
+  },
+  "pairExchangeSettings": {
+    "currentPairTooltip": "选择和设置货币和符号"
   }
 }

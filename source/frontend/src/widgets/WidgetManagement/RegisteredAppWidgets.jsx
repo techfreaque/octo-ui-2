@@ -36,7 +36,6 @@ import CancelAllOrdersButton from "../AppWidgets/Buttons/CancelAllOrdersButton";
 import PowerMenu from "../AppWidgets/Modals/PowerMenu/PowerMenu";
 import SendActionCommandToTradingMode from "../AppWidgets/Buttons/SendActionCommandToTradingMode";
 import RefreshBotData from "../AppWidgets/Buttons/RefreshData";
-import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
 import OptimizerQueueSize from "../AppWidgets/Stats/OptimizerQueueSize";
 import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
 import SymbolsInfoTable from "../AppWidgets/Tables/SymbolsInfo";
@@ -80,7 +79,6 @@ export const registeredComponents = {
     AppStore,
     TradingConfig,
     PairsSelector,
-    ExchangeSelector,
     BacktestingRunDataTable,
     UIConfig,
     OptimizerQueueTable,

@@ -16,9 +16,11 @@ export const defaultColors = {
         success: "#5aef70",
         error: "#ff4d4f",
         primary: "#0d6efd",
+        black: "#131722",
+        white: "#b2b5be",
         // primary: "#722ED1",
         tags: {
-            primary: 'blue',
+            primary: "#0d6efd",
         },
         candles: {
             wick: {
@@ -39,7 +41,7 @@ export const defaultColors = {
         }
     },
     light: {
-        background: "#131722",
+        background: "#fff",
         backgroundSecondary: "rgba(0, 0, 0, 0.02)",
         backgroundHover: "rgba(0,0,0,.06)",
         backgroundActive: "#e6f4ff",
@@ -51,6 +53,13 @@ export const defaultColors = {
         borderGlow:"#1d1d5f",
         warning: "#fb3",
         success: "#00c851",
+        error: "#ff4d4f",
+        primary: "#0d6efd",
+        black: "#131722",
+        white: "#e6f4ff",
+        tags: {
+            primary: "#0d6efd",
+        },
         candles: {
             wick: {
                 green: "rgb(178, 235, 242)",

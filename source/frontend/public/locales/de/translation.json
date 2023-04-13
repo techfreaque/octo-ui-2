@@ -14,5 +14,16 @@
   "notificationCenter": {
     "botErrorLog": "Bot-Fehlerprotokoll",
     "botNotifications": "Bot-Benachrichtigungen"
+  },
+  "plotting": {
+    "switchtotheDisplaySettings": "Wechseln zu den Anzeigeeinstellungen",
+    "switchtotheTablesView": "Wechsle in die Tabellenansicht",
+    "switchtotheChartsView": "Wechsle in die Diagrammansicht"
+  },
+  "profile": {
+    "profileInfoButtonToolTip": "Öffnen die Profileinstellungen"
+  },
+  "pairExchangeSettings": {
+    "currentPairTooltip": "Währungen und Symbole auswählen und einrichten"
   }
 }

@@ -1,31 +1,61 @@
-import {Radio} from "antd";
 import W2uiDataTable from "../Tables/W2uiDataTable";
 import PlotlyDualCharts from "./MainCharts/PlotlyDualCharts";
 import {sizes} from "../../../constants/frontendConstants";
 import {useChartTypeContext, useUpdateChartTypeContext} from "../../../context/config/CurrentChartTypeProvider";
 import {useState} from "react";
-import { LineChartOutlined, UnorderedListOutlined } from "@ant-design/icons";
-import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
+import {LineChartOutlined, SettingOutlined, UnorderedListOutlined} from "@ant-design/icons";
+import {AntIconByReactFunc} from "../../../components/Icons/AntIcon";
+import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
+import { Trans } from "react-i18next";
 
 export const chartTypes = {
     CHART: "chart",
     TABLE: "table",
     PIE: "pie",
-    STATS: "stats"
+    STATS: "stats",
+    RUN_ANALYSIS: "runAnalysis"
 }
 
 export function ChartTypeSelector() {
     const updateChartType = useUpdateChartTypeContext()
     const chartType = useChartTypeContext()
 
-    const chartTypes = [
+    const _chartTypes = [
         {
-            label: (<AntIconByReactFunc AntReactIcon={LineChartOutlined} size={sizes.medium}  />),
-            value: 'chart',
+            label: (
+                <AntIconByReactFunc AntReactIcon={LineChartOutlined}
+                    size={
+                        sizes.small
+                    }/>
+            ),
+           
+            toolTipText:(<Trans  i18nKey="plotting.switchtotheChartsView" />),
+            key: chartTypes.CHART,
             // disabled: true
-        }, {
-            label: (<AntIconByReactFunc AntReactIcon={UnorderedListOutlined} size={sizes.medium} />),
-            value: 'table',
+        },
+        {
+            label: (
+                <AntIconByReactFunc AntReactIcon={UnorderedListOutlined}
+                    size={
+                        sizes.small
+                    }/>
+            ),
+            
+            toolTipText:(<Trans  i18nKey="plotting.switchtotheTablesView" />),
+            key: chartTypes.TABLE,
+            // disabled: true
+        },
+        {
+            label: (
+                <AntIconByReactFunc AntReactIcon={SettingOutlined}
+                    size={
+                        sizes.small
+                    }/>
+            ),
+            
+            toolTipText:(<Trans  i18nKey="plotting.switchtotheDisplaySettings" />),
+            key: chartTypes.RUN_ANALYSIS,
             // disabled: true
         },
 
@@ -48,26 +78,28 @@ export function ChartTypeSelector() {
         //     disabled: true
         // },
     ]
-    function handleChartLocationChange(event) {
-        updateChartType(event.target.value)
-    }
 
-    return (<Radio.Group options={chartTypes}
-        onChange={handleChartLocationChange}
-        value={chartType}
-        optionType="button"
-        size="large"
-        buttonStyle="outlined"/>)
+    return (
+        <RadioButtonGroup menuItems={_chartTypes}
+            onChange={updateChartType}
+            selected={chartType}
+            />
+    )
 }
 
-export default function ChartTablePieCombo() {
+export default function ChartTablePieCombo({settingsContent}) {
     const [charts, setCharts] = useState()
 
     const chartType = useChartTypeContext()
     if (chartType === chartTypes.CHART) {
-        return (<PlotlyDualCharts charts={charts}
-            setCharts={setCharts}/>)
+        return (
+            <PlotlyDualCharts charts={charts}
+                setCharts={setCharts}/>
+        )
     } else if (chartType === chartTypes.TABLE) {
-        return (<W2uiDataTable/>)
+        return (
+            <W2uiDataTable/>)
+    } else if (chartType === chartTypes.RUN_ANALYSIS) {
+        return settingsContent && (<AppWidgets layout={settingsContent}/>)
     }
 }

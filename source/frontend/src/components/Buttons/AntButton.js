@@ -9,6 +9,7 @@ import {FaIconByReactFunc} from "../Icons/FontAwesome";
 
 export const buttonTypes = {
     success: "success",
+    black: "black",
     warning: "warning",
     error: "error",
     primary: "primary"
@@ -43,10 +44,12 @@ export default function AntButton({
     children
 
 }) {
-    const _style = block ? {
-        // justifyContent: "center"
-    } : {}
     const botColors = useBotColorsContext();
+    const _style = block ? { // justifyContent: "center"
+    } : {}
+    if (buttonType === buttonTypes.black) {
+        _style.color = botColors?.white
+    }
     const theme = {
         token: {
             colorError: botColors[buttonType],

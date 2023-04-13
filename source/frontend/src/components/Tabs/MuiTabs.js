@@ -12,7 +12,7 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
         setCurrentTabId(newCurrentTabId);
     };
     return tabs && (
-        <div style={{ height: "100%", zIndex:1, backgroundColor: botColors.background,position: "relative" }}>
+        <div style={{ height: "100%", zIndex:1, backgroundColor: botColors?.background,position: "relative" }}>
             <Box sx={{ borderBottom: `solid 1px ${botColors?.border}`}}>
                 <TabsContainer>
                     <TabsElement isBigScreen={isBigScreen} isRightContent={true} >
