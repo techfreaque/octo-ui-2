@@ -1,14 +1,15 @@
-import {Alert, Button, Modal} from "@mui/material";
+import {Modal} from "@mui/material";
 import {Box} from "@mui/system";
 import {useMemo, useState} from "react";
 import {realTradingSwitch} from "../../../../api/actions";
 import {useBotConfigContext} from "../../../../context/config/BotConfigProvider";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
-import {Tooltip} from "antd";
+import {Space, Tooltip, Alert } from "antd";
 import {MuiIconButton} from "../../../../components/Buttons/IconButton";
 import {sizes} from "../../../../constants/frontendConstants";
 import {DollarOutlined, PauseOutlined, RobotOutlined} from "@ant-design/icons";
 import {AntIconByReactFunc} from "../../../../components/Icons/AntIcon";
+import AntButton, { buttonTypes } from "../../../../components/Buttons/AntButton";
 
 
 export default function RealTradingSwitch() {
@@ -56,22 +57,25 @@ export default function RealTradingSwitch() {
                         <p>It will no longer create trades with your exchange account, it will use a simulated portfolio managed by OctoBot.</p>
                     </>) : (<p>By switching to real trading, OctoBot will use your real funds</p>)
                 }
-                    <Alert style={
-                            {marginBottom: "10px"}
+                    <Alert banner
+                    style={
+                            {margin: "20px 0 30px 0"}
                         }
-                        severity="warning">Warning! The switch button will also restart OctoBot
-                    </Alert>
-                    <Button onClick={handleClose}
-                        variant="outlined"
-                        style={
-                            {marginRight: "10px"}
-                    }>Stay</Button>
-                    <Button variant="contained"
-                        onClick={
-                            () => realTradingSwitch(botDomain, isRealTrading)
-                    }>Switch to {
-                        isRealTrading ? "Simulated trading" : "Real trading"
-                    }</Button>
+                        message='Warning! The switch button will also restart OctoBot'
+                    />
+                    <div style={{float: 'right'}}>
+                        <Space>
+                            <AntButton onClick={handleClose}
+                                style={{marginRight: "5px"}}
+                                buttonType= {buttonTypes.primary}
+                                text='Cancel'/>
+                            <AntButton 
+                                onClick={() => realTradingSwitch(botDomain, isRealTrading)}
+                                text={`Switch to ${isRealTrading ? "Simulated trading" : "Real trading"}`}
+                                buttonType= {buttonTypes.primary}
+                                buttonVariant="primary"/>
+                        </Space>
+                    </div>
                 </Box>
             </Modal>
         </div>);
