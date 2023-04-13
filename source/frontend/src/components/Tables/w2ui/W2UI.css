@@ -66,6 +66,69 @@
   background-color: unset !important;
 }
 
+#root .w2ui-search-all {
+  background-color: unset !important;
+}
+
+.dark .w2ui-menu {
+  background-color: var(--dark-background) !important;
+  border-color: var(--dark-border) !important;
+  color: var(--dark-font) !important;
+}
+
+.dark .w2ui-menu-item:hover {
+  background-color: var(--dark-backgroundActive) !important;
+  color: var(--dark-fontActive) !important;
+}
+
+.dark .w2ui-menu .w2ui-menu-item.w2ui-selected {
+  background-color: var(--dark-backgroundActive) !important;
+  color: var(--dark-fontActive) !important;
+}
+
+.dark #backtesting-runs_skip,
+.dark .w2ui-overlay .w2ui-grid-search-advanced table td.value input[type=text] {
+  background-color: var(--dark-background) !important;
+  border-color: var(--dark-border) !important;
+  color: var(--dark-font) !important;
+}
+
+.dark .w2ui-overlay .w2ui-grid-search-advanced table td.operator select {
+  background-color: var(--dark-background) !important;
+  border-color: var(--dark-border) !important;
+  outline-color : unset !important;
+  /* color: var(--dark-font) !important; */
+}
+
+input:not([type=button]):not([type=submit]).w2ui-input:focus, textarea.w2ui-input:focus {
+  outline-color : unset !important;
+}
+
+.dark select.w2ui-input {
+  background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAALCAQAAACnzwd+AAAAcklEQVR4AcXMsQFBQQDG4P9tAgC0gJYRQJZgKQMwCqCku6vVAAAA+NJHP4KHOk0aV2pRw61n4BBmyOxKQ8I4ehZeuhd3HTx6DQEGZ7sBfr2OOOOj3Yi43kMKs9sZknofOexqZ8npMygwWZTX51CipP+YA1OiZJbYYg9lAAAAAElFTkSuQmCC),linear-gradient(to bottom,var(--dark-background) 20%,var(--dark-background) 50%,var(--dark-background) 52%,var(--dark-background) 100%);
+  color: var(--dark-font) !important;
+  border-color: var(--dark-border) !important;
+  background-color: var(--dark-background) !important;
+}
+
+.w2ui-overlay .w2ui-grid-search-advanced table td.actions:nth-child(2) {
+  background-color: unset !important;
+}
+
+.dark button.w2ui-btn, input[type=button].w2ui-btn {
+  box-shadow: unset !important;
+}
+
+.dark .w2ui-overlay .w2ui-grid-search-advanced {
+  background-color: var(--dark-backgroundActive) !important;
+  color: var(--dark-font) !important;
+}
+
+.dark .w2ui-overlay .w2ui-grid-search-advanced table td.caption, 
+.dark .w2ui-overlay .w2ui-grid-search-advanced .search-title {
+  color: var(--dark-font) !important;
+}
+
 .w2ui-sort-down,
 .w2ui-sort-up {
   border-color: transparent !important;
