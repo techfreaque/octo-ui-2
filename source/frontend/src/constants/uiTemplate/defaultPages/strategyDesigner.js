@@ -33,7 +33,9 @@ export const defaultStrategyDesignerPageLayout = {
                                             "antIcon": "noIcon",
                                             "component": "Tab",
                                             "content": [
+                                                {"component": "ColorModeSwitch"},
                                                 {
+                                                
                                                     "component": "UIConfig",
                                                     "configKeys": [
                                                         "display_settings"
@@ -44,9 +46,7 @@ export const defaultStrategyDesignerPageLayout = {
                                             "faIcon": "",
                                             "title": "Display Settings",
                                             "toolBarContent": [
-                                                {
-                                                    "component": "ColorModeSwitch"
-                                                }
+                                                
                                             ]
                                         },
                                         {

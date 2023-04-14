@@ -12,7 +12,8 @@ export const buttonTypes = {
     black: "black",
     warning: "warning",
     error: "error",
-    primary: "primary"
+    primary: "primary",
+    white: "white"
 }
 
 export const buttonVariants = {
@@ -35,6 +36,7 @@ export default function AntButton({
     // string icons
     faIcon,
     antIcon,
+    icon,
 
     spin,
 
@@ -47,9 +49,9 @@ export default function AntButton({
     const botColors = useBotColorsContext();
     const _style = block ? { // justifyContent: "center"
     } : {}
-    if (buttonType === buttonTypes.black) {
-        _style.color = botColors?.white
-    }
+    // if (buttonType === buttonTypes.black) {
+    //     _style.color = botColors?.white
+    // }
     const theme = {
         token: {
             colorError: botColors[buttonType],
@@ -77,7 +79,11 @@ export default function AntButton({
                         size={iconSize}
                         marginRight={iconMargin}
                         spin={spin}/>)
-                } </>)
+                }
+                
+                    {
+                    icon ? icon : null
+                    } </>)
             }
             danger={
                 buttonVariant === buttonVariants.outline
