@@ -1,9 +1,9 @@
 import {useMemo} from "react";
 import {useSetCurrentPanelPercent} from "../../../context/config/MainPanelContext";
-import {MuiIconButton} from "../../../components/Buttons/IconButton";
 // import {sizes} from "../../../constants/frontendConstants";
 import {Tooltip} from "antd";
 import { VerticalAlignBottomOutlined } from "@ant-design/icons";
+import AntButton from "../../../components/Buttons/AntButton";
 
 export default function CurrentPanelMinimize() {
     const setPanelSize = useSetCurrentPanelPercent()
@@ -19,11 +19,12 @@ export default function CurrentPanelMinimize() {
                     title={"Minimize Panel"}
                     arrow={false}>
                     <div>
-                        <MuiIconButton onClick={
+                        <AntButton onClick={
                             () => setPanelSize(100)
-                        }>
+                        }
+                            buttonVariant="text">
                           <VerticalAlignBottomOutlined style={{fontSize:'22px'}}/>
-                        </MuiIconButton>
+                        </AntButton>
                     </div>
                 </Tooltip>
             </div>

@@ -1,14 +1,10 @@
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
 import {useState} from "react";
-import {faClose} from "@fortawesome/free-solid-svg-icons";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
 import IconFromString from '../../../components/Icons/IconFromString';
-import {Tooltip} from 'antd';
-import {MuiIconButton} from '../../../components/Buttons/IconButton';
+import {Tooltip, Modal} from 'antd';
 import {useBotColorsContext} from '../../../context/config/BotColorsProvider';
+import AntButton from '../../../components/Buttons/AntButton';
 
 
 const style = {
@@ -49,12 +45,13 @@ export default function ButtonWithModal({
             title={title}
             arrow={false}>
             <div>
-                <MuiIconButton onClick={handleOpen}>
+                <AntButton onClick={handleOpen}
+                    buttonVariant="text">
                     <IconFromString faIcon={faIcon}
                         antIcon={antIcon}
                         marginRight={"0px"}/> {
                     !iconOnly && title
-                } </MuiIconButton>
+                } </AntButton>
             </div>
         </Tooltip>
         {
@@ -69,6 +66,10 @@ function ModalContent({open, id, handleClose, content}) {
     const botColors = useBotColorsContext()
     return (<Modal open={open}
         onClose={handleClose}
+        width={1000}
+        centered
+        footer={null}
+        closable={false}
         aria-labelledby={
             `modal-${id}-title`
         }
@@ -81,17 +82,21 @@ function ModalContent({open, id, handleClose, content}) {
         <Box sx={
             {
                 ...style,
-                bgcolor: botColors?.background
+                bgcolor: botColors?.background,
+                maxHeight: "500px", 
+                padding: '20px 32px 0 32px'
             }
         }>
-            <Button onClick={handleClose}
+            <AntButton onClick={handleClose}
+                buttonVariant="text"
                 style={
                     {
                         float: "right",
                         zIndex: 100
                     }
-            }><FontAwesomeIcon size="xl"
-                    icon={faClose}/></Button>
+                }
+                antIcon={"CloseOutlined"}
+            ></AntButton>
             {
             content && <AppWidgets layout={content}/>
         }

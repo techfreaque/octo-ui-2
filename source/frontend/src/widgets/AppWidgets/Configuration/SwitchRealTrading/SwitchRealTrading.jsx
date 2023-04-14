@@ -5,7 +5,6 @@ import {realTradingSwitch} from "../../../../api/actions";
 import {useBotConfigContext} from "../../../../context/config/BotConfigProvider";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
 import {Space, Tooltip, Alert } from "antd";
-import {MuiIconButton} from "../../../../components/Buttons/IconButton";
 import {sizes} from "../../../../constants/frontendConstants";
 import {DollarOutlined, PauseOutlined, RobotOutlined} from "@ant-design/icons";
 import {AntIconByReactFunc} from "../../../../components/Icons/AntIcon";
@@ -42,8 +41,9 @@ export default function RealTradingSwitch() {
                 title={title}
                 arrow={false}>
                 <div>
-                    <MuiIconButton onClick={handleOpen}> {icon}
-                        {} </MuiIconButton>
+                    <AntButton onClick={handleOpen}
+                        buttonVariant="text"> {icon}
+                        {} </AntButton>
                 </div>
             </Tooltip>
             <Modal open={open}

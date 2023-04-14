@@ -1,9 +1,9 @@
 import React, {useMemo} from "react";
 import {useSetCurrentPanelPercent} from "../../../context/config/MainPanelContext";
 import {Tooltip} from "antd";
-import {MuiIconButton} from "../../../components/Buttons/IconButton";
 // import {sizes} from "../../../constants/frontendConstants";
 import { VerticalAlignTopOutlined } from "@ant-design/icons";
+import AntButton from "../../../components/Buttons/AntButton";
 
 export default function CurrentPanelFullscreen() {
     const setPanelPercent = useSetCurrentPanelPercent()
@@ -19,11 +19,12 @@ export default function CurrentPanelFullscreen() {
                     title={"Maximize Panel"}
               arrow={false}>
               <div>
-                    <MuiIconButton onClick={
+                    <AntButton onClick={
                         () => setPanelPercent(0)
-                    }>
+                    }
+                        buttonVariant="text">
                         <VerticalAlignTopOutlined style={{fontSize:'22px'}} />
-                    </MuiIconButton>
+                    </AntButton>
               </div>
                 </Tooltip>
             </div>

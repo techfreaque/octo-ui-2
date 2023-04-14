@@ -5,8 +5,8 @@ import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 import {sizes} from '../../../constants/frontendConstants';
 import {SyncOutlined} from '@ant-design/icons';
 import {AntIconByReactFunc} from '../../../components/Icons/AntIcon';
-import {MuiIconButton} from '../../../components/Buttons/IconButton';
 import { Trans } from 'react-i18next';
+import AntButton from '../../../components/Buttons/AntButton';
 
 
 export default function RefreshBotData() {
@@ -34,19 +34,20 @@ export default function RefreshBotData() {
                 title={<Trans i18nKey="buttons.softRefresh" />}
                 arrow={false}>
                 <div>
-                    <MuiIconButton disabled={isFetching}
+                    <AntButton disabled={isFetching}
                         onClick={
                             (() => {
                                 setDidJustStartFetching(true);
                                 fetchBotInfo(true, setIsFinished);
                             })
-                    }>
+                    }
+                        buttonVariant="text">
                         <AntIconByReactFunc AntReactIcon={SyncOutlined}
                             size={
                                 sizes.medium
                             }
                             spin={isFetching}/>
-                    </MuiIconButton>
+                    </AntButton>
                 </div>
             </Tooltip>
         );

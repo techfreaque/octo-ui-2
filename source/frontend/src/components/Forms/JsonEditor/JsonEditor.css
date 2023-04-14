@@ -135,6 +135,7 @@
     border: var(--dark-border) solid 1px;
 }
 
+
 .light .w-100 {
     color: var(--light-font);
 }

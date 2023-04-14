@@ -5,11 +5,11 @@ import StopBotButton from '../../Buttons/StopBotButton';
 import LogoutButton from '../../Buttons/LogoutButton';
 import {Dropdown, Tooltip, Button} from 'antd';
 import {useBotDomainContext} from '../../../../context/config/BotDomainProvider';
-import {MuiIconButton} from '../../../../components/Buttons/IconButton';
 import { useState } from 'react';
 import { useBotInfoContext } from '../../../../context/data/BotInfoProvider';
 import { PoweroffOutlined } from '@ant-design/icons';
 import { Trans } from 'react-i18next';
+import AntButton from '../../../../components/Buttons/AntButton';
 
 export default function PowerMenu() {
     const botDomain = useBotDomainContext();
@@ -67,9 +67,9 @@ export default function PowerMenu() {
                 title={"Power Menu"}
                 arrow={false}>
                 <div>
-                    <MuiIconButton>
+                    <AntButton buttonVariant="text">
                         <PoweroffOutlined style={{fontSize:'22px'}} />    
-                    </MuiIconButton>
+                    </AntButton>
                 </div>
             </Tooltip>
         </Dropdown>
