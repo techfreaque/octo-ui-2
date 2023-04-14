@@ -12,9 +12,12 @@ def plot_table_data(
     additional_columns: list,
     additional_column_types: typing.Dict[str, str],
     datum_columns_callback,
+    icon: typing.Optional[str] = None,
 ):
     if not data:
-        run_data.logger.debug(f"Nothing to create a table from when reading {data_name}")
+        run_data.logger.debug(
+            f"Nothing to create a table from when reading {data_name}"
+        )
         return
     column_render = _get_default_column_render()
     types = {**_get_default_types(), **additional_column_types}
@@ -39,7 +42,7 @@ def plot_table_data(
             columns=columns,
             rows=rows,
             searches=searches,
-            config={"antIcon": "ShoppingCartOutlined"},
+            config={"antIcon": icon},
         )
     except Exception:
         # TODO remove when merged
@@ -49,7 +52,6 @@ def plot_table_data(
             rows=rows,
             searches=searches,
         )
-        
 
 
 # async def plot_table(

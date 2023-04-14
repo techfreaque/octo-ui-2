@@ -3,7 +3,7 @@ import os
 import time
 import flask
 import flask_login
-
+import octobot_commons.time_frame_manager as time_frame_manager
 import octobot_commons
 import octobot_commons.optimization_campaign as optimization_campaign
 import octobot_commons.enums as commons_enums
@@ -113,10 +113,12 @@ def register_bot_info_routes(plugin):
                 traded_time_frames = [
                     tf.value for tf in models.get_traded_time_frames(exchange_manager)
                 ]
-                for tf in commons_enums.TimeFrames:
-                    timeframes_dict[tf.value] = {
-                        "enabled": True if tf.value in traded_time_frames else False
-                    }
+                available_time_frames = [
+                    time_frame.value
+                    for time_frame in time_frame_manager.sort_time_frames(
+                        [_time_frame.value for _time_frame in commons_enums.TimeFrames]
+                    )
+                ]
                 if (
                     len(trading_mode.exchange_manager.trading_modes)
                     and len(trading_mode.exchange_manager.trading_modes[0].producers)
@@ -162,7 +164,7 @@ def register_bot_info_routes(plugin):
                 "can_logout": flask_login.current_user.is_authenticated,
                 "any_exchange_is_futures": any_exchange_is_futures,
                 "evaluator_names": evaluator_names,
-                "time_frames": timeframes_dict,
+                "time_frames": available_time_frames,
                 # "enabled_time_frames": enabled_time_frames,
                 "traded_time_frames": traded_time_frames,
                 "trigger_time_frames": trigger_time_frames,

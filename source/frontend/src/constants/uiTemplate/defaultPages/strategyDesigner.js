@@ -108,22 +108,10 @@ export const defaultStrategyDesignerPageLayout = {
                     "component": "Header",
                     "leftContent": [
                         {
-                            "component": "Logo"
-                        },
-                        {
                             "component": "PairsSelector"
                         },
                         {
                             "component": "TimeFrameSelector"
-                        },
-                        {
-                            "antIcon": "noIcon",
-                            "component": "Tab",
-                            "content": [],
-                            "dontScroll": false,
-                            "faIcon": "",
-                            "title": "",
-                            "toolBarContent": []
                         }
                     ],
                     "rightContent": [
@@ -173,21 +161,6 @@ export const defaultStrategyDesignerPageLayout = {
                                 }
                             ]
                         },
-                        // {
-                        //     "antIcon": "FileSearchOutlined",
-                        //     "component": "Tab",
-                        //     "content": [
-                        //         {
-                        //             "component": "TentaclesConfig",
-                        //             "content": [],
-                        //             "tentacleNames": "RunAnalysisModePlugin"
-                        //         }
-                        //     ],
-                        //     "dontScroll": false,
-                        //     "faIcon": "noIcon",
-                        //     "title": "Run Analysis",
-                        //     "toolBarContent": []
-                        // },
                         {
                             "antIcon": "LineChartOutlined",
                             "component": "Tab",

@@ -4,7 +4,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome"
 
 const iconStyles = {
     size: {
-        [sizes.small]: "",
+        [sizes.small]: undefined,
         [sizes.medium]: "xl",
         [sizes.large]: "2x"
     }

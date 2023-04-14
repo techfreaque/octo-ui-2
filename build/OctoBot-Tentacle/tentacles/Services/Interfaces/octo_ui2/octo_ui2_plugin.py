@@ -23,6 +23,7 @@ from .controllers import (
     daemons,
     tentacles_config,
     symbols_info,
+    exchanges_config,
 )
 
 class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
@@ -42,6 +43,7 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
         tentacles_config.register_tentacles_config_routes(self)
         daemons.register_daemons_routes(self)
         symbols_info.register_symbols_info_routes(self)
+        exchanges_config.register_exchanges_routes(self)
 
     def get_tabs(self):
         return [

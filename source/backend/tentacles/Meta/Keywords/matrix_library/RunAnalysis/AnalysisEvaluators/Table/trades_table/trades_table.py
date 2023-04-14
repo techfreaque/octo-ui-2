@@ -89,4 +89,5 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
                     additional_columns=additional_columns,
                     additional_column_types=additional_column_types,
                     datum_columns_callback=datum_columns_callback,
+                    icon="ShoppingCartOutlined"
                 )

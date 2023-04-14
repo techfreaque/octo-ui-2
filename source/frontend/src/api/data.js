@@ -10,6 +10,13 @@ export async function fetchBotInfo(
     "get", {}, successNotification, false, setIsFinished);
 }
 
+export async function fetchExchangeInfo(
+  botDomain, setExchangeInfo, successNotification = false, setIsFinished = undefined) {
+  await fetchAndStoreFromBot(
+    botDomain + backendRoutes.exchangeInfo, setExchangeInfo,
+    "get", {}, successNotification, false, setIsFinished);
+}
+
 export async function getCurrencyLogos(botDomain, currencyIds, setCurrencyLogos) {
   await fetchAndStoreFromBot(
     botDomain + backendRoutes.currencyLogos, setCurrencyLogos,

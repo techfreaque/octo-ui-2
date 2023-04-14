@@ -11,6 +11,7 @@ import { useUpdateVisibleTimeFramesContext } from "../config/VisibleTimeFramePro
 import { useUpdateVisiblePairsContext } from "../config/VisiblePairProvider";
 import { useUpdateVisibleExchangesContext, useVisibleExchangesContext } from "../config/VisibleExchangesProvider";
 import { useIsBotOnlineContext } from "./IsBotOnlineProvider";
+import { BotExchangeInfoProvider } from "./BotExchangeInfoProvider";
 
 
 const BotInfoContext = createContext();
@@ -62,7 +63,9 @@ export const BotInfoProvider = ({ children }) => {
   return (
     <BotInfoContext.Provider value={botInfo}>
       <UpdateBotInfoContext.Provider value={setBotInfo}>
+        <BotExchangeInfoProvider>
         {children}
+        </BotExchangeInfoProvider>
       </UpdateBotInfoContext.Provider>
     </BotInfoContext.Provider>
   );

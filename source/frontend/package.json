@@ -32,6 +32,7 @@
     "react-bootstrap": "^2.5.0",
     "react-dom": "^18.2.0",
     "react-helmet": "^6.1.0",
+    "react-highlight-words": "^0.20.0",
     "react-i18next": "^12.2.0",
     "react-notifications-component": "^4.0.1",
     "react-plotly.js": "^2.6.0",

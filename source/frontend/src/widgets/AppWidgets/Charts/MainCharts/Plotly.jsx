@@ -140,7 +140,7 @@ const xRange0 = 'xaxis.range[0]'
 const xRange1 = 'xaxis.range[1]'
 const yAutorange = 'yaxis.autorange'
 const yRange0 = 'yaxis.range[0]'
-const yRange1 = 'yaxis.range[1]'
+// const yRange1 = 'yaxis.range[1]'
 
 function getDivId(chartLocation) {
     return "plotly" + chartLocation

@@ -14,5 +14,28 @@
   "notificationCenter": {
     "botErrorLog": "Bot-Fehlerprotokoll",
     "botNotifications": "Bot-Benachrichtigungen"
+  },
+  "plotting": {
+    "switchtotheDisplaySettings": "Wechseln zu den Anzeigeeinstellungen",
+    "switchtotheTablesView": "Wechsle in die Tabellenansicht",
+    "switchtotheChartsView": "Wechsle in die Diagrammansicht"
+  },
+  "profile": {
+    "profileInfoButtonToolTip": "Öffnen die Profileinstellungen"
+  },
+  "pairExchangeSettings": {
+    "currentPairTooltip": "Währungen und Symbole auswählen und einrichten"
+  },
+  "title": {
+    "warning": "Warnung"
+  },
+  "description": {
+    "warning": "Sie sind dabei, alle ausgewählten Einstellungen zurückzusetzen. \nMöchtest du fortfahren?"
+  },
+  "Reset": {
+    "Selected": "Ausgewählte zurücksetzen"
+  },
+  "select": {
+    "all": "Wählen Sie Alle"
   }
 }

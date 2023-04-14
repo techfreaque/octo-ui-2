@@ -6,6 +6,7 @@ export const advancedPath = "/advanced";
 export const backendRoutes = {
     frontendEntry: `${basePath}/home`,
     botInfo: `${basePath}/bot-info`,
+    exchangeInfo: `${basePath}/exchanges-info`,
     botConfig: `${basePath}/bot-config`,
     plottedData: `${basePath}/plotted_data`,
     plottedRunData: `${basePath}/plotted_run_data`,

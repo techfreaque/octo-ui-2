@@ -14,5 +14,28 @@
   "notificationCenter": {
     "botErrorLog": "Bot Error Log",
     "botNotifications": "Bot Notifications"
+  },
+  "plotting": {
+    "switchtotheDisplaySettings": "Switch to the Display Settings",
+    "switchtotheTablesView": "Switch to the Tables View",
+    "switchtotheChartsView": "Switch to the Charts View"
+  },
+  "profile": {
+    "profileInfoButtonToolTip": "Open the profile settings"
+  },
+  "pairExchangeSettings": {
+    "currentPairTooltip": "Select and setup currencies and symbols"
+  },
+  "title": {
+    "warning": "Warning"
+  },
+  "description": {
+    "warning": "You are about to reset all selected settings. Do you want to continue?"
+  },
+  "Reset": {
+    "Selected": "Reset Selected"
+  },
+  "select": {
+    "all": "Select All"
   }
 }

@@ -1,6 +1,7 @@
 import React, {createElement} from "react";
 import {useMemo} from "react";
 import {registeredComponents} from "./RegisteredAppWidgets";
+import { getIsProduction } from "../../context/config/BotDomainProvider";
 
 
 export default function AppWidgets(props) {
@@ -14,14 +15,13 @@ export default function AppWidgets(props) {
                             element.component
                         }`
                     }></span>);
-                }
-                // console.log("widget is loading: " + element.component, element)
+              }
+              !getIsProduction() && console.log("widget is loading: " + element.component, element)
                 try {
-                    return (<ErrorBoundary> {
+                    return (<ErrorBoundary key= {`${index}-${
+                      element.component
+                  }`} > {
                         createElement(registeredComponents[element.component], {
-                            key: `${index}-${
-                                element.component
-                            }`,
                             id: index,
                             ...element
                         })
@@ -36,7 +36,7 @@ export default function AppWidgets(props) {
                 }
             });
         } else {
-          // console.log("widget doesnt have a layout:", props);
+          !getIsProduction() &&  console.log("widget doesnt have a layout:", props);
         }
     }, [props])
 }

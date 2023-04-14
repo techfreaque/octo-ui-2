@@ -63,13 +63,14 @@ export default function DataTable({dataSource}) {
                 tableTitle={dataSource}
                 onActionClick={onActionClick}
                 actionTitle={actionTitle}
-                toolbarContent={<Button disable={
+                toolbarContent={(<Button
+                    disabled={
                     isLoading || ! isOnline
                 }
                 onClick={
                     () => handleFetchTableData(dataSource, botDomain, setIsLoading, setTableData)
             }>
-               <FontAwesomeIcon icon={faRefresh} style={{marginRight: "5px"}} /> Refresh {dataSource}</Button>}
+               <FontAwesomeIcon icon={faRefresh} style={{marginRight: "5px"}} /> Refresh {dataSource}</Button>)}
                 />
         </div>
     )

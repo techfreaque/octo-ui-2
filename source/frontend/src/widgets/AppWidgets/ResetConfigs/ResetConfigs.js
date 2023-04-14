@@ -1,4 +1,4 @@
-import {Button, Card, Popconfirm} from 'antd'
+import {Button, Popconfirm} from 'antd'
 import React, {useState} from 'react'
 import { useBotDomainContext } from '../../../context/config/BotDomainProvider'
 import { useBotInfoContext } from '../../../context/data/BotInfoProvider'

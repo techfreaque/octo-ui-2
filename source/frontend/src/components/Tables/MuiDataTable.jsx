@@ -25,22 +25,22 @@ export default function DataTableMui({
 }) {
     return (
         <Box sx={
-            {margin: 1}
+            {margin: "1"}
         }>
             <h3 style={
                 {
                     marginTop: "15px",
                     marginBottom: "0px",
-                    padding: 0
+                    padding: "0"
                 }
             }>
-                {tableTitle} </h3>
+                {tableTitle && tableTitle} </h3>
             <div style={
                 {float: "right"}
             }>
-                {toolbarContent}</div>
+                {toolbarContent && toolbarContent}</div>
             <TableContainer> {
-                (tableData?.length && tableColumns) ? <Table size="small">
+                (tableData?.length && tableColumns) ? (<Table size="small">
                     <TableHead>
                         <TableRow> {
                             Object.values(tableColumns).map(column => (
@@ -73,8 +73,8 @@ export default function DataTableMui({
                             } </TableRow>
                         ))
                     } </TableBody>
-                </Table> : (tableData?.length ? <div>{tableTitle}
-                    is loading</div> : <Alert>No {tableTitle}</Alert>)
+                </Table>) : (tableData?.length ? (<div>{tableTitle}
+                    is loading</div>) : (<Alert>No {tableTitle}</Alert>))
             } </TableContainer>
         </Box>
     )
