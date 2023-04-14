@@ -13,12 +13,13 @@ export const buttonTypes = {
     warning: "warning",
     error: "error",
     primary: "primary",
-    white: "white"
+    white: "white",
 }
 
 export const buttonVariants = {
     primary: "primary",
-    outline: "outline"
+    outline: "outline",
+    text: "text",
 }
 
 export default function AntButton({
@@ -37,6 +38,7 @@ export default function AntButton({
     faIcon,
     antIcon,
     icon,
+    selected,
 
     spin,
 
@@ -49,15 +51,32 @@ export default function AntButton({
     const botColors = useBotColorsContext();
     const _style = block ? { // justifyContent: "center"
     } : {}
-    // if (buttonType === buttonTypes.black) {
-    //     _style.color = botColors?.white
-    // }
+    if (buttonType === buttonTypes.black) {
+        _style.color = botColors?.white
+    }
     const theme = {
         token: {
             colorError: botColors[buttonType],
             colorPrimary: botColors[buttonType]
         }
     };
+    if (buttonVariant === buttonVariants.text) {
+        _style.padding = '0px 8px'
+    }
+
+    if (selected) {
+        _style.color = botColors?.fontActive
+    }
+
+    const spanStyle = {}
+    if (buttonVariant === buttonVariants.text) {
+        spanStyle.display = 'flex'
+    }
+    else {
+        spanStyle.height= '6px'
+        spanStyle.lineHeight= '5px'
+    }
+
     const iconMargin = (text || children) ? "5px" : "0px";
     return (<ConfigProvider theme={theme}>
         <Button icon={
@@ -82,7 +101,7 @@ export default function AntButton({
                 }
                 
                     {
-                    icon ? icon : null
+                    icon && icon 
                     } </>)
             }
             danger={
@@ -108,8 +127,7 @@ export default function AntButton({
 
             <span style={
                 {margin: "auto",
-                height: '6px',
-                lineHeight: '5px',}
+                ...spanStyle}
             }> {text}
                 {children} </span>
         </Button>

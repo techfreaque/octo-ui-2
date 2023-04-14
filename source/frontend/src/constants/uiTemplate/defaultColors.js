@@ -56,7 +56,7 @@ export const defaultColors = {
         error: "#ff4d4f",
         primary: "#0d6efd",
         black: "#131722",
-        white: "#e6f4ff",
+        white: "#131722",
         tags: {
             primary: "blue",
         },

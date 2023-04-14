@@ -7,11 +7,11 @@ import {
     Dropdown,
     Tooltip
 } from "antd";
-import RadioButton from "../../../components/Buttons/RadioButton";
 import {Trans} from "react-i18next";
 import {useVisibleExchangesContext} from "../../../context/config/VisibleExchangesProvider";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { PairsTable } from "./PairsTable";
+import AntButton from "../../../components/Buttons/AntButton";
 // import {getCurrencyLogos} from "../../../api/data";
 
 export default function PairsSelector() { // const [currencyLogos, setCurrencyLogos] = useState()
@@ -33,10 +33,12 @@ export default function PairsSelector() { // const [currencyLogos, setCurrencyLo
                 title={
                     (<Trans i18nKey="pairExchangeSettings.currentPairTooltip"/>)
             }>
-                <RadioButton selected={true}
+                <AntButton selected={true}
                     onClick={
                         () => setMenuIsOpen(true)
-                }>
+                }
+                    buttonVariant="text"
+                >
                     <div>
                         <div style={
                             {lineHeight: "16px"}
@@ -45,7 +47,7 @@ export default function PairsSelector() { // const [currencyLogos, setCurrencyLo
                             {lineHeight: "15px"}
                         }> {visibleExchanges} </div>
                     </div>
-                </RadioButton>
+                </AntButton>
             </Tooltip>
                 
                 </PairConfiguratorDropdown>

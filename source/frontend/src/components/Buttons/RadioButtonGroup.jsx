@@ -1,5 +1,5 @@
-import {Radio, Tooltip} from "antd";
-import RadioButton from "./RadioButton";
+import {Radio, Space, Tooltip} from "antd";
+import AntButton from "./AntButton";
 
 export default function RadioButtonGroup({rightContent, menuItems, onChange, selected}) {
     return (<Radio.Group onChange={onChange}
@@ -10,7 +10,8 @@ export default function RadioButtonGroup({rightContent, menuItems, onChange, sel
                 marginRight: "5px"
             }
     }>
-        <> {
+        <Space> 
+        {
             menuItems?.map(item => {
                 return (<Tooltip key={
                         item.key
@@ -18,19 +19,18 @@ export default function RadioButtonGroup({rightContent, menuItems, onChange, sel
                     title={
                         item?.toolTipText
                 }>
-                    <RadioButton selected={
-                            selected === item.key
-                        }
-                        onClick={
-                            () => onChange && onChange(item.key)
-                    }> {
-                        item.label
-                    } </RadioButton>
+                    <AntButton 
+                        selected={selected === item.key}
+                        onClick={() => onChange && onChange(item.key)} 
+                        text = {item.label}
+                        buttonVariant="text"
+                    />
+                     
                 </Tooltip>)
             })
         }
             {
             rightContent && rightContent
-        } </>
+        } </Space>
     </Radio.Group>)
 }
