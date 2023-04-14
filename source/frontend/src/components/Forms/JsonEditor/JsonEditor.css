@@ -135,6 +135,10 @@
     border: var(--dark-border) solid 1px;
 }
 
+.light .w-100 {
+    color: var(--light-font);
+}
+
 .light .custom-control-label::before {
     background-color: unset;
     border: var(--light-border) solid 1px;
