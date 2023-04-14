@@ -5,8 +5,7 @@ export function ProfileRealSettings({newProfileSettings, onChange}) {
     return (
         <>
             <Grid item
-                xs={12}
-                spacing={1}>
+                xs={12}>
                 <Typography.Title level={3}>Real Trading Settings</Typography.Title>
             </Grid>
             <Grid item

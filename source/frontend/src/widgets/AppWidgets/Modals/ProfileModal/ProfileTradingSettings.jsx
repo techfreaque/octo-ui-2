@@ -101,7 +101,7 @@ export function ProfileTradingTypeSettings({tradingType, onChange}) {
     return (
         <Grid item
             xs={12}
-            spacing={1}>
+            >
             <Typography.Title level={5}>Trading Type:</Typography.Title>
             <Radio.Group options={
                     [tradingTypes.realTrading, tradingTypes.simulatedTrading, tradingTypes.tradingDisabled,]

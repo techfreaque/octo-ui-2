@@ -7,7 +7,6 @@ import {
     Table
 } from 'antd';
 import {useEffect, useRef, useState} from 'react';
-import Highlighter from 'react-highlight-words';
 import {useExchangeInfoContext, useFetchExchangeInfo} from '../../../context/data/BotExchangeInfoProvider';
 import {useIsBotOnlineContext} from '../../../context/data/IsBotOnlineProvider';
 import {useBotDomainContext} from '../../../context/config/BotDomainProvider';
@@ -81,7 +80,9 @@ export function PairsTable({currencySettings}) {
         // }
 
     });
+    // eslint-disable-next-line
     const [searchText, setSearchText] = useState('');
+    // eslint-disable-next-line
     const [searchedColumn, setSearchedColumn] = useState('');
     const searchInput = useRef(null);
 

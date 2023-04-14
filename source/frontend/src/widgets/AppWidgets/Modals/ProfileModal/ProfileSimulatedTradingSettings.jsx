@@ -8,8 +8,7 @@ export function ProfileSimulatedSettings({newProfileSettings, onChange, setNewPr
     return (
         <>
             <Grid item
-                xs={12}
-                spacing={1}>
+                xs={12}>
                 <Typography.Title level={3}>Simulated Trading Settings</Typography.Title>
             </Grid>
             <Grid item

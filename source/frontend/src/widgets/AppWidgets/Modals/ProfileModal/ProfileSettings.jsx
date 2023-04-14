@@ -35,7 +35,7 @@ export function ProfileSettings({
             style={
                 {marginBottom: "15px"}
         }>
-            <Button key="duplicate" type="primary" warning
+            <Button key="duplicate" type="primary" 
                 icon={
                     (
                         <FontAwesomeIcon style={
@@ -48,7 +48,7 @@ export function ProfileSettings({
                 onClick={handleProfileDuplication}>
                 Duplicate Profile
             </Button>
-            <Button key="downloadProfile" type="primary" warning
+            <Button key="downloadProfile" type="primary" 
                 icon={
                     (
                         <FontAwesomeIcon style={
@@ -65,7 +65,7 @@ export function ProfileSettings({
             >
                 Download Profile
             </Button>
-            <Button key="deleteProfile" type="primary" warning
+            <Button key="deleteProfile" type="primary" 
                 icon={
                     (
                         <FontAwesomeIcon style={
