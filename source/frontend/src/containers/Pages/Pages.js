@@ -32,8 +32,8 @@ export default function Pages() {
               />
             );
           })
-          : <Route key="isLoading" path="*" element={<LoadingPage />} />}
-        <Route key="notFound" path="*" element={<NotFoundPage />} />
+          : <Route key="isLoading" path="*" element={<LoadingPage key="isLoading" />} />}
+        <Route key="notFound" path="*" element={<NotFoundPage key="notFound" />} />
       </Routes>
     </BrowserRouter>
   // eslint-disable-next-line react-hooks/exhaustive-deps
