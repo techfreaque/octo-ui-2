@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box';
 import {useState} from "react";
 import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
 import IconFromString from '../../../components/Icons/IconFromString';
@@ -64,7 +63,9 @@ export default function ButtonWithModal({
 
 function ModalContent({open, id, handleClose, content}) {
     const botColors = useBotColorsContext()
-    return (<Modal open={open}
+    return (
+    <Modal 
+        open={open}
         onClose={handleClose}
         width={1000}
         centered
@@ -79,11 +80,11 @@ function ModalContent({open, id, handleClose, content}) {
         aria-describedby={
             `modal-${id}-description`
     }>
-        <Box sx={
+        <div  style={
             {
                 ...style,
-                bgcolor: botColors?.background,
-                maxHeight: "500px", 
+                backgroundColor: botColors?.background,
+                maxHeight: "600px", 
                 padding: '20px 32px 0 32px'
             }
         }>
@@ -100,6 +101,6 @@ function ModalContent({open, id, handleClose, content}) {
             {
             content && <AppWidgets layout={content}/>
         }
-            {/* <Button variant="contained" onClick={handleClose}>Close</Button> */} </Box>
+        </div>
     </Modal>)
 }
