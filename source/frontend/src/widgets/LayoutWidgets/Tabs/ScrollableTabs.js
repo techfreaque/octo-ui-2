@@ -4,11 +4,9 @@ import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 import MuiTabs from "../../../components/Tabs/MuiTabs";
 import IconFromString from "../../../components/Icons/IconFromString";
 
-export default function ResizableTabs(props) {
-    const {tabs, rightContent, defaultTabId} = props;
-
+export default function ResizableTabs({tabs, rightContent, defaultTabId=0}) {
     const tabsData = []
-    tabs.forEach((tab, index) => {
+    tabs?.forEach((tab, index) => {
         tabsData[index] = tab.component === "Tab" ? {
             title: (<Tab key={index}
                 label={
@@ -37,11 +35,11 @@ export default function ResizableTabs(props) {
                         display: "-webkit-box"
                     }
                 }/>),
-            content: tab.content?.[0] && (<AppWidgets {...props}
+            content: tab.content?.[0] && (<AppWidgets
                 layout={
                     tab.content
                 }/>),
-            toolBarContent: tab.toolBarContent?.[0] && (<AppWidgets {...props}
+            toolBarContent: tab.toolBarContent?.[0] && (<AppWidgets
                 layout={
                     tab.toolBarContent
                 }/>),
@@ -50,7 +48,6 @@ export default function ResizableTabs(props) {
             title: (<AppWidgets key={
                     tab.title.replace(/ /g, "_")
                 }
-                {...props}
                 layout={
                     [tab]
                 }/>),
@@ -59,7 +56,7 @@ export default function ResizableTabs(props) {
     })
     return (<MuiTabs tabs={tabsData}
         rightContent={
-            rightContent?.[0] && (<AppWidgets {...props}
+            rightContent?.[0] && (<AppWidgets
                 layout={rightContent}/>)
         }
         defaultTabId={defaultTabId}/>)

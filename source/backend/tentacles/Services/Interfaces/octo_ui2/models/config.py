@@ -1,21 +1,20 @@
-import tentacles.Services.Interfaces.octo_ui2.octo_ui2_plugin as octo_ui2_plugin
 import octobot_services.interfaces.util as interfaces_util
 import octobot_tentacles_manager.api as tentacles_manager_api
 
 
-def save_ui_config(config_update):
+def save_ui_config(config_update, plugin_class, keep_existing=False):
     tentacles_manager_api.update_tentacle_config(
         interfaces_util.get_edited_tentacles_config(),
-        octo_ui2_plugin.OctoUi2Plugin,
+        plugin_class,
         config_update,
-        keep_existing=False,
+        keep_existing=keep_existing,
     )
 
     return {"success": "UI configuration updated"}
 
 
-def get_ui_config():
-    return octo_ui2_plugin.OctoUi2Plugin.get_ui_config()
+def get_ui_config(plugin_class):
+    return plugin_class.get_ui_config()
 
 def update_profile(profile_id, json_profile):
     config = interfaces_util.get_edited_config(dict_only=False)

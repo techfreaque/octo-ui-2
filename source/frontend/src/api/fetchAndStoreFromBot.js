@@ -1,18 +1,24 @@
 import $ from "jquery";
 import createNotification from "../components/Notifications/Notification";
 
-export async function sendAndInterpretBotUpdate(updated_data, update_url, success_callback, error_callback, method = "POST") {
+export async function sendAndInterpretBotUpdate(updated_data, update_url, success_callback, error_callback, method = "POST", withCredentials) {
   return $.ajax({
     url: update_url,
     type: method,
     dataType: "json",
     contentType: 'application/json',
     data: JSON.stringify(updated_data),
-    success: function (msg, status) {
+    crossDomain: true,
+    // headers: "",
+    // withCredentials: true,
+    // beforeSend: function(xhr){
+    //   xhr.withCredentials = true;
+    // },
+    success: function (msg, status, request) {
       if (typeof success_callback === "undefined") {
         genericRequestSuccessCallback(updated_data, update_url, msg, status)
       } else {
-        success_callback(updated_data, update_url, undefined, msg, status)
+        success_callback(updated_data, update_url, undefined, msg, status, request)
       }
       return updated_data
     },

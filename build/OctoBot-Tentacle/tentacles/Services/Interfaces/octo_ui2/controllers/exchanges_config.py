@@ -1,15 +1,17 @@
 import flask
+
+import octobot_commons.constants as commons_constants
+import octobot_services.constants as services_constants
+import octobot_services.interfaces.util as interfaces_util
+import octobot_trading.api as trading_api
+
+import tentacles.Services.Interfaces.web_interface.login as login
+import tentacles.Services.Interfaces.web_interface.models as models
+import tentacles.Services.Interfaces.octo_ui2.utils.basic_utils as basic_utils
+import tentacles.Services.Interfaces.octo_ui2.models.exchanges_config as exchanges_config
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
 )
-
-import octobot_commons.constants as commons_constants
-import tentacles.Services.Interfaces.web_interface.login as login
-import tentacles.Services.Interfaces.web_interface.models as models
-import octobot_trading.api as trading_api
-import octobot_services.interfaces.util as interfaces_util
-
-from tentacles.Services.Interfaces.octo_ui2.utils import basic_utils
 
 
 def register_exchanges_routes(plugin):
@@ -46,12 +48,13 @@ def register_exchanges_routes(plugin):
         display_config = interfaces_util.get_edited_config()
 
         config_exchanges = display_config[commons_constants.CONFIG_EXCHANGES]
-        enabled_exchanges = trading_api.get_enabled_exchanges_names(display_config)
+        # enabled_exchanges = trading_api.get_enabled_exchanges_names(display_config)
         # exchange_details = models.get_exchanges_details(config_exchanges)
 
         symbols_by_exchanges = {
             exchange: sorted(models.get_symbol_list([exchange]))
-            for exchange in (enabled_exchanges or config_exchanges)
+            for exchange in config_exchanges.keys()
+            if config_exchanges[exchange].get("enabled")
         }
 
         return basic_utils.get_response(
@@ -66,3 +69,39 @@ def register_exchanges_routes(plugin):
                 # "exchanges_details": exchange_details,
             },
         )
+
+    route = "/services-info"
+    if cross_origin := import_cross_origin_if_enabled():
+
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def services_info():
+            return _services_info()
+
+    else:
+
+        @plugin.blueprint.route(route)
+        @login.login_required_when_activated
+        def services_info():
+            return _services_info()
+
+    def _services_info():
+        display_config = interfaces_util.get_edited_config()
+
+        # service lists
+        service_list = models.get_services_list()
+        notifiers_list = models.get_notifiers_list()
+
+        data = {
+            "exchanges": exchanges_config.get_exchanges_config(display_config),
+            "config_notifications": display_config[
+                services_constants.CONFIG_CATEGORY_NOTIFICATION
+            ],
+            "config_services": display_config[
+                services_constants.CONFIG_CATEGORY_SERVICES
+            ],
+            # "services_list": service_list,
+            "notifiers_list": notifiers_list,
+        }
+        return basic_utils.get_response(data=data)

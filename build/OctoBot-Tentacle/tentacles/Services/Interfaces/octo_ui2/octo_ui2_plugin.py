@@ -26,6 +26,7 @@ from .controllers import (
     exchanges_config,
 )
 
+
 class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
     NAME = "octo_ui2"
     PLUGIN_ROOT_FOLDER = os.path.dirname(os.path.abspath(__file__))
@@ -71,16 +72,18 @@ class OctoUi2Plugin(plugins.AbstractWebInterfacePlugin):
 
     @classmethod
     def optimization_campaign_name(cls, tentacles_setup_config=None):
-        return cls._get_campaign_config(tentacles_setup_config)[commons_constants.CONFIG_NAME]
+        return cls._get_campaign_config(tentacles_setup_config)[
+            commons_constants.CONFIG_NAME
+        ]
 
     @classmethod
     def _get_campaign_config(cls, tentacles_setup_config=None):
-        config = tentacles_manager_api.get_tentacle_config(tentacles_setup_config or
-                                                           interfaces_util.get_edited_tentacles_config(), cls)
+        config = tentacles_manager_api.get_tentacle_config(
+            tentacles_setup_config or interfaces_util.get_edited_tentacles_config(), cls
+        )
         campaign_config = config.get(octobot_constants.OPTIMIZATION_CAMPAIGN_KEY, {})
         campaign_config[commons_constants.CONFIG_NAME] = campaign_config.get(
-            commons_constants.CONFIG_NAME,
-            commons_constants.DEFAULT_CAMPAIGN
+            commons_constants.CONFIG_NAME, commons_constants.DEFAULT_CAMPAIGN
         )
         return campaign_config
 

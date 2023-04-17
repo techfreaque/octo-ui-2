@@ -1,12 +1,7 @@
-import {SearchOutlined} from '@ant-design/icons';
 import {
-    Button,
-    Input,
-    Space,
     Switch,
-    Table
 } from 'antd';
-import {useEffect, useRef, useState} from 'react';
+import {useEffect,} from 'react';
 import {useExchangeInfoContext, useFetchExchangeInfo} from '../../../context/data/BotExchangeInfoProvider';
 import {useIsBotOnlineContext} from '../../../context/data/IsBotOnlineProvider';
 import {useBotDomainContext} from '../../../context/config/BotDomainProvider';
@@ -14,8 +9,12 @@ import {useUpdateVisibleExchangesContext} from '../../../context/config/VisibleE
 import {useUpdateVisiblePairsContext, useVisiblePairsContext} from '../../../context/config/VisiblePairProvider';
 import {useVisibleExchangesContext} from '../../../context/config/VisibleExchangesProvider';
 import "./pairsTable.css"
+import { useBotInfoContext } from '../../../context/data/BotInfoProvider';
+import AntTable from '../../../components/Tables/AntTable';
 
-export function PairsTable({currencySettings}) {
+export default function PairsTable() {
+    const botInfo = useBotInfoContext();
+    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
     const exchangeInfo = useExchangeInfoContext()
     const isOnline = useIsBotOnlineContext()
     const botDomain = useBotDomainContext()
@@ -39,22 +38,22 @@ export function PairsTable({currencySettings}) {
     currencySettings && Object.keys(currencySettings).forEach(currency => {
         pairsData.push(...currencySettings[currency]?.pairs)
     })
-    const data = []
+    const preSorteddata = []
     const enabledExchanges = exchangeInfo?.symbols_by_exchanges && Object.keys(exchangeInfo.symbols_by_exchanges)
     enabledExchanges?.forEach(exchange => {
         exchangeInfo.symbols_by_exchanges[exchange].forEach(symbol => {
             const isEnabled = pairsData.includes(symbol)
-            const isSelected = visibleExchanges ===exchange && visiblePairs === symbol.replace("/", "|")
-            data.push({
+            const isSelected = visibleExchanges === exchange && visiblePairs === symbol.replace("/", "|")
+            preSorteddata.push({
                 key: symbol,
                 exchange: exchange,
-                symbolLabel: (isEnabled && ! isSelected) ? (
+                symbolLabel: (isEnabled && !isSelected) ? (
                     // eslint-disable-next-line jsx-a11y/anchor-is-valid
                     <a
                         href="#"
                         onClick={
                             (() => handlePairSelection(symbol, exchange))
-                    }>
+                        }>
                         {symbol} </a>
                 ) : symbol,
                 symbol: symbol,
@@ -66,90 +65,12 @@ export function PairsTable({currencySettings}) {
             })
 
         })
-    })
+    });
     // pre sort by enabled and symbol
-    data?.sort((a, b) => {
+    preSorteddata?.sort((a, b) => {
         return(+ b?.enabled) - (+ a?.enabled) || a.symbol.localeCompare(b.symbol)
-        // if ((+b?.enabled) - (+a?.enabled))
-        // {
-        //     return (+b?.enabled) - (+a?.enabled)
-        // } else if ((typeof a.symbol === 'string' || a.symbol instanceof String) && (typeof b.symbol === 'string' || b.symbol instanceof String)) {
-        //     return a.symbol.localeCompare(b.symbol)
-        // } else {
-        //     return 0
-        // }
-
     });
-    // eslint-disable-next-line
-    const [searchText, setSearchText] = useState('');
-    // eslint-disable-next-line
-    const [searchedColumn, setSearchedColumn] = useState('');
-    const searchInput = useRef(null);
-
-    const getColumnSearchProps = (dataIndex) => ({
-        filterDropdown: (
-            {
-                setSelectedKeys,
-                selectedKeys,
-                confirm,
-                clearFilters,
-                close
-            }
-        ) => (
-            <FilterDrowdown selectedKeys={selectedKeys}
-                confirm={confirm}
-                clearFilters={clearFilters}
-                setSearchText={setSearchText}
-                setSearchedColumn={setSearchedColumn}
-                dataIndex={dataIndex}
-                searchInput={searchInput}
-                setSelectedKeys={setSelectedKeys}
-                close={close}/>
-        ),
-        filterIcon: (filtered) => (
-            <SearchOutlined style={
-                {
-                    color: filtered ? '#1890ff' : undefined
-                }
-            }/>
-        ),
-        onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-        onFilterDropdownOpenChange: (visible) => {
-            if (visible) {
-                setTimeout(() => searchInput.current?.select(), 100);
-            }
-        },
-        // render: (text) => searchedColumn === dataIndex ? (
-        //     <Highlighter highlightStyle={
-        //             {
-        //                 backgroundColor: '#ffc069',
-        //                 padding: 0
-        //             }
-        //         }
-        //         searchWords={
-        //             [searchText]
-        //         }
-        //         autoEscape
-        //         textToHighlight={
-        //             text ? text.toString() : ''
-        //         }/>
-        // ) : (text)
-    });
-    const [tableParams, setTableParams] = useState({
-        // filters: {
-        //     enabled: [true]
-        // }
-        // pagination: {
-        // current: 1,
-        // pageSize: 10,
-        // },
-    });
-    const handleTableChange = (pagination, filters, sorter) => {
-        setTableParams({ // pagination,
-            filters,
-            ...sorter
-        });
-    };
+  
     const columns = [
         {
             title: 'Symbol',
@@ -160,7 +81,7 @@ export function PairsTable({currencySettings}) {
             sortDirections: [
                 'descend', 'ascend'
             ],
-            ...getColumnSearchProps('symbol')
+            searchColumnKey: "symbol",
         }, {
             title: 'Exchange',
             dataIndex: 'exchange',
@@ -192,8 +113,9 @@ export function PairsTable({currencySettings}) {
             sortDirections: ['descend', 'ascend']
         },
     ];
-    const filteredData = data.filter((item) => {
-        if (tableParams?.filters?.symbol && tableParams?.filters?.symbol?.every(symbol => {
+    function filterData(tableParams, data) {
+        return data.filter((item) => {
+            if (tableParams?.filters?.symbol && tableParams?.filters?.symbol?.every(symbol => {
             return !item.symbol.replace("/", "").replace(":", "").toLowerCase().includes(symbol.toLowerCase())
         })) {
             return false;
@@ -206,126 +128,8 @@ export function PairsTable({currencySettings}) {
         }
         return true;
     })
+}
     return (
-        <div className='pairs-table' style={{
-            //     maxHeight: "calc(100vh - 80px)",
-        overflowX: "auto",
-        overflowY: "auto",
-            maxWidth: "650px",
-            width: "100vw",
-                maxHeight: "calc(100vh - 140px)",
-        }}>
-
-            <Table columns={columns}
-                scroll={{ x: false, y: false }}
-                
-                style={{
-// overflow: "hidden"
-            // maxWidth: "650px",
-                // maxHeight: "calc(100vh - 80px)",
-
-                }}
-            dataSource={filteredData}
-            sticky={true}
-                onChange={handleTableChange}
-                pagination={{ position: ["bottomLeft"] }}
-            filters={
-                tableParams?.filters
-            }/>
-        </div>
+        <AntTable onFilterChange={filterData} columns={columns} data={preSorteddata} />
     );
 };
-
-
-function FilterDrowdown({
-    selectedKeys,
-    confirm,
-    clearFilters,
-    setSearchText,
-    setSearchedColumn,
-    dataIndex,
-    searchInput,
-    setSelectedKeys,
-    close
-}) {
-    const handleSearch = (selectedKeys, confirm, dataIndex) => {
-        confirm();
-        setSearchText(selectedKeys[0]);
-        setSearchedColumn(dataIndex);
-    };
-    const handleReset = (clearFilters) => {
-        clearFilters();
-        setSearchText('');
-    };
-    return (
-        <div style={
-                {padding: 8}
-            }
-            onKeyDown={
-                (e) => e.stopPropagation()
-        }>
-            <Input ref={searchInput}
-                placeholder={
-                    `Search ${dataIndex}`
-                }
-                value={
-                    selectedKeys[0]
-                }
-                onChange={
-                    (e) => setSelectedKeys(e.target.value ? [e.target.value] : [])
-                }
-                onPressEnter={
-                    () => handleSearch(selectedKeys, confirm, dataIndex)
-                }
-                style={
-                    {
-                        marginBottom: 8,
-                        display: 'block'
-                    }
-                }/>
-            <Space>
-                <Button type="primary"
-                    onClick={
-                        () => handleSearch(selectedKeys, confirm, dataIndex)
-                    }
-                    icon={
-                        (
-                            <SearchOutlined/>)
-                    }
-                    size="small"
-                    style={
-                        {width: 90}
-                }>
-                    Search
-                </Button>
-                <Button onClick={
-                        () => clearFilters && handleReset(clearFilters)
-                    }
-                    size="small"
-                    style={
-                        {width: 90}
-                }>
-                    Reset
-                </Button>
-                <Button type="link" size="small"
-                    onClick={
-                        () => {
-                            confirm({closeDropdown: false});
-                            setSearchText(selectedKeys[0]);
-                            setSearchedColumn(dataIndex);
-                        }
-                }>
-                    Filter
-                </Button>
-                <Button type="link" size="small"
-                    onClick={
-                        () => {
-                            close();
-                        }
-                }>
-                    close
-                </Button>
-            </Space>
-        </div>
-    )
-}

@@ -65,21 +65,17 @@ function ModalContent({open, id, handleClose, content}) {
     const botColors = useBotColorsContext()
     return (
     <Modal 
+    
         open={open}
-        onClose={handleClose}
+        onCancel={handleClose}
         width={1000}
         centered
-        footer={null}
-        closable={false}
-        aria-labelledby={
-            `modal-${id}-title`
-        }
+            footer={null}
+            closable={true}
         style={
             {zIndex: "1000"}
         }
-        aria-describedby={
-            `modal-${id}-description`
-    }>
+        >
         <div  style={
             {
                 ...style,
@@ -88,7 +84,7 @@ function ModalContent({open, id, handleClose, content}) {
                 padding: '20px 32px 0 32px'
             }
         }>
-            <AntButton onClick={handleClose}
+            {/* <AntButton onClick={handleClose}
                 buttonVariant="text"
                 style={
                     {
@@ -97,7 +93,7 @@ function ModalContent({open, id, handleClose, content}) {
                     }
                 }
                 antIcon={"CloseOutlined"}
-            ></AntButton>
+            ></AntButton> */}
             {
             content && <AppWidgets layout={content}/>
         }

@@ -34,7 +34,6 @@ export const useFetchBotInfo = () => {
   const setBotInfo = useUpdateBotInfoContext();
   const botDomain = useBotDomainContext();
   const visibleExchanges = useVisibleExchangesContext();
-
   const logic = useCallback((successNotification = false, setIsFinished = undefined) => {
     setIsFinished && setIsFinished(false)
     fetchBotInfo(botDomain, setBotInfo, visibleExchanges, successNotification, setIsFinished);

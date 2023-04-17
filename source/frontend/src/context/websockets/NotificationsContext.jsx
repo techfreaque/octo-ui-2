@@ -35,6 +35,8 @@ export const NotificationsContextProvider = ({ children }) => {
     
     const socketUrl = botDomain.replace("http://", "ws://").replace("https://", "wss://") + "/notifications"
     const setIsBotOnline = useUpdateIsBotOnlineContext()
+    // const fetchBotInfo = useFetchBotInfo()
+
     function onReconnect() {
         // console.log("Bot connected")
         setIsBotOnline(prevState => {
@@ -43,6 +45,8 @@ export const NotificationsContextProvider = ({ children }) => {
             }
             return true
         })
+        // fetchBotInfo(false, () => {
+        // })
     }
     function onNewMessage(newMessage) {
         newMessage?.notifications?.forEach(notification => {

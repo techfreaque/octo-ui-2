@@ -1,7 +1,4 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import {useVisiblePairsContext} from "../../../context/config/VisiblePairProvider";
-import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
-import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
 import {useMemo, useState} from "react";
 import {
     Dropdown,
@@ -10,12 +7,11 @@ import {
 import {Trans} from "react-i18next";
 import {useVisibleExchangesContext} from "../../../context/config/VisibleExchangesProvider";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { PairsTable } from "./PairsTable";
 import AntButton from "../../../components/Buttons/AntButton";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 // import {getCurrencyLogos} from "../../../api/data";
 
-export default function PairsSelector() { // const [currencyLogos, setCurrencyLogos] = useState()
-    const botDomain = useBotDomainContext();
+export default function PairsSelector({content}) { // const [currencyLogos, setCurrencyLogos] = useState()
     const visiblePairs = useVisiblePairsContext();
     const visibleExchanges = useVisibleExchangesContext();
     const [menuIsOpen, setMenuIsOpen] = useState(false);
@@ -28,7 +24,9 @@ export default function PairsSelector() { // const [currencyLogos, setCurrencyLo
             {margin: "auto"}
         }>
             <PairConfiguratorDropdown setMenuIsOpen={setMenuIsOpen}
-                menuIsOpen={menuIsOpen}>
+                menuIsOpen={menuIsOpen}
+                content={content}
+            >
             <Tooltip key={visiblePairs}
                 title={
                     (<Trans i18nKey="pairExchangeSettings.currentPairTooltip"/>)
@@ -53,18 +51,18 @@ export default function PairsSelector() { // const [currencyLogos, setCurrencyLo
                 </PairConfiguratorDropdown>
         </div>)
 
-    }, [botDomain, menuIsOpen, visibleExchanges, visiblePairs])
+    }, [content, menuIsOpen, visibleExchanges, visiblePairs])
 }
 
 
-function PairConfiguratorDropdown({setMenuIsOpen, menuIsOpen, children}) {
+function PairConfiguratorDropdown({content, setMenuIsOpen, menuIsOpen, children}) {
 
     return (<Dropdown onOpenChange={setMenuIsOpen}
         open={menuIsOpen}
         destroyPopupOnHide={true}
         dropdownRender={
             () => {
-                return (<PairConfigurator/>)
+                return (<PairConfigurator content={content} />)
             }
         }
         selectable={false}
@@ -77,9 +75,7 @@ function PairConfiguratorDropdown({setMenuIsOpen, menuIsOpen, children}) {
         >{children}</Dropdown>)
 }
 
-function PairConfigurator() {
-    const botInfo = useBotInfoContext();
-    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
+function PairConfigurator({content}) {
     const botColors = useBotColorsContext();
     return (<div style={{
         backgroundColor: botColors.background,
@@ -88,59 +84,9 @@ function PairConfigurator() {
         // overflowY: "auto",
         border: `1px solid ${botColors.border}`,
     }}>
-        {/* <ExchangeSelector /> */}
-        <PairsTable currencySettings={currencySettings}/>
-        {/* <List grid={
-                {
-                    gutter: 16,
-                    column: 1
-                    // xs: 1,
-                    // sm: 2,
-                    // md: 4,
-                    // lg: 4,
-                    // xl: 6,
-                    // xxl: 3,
-                }
-            }
-            dataSource={pairsData}
-            renderItem={
-                (item) => {
-                    const availableOptions = [{
-                            label: "ree",
-                            value: "ree"
-                        }]
-                    const selectedOptions = item?.pairs?.map(pair => ({label: pair, value: pair}))
-                    return (<List.Item>
-                        <Card title={
-                            item.currency
-                        }>
-                            <Space direction="vertical">
-                                <Switch checkedChildren={
-                                        `${
-                                            item.currency
-                                        } enabled`
-                                    }
-                                    unCheckedChildren={
-                                        `${
-                                            item.currency
-                                        } disabled`
-                                    }
-                                    // checked={item.enabled}
-                                />
-                                <Select mode="tags"
-                                    style={
-                                        {width: '100%'}
-                                    }
-                                    placeholder="Pairs"
-                                    // onChange={handleChange}
-                                    options={availableOptions}
-                                    value={selectedOptions}/></Space>
-                        </Card>
-                    </List.Item>)
-                }
-            }/>
-        <Button href={
-            botDomain + backendRoutes.manageSymbol
-        }>Manage Currency Settings</Button> */}
+       { content && (<AppWidgets layout={content}/>)}
+        {/* <ExchangeSelector />
+        <PairsTable currencySettings={currencySettings}/> */}
+
     </div>)
 }

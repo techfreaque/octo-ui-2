@@ -1,26 +1,198 @@
-import TabsWithSelector from "../../../components/Tabs/TabsWithSelector";
-import { Button } from "@mui/material";
-import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
-import { backendRoutes } from "../../../constants/backendConstants";
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import { useMemo } from "react";
-import { useUpdateVisibleExchangesContext, useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
+import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
+import {useEffect} from "react";
+import {useVisibleExchangesContext} from "../../../context/config/VisibleExchangesProvider";
+import {useFetchServicesInfo, useServicesInfoContext} from "../../../context/data/BotExchangeInfoProvider";
+import AntTable from "../../../components/Tables/AntTable";
+import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
+import {Switch} from "antd";
+import {CheckCircleOutlined, ExclamationCircleOutlined, QuestionCircleOutlined, WarningOutlined} from "@ant-design/icons";
+import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
 
 export default function ExchangeSelector() {
-  const botInfo = useBotInfoContext();
-  const botDomain = useBotDomainContext();
-  const visibleExchanges = useVisibleExchangesContext();
-  const setVisibleExchanges = useUpdateVisibleExchangesContext();
-  return useMemo(() => {
-      return botInfo?.exchange_names && visibleExchanges && (
-        <TabsWithSelector
-          currentItem={visibleExchanges}
-          items={botInfo.exchange_names}
-          handleChange={(event, newExchange) => setVisibleExchanges(newExchange)}
-        >
-          
-          <Button href={botDomain + backendRoutes.manageSymbol}>Manage exchange settings</Button>
-        </TabsWithSelector>
-      );
-  }, [botDomain, botInfo, setVisibleExchanges, visibleExchanges])
+    const botDomain = useBotDomainContext();
+    const visibleExchanges = useVisibleExchangesContext();
+    const isOnline = useIsBotOnlineContext()
+    const servicesInfo = useServicesInfoContext()
+    const fetchServicesInfo = useFetchServicesInfo()
+    useEffect(() => {
+        isOnline && fetchServicesInfo()
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isOnline, botDomain])
+
+    const exchangesData = []
+    const enabledExchanges = []
+    const configExchanges = servicesInfo?.exchanges ? Object.keys(servicesInfo.exchanges) : []
+    function addExchangeToTable({
+        exchangeName,
+        exchangeType,
+        enabled = false,
+        sandboxed = false,
+        apiKey = 'your-api-key-here',
+        apiSecret = 'your-api-secret-here',
+        apiPassword = 'your-api-password-here',
+        configurable,
+        hasWebsockets,
+        supportedExchangeTypes,
+        isTested,
+        isTestedSimulated,
+        authSuccess
+
+    }) {
+        enabled && enabledExchanges.push(exchangeName)
+        exchangesData.push({
+            exchange: exchangeName,
+            sandboxed: sandboxed,
+            apiKey: apiKey,
+            enabledLabel: (<Switch checked={enabled}></Switch>),
+            enabled,
+            apiSecret,
+            apiPassword,
+            exchangeType,
+            exchangeTypeLabel: supportedExchangeTypes?.length > 1 ? (<RadioButtonGroup menuItems={
+                    supportedExchangeTypes?.map((exchangeType) => ({label: exchangeType, key: exchangeType}))
+                }
+                // onChange={handleChange}
+                selected={exchangeType}/>) : exchangeType,
+            isTestedExchange: isTested || (isTestedSimulated && "simulation"),
+            isTestedExchangeLabel: isTested ? (<CheckCircleOutlined/>) : (isTestedSimulated ? (<ExclamationCircleOutlined/>) : (<QuestionCircleOutlined/>)),
+            selected: visibleExchanges === exchangeName,
+            configurable,
+            hasWebsockets,
+            authSuccess,
+            hasWebsocketsLabel: hasWebsockets ? (<CheckCircleOutlined/>) : (<WarningOutlined/>)
+
+        })
+    }
+    configExchanges.forEach(exchange => {
+        addExchangeToTable({
+            exchangeName: exchange,
+            enabled: servicesInfo.exchanges[exchange].enabled,
+            sandboxed: servicesInfo.exchanges[exchange].sandboxed,
+            apiKey: servicesInfo.exchanges[exchange]["api-key"],
+            apiSecret: servicesInfo.exchanges[exchange]["api-secret"],
+            apiPassword: servicesInfo.exchanges[exchange]["api-password"],
+            isTested: servicesInfo.exchanges[exchange].is_tested,
+            isTestedSimulated: servicesInfo.exchanges[exchange].is_tested_simulated,
+            exchangeType: servicesInfo.exchanges[exchange]["exchange-type"] || servicesInfo.exchanges[exchange].default_exchange_type,
+            configurable: servicesInfo.exchanges[exchange].configurable,
+            hasWebsockets: servicesInfo.exchanges[exchange].has_websockets,
+            supportedExchangeTypes: servicesInfo.exchanges[exchange].supported_exchange_types,
+            authSuccess: servicesInfo.exchanges[exchange].auth_success
+        })
+    })
+
+    // put enabled ones on top, then config existing ones and others at the bottom
+    exchangesData.sort((a, b) => ((+ b?.enabled) - (+ a?.enabled) || a?.exchange?.localeCompare(b?.exchange)));
+
+    const columns = [
+        {
+            title: 'Exchange',
+            dataIndex: 'exchange',
+            width: '40%',
+            key: 'exchange',
+            // ...getColumnSearchProps('exchange'),
+            sorter: (a, b) => a.exchange.localeCompare(b.exchange),
+            sortDirections: [
+                'descend', 'ascend'
+            ],
+            // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
+        },
+        {
+            title: 'Type',
+            dataIndex: 'exchangeTypeLabel',
+            width: '15%',
+            key: 'exchangeType',
+            // ...getColumnSearchProps('exchange'),
+            sorter: (a, b) => a?.exchangeType?.localeCompare(b.exchangeType),
+            sortDirections: [
+                'descend', 'ascend'
+            ],
+            // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
+        },
+        {
+            title: 'Enabled',
+            dataIndex: 'enabledLabel',
+            key: 'enabled',
+            width: '15%',
+            filters: [
+                {
+                    text: "Disabled",
+                    value: false
+                }, {
+                    text: "Enabled",
+                    value: true
+                },
+
+            ],
+            // ... getColumnSearchProps('enabledLabel'),
+            sorter: (a, b) => (a.enabled && 1) - (b.enabled && 1),
+            sortDirections: ['descend', 'ascend']
+        },
+        {
+            title: 'Has Websockets',
+            dataIndex: 'hasWebsocketsLabel',
+            key: "hasWebsockets",
+            width: '15%',
+            filters: [
+                {
+                    text: "Rest API only",
+                    value: false
+                }, {
+                    text: "Has Websockets",
+                    value: true
+                },
+            ],
+            // ... getColumnSearchProps('enabledLabel'),
+            sorter: (a, b) => (a.hasWebsockets ? 1 : 0) - (b.hasWebsockets ? 1 : 0),
+            sortDirections: ['descend', 'ascend']
+            // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
+        }, {
+            title: 'Tested',
+            dataIndex: 'isTestedExchangeLabel',
+            key: 'isTestedExchange',
+            width: '15%',
+            filters: [
+                {
+                    text: "Untested",
+                    value: false
+                }, {
+                    text: "Fully Tested",
+                    value: true
+                }, {
+                    text: "Tested in Simulation",
+                    value: "simulation"
+                },
+            ],
+            // ... getColumnSearchProps('enabledLabel'),
+            // TODO sorter (also sort by "simulated")
+            sorter: (a, b) => (
+                (a.isTestedExchange === true ? 1 : 0) - (b.isTestedExchange === true ? 1 : 0) || (a.isTestedExchange === "simulated" ? 1 : 0) - (b.isTestedExchange === "simulated" ? 1 : 0)
+            ),
+            sortDirections: ['descend', 'ascend']
+        },
+    ];
+    function filterData(tableParams, data) {
+        return data.filter((item) => {
+            if (tableParams?.filters?.exchange && tableParams?.filters?.exchange?.every(exchange => (item.exchange !== exchange))) {
+                return false;
+            }
+            if (tableParams?.filters?.enabled && ! tableParams?.filters?.enabled?.includes(item.enabled)) {
+                return false;
+            }
+            if (tableParams?.filters?.isTestedSimulationExchange && ! tableParams?.filters?.isTestedSimulationExchange?.includes(item.isTestedSimulationExchange)) {
+                return false;
+            }
+            if (tableParams?.filters?.isTestedExchange && ! tableParams?.filters?.isTestedExchange?.includes(item.isTestedExchange)) {
+                return false;
+            }
+            if (tableParams?.filters?.hasWebsockets && ! tableParams?.filters?.hasWebsockets?.includes(item.hasWebsockets)) {
+                return false;
+            }
+            return true;
+        })
+    }
+    return (<AntTable onFilterChange={filterData}
+        columns={columns}
+        maxWidth="950px"
+        data={exchangesData}/>);
 }

@@ -1,4 +1,5 @@
 import octobot_commons.enums as commons_enums
+import octobot_trading.modes.script_keywords.context_management as context_management
 import tentacles.Meta.Keywords.scripting_library.UI.plots.displayed_elements as displayed_elements
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.future_base_data_provider as future_base_data_provider
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.default_base_data_provider.spot_base_data_provider as spot_base_data_provider
@@ -6,7 +7,7 @@ import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.ana
 
 
 async def get_base_data(
-    ctx,
+    ctx: context_management.Context,
     exchange_id: str,
     is_backtesting: bool,
     run_database,
@@ -18,6 +19,12 @@ async def get_base_data(
     # load and generate unified base data
 
     metadata = await _get_metadata(run_database)
+
+    if ctx.time_frame not in metadata.get(
+        commons_enums.BacktestingMetadata.TIME_FRAMES.value, []
+    ):
+        # timeframe not available, use first available
+        ctx.time_frame = metadata[commons_enums.BacktestingMetadata.TIME_FRAMES.value][0]
     if metadata["trading_type"] == "spot":
         run_data = spot_base_data_provider.SpotRunAnalysisBaseDataGenerator(
             ctx=ctx,

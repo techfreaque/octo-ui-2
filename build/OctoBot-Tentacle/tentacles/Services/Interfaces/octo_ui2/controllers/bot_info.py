@@ -62,7 +62,7 @@ def register_bot_info_routes(plugin):
         exchange_id = None
         available_api_actions = None
         symbols = traded_time_frames = activated_evaluators = []
-        timeframes_dict = {}
+        available_time_frames = []
         strategy_names = []
         trigger_time_frames = None
         real_time_strategies_active: bool = False

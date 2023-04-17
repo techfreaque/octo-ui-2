@@ -13,9 +13,20 @@ export async function fetchUIConfig(botDomain, saveUIConfig) {
         }
         saveUIConfig(msg)
     }
-    sendAndInterpretBotUpdate({}, botDomain + backendRoutes.UIConfig, success, undefined, "get")
+    sendAndInterpretBotUpdate({}, botDomain + backendRoutes.uIConfig, success, undefined, "get")
 }
 
 export async function saveUIConfig(botDomain, newConfig, callbackSucces, callbackFail) {
-    sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.UIConfig, callbackSucces ? callbackSucces : () => {}, callbackFail)
+    sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.uIConfig, callbackSucces ? callbackSucces : () => {}, callbackFail)
+}
+
+export async function fetchProConfig(botDomain, saveProConfig) {
+    const success = (updated_data, update_url, result, msg, status) => {
+        saveProConfig(msg)
+    }
+    sendAndInterpretBotUpdate({}, botDomain + backendRoutes.proConfig, success, undefined, "get")
+}
+
+export async function saveProConfig(botDomain, newConfig, callbackSucces, callbackFail) {
+    sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.proConfig, callbackSucces ? callbackSucces : () => {}, callbackFail)
 }

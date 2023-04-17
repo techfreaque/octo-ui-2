@@ -4,6 +4,7 @@ import octobot_commons.constants as commons_constants
 
 from tentacles.Services.Interfaces.octo_ui2.models import config
 from tentacles.Services.Interfaces.octo_ui2.utils import basic_utils
+from tentacles.Services.Interfaces.octo_ui2 import octo_ui2_plugin
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
@@ -37,13 +38,17 @@ def register_bot_config_routes(plugin):
             try:
                 request_data = flask.request.get_json()
                 return util.get_rest_reply(
-                    flask.jsonify(config.save_ui_config(request_data))
+                    flask.jsonify(
+                        config.save_ui_config(
+                            request_data, octo_ui2_plugin.OctoUi2Plugin
+                        )
+                    )
                 )
             except Exception as e:
                 basic_utils.get_octo_ui_2_logger().exception(e)
                 return util.get_rest_reply(str(e), 500)
         else:
-            return config.get_ui_config()
+            return config.get_ui_config(octo_ui2_plugin.OctoUi2Plugin)
 
     route = "/bot-config"
     if cross_origin := import_cross_origin_if_enabled():

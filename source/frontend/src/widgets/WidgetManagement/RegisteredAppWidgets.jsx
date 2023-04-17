@@ -13,7 +13,9 @@ import ColorModeSwitch from "../AppWidgets/Buttons/ColorModeSwitcher";
 import AppStore from "../AppWidgets/AppStore/AppStore";
 import CurrentPortfolioTable from "../AppWidgets/Tables/CurrentPortfolio";
 import TradingConfig from "../AppWidgets/Configuration/TradingConfig";
+import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
 import PairsSelector from "../AppWidgets/PairsSelector/PairsSelector";
+import PairsTable from "../AppWidgets/PairsSelector/PairsTable";
 import {BacktestingRunDataTable} from "../AppWidgets/Tables/RunDataTableW2UI";
 import UIConfig from "../AppWidgets/Configuration/UIConfig";
 import StartBacktestingButton from "../AppWidgets/Buttons/StartBacktestingButton";
@@ -49,6 +51,8 @@ import ChartTablePieCombo, {ChartTypeSelector} from "../AppWidgets/Charts/ChartT
 import LanguageSwitch from "../AppWidgets/Buttons/LanguageSwitch";
 import ResetConfigs from "../AppWidgets/ResetConfigs/ResetConfigs";
 import NotificationCenter from "../AppWidgets/NotificationCenter/NotificationCenter";
+import BacktestingProgress from "../AppWidgets/Progress/BacktestingProgress";
+import OptimizerProgress from "../AppWidgets/Progress/OptimizerProgress";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -107,4 +111,8 @@ export const registeredComponents = {
     ChartTypeSelector,
     LanguageSwitch,
     ResetConfigs,
+    PairsTable,
+    ExchangeSelector,
+    BacktestingProgress,
+    OptimizerProgress
 };

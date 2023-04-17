@@ -1,36 +1,41 @@
 import {useEffect, useMemo} from "react";
 import {OPTIMIZER_INPUTS_KEY, _INPUT_SEPARATOR} from "../../../../constants/backendConstants";
-import {useUiConfigContext} from "../../../../context/config/UiConfigProvider";
 import $ from "jquery";
 import OptimizerSettingTemplate from "./OptimizerInputTemplate";
 // eslint-disable-next-line no-unused-vars
 import select2 from "select2/dist/js/select2.js" // required
-import {useUpdateOptimizerEditorCounterContext} from "../../../../context/config/OptimizerEditorProvider";
-import {useGetAndSaveOptimizerForm} from "../../../../context/actions/BotOptimizerProvider";
+import {useFetchProConfig, useGetAndSaveOptimizerForm, useOptimizerEditorContext, useUpdateOptimizerEditorCounterContext} from "../../../../context/config/OptimizerEditorProvider";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
-import AntButton , { buttonTypes } from "../../../../components/Buttons/AntButton";
 
 export default function OptimizerConfigForm() {
-    const uiConfig = useUiConfigContext()
-    const optimizerConfig = uiConfig[OPTIMIZER_INPUTS_KEY] || {}
+    const optimizerEditor = useOptimizerEditorContext()
+    const optimizerConfig = optimizerEditor[OPTIMIZER_INPUTS_KEY] || {}
     const currentTentaclesConfig = useTentaclesConfigContext()
     const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
-
     const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
+    const fetchProConfig = useFetchProConfig()
+
     useEffect(() => {
-        currentTentaclesTradingConfig && uiConfig && _buildOptimizerSettingsForm(currentTentaclesTradingConfig, optimizerConfig, updateOptimizerEditorCounter);
+        fetchProConfig()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    useEffect(() => {
+        currentTentaclesTradingConfig && optimizerConfig && _buildOptimizerSettingsForm(currentTentaclesTradingConfig, optimizerConfig, updateOptimizerEditorCounter);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentTentaclesTradingConfig, optimizerConfig, uiConfig]);
+    }, [currentTentaclesTradingConfig]);
     return useMemo(() => {
-        return (<div>
-            <div>
+        return (<div
+            onBlur={saveOptimizerForm}
+        >
+            {/* <div>
                 <AntButton buttonType={
                         buttonTypes.primary
                     }
                     onClick={saveOptimizerForm}
                     text="Save Optimizer Form"/>
-            </div>
+            </div> */}
             <div id="strategy-optimizer-inputs">
                 <OptimizerSettingTemplate/>
             </div>
@@ -44,7 +49,7 @@ export default function OptimizerConfigForm() {
                     <OptimizerRunFilterTemplate />
                 </div> */} </div>)
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentTentaclesConfig, optimizerConfig, uiConfig])
+    }, [currentTentaclesConfig])
 }
 
 async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, updateOptimizerEditorCounter) {
@@ -76,7 +81,6 @@ async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, upda
     })
     // $("#optimizer-filters-root").empty();
     // _buildOptimizerFilters(optimizerConfig.filters_settings, false);
-    _updateCounter(updateOptimizerEditorCounter);
     updateInputSettingsDisplay(settingsRoot);
     // settingsRoot.find("input, select").each((i, jsInputSetting) => {
     //     $(jsInputSetting).on("change", () => _updateCounter(updateOptimizerEditorCounter));
@@ -350,31 +354,6 @@ function updateInputSettingsDisplay(settingsRoot) {
         closeOnSelect: false,
         placeholder: "Select values to use"
     });
-}
-
-function _updateCounter(updateOptimizerEditorCounter) {
-    const userInputs = getOptimizerSettingsValues().user_inputs;
-    let runsCount = 0;
-    Object.values(userInputs).forEach(userInput => {
-        if (userInput.enabled) {
-            if (runsCount === 0) {
-                runsCount = 1;
-            }
-            const value = userInput.value;
-            if (value instanceof Array) {
-                runsCount *= value.length;
-            } else if (typeof value.step !== "undefined") {
-                if (value.step > 0) {
-                    const window = value.max - value.min;
-                    runsCount *= Math.floor(window / value.step + 1);
-                }
-            } else {
-                console.log("Unhandled user input type to compute optimizer runs count: ", value);
-            }
-        }
-    });
-    updateOptimizerEditorCounter(runsCount);
-    // $("#backtesting-computations-count").text(runsCount * new Number($("#backtesting-candles-counts").text()));
 }
 
 function _optimizeUserInputIdentifier(tentacleValue, inputName) {

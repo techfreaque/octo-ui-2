@@ -1,7 +1,7 @@
 import React, {createElement} from "react";
 import {useMemo} from "react";
 import {registeredComponents} from "./RegisteredAppWidgets";
-import { getIsProduction } from "../../context/config/BotDomainProvider";
+import { isProduction } from "../../constants/frontendConstants";
 
 
 export default function AppWidgets(props) {
@@ -16,7 +16,7 @@ export default function AppWidgets(props) {
                         }`
                     }></span>);
               }
-              !getIsProduction() && console.log("widget is loading: " + element.component, element)
+              !isProduction && console.log("widget is loading: " + element.component, element)
                 try {
                     return (<ErrorBoundary key= {`${index}-${
                       element.component
@@ -36,7 +36,7 @@ export default function AppWidgets(props) {
                 }
             });
         } else {
-          !getIsProduction() &&  console.log("widget doesnt have a layout:", props);
+          !isProduction &&  console.log("widget doesnt have a layout:", props);
         }
     }, [props])
 }

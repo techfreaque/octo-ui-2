@@ -16,7 +16,7 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
 
 
 def register_appstore_routes(plugin):
-    route = "/app-store"
+    route = "/tentacles-info"
     if cross_origin := import_cross_origin_if_enabled():
         if dev_mode_is_on:
 
@@ -43,11 +43,8 @@ def register_appstore_routes(plugin):
     def _app_store():
         return {
             "success": True,
-            "message": "Successfully fetched package manager data",
-            "data": {
-                "tentacles": app_store_models.get_installed_tentacles_modules_dict(),
-                "available_apps": app_store_models.fetch_available_apps_from_repos(),
-            },
+            "message": "Successfully fetched installed tentacles data",
+            "data": app_store_models.get_installed_tentacles_modules_dict(),
         }
 
     tentacles_package_route = "/tentacle_packages"
@@ -155,7 +152,6 @@ def _handle_package_operation(update_type):
         if not success:
             return util.get_rest_reply('{"operation": "ko"}', 500)
     elif update_type in ["install_packages", "update_packages", "reset_packages"]:
-
         packages_operation_result = {}
         if update_type == "install_packages":
             packages_operation_result = models.install_packages()
