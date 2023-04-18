@@ -4,6 +4,7 @@ import IconFromString from '../../../components/Icons/IconFromString';
 import {Tooltip, Modal} from 'antd';
 import AntButton from '../../../components/Buttons/AntButton';
 
+
 export default function ButtonWithModal({
     title,
     content,
@@ -14,7 +15,6 @@ export default function ButtonWithModal({
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
-    const id = title?.replace(" ", "-")
     return (<div style={
         {
             margin: "auto",
@@ -36,13 +36,12 @@ export default function ButtonWithModal({
         </Tooltip>
         {
         open && <ModalContent open={open}
-            id={id}
             handleClose={handleClose}
             content={content}/>
     } </div>);
 }
 
-function ModalContent({open, id, handleClose, content}) {
+function ModalContent({open, handleClose, content}) {
     return (
         <Modal 
             open={open}
@@ -58,6 +57,7 @@ function ModalContent({open, id, handleClose, content}) {
             <div  style={
                 {
                     padding: '20px 32px 0 32px'
+
                 }
             }>
                 {
