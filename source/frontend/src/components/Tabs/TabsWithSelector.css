@@ -5,3 +5,6 @@
 .MuiTabs-flexContainer {
   height: 100%;
 }
+.MuiButtonBase-root.MuiTabScrollButton-root.MuiTabScrollButton-horizontal.Mui-disabled.MuiTabs-scrollButtons {
+  display: none;
+}

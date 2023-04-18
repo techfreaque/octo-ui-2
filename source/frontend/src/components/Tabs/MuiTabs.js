@@ -26,7 +26,7 @@ export default function MuiTabs({ tabs, rightContent, defaultTabId }) {
                             value={currentTabId}
                             onChange={handleTabChange}
                             variant="scrollable"
-                            scrollButtons
+                            // scrollButtons
                             allowScrollButtonsMobile
                             aria-label="Tabs"
                             className="mx-auto">
