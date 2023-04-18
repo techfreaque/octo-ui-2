@@ -53,6 +53,7 @@ import ResetConfigs from "../AppWidgets/ResetConfigs/ResetConfigs";
 import NotificationCenter from "../AppWidgets/NotificationCenter/NotificationCenter";
 import BacktestingProgress from "../AppWidgets/Progress/BacktestingProgress";
 import OptimizerProgress from "../AppWidgets/Progress/OptimizerProgress";
+import CurrentPanelPosition from "../AppWidgets/Buttons/CurrentPanelPosition";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -114,5 +115,6 @@ export const registeredComponents = {
     PairsTable,
     ExchangeSelector,
     BacktestingProgress,
-    OptimizerProgress
+    OptimizerProgress,
+    CurrentPanelPosition
 };

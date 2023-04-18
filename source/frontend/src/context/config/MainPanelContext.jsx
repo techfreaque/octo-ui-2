@@ -22,7 +22,7 @@ export const useSetCurrentPanelPercent = () => {
 }
 
 export function MainPanelProvider({ children }) {
-    const [panelSize, setPanelSize] = useState({ percent: 60, shouldUpdate: false, });
+    const [panelSize, setPanelSize] = useState({ percent: 50, shouldUpdate: false, });
     return (
         <UpdateCurrentPanelContext.Provider value={setPanelSize}>
             <CurrentPanelContext.Provider value={panelSize}>
