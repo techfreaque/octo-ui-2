@@ -1,4 +1,5 @@
 import {iconStringToComponent} from "../../components/Icons/AntIcon";
+import { availablePanelPositionsArray } from "../AppWidgets/Buttons/CurrentPanelPosition";
 import {allChartLocations} from "../AppWidgets/Charts/MainCharts/Plotly";
 import {availableConfigKeysList} from "../AppWidgets/Configuration/Form";
 import {availableUIConfigKeys} from "../AppWidgets/Configuration/UIConfig";
@@ -19,6 +20,7 @@ export default function appWidgetsProps() {
         ...generateSimpleProp("noPadding", "SidebarMenuItem", "boolean", "checkbox", undefined, undefined, false),
         ...generateSimpleProp("iconOnly", "ButtonWithModal", "boolean", "checkbox", undefined, undefined, true),
         ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeysList),
+        ...generateSimpleProp("position", "CurrentPanelPosition", "string", undefined, availablePanelPositionsArray),
         ...generateSimpleProp("configKeys", "UIConfig", "array", "select", availableUIConfigKeys, true),
         ...generateSimpleProp("faIcon", ["Tab","ButtonWithModal","SendActionCommandToTradingMode", "SidebarMenuItem"], "string"),
         ...generateSimpleProp("antIcon", ["Tab",
