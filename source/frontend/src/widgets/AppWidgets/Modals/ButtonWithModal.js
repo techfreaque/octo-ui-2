@@ -65,7 +65,6 @@ function ModalContent({open, id, handleClose, content}) {
     const botColors = useBotColorsContext()
     return (
     <Modal 
-    
         open={open}
         onCancel={handleClose}
         width={1000}
@@ -74,9 +73,6 @@ function ModalContent({open, id, handleClose, content}) {
         closable={true}
         // closable={false}
         keyboard
-        aria-labelledby={
-            `modal-${id}-title`
-        }
         style={
             {zIndex: "1000"}
         }

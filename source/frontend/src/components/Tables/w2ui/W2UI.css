@@ -68,6 +68,7 @@
 
 #root .w2ui-search-all {
   background-color: unset !important;
+  border-color: var(--dark-border) !important;
 }
 
 .dark .w2ui-menu {
@@ -79,6 +80,10 @@
 .dark .w2ui-menu-item:hover {
   background-color: var(--dark-backgroundActive) !important;
   color: var(--dark-fontActive) !important;
+}
+
+.dark {
+  color-scheme: dark;
 }
 
 .dark .w2ui-menu .w2ui-menu-item.w2ui-selected {

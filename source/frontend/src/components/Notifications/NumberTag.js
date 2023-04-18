@@ -5,7 +5,7 @@ import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 export default function NumberTag (props) {
     
     const formatCash = n => {
-        if (n < 1e3) return n;
+        if (n < 1e3) return n.toString();
         if (n >= 1e3 && n < 1e6) return +(n / 1e3).toFixed(2) + "K";
         if (n >= 1e6 && n < 1e9) return +(n / 1e6).toFixed(2) + "M";
         if (n >= 1e9 && n < 1e12) return +(n / 1e9).toFixed(2) + "B";
@@ -31,7 +31,8 @@ export default function NumberTag (props) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 padding:'0 5px 0 2px'}}>            
-                {<Badge 
+                {<Badge
+                    overflowCount={999} 
                     count={count} showZero 
                     style={{width: badgesize, 
                             height: '15px', 

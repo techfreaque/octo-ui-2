@@ -4,12 +4,13 @@ import {useMemo, useState} from "react";
 import {realTradingSwitch} from "../../../../api/actions";
 import {useBotConfigContext} from "../../../../context/config/BotConfigProvider";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
-import {Space, Tooltip, Alert } from "antd";
+import {Space, Tooltip, Alert, Typography} from "antd";
 import {sizes} from "../../../../constants/frontendConstants";
 import {DollarOutlined, PauseOutlined, RobotOutlined} from "@ant-design/icons";
 import {AntIconByReactFunc} from "../../../../components/Icons/AntIcon";
 import AntButton, { buttonTypes } from "../../../../components/Buttons/AntButton";
 
+const { Paragraph, Title  } = Typography;
 
 export default function RealTradingSwitch() {
     const [open, setOpen] = useState(false);
@@ -50,12 +51,12 @@ export default function RealTradingSwitch() {
                 onClose={handleClose}
                 aria-labelledby={"real-trading-switch-modal-title"}>
                 <Box sx={style}>
-                    <h3>Currently using: {title}</h3>
+                    <Title level={3}>Currently using: {title}</Title>
                     {
                     isRealTrading ? (<>
-                        <p>By switching to simulated trading, OctoBot will only use its simulation mode on real market conditions.</p>
-                        <p>It will no longer create trades with your exchange account, it will use a simulated portfolio managed by OctoBot.</p>
-                    </>) : (<p>By switching to real trading, OctoBot will use your real funds</p>)
+                        <Paragraph>By switching to simulated trading, OctoBot will only use its simulation mode on real market conditions.</Paragraph>
+                        <Paragraph>It will no longer create trades with your exchange account, it will use a simulated portfolio managed by OctoBot.</Paragraph>
+                    </>) : (<Paragraph>By switching to real trading, OctoBot will use your real funds</Paragraph>)
                 }
                     <Alert banner
                     style={
