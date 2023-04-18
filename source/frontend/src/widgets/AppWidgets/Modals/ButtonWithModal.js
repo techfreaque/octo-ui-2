@@ -70,8 +70,13 @@ function ModalContent({open, id, handleClose, content}) {
         onCancel={handleClose}
         width={1000}
         centered
-            footer={null}
-            closable={true}
+        footer={null}
+        closable={true}
+        // closable={false}
+        keyboard
+        aria-labelledby={
+            `modal-${id}-title`
+        }
         style={
             {zIndex: "1000"}
         }
