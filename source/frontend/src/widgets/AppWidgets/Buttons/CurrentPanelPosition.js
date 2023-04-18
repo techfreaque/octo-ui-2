@@ -35,7 +35,8 @@ function PanelSize({position, title, icon, panelPercent}) {
 export const availablePanelPositions = {
     maximized: "maximized",
     minimized: "minimized",
-    half: "half"
+    half: "half",
+    footer_half: "footer_half"
 }
 export const availablePanelPositionsArray = [availablePanelPositions.maximized, availablePanelPositions.minimized, availablePanelPositions.half]
 
@@ -51,11 +52,17 @@ export default function CurrentPanelPosition({position}) {
         return (
             <PanelSize {...props}/>
         )
-    if (props.position === availablePanelPositions.minimized && currentPanel?.percent !== 100) 
+    else if (props.position === availablePanelPositions.minimized && currentPanel?.percent !== 100) 
         return (
             <PanelSize {...props}/>
         )
-    if (props.position === availablePanelPositions.half && currentPanel?.percent !== 50) 
+
+    else if (props.position === availablePanelPositions.half && currentPanel?.percent !== 50) 
+        return (
+            <PanelSize {...props}/>
+        )
+    else if (props.position === availablePanelPositions.footer_half && currentPanel?.percent === 100)
+
         return (
             <PanelSize {...props}/>
         )

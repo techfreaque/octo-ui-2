@@ -98,7 +98,11 @@ export const defaultStrategyDesignerPageLayout = {
                             "title": "Notification Center"
                         }, {
                             "component": "RealTradingSwitch"
-                        }, {
+                        },{
+                            'component': 'CurrentPanelPosition',
+                            'position': 'footer_half'
+                        },
+                        {
                             "component": "PowerMenu"
                         }
                     ]
@@ -161,9 +165,14 @@ export const defaultStrategyDesignerPageLayout = {
                     "component": "ScrollableTabs",
                     "rightContent": [
                         {
-                            "component": "CurrentPanelMinimize"
+                            "component": "CurrentPanelPosition",
+                            'position': 'minimized'
                         }, {
-                            "component": "CurrentPanelFullscreen"
+                            "component": "CurrentPanelPosition",
+                            'position': 'half'
+                        }, {
+                            "component": "CurrentPanelPosition",
+                            'position': 'maximized'
                         }
                     ],
                     "tabs": [
