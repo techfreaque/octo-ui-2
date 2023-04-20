@@ -48,7 +48,7 @@ export default function CurrentPanelPosition({position}) {
         icon: (position === availablePanelPositions.maximized ? 'VerticalAlignTopOutlined' : (position === availablePanelPositions.minimized ? 'VerticalAlignBottomOutlined' : 'VerticalAlignMiddleOutlined')),
         panelPercent: (position === availablePanelPositions.maximized ? 0 : (position === availablePanelPositions.minimized ? 100 : 50))
     }
-    if (props.position === availablePanelPositions.maximized && currentPanel?.percent !== 0) 
+    if (props.position === availablePanelPositions.maximized && currentPanel?.percent > 5) 
         return (
             <PanelSize {...props}/>
         )

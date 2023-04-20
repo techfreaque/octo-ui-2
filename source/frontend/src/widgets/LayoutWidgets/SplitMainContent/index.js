@@ -61,7 +61,7 @@ function handleResize(gutterClassName, setPanelPercent, newSizes, setPanelSize) 
   const gutter = document.getElementsByClassName(gutterClassName)[0]
   gutter?.classList?.remove("is-resizing")
   const newPercent = newSizes[0] * 100 / total
-  setPanelPercent({ percent: newPercent, shouldUpdate: false, })
+  setPanelPercent(newPercent)
   setPanelSize(
     newSizes[0] === 0
       ? [newSizes[0], 100 - newSizes[0]]

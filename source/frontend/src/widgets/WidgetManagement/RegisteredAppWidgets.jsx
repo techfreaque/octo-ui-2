@@ -4,8 +4,6 @@ import AppDrawerDropdown from "../AppWidgets/AppDrawerDropdown";
 import ScrollableTabs from "../LayoutWidgets/Tabs/ScrollableTabs";
 import Footer from "../LayoutWidgets/Footer";
 import SplitMainContent from "../LayoutWidgets/SplitMainContent";
-import CurrentPanelFullscreen from "../AppWidgets/Buttons/CurrentPanelFullscreen";
-import CurrentPanelMinimize from "../AppWidgets/Buttons/CurrentPanelMinimize";
 import Configuration from "../AppWidgets/Configuration/Form";
 import TimeFrameSelector from "../AppWidgets/TimeFrameSelector/TimeFrameSelector";
 import Header from "../LayoutWidgets/Header";
@@ -76,8 +74,6 @@ export const registeredComponents = {
     StopBacktestingButton,
     StartOptimizerButton,
     StopOptimizerButton,
-    CurrentPanelFullscreen,
-    CurrentPanelMinimize,
     Configuration,
     RefreshBotData,
     TimeFrameSelector,
