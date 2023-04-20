@@ -1,11 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useContext, createContext, useEffect} from "react";
 import {useCallback} from "react";
-import {installAppPackage} from "../../api/actions";
-import {fetchAppStoreData, fetchPackagesData, loginToAppStore, logoutFromAppStore, signupToAppStore} from "../../api/data";
+import {installAppPackage, installProfile} from "../../api/actions";
+import {
+    fetchAppStoreData,
+    fetchPackagesData,
+    loginToAppStore,
+    logoutFromAppStore,
+    signupToAppStore
+} from "../../api/data";
 import {useBotDomainContext} from "../config/BotDomainProvider";
 import {appStoreDomainProduction, isProduction} from "../../constants/frontendConstants";
-import { useBotInfoContext } from "./BotInfoProvider";
+import {useBotInfoContext} from "./BotInfoProvider";
 
 
 const AppStoreDataContext = createContext();
@@ -52,7 +58,7 @@ const _useFetchAppStoreData = () => {
 export const useFetchAppStoreData = () => {
     const botDomain = useBotDomainContext()
     const fetchAppStoreData = _useFetchAppStoreData()
-    const logic = useCallback((notification=true) => {
+    const logic = useCallback((notification = true) => {
         fetchPackagesData((newData) => fetchAppStoreData(newData, notification), botDomain, notification)
     }, [botDomain, fetchAppStoreData]);
     return logic;
@@ -93,6 +99,14 @@ export const useInstallAppPackage = () => {
     return logic;
 }
 
+export const useInstallProfile = () => {
+    const botDomain = useBotDomainContext()
+    const logic = useCallback((profileUrl, profileTitle, profileName) => {
+        installProfile(profileUrl, profileTitle, profileName, botDomain)
+    }, [botDomain]);
+    return logic;
+}
+
 export const AppStoreDataProvider = ({children}) => {
     const [appStoreData, setAppStoreData] = useState({});
     const [appStoreUserData, setAppStoreUserData] = useState({});
@@ -105,15 +119,18 @@ export const AppStoreDataProvider = ({children}) => {
         appStoreDomain && fetchAppStoreData(false)
     }, [appStoreDomain, botInfo])
 
-    return (<AppStoreDataContext.Provider value={appStoreData}>
-        <UpdateAppStoreDataContext.Provider value={setAppStoreData}>
-            <AppStoreDomainContext.Provider value={appStoreDomain}>
-                <UpdateAppStoreUserContext.Provider value={setAppStoreUserData}>
-                    <AppStoreUserContext.Provider value={appStoreUserData}>
-                        <UpdateAppStoreDomainContext.Provider value={setAppStoreDomain}> {children} </UpdateAppStoreDomainContext.Provider>
-                    </AppStoreUserContext.Provider>
-                </UpdateAppStoreUserContext.Provider>
-            </AppStoreDomainContext.Provider>
-        </UpdateAppStoreDataContext.Provider>
-    </AppStoreDataContext.Provider>);
+    return (
+        <AppStoreDataContext.Provider value={appStoreData}>
+            <UpdateAppStoreDataContext.Provider value={setAppStoreData}>
+                <AppStoreDomainContext.Provider value={appStoreDomain}>
+                    <UpdateAppStoreUserContext.Provider value={setAppStoreUserData}>
+                        <AppStoreUserContext.Provider value={appStoreUserData}>
+                            <UpdateAppStoreDomainContext.Provider value={setAppStoreDomain}>
+                                {children} </UpdateAppStoreDomainContext.Provider>
+                        </AppStoreUserContext.Provider>
+                    </UpdateAppStoreUserContext.Provider>
+                </AppStoreDomainContext.Provider>
+            </UpdateAppStoreDataContext.Provider>
+        </AppStoreDataContext.Provider>
+    );
 };

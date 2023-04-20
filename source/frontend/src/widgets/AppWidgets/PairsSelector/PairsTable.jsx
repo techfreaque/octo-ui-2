@@ -1,7 +1,7 @@
 import {
     Switch,
 } from 'antd';
-import {useEffect,} from 'react';
+import {useEffect, useState,} from 'react';
 import {useExchangeInfoContext, useFetchExchangeInfo} from '../../../context/data/BotExchangeInfoProvider';
 import {useIsBotOnlineContext} from '../../../context/data/IsBotOnlineProvider';
 import {useBotDomainContext} from '../../../context/config/BotDomainProvider';
@@ -11,17 +11,44 @@ import {useVisibleExchangesContext} from '../../../context/config/VisibleExchang
 import "./pairsTable.css"
 import { useBotInfoContext } from '../../../context/data/BotInfoProvider';
 import AntTable from '../../../components/Tables/AntTable';
+import { parseSymbol } from '../../../components/SymbolsUtil/SymbolsUtil';
+
+function convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo) {
+    const pairsData = []
+    const newCurrencySettings = {}
+    currencySettings && Object.keys(currencySettings).forEach(currency => {
+        if (currencySettings[currency]?.enabled) {
+            currencySettings[currency]?.pairs?.forEach(pair => {
+                pairsData.push(pair)
+                newCurrencySettings[pair] = {enabled: true, pairs: [pair], currency: exchangeInfo?.currency_name_info?.[parseSymbol(pair).base]?.n}
+            })
+                 }
+    })
+    return {pairsData, newCurrencySettings}
+}
+
 
 export default function PairsTable() {
     const botInfo = useBotInfoContext();
     const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
     const exchangeInfo = useExchangeInfoContext()
+    const [unsavedCurrencySettings, setUnsavedCurrencySettings] = useState(convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo));
     const isOnline = useIsBotOnlineContext()
     const botDomain = useBotDomainContext()
     const setVisibleExchanges = useUpdateVisibleExchangesContext();
     const visibleExchanges = useVisibleExchangesContext();
     const setVisiblePairs = useUpdateVisiblePairsContext();
     const visiblePairs = useVisiblePairsContext();
+    useEffect(() => {
+        setUnsavedCurrencySettings(convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo));
+    }, [currencySettings, exchangeInfo])
+
+    function handleSettingChange(enabled, exchange, symbol, base) { 
+        console.log(currencySettings)
+        // setUnsavedCurrencySettings(prevSettings => {
+            
+        // })
+    }
 
     function handlePairSelection(symbol, exchange) {
         setVisibleExchanges(exchange)
@@ -35,17 +62,18 @@ export default function PairsTable() {
     }, [isOnline, botDomain])
 
     const pairsData = []
-    currencySettings && Object.keys(currencySettings).forEach(currency => {
-        pairsData.push(...currencySettings[currency]?.pairs)
+    unsavedCurrencySettings && Object.keys(unsavedCurrencySettings).forEach(currency => {
+        pairsData.push(...unsavedCurrencySettings[currency]?.pairs)
     })
     const preSorteddata = []
     const enabledExchanges = exchangeInfo?.symbols_by_exchanges && Object.keys(exchangeInfo.symbols_by_exchanges)
     enabledExchanges?.forEach(exchange => {
         exchangeInfo.symbols_by_exchanges[exchange].forEach(symbol => {
             const isEnabled = pairsData.includes(symbol)
+            const base = parseSymbol(symbol).base
             const isSelected = visibleExchanges === exchange && visiblePairs === symbol.replace("/", "|")
             preSorteddata.push({
-                key: symbol,
+                key: `${symbol} ${exchangeInfo?.currency_name_info?.[base]?.n}`,
                 exchange: exchange,
                 symbolLabel: (isEnabled && !isSelected) ? (
                     // eslint-disable-next-line jsx-a11y/anchor-is-valid
@@ -58,7 +86,7 @@ export default function PairsTable() {
                 ) : symbol,
                 symbol: symbol,
                 enabledLabel: (
-                    <Switch checked={isEnabled}></Switch>
+                    <Switch checked={isEnabled} onChange={(event)=>handleSettingChange(event, exchange, symbol ,base)} ></Switch>
                 ),
                 enabled: isEnabled,
                 selected: isSelected

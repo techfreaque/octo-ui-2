@@ -4,9 +4,10 @@ import {OPTIMIZER_RUN_SETTINGS_KEY} from "../../constants/backendConstants";
 import {useBotDomainContext} from "../config/BotDomainProvider";
 import {useBotInfoContext} from "../data/BotInfoProvider";
 import {useFetchOptimizerQueue} from "../data/OptimizerQueueProvider";
-import {useGetAndSaveOptimizerForm} from "../config/OptimizerEditorProvider";
+import {useFetchProConfig, useOptimizerEditorContext} from "../config/OptimizerEditorProvider";
 import {useUiConfigContext} from "../config/UiConfigProvider";
 import {AbstractWebsocketContext} from "../websockets/AbstractWebsocketContext";
+import createNotification from "../../components/Notifications/Notification";
 
 const BotIsOptimizingContext = createContext();
 const UpdateBotIsOptimizingContext = createContext();
@@ -39,18 +40,24 @@ export const useStartOptimizer = () => {
     const botDomain = useBotDomainContext();
     const botInfo = useBotInfoContext()
     const idsByExchangeName = botInfo && botInfo.ids_by_exchange_name
-    const getOptimizerForm = useGetAndSaveOptimizerForm();
+    const optimizerForm = useOptimizerEditorContext();
+    const fetchProConfig = useFetchProConfig()
     const logic = useCallback(() => { // TODO validate settings
         if (optimizerSettings && idsByExchangeName) {
-            startOptimizer(botDomain, optimizerSettings, getOptimizerForm(false), idsByExchangeName, setBotIsOptimizing)
+            if (!optimizerForm?.optimizer_inputs?.user_inputs) {
+                // settings not loaded yet, use directly from settings storage
+               fetchProConfig((fetchedOptimizerForm) => {
+                   if (fetchedOptimizerForm?.optimizer_inputs) {
+                       startOptimizer(botDomain, optimizerSettings, fetchedOptimizerForm.optimizer_inputs, idsByExchangeName, setBotIsOptimizing)
+                   } else {
+                       createNotification("Failed to add to optimizer queue", "danger", "Check your optimizer run configuration")
+                   }
+               })
+           } else {
+               startOptimizer(botDomain, optimizerSettings, optimizerForm?.optimizer_inputs, idsByExchangeName, setBotIsOptimizing)
+           }
         }
-    }, [
-        setBotIsOptimizing,
-        botDomain,
-        optimizerSettings,
-        idsByExchangeName,
-        getOptimizerForm
-    ]);
+    }, [optimizerSettings, idsByExchangeName, optimizerForm?.optimizer_inputs, fetchProConfig, botDomain, setBotIsOptimizing]);
     return logic;
 };
 
@@ -61,19 +68,32 @@ export const useAddToOptimizerQueue = () => {
     const botDomain = useBotDomainContext();
     const botInfo = useBotInfoContext()
     const exchageId = botInfo && botInfo.exchange_id
-    const getOptimizerForm = useGetAndSaveOptimizerForm();
+    const optimizerForm = useOptimizerEditorContext();
     const fetchOptimizerQueue = useFetchOptimizerQueue()
+    const fetchProConfig = useFetchProConfig()
     const logic = useCallback(() => {
         if (optimizerSettings && exchageId) {
-            addToOptimizerQueue(botDomain, optimizerSettings, getOptimizerForm(false), exchageId, setBotIsOptimizing, fetchOptimizerQueue)
+            if (!optimizerForm?.optimizer_inputs?.user_inputs) {
+                 // settings not loaded yet, use directly from settings storage
+                fetchProConfig((fetchedOptimizerForm) => {
+                    if (fetchedOptimizerForm?.optimizer_inputs) {
+                        addToOptimizerQueue(botDomain, optimizerSettings, fetchedOptimizerForm.optimizer_inputs, exchageId, setBotIsOptimizing, fetchOptimizerQueue)
+                    } else {
+                        createNotification("Failed to add to optimizer queue", "danger", "Check your optimizer run configuration")
+                    }
+                })
+            } else {
+                addToOptimizerQueue(botDomain, optimizerSettings, optimizerForm?.optimizer_inputs, exchageId, setBotIsOptimizing, fetchOptimizerQueue)
+            }
         }
     }, [
         optimizerSettings,
         exchageId,
+        optimizerForm,
         botDomain,
-        getOptimizerForm,
         setBotIsOptimizing,
-        fetchOptimizerQueue
+        fetchOptimizerQueue,
+        fetchProConfig
     ]);
     return logic;
 };
@@ -90,8 +110,8 @@ export const BotOptimizerProvider = ({children}) => {
         if (data?.status === "starting" || data?.status === "computing") {
             setBotIsOptimizing(true);
             setTimeout(function () {
-                socket.emit('backtesting_status')
-            }, 50);
+                socket.emit('strategy_optimizer_status')
+            }, 2000);
         } else {
             setBotIsOptimizing(prevState => {
                 if (data?.status === "finished" && prevState) { // createNotification("Backtest finished successfully")
@@ -103,14 +123,17 @@ export const BotOptimizerProvider = ({children}) => {
     function onConnectionLost() {
         setBotIsOptimizing(false)
     }
-    return (<BotIsOptimizingContext.Provider value={botIsOptimizing}>
-        <UpdateBotIsOptimizingContext.Provider value={setBotIsOptimizing}>
-            <OptimizerProgressContext.Provider value={optimizerProgress}>
-                <AbstractWebsocketContext socketUrl={socketUrl}
-                    onConnectionUpdate={onConnectionUpdate}
-                    onConnectionLost={onConnectionLost}
-                    onKey={"strategy_optimizer_status"}> {children} </AbstractWebsocketContext>
-            </OptimizerProgressContext.Provider>
-        </UpdateBotIsOptimizingContext.Provider>
-    </BotIsOptimizingContext.Provider>);
+    return (
+        <BotIsOptimizingContext.Provider value={botIsOptimizing}>
+            <UpdateBotIsOptimizingContext.Provider value={setBotIsOptimizing}>
+                <OptimizerProgressContext.Provider value={optimizerProgress}>
+                    <AbstractWebsocketContext socketUrl={socketUrl}
+                        onConnectionUpdate={onConnectionUpdate}
+                        onConnectionLost={onConnectionLost}
+                        onKey={"strategy_optimizer_status"}>
+                        {children} </AbstractWebsocketContext>
+                </OptimizerProgressContext.Provider>
+            </UpdateBotIsOptimizingContext.Provider>
+        </BotIsOptimizingContext.Provider>
+    );
 };

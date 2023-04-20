@@ -1,14 +1,21 @@
 import abc
+import os
 import aiohttp
 import flask
 
 import octobot_commons.authentication as authentication
+import octobot_commons.profiles as profiles
+import octobot_commons.constants as constants
+import octobot_commons.profiles.profile_sharing as profile_sharing
 import octobot_services.constants as services_constants
+import octobot_services.interfaces.util as interfaces_util
+
 import tentacles.Services.Interfaces.web_interface.util as util
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.login as login
 
 import tentacles.Services.Interfaces.octo_ui2.models.app_store as app_store_models
+import tentacles.Services.Interfaces.octo_ui2.utils.basic_utils as basic_utils
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
     dev_mode_is_on,
@@ -77,6 +84,76 @@ def register_appstore_routes(plugin):
         if flask.request.method == "POST":
             update_type = flask.request.args["update_type"]
             return _handle_tentacles_pages_post(update_type)
+
+    route = "/profiles/<command>"
+    methods = ["POST"]
+    if cross_origin := import_cross_origin_if_enabled():
+        if dev_mode_is_on:
+
+            @plugin.blueprint.route(route, methods=methods)
+            @cross_origin(origins="*")
+            def profiles_route(command):
+                return _profiles_route(command)
+
+        else:
+
+            @plugin.blueprint.route(route, methods=methods)
+            @cross_origin(origins="*")
+            @login.login_required_when_activated
+            def profiles_route(command):
+                return _profiles_route(command)
+
+    else:
+
+        @plugin.blueprint.route(route, methods=methods)
+        @login.login_required_when_activated
+        def profiles_route(command):
+            return _profiles_route(command)
+
+    def _profiles_route(command):
+        if command == "import":
+            request_data = flask.request.get_json()
+            try:
+                name = request_data["name"]
+                url = request_data["url"]
+                file_path = profiles.download_profile(url, name)
+                temp_profile_name = profile_sharing._get_profile_name(name, file_path)
+
+                profile = profile_sharing.install_profile(
+                    file_path,
+                    temp_profile_name,
+                    ".",
+                    True,
+                    True,
+                    origin_url=url,
+                    profile_schema=constants.PROFILE_FILE_SCHEMA,
+                )
+                if profile.name != temp_profile_name:
+                    profile.rename_folder(
+                        profile_sharing._get_unique_profile_folder_from_name(profile),
+                        False,
+                    )
+                interfaces_util.get_edited_config(dict_only=False).load_profiles()
+                if os.path.isfile(file_path):
+                    os.remove(file_path)
+                return basic_utils.get_response(
+                    success=True,
+                    message=f"{profile.name} profile successfully imported.",
+                )
+            except FileNotFoundError:
+                return basic_utils.get_response(
+                    success=False,
+                    message=f"Invalid profile url {url}",
+                )
+            except Exception as err:
+                return basic_utils.get_response(
+                    success=False,
+                    message=f"Error when importing profile: {err}",
+                )
+        return basic_utils.get_response(
+            success=False,
+            message="No command provided",
+        )
 
 
 class TentacleInstallAuthenticator(authentication.Authenticator):

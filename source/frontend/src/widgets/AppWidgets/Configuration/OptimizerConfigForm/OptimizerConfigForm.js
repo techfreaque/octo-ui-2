@@ -4,42 +4,41 @@ import $ from "jquery";
 import OptimizerSettingTemplate from "./OptimizerInputTemplate";
 // eslint-disable-next-line no-unused-vars
 import select2 from "select2/dist/js/select2.js" // required
-import {useFetchProConfig, useGetAndSaveOptimizerForm, useOptimizerEditorContext, useUpdateOptimizerEditorCounterContext} from "../../../../context/config/OptimizerEditorProvider";
+import {useFetchProConfig, useGetAndSaveOptimizerForm, useOptimizerEditorContext} from "../../../../context/config/OptimizerEditorProvider";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
 
 export default function OptimizerConfigForm() {
     const optimizerEditor = useOptimizerEditorContext()
-    const optimizerConfig = optimizerEditor[OPTIMIZER_INPUTS_KEY] || {}
+    const optimizerConfig = optimizerEditor ? (optimizerEditor[OPTIMIZER_INPUTS_KEY] || {}) : null
+    const formIsBuilt = Boolean(optimizerConfig)
     const currentTentaclesConfig = useTentaclesConfigContext()
     const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
-    const updateOptimizerEditorCounter = useUpdateOptimizerEditorCounterContext()
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
     const fetchProConfig = useFetchProConfig()
 
     useEffect(() => {
         fetchProConfig()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
-        currentTentaclesTradingConfig && optimizerConfig && _buildOptimizerSettingsForm(currentTentaclesTradingConfig, optimizerConfig, updateOptimizerEditorCounter);
+        currentTentaclesTradingConfig && optimizerConfig && _buildOptimizerSettingsForm(currentTentaclesTradingConfig, optimizerConfig);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentTentaclesTradingConfig]);
+    }, [currentTentaclesTradingConfig, formIsBuilt]);
     return useMemo(() => {
-        return (<div
-            onBlur={saveOptimizerForm}
-        >
-            {/* <div>
+        return (
+            <div onBlur={saveOptimizerForm}>
+                {/* <div>
                 <AntButton buttonType={
                         buttonTypes.primary
                     }
                     onClick={saveOptimizerForm}
                     text="Save Optimizer Form"/>
             </div> */}
-            <div id="strategy-optimizer-inputs">
-                <OptimizerSettingTemplate/>
-            </div>
-            {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
+                <div id="strategy-optimizer-inputs">
+                    <OptimizerSettingTemplate/>
+                </div>
+                {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
                     <h4>
                         Run filters
                     </h4>
@@ -47,12 +46,13 @@ export default function OptimizerConfigForm() {
                         If a run validates any of these statements, it will be discarded.
                     </p>
                     <OptimizerRunFilterTemplate />
-                </div> */} </div>)
+                </div> */} </div>
+        )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentTentaclesConfig])
+    }, [currentTentaclesConfig, formIsBuilt])
 }
 
-async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, updateOptimizerEditorCounter) {
+async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, setFormIsBuilt) {
     const settingsRoot = $("#optimizer-settings-root");
     settingsRoot.empty();
     // reset user inputs custom paths

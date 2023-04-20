@@ -54,6 +54,7 @@ import NotificationCenter from "../AppWidgets/NotificationCenter/NotificationCen
 import BacktestingProgress from "../AppWidgets/Progress/BacktestingProgress";
 import OptimizerProgress from "../AppWidgets/Progress/OptimizerProgress";
 import CurrentPanelPosition from "../AppWidgets/Buttons/CurrentPanelPosition";
+import DataCollectorProgress from "../AppWidgets/Progress/DataCollectorProgress";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -116,5 +117,6 @@ export const registeredComponents = {
     ExchangeSelector,
     BacktestingProgress,
     OptimizerProgress,
-    CurrentPanelPosition
+    CurrentPanelPosition,
+    DataCollectorProgress,
 };

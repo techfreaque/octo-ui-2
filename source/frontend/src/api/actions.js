@@ -18,10 +18,14 @@ export async function startBacktesting(botDomain, backtestingSettings, setBotIsB
 export async function restartBot(botDomain, updateIsOnline, notification) {
     const success = (updated_data, update_url, result, msg, status) => {
         updateIsOnline(false)
-        if (notification) createNotification("The bot is restarting...", "success");
+        if (notification) 
+            createNotification("The bot is restarting...", "success");
+        
     }
     const failure = (updated_data, update_url, result, status, error) => {
-        if (notification) createNotification("Failed to restart bot", "danger",);
+        if (notification) 
+            createNotification("Failed to restart bot", "danger",);
+        
     }
     sendAndInterpretBotUpdate({}, botDomain + backendRoutes.restartBot, success, failure, "GET")
 }
@@ -145,6 +149,16 @@ export async function installAppPackage(appUrl, appName, botDomain, token) {
     sendAndInterpretBotUpdate(requestData, botDomain + backendRoutes.installApp, success, fail)
 }
 
+export async function installProfile(profileUrl, profileTitle, profileName, botDomain) {
+    const success = (updated_data, update_url, result, msg, status) => {
+        createNotification(`Successfully installed ${profileTitle}`)
+    }
+    const fail = (updated_data, update_url, result, msg, status) => {
+        createNotification(`Failed to install ${profileTitle}`, "danger")
+    }
+    sendAndInterpretBotUpdate({url: profileUrl, name: profileName}, botDomain + backendRoutes.importProfileFromUrl, success, fail)
+}
+
 export async function deleteTrades(botDomain, exchange_id) {
     const success = (updated_data, update_url, result, msg, status) => {
         createNotification("Successfully deleted trades")
@@ -227,14 +241,14 @@ export async function cancelOrder(botDomain, orderId, setIsCancelling) {
 }
 
 export async function cancelOrders(botDomain, orderIdsArray, setIsCancelling) {
-    setIsCancelling?.(true)
+    setIsCancelling ?. (true)
     const success = (updated_data, update_url, result, msg, status) => {
         createNotification("Successfully canceled orders")
-        setIsCancelling?.(false)
+        setIsCancelling ?. (false)
     }
     const fail = (updated_data, update_url, result, msg, status) => {
         createNotification("Failed to cancel orders", "danger")
-        setIsCancelling?.(false)
+        setIsCancelling ?. (false)
     }
     sendAndInterpretBotUpdate(orderIdsArray, botDomain + backendRoutes.cancelOrders, success, fail, "POST")
 }
@@ -244,7 +258,7 @@ export async function updateProfileInfo(botDomain, newProfileInfo, onFail) {
         createNotification("Successfully updated profile info")
     }
     const fail = (updated_data, update_url, result, msg, status) => {
-        onFail?.()
+        onFail ?. ()
         createNotification("Failed to updated profile info", "danger")
     }
     await sendAndInterpretBotUpdate(newProfileInfo, botDomain + backendRoutes.updateProfileInfo, success, fail, "POST")
@@ -252,11 +266,11 @@ export async function updateProfileInfo(botDomain, newProfileInfo, onFail) {
 
 export async function duplicateProfile(botDomain, profileId, profileName, onSuccess, onFail) {
     const success = (updated_data, update_url, result, msg, status) => {
-        onSuccess?.()
+        onSuccess ?. ()
         createNotification(`Successfully duplicated ${profileName} profile`)
     }
     const fail = (updated_data, update_url, result, msg, status) => {
-        onFail?.()
+        onFail ?. ()
         createNotification(`Failed to duplicate ${profileName} profile`, "danger")
     }
     await sendAndInterpretBotUpdate({}, botDomain + backendRoutes.duplicateProfile + profileId, success, fail, "GET")
@@ -264,11 +278,11 @@ export async function duplicateProfile(botDomain, profileId, profileName, onSucc
 
 export async function deleteProfile(botDomain, profileId, profileName, onSuccess, onFail) {
     const success = (updated_data, update_url, result, msg, status) => {
-        onSuccess?.()
+        onSuccess ?. ()
         createNotification(`Successfully deleted ${profileName} profile`)
     }
     const fail = (updated_data, update_url, result, msg, status) => {
-        onFail?.()
+        onFail ?. ()
         createNotification(`Failed to delete ${profileName} profile`, "danger")
     }
     await sendAndInterpretBotUpdate({
@@ -365,7 +379,7 @@ export async function updateConfig(botDomain, newConfig, profileName, onFail) {
         createNotification(`Successfully updated ${profileName} config`, "success", newConfig.restart_after_save && "OctoBot will restart now")
     }
     const fail = (updated_data, update_url, result, msg, status) => {
-        onFail?.()
+        onFail ?. ()
         createNotification(`Failed to update ${profileName} config`, "danger")
     }
     await sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.config, success, fail)

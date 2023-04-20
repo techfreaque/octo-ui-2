@@ -10,6 +10,9 @@ export const defaultStrategyDesignerPageLayout = {
                             "component": "OptimizerProgress"
                         },
                         {
+                            "component": "DataCollectorProgress"
+                        },
+                        {
                             "component": "BacktestingProgress"
                         },
                         {

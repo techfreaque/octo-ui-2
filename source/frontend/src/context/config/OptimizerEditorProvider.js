@@ -35,8 +35,8 @@ export const useUpdateOptimizerEditorContext = () => {
 export const useFetchProConfig = () => {
     const setOptimizerEditor = useUpdateOptimizerEditorContext();
     const botDomain = useBotDomainContext();
-    const logic = useCallback(() => {
-        fetchProConfig(botDomain, setOptimizerEditor);
+    const logic = useCallback((onFinished) => {
+        fetchProConfig(botDomain, setOptimizerEditor,onFinished);
     }, [setOptimizerEditor, botDomain]);
     return logic;
 };
@@ -67,7 +67,7 @@ export const useGetAndSaveOptimizerForm = () => {
 
 export const OptimizerEditorProvider = ({children}) => {
     const [optimizerEditorCounter, setOptimizerEditorCounter] = useState(0);
-    const [optimizerEditor, setOptimizerEditor] = useState({});
+    const [optimizerEditor, setOptimizerEditor] = useState();
     const inputs = optimizerEditor?.optimizer_inputs?.user_inputs
     useEffect(() => {
         inputs && setOptimizerEditorCounter(getOptimizerEditorCounter(inputs))

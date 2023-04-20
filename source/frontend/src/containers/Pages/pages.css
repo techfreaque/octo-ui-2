@@ -53,3 +53,9 @@ body {
     overscroll-behavior-y: contain;
     overflow: hidden;
 }
+
+/* remove with mui tabs */
+
+.Mui-disabled.MuiTabs-scrollButtons {
+    display: none !important;
+  }

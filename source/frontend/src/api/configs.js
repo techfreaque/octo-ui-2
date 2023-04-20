@@ -20,9 +20,10 @@ export async function saveUIConfig(botDomain, newConfig, callbackSucces, callbac
     sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.uIConfig, callbackSucces ? callbackSucces : () => {}, callbackFail)
 }
 
-export async function fetchProConfig(botDomain, saveProConfig) {
+export async function fetchProConfig(botDomain, saveProConfig, onFinished) {
     const success = (updated_data, update_url, result, msg, status) => {
         saveProConfig(msg)
+        onFinished?.(msg)
     }
     sendAndInterpretBotUpdate({}, botDomain + backendRoutes.proConfig, success, undefined, "get")
 }

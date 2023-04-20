@@ -1,6 +1,7 @@
 import flask
 
 import octobot_commons.constants as commons_constants
+import octobot_commons.symbols.symbol_util as symbol_util
 import octobot_services.constants as services_constants
 import octobot_services.interfaces.util as interfaces_util
 import octobot_trading.api as trading_api
@@ -50,22 +51,36 @@ def register_exchanges_routes(plugin):
         config_exchanges = display_config[commons_constants.CONFIG_EXCHANGES]
         # enabled_exchanges = trading_api.get_enabled_exchanges_names(display_config)
         # exchange_details = models.get_exchanges_details(config_exchanges)
+        all_symbols: set = set()
+        symbols_by_exchanges: dict = {}
+        for exchange in config_exchanges.keys():
+            if config_exchanges[exchange].get("enabled"):
+                this_exchange_symbols = models.get_symbol_list([exchange])
+                all_symbols.update(this_exchange_symbols)
+                symbols_by_exchanges[exchange] = sorted(this_exchange_symbols)
 
-        symbols_by_exchanges = {
-            exchange: sorted(models.get_symbol_list([exchange]))
-            for exchange in config_exchanges.keys()
-            if config_exchanges[exchange].get("enabled")
-        }
+        all_currencies: set = set()
+        for symbol in all_symbols:
+            parsed_symbol = symbol_util.parse_symbol(symbol)
+            all_currencies.add(parsed_symbol.base)
+            all_currencies.add(parsed_symbol.quote)
+
+        currency_name_info = {}
+        currency_name_info_list = models.get_all_symbols_list()
+        for currency in currency_name_info_list:
+            currency_name = currency.get("s")
+            if currency_name in all_currencies:
+                currency_name_info[currency_name] = currency
 
         return basic_utils.get_response(
             data={
                 "config_exchanges": config_exchanges,
                 "config_symbols": models.format_config_symbols(display_config),
                 "symbols_by_exchanges": symbols_by_exchanges,
+                "currency_name_info": currency_name_info,
                 # "symbol_list": sorted(
                 #     models.get_symbol_list(enabled_exchanges or config_exchanges)
                 # ),
-                "full_symbol_list": models.get_all_symbols_list(),
                 # "exchanges_details": exchange_details,
             },
         )
