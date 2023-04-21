@@ -5,7 +5,8 @@
     "softRefresh": "Soft Refresh",
     "stopBot": "Stop Bot",
     "updateBot": "Update Bot",
-    "logout": "Log out from Bot"
+    "logout": "Log out from Bot",
+    "closePairSelectorTooltip": "Click to close the exchange settings"
   },
   "notFoundPage": {
     "goHome": "go home",
@@ -37,5 +38,8 @@
   },
   "select": {
     "all": "Select All"
+  },
+  "pairSelector": {
+    "SaveAndRestart": "Save And Restart"
   }
 }

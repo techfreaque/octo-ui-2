@@ -5,7 +5,8 @@
     "softRefresh": "Actualización suave",
     "stopBot": "Detener robot",
     "updateBot": "Actualizar robot",
-    "logout": "Cerrar sesión de Bot"
+    "logout": "Cerrar sesión de Bot",
+    "closePairSelectorTooltip": "Haga clic para cerrar la configuración de intercambio"
   },
   "notFoundPage": {
     "goHome": "Vete a casa",
@@ -37,5 +38,8 @@
   },
   "select": {
     "all": "Seleccionar todo"
+  },
+  "pairSelector": {
+    "SaveAndRestart": "Guardar y reiniciar"
   }
 }

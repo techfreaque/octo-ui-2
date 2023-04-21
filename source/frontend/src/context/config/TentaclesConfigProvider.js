@@ -99,8 +99,6 @@ export const useSaveTentaclesConfig = () => {
             createNotification("Successfully save tentacles config")
             if (reloadPlots) 
                 fetchPlotData();
-            
-
         }
         const success = (updated_data, update_url, result, msg, status) => {
             if (isTradingConfig) {
@@ -125,8 +123,6 @@ export const useSaveTentaclesConfigAndSendAction = () => {
         const success = (updated_data, update_url, result, msg, status) => {
             if (reloadPlots) 
                 fetchPlotData();
-            
-
             setIsLoading(false)
             createNotification("Successfully executed trading mode")
         }

@@ -55,6 +55,8 @@ import BacktestingProgress from "../AppWidgets/Progress/BacktestingProgress";
 import OptimizerProgress from "../AppWidgets/Progress/OptimizerProgress";
 import CurrentPanelPosition from "../AppWidgets/Buttons/CurrentPanelPosition";
 import DataCollectorProgress from "../AppWidgets/Progress/DataCollectorProgress";
+import ClosePairSelector from "../AppWidgets/Buttons/ClosePairSelector";
+import SavePairSelector from "../AppWidgets/Buttons/SavePairSelector";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -119,4 +121,6 @@ export const registeredComponents = {
     OptimizerProgress,
     CurrentPanelPosition,
     DataCollectorProgress,
+    ClosePairSelector,
+    SavePairSelector,
 };

@@ -11,7 +11,7 @@ import octobot_services.interfaces.util as interfaces_util
 import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisModes.default_run_analysis_mode.run_analysis_mode_default as run_analysis_mode_default
-
+import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
 
 class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
     NAME = "run_analysis_modes"
@@ -65,6 +65,9 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
                     optimization_campaign=optimization_campaign,
                 )
             )
+        except analysis_errors.LiveMetaDataNotInitializedError as error:
+            if cls.DEBUG_PLOTS:
+                cls.log_exception(error)
         except Exception as error:
             if cls.DEBUG_PLOTS:
                 cls.log_exception(error)

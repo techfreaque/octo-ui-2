@@ -41,6 +41,7 @@ export default function ExchangeSelector() {
         enabled && enabledExchanges.push(exchangeName)
         exchangesData.push({
             exchange: exchangeName,
+            key: exchangeName,
             sandboxed: sandboxed,
             apiKey: apiKey,
             enabledLabel: (<Switch checked={enabled}></Switch>),

@@ -5,7 +5,8 @@
     "softRefresh": "Sanfte Aktualisierung",
     "stopBot": "Bot stoppen",
     "updateBot": "Bot aktualisieren",
-    "logout": "Melden Sie sich vom Bot ab"
+    "logout": "Melden Sie sich vom Bot ab",
+    "closePairSelectorTooltip": "Klicken Sie hier, um die Exchange-Einstellungen zu schließen"
   },
   "notFoundPage": {
     "goHome": "zur Startseite",
@@ -37,5 +38,8 @@
   },
   "select": {
     "all": "Wählen Sie Alle"
+  },
+  "pairSelector": {
+    "SaveAndRestart": "Speichern und neu starten"
   }
 }

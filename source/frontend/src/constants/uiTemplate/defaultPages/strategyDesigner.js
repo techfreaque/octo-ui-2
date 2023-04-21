@@ -17,8 +17,7 @@ export const defaultStrategyDesignerPageLayout = {
                         },
                         {
                             "component": "RefreshBotData"
-                        },
-                        {
+                        }, {
                             "antIcon": "AppstoreAddOutlined",
                             "component": "ButtonWithModal",
                             "content": [
@@ -29,8 +28,7 @@ export const defaultStrategyDesignerPageLayout = {
                             "faIcon": "noIcon",
                             "iconOnly": true,
                             "title": "Package Manager"
-                        },
-                        {
+                        }, {
                             "antIcon": "SettingOutlined",
                             "component": "ButtonWithModal",
                             "content": [
@@ -84,8 +82,7 @@ export const defaultStrategyDesignerPageLayout = {
                             "faIcon": "",
                             "iconOnly": true,
                             "title": "Bot Settings"
-                        },
-                        {
+                        }, {
                             "antIcon": "NotificationOutlined",
                             "component": "ButtonWithModal",
                             "content": [
@@ -98,11 +95,10 @@ export const defaultStrategyDesignerPageLayout = {
                             "title": "Notification Center"
                         }, {
                             "component": "RealTradingSwitch"
-                        },{
+                        }, {
                             'component': 'CurrentPanelPosition',
                             'position': 'footer_half'
-                        },
-                        {
+                        }, {
                             "component": "PowerMenu"
                         }
                     ]
@@ -117,7 +113,11 @@ export const defaultStrategyDesignerPageLayout = {
                             "content": [
                                 {
                                     "component": "ScrollableTabs",
-                                    "rightContent": [],
+                                    "rightContent": [
+                                        {
+                                            "component": "ClosePairSelector"
+                                        }
+                                    ],
                                     "tabs": [
                                         {
                                             "antIcon": "DollarOutlined",
@@ -130,7 +130,9 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": true,
                                             "faIcon": "",
                                             "title": "Symbols",
-                                            "toolBarContent": []
+                                            "toolBarContent": [  {
+                                                "component": "SavePairSelector"
+                                            }]
                                         }, {
                                             "antIcon": "BankOutlined",
                                             "component": "Tab",
@@ -142,7 +144,9 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": true,
                                             "faIcon": "",
                                             "title": "Exchanges",
-                                            "toolBarContent": []
+                                            "toolBarContent": [  {
+                                                "component": "SavePairSelector"
+                                            }]
                                         }
                                     ]
                                 }

@@ -6,7 +6,7 @@ short-name: any_platform.zip
 tags: []
 tentacles:
 - RunAnalysis@1.0.2
-- octo_ui2@0.9.16
+- octo_ui2@0.9.17
 - run_analysis_mode@0.6.2
 type: tentacle_package
 version: unknown_version

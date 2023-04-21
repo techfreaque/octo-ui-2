@@ -39,6 +39,7 @@ class UnrealizedPortfolioValue(abstract_analysis_evaluator.AnalysisEvaluator):
             analysis_type=analysis_type,
             data_source_input_name=self.PLOT_UNREALIZED_PORTFOLIO_VALUE_NAME,
             default_chart_location="sub-chart",
+            default_data_source_enabled=True
         )
         x = []
         y: typing.Dict[list] = {}

@@ -168,30 +168,32 @@ class RunAnalysisBaseDataGenerator:
     ) -> typing.List[npt.NDArray[numpy.float64]]:
         # TODO get/download history from first tradetime or start time
         # TODO multi exchange
-        exchange_manager = trading_api.get_exchange_manager_from_exchange_id(
-            exchange_api.get_exchange_ids()[0]
-        )
-        try:
-            raw_candles = trading_api.get_symbol_historical_candles(
-                trading_api.get_symbol_data(
-                    exchange_manager, symbol, allow_creation=True
-                ),
-                time_frame,
+        for exchange_id in exchange_api.get_exchange_ids():
+            exchange_manager = trading_api.get_exchange_manager_from_exchange_id(
+                exchange_id
             )
-        except KeyError as error:
-            raise analysis_errors.CandlesLoadingError from error
-        for index in range(
-            len(raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value])
-        ):
-            raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value][index] *= 1000
-        return [
-            raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value],
-            raw_candles[commons_enums.PriceIndexes.IND_PRICE_OPEN.value],
-            raw_candles[commons_enums.PriceIndexes.IND_PRICE_HIGH.value],
-            raw_candles[commons_enums.PriceIndexes.IND_PRICE_LOW.value],
-            raw_candles[commons_enums.PriceIndexes.IND_PRICE_CLOSE.value],
-            raw_candles[commons_enums.PriceIndexes.IND_PRICE_VOL.value],
-        ]
+            if exchange_manager.exchange_name == self.exchange_name:
+                try:
+                    raw_candles = trading_api.get_symbol_historical_candles(
+                        trading_api.get_symbol_data(
+                            exchange_manager, symbol, allow_creation=True
+                        ),
+                        time_frame,
+                    )
+                except KeyError as error:
+                    raise analysis_errors.CandlesLoadingError from error
+                for index in range(
+                    len(raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value])
+                ):
+                    raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value][index] *= 1000
+                return [
+                    raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value],
+                    raw_candles[commons_enums.PriceIndexes.IND_PRICE_OPEN.value],
+                    raw_candles[commons_enums.PriceIndexes.IND_PRICE_HIGH.value],
+                    raw_candles[commons_enums.PriceIndexes.IND_PRICE_LOW.value],
+                    raw_candles[commons_enums.PriceIndexes.IND_PRICE_CLOSE.value],
+                    raw_candles[commons_enums.PriceIndexes.IND_PRICE_VOL.value],
+                ]
 
     async def get_trades(self, symbols: typing.Optional[typing.List[str]] = None):
         # TODO when live load trades from bot 

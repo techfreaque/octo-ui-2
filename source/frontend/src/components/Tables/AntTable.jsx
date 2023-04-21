@@ -84,7 +84,7 @@ export default function AntTable({columns, data, onFilterChange, maxWidth= "650p
                 overflowY: "auto",
                 maxWidth: maxWidth,
                 width: "100vw",
-                maxHeight: "calc(100vh - 140px)"
+                maxHeight: "calc(100vh - 200px)"
             }
     }>
 

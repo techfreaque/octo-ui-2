@@ -60,5 +60,5 @@ async def _get_metadata(run_database):
         return (
             await run_database.get_run_db().all(commons_enums.DBTables.METADATA.value)
         )[0]
-    except IndexError as error:
-        raise analysis_errors.LiveMetaDataNotInitializedError from error
+    except IndexError:
+        raise analysis_errors.LiveMetaDataNotInitializedError

@@ -5,7 +5,8 @@
     "softRefresh": "软刷新",
     "stopBot": "停止机器人",
     "updateBot": "更新机器人",
-    "logout": "从机器人注销"
+    "logout": "从机器人注销",
+    "closePairSelectorTooltip": "点击关闭兑换设置"
   },
   "notFoundPage": {
     "goHome": "回家",
@@ -37,5 +38,8 @@
   },
   "select": {
     "all": "全选"
+  },
+  "pairSelector": {
+    "SaveAndRestart": "保存并重启"
   }
 }

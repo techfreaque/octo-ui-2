@@ -1,5 +1,5 @@
 import {useVisiblePairsContext} from "../../../context/config/VisiblePairProvider";
-import {useMemo, useState} from "react";
+import {useMemo} from "react";
 import {
     Dropdown,
     Tooltip
@@ -9,22 +9,19 @@ import {useVisibleExchangesContext} from "../../../context/config/VisibleExchang
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import AntButton from "../../../components/Buttons/AntButton";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
-// import {getCurrencyLogos} from "../../../api/data";
+import { usePairSelectorMenuOpenContext, useUpdatePairSelectorMenuOpenContext } from "../../../context/data/BotExchangeInfoProvider";
 
-export default function PairsSelector({content}) { // const [currencyLogos, setCurrencyLogos] = useState()
+export default function PairsSelector({content}) {
     const visiblePairs = useVisiblePairsContext();
     const visibleExchanges = useVisibleExchangesContext();
-    const [menuIsOpen, setMenuIsOpen] = useState(false);
-
-    // useEffect(() => {
-    //     getCurrencyLogos(botDomain, Object.keys(currencySettings).map(currency => currency), setCurrencyLogos)
-    // }, [currencySettings]);
+    const menuIsOpen =usePairSelectorMenuOpenContext()
+    const setMenuIsOpen = useUpdatePairSelectorMenuOpenContext()
     return useMemo(() => {
         return (<div style={
             {margin: "auto"}
         }>
             <PairConfiguratorDropdown setMenuIsOpen={setMenuIsOpen}
-                menuIsOpen={menuIsOpen}
+                menuIsOpen={menuIsOpen?.open}
                 content={content}
             >
             <Tooltip key={visiblePairs}
@@ -33,7 +30,7 @@ export default function PairsSelector({content}) { // const [currencyLogos, setC
             }>
                 <AntButton selected={true}
                     onClick={
-                        () => setMenuIsOpen(true)
+                        () => setMenuIsOpen({open: true, wantsClose: false})
                 }
                     buttonVariant="text"
                 >
@@ -47,17 +44,15 @@ export default function PairsSelector({content}) { // const [currencyLogos, setC
                     </div>
                 </AntButton>
             </Tooltip>
-                
                 </PairConfiguratorDropdown>
         </div>)
-
-    }, [content, menuIsOpen, visibleExchanges, visiblePairs])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [content, menuIsOpen?.open, visibleExchanges, visiblePairs])
 }
 
 
 function PairConfiguratorDropdown({content, setMenuIsOpen, menuIsOpen, children}) {
-
-    return (<Dropdown onOpenChange={setMenuIsOpen}
+    return (<Dropdown onOpenChange={(open)=>setMenuIsOpen({open, wantsClose: true})}
         open={menuIsOpen}
         destroyPopupOnHide={true}
         dropdownRender={
@@ -79,14 +74,8 @@ function PairConfigurator({content}) {
     const botColors = useBotColorsContext();
     return (<div style={{
         backgroundColor: botColors.background,
-        // maxHeight: "calc(100vh - 80px)",
-        // overflowX: "hidden",
-        // overflowY: "auto",
         border: `1px solid ${botColors.border}`,
     }}>
        { content && (<AppWidgets layout={content}/>)}
-        {/* <ExchangeSelector />
-        <PairsTable currencySettings={currencySettings}/> */}
-
     </div>)
 }

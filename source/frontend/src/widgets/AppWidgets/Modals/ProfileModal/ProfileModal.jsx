@@ -10,7 +10,7 @@ import {useIsBotOnlineContext, useRestartBot} from "../../../../context/data/IsB
 import ProfileAvatar from "../../Stats/ProfileAvatar";
 import {ProfileSettings} from "./ProfileSettings";
 import {ProfileTitle} from "./ProfileTitle";
-import { Trans } from "react-i18next";
+import {Trans} from "react-i18next";
 
 
 export default function ProfileModal() {
@@ -96,46 +96,48 @@ export default function ProfileModal() {
         setOpen(false)
     };
     return useMemo(() => (
-        <Tooltip  
-        title={(<Trans  i18nKey="profile.profileInfoButtonToolTip" />)} 
-        >
-        <div style={
-            {
-                margin: "auto",
-                height: "100%"
-            }
+        <Tooltip title={
+            (
+                <Trans i18nKey="profile.profileInfoButtonToolTip"/>
+            )
         }>
-            <Button onClick={
-                    () => setOpen(true)
+            <div style={
+                {
+                    margin: "auto",
+                    height: "100%"
                 }
-                disabled={
-                    ! isOnline
-                }
-                style={
-                    {
-                        fontSize: "9px",
-                        height: "100%",
-                        textTransform: "none",
-                        maxWidth: "150px",
-                        maxHeight: "40px",
-                        overflow: "hidden",
-                        textOverflow: "ellipsis"
-                    }
             }>
-                <ProfileAvatar marginRight="5px"/> {currentProfileTitle} </Button>
-            {
-            open && <ProfileModalElement open={open}
-                setIsloading={setIsloading}
-                handleClose={handleClose}
-                newProfileSettings={newProfileSettings}
-                setNewProfileSettings={setNewProfileSettings}
-                botInfo={botInfo}
-                setRequiresInstantRestart={setRequiresInstantRestart}
-                requiresInstantRestart={requiresInstantRestart}
-                loading={loading}
-                saveProfile={saveProfile}
-                hasChanged={hasChanged}
-                saveProfileAndRestart={saveProfileAndRestart}/>
+                <Button onClick={
+                        () => setOpen(true)
+                    }
+                    disabled={
+                        ! isOnline
+                    }
+                    style={
+                        {
+                            fontSize: "9px",
+                            height: "100%",
+                            textTransform: "none",
+                            maxWidth: "150px",
+                            maxHeight: "40px",
+                            overflow: "hidden",
+                            textOverflow: "ellipsis"
+                        }
+                }>
+                    <ProfileAvatar marginRight="5px"/> {currentProfileTitle} </Button>
+                {
+                open && <ProfileModalElement open={open}
+                    setIsloading={setIsloading}
+                    handleClose={handleClose}
+                    newProfileSettings={newProfileSettings}
+                    setNewProfileSettings={setNewProfileSettings}
+                    botInfo={botInfo}
+                    setRequiresInstantRestart={setRequiresInstantRestart}
+                    requiresInstantRestart={requiresInstantRestart}
+                    loading={loading}
+                    saveProfile={saveProfile}
+                    hasChanged={hasChanged}
+                    saveProfileAndRestart={saveProfileAndRestart}/>
             } </div>
         </Tooltip>
     // eslint-disable-next-line react-hooks/exhaustive-deps
