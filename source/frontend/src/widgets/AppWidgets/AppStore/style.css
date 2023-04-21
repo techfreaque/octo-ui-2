@@ -1,0 +1,20 @@
+.productCard:hover {
+    transform: translateY(-2px);
+  }
+
+.productCard {
+    width: 300px;
+    height: 360px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+    margin-left: 16px;
+    box-shadow: 0px 0px 3px rgb(0 0 0 / 24%);
+    border-radius: 4px;
+    transition: all 200ms linear 0ms;
+  }
+
+.productCard__price {
+    display: block;
+    position: absolute;
+    bottom: 10px;
+}

@@ -1,11 +1,11 @@
 import React from "react";
-import { Box } from "@mui/material";
 import InstalledAppCard from "./InstalledAppCard";
 import AppCard from "./AppCard";
+import { Row } from "antd";
 
 export default function AppList({ selectedCategories, appStoreData }) {
   return (
-    <Box>
+    <Row>
       {selectedCategories.includes("installed")
         ? Object.values(appStoreData.tentacles).map((tentacle, index) => (
             <InstalledAppCard key={tentacle.name + index} tentacle={tentacle} />
@@ -18,6 +18,6 @@ export default function AppList({ selectedCategories, appStoreData }) {
                 )) && <AppCard key={app.name + index} app={app} />
             );
           })}
-    </Box>
+    </Row>
   );
 }
