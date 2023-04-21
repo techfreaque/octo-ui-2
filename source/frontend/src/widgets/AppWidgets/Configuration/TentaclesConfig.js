@@ -22,14 +22,14 @@ export function useCurrentTentacleConfig(tentacleType = tentacleConfigType.tenta
 
 export default function TentaclesConfig({
     content,
-    tentacleNames = "RunAnalysisModePlugin"
+    tentacleNames = "RunAnalysisModePlugin",
+    additionalTabs = []
 }) {
     const botInfo = useBotInfoContext()
     const fetchTentaclesConfig = useFetchTentaclesConfig()
     const currentTentaclesConfig = useTentaclesConfigContext()
     const currentTentaclesNonTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tentacles]
     const tentacles = tentacleNames.split(",")
-
     const saveTentaclesConfig = useSaveTentaclesConfig()
     function handleTentaclesUpdate() {
         fetchTentaclesConfig(tentacleNames.split(","))
@@ -37,22 +37,47 @@ export default function TentaclesConfig({
     useEffect(() => {
         handleTentaclesUpdate()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [botInfo])
-
-    const configs = {}
-    tentacles.forEach(tentacle => {
-        configs[tentacle] = currentTentaclesNonTradingConfig?.[tentacle] || {}
-    })
-
-    return useMemo(() => (
-        <AbstractTentaclesConfig botInfo={botInfo}
-            fetchCurrentTentaclesConfig={handleTentaclesUpdate}
-            currentTentaclesTradingConfig={configs}
-            saveTentaclesConfig={saveTentaclesConfig}
-            content={content}
-            storageName={tentacleNames}/>
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), [botInfo, content, currentTentaclesNonTradingConfig, tentacleNames])
+    }, [botInfo])    
+    return useMemo(() => {
+        if (currentTentaclesConfig) {
+            const configs = {}
+            tentacles?.forEach(tentacle => {
+                configs[tentacle] = currentTentaclesNonTradingConfig?.[tentacle] || {}
+            })
+                (<AbstractTentaclesConfig botInfo={botInfo}
+                    fetchCurrentTentaclesConfig={handleTentaclesUpdate}
+                    currentTentaclesTradingConfig={configs}
+                    saveTentaclesConfig={saveTentaclesConfig}
+                    content={content}
+                    additionalTabsAfter={
+                        additionalTabs.map(tab => {
+                            const tabId = tab.title.replace(/ /g, "_")
+                            return {
+                                ...tab,
+                                tabId,
+                                title: (
+                                    <Tab key={tabId}
+                                        label={
+                                            tab.title
+                                        }
+                                        value={tabId}
+                                        sx={
+                                            { textTransform: 'none' }
+                                        } />
+                                ),
+                                content: (
+                                    <AppWidgets layout={
+                                        tab.content
+                                    } />
+                                )
+                            }
+                        })
+                    }
+                    storageName={tentacleNames} />
+                    // eslint-disable-next-line react-hooks/exhaustive-deps
+                )
+        }
+    }, [botInfo, content, currentTentaclesNonTradingConfig, tentacleNames])
 }
 
 export function AbstractTentaclesConfig({
@@ -62,16 +87,18 @@ export function AbstractTentaclesConfig({
     saveTentaclesConfig,
     setHiddenMetadataColumns,
     content,
-    storageName = "tradingConfig"
+    storageName = "tradingConfig",
+    additionalTabs,
+    additionalTabsAfter
 }) {
     const botDomain = useBotDomainContext()
     const exchangeId = botInfo?.exchange_id
     const [tabs, setTabs] = useState()
     const [isSaving, setIsSaving] = useState(false)
     useEffect(() => {
-        if (currentTentaclesTradingConfig) 
-            setTabs(tradingConfigTabs(currentTentaclesTradingConfig, setHiddenMetadataColumns, exchangeId, botDomain, storageName));
-        
+        if (currentTentaclesTradingConfig) {
+            setTabs(tradingConfigTabs(currentTentaclesTradingConfig, setHiddenMetadataColumns, exchangeId, botDomain, storageName, additionalTabs, additionalTabsAfter));
+        }
 
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -92,24 +119,24 @@ export function AbstractTentaclesConfig({
                     (
                         <>
                             <AppWidgets layout={content}/>
-                                <AntButton type="primary"
-                                    disabled={isSaving}
-                                    onClick={handleUserInputSave}
-                                    antIconComponent={SaveOutlined}
-                                    iconSize={sizes.medium}
-                                >
-                                </AntButton>
+                            <AntButton type="primary"
+                                disabled={isSaving}
+                                onClick={handleUserInputSave}
+                                antIconComponent={SaveOutlined}
+                                iconSize={
+                                    sizes.medium
+                            }></AntButton>
                         </>
                     )
                 }
                 defaultTabId={defaultTabId}/>
         )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tabs, defaultTabId, content, isSaving])
 }
 
-function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, botDomain, storageName) {
-    const tabsData = []
+function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, botDomain, storageName, additionaltabs =[], additionalTabsAfter =[]) {
+    const tabsData = [...additionaltabs]
     // window.trading_mode_objects = {}
 
     destroyAllEditors(storageName)
@@ -132,6 +159,7 @@ function tradingConfigTabs(userInputs, setHiddenMetadataColumns, exchangeId, bot
         });
 
     })
+    tabsData.push(...additionalTabsAfter)
     return tabsData
 }
 
@@ -175,16 +203,16 @@ function _handleHiddenUserInputs(elements, setHiddenMetadataColumns) {
     Object.values(elements).forEach((inputDetails) => {
         hiddenMetadataColumns = hiddenMetadataColumns.concat(_hideNotShownUserInputs(inputDetails.tentacle, inputDetails.schema, inputDetails.is_hidden));
     });
-    setHiddenMetadataColumns?.(hiddenMetadataColumns)
+    setHiddenMetadataColumns ?. (hiddenMetadataColumns)
 }
 
 export function saveUserInputs(saveTentaclesConfig, setIsLoading, storageName = "tradingConfig") {
-    setIsLoading?.(true)
+    setIsLoading ?. (true)
     const tentaclesConfigByTentacle = {};
     let save = true;
     Object.keys(window[`$${storageName}`]).forEach((editorKey) => {
         const editor = window[`$${storageName}`][editorKey]
-        if (!editor) {
+        if (! editor) {
             return;
         }
         const tentacle = editorKey.split("##")[1];
@@ -225,7 +253,11 @@ function _createTentacleConfigTab({
     tabsData,
     storageName
 }) {
-    if (schema) _addGridDisplayOptions(schema, editorKey);
+    if (schema) 
+        _addGridDisplayOptions(schema, editorKey);
+    
+
+
     if (schema?.properties) {
         try {
             Object.values(schema?.properties).forEach(property => property && _addGridDisplayOptions(property, null));

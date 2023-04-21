@@ -10,6 +10,7 @@ import { useBotInfoContext } from '../../../../context/data/BotInfoProvider';
 import { PoweroffOutlined } from '@ant-design/icons';
 import { Trans } from 'react-i18next';
 import AntButton from '../../../../components/Buttons/AntButton';
+import ColorModeSwitch from '../../Buttons/ColorModeSwitcher';
 
 export default function PowerMenu() {
     const botDomain = useBotDomainContext();
@@ -39,7 +40,13 @@ export default function PowerMenu() {
                             key: 'stop',
                             label: (
                                 <StopBotButton/>)
-                        }, {
+                        },
+                        {
+                            key: 'colorMode',
+                            label: (
+                                <ColorModeSwitch/>)
+                        },
+                        {
                             key: 'back',
                             label: (
                                 <Button variant="outlined"         block={true}

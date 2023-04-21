@@ -31,6 +31,7 @@ export default function appWidgetsProps() {
         ...generateSimpleProp("minHeights", [
             "DefaultLayout", "SplitMainContent"
         ], "string", undefined, undefined, undefined, "0, 0"),
+        ...generateAppWidgetProp("additionalTabs", "TentaclesConfig"),
         ...generateAppWidgetProp("tabs", "ScrollableTabs"),
         ...generateAppWidgetProp("settingsContent", "ChartTablePieCombo"),
         ...generateAppWidgetProp("headerContent", ["DefaultLayout", "SimpleLayout"]),

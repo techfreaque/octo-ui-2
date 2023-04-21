@@ -6,7 +6,6 @@ import {
     useExchangeInfoContext,
     useFetchExchangeInfo,
     useHandleSettingChange,
-    useUnsavedCurrenciesLists
 } from '../../../context/data/BotExchangeInfoProvider';
 import {useIsBotOnlineContext} from '../../../context/data/IsBotOnlineProvider';
 import {useBotDomainContext} from '../../../context/config/BotDomainProvider';
@@ -109,9 +108,9 @@ function getData({
     handleSettingChange
 }) {
     const preSorteddata = []
-    const enabledExchanges = exchangeInfo ?. symbols_by_exchanges && Object.keys(exchangeInfo.symbols_by_exchanges)
-    enabledExchanges ?. forEach(exchange => {
-        exchangeInfo ?. symbols_by_exchanges ?. [exchange] ?. forEach(symbol => {
+    const enabledExchanges = exchangeInfo?.symbols_by_exchanges && Object.keys(exchangeInfo.symbols_by_exchanges)
+    enabledExchanges?.forEach(exchange => {
+        exchangeInfo?.symbols_by_exchanges?.[exchange]?.forEach(symbol => {
             const isEnabled = currentCurrencyList.includes(symbol)
             const isSelected = visibleExchanges === exchange && visiblePairs === symbol.replace("/", "|")
             const availableAfterRestart = unsavedCurrencyList.includes(symbol) && ! isEnabled
@@ -142,8 +141,8 @@ function getData({
         })
     });
     // pre sort by enabled and symbol
-    preSorteddata ?. sort((a, b) => {
-        return(+ b ?. enabled) - (+ a ?. enabled) || a.symbol.localeCompare(b.symbol)
+    preSorteddata?.sort((a, b) => {
+        return(+ b?.enabled) - (+ a?.enabled) || a.symbol.localeCompare(b.symbol)
     });
     return preSorteddata
 }
@@ -184,15 +183,15 @@ function SymbolEnabler({
 
 function filterData(tableParams, data) {
     return data.filter((item) => {
-        if (tableParams ?. filters ?. symbol && tableParams ?. filters ?. symbol ?. every(symbol => {
+        if (tableParams?.filters?.symbol && tableParams?.filters?.symbol?.every(symbol => {
             return !item.symbol.replace("/", "").replace(":", "").toLowerCase().includes(symbol.replace("/", "").replace(":", "").toLowerCase())
         })) {
             return false;
         }
-        if (tableParams ?. filters ?. exchange && tableParams ?. filters ?. exchange ?. every(exchange => (item.exchange !== exchange))) {
+        if (tableParams?.filters?.exchange && tableParams?.filters?.exchange?.every(exchange => (item.exchange !== exchange))) {
             return false;
         }
-        if (tableParams ?. filters ?. enabled && ! tableParams ?. filters ?. enabled ?. includes(item.enabled)) {
+        if (tableParams?.filters?.enabled && ! tableParams?.filters?.enabled?.includes(item.enabled)) {
             return false;
         }
         return true;

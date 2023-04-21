@@ -126,7 +126,7 @@ export const BotExchangeInfoProvider = ({children}) => {
     const [currenciesLists, setCurrenciesLists] = useState();
 
     const {currencyList: currentCurrencyList, currencySettings: currentCurrencySettings} = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
-    const {currencyList: unsavedCurrencyList, currencySettings: unsavedCurrencySettings} = convertSymbolSettingsToNewFormat(toSaveCurrencySettings, exchangeInfo)
+    const {currencyList: unsavedCurrencyList} = convertSymbolSettingsToNewFormat(toSaveCurrencySettings, exchangeInfo)
     const currentCurrencySettingsJson = JSON.stringify(currentCurrencySettings)
     const currentCurrencyListJson = JSON.stringify(currentCurrencyList)
     const unsavedCurrencyListJson = JSON.stringify(unsavedCurrencyList)

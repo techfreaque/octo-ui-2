@@ -6,7 +6,8 @@
     "stopBot": "停止机器人",
     "updateBot": "更新机器人",
     "logout": "从机器人注销",
-    "closePairSelectorTooltip": "点击关闭兑换设置"
+    "closePairSelectorTooltip": "点击关闭兑换设置",
+    "colorModeSwitch": "颜色模式"
   },
   "notFoundPage": {
     "goHome": "回家",
@@ -41,5 +42,12 @@
   },
   "pairSelector": {
     "SaveAndRestart": "保存并重启"
+  },
+  "exchangeSelector": {
+    "exchangeAuthenticatedTooltip": "您的 API 密钥有效。",
+    "exchangeNotAuthenticatedTooltip": "无法验证您的 API 密钥。\n真实交易需要有效的 API 密钥。",
+    "isTestedExchangeTooltip": "该交易所得到全面支持和测试",
+    "isTestedExchangeSimulatedTooltip": "此交换仅在模拟模式下经过测试和支持。",
+    "isUntestedExchangeTooltip": "此交换尚未经过测试，未得到官方支持。"
   }
 }

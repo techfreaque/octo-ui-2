@@ -6,7 +6,8 @@
     "stopBot": "Stop Bot",
     "updateBot": "Update Bot",
     "logout": "Log out from Bot",
-    "closePairSelectorTooltip": "Click to close the exchange settings"
+    "closePairSelectorTooltip": "Click to close the exchange settings",
+    "colorModeSwitch": "Color Mode"
   },
   "notFoundPage": {
     "goHome": "go home",
@@ -41,5 +42,12 @@
   },
   "pairSelector": {
     "SaveAndRestart": "Save And Restart"
+  },
+  "exchangeSelector": {
+    "exchangeAuthenticatedTooltip": "Your API keys are valid.",
+    "exchangeNotAuthenticatedTooltip": "Failed to verify your API keys. Valid API keys are required for real trading.",
+    "isTestedExchangeTooltip": "This exchange is fully supported and tested.",
+    "isTestedExchangeSimulatedTooltip": "This exchange is tested and supported in simulation mode only.",
+    "isUntestedExchangeTooltip": "This exchange has not been tested yet and is not officially supported."
   }
 }

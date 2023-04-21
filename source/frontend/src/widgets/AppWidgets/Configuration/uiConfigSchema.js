@@ -1,12 +1,12 @@
 import { CURRENT_BOT_DATA } from "../../../constants/backendConstants";
 
-const DISPLAYED_ELEMENTS_KEYS = ["main-chart", "sub-chart", "backtesting-run-overview", "backtesting-details", "list-of-trades-part"]
-const DISPLAYED_ELEMENTS_TITLES = [
-    "main-chart: Display plotted elements on the main chart section ",
-    "sub-chart: Display plotted elements on the sub chart section ",
-    "backtesting-run-overview: Display plotted elements on the backtesting run overview section ",
-    "backtesting-details: Display elements on the backtesting run details section ",
-    "list-of-trades-part: Display elements on the list of trades section "]
+// const DISPLAYED_ELEMENTS_KEYS = ["main-chart", "sub-chart", "backtesting-run-overview", "backtesting-details", "list-of-trades-part"]
+// const DISPLAYED_ELEMENTS_TITLES = [
+//     "main-chart: Display plotted elements on the main chart section ",
+//     "sub-chart: Display plotted elements on the sub chart section ",
+//     "backtesting-run-overview: Display plotted elements on the backtesting run overview section ",
+//     "backtesting-details: Display elements on the backtesting run details section ",
+//     "list-of-trades-part: Display elements on the list of trades section "]
 
 
 export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availableExchanges) {
@@ -472,25 +472,25 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                     "grid_columns": 12,
                 },
                 properties: {
-                    displayed_elements: {
-                        "type": "array",
-                        "uniqueItems": true,
-                        "format": "select2",
-                        "options": {
-                            "grid_columns": 12,
-                            "select2": {
-                                "tags": true
-                            },
-                        },
-                        title: "Elements to render",
-                        default: DISPLAYED_ELEMENTS_KEYS,
+                    // displayed_elements: {
+                    //     "type": "array",
+                    //     "uniqueItems": true,
+                    //     "format": "select2",
+                    //     "options": {
+                    //         "grid_columns": 12,
+                    //         "select2": {
+                    //             "tags": true
+                    //         },
+                    //     },
+                    //     title: "Elements to render",
+                    //     default: DISPLAYED_ELEMENTS_KEYS,
 
-                        items: {
-                            enum: DISPLAYED_ELEMENTS_KEYS,
-                            type: "string",
-                            "options": { enum_titles: DISPLAYED_ELEMENTS_TITLES },
-                        },
-                    },
+                    //     items: {
+                    //         enum: DISPLAYED_ELEMENTS_KEYS,
+                    //         type: "string",
+                    //         "options": { enum_titles: DISPLAYED_ELEMENTS_TITLES },
+                    //     },
+                    // },
                     graphs: {
                         type: "object",
                         title: "Graphs",

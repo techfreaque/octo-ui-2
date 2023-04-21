@@ -55,6 +55,7 @@ import CurrentPanelPosition from "../AppWidgets/Buttons/CurrentPanelPosition";
 import DataCollectorProgress from "../AppWidgets/Progress/DataCollectorProgress";
 import ClosePairSelector from "../AppWidgets/Buttons/ClosePairSelector";
 import SavePairSelector from "../AppWidgets/Buttons/SavePairSelector";
+import StraegyConfigurator from "../AppWidgets/Configuration/StrategyConfigurator";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -119,4 +120,5 @@ export const registeredComponents = {
     DataCollectorProgress,
     ClosePairSelector,
     SavePairSelector,
+    StraegyConfigurator,
 };

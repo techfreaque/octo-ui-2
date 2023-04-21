@@ -2,8 +2,13 @@ import {SearchOutlined} from "@ant-design/icons";
 import {Button, Input, Space, Table} from "antd";
 import {useRef, useState} from "react";
 
-export default function AntTable({columns, data, onFilterChange, maxWidth= "650px"}) {
-    // eslint-disable-next-line no-unused-vars
+export default function AntTable({
+    columns,
+    data,
+    onFilterChange,
+    maxWidth = "650px",
+    expandable
+}) { // eslint-disable-next-line no-unused-vars
     const [searchText, setSearchText] = useState('');
     // eslint-disable-next-line no-unused-vars
     const [searchedColumn, setSearchedColumn] = useState('');
@@ -16,7 +21,8 @@ export default function AntTable({columns, data, onFilterChange, maxWidth= "650p
                 clearFilters,
                 close
             }
-        ) => (<FilterDrowdown selectedKeys={selectedKeys}
+        ) => (
+            <FilterDrowdown selectedKeys={selectedKeys}
                 confirm={confirm}
                 clearFilters={clearFilters}
                 setSearchText={setSearchText}
@@ -24,12 +30,15 @@ export default function AntTable({columns, data, onFilterChange, maxWidth= "650p
                 dataIndex={dataIndex}
                 searchInput={searchInput}
                 setSelectedKeys={setSelectedKeys}
-                close={close}/>),
-        filterIcon: (filtered) => (<SearchOutlined style={
+                close={close}/>
+        ),
+        filterIcon: (filtered) => (
+            <SearchOutlined style={
                 {
                     color: filtered ? '#1890ff' : undefined
                 }
-            }/>),
+            }/>
+        ),
         onFilter: (value, record) => record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
         onFilterDropdownOpenChange: (visible) => {
             if (visible) {
@@ -76,44 +85,46 @@ export default function AntTable({columns, data, onFilterChange, maxWidth= "650p
     };
 
     const _data = onFilterChange(tableParams, data)
-    return (<div className='pairs-table'
-        style={
-            {
-                //     maxHeight: "calc(100vh - 80px)",
-                overflowX: "auto",
-                overflowY: "auto",
-                maxWidth: maxWidth,
-                width: "100vw",
-                maxHeight: "calc(100vh - 200px)"
-            }
-    }>
-
-        <Table columns={_columns}
-            scroll={
-                {
-                    x: false,
-                    y: false
-                }
-            }
-
+    return (
+        <div className='pairs-table'
             style={
                 {
-                    // overflow: "hidden"
-                    // maxWidth: "650px",
-                    // maxHeight: "calc(100vh - 80px)",
-
+                    //     maxHeight: "calc(100vh - 80px)",
+                    overflowX: "auto",
+                    overflowY: "auto",
+                    maxWidth: maxWidth,
+                    width: "100vw",
+                    maxHeight: "calc(100vh - 200px)"
                 }
-            }
-            dataSource={_data}
-            sticky={true}
-            onChange={handleTableChange}
-            pagination={
-                {position: ["bottomLeft"]}
-            }
-            filters={
-                tableParams?.filters
-            }/>
-    </div>)
+        }>
+
+            <Table columns={_columns}
+                scroll={
+                    {
+                        x: false,
+                        y: false
+                    }
+                }
+                expandable={expandable}
+                style={
+                    {
+                        // overflow: "hidden"
+                        // maxWidth: "650px",
+                        // maxHeight: "calc(100vh - 80px)",
+
+                    }
+                }
+                dataSource={_data}
+                sticky={true}
+                onChange={handleTableChange}
+                pagination={
+                    {position: ["bottomLeft"]}
+                }
+                filters={
+                    tableParams?.filters
+                }/>
+        </div>
+    )
 }
 
 
@@ -137,72 +148,75 @@ function FilterDrowdown({
         clearFilters();
         setSearchText('');
     };
-    return (<div style={
-            {padding: 8}
-        }
-        onKeyDown={
-            (e) => e.stopPropagation()
-    }>
-        <Input ref={searchInput}
-            placeholder={
-                `Search ${dataIndex}`
+    return (
+        <div style={
+                {padding: 8}
             }
-            value={
-                selectedKeys[0]
-            }
-            onChange={
-                (e) => setSelectedKeys(e.target.value ? [e.target.value] : [])
-            }
-            onPressEnter={
-                () => handleSearch(selectedKeys, confirm, dataIndex)
-            }
-            style={
-                {
-                    marginBottom: 8,
-                    display: 'block'
+            onKeyDown={
+                (e) => e.stopPropagation()
+        }>
+            <Input ref={searchInput}
+                placeholder={
+                    `Search ${dataIndex}`
                 }
-            }/>
-        <Space>
-            <Button type="primary"
-                onClick={
+                value={
+                    selectedKeys[0]
+                }
+                onChange={
+                    (e) => setSelectedKeys(e.target.value ? [e.target.value] : [])
+                }
+                onPressEnter={
                     () => handleSearch(selectedKeys, confirm, dataIndex)
                 }
-                icon={
-                    (<SearchOutlined/>)
-                }
-                size="small"
                 style={
-                    {width: 90}
-            }>
-                Search
-            </Button>
-            <Button onClick={
-                    () => clearFilters && handleReset(clearFilters)
-                }
-                size="small"
-                style={
-                    {width: 90}
-            }>
-                Reset
-            </Button>
-            <Button type="link" size="small"
-                onClick={
-                    () => {
-                        confirm({closeDropdown: false});
-                        setSearchText(selectedKeys[0]);
-                        setSearchedColumn(dataIndex);
+                    {
+                        marginBottom: 8,
+                        display: 'block'
                     }
-            }>
-                Filter
-            </Button>
-            <Button type="link" size="small"
-                onClick={
-                    () => {
-                        close();
+                }/>
+            <Space>
+                <Button type="primary"
+                    onClick={
+                        () => handleSearch(selectedKeys, confirm, dataIndex)
                     }
-            }>
-                close
-            </Button>
-        </Space>
-    </div>)
+                    icon={
+                        (
+                            <SearchOutlined/>)
+                    }
+                    size="small"
+                    style={
+                        {width: 90}
+                }>
+                    Search
+                </Button>
+                <Button onClick={
+                        () => clearFilters && handleReset(clearFilters)
+                    }
+                    size="small"
+                    style={
+                        {width: 90}
+                }>
+                    Reset
+                </Button>
+                <Button type="link" size="small"
+                    onClick={
+                        () => {
+                            confirm({closeDropdown: false});
+                            setSearchText(selectedKeys[0]);
+                            setSearchedColumn(dataIndex);
+                        }
+                }>
+                    Filter
+                </Button>
+                <Button type="link" size="small"
+                    onClick={
+                        () => {
+                            close();
+                        }
+                }>
+                    close
+                </Button>
+            </Space>
+        </div>
+    )
 }

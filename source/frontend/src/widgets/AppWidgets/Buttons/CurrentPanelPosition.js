@@ -10,7 +10,7 @@ export const availablePanelPositions = {
     half: "half",
     footerHalf: "footerHalf"
 }
-export const availablePanelPositionsArray = [availablePanelPositions.maximized, availablePanelPositions.minimized, availablePanelPositions.half]
+export const availablePanelPositionsArray = [availablePanelPositions.maximized, availablePanelPositions.minimized, availablePanelPositions.half, availablePanelPositions.footerHalf]
 
 export default function CurrentPanelPosition({position}) {
     const currentPanel = useCurrentPanelContext()
