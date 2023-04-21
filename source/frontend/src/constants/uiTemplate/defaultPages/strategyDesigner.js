@@ -97,7 +97,7 @@ export const defaultStrategyDesignerPageLayout = {
                             "component": "RealTradingSwitch"
                         }, {
                             'component': 'CurrentPanelPosition',
-                            'position': 'footer_half'
+                            'position': 'footerHalf'
                         }, {
                             "component": "PowerMenu"
                         }
