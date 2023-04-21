@@ -4,7 +4,7 @@
 
 .productCard {
     width: 300px;
-    height: 360px;
+    height: 380px;
     margin-right: 16px;
     margin-bottom: 16px;
     margin-left: 16px;
@@ -17,4 +17,82 @@
     display: block;
     position: absolute;
     bottom: 10px;
+}
+
+.ratingComponent {
+  display: flex;
+  align-items: center;
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.fullStar {
+    fill: #4B4B4B;
+    stroke: #4B4B4B;
+}
+
+.halfStar > path:first-of-type {
+    fill: #FFF;
+    stroke: #4B4B4B;
+}
+
+.halfStar > path:last-of-type {
+    fill: #4B4B4B;
+    stroke: #4B4B4B;
+}
+
+.dark .fullStar {
+    fill: rgb(185, 179, 169);
+    stroke: rgb(185, 179, 169);
+}
+
+.dark .halfStar > path:first-of-type {
+    fill: #4B4B4B;
+    /* fill: rgb(232, 230, 227); */
+    stroke: #4B4B4B;
+    /* stroke: rgb(185, 179, 169); */
+}
+
+.halfStar > path:last-of-type {
+    /* fill: #4B4B4B; */
+    fill: rgb(185, 179, 169);
+    stroke: rgb(185, 179, 169);
+}
+
+.dark .emptyStar {
+    fill: #4B4B4B;
+    stroke: #4B4B4B;
+}
+
+.emptyStar {
+  /* fill: #4B4B4B; */
+  fill: rgb(185, 179, 169);
+  stroke: rgb(185, 179, 169);
+}
+
+.ratingComponent__votes {
+  color: rgb(113, 113, 113); 
+  padding: 0px 0px 0px 5px;
+  line-height: 0px
+}
+
+.productCard__image {
+  width: 99.8% !important;
+}
+
+.productCard__description {
+  display: -webkit-box;
+  max-width: 300px;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.productCard__title {
+  margin-bottom: 0px important!;
+}
+
+.productCard__category {
+  margin-bottom: 8px;
+  margin-top: -5px;
 }

@@ -69,10 +69,12 @@ export default function AppStore() {
           />
         </Grid>
         <Grid item xs={12} md={8} lg={9}>
-          <AppList
-            selectedCategories={selectedCategories}
-            appStoreData={appStoreData}
-          />
+          <div style={{marginTop: "10px"}}>
+            <AppList 
+              selectedCategories={selectedCategories}
+              appStoreData={appStoreData}
+            />
+          </div>
         </Grid>
       </Grid>
     )
