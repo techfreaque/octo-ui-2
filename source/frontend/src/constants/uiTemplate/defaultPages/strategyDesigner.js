@@ -18,17 +18,6 @@ export const defaultStrategyDesignerPageLayout = {
                         {
                             "component": "RefreshBotData"
                         }, {
-                            "antIcon": "AppstoreAddOutlined",
-                            "component": "ButtonWithModal",
-                            "content": [
-                                {
-                                    "component": "AppStore"
-                                }
-                            ],
-                            "faIcon": "noIcon",
-                            "iconOnly": true,
-                            "title": "Package Manager"
-                        }, {
                             "antIcon": "SettingOutlined",
                             "component": "ButtonWithModal",
                             "content": [
@@ -96,8 +85,8 @@ export const defaultStrategyDesignerPageLayout = {
                         }, {
                             "component": "RealTradingSwitch"
                         }, {
-                            'component': 'CurrentPanelPosition',
-                            'position': 'footerHalf'
+                            "component": "CurrentPanelPosition",
+                            "position": "maximized"
                         }, {
                             "component": "PowerMenu"
                         }
@@ -130,9 +119,11 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": true,
                                             "faIcon": "",
                                             "title": "Symbols",
-                                            "toolBarContent": [  {
-                                                "component": "SavePairSelector"
-                                            }]
+                                            "toolBarContent": [
+                                                {
+                                                    "component": "SavePairSelector"
+                                                }
+                                            ]
                                         }, {
                                             "antIcon": "BankOutlined",
                                             "component": "Tab",
@@ -144,9 +135,11 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": true,
                                             "faIcon": "",
                                             "title": "Exchanges",
-                                            "toolBarContent": [  {
-                                                "component": "SavePairSelector"
-                                            }]
+                                            "toolBarContent": [
+                                                {
+                                                    "component": "SavePairSelector"
+                                                }
+                                            ]
                                         }
                                     ]
                                 }
@@ -170,13 +163,13 @@ export const defaultStrategyDesignerPageLayout = {
                     "rightContent": [
                         {
                             "component": "CurrentPanelPosition",
-                            'position': 'minimized'
+                            "position": "minimized"
                         }, {
                             "component": "CurrentPanelPosition",
-                            'position': 'half'
+                            "position": "half"
                         }, {
                             "component": "CurrentPanelPosition",
-                            'position': 'maximized'
+                            "position": "maximized"
                         }
                     ],
                     "tabs": [
@@ -194,16 +187,30 @@ export const defaultStrategyDesignerPageLayout = {
                             "title": "Strategy Settings",
                             "toolBarContent": [
                                 {
-                                    "antIcon": "DollarOutlined",
-                                    "command": "execute",
+                                    "antIcon": "noIcon",
+                                    "command": "",
                                     "component": "SendActionCommandToTradingMode",
-                                    "faIcon": "noIcon",
-                                    "title": "Execute trading mode"
+                                    "faIcon": "",
+                                    "title": ""
                                 }, {
                                     "component": "ToggleActivateRealTimeStrategy"
                                 }
                             ]
-                        }, {
+                        },
+                        {
+                            "antIcon": "AppstoreAddOutlined",
+                            "component": "Tab",
+                            "content": [
+                                {
+                                    "component": "AppStore"
+                                }
+                            ],
+                            "dontScroll": false,
+                            "faIcon": "",
+                            "title": "Store",
+                            "toolBarContent": []
+                        },
+                        {
                             "antIcon": "LineChartOutlined",
                             "component": "Tab",
                             "content": [
@@ -303,7 +310,8 @@ export const defaultStrategyDesignerPageLayout = {
                                     "component": "CloseAllPositionsButton"
                                 }
                             ]
-                        }, {
+                        },
+                        {
                             "antIcon": "ExperimentOutlined",
                             "component": "Tab",
                             "content": [
