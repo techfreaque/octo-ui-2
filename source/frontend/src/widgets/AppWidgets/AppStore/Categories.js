@@ -6,7 +6,7 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Divider from "@mui/material/Divider";
 
-export default function Categories({
+export default function Categories({ 
   categories,
   handleCategoryClick,
   selectedCategories,

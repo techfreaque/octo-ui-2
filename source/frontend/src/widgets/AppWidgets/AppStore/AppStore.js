@@ -10,6 +10,7 @@ import {
 import AppList from "./AppList";
 import Categories from "./Categories";
 import { Button } from "antd";
+import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 
 export default function AppStore() {
   const appStoreData = useAppStoreDataContext();
@@ -57,7 +58,6 @@ export default function AppStore() {
     logInInfo && signupToAppStore(logInInfo);
   }
 
-
   return (
     appStoreData &&
     appStoreData.available_apps && (
@@ -71,6 +71,7 @@ export default function AppStore() {
             handleCategoryClick={handleCategoryClick}
             selectedCategories={selectedCategories}
           />
+          <AntSidebar />
         </Grid>
         <Grid item xs={12} md={8} lg={9}>
           <div style={{marginTop: "10px"}}>

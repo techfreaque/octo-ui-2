@@ -1,18 +1,34 @@
-import { Card, Switch, Col, Row } from 'antd';
+import { Card, Skeleton, Switch, Col, Row, Avatar } from 'antd';
 import { useState } from 'react';
 import './style.css';
 import AntButton from '../../../components/Buttons/AntButton';
+import { useBotInfoContext } from '../../../context/data/BotInfoProvider';
 
 const { Meta } = Card;
 
+const tradingModeCategoryName = "Trading Mode"
+const profileCategoryName = "Strategy"
+
 export default function AppCard({app}) {
-    const [showDb, setShowDb] = useState(false);
-    const mouseHover = () => setShowDb(prev => !prev);
+    const [showDownloadButton, setShowDownloadButton] = useState(false);
+    const mouseHover = () => setShowDownloadButton(prev => !prev);
     const category = app.categories.length > 1 ? 'Package' : app.categories[0]
+    const botInfo = useBotInfoContext()
+    const currentProfile = botInfo?.current_profile
+    
 ;
     return (
     <>
-    <Col 
+    {category === tradingModeCategoryName && <StrategyCard app={app} mouseHover={mouseHover} category={category} showDownloadButton={showDownloadButton}/>}
+    {(category === profileCategoryName|| category ==='Ui') && <ProfileCard app={app} mouseHover={mouseHover} category={category} showDownloadButton={showDownloadButton}/>}
+    </>
+    );
+};
+
+
+function StrategyCard({app, mouseHover, category, showDownloadButton}) {
+    return (
+        <Col 
         // xs={{span:12, offset:1}} md={{span:6,offset:1}} lg={{span:4 ,offset:1}}
         >
         <Card className='productCard'
@@ -35,16 +51,62 @@ export default function AppCard({app}) {
                         ]}
                     />
                     <div key="productCardPrice" className='productCard__price'>
-                        {showDb && <AntButton buttonVariant="text">
+                        {showDownloadButton && <AntButton buttonVariant="text">
                         {app.price ? `Buy for ${app.price}$` : 'Free download' } </AntButton>} 
-                        {!showDb && (app.price ? app.price+"$":undefined)}
+                        {!showDownloadButton && (app.price ? app.price+"$":undefined)}
                     </div>
                 </div>
         </Card>
     </Col>
-    </>
-    );
-};
+        )
+}
+
+function ProfileCard({app, mouseHover, category, showDownloadButton}) {
+    return (
+        <Col 
+        // xs={{span:12, offset:1}} md={{span:6,offset:1}} lg={{span:4 ,offset:1}}
+        >
+        <Card className='productCard profileCard'
+            hoverable
+            onMouseEnter={mouseHover} 
+            onMouseLeave={mouseHover}>
+                <div>
+                    <Meta 
+                        avatar={<Avatar src='https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png' />}
+                        title={<div className='productCard__title'>{app.title}</div>}
+                        description={[
+                            <div className='productCard__category'>
+                                {category}
+                            </div>,
+                            <RatingComponent rating={app.rating} votes={app.votes} />,
+
+                            <div className='productCard__description'>
+                                {app.description}
+                            </div>
+                        ]}
+                    />
+                    <div className='productCard__price'>
+                        {showDownloadButton && <AntButton buttonVariant="text">
+                        {app.price === 'Free' ? 'Free download' : 'Buy for ' + app.price } </AntButton>} 
+                        {!showDownloadButton && app.price}
+                    </div>
+                </div>
+        </Card>
+    </Col>
+        )
+}
+
+function PriceComponent(showDownloadButton, app) {
+    return(
+
+        <div className='productCard__price'>
+            {showDownloadButton && <AntButton buttonVariant="text">
+            {app.price === 'Free' ? 'Free download' : 'Buy for ' + app.price } </AntButton>} 
+            {!showDownloadButton && app.price}
+        </div>
+
+    )
+}
 
 function RatingComponent(props) {
     const formatCash = n => {
