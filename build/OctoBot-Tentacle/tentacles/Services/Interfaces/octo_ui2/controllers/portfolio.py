@@ -1,5 +1,6 @@
-import tentacles.Services.Interfaces.web_interface.login as login
 import octobot_services.interfaces.util as interfaces_util
+import tentacles.Services.Interfaces.web_interface.login as login
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import SHARE_YOUR_OCOBOT
 import tentacles.Services.Interfaces.web_interface.models as models
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
@@ -8,7 +9,16 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
 
 def register_portfolio_routes(plugin):
     route = "/portfolio"
-    if cross_origin := import_cross_origin_if_enabled():
+
+    cross_origin = import_cross_origin_if_enabled()
+    if SHARE_YOUR_OCOBOT:
+
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        def _portfolio():
+            return portfolio()
+
+    elif cross_origin:
 
         @plugin.blueprint.route(route)
         @cross_origin(origins="*")

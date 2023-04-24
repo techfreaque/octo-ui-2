@@ -1,4 +1,4 @@
-import { Card, Skeleton, Switch, Col, Row } from 'antd';
+import { Card, Switch, Col, Row } from 'antd';
 import { useState } from 'react';
 import './style.css';
 import AntButton from '../../../components/Buttons/AntButton';
@@ -34,10 +34,10 @@ export default function AppCard({app}) {
                             </div>
                         ]}
                     />
-                    <div className='productCard__price'>
+                    <div key="productCardPrice" className='productCard__price'>
                         {showDb && <AntButton buttonVariant="text">
-                        {app.price === 'Free' ? 'Free download' : 'Buy for ' + app.price } </AntButton>} 
-                        {!showDb && app.price}
+                        {app.price ? `Buy for ${app.price}$` : 'Free download' } </AntButton>} 
+                        {!showDb && (app.price ? app.price+"$":undefined)}
                     </div>
                 </div>
         </Card>
@@ -70,7 +70,7 @@ function RatingComponent(props) {
 
 function FullStar() {
     return (
-        <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="fullStar">
+        <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="fullStar">
             <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25">
             </path>
         </svg>
@@ -79,7 +79,7 @@ function FullStar() {
 
 function HalfStar() {
     return (
-    <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="halfStar">
+    <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="halfStar">
         <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25">
         </path>
         <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 0 0">
@@ -90,7 +90,7 @@ function HalfStar() {
 
 function EmptyStar() {
     return (
-    <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" class="emptyStar">
+    <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="emptyStar">
         <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25">
         </path>
     </svg>

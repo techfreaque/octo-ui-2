@@ -7,6 +7,7 @@ from tentacles.Services.Interfaces.run_analysis_mode.run_analysis_modes_plugin i
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import SHARE_YOUR_OCOBOT
 import octobot_commons.symbols.symbol_util as symbol_util
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
@@ -16,7 +17,16 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
 def register_plot_data_routes(plugin):
     route = "/plotted_run_data"
     methods = ["POST"]
-    if cross_origin := import_cross_origin_if_enabled():
+
+    cross_origin = import_cross_origin_if_enabled()
+    if SHARE_YOUR_OCOBOT:
+
+        @plugin.blueprint.route(route, methods=methods)
+        @cross_origin(origins="*")
+        def run_plotted_data():
+            return _run_plotted_data()
+
+    elif cross_origin:
 
         @plugin.blueprint.route(route, methods=methods)
         @cross_origin(origins="*")

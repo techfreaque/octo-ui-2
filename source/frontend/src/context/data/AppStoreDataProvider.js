@@ -67,9 +67,10 @@ export const useFetchAppStoreData = () => {
 export const useLoginToAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const updateAppStoreUser = useUpdateAppStoreUserContext()
+    const appStoreUser = useAppStoreUserContext()
     const logic = useCallback((userData) => {
-        loginToAppStore(updateAppStoreUser, appStoreDomain, userData)
-    }, [appStoreDomain, fetchAppStoreData]);
+        loginToAppStore(updateAppStoreUser, appStoreDomain, userData, appStoreUser)
+    }, [appStoreDomain, fetchAppStoreData, appStoreUser]);
     return logic;
 }
 

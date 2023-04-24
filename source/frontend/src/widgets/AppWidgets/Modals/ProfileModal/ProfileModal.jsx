@@ -95,12 +95,17 @@ export default function ProfileModal() {
         setIsloading(false)
         setOpen(false)
     };
+
     return useMemo(() => (
         <Tooltip title={
             (
                 <Trans i18nKey="profile.profileInfoButtonToolTip"/>
             )
         }>
+            
+            
+            {isOnline ? (<div></div>): (<div></div>)}
+
             <div style={
                 {
                     margin: "auto",

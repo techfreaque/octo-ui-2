@@ -38,6 +38,7 @@ class RunAnalysisBaseDataGenerator:
         ] = {}
         self._trades = None
         self._orders = None
+        self._order_updates = None
         self._historical_portfolio_value = None
         self._transactions = None
         self._cached_values_by_symbols: dict = {}
@@ -230,17 +231,29 @@ class RunAnalysisBaseDataGenerator:
             )
         )
 
-    # async def get_orders(self):
-    #     if not self._orders:
-    #         await self._load_orders()
-    #     return self._orders
+    async def get_open_orders(self):
+        if not self._orders:
+            await self._load_open_orders()
+        return self._orders
 
-    # async def _load_orders(self):
-    #     self._orders = await self.run_database.get_orders_db(
-    #         self.account_type, exchange=self.exchange_name
-    #     ).all(
-    #         commons_enums.DBTables.ORDERS.value,
-    #     )
+    async def _load_open_orders(self):
+        self._orders = await self.run_database.get_orders_db(
+            self.account_type, exchange=self.exchange_name
+        ).all(
+            commons_enums.DBTables.ORDERS.value,
+        )
+
+    async def get_order_updates(self):
+        if not self._order_updates:
+            await self._load_order_updates()
+        return self._order_updates
+
+    async def _load_order_updates(self):
+        self._order_updates = await self.run_database.get_orders_db(
+            self.account_type, exchange=self.exchange_name
+        ).all(
+            commons_enums.DBTables.HISTORICAL_ORDERS_UPDATES.value,
+        )
 
     async def get_historical_portfolio_value(self):
         if not self._historical_portfolio_value:
@@ -292,17 +305,17 @@ class RunAnalysisBaseDataGenerator:
             self.exchange_name, symbol
         )
 
-    # async def get_transactions(self):
-    #     if not self._transactions:
-    #         self._load_transactions()
-    #     return self._transactions
+    async def get_transactions(self):
+        if not self._transactions:
+            await self._load_transactions()
+        return self._transactions
 
-    # async def _load_transactions(self):
-    #     self._transactions = await self.run_database.get_transactions_db(
-    #         self.account_type, exchange=self.exchange_name
-    #     ).all(
-    #         commons_enums.DBTables.TRANSACTIONS.value,
-    #     )
+    async def _load_transactions(self):
+        self._transactions = await self.run_database.get_transactions_db(
+            self.account_type, exchange=self.exchange_name
+        ).all(
+            commons_enums.DBTables.TRANSACTIONS.value,
+        )
 
     async def load_base_data(self, exchange_id: str):
 

@@ -1,15 +1,18 @@
 # from flask_cors import cross_origin
 import flask
+from flask_login import current_user
 import octobot_commons.constants as commons_constants
 
 from tentacles.Services.Interfaces.octo_ui2.models import config
 from tentacles.Services.Interfaces.octo_ui2.utils import basic_utils
 from tentacles.Services.Interfaces.octo_ui2 import octo_ui2_plugin
 import tentacles.Services.Interfaces.web_interface.login as login
+import tentacles.Services.Interfaces.web_interface.login.web_login_manager as web_login_manager
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
 import octobot_backtesting.api as backtesting_api
 import octobot_services.interfaces.util as interfaces_util
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import SHARE_YOUR_OCOBOT
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
 )
@@ -18,7 +21,16 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
 def register_bot_config_routes(plugin):
     route = "/ui_config"
     methods = ["GET", "POST"]
-    if cross_origin := import_cross_origin_if_enabled():
+
+    cross_origin = import_cross_origin_if_enabled()
+    if SHARE_YOUR_OCOBOT:
+
+        @plugin.blueprint.route(route, methods=methods)
+        @cross_origin(origins="*")
+        def ui_config():
+            return _ui_config()
+
+    elif cross_origin:
 
         @plugin.blueprint.route(route, methods=methods)
         @cross_origin(origins="*")
@@ -35,20 +47,24 @@ def register_bot_config_routes(plugin):
 
     def _ui_config():
         if flask.request.method == "POST":
-            try:
-                request_data = flask.request.get_json()
-                return util.get_rest_reply(
-                    flask.jsonify(
-                        config.save_ui_config(
-                            request_data, octo_ui2_plugin.OctoUi2Plugin
+            if (
+                not web_login_manager.is_login_required()
+                or web_login_manager.is_authenticated()
+            ):
+                try:
+                    request_data = flask.request.get_json()
+                    return util.get_rest_reply(
+                        flask.jsonify(
+                            config.save_ui_config(
+                                request_data, octo_ui2_plugin.OctoUi2Plugin
+                            )
                         )
                     )
-                )
-            except Exception as e:
-                basic_utils.get_octo_ui_2_logger().exception(e)
-                return util.get_rest_reply(str(e), 500)
-        else:
-            return config.get_ui_config(octo_ui2_plugin.OctoUi2Plugin)
+                except Exception as e:
+                    basic_utils.get_octo_ui_2_logger().exception(e)
+                    return util.get_rest_reply(str(e), 500)
+            return util.get_rest_reply("You are not logged in", 500)
+        return config.get_ui_config(octo_ui2_plugin.OctoUi2Plugin)
 
     route = "/bot-config"
     if cross_origin := import_cross_origin_if_enabled():

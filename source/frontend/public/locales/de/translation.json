@@ -49,5 +49,8 @@
     "isTestedExchangeTooltip": "Diese Börse wird vollständig unterstützt und ist getestet.",
     "isTestedExchangeSimulatedTooltip": "Diese Börse wurde nur im Simulationsmodus getestet.",
     "isUntestedExchangeTooltip": "Diese Börse wurde noch nicht getestet und wird noch nicht offiziell unterstützt."
+  },
+  "progress": {
+    "backtestingProgressTooltip": "Backtest ist zu {{progressPercent}} % abgeschlossen"
   }
 }

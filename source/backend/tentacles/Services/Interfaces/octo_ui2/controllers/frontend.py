@@ -1,5 +1,6 @@
 # from flask_cors import cross_origin
 import tentacles.Services.Interfaces.web_interface.login as login
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import SHARE_YOUR_OCOBOT
 import os
 from flask import send_from_directory
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
@@ -9,7 +10,15 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
 
 def register_frontend_route(plugin):
     route = "/<url_path>"
-    if cross_origin := import_cross_origin_if_enabled():
+    cross_origin = import_cross_origin_if_enabled()
+    if SHARE_YOUR_OCOBOT:
+
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        def any_page(url_path=None):
+            return _home(url_path)
+
+    elif cross_origin:
 
         @plugin.blueprint.route(route)
         @cross_origin(origins="*")
@@ -25,7 +34,14 @@ def register_frontend_route(plugin):
             return _home(url_path)
 
     route = "/home"
-    if cross_origin := import_cross_origin_if_enabled():
+    if SHARE_YOUR_OCOBOT:
+
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        def home(url_path=None):
+            return _home(url_path)
+
+    elif cross_origin:
 
         @plugin.blueprint.route(route)
         @cross_origin(origins="*")

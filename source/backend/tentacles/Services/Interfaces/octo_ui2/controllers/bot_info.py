@@ -14,6 +14,7 @@ import octobot_services.interfaces.util as interfaces_util
 import tentacles.Services.Interfaces.web_interface as web_interface
 
 import tentacles.Services.Interfaces.octo_ui2.utils.basic_utils as basic_utils
+from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import SHARE_YOUR_OCOBOT
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
@@ -25,7 +26,16 @@ TIME_TO_START = 20
 
 def register_bot_info_routes(plugin):
     route = "/bot-info/<exchange>"
-    if cross_origin := import_cross_origin_if_enabled():
+
+    cross_origin = import_cross_origin_if_enabled()
+    if SHARE_YOUR_OCOBOT:
+
+        @plugin.blueprint.route(route)
+        @cross_origin(origins="*")
+        def bot_info(exchange=None):
+            return _bot_info(exchange)
+
+    elif cross_origin:
 
         @plugin.blueprint.route(route)
         @cross_origin(origins="*")
@@ -67,6 +77,8 @@ def register_bot_info_routes(plugin):
         trigger_time_frames = None
         real_time_strategies_active: bool = False
         any_exchange_is_futures: bool = False
+        missing_tentacles = set()
+        strategy_config = {}
         try:
             (
                 exchange_manager,
@@ -132,9 +144,13 @@ def register_bot_info_routes(plugin):
                         .producers[0]
                         .trigger_time_frames
                     )
+                media_url = flask.url_for("tentacle_media", _external=True)
                 # config_candles_count = models.get_config_required_candles_count(
                 #     exchange_manager
                 # )
+                strategy_config = models.get_strategy_config(
+                    media_url, missing_tentacles
+                )
             else:
                 trading_mode_name = None
 
@@ -173,6 +189,7 @@ def register_bot_info_routes(plugin):
                 # "activated_evaluators": activated_evaluators,
                 # "activated_strategy": activated_strategy,
                 # "config_candles_count": config_candles_count,
+                "strategy_config": strategy_config,
                 "real_time_strategies_active": real_time_strategies_active,
                 "available_api_actions": available_api_actions,
                 "data_files": models.get_data_files_with_description(),

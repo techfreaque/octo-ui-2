@@ -49,5 +49,8 @@
     "isTestedExchangeTooltip": "Este intercambio es totalmente compatible y probado.",
     "isTestedExchangeSimulatedTooltip": "Este intercambio se prueba y admite solo en modo de simulación.",
     "isUntestedExchangeTooltip": "Este intercambio aún no se ha probado y no es compatible oficialmente."
+  },
+  "progress": {
+    "backtestingProgressTooltip": "El backtest está {{progressPercent}}% completado"
   }
 }

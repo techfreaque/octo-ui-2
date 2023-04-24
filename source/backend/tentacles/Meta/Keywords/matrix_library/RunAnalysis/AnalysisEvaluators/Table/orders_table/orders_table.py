@@ -1,3 +1,4 @@
+import octobot_commons.symbols.symbol_util as symbol_util
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisKeywords.common_user_inputs as common_user_inputs
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisKeywords.analysis_enums as analysis_enums
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisKeywords.table_keywords as table_keywords
@@ -5,17 +6,17 @@ import tentacles.Meta.Keywords.matrix_library.RunAnalysis.BaseDataProvider.defau
 import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.abstract_analysis_evaluator as abstract_analysis_evaluator
 
 
-class PositionsTable(abstract_analysis_evaluator.AnalysisEvaluator):
-    POSITIONS_TABLE_NAME = "_positions_table"
-    POSITIONS_TABLE_TITLE = "Positions Table"
+class OrdersTable(abstract_analysis_evaluator.AnalysisEvaluator):
+    ORDERS_TABLE_NAME = "_open_orders_table"
+    ORDERS_TABLE_TITLE = "Open Orders Table"
 
     @classmethod
     def init_user_inputs(
         cls, analysis_mode_plugin, inputs: dict, parent_input_name: str
     ) -> None:
         common_user_inputs.init_data_source_settings(
-            data_source_input_name=cls.POSITIONS_TABLE_NAME,
-            data_source_input_title=cls.POSITIONS_TABLE_TITLE,
+            data_source_input_name=cls.ORDERS_TABLE_NAME,
+            data_source_input_title=cls.ORDERS_TABLE_TITLE,
             analysis_mode_plugin=analysis_mode_plugin,
             inputs=inputs,
             parent_input_name=parent_input_name,
@@ -31,7 +32,7 @@ class PositionsTable(abstract_analysis_evaluator.AnalysisEvaluator):
     ):
         if common_user_inputs.get_is_data_source_enabled(
             run_data,
-            data_source_input_name=self.POSITIONS_TABLE_NAME,
+            data_source_input_name=self.ORDERS_TABLE_NAME,
             def_val=True,
             analysis_type=analysis_type,
         ):
@@ -45,52 +46,53 @@ class PositionsTable(abstract_analysis_evaluator.AnalysisEvaluator):
             #     if symbols_settings == analysis_enums.SymbolsOptions.ALL_SYMBOLS
             #     else [run_data.ctx.symbol]
             # )
-            transactions = await run_data.get_transactions()
-            if bool(transactions):
+            orders: list = await run_data.get_open_orders()
+            formatted_orders: list = []
+            for order_dict in orders:
+                formatted_orders.append(order_dict["origin_value"])
+            if bool(formatted_orders):
                 # TODO use constants
                 key_to_label = {
-                    "x": "Exit time",
-                    "first_entry_time": "Entry time",
-                    "average_entry_price": "Average entry price",
-                    "average_exit_price": "Average exit price",
-                    "cumulated_closed_quantity": "Cumulated closed quantity",
-                    "realized_pnl": "Realized PNL",
+                    "timestamp": "Open Time",
+                    "type": "Type",
                     "side": "Side",
-                    "trigger_source": "Closed by",
+                    "status": "Status",
+                    "cost": "Filled Value",
+                    "price": "Price",
+                    "amount": "Amount",
+                    "reduce_only": "Reduce Only",
+                    "id": "ID",
                 }
                 additional_column_types = {
-                    "Time": "datetime",
-                    "Entry time": "datetime",
-                    "Exit time": "datetime",
-                    "Average entry price": "float",
-                    "Average exit price": "float",
-                    "Cumulated closed quantity": "float",
-                    "Realized PNL": "float",
-                    "Side": "float",
-                    "trigger_source": "text",
+                    "Open Time": "datetime",
+                    "Symbol": "text",
+                    "Type": "text",
+                    "Side": "text",
+                    "Status": "text",
+                    "Filled Value": "float",
+                    "Price": "float",
+                    "Amount": "float",
+                    "Reduce Only": "boolean",
+                    "ID": "text",
                 }
                 additional_columns = [
-                    {
-                        "field": "total",
-                        "text": "Total",
-                        "render": None,
-                        "sortable": True,
-                    },
-                    {"field": "fees", "text": "Fees", "render": None, "sortable": True},
+                    # {
+                    #     "field": "total",
+                    #     "text": "Total",
+                    #     "render": None,
+                    #     "sortable": True,
+                    # },
+                    # {"field": "fees", "text": "Fees", "render": None, "sortable": True},
                 ]
 
                 def datum_columns_callback(datum):
-                    datum[
-                        "total"
-                    ] = f"{datum['cost']} {datum['origin_value']['market']}"
-                    datum[
-                        "volume"
-                    ] = f"{datum['volume']} {datum['origin_value']['quantity_currency']}"
-                    datum["fees"] = f'{datum["fees_amount"]} {datum["fees_currency"]}'
+                    datum["amount"] = f"{datum['amount']} {datum['quantity_currency']}"
+                    parsed_symbol = symbol_util.parse_symbol(datum["symbol"])
+                    datum["cost"] = f'{datum["cost"]} {parsed_symbol.quote}'
 
                 table_keywords.plot_table_data(
-                    data=transactions,
-                    data_name=f"Trades for {run_data.exchange_name}",
+                    data=formatted_orders,
+                    data_name=f"Orders for {run_data.exchange_name}",
                     run_data=run_data,
                     additional_key_to_label=key_to_label,
                     additional_columns=additional_columns,

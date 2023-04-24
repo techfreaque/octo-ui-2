@@ -24,7 +24,7 @@ export default function ExchangeSelector() {
 
     const exchangesData = []
     const enabledExchanges = []
-    const configExchanges = servicesInfo ?. exchanges ? Object.keys(servicesInfo.exchanges) : []
+    const configExchanges = servicesInfo?.exchanges ? Object.keys(servicesInfo.exchanges) : []
     function addExchangeToTable({
         exchangeName,
         exchangeType,
@@ -46,7 +46,7 @@ export default function ExchangeSelector() {
             exchangeLabel: enabled ? (authSuccess ? (
                 <div style={
                     {
-                        color: botColors ?. success
+                        color: botColors?.success
                     }
                 }>
                     <Tooltip title={
@@ -62,7 +62,7 @@ export default function ExchangeSelector() {
             ) : (
                 <div style={
                     {
-                        color: botColors ?. error
+                        color: botColors?.error
                     }
                 }>
                     <Tooltip title={
@@ -86,9 +86,9 @@ export default function ExchangeSelector() {
             apiSecret,
             apiPassword,
             exchangeType,
-            exchangeTypeLabel: supportedExchangeTypes ?. length > 1 ? (
+            exchangeTypeLabel: supportedExchangeTypes?.length > 1 ? (
                 <RadioButtonGroup menuItems={
-                        supportedExchangeTypes ?. map((exchangeType) => ({label: exchangeType, key: exchangeType}))
+                        supportedExchangeTypes?.map((exchangeType) => ({label: exchangeType, key: exchangeType}))
                     }
                     // onChange={handleChange}
                     selected={exchangeType}/>
@@ -145,7 +145,7 @@ export default function ExchangeSelector() {
     });
 
     // put enabled ones on top, then config existing ones and others at the bottom
-    exchangesData.sort((a, b) => ((+ b ?. enabled) - (+ a ?. enabled) || a ?. exchange ?. localeCompare(b ?. exchange)));
+    exchangesData.sort((a, b) => ((+ b?.enabled) - (+ a?.enabled) || a?.exchange?.localeCompare(b?.exchange)));
 
     return (
         <AntTable onFilterChange={filterData}
@@ -162,19 +162,19 @@ export default function ExchangeSelector() {
 
                                     <Input addonBefore="API Key"
                                         value={
-                                            record ?. apiKey
+                                            record?.apiKey
                                         }
                                         // defaultValue="mysite"
                                     />
                                     <Input addonBefore="API Secret"
                                         value={
-                                            record ?. apiSecret
+                                            record?.apiSecret
                                         }
                                         // defaultValue="mysite"
                                     />
                                     <Input addonBefore="API Password"
                                         value={
-                                            record ?. apiPassword
+                                            record?.apiPassword
                                         }
                                         // defaultValue="mysite"
                                     />
@@ -207,7 +207,7 @@ const columns = [
         // width: '15%',
         key: 'exchangeType',
         // ...getColumnSearchProps('exchange'),
-        sorter: (a, b) => a ?. exchangeType ?. localeCompare(b.exchangeType),
+        sorter: (a, b) => a?.exchangeType?.localeCompare(b.exchangeType),
         sortDirections: [
             'descend', 'ascend'
         ],
@@ -279,19 +279,19 @@ const columns = [
 ];
 function filterData(tableParams, data) {
     return data.filter((item) => {
-        if (tableParams ?. filters ?. exchange && tableParams ?. filters ?. exchange ?. every(exchange => (item.exchange !== exchange))) {
+        if (tableParams?.filters?.exchange && tableParams?.filters?.exchange?.every(exchange => (item.exchange !== exchange))) {
             return false;
         }
-        if (tableParams ?. filters ?. enabled && ! tableParams ?. filters ?. enabled ?. includes(item.enabled)) {
+        if (tableParams?.filters?.enabled && ! tableParams?.filters?.enabled?.includes(item.enabled)) {
             return false;
         }
-        if (tableParams ?. filters ?. isTestedSimulationExchange && ! tableParams ?. filters ?. isTestedSimulationExchange ?. includes(item.isTestedSimulationExchange)) {
+        if (tableParams?.filters?.isTestedSimulationExchange && ! tableParams?.filters?.isTestedSimulationExchange?.includes(item.isTestedSimulationExchange)) {
             return false;
         }
-        if (tableParams ?. filters ?. isTestedExchange && ! tableParams ?. filters ?. isTestedExchange ?. includes(item.isTestedExchange)) {
+        if (tableParams?.filters?.isTestedExchange && ! tableParams?.filters?.isTestedExchange?.includes(item.isTestedExchange)) {
             return false;
         }
-        if (tableParams ?. filters ?. hasWebsockets && ! tableParams ?. filters ?. hasWebsockets ?. includes(item.hasWebsockets)) {
+        if (tableParams?.filters?.hasWebsockets && ! tableParams?.filters?.hasWebsockets?.includes(item.hasWebsockets)) {
             return false;
         }
         return true;

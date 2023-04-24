@@ -49,5 +49,8 @@
     "isTestedExchangeTooltip": "该交易所得到全面支持和测试",
     "isTestedExchangeSimulatedTooltip": "此交换仅在模拟模式下经过测试和支持。",
     "isUntestedExchangeTooltip": "此交换尚未经过测试，未得到官方支持。"
+  },
+  "progress": {
+    "backtestingProgressTooltip": "回测已完成 {{progressPercent}}%"
   }
 }

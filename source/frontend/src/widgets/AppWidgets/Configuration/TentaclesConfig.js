@@ -37,14 +37,15 @@ export default function TentaclesConfig({
     useEffect(() => {
         handleTentaclesUpdate()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [botInfo])    
+    }, [botInfo])
     return useMemo(() => {
         if (currentTentaclesConfig) {
             const configs = {}
             tentacles?.forEach(tentacle => {
                 configs[tentacle] = currentTentaclesNonTradingConfig?.[tentacle] || {}
             })
-                (<AbstractTentaclesConfig botInfo={botInfo}
+            return (
+                <AbstractTentaclesConfig botInfo={botInfo}
                     fetchCurrentTentaclesConfig={handleTentaclesUpdate}
                     currentTentaclesTradingConfig={configs}
                     saveTentaclesConfig={saveTentaclesConfig}
@@ -62,21 +63,21 @@ export default function TentaclesConfig({
                                         }
                                         value={tabId}
                                         sx={
-                                            { textTransform: 'none' }
-                                        } />
+                                            {textTransform: 'none'}
+                                        }/>
                                 ),
                                 content: (
                                     <AppWidgets layout={
                                         tab.content
-                                    } />
+                                    }/>
                                 )
                             }
                         })
                     }
-                    storageName={tentacleNames} />
-                    // eslint-disable-next-line react-hooks/exhaustive-deps
-                )
+                    storageName={tentacleNames}/>
+            )
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botInfo, content, currentTentaclesNonTradingConfig, tentacleNames])
 }
 

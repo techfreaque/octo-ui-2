@@ -47,7 +47,7 @@ export function BacktestingRunDataTable() {
 function NoBacktestingData({fetchBacktestingRunData}) {
     return (<>
         <h4>
-            No backtesting found, here you will be able to select backtestings using for comparison.
+            No backtests finished yet. Once a backtest is finished, you can select it here to analyze the results.
         </h4>
         <h4>
             <Button onClick={fetchBacktestingRunData}>

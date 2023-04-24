@@ -19,7 +19,7 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
             analysis_mode_plugin=analysis_mode_plugin,
             inputs=inputs,
             parent_input_name=parent_input_name,
-            default_data_source_enabled=False,
+            default_data_source_enabled=True,
             has_chart_location=False,
             can_select_symbols=True,
         )
@@ -32,7 +32,7 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
         if common_user_inputs.get_is_data_source_enabled(
             run_data,
             data_source_input_name=self.TRADES_TABLE_NAME,
-            def_val=False,
+            def_val=True,
             analysis_type=analysis_type,
         ):
             symbols_settings = common_user_inputs.get_enabled_symbols(

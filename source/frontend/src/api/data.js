@@ -52,7 +52,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.live = {
                     [botInfo.live_id]: {
                         [symbol]: {
-                            [timeFrame]: msg?.data
+                            [timeFrame]: msg ?. data
                         }
                     }
                 }
@@ -62,7 +62,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                         [optimizer_id]: {
                             [backtesting_id]: {
                                 [symbol]: {
-                                    [timeFrame]: msg?.data
+                                    [timeFrame]: msg ?. data
                                 }
                             }
                         }
@@ -73,7 +73,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                     [optimizer_id]: {
                         [backtesting_id]: {
                             [symbol]: {
-                                [timeFrame]: msg?.data
+                                [timeFrame]: msg ?. data
                             }
                         }
                     }
@@ -82,14 +82,14 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.backtesting[optimization_campaign][optimizer_id] = {
                     [backtesting_id]: {
                         [symbol]: {
-                            [timeFrame]: msg?.data
+                            [timeFrame]: msg ?. data
                         }
                     }
                 }
             } else {
                 newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
                     [symbol]: {
-                        [timeFrame]: msg?.data
+                        [timeFrame]: msg ?. data
                     }
                 }
             }
@@ -144,24 +144,39 @@ export async function fetchPackagesData(saveAppStoreData, botDomain, notificatio
     await fetchAndStoreFromBot(botDomain + backendRoutes.packagesData, saveAppStoreData, "get", {}, false, false, undefined, notification);
 }
 
-export async function loginToAppStore(saveAppStoreData, storeDomain, loginData) {
+export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData, appStoreUser) {
     function onFail(updated_data, update_url, result, msg, status) {
         createNotification("Failed to log in to App Store", "danger", "Check your password or email")
-        saveAppStoreData(msg.data);
+        updateAppStoreUser(msg.data);
     }
     function onSucces(updated_data, update_url, result, msg, status, request) {
         if (msg.success) {
-
             createNotification("Successfully logged in to App Store")
-            const t = request.getResponseHeader('Set-Cookie')
-            console.log(t)
-            console.log(document.cookie)
-            saveAppStoreData(msg?.data);
+            document.cookie = `storeToken=${msg.access_token}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=${storeDomain}` 
+            updateAppStoreUser(prevData => ({
+                ...prevData,
+                token: msg.access_token
+            }));
         } else {
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true)
+    // const response = await fetch(storeDomain + backendRoutes.appStoreLogin, {
+    //     credentials: 'include',
+    //     method: "POST", // *GET, POST, PUT, DELETE, etc.
+    //     mode: "cors", // no-cors, *cors, same-origin
+    //     // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    //     headers: {
+    //         "Content-Type": "application/json",
+    //         // 'Content-Type': 'application/x-www-form-urlencoded',
+    //     },
+    //     // redirect: "follow", // manual, *follow, error
+    //     // referrerPolicy: "origin-when-cross-origin", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
+    //     body: JSON.stringify(loginData), // body data type must match "Content-Type" header
+    // },)
+    // const t = response.json()
+    // console.log(t)
+    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser.token)
 }
 
 export async function logoutFromAppStore(saveAppStoreData, storeDomain, loginData) {
@@ -170,9 +185,7 @@ export async function logoutFromAppStore(saveAppStoreData, storeDomain, loginDat
         saveAppStoreData(msg.data);
     }
     function onSucces(updated_data, update_url, result, msg, status, request) {
-        if (msg.success) {
-
-            // const t = request.getResponseHeader('Set-Cookie')
+        if (msg.success) { // const t = request.getResponseHeader('Set-Cookie')
             document.cookie = undefined;
             saveAppStoreData({});
             createNotification("Successfully logged out from App Store")

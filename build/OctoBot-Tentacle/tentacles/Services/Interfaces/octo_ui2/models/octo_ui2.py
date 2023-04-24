@@ -3,6 +3,7 @@ import os
 
 CORS_ENABLED = os.getenv("CORS_MODE_ENABLED") or False
 DEV_MODE_ENABLED = os.getenv("API_DEV_MODE_ENABLED") or False
+SHARE_YOUR_OCOBOT = os.getenv("API_DEV_MODE_ENABLED") or False
 
 
 def dev_mode_is_on():

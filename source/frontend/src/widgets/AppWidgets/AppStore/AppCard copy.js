@@ -155,7 +155,7 @@ function InstallAppMenu({app, token}) {
                         }
                         onClick={
                             () => {
-                                app?.categories?.includes("Profiles") ? installProfile(appVersion.url, app.title, app.name) : installAppPackage(appVersion.url, app.title + " " + appVersion.version, token)
+                                app?.categories?.includes("Strategy") ? installProfile(appVersion.url, app.title, app.name) : installAppPackage(appVersion.url, app.title + " " + appVersion.version, token)
                             }
                     }>
                         {
