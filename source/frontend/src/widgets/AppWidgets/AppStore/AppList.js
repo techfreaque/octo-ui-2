@@ -1,23 +1,29 @@
 import React from "react";
-import InstalledAppCard from "./InstalledAppCard";
-import AppCard from "./AppCard";
-import { Row } from "antd";
 
-export default function AppList({ selectedCategories, appStoreData }) {
-  return (
-    <Row>
-      {selectedCategories.includes("installed")
-        ? Object.values(appStoreData.tentacles).map((tentacle, index) => (
-            <InstalledAppCard key={tentacle.name + index} tentacle={tentacle} />
-          ))
-        : appStoreData.available_apps.apps.map((app, index) => {
-            return (
-              (selectedCategories.includes("all") ||
-                app.categories.some((appCategory) =>
-                  selectedCategories.includes(appCategory)
-                )) && <AppCard key={app.name + index} app={app} />
-            );
-          })}
-    </Row>
-  );
+import AppCard from "./AppCards/AppCard";
+import {Grid} from "@mui/material";
+
+export default function AppList({selectedCategories, appStoreData}) {
+    const thisCategoryAppStoreData = appStoreData ?. [selectedCategories] && Object.values(appStoreData[selectedCategories])
+    const preSortedAppStoreData = thisCategoryAppStoreData?.sort((a, b) => ((b?.is_selected && 1) - (a?.is_selected && 1)))
+    return preSortedAppStoreData && (
+        <Grid container
+            spacing={2}>
+            {
+            preSortedAppStoreData.map((app, index) => {
+                return (
+                    <AppCard key={
+                            app.package_id + index
+                        }
+                        app={app}/>
+                )
+            })
+        } </Grid>
+    );
 }
+
+// {selectedCategories.includes("installed")
+// ? Object.values(appStoreData.tentacles).map((tentacle, index) => (
+//       <InstalledAppCard key={tentacle.name + index} tentacle={tentacle} />
+//     ))
+// :

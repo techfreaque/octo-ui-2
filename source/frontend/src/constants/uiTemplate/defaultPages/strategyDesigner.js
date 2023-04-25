@@ -170,31 +170,6 @@ export const defaultStrategyDesignerPageLayout = {
                     ],
                     "tabs": [
                         {
-                            "antIcon": "ControlOutlined",
-                            "component": "Tab",
-                            "content": [
-                                {
-                                    "component": "TradingConfig",
-                                    "content": []
-                                }
-                            ],
-                            "dontScroll": true,
-                            "faIcon": "NoIcon",
-                            "title": "Strategy Settings",
-                            "toolBarContent": [
-                                {
-                                    "antIcon": "DollarCircleOutlined",
-                                    "command": "execute",
-                                    "component": "SendActionCommandToTradingMode",
-                                    "faIcon": "",
-                                    "title": "Execute Trading Mode"
-                                },
-                                {
-                                    "component": "ToggleActivateRealTimeStrategy"
-                                }
-                            ]
-                        },
-                        {
                             "antIcon": "AppstoreAddOutlined",
                             "component": "Tab",
                             "content": [
@@ -204,7 +179,7 @@ export const defaultStrategyDesignerPageLayout = {
                             ],
                             "dontScroll": false,
                             "faIcon": "",
-                            "title": "Store",
+                            "title": "Strategy Manager",
                             "toolBarContent": []
                         },
                         {

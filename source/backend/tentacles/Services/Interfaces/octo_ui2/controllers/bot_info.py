@@ -21,7 +21,7 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
 )
 
-TIME_TO_START = 20
+TIME_TO_START = 120
 
 
 def register_bot_info_routes(plugin):
@@ -50,18 +50,12 @@ def register_bot_info_routes(plugin):
         def bot_info(exchange=None):
             return _bot_info(exchange)
 
-    def _bot_info(exchange=None):
+    def _bot_info(exchange=None, try_counter=0):
         exchange = (
             exchange if (exchange != "null" and exchange != "undefined") else None
         )
         is_starting = False
-
-        running_seconds = time.time() - interfaces.get_bot_api().get_start_time()
-        if running_seconds < TIME_TO_START:
-            interfaces_util.run_in_bot_async_executor(
-                asyncio.sleep(TIME_TO_START - running_seconds)
-            )
-
+        try_counter += 1
         config_candles_count = 0
         trading_mode = trading_mode_name = None
         exchange_name = None
@@ -154,8 +148,14 @@ def register_bot_info_routes(plugin):
             else:
                 trading_mode_name = None
 
-        except KeyError:
+        except (KeyError, Exception) as error:
             is_starting = True
+            running_seconds = time.time() - interfaces.get_bot_api().get_start_time()
+            if running_seconds < TIME_TO_START:
+                if try_counter <= 5:
+                    interfaces_util.run_in_bot_async_executor(asyncio.sleep(4))
+                    return _bot_info(exchange=exchange, try_counter=try_counter)
+            raise error
         return {
             "success": True,
             "message": "Successfully fetched bot base data",

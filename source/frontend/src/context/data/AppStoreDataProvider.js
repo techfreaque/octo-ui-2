@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
 import React, {useState, useContext, createContext, useEffect} from "react";
 import {useCallback} from "react";
 import {installAppPackage, installProfile} from "../../api/actions";
@@ -49,18 +48,19 @@ export const useAppStoreDataContext = () => {
 const _useFetchAppStoreData = () => {
     const saveAppStoreData = useSaveAppStoreDataContext()
     const appStoreDomain = useAppStoreDomainContext()
-    const isPremiumUser = false
-    return useCallback((installedTentaclesInfo, notification) => {
-        appStoreDomain && fetchAppStoreData(saveAppStoreData, appStoreDomain, installedTentaclesInfo, isPremiumUser, notification)
-    }, [saveAppStoreData, appStoreDomain, isPremiumUser])
+    const botInfo = useBotInfoContext()
+    return useCallback((installedTentaclesInfo, notification, appStoreUser) => {
+        appStoreDomain && fetchAppStoreData(saveAppStoreData, appStoreDomain, {installedTentaclesInfo, botInfo}, notification, appStoreUser)
+    }, [appStoreDomain, saveAppStoreData, botInfo])
 }
 
 export const useFetchAppStoreData = () => {
     const botDomain = useBotDomainContext()
     const fetchAppStoreData = _useFetchAppStoreData()
+    const appStoreUser = useAppStoreUserContext()
     const logic = useCallback((notification = true) => {
-        fetchPackagesData((newData) => fetchAppStoreData(newData, notification), botDomain, notification)
-    }, [botDomain, fetchAppStoreData]);
+        fetchPackagesData((newData) => fetchAppStoreData(newData, notification, appStoreUser), botDomain, notification)
+    }, [appStoreUser, botDomain, fetchAppStoreData]);
     return logic;
 }
 
@@ -68,27 +68,28 @@ export const useLoginToAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const updateAppStoreUser = useUpdateAppStoreUserContext()
     const appStoreUser = useAppStoreUserContext()
-    const logic = useCallback((userData) => {
-        loginToAppStore(updateAppStoreUser, appStoreDomain, userData, appStoreUser)
-    }, [appStoreDomain, fetchAppStoreData, appStoreUser]);
+    const logic = useCallback((userData, onLoggedIn) => {
+        loginToAppStore(updateAppStoreUser, appStoreDomain, userData, appStoreUser, onLoggedIn)
+    }, [updateAppStoreUser, appStoreDomain, appStoreUser]);
     return logic;
 }
 
 export const useLogoutFromAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const updateAppStoreUser = useUpdateAppStoreUserContext()
+    const appStoreUser = useAppStoreUserContext()
     const logic = useCallback(() => {
-        logoutFromAppStore(updateAppStoreUser, appStoreDomain)
-    }, [appStoreDomain, fetchAppStoreData]);
+        logoutFromAppStore(updateAppStoreUser, appStoreDomain, appStoreUser)
+    }, [updateAppStoreUser, appStoreDomain, appStoreUser]);
     return logic;
 }
 
 export const useSignupToAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const updateAppStoreUser = useUpdateAppStoreUserContext()
-    const logic = useCallback((userData) => {
-        signupToAppStore(updateAppStoreUser, appStoreDomain, userData)
-    }, [appStoreDomain, fetchAppStoreData]);
+    const logic = useCallback((userData, onLoggedIn) => {
+        signupToAppStore(updateAppStoreUser, appStoreDomain, userData, onLoggedIn)
+    }, [appStoreDomain, updateAppStoreUser]);
     return logic;
 }
 
@@ -114,12 +115,10 @@ export const AppStoreDataProvider = ({children}) => {
     const [appStoreDomain, setAppStoreDomain] = useState(isProduction ? appStoreDomainProduction : process.env.REACT_APP_STORE_DOMAIN);
     const fetchAppStoreData = useFetchAppStoreData()
     const botInfo = useBotInfoContext()
-
-
     useEffect(() => {
         appStoreDomain && fetchAppStoreData(false)
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [appStoreDomain, botInfo])
-
     return (
         <AppStoreDataContext.Provider value={appStoreData}>
             <UpdateAppStoreDataContext.Provider value={setAppStoreData}>

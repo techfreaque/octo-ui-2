@@ -18,21 +18,21 @@ export default function TradingConfig({content}) {
             currentTentaclesTradingConfig={currentTentaclesTradingConfig}
             saveTentaclesConfig={saveTentaclesConfig}
             setHiddenMetadataColumns={setHiddenMetadataColumns}
-            additionalTabs={
-                [{
-                        title: (
-                            <Tab key={"strategyConfigTab"}
-                                label={"Trading Modes"}
-                                value={"strategyConfigTab"}
-                                sx={
-                                    {textTransform: 'none'}
-                                }/>
-                        ),
-                        tabId: "strategyConfigTab",
-                        content: (
-                            <StraegyConfigurator/>)
-                    }]
-            }
+            // additionalTabs={
+            //     [{
+            //             title: (
+            //                 <Tab key={"strategyConfigTab"}
+            //                     label={"Trading Modes"}
+            //                     value={"strategyConfigTab"}
+            //                     sx={
+            //                         {textTransform: 'none'}
+            //                     }/>
+            //             ),
+            //             tabId: "strategyConfigTab",
+            //             // content: (
+            //             //     <StraegyConfigurator/>)
+            //         }]
+            // }
             content={content}/>
     )
 }

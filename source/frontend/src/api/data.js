@@ -52,7 +52,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.live = {
                     [botInfo.live_id]: {
                         [symbol]: {
-                            [timeFrame]: msg ?. data
+                            [timeFrame]: msg?.data
                         }
                     }
                 }
@@ -62,7 +62,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                         [optimizer_id]: {
                             [backtesting_id]: {
                                 [symbol]: {
-                                    [timeFrame]: msg ?. data
+                                    [timeFrame]: msg?.data
                                 }
                             }
                         }
@@ -73,7 +73,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                     [optimizer_id]: {
                         [backtesting_id]: {
                             [symbol]: {
-                                [timeFrame]: msg ?. data
+                                [timeFrame]: msg?.data
                             }
                         }
                     }
@@ -82,14 +82,14 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.backtesting[optimization_campaign][optimizer_id] = {
                     [backtesting_id]: {
                         [symbol]: {
-                            [timeFrame]: msg ?. data
+                            [timeFrame]: msg?.data
                         }
                     }
                 }
             } else {
                 newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
                     [symbol]: {
-                        [timeFrame]: msg ?. data
+                        [timeFrame]: msg?.data
                     }
                 }
             }
@@ -136,15 +136,23 @@ export async function fetchSymbolsInfo(setSymbolsInfo, botDomain) {
     return await fetchAndStoreFromBot(botDomain + backendRoutes.symbolsInfo, setSymbolsInfo, "GET", {}, false, false, undefined, false);
 }
 
-export async function fetchAppStoreData(saveAppStoreData, botDomain, installedTentaclesInfo, isPremiumUser, notification) {
-    await fetchAndStoreFromBot(botDomain + (isPremiumUser ? backendRoutes.appStorePremium : backendRoutes.appStoreFree), saveAppStoreData, "POST", installedTentaclesInfo, false, false, undefined, notification);
+export async function fetchAppStoreData(saveAppStoreData, storeDomain, installedTentaclesInfo, notification, appStoreUser) {
+    function onSuccess(updated_data, update_url, result, msg, status) {
+        saveAppStoreData(msg?.data)
+        notification && createNotification("Successfully fetched package manager repositories")
+    }
+    function onFail(updated_data, update_url, result, msg, status) {
+        notification && createNotification("Failed to fetch package manager repositories")
+        // TODO add fallback
+    }
+    await sendAndInterpretBotUpdate(installedTentaclesInfo, storeDomain + backendRoutes.appStoreFree, onSuccess, onFail, "POST", true, appStoreUser?.token)
 }
 
 export async function fetchPackagesData(saveAppStoreData, botDomain, notification) {
     await fetchAndStoreFromBot(botDomain + backendRoutes.packagesData, saveAppStoreData, "get", {}, false, false, undefined, notification);
 }
 
-export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData, appStoreUser) {
+export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData, appStoreUser, onLoggedIn) {
     function onFail(updated_data, update_url, result, msg, status) {
         createNotification("Failed to log in to App Store", "danger", "Check your password or email")
         updateAppStoreUser(msg.data);
@@ -152,34 +160,17 @@ export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData
     function onSucces(updated_data, update_url, result, msg, status, request) {
         if (msg.success) {
             createNotification("Successfully logged in to App Store")
-            document.cookie = `storeToken=${msg.access_token}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=${storeDomain}` 
-            updateAppStoreUser(prevData => ({
-                ...prevData,
-                token: msg.access_token
-            }));
+            onLoggedIn(true)
+            // document.cookie = `storeToken=${msg.access_token}; expires=Sun, 1 Jan 2023 00:00:00 UTC; path=${storeDomain}`
+            updateAppStoreUser(msg.access_tokens);
         } else {
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    // const response = await fetch(storeDomain + backendRoutes.appStoreLogin, {
-    //     credentials: 'include',
-    //     method: "POST", // *GET, POST, PUT, DELETE, etc.
-    //     mode: "cors", // no-cors, *cors, same-origin
-    //     // cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-    //     headers: {
-    //         "Content-Type": "application/json",
-    //         // 'Content-Type': 'application/x-www-form-urlencoded',
-    //     },
-    //     // redirect: "follow", // manual, *follow, error
-    //     // referrerPolicy: "origin-when-cross-origin", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-    //     body: JSON.stringify(loginData), // body data type must match "Content-Type" header
-    // },)
-    // const t = response.json()
-    // console.log(t)
-    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser.token)
+    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser?.token)
 }
 
-export async function logoutFromAppStore(saveAppStoreData, storeDomain, loginData) {
+export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStoreUser) {
     function onFail(updated_data, update_url, result, msg, status) {
         createNotification("Failed to log out from App Store", "danger")
         saveAppStoreData(msg.data);
@@ -193,12 +184,18 @@ export async function logoutFromAppStore(saveAppStoreData, storeDomain, loginDat
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogout, onSucces, onFail, "GET", true)
+    if (appStoreUser?.token) {
+        sendAndInterpretBotUpdate({}, storeDomain + backendRoutes.appStoreLogout, onSucces, onFail, "POST", true, appStoreUser.token)
+    } else {
+        createNotification("You are already logged out", "warning")
+        saveAppStoreData({})
+    }
 }
 
-export async function signupToAppStore(saveAppStoreData, storeDomain, loginData) {
+export async function signupToAppStore(saveAppStoreData, storeDomain, loginData, onLoggedIn) {
     function onFail(updated_data, update_url, result, msg, status) {
         createNotification("Failed to sign up to the App Store", "danger", "Check your password or email")
+        onLoggedIn(true)
         saveAppStoreData(msg.data);
     }
     function onSucces(updated_data, update_url, result, msg, status) {

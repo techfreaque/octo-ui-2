@@ -13,7 +13,7 @@ export default function Categories({
 }) {
   return (
     <Box sx={{ width: "100%", bgcolor: "background.paper" }}>
-      <List component="nav" aria-label="main mailbox folders">
+      {/* <List component="nav" aria-label="main mailbox folders">
         <ListItemButton
           selected={selectedCategories.includes("all")}
           onClick={(event) => handleCategoryClick(event, "all")}
@@ -29,14 +29,13 @@ export default function Categories({
           <ListItemText primary="Installed" />
         </ListItemButton>
       </List>
-      <Divider />
+      <Divider /> */}
       <List component="nav" aria-label="secondary mailbox folder">
-        {categories &&
-          Object.keys(categories).map((category, index) => {
+        {categories?.map((category) => {
             return (
               <ListItemButton
-                key={index}
-                selected={selectedCategories.includes(category)}
+                key={category}
+                selected={selectedCategories === category}
                 onClick={(event) => handleCategoryClick(event, category)}
               >
                 <ListItemIcon>{category[0]}</ListItemIcon>

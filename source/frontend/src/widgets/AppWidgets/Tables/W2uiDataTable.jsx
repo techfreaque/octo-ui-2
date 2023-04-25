@@ -29,7 +29,6 @@ export default function W2uiDataTable() {
                             optimizerId,
                             botDomain
                         })
-
                     })
                 })
             }

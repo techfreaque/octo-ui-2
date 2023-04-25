@@ -1,5 +1,7 @@
 import typing
 import numpy
+import asyncio
+import time
 import numpy.typing as npt
 
 import octobot_commons.databases.implementations.meta_database as meta_database
@@ -9,6 +11,7 @@ import octobot_commons.enums as commons_enums
 import octobot_commons.logging as commons_logging
 import octobot_trading.api.exchange as exchange_api
 import octobot_trading.api as trading_api
+import octobot_services.interfaces as interfaces
 import octobot_backtesting.api as backtesting_api
 import tentacles.Meta.Keywords.scripting_library.UI.plots.displayed_elements as displayed_elements
 
@@ -121,7 +124,7 @@ class RunAnalysisBaseDataGenerator:
             candles_sources[0][commons_enums.DBRows.VALUE.value]
             == octobot_commons.constants.LOCAL_BOT_DATA
         ):
-            candles = self._get_live_candles(symbol, time_frame)
+            candles = await self._get_live_candles(symbol, time_frame)
         else:
             candles = await self._get_backtesting_candles(
                 symbol=symbol, time_frame=time_frame, candles_sources=candles_sources
@@ -164,11 +167,12 @@ class RunAnalysisBaseDataGenerator:
             numpy.array(volumes),
         ]
 
-    def _get_live_candles(
-        self, symbol, time_frame
+    async def _get_live_candles(
+        self, symbol, time_frame, try_counter=0
     ) -> typing.List[npt.NDArray[numpy.float64]]:
         # TODO get/download history from first tradetime or start time
         # TODO multi exchange
+        try_counter += 1
         for exchange_id in exchange_api.get_exchange_ids():
             exchange_manager = trading_api.get_exchange_manager_from_exchange_id(
                 exchange_id
@@ -182,11 +186,24 @@ class RunAnalysisBaseDataGenerator:
                         time_frame,
                     )
                 except KeyError as error:
+                    running_seconds = (
+                        time.time() - interfaces.get_bot_api().get_start_time()
+                    )
+                    if running_seconds < 120:
+                        if try_counter <= 5:
+                            await asyncio.sleep(4)
+                            return await self._get_live_candles(
+                                symbol=symbol,
+                                time_frame=time_frame,
+                                try_counter=try_counter,
+                            )
                     raise analysis_errors.CandlesLoadingError from error
                 for index in range(
                     len(raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value])
                 ):
-                    raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value][index] *= 1000
+                    raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value][
+                        index
+                    ] *= 1000
                 return [
                     raw_candles[commons_enums.PriceIndexes.IND_PRICE_TIME.value],
                     raw_candles[commons_enums.PriceIndexes.IND_PRICE_OPEN.value],
@@ -197,7 +214,7 @@ class RunAnalysisBaseDataGenerator:
                 ]
 
     async def get_trades(self, symbols: typing.Optional[typing.List[str]] = None):
-        # TODO when live load trades from bot 
+        # TODO when live load trades from bot
         if not self._trades:
             await self._load_trades()
         if symbols:
@@ -318,7 +335,6 @@ class RunAnalysisBaseDataGenerator:
         )
 
     async def load_base_data(self, exchange_id: str):
-
         # self.load_starting_portfolio()
         # self.exchange_name = (
         #     self.exchange_name
