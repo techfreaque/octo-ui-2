@@ -1,16 +1,15 @@
 import {faSave, faXmark} from "@fortawesome/free-solid-svg-icons";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {Button} from "@mui/material";
-import {Modal, Button as AntButton, Tooltip} from "antd";
+import {Modal} from "antd";
 import {useEffect, useMemo, useState} from "react";
 import {updateConfig, updateProfileInfo} from "../../../../api/actions";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
 import {useBotInfoContext, useFetchBotInfo} from "../../../../context/data/BotInfoProvider";
 import {useIsBotOnlineContext, useRestartBot} from "../../../../context/data/IsBotOnlineProvider";
-import ProfileAvatar from "../../Stats/ProfileAvatar";
 import {ProfileSettings} from "./ProfileSettings";
 import {ProfileTitle} from "./ProfileTitle";
-import {Trans} from "react-i18next";
+import AntButton from "../../../../components/Buttons/AntButton";
+import { PlusCircleOutlined } from "@ant-design/icons";
 
 
 export default function ProfileModal() {
@@ -97,39 +96,25 @@ export default function ProfileModal() {
     };
 
     return useMemo(() => (
-        <Tooltip title={
-            (
-                <Trans i18nKey="profile.profileInfoButtonToolTip"/>
-            )
-        }>
-            
-            
-            {isOnline ? (<div></div>): (<div></div>)}
-
-            <div style={
-                {
-                    margin: "auto",
-                    height: "100%"
-                }
-            }>
-                <Button onClick={
+        // <Tooltip title={
+        //     (
+        //         <Trans i18nKey="profile.profileInfoButtonToolTip"/>
+        //     )
+        // }>
+<>
+                <AntButton onClick={
                         () => setOpen(true)
                     }
+                antIconComponent={PlusCircleOutlined}
                     disabled={
                         ! isOnline
                     }
                     style={
-                        {
-                            fontSize: "9px",
-                            height: "100%",
-                            textTransform: "none",
-                            maxWidth: "150px",
-                            maxHeight: "40px",
-                            overflow: "hidden",
-                            textOverflow: "ellipsis"
-                        }
-                }>
-                    <ProfileAvatar marginRight="5px"/> {currentProfileTitle} </Button>
+                    {margin: "3px"}
+                }
+             buttonVariant="text"
+                >
+                    More Settings </AntButton>
                 {
                 open && <ProfileModalElement open={open}
                     setIsloading={setIsloading}
@@ -143,8 +128,7 @@ export default function ProfileModal() {
                     saveProfile={saveProfile}
                     hasChanged={hasChanged}
                     saveProfileAndRestart={saveProfileAndRestart}/>
-            } </div>
-        </Tooltip>
+            } </>
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [
         currentProfileTitle,

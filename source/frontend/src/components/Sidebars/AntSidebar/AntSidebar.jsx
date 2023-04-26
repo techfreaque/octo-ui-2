@@ -32,6 +32,7 @@ export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrent
         if (defaultSelected) {
             actualSetCurrentlySelectedMenu(defaultSelected);
         }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [defaultSelected]);
     // function toggleHideMenuItemText() {
     //     setHideText(prevState => (!prevState));
@@ -77,7 +78,8 @@ export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrent
                         width: "100%",
                         padding: currentContent?.noPadding ? "" : "15px",
                         height: "100%",
-                        overflowY: currentContent?.dontScroll ? undefined : "auto"
+                        overflowY: currentContent?.dontScroll ? undefined : "auto",
+                        overflowX: "hidden"
                     }
                 }>
                     {

@@ -170,6 +170,29 @@ export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData
     sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser?.token)
 }
 
+export async function uploadApp(storeDomain, appDetails, appStoreUser, onSuccess) {
+    function onFail(updated_data, update_url, result, msg, status) {
+        createNotification("Failed to upload the app", "danger")
+        // saveAppStoreData(msg.data);
+    }
+    function onSucces(updated_data, update_url, result, msg, status, request) {
+        if (msg.success) {
+            // document.cookie = undefined;
+            // saveAppStoreData({});
+            onSuccess?.()
+            createNotification("Your app is now published")
+        } else {
+            onFail(updated_data, update_url, result, msg, status)
+        }
+    }
+    if (appStoreUser?.token) {
+        sendAndInterpretBotUpdate(appDetails, storeDomain + backendRoutes.appStoreUpload + `/${appDetails.categories[0]}/${appDetails.package_id}`, onSucces, onFail, "POST", true, appStoreUser.token)
+    } else {
+        createNotification("You need to be signed in to upload an app", "warning")
+        // saveAppStoreData({})
+    }
+}
+
 export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStoreUser) {
     function onFail(updated_data, update_url, result, msg, status) {
         createNotification("Failed to log out from App Store", "danger")
@@ -178,7 +201,8 @@ export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStore
     function onSucces(updated_data, update_url, result, msg, status, request) {
         if (msg.success) { // const t = request.getResponseHeader('Set-Cookie')
             document.cookie = undefined;
-            saveAppStoreData({});
+            // TODO uncomment
+            // saveAppStoreData({});
             createNotification("Successfully logged out from App Store")
         } else {
             onFail(updated_data, update_url, result, msg, status)

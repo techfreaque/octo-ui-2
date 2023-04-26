@@ -20,7 +20,8 @@
   "plotting": {
     "switchtotheDisplaySettings": "Cambiar a la configuración de pantalla",
     "switchtotheTablesView": "Cambiar a la vista de tablas",
-    "switchtotheChartsView": "Cambiar a la vista de gráficos"
+    "switchtotheChartsView": "Cambiar a la vista de gráficos",
+    "switchToThePieChartView": "Cambiar al diseño de gráfico circular"
   },
   "profile": {
     "profileInfoButtonToolTip": "Abre la configuración del perfil."

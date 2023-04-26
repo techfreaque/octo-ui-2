@@ -20,7 +20,8 @@
   "plotting": {
     "switchtotheDisplaySettings": "Switch to the Display Settings",
     "switchtotheTablesView": "Switch to the Tables View",
-    "switchtotheChartsView": "Switch to the Charts View"
+    "switchtotheChartsView": "Switch to the Charts View",
+    "switchToThePieChartView": "Switch to the pie chart layout"
   },
   "profile": {
     "profileInfoButtonToolTip": "Open the profile settings"

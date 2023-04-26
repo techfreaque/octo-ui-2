@@ -3,7 +3,7 @@ import PlotlyDualCharts from "./MainCharts/PlotlyDualCharts";
 import {sizes} from "../../../constants/frontendConstants";
 import {useChartTypeContext, useUpdateChartTypeContext} from "../../../context/config/CurrentChartTypeProvider";
 import {useState} from "react";
-import {LineChartOutlined, SettingOutlined, UnorderedListOutlined} from "@ant-design/icons";
+import {LineChartOutlined, PieChartOutlined, SettingOutlined, UnorderedListOutlined} from "@ant-design/icons";
 import {AntIconByReactFunc} from "../../../components/Icons/AntIcon";
 import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
@@ -32,6 +32,18 @@ export function ChartTypeSelector() {
            
             toolTipText:(<Trans  i18nKey="plotting.switchtotheChartsView" />),
             key: chartTypes.CHART,
+            // disabled: true
+        },
+        {
+            label: (
+                <AntIconByReactFunc AntReactIcon={PieChartOutlined}
+                    size={
+                        sizes.small
+                    }/>
+            ),
+            
+            toolTipText:(<Trans  i18nKey="plotting.switchToThePieChartView" />),
+            key: chartTypes.PIE,
             // disabled: true
         },
         {

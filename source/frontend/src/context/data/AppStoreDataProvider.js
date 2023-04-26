@@ -6,7 +6,8 @@ import {
     fetchPackagesData,
     loginToAppStore,
     logoutFromAppStore,
-    signupToAppStore
+    signupToAppStore,
+    uploadApp
 } from "../../api/data";
 import {useBotDomainContext} from "../config/BotDomainProvider";
 import {appStoreDomainProduction, isProduction} from "../../constants/frontendConstants";
@@ -50,7 +51,10 @@ const _useFetchAppStoreData = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const botInfo = useBotInfoContext()
     return useCallback((installedTentaclesInfo, notification, appStoreUser) => {
-        appStoreDomain && fetchAppStoreData(saveAppStoreData, appStoreDomain, {installedTentaclesInfo, botInfo}, notification, appStoreUser)
+        appStoreDomain && fetchAppStoreData(saveAppStoreData, appStoreDomain, {
+            installedTentaclesInfo,
+            botInfo
+        }, notification, appStoreUser)
     }, [appStoreDomain, saveAppStoreData, botInfo])
 }
 
@@ -58,7 +62,7 @@ export const useFetchAppStoreData = () => {
     const botDomain = useBotDomainContext()
     const fetchAppStoreData = _useFetchAppStoreData()
     const appStoreUser = useAppStoreUserContext()
-    const logic = useCallback((notification = true) => {
+    const logic = useCallback((notification = false) => {
         fetchPackagesData((newData) => fetchAppStoreData(newData, notification, appStoreUser), botDomain, notification)
     }, [appStoreUser, botDomain, fetchAppStoreData]);
     return logic;
@@ -81,6 +85,16 @@ export const useLogoutFromAppStore = () => {
     const logic = useCallback(() => {
         logoutFromAppStore(updateAppStoreUser, appStoreDomain, appStoreUser)
     }, [updateAppStoreUser, appStoreDomain, appStoreUser]);
+    return logic;
+}
+
+export const useUploadToAppStore = () => {
+    const appStoreDomain = useAppStoreDomainContext()
+    const appStoreUser = useAppStoreUserContext()
+    const logic = useCallback((app, setIsloading) => {
+        setIsloading(true)
+        uploadApp(appStoreDomain, app, appStoreUser, () => setIsloading(false))
+    }, [appStoreDomain, appStoreUser]);
     return logic;
 }
 

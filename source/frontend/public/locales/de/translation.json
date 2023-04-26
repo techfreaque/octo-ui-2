@@ -20,7 +20,8 @@
   "plotting": {
     "switchtotheDisplaySettings": "Wechseln zu den Anzeigeeinstellungen",
     "switchtotheTablesView": "Wechsle in die Tabellenansicht",
-    "switchtotheChartsView": "Wechsle in die Diagrammansicht"
+    "switchtotheChartsView": "Wechsle in die Diagrammansicht",
+    "switchToThePieChartView": "Wechseln Sie zum Kreisdiagramm-Layout"
   },
   "profile": {
     "profileInfoButtonToolTip": "Öffnen die Profileinstellungen"

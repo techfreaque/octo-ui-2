@@ -19,7 +19,7 @@ export const defaultStrategyDesignerPageLayout = {
                             "component": "RefreshBotData"
                         },
                         {
-                            "antIcon": "SettingOutlined",
+                            "antIcon": "noIcon",
                             "component": "ButtonWithModal",
                             "content": [
                                 {
@@ -55,7 +55,8 @@ export const defaultStrategyDesignerPageLayout = {
                                     ]
                                 }
                             ],
-                            "faIcon": "",
+                            "displayAsAvatar": false,
+                            "faIcon": "wand-magic-sparkles",
                             "iconOnly": true,
                             "title": "Bot Settings"
                         },
@@ -67,6 +68,7 @@ export const defaultStrategyDesignerPageLayout = {
                                     "component": "NotificationCenter"
                                 }
                             ],
+                            "displayAsAvatar": false,
                             "faIcon": "",
                             "iconOnly": true,
                             "title": "Notification Center"
@@ -146,7 +148,18 @@ export const defaultStrategyDesignerPageLayout = {
                             "component": "ChartTypeSelector"
                         },
                         {
-                            "component": "ProfileModal"
+                            "antIcon": "UserOutlined",
+                            "component": "ButtonWithModal",
+                            "content": [
+                                {
+                                    "component": "LoginManager"
+                                }
+                            ],
+                            "displayAsAvatar": true,
+                            "faIcon": "",
+                            "width": "500",
+                            "iconOnly": true,
+                            "title": "Account Settings"
                         }
                     ]
                 }
@@ -181,110 +194,6 @@ export const defaultStrategyDesignerPageLayout = {
                             "faIcon": "",
                             "title": "Strategy Manager",
                             "toolBarContent": []
-                        },
-                        {
-                            "antIcon": "LineChartOutlined",
-                            "component": "Tab",
-                            "content": [
-                                {
-                                    "component": "ScrollableTabs",
-                                    "rightContent": [],
-                                    "tabs": [
-                                        {
-                                            "antIcon": "noIcon",
-                                            "component": "Tab",
-                                            "content": [
-                                                {
-                                                    "component": "LiveRunMetaData"
-                                                }
-                                            ],
-                                            "dontScroll": false,
-                                            "faIcon": "",
-                                            "title": "Trading Overview",
-                                            "toolBarContent": []
-                                        },
-                                        {
-                                            "antIcon": "noIcon",
-                                            "component": "Tab",
-                                            "content": [
-                                                {
-                                                    "component": "CurrentPortfolioTable"
-                                                }
-                                            ],
-                                            "dontScroll": false,
-                                            "faIcon": "",
-                                            "title": "Portfolio",
-                                            "toolBarContent": []
-                                        },
-                                        {
-                                            "antIcon": "noIcon",
-                                            "component": "Tab",
-                                            "content": [
-                                                {
-                                                    "component": "SymbolsInfoTable"
-                                                }
-                                            ],
-                                            "dontScroll": true,
-                                            "faIcon": "",
-                                            "title": "Symbols Info",
-                                            "toolBarContent": []
-                                        },
-                                        {
-                                            "antIcon": "noIcon",
-                                            "component": "Tab",
-                                            "content": [
-                                                {
-                                                    "component": "DataTable",
-                                                    "dataSource": "Open Orders"
-                                                }
-                                            ],
-                                            "dontScroll": false,
-                                            "faIcon": "",
-                                            "title": "Orders",
-                                            "toolBarContent": []
-                                        },
-                                        {
-                                            "antIcon": "noIcon",
-                                            "component": "Tab",
-                                            "content": [
-                                                {
-                                                    "component": "DataTable",
-                                                    "dataSource": "Trades History"
-                                                }
-                                            ],
-                                            "dontScroll": false,
-                                            "faIcon": "",
-                                            "title": "Trades",
-                                            "toolBarContent": []
-                                        },
-                                        {
-                                            "antIcon": "noIcon",
-                                            "component": "Tab",
-                                            "content": [
-                                                {
-                                                    "component": "DataTable",
-                                                    "dataSource": "Open Positions"
-                                                }
-                                            ],
-                                            "dontScroll": false,
-                                            "faIcon": "",
-                                            "title": "Positions",
-                                            "toolBarContent": []
-                                        }
-                                    ]
-                                }
-                            ],
-                            "dontScroll": true,
-                            "faIcon": "noIcon",
-                            "title": "Trading",
-                            "toolBarContent": [
-                                {
-                                    "component": "CancelAllOrdersButton"
-                                },
-                                {
-                                    "component": "CloseAllPositionsButton"
-                                }
-                            ]
                         },
                         {
                             "antIcon": "ExperimentOutlined",

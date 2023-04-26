@@ -1,5 +1,5 @@
 import React, {useState} from "react";
-import AppCard from "./AppCards/AppCard";
+import AppCards from "./AppCards/AppCards";
 import {Grid} from "@mui/material";
 
 export default function AppList({selectedCategories, appStoreData}) {
@@ -13,7 +13,7 @@ export default function AppList({selectedCategories, appStoreData}) {
             {
             preSortedAppStoreData.map((app, index) => {
                 return (
-                    <AppCard key={
+                    <AppCards key={
                             app.package_id + index
                         }
                         app={app}

@@ -20,7 +20,8 @@
   "plotting": {
     "switchtotheDisplaySettings": "切换到显示设置",
     "switchtotheTablesView": "切换到表视图",
-    "switchtotheChartsView": "切换到图表视图"
+    "switchtotheChartsView": "切换到图表视图",
+    "switchToThePieChartView": "切换到饼图布局"
   },
   "profile": {
     "profileInfoButtonToolTip": "打开配置文件设置"

@@ -1,19 +1,23 @@
-import {Card} from "antd";
-import RatingComponent from "./Rating";
-import AntButton from "../../../../components/Buttons/AntButton";
 import {deleteProfile, duplicateProfile, selectProfile} from "../../../../api/actions";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
-import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
-const {Meta} = Card;
+import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
+import AppActions from "./CardActions";
+import {backendRoutes} from "../../../../constants/backendConstants";
+import {useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
+import {useState} from "react";
+import UploadApp from "./UploadApp";
+import AppCard from "./AppCard";
+import ProfileModal from "../../Modals/ProfileModal/ProfileModal";
 
 export default function StrategyCard({
     app,
-    mouseHover,
+    setMouseHover,
     category,
-    showDownloadButton,
+    isMouseHover,
     isLoading,
     setIsloading
 }) {
+    const [uploadInfo, setUploadInfo] = useState({})
     const botDomain = useBotDomainContext()
     const botInfo = useBotInfoContext()
     function onSuccess() {
@@ -21,72 +25,63 @@ export default function StrategyCard({
         // handleClose()
         // fetchBotInfo(true)
     }
-    async function handleSelectProfile() {
+    async function handleSelectProfile(setOpen) {
         setIsloading(true)
         await selectProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
+        setOpen(false)
     }
-    async function handleDeleteProfile() {
+    async function handleDeleteProfile(setOpen) {
         setIsloading(true)
         await deleteProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
+        setOpen(false)
     }
-    async function handleProfileDuplication() {
+    async function handleProfileDuplication(setOpen) {
         setIsloading(true)
         await duplicateProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
+        setOpen(false)
+    }
+    const uploadToAppStore = useUploadToAppStore()
+    async function handleProfileUpload(setOpen) {
+        uploadToAppStore({
+            ...app,
+            ...uploadInfo
+        }, setIsloading)
+        setOpen(false)
     }
 
     const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
-    return (
-        <Card className='productCard' hoverable
-            // style={{height: "100%"}}
-            cover={
-                <img
-            className="productCard__image"
-            alt="example"
-            src='https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png'/>
-            }
-            onMouseEnter={mouseHover}
-            onMouseLeave={mouseHover}>
-            <div>
-                <Meta title={
-                        (
-                            <div className='productCard__title'>
-                                {
-                                app.title
-                            }</div>
-                        )
-                    }
-                    description={
-                        (
-                            <>
-                                <div className='productCard__category'>
-                                    {category} </div>
-                                <RatingComponent rating={
-                                        app.rating
-                                    }
-                                    votes={
-                                        app.votes
-                                    }/>
 
-                                <div className='productCard__description'>
-                                    {
-                                    app.description
-                                } </div>
-                            </>
-                        )
-                    }/>
-                <div key="productCardPrice" className='productCard__price'>
-                    {
-                    showDownloadButton && <AntButton buttonVariant="text">
-                        {
-                        app.price ? `Buy for ${
-                            app.price
-                        }$` : 'Free download'
-                    } </AntButton>
-                }
-                    {
-                    !showDownloadButton && (app.price ? app.price + "$" : undefined)
-                } </div>
-            </div>
-        </Card>
+    const currentAvatar = additionalProfileInfo?.profile?.avatar
+    const avatarUrl = currentAvatar === "default_profile.png" ? `${
+        botDomain + backendRoutes.staticImg
+    }/${currentAvatar}` : `${
+        botDomain + backendRoutes.profileMedia
+    }/${
+        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
+    }/${currentAvatar}`
+
+    function configureAppUpload() {
+        return (
+            <UploadApp setUploadInfo={setUploadInfo}
+                uploadInfo={uploadInfo}
+                app={app}/>
+        )
+    }
+    return (
+        <AppCard app={app}
+            setMouseHover={setMouseHover}
+            avatarUrl={avatarUrl}
+            category={category}
+            isMouseHover={isMouseHover}>
+            <AppActions isMouseHover={isMouseHover}
+                // configureDuplication={configureDuplication}
+                configureUpload={configureAppUpload}
+                handleSelect={handleSelectProfile}
+                handleUninstall={handleDeleteProfile}
+                handleUpload={handleProfileUpload}
+                handleDuplication={handleProfileDuplication}
+                otherActions={<ProfileModal/>}
+                app={app}/>
+        </AppCard>
     )
 }

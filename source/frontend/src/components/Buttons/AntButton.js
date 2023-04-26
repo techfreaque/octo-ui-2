@@ -14,12 +14,13 @@ export const buttonTypes = {
     error: "error",
     primary: "primary",
     white: "white",
+    fontSecondary: "fontSecondary"
 }
 
 export const buttonVariants = {
     primary: "primary",
     outline: "outline",
-    text: "text",
+    text: "text"
 }
 
 export default function AntButton({
@@ -71,65 +72,77 @@ export default function AntButton({
     const spanStyle = {}
     if (buttonVariant === buttonVariants.text) {
         spanStyle.display = 'flex'
-    }
-    else {
-        spanStyle.height= '6px'
-        spanStyle.lineHeight= '5px'
+    } else {
+        spanStyle.height = '6px'
+        spanStyle.lineHeight = '5px'
     }
 
     const iconMargin = (text || children) ? "5px" : "0px";
-    return (<ConfigProvider theme={theme}>
-        <Button icon={
-                (<> {
-                    (faIcon || antIcon) && (<IconFromString faIcon={faIcon}
-                        antIcon={antIcon}
-                        size={iconSize}
-                        marginRight={iconMargin}
-                        spin={spin}/>)
-                }
-                    {
-                    antIconComponent && (<AntIconByReactFunc AntReactIcon={antIconComponent}
-                        size={iconSize}
-                        marginRight={iconMargin}
-                        spin={spin}/>)
-                }
-                    {
-                    faIconComponent && (<FaIconByReactFunc icon={faIconComponent}
-                        size={iconSize}
-                        marginRight={iconMargin}
-                        spin={spin}/>)
-                }
-                
-                    {
-                    icon && icon 
-                    } </>)
-            }
-            danger={
-                buttonVariant === buttonVariants.outline
-            }
-            type={
-                buttonVariant === buttonVariants.outline ? 'default' : buttonVariant
-            }
-            block={block}
-            disabled={disabled}
-            onClick={onClick}
-            href={href}
-            style={
-                {
-                    marginRight,
-                    marginTop: "auto",
-                    marginBottom: "auto",
-                    display: "flex",
-                    ..._style,
-                    ...style
-                }
-        }>
+    return (
+        <ConfigProvider theme={theme}>
+            <Button icon={
+                    (
+                        <> {
+                            (faIcon || antIcon) && (
+                                <IconFromString faIcon={faIcon}
+                                    antIcon={antIcon}
+                                    size={iconSize}
+                                    marginRight={iconMargin}
+                                    spin={spin}/>
+                            )
+                        }
+                            {
+                            antIconComponent && (
+                                <AntIconByReactFunc AntReactIcon={antIconComponent}
+                                    size={iconSize}
+                                    marginRight={iconMargin}
+                                    spin={spin}/>
+                            )
+                        }
+                            {
+                            faIconComponent && (
+                                <FaIconByReactFunc icon={faIconComponent}
+                                    size={iconSize}
+                                    marginRight={iconMargin}
+                                    spin={spin}/>
+                            )
+                        }
 
-            <span style={
-                {margin: "auto",
-                ...spanStyle}
-            }> {text}
-                {children} </span>
-        </Button>
-    </ConfigProvider>)
+                            {
+                            icon && icon
+                        } </>
+                    )
+                }
+                danger={
+                    buttonVariant === buttonVariants.outline
+                }
+                type={
+                    buttonVariant === buttonVariants.outline ? 'default' : buttonVariant
+                }
+                block={block}
+                disabled={disabled}
+                onClick={onClick}
+                href={href}
+                style={
+                    {
+                        marginRight,
+                        marginTop: "auto",
+                        marginBottom: "auto",
+                        display: "flex",
+                        ..._style,
+                        ...style
+                    }
+            }>
+
+                <span style={
+                    {
+                        margin: "auto",
+                        ...spanStyle
+                    }
+                }>
+                    {text}
+                    {children} </span>
+            </Button>
+        </ConfigProvider>
+    )
 };

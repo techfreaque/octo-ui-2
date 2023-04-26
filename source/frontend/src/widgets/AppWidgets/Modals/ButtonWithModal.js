@@ -1,7 +1,7 @@
 import {useState} from "react";
 import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
 import IconFromString from '../../../components/Icons/IconFromString';
-import {Tooltip, Modal} from 'antd';
+import {Tooltip, Modal, Avatar} from 'antd';
 import AntButton from '../../../components/Buttons/AntButton';
 
 export default function ButtonWithModal({
@@ -9,7 +9,9 @@ export default function ButtonWithModal({
     content,
     antIcon,
     faIcon,
-    iconOnly
+    iconOnly,
+    displayAsAvatar,
+    width
 }) {
     const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
@@ -25,28 +27,50 @@ export default function ButtonWithModal({
                 title={title}
                 arrow={false}>
                 <div>
+
                     <AntButton onClick={handleOpen}
                         buttonVariant="text">
-                        <IconFromString faIcon={faIcon}
-                            antIcon={antIcon}
-                            marginRight={"0px"}/> {
+                        {
+                        displayAsAvatar ? (
+                            <>
+                                <Avatar onClick={handleOpen}
+                                    style={
+                                        {margin: "auto"}
+                                    }
+                                    size="small"
+                                    icon={
+                                        (
+                                            <IconFromString faIcon={faIcon}
+                                                antIcon={antIcon}
+                                                marginRight={"0px"}/>
+                                        )
+                                    }/> {
+                                !iconOnly && title
+                            } </>
+                        ) : (
+                            <IconFromString faIcon={faIcon}
+                                antIcon={antIcon}
+                                marginRight={"0px"}/>
+                        )
+                    }
+                         {
                         !iconOnly && title
                     } </AntButton>
                 </div>
             </Tooltip>
             {
-            open && <ModalContent open={open}
+            open && (<ModalContent open={open} width={width}
                 handleClose={handleClose}
-                content={content}/>
+                content={content}/>)
         } </div>
     );
 }
 
-function ModalContent({open, handleClose, content}) {
+function ModalContent({open, handleClose, content, width=1000}) {
     return (
         <Modal open={open}
             onCancel={handleClose}
-            width={1000}
+            width={width}
             centered
             footer={null}
             closable={true}
@@ -57,7 +81,9 @@ function ModalContent({open, handleClose, content}) {
                 {padding: '20px 32px 0 32px'}
             }>
                 {
-                content && <AppWidgets layout={content}/>
+                content && (
+                    <AppWidgets layout={content}/>
+                )
             } </div>
         </Modal>
     )
