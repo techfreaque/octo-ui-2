@@ -73,6 +73,7 @@ def register_bot_info_routes(plugin):
         any_exchange_is_futures: bool = False
         missing_tentacles = set()
         strategy_config = {}
+        profiles = {}
         try:
             (
                 exchange_manager,
@@ -99,6 +100,13 @@ def register_bot_info_routes(plugin):
                     if real_time_strategy_data:
                         real_time_strategies_active = real_time_strategy_data.activated
                 symbols = models.get_enabled_trading_pairs()
+                profiles = {
+                    profile.profile_id: profile.as_dict()
+                    for profile in models.get_profiles(
+                        commons_enums.ProfileType.LIVE
+                    ).values()
+                }
+
                 activated_evaluators = models.get_config_activated_evaluators()
                 evaluator_names = [
                     activated_evaluator.get_name()
@@ -177,6 +185,7 @@ def register_bot_info_routes(plugin):
                         for s in symbols
                     ]
                 ),
+                "profiles": profiles,
                 "can_logout": flask_login.current_user.is_authenticated,
                 "any_exchange_is_futures": any_exchange_is_futures,
                 "evaluator_names": evaluator_names,

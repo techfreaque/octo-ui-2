@@ -1,6 +1,8 @@
 export const projectName = "O UI2"
 export const projectDescription = "OctoBot trading bot frontend"
-export const appStoreDomainProduction = "https://apps.a42.ch"
+// !!!!!!!!! Switch back for the next release!!!
+// export const appStoreDomainProduction = "https://apps.a42.ch"
+export const appStoreDomainProduction = "https://apps-dev.a42.ch"
 
 export const isProduction = process.env.NODE_ENV !== "development"
 

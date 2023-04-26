@@ -10,13 +10,16 @@ import {useEffect} from "react";
 import {useMediaQuery} from "@mui/material";
 const {Panel} = Collapse;
 
-export default function AntSidebar({menuItems}) {
+export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrentlySelectedMenu}) {
     const botColors = useBotColorsContext();
     const hasContent = menuItems && Boolean(menuItems?.length)
-    const defaultSelected = hasContent && getKeyFromLabel(Object.values(menuItems)[0].label)
-    const [currentlySelectedMenu, setCurrentlySelectedMenu] = useState();
+    const defaultSelected = hasContent && getKeyFromLabel(Object.values(menuItems)[0])
+    const [_currentlySelectedMenu, _setCurrentlySelectedMenu] = useState();
     const [hideText, setHideText] = useState(false);
     const iSmallScreen = useMediaQuery('(max-width:800px)');
+
+    const actualCurrentlySelectedMenu = currentlySelectedMenu || _currentlySelectedMenu
+    const actualSetCurrentlySelectedMenu = setCurrentlySelectedMenu || _setCurrentlySelectedMenu
 
     useEffect(() => {
         if (iSmallScreen) {
@@ -26,64 +29,66 @@ export default function AntSidebar({menuItems}) {
         }
     }, [iSmallScreen]);
     useEffect(() => {
-        if (defaultSelected) 
-            setCurrentlySelectedMenu(defaultSelected);
-        
-
+        if (defaultSelected) {
+            actualSetCurrentlySelectedMenu(defaultSelected);
+        }
     }, [defaultSelected]);
     // function toggleHideMenuItemText() {
     //     setHideText(prevState => (!prevState));
     // }
     return useMemo(() => {
         const activeMenus = []
-        const currentContent = hasContent && findCurrentContent(menuItems, currentlySelectedMenu, activeMenus)
-        return hasContent && (<div style={
-            {
-                height: "100%",
-                width: "100%",
-                display: "flex"
-            }
-        }>
+        const currentContent = hasContent && findCurrentContent(menuItems, actualCurrentlySelectedMenu, activeMenus)
+        return hasContent && (
             <div style={
-                    {
-                        width: "auto",
-                        // `${sideBarWidth}px`,
-                        height: "100%",
-                        borderRight: `4px solid ${
-                            botColors?.border
-                        }`
-                    }
+                {
+                    height: "100%",
+                    width: "100%",
+                    display: "flex"
                 }
-                className={"ant-side-bar"}>
+            }>
                 <div style={
-                    {
-                        overflowY: "auto",
-                        height: "100%"
+                        {
+                            width: "auto",
+                            // `${sideBarWidth}px`,
+                            height: "100%",
+                            borderRight: `4px solid ${
+                                botColors?.border
+                            }`
+                        }
+                    }
+                    className={"ant-side-bar"}>
+                    <div style={
+                        {
+                            overflowY: "auto",
+                            height: "100%"
+                        }
+                    }>
+
+                        <MenuItems menuItems={menuItems}
+                            currentlySelectedMenu={actualCurrentlySelectedMenu}
+                            activeMenus={activeMenus}
+                            hideText={hideText}
+                            setCurrentlySelectedMenu={actualSetCurrentlySelectedMenu}/>
+                    </div>
+                </div>
+                <div style={
+                    { // width: `calc(100% - ${sideBarWidth}px)`,
+                        width: "100%",
+                        padding: currentContent?.noPadding ? "" : "15px",
+                        height: "100%",
+                        overflowY: currentContent?.dontScroll ? undefined : "auto"
                     }
                 }>
-
-                    <MenuItems menuItems={menuItems}
-                        currentlySelectedMenu={currentlySelectedMenu}
-                        activeMenus={activeMenus}
-                        hideText={hideText}
-                        setCurrentlySelectedMenu={setCurrentlySelectedMenu}/>
-                </div>
+                    {
+                    currentContent?.content
+                } </div>
             </div>
-            <div style={
-                { // width: `calc(100% - ${sideBarWidth}px)`,
-                    width: "100%",
-                    padding: currentContent?.noPadding ? "" : "15px",
-                    height: "100%",
-                    overflowY: currentContent?.dontScroll ? undefined : "auto"
-                }
-            }> {
-                currentContent?.content
-            } </div>
-        </div>)
+        )
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
         botColors?.border,
-        currentlySelectedMenu,
+        actualCurrentlySelectedMenu,
         menuItems,
         hideText
     ])
@@ -91,13 +96,13 @@ export default function AntSidebar({menuItems}) {
 
 function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
     for (const menuItemData of menuItemsData) {
-        if (getKeyFromLabel(menuItemData.label) === currentlySelectedMenu) {
-            activeMenus.push(getKeyFromLabel(menuItemData.label))
+        if (getKeyFromLabel(menuItemData) === currentlySelectedMenu) {
+            activeMenus.push(getKeyFromLabel(menuItemData))
             return menuItemData
         } else if (menuItemData.children) {
             const foundContent = findCurrentContent(menuItemData.children, currentlySelectedMenu, activeMenus)
             if (foundContent) {
-                activeMenus.push(getKeyFromLabel(menuItemData.label))
+                activeMenus.push(getKeyFromLabel(menuItemData))
                 return foundContent
             }
         }
@@ -117,21 +122,23 @@ function MenuItems({
         const style = isSubMenu ? {
             margin: "5px"
         } : {}
-        return (<div key={
-                getKeyFromLabel(menuItem.label)
-            }
-            style={style}
-            className={
-                isSubMenu ? "sub-menu" : "root-menu"
-        }>
-            <MenuItem mode="inline"
-                hideText={hideText}
-                menuItem={menuItem}
-                isSubMenu={isSubMenu}
-                currentlySelectedMenu={currentlySelectedMenu}
-                setCurrentlySelectedMenu={setCurrentlySelectedMenu}
-                activeMenus={activeMenus}/>
-        </div>)
+        return (
+            <div key={
+                    getKeyFromLabel(menuItem)
+                }
+                style={style}
+                className={
+                    isSubMenu ? "sub-menu" : "root-menu"
+            }>
+                <MenuItem mode="inline"
+                    hideText={hideText}
+                    menuItem={menuItem}
+                    isSubMenu={isSubMenu}
+                    currentlySelectedMenu={currentlySelectedMenu}
+                    setCurrentlySelectedMenu={setCurrentlySelectedMenu}
+                    activeMenus={activeMenus}/>
+            </div>
+        )
     })
 }
 
@@ -144,27 +151,31 @@ function MenuItem({
     hideText
 }) {
     function handleCurentChange() {
-        setCurrentlySelectedMenu(getKeyFromLabel(menuItem.label))
+        setCurrentlySelectedMenu(getKeyFromLabel(menuItem))
         menuItem?.onClick ?. (menuItem)
     }
     const colorMode = useColorModeContext()
     const colors = useBotColorsContext()
-    const buttonStyle = getKeyFromLabel(menuItem.label) === currentlySelectedMenu ? { // backgroundColor: colors ?. backgroundActive,
+    const buttonStyle = getKeyFromLabel(menuItem) === currentlySelectedMenu ? { // backgroundColor: colors ?. backgroundActive,
         color: colors?.fontActive
     } : {}
 
 
-    return useMemo(() => (menuItem.children?.length ? (<NestedSideBarMenuItem colorMode={colorMode}
-        activeMenus={activeMenus}
-        hideText={hideText}
-        currentlySelectedMenu={currentlySelectedMenu}
-        setCurrentlySelectedMenu={setCurrentlySelectedMenu}
-        handleCurentChange={handleCurentChange}
-        menuItem={menuItem}/>) : (<SideBarButton isSubMenu={isSubMenu}
-        hideText={hideText}
-        buttonStyle={buttonStyle}
-        handleCurentChange={handleCurentChange}
-        menuItem={menuItem}/>)),
+    return useMemo(() => (menuItem.children?.length ? (
+        <NestedSideBarMenuItem colorMode={colorMode}
+            activeMenus={activeMenus}
+            hideText={hideText}
+            currentlySelectedMenu={currentlySelectedMenu}
+            setCurrentlySelectedMenu={setCurrentlySelectedMenu}
+            handleCurentChange={handleCurentChange}
+            menuItem={menuItem}/>
+    ) : (
+        <SideBarButton isSubMenu={isSubMenu}
+            hideText={hideText}
+            buttonStyle={buttonStyle}
+            handleCurentChange={handleCurentChange}
+            menuItem={menuItem}/>
+    )),
     // eslint-disable-next-line react-hooks/exhaustive-deps
         [
         activeMenus,
@@ -185,64 +196,72 @@ function NestedSideBarMenuItem({
     menuItem,
     hideText
 }) {
-    return (<Collapse prefixCls={
-            `${colorMode}`
-        }
-        activeKey={activeMenus}
-        onChange={handleCurentChange}
-        style={
-            {border: "none"}
-        }
-        expandIconPosition="end"
-        destroyInactivePanel={true}
-        // showArrow={true}
-    >
-        <Panel header={
-                (<Tooltip title={
-                        hideText && menuItem.label
-                    }
-                    trigger={
-                        [
-                            "hover",
-                            // "focus",
-                            // "click"
-                        ]
-                }>
-                    <div style={
-                        {display: "flex"}
-                    }>
-                        <IconFromString faIcon={
-                                menuItem.faIcon
-                            }
-                            antIcon={
-                                menuItem.antIcon
-                            }/>
-                        <span style={
-                            menuItem.antIcon ? {
-                                marginLeft: "5px"
-                            } : {}
-                        }> {
-                            !hideText && menuItem.label
-                        }</span>
-                    </div>
-                </Tooltip>)
+    return (
+        <Collapse prefixCls={
+                `${colorMode}`
             }
-            key={
-                getKeyFromLabel(menuItem.label)
-            }
+            activeKey={activeMenus}
+            onChange={handleCurentChange}
             style={
                 {border: "none"}
-        }>
-            <MenuItems menuItems={
-                    menuItem.children
+            }
+            expandIconPosition="end"
+            destroyInactivePanel={true}
+            // showArrow={true}
+        >
+            <Panel header={
+                    (
+                        <Tooltip title={
+                                hideText && menuItem.label
+                            }
+                            trigger={
+                                [
+                                    "hover",
+                                    // "focus",
+                                    // "click"
+                                ]
+                        }>
+                            <div style={
+                                {display: "flex"}
+                            }>
+                                {
+                                menuItem?.icon && menuItem.icon
+                            }
+                                <IconFromString faIcon={
+                                        menuItem.faIcon
+                                    }
+                                    antIcon={
+                                        menuItem.antIcon
+                                    }/>
+                                <span style={
+                                    menuItem.antIcon ? {
+                                        marginLeft: "5px"
+                                    } : {}
+                                }>
+                                    {
+                                    !hideText && menuItem.label
+                                }</span>
+                            </div>
+                        </Tooltip>
+                    )
                 }
-                hideText={hideText}
-                activeMenus={activeMenus}
-                isSubMenu={true}
-                currentlySelectedMenu={currentlySelectedMenu}
-                setCurrentlySelectedMenu={setCurrentlySelectedMenu}/>
-        </Panel>
-    </Collapse>)
+                key={
+                    getKeyFromLabel(menuItem)
+                }
+                style={
+                    {border: "none"}
+            }>
+                <MenuItems menuItems={
+                        menuItem.children
+                    }
+                    hideText={hideText}
+                    activeMenus={activeMenus}
+                    isSubMenu={true}
+                    currentlySelectedMenu={currentlySelectedMenu}
+                    setCurrentlySelectedMenu={setCurrentlySelectedMenu}/>
+            </Panel>
+        </Collapse>
+    )
 }
 function SideBarButton({
     buttonStyle,
@@ -257,43 +276,56 @@ function SideBarButton({
     const buttonStyleForIcon = (menuItem.antIcon && menuItem.antIcon !== iconStringNoIcon) ? {
         display: "flex"
     } : {}
-    return (<div style={
-        {
-            width: "100%",
-            ...buttonContainerStyle
-        }
-    }>
-        <Tooltip title={
-            hideText && menuItem.label
+    return (
+        <div style={
+            {
+                width: "100%",
+                ...buttonContainerStyle
+            }
         }>
-            <Button style={
-                    {
-                        ...buttonStyle,
-                        ...buttonStyleForIcon,
-                        textAlign: "start"
+            <Tooltip title={
+                hideText && menuItem.label
+            }>
+                <Button style={
+                        {
+                            ...buttonStyle,
+                            ...buttonStyleForIcon,
+                            textAlign: "start"
 
+                        }
                     }
+                    size={"large"}
+                    type="text"
+                    onClick={handleCurentChange}
+                    block>
+                    {
+                    menuItem.icon && (
+                        <span style={
+                            {marginRight: "7px"}
+                        }>
+                            {
+                            menuItem.icon
+                        } </span>
+                    )
                 }
-                size={"large"}
-                type="text"
-                onClick={handleCurentChange}
-                block>
-                <IconFromString faIcon={
-                        menuItem.faIcon
-                    }
-                    antIcon={
-                        menuItem.antIcon
-                    }/> {
-                !hideText && menuItem.label
-            } </Button>
-        </Tooltip>
-    </div>)
+                    <IconFromString faIcon={
+                            menuItem.faIcon
+                        }
+                        antIcon={
+                            menuItem.antIcon
+                        }/> {
+                    !hideText && menuItem.label
+                } </Button>
+            </Tooltip>
+        </div>
+    )
 }
 
-function getKeyFromLabel(label) {
-    if (label) {
-        return label?.replace(" ", "_")
-
+function getKeyFromLabel(menuItem) {
+    if (menuItem.key) {
+        return menuItem.key
+    } else if (menuItem.label) {
+        return menuItem.label?.replace(" ", "_")
     }
     console.error("A sidebar menu item has no label")
 }

@@ -8,7 +8,7 @@ import {Grid} from '@mui/material';
 const tradingModeCategoryName = "Strategy Mode"
 const profileCategoryName = "Strategy"
 
-export default function AppCard({app}) {
+export default function AppCard({app, isLoading, setIsloading}) {
     const [showDownloadButton, setShowDownloadButton] = useState(false);
     const mouseHover = () => setShowDownloadButton(prev => !prev);
     const category = app.categories.length > 1 ? 'Package' : app.categories[0]
@@ -18,6 +18,8 @@ export default function AppCard({app}) {
                 <TradingModeCard app={app}
                     mouseHover={mouseHover}
                     category={category}
+                    isLoading={isLoading}
+                    setIsloading={setIsloading}
                     showDownloadButton={showDownloadButton}/>
             </SelectedCardContainer>
         )
@@ -25,6 +27,8 @@ export default function AppCard({app}) {
         return (
             <SelectedCardContainer app={app}>
                 <StrategyCard app={app}
+                    isLoading={isLoading}
+                    setIsloading={setIsloading}
                     mouseHover={mouseHover}
                     category={category}
                     showDownloadButton={showDownloadButton}/>
@@ -39,16 +43,19 @@ export default function AppCard({app}) {
 
 
 function SelectedCardContainer({app, children}) {
-    if (app ?. is_selected) {
+    if (app?.is_selected) {
         return (
-            <Grid item xs={12}>
+            <Grid item
+                xs={12}>
                 {children}</Grid>
         )
     } else {
         return (
-            <Grid
-            style={{height: "100%"}}
-                item xs={12}
+            <Grid style={
+                    {height: "100%"}
+                }
+                item
+                xs={12}
                 sm={6}
                 md={6}
                 lg={4}>

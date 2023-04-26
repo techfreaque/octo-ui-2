@@ -49,6 +49,7 @@ export const backendRoutes = {
     currencyLogos: "/currency_logos",
     updateProfileInfo: `${basePath}/update_profile_info`,
     duplicateProfile: "/profiles_management/duplicate?profile_id=",
+    selectProfile: "/profiles_management/use_as_live?profile_id=",
     deleteProfile: "/profiles_management/remove",
     importProfile: "/profiles_management/import",
     importProfileFromUrl: `/${basePath}/profiles/import`,
