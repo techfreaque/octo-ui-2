@@ -1,13 +1,7 @@
 import {useMemo} from 'react';
 import {SplitResizableContent} from '../../../LayoutWidgets/SplitMainContent';
 import PlotlyChart, {allChartLocations, enableAxisSelect} from './Plotly';
-import {usePlotlyLayoutsContext, useUpdatePlotlyLayoutsContext} from './PlotlyContext';
 import {useEffect, useState} from 'react';
-import {useUiConfigContext} from '../../../../context/config/UiConfigProvider';
-import {useVisiblePairsContext} from '../../../../context/config/VisiblePairProvider';
-import {useVisibleTimeFramesContext} from '../../../../context/config/VisibleTimeFrameProvider';
-import {useBotPlottedElementsContext} from '../../../../context/data/BotPlottedElementsProvider';
-import {setPlotData} from './PlotlyGenerateData';
 import {useRef} from 'react';
 import "./crosshair.css"
 import Crosshair, { handleCrosshairOnMouseEnter, handleCrosshairOnMouseLeave } from './Crosshair';
@@ -16,24 +10,16 @@ import Crosshair, { handleCrosshairOnMouseEnter, handleCrosshairOnMouseLeave } f
 export default function PlotlyDualCharts({
     chartLocations = allChartLocations,
     charts,
-    setCharts
+    setLayouts,
+    layouts
 }) {
     const [splitChartsPercent, setSplitChartsPercent] = useState({percent: 60, shouldUpdate: false})
-    const layouts = usePlotlyLayoutsContext()
-    const setLayouts = useUpdatePlotlyLayoutsContext()
-    const plottedElements = useBotPlottedElementsContext()
-    const uiConfig = useUiConfigContext()
-    const visiblePairs = useVisiblePairsContext();
-    const visibleTimeframes = useVisibleTimeFramesContext();
     const mainRef = useRef()
     const subRef = useRef()
     const activeChartLocations = charts ? Object.keys(charts) : []
     const chartExist = activeChartLocations.length > 0
     const subChartExist = activeChartLocations.length > 1
-    useEffect(() => {
-        setPlotData(plottedElements, uiConfig, visibleTimeframes, visiblePairs, setCharts, setLayouts)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [plottedElements, uiConfig])
+
     useEffect(() => {
         // main chart
         updateChartDimensions(activeChartLocations, chartLocations[0], setLayouts, mainRef?.current?.clientHeight,)

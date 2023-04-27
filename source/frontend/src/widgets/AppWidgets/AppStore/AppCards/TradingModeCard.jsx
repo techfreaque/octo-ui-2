@@ -3,6 +3,7 @@ import {useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider
 import {useState} from "react";
 import UploadApp from "./UploadApp";
 import AppCard from "./AppCard";
+import { strategyModeName, strategyModeSettingsName } from "../AppStore";
 
 export default function TradingModeCard({
     app,
@@ -10,7 +11,7 @@ export default function TradingModeCard({
     category,
     isMouseHover,
     isLoading,
-    setIsloading
+    setIsloading,setSelectedCategories
 }) {
     const uploadToAppStore = useUploadToAppStore()
     const [uploadInfo, setUploadInfo] = useState({})
@@ -33,11 +34,17 @@ export default function TradingModeCard({
             setMouseHover={setMouseHover}
             avatarUrl={"https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png"}
             category={category}
-            isMouseHover={isMouseHover}>
-            <AppActions isMouseHover={isMouseHover}
-                handleUpload={handleProfileUpload}
-                configureUpload={configureAppUpload}
-                app={app}/>
-        </AppCard>
+            isMouseHover={isMouseHover}
+            cardActions={
+                (
+                    <AppActions isMouseHover={isMouseHover}
+                        setSelectedCategories={setSelectedCategories}
+                        infoContent={app.description}
+                        onConfigure={()=>setSelectedCategories(strategyModeSettingsName)}
+                        handleUpload={handleProfileUpload}
+                        configureUpload={configureAppUpload}
+                        app={app}/>
+                )
+            }/>
     )
 }

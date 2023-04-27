@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import { Switch, Typography } from "antd";
 
-export function ProfileRealSettings({newProfileSettings, onChange}) {
+export function ProfileRealSettings({newProfileSettings, onChange, isCurrentProfile}) {
     return (
         <>
             <Grid item
@@ -11,7 +11,7 @@ export function ProfileRealSettings({newProfileSettings, onChange}) {
             <Grid item
                 xs={12}
                 sm={6}>
-                <Switch onChange={
+                <Switch disabled={!isCurrentProfile} onChange={
                         (value) => onChange(value, "trader", "load-trade-history")
                     }
                     checked={

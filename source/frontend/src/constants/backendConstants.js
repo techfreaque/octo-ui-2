@@ -18,6 +18,7 @@ export const backendRoutes = {
     appStoreLogout: `/logout`,
     appStoreSignup: `/register`,
     appStoreUpload: `/upload_app`,
+    appStoreRate: `/rate_app`,
     packagesData: `${basePath}/tentacles-info`,
     appStorePremium: `/premium/repo`,
     daemons: `${basePath}/daemons`,

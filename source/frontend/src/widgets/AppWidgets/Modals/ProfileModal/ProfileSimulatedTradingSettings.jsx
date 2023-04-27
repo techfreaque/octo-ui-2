@@ -4,7 +4,7 @@ import { Grid } from "@mui/material"
 import { Alert, Button, Card, Input, InputNumber, List, Typography } from "antd"
 import { useState } from "react"
 
-export function ProfileSimulatedSettings({newProfileSettings, onChange, setNewProfileSettings}) {
+export function ProfileSimulatedSettings({newProfileSettings, onChange, setNewProfileSettings, isCurrentProfile}) {
     return (
         <>
             <Grid item
@@ -20,7 +20,7 @@ export function ProfileSimulatedSettings({newProfileSettings, onChange, setNewPr
                     }
                     value={
                         newProfileSettings?.config?.["trader-simulator"]?.fees?.maker
-                    }
+                    } disabled={!isCurrentProfile}
                     addonAfter="%"
                     defaultValue="0.1"
                     min="-1"
@@ -40,7 +40,7 @@ export function ProfileSimulatedSettings({newProfileSettings, onChange, setNewPr
                     }
                     value={
                         newProfileSettings?.config?.["trader-simulator"]?.fees?.taker
-                    }
+                    } disabled={!isCurrentProfile}
                     addonAfter="%"
 
                     defaultValue="0.1"
@@ -52,13 +52,13 @@ export function ProfileSimulatedSettings({newProfileSettings, onChange, setNewPr
                     }
                     stringMode/>
             </Grid>
-            <ProfilePortfolioSettings newProfileSettings={newProfileSettings}
+            <ProfilePortfolioSettings newProfileSettings={newProfileSettings} isCurrentProfile={isCurrentProfile}
                 onChange={onChange}
                 setNewProfileSettings={setNewProfileSettings}/></>
     )
 }
 const addKey = "add"
-export function ProfilePortfolioSettings({newProfileSettings, onChange, setNewProfileSettings}) {
+export function ProfilePortfolioSettings({newProfileSettings, onChange, setNewProfileSettings, isCurrentProfile}) {
 
     const data = [
         ...Object.keys(newProfileSettings.config["trader-simulator"]["starting-portfolio"]).map(coin => {
@@ -73,7 +73,7 @@ export function ProfilePortfolioSettings({newProfileSettings, onChange, setNewPr
         <Grid item
             xs={12}>
             <Typography.Title level={5}>Simulated Starting Portfolio:</Typography.Title>
-            <Alert message={
+           {isCurrentProfile&&( <Alert message={
                     (
                         <><FontAwesomeIcon style={
                                     {marginRight: "5px"}
@@ -84,7 +84,7 @@ export function ProfilePortfolioSettings({newProfileSettings, onChange, setNewPr
                 type="info"
                 style={
                     {marginBottom: "10px"}
-                }/>
+                }/>)}
             <List grid={
                     {
                         gutter: 16,
@@ -96,12 +96,12 @@ export function ProfilePortfolioSettings({newProfileSettings, onChange, setNewPr
                 dataSource={data}
                 renderItem={
                     (item) => {
-                        return item.key === addKey ? (
+                        return item.key === addKey ? (isCurrentProfile && (
                             <ProfileAddCoinSettings setNewProfileSettings={setNewProfileSettings}/>
-                        ) : (
+                        )) : (
                             <ProfilePortfolioCoinSettings item={item}
                                 newProfileSettings={newProfileSettings}
-                                setNewProfileSettings={setNewProfileSettings}
+                                setNewProfileSettings={setNewProfileSettings} isCurrentProfile={isCurrentProfile} 
                                 onChange={onChange}/>
                         )
                     }
@@ -165,12 +165,12 @@ export function ProfileAddCoinSettings({setNewProfileSettings}) {
                         (newValue) => handleCoinToAdd("value", Number(newValue))
                     }
                     stringMode/>
-                <Button type="primary"
+               <Button type="primary"
                     style={
                         {marginTop: "10px"}
                     }
                     disabled={
-                        !coinToSet.coin && !coinToSet.value && true
+                        (!coinToSet.coin && !coinToSet.value && true)
                     }
                     icon={
                         (
@@ -188,7 +188,7 @@ export function ProfileAddCoinSettings({setNewProfileSettings}) {
 }
 
 
-export function ProfilePortfolioCoinSettings({item, newProfileSettings, onChange, setNewProfileSettings}) {
+export function ProfilePortfolioCoinSettings({item, newProfileSettings, onChange, setNewProfileSettings, isCurrentProfile}) {
     function handleRemoveCoin() {
         setNewProfileSettings(prevSettings => {
             const newSettings = {
@@ -217,7 +217,7 @@ export function ProfilePortfolioCoinSettings({item, newProfileSettings, onChange
                     style={
                         {width: "100%"}
                     }
-                    editable={
+                    editable={isCurrentProfile &&
                         {
                             tooltip: 'click to edit the asset',
                             onChange: handleCoinNameChange,
@@ -234,6 +234,7 @@ export function ProfilePortfolioCoinSettings({item, newProfileSettings, onChange
                     value={
                         newProfileSettings.config["trader-simulator"]["starting-portfolio"][item.coin]
                     }
+                    disabled={!isCurrentProfile}
                     addonAfter={
                         item.coin
                     }
@@ -243,7 +244,7 @@ export function ProfilePortfolioCoinSettings({item, newProfileSettings, onChange
                         (newValue) => onChange(Number(newValue), "trader-simulator", "starting-portfolio", item.coin)
                     }
                     stringMode/>
-                <Button key={
+               {isCurrentProfile&&( <Button key={
                         `delete${
                             item.coin
                         }`
@@ -264,7 +265,7 @@ export function ProfilePortfolioCoinSettings({item, newProfileSettings, onChange
                     onClick={handleRemoveCoin}>
                     Remove {
                     item.coin
-                } </Button>
+                } </Button>)}
             </Card>
         </List.Item>
     )

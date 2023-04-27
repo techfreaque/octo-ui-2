@@ -7,7 +7,7 @@ import {Grid} from '@mui/material';
 const tradingModeCategoryName = "Strategy Mode"
 const profileCategoryName = "Strategy"
 
-export default function AppCards({app, isLoading, setIsloading}) {
+export default function AppCards({app, isLoading, setIsloading, setSelectedCategories}) {
     const [isMouseHover, setMouseHover] = useState(false);
     const category = app.categories.length > 1 ? 'Package' : app.categories[0]
     if (category === tradingModeCategoryName) {
@@ -16,6 +16,7 @@ export default function AppCards({app, isLoading, setIsloading}) {
                 <TradingModeCard app={app}
                     setMouseHover={setMouseHover}
                     category={category}
+                    setSelectedCategories={setSelectedCategories}
                     isLoading={isLoading}
                     setIsloading={setIsloading}
                     isMouseHover={isMouseHover}/>
@@ -29,7 +30,11 @@ export default function AppCards({app, isLoading, setIsloading}) {
                     setIsloading={setIsloading}
                     setMouseHover={setMouseHover}
                     category={category}
-                    isMouseHover={isMouseHover}/>
+                    setSelectedCategories={setSelectedCategories}
+                    isMouseHover={isMouseHover}
+                    // isMouseHover={true}
+                    
+                    />
             </SelectedCardContainer>
         )
     } else {
@@ -53,7 +58,7 @@ function SelectedCardContainer({app, children}) {
                     {
                         margin: "auto",
                         height: "100%",
-                        maxWidth: "500px"
+                        // maxWidth: "500px"
                     }
                 }
                 item
@@ -61,7 +66,10 @@ function SelectedCardContainer({app, children}) {
                 sm={12}
                 md={12}
                 lg={6}
-                xl={4}>
+                xl={4}
+                xxl={4}
+            
+            >
                 {children}</Grid>
         )
     }

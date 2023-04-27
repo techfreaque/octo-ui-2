@@ -1,4 +1,6 @@
-export default function RatingComponent({rating, votes, style}) {
+import { Tooltip } from "antd";
+
+export default function RatingComponent({app, rating, votes, style}) {
     // const formatCash = n => {
     //     if (n < 1e3)
     //         return n.toString();
@@ -17,6 +19,10 @@ export default function RatingComponent({rating, votes, style}) {
 
     // };
     // const _rating = formatCash(rating);
+    function onRatingChange(starId) {
+        // TODO use rating endpoint here
+        console.log()
+    }
     return (
         <div style={
             {
@@ -29,58 +35,65 @@ export default function RatingComponent({rating, votes, style}) {
                 ...style
             }
         }>
+            <Tooltip title={`${votes} users have voted ~${rating} stars on average`} >
             {
-            [
+                [
+                0,
                 1,
                 2,
                 3,
                 4,
-                5
-            ].map(starId => (
+                ].map(starId => (
+                        
                 <Rating rating={rating}
+                    onRatingChange={()=>onRatingChange(starId)}
                     starId={starId}/>
             ))
         }
             <span className='ratingComponent__votes'>
                 {votes}</span>
+                </Tooltip>
         </div>
     );
 }
 
 
-function Rating({rating, starId}) {
-    if (rating >= starId) {
+function Rating({ rating, starId, onRatingChange }) {
+    const starStyle = {
+        cursor: "pointer"
+    }
+    if (rating >= starId+1) {
         return (
-            <FullStar/>)
+            <FullStar onRatingChange={onRatingChange} starStyle={starStyle} />)
     } else if (rating >= starId + .5) {
         (
-            <HalfStar/>)
+            <HalfStar onRatingChange={onRatingChange} starStyle={starStyle} />)
     } else {
         return (
-            <EmptyStar/>)
+            <EmptyStar onRatingChange={onRatingChange} starStyle={starStyle} />)
 
     }
 }
-function FullStar() {
+function FullStar({onRatingChange, starStyle}) {
     return (
-        <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="fullStar">
+        <svg onClick={onRatingChange} style={starStyle} width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="fullStar">
             <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25"></path>
         </svg>
     )
 }
 
-function HalfStar() {
+function HalfStar({onRatingChange, starStyle}) {
     return (
-        <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="halfStar">
+        <svg onClick={onRatingChange} style={starStyle} width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="halfStar">
             <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25"></path>
             <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 0 0"></path>
         </svg>
     )
 }
 
-function EmptyStar() {
+function EmptyStar({onRatingChange, starStyle}) {
     return (
-        <svg width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="emptyStar">
+        <svg onClick={onRatingChange} style={starStyle} width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="emptyStar">
             <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25"></path>
         </svg>
     )

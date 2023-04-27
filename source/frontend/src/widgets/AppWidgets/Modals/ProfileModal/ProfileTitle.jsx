@@ -1,7 +1,7 @@
 import ProfileAvatar from "../../Stats/ProfileAvatar"
 import {Typography} from "antd";
 
-export function ProfileTitle({newProfileSettings, setNewProfileSettings, currentProfile, setRequiresInstantRestart}) {
+export function ProfileTitle({newProfileSettings, setNewProfileSettings, currentProfile, setRequiresInstantRestart, isCurrentProfile}) {
     function handleTitleChange(newName) {
         // TODO also change profile id
         setNewProfileSettings(prevSettings => {
@@ -16,7 +16,7 @@ export function ProfileTitle({newProfileSettings, setNewProfileSettings, current
     return (
         <Typography.Title level={2}
             editable={
-                !newProfileSettings.profile.read_only && {
+                (!newProfileSettings.profile.read_only && isCurrentProfile) && {
                     onChange: handleTitleChange,
                     text: newProfileSettings?.profile?.name,
 

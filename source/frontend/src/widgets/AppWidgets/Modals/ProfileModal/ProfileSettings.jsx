@@ -13,6 +13,7 @@ export function ProfileSettings({
     setNewProfileSettings,
     setIsloading,
     handleClose,
+    isCurrentProfile,
     loading
 }) {
     const botDomain = useBotDomainContext()
@@ -80,9 +81,10 @@ export function ProfileSettings({
                 Delete Profile
             </Button>
         </Space>
-        <ProfileDescription newProfileSettings={newProfileSettings}
+        <ProfileDescription newProfileSettings={newProfileSettings} isCurrentProfile={isCurrentProfile}
             setNewProfileSettings={setNewProfileSettings}/>
         <ProfileTradingSettings newProfileSettings={newProfileSettings}
+            isCurrentProfile={isCurrentProfile}
             setNewProfileSettings={setNewProfileSettings}
         />
     </div>

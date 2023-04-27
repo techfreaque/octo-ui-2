@@ -1,6 +1,6 @@
 import { Typography } from "antd"
 
-export function ProfileDescription({newProfileSettings, setNewProfileSettings}) {
+export function ProfileDescription({newProfileSettings, setNewProfileSettings, isCurrentProfile}) {
     function handleDescriptionChange(newDesc) {
         setNewProfileSettings(prevSettings => {
             const newSettings = {
@@ -12,7 +12,7 @@ export function ProfileDescription({newProfileSettings, setNewProfileSettings}) 
         // TODO handle api
     }
     return <Typography.Paragraph editable={
-        !newProfileSettings.profile.read_only && {
+        (!newProfileSettings.profile.read_only && isCurrentProfile) && {
             onChange: handleDescriptionChange,
             text: newProfileSettings?.profile?.description,
             tooltip: 'Click to edit the profile description'

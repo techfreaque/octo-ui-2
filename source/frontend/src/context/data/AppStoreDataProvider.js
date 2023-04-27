@@ -6,6 +6,7 @@ import {
     fetchPackagesData,
     loginToAppStore,
     logoutFromAppStore,
+    rateApp,
     signupToAppStore,
     uploadApp
 } from "../../api/data";
@@ -94,6 +95,16 @@ export const useUploadToAppStore = () => {
     const logic = useCallback((app, setIsloading) => {
         setIsloading(true)
         uploadApp(appStoreDomain, app, appStoreUser, () => setIsloading(false))
+    }, [appStoreDomain, appStoreUser]);
+    return logic;
+}
+
+export const useRateAppStore = () => {
+    const appStoreDomain = useAppStoreDomainContext()
+    const appStoreUser = useAppStoreUserContext()
+    const logic = useCallback((rateInfo, setIsloading) => {
+        setIsloading(true)
+        rateApp(appStoreDomain, rateInfo, appStoreUser, () => setIsloading(false))
     }, [appStoreDomain, appStoreUser]);
     return logic;
 }

@@ -4,37 +4,36 @@ import {Modal} from "antd";
 import {useEffect, useMemo, useState} from "react";
 import {updateConfig, updateProfileInfo} from "../../../../api/actions";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
-import {useBotInfoContext, useFetchBotInfo} from "../../../../context/data/BotInfoProvider";
+import {useFetchBotInfo} from "../../../../context/data/BotInfoProvider";
 import {useIsBotOnlineContext, useRestartBot} from "../../../../context/data/IsBotOnlineProvider";
 import {ProfileSettings} from "./ProfileSettings";
 import {ProfileTitle} from "./ProfileTitle";
 import AntButton from "../../../../components/Buttons/AntButton";
-import { PlusCircleOutlined } from "@ant-design/icons";
+import { BankOutlined } from "@ant-design/icons";
 
 
-export default function ProfileModal() {
+export default function ProfileModal({profile, isCurrentProfile}) {
     const [open, setOpen] = useState(false);
     const fetchBotInfo = useFetchBotInfo()
     const [loading, setIsloading] = useState(false);
     const [requiresInstantRestart, setRequiresInstantRestart] = useState(false);
-    const botInfo = useBotInfoContext()
+    // const botInfo = useBotInfoContext()
     const isOnline = useIsBotOnlineContext()
     const restartBot = useRestartBot()
     const botDomain = useBotDomainContext()
-    const currentProfileTitle = (botInfo?.current_profile || {})?.profile?.name
-    const [newProfileSettings, setNewProfileSettings] = useState(JSON.parse(JSON.stringify(botInfo?.current_profile || {})))
-    const hasChanged = JSON.stringify(botInfo?.current_profile || {}) !== JSON.stringify(newProfileSettings)
+    const currentProfileTitle = (profile || {})?.profile?.name
+    const [newProfileSettings, setNewProfileSettings] = useState(JSON.parse(JSON.stringify(profile || {})))
+    const hasChanged = JSON.stringify(profile || {}) !== JSON.stringify(newProfileSettings)
 
     useEffect(() => {
-        setNewProfileSettings(JSON.parse(JSON.stringify(botInfo?.current_profile || {})))
-    }, [botInfo?.current_profile])
+        setNewProfileSettings(JSON.parse(JSON.stringify(profile || {})))
+    }, [profile])
 
     async function saveProfile(event, restart = false) {
         setIsloading(true)
-        const infoHasChanged = JSON.stringify((botInfo?.current_profile || {}).profile) !== JSON.stringify(newProfileSettings.profile)
-        const configHasChanged = JSON.stringify((botInfo?.current_profile || {}).config) !== JSON.stringify(newProfileSettings.config)
+        const infoHasChanged = JSON.stringify((profile || {}).profile) !== JSON.stringify(newProfileSettings.profile)
+        const configHasChanged = JSON.stringify((profile || {}).config) !== JSON.stringify(newProfileSettings.config)
         function onFail() {
-
             setIsloading(false)
         }
         if (configHasChanged) {
@@ -54,7 +53,7 @@ export default function ProfileModal() {
             const portfolioCoins = new Set([
                 ...Object.keys(newProfileSettings.config["trader-simulator"]["starting-portfolio"]),
                 ...Object.keys(
-                    (botInfo?.current_profile || {}).config["trader-simulator"]["starting-portfolio"]
+                    (profile || {}).config["trader-simulator"]["starting-portfolio"]
                 )
             ])
             portfolioCoins.forEach(coin => {
@@ -86,7 +85,7 @@ export default function ProfileModal() {
         saveProfile(undefined, true)
     }
     function resetUnsavedConfig() {
-        setNewProfileSettings(JSON.parse(JSON.stringify(botInfo?.current_profile)))
+        setNewProfileSettings(JSON.parse(JSON.stringify(profile)))
     }
 
     const handleClose = () => {
@@ -105,7 +104,7 @@ export default function ProfileModal() {
                 <AntButton onClick={
                         () => setOpen(true)
                     }
-                antIconComponent={PlusCircleOutlined}
+                antIconComponent={BankOutlined}
                     disabled={
                         ! isOnline
                     }
@@ -114,14 +113,15 @@ export default function ProfileModal() {
                 }
              buttonVariant="text"
                 >
-                    More Settings </AntButton>
+                    Exchange Settings</AntButton>
                 {
                 open && <ProfileModalElement open={open}
                     setIsloading={setIsloading}
                     handleClose={handleClose}
+                    isCurrentProfile={isCurrentProfile}
                     newProfileSettings={newProfileSettings}
                     setNewProfileSettings={setNewProfileSettings}
-                    botInfo={botInfo}
+                    profile={profile}
                     setRequiresInstantRestart={setRequiresInstantRestart}
                     requiresInstantRestart={requiresInstantRestart}
                     loading={loading}
@@ -132,7 +132,7 @@ export default function ProfileModal() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [
         currentProfileTitle,
-        botInfo?.current_profile,
+        profile,
         hasChanged,
         loading,
         newProfileSettings,
@@ -143,11 +143,12 @@ export default function ProfileModal() {
 
 function ProfileModalElement({
     open,
+    isCurrentProfile,
     setIsloading,
     handleClose,
     newProfileSettings,
     setNewProfileSettings,
-    botInfo,
+    profile,
     setRequiresInstantRestart,
     requiresInstantRestart,
     loading,
@@ -161,9 +162,10 @@ function ProfileModalElement({
             title={
                 (
                     <ProfileTitle newProfileSettings={newProfileSettings}
+                    isCurrentProfile={isCurrentProfile}
                         setNewProfileSettings={setNewProfileSettings}
                         currentProfile={
-                            botInfo?.current_profile || {}
+                            profile || {}
                         }
                         setRequiresInstantRestart={setRequiresInstantRestart}/>
                 )
@@ -202,7 +204,7 @@ function ProfileModalElement({
                             Cancel
                         </AntButton>
                     ),
-                    !requiresInstantRestart && (
+                    (!requiresInstantRestart && isCurrentProfile) && (
                         <AntButton disabled={
                                 !hasChanged || loading
                             }
@@ -221,7 +223,7 @@ function ProfileModalElement({
                             Save And Restart Later
                         </AntButton>
                     ),
-                    (
+                    isCurrentProfile && (
                         <AntButton disabled={
                                 !hasChanged || loading
                             }
@@ -246,6 +248,7 @@ function ProfileModalElement({
             <ProfileSettings newProfileSettings={newProfileSettings}
                 setNewProfileSettings={setNewProfileSettings}
                 setIsloading={setIsloading}
+                isCurrentProfile={isCurrentProfile}
                 handleClose={handleClose}
                 loading={loading}/>
         </Modal>

@@ -1,17 +1,19 @@
 import {Card} from "antd";
-import {CardAvatar, CardDescription, CardCover, CardTitle} from "./CardComponents";
+import {CardAvatar, CardCover, CardTitle} from "./CardComponents";
 import {useBotColorsContext} from "../../../../context/config/BotColorsProvider";
+import RatingComponent from "./Rating";
+import { CardDescription } from "./AppDescription";
 
 export default function AppCard({
     app,
     setMouseHover,
-    children,
+    cardActions,
     isMouseHover,
     avatarUrl,
     category
 }) {
     const botColors = useBotColorsContext()
-    const boxShadowColor = (app ?. is_selected || isMouseHover) ? botColors ?. borderActive : "rgb(0 0 0 / 24%)"
+    const boxShadowColor = (app?.is_selected || isMouseHover) ? botColors?.borderActive : "rgb(0 0 0 / 24%)"
     const cardStyle = {
         boxShadow: `0px 0px 3px ${boxShadowColor}`,
         borderRadius: "4px",
@@ -22,7 +24,8 @@ export default function AppCard({
     }
 
     return (
-        <Card hoverable
+        <Card
+            // hoverable
             style={cardStyle}
             cover={
                 (
@@ -50,16 +53,33 @@ export default function AppCard({
                                 app.title
                             }/>
                         )
-                    }
-                    description={
-                        // !app?.is_selected &&
-                        (
-                            <CardDescription category={category}
+                    }/> 
+             
+                    <div style={
+                        {
+                            marginLeft: "50px",
+                            marginTop: "0px",
+                            marginBottom: "10px",
+                            marginRight: "50px"
+                        }
+                    }>
+                           {!app?.is_selected && (<><div> {category} </div>
+                        <RatingComponent rating={
+                                app.rating
+                            }
+                            app={app}
+                            votes={
+                                app.votes
+                            } />
+                        </>)
+            }
+                        <CardDescription category={category}
+                            cardActions={cardActions}
+                            isMouseHover={isMouseHover}
+                            app={app}/>
 
-                                isMouseHover={isMouseHover}
-                                app={app}/>
-                        )
-                    }/>
-            </div>{children}</Card>
+                    </div>
+                </div>
+        </Card>
     )
 }

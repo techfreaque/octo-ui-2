@@ -33,6 +33,7 @@ export function CardCover({app, avatarImage}) {
                 votes={
                     app.votes
                 }
+                app={app}
                 style={
                     {padding: '30px 0px 0px 20px'}
                 }/>
@@ -46,44 +47,5 @@ export function CardCover({app, avatarImage}) {
                 {width: "99.7%"}
             }
             src={avatarImage}/>
-    )
-}
-
-export function CardDescription({category, app, isMouseHover }) {
-    const lineHeight = 1.6
-    const unSelectedStyle = {
-        display: "block", /* or inline-block */
-        textOverflow: "ellipsis",
-        wordWrap: "break-word",
-        overflow: "hidden",
-        height: lineHeight * 3 + "em",
-        maxHeight: lineHeight * 3 + "em",
-        lineHeight: lineHeight + "em",
-        marginBottom: "60px"
-    }
-    return (
-        <div> {
-            !app ?. is_selected && (
-                <>
-                    <div> {category} </div>
-                    <RatingComponent rating={
-                            app.rating
-                        }
-                        votes={
-                            app.votes
-                        }/>
-                </>
-            )
-        }
-
-            <span style={
-                (isMouseHover && !app ?. is_selected) ?  {... unSelectedStyle,
-                    visibility: "hidden"} : (app ?. is_selected ? {} : unSelectedStyle)
-            }>
-                {
-                app.description
-                } </span>
-    
-        </div>
     )
 }

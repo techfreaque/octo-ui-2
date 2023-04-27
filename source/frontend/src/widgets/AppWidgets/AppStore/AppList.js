@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import AppCards from "./AppCards/AppCards";
 import {Grid} from "@mui/material";
 
-export default function AppList({selectedCategories, appStoreData}) {
+export default function AppList({selectedCategories, appStoreData, setSelectedCategories}) {
     const [isLoading, setIsloading] = useState(false)
 
     const thisCategoryAppStoreData = appStoreData?.[selectedCategories] && Object.values(appStoreData[selectedCategories])
@@ -16,6 +16,7 @@ export default function AppList({selectedCategories, appStoreData}) {
                     <AppCards key={
                             app.package_id + index
                         }
+                        setSelectedCategories={setSelectedCategories}
                         app={app}
                         isLoading={isLoading}
                         setIsloading={setIsloading}/>

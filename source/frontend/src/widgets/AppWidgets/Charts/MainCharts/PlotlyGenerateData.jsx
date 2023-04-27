@@ -209,6 +209,9 @@ function _createChartedElements({
 }) {
     const createdChartedElements = [];
     if (chartDetails.x === null) {
+        if (chartDetails.values) {
+            createdChartedElements.push(_createPieChartElement(chartDetails))
+        } 
         return createdChartedElements;
     }
     if (chartDetails.kind === "candlestick" && displayCandlesAsLines(chartDetails.x.length, uiConfig)) {
@@ -265,6 +268,9 @@ function displayCandlesAsLines(candlesCount, uiConfig) {
     return default_max_candles_line_sources;
 }
 
+function _createPieChartElement(chartDetails) {
+    return chartDetails
+}
 function _createChartedElement({
     chartDetails, yAxisId, xAxisId, backtestingId, optimizerId, optimizerCampaign, chartIdentifier, plotOnlyY, chartsInfo, chartLocation
 }) {

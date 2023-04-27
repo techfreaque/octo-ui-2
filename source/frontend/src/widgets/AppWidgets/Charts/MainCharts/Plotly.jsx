@@ -3,14 +3,20 @@ import Plot from 'react-plotly.js';
 
 export const allChartLocations = ["main-chart", "sub-chart"]
 
-export default function PlotlyChart({ chartLocation, setLayouts, layout, chartData }) {
+export default function PlotlyChart({ chartLocation, setLayouts,
+    layout,
+    chartData }) {
     const divId = getDivId(chartLocation)
-
     return useMemo(() => (
         chartData && layout
         && <Plot
+            // data={data}
             data={chartData}
-            layout={{ ...layout }}
+            // layout={Olayout}
+            layout={{ ...layout,     grid: {
+        rows: 1,
+        columns: 2
+    } }}
             config={getPlotlyConfig()}
             divId={divId}
             onRelayout={(chart) => relayout(chart, chartLocation, setLayouts)}
@@ -142,11 +148,11 @@ const yAutorange = 'yaxis.autorange'
 const yRange0 = 'yaxis.range[0]'
 // const yRange1 = 'yaxis.range[1]'
 
-function getDivId(chartLocation) {
+export function getDivId(chartLocation) {
     return "plotly" + chartLocation
 }
 
-function getPlotlyConfig() {
+export function getPlotlyConfig() {
     return {
         scrollZoom: true,
         modeBarButtonsToRemove: ["select2d", "lasso2d", "toggleSpikelines"],

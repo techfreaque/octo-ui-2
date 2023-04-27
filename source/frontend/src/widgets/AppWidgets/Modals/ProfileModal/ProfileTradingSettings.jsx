@@ -20,8 +20,7 @@ const tradingTypes = {
 }
 const tradingTypeStr = "tradingType"
 
-export function ProfileTradingSettings({newProfileSettings, setNewProfileSettings}) {
-
+export function ProfileTradingSettings({newProfileSettings, setNewProfileSettings, isCurrentProfile}) {
     const isRealTrading = newProfileSettings?.config?.trader?.enabled
     const isSimulatedTrading = newProfileSettings?.config?.["trader-simulator"].enabled
     const currentTradingType = isRealTrading ? tradingTypes.realTrading.value : (isSimulatedTrading ? tradingTypes.simulatedTrading.value : tradingTypes.tradingDisabled.value)
@@ -84,26 +83,26 @@ export function ProfileTradingSettings({newProfileSettings, setNewProfileSetting
                 Trading Settings
             </Typography.Title>
         </Grid>
-        <ProfileTradingTypeSettings tradingType={currentTradingType}
+        <ProfileTradingTypeSettings tradingType={currentTradingType} isCurrentProfile={isCurrentProfile}
             onChange={onChange}/>
-        <ProfileReferenceMarketSettings newProfileSettings={newProfileSettings}
+        <ProfileReferenceMarketSettings newProfileSettings={newProfileSettings} isCurrentProfile={isCurrentProfile}
             onChange={onChange}/>
-        <ProfileRealSettings newProfileSettings={newProfileSettings}
+        <ProfileRealSettings newProfileSettings={newProfileSettings} isCurrentProfile={isCurrentProfile}
             onChange={onChange}/>
-        <ProfileSimulatedSettings newProfileSettings={newProfileSettings}
+        <ProfileSimulatedSettings newProfileSettings={newProfileSettings} isCurrentProfile={isCurrentProfile}
             onChange={onChange}
             setNewProfileSettings={setNewProfileSettings}/>
     </Grid>
 }
 
 
-export function ProfileTradingTypeSettings({tradingType, onChange}) {
+export function ProfileTradingTypeSettings({tradingType, onChange, isCurrentProfile}) {
     return (
         <Grid item
             xs={12}
             >
             <Typography.Title level={5}>Trading Type:</Typography.Title>
-            <Radio.Group options={
+            <Radio.Group disabled={!isCurrentProfile}  options={
                     [tradingTypes.realTrading, tradingTypes.simulatedTrading, tradingTypes.tradingDisabled,]
                 }
                 onChange={
@@ -115,7 +114,7 @@ export function ProfileTradingTypeSettings({tradingType, onChange}) {
     )
 }
 
-export function ProfileReferenceMarketSettings({newProfileSettings, onChange}) {
+export function ProfileReferenceMarketSettings({newProfileSettings, onChange, isCurrentProfile}) {
     const refMarket = newProfileSettings?.config?.trading?.["reference-market"];
     // TODO replace with all available
     const quoteAssets = [...new Set(
@@ -151,6 +150,7 @@ export function ProfileReferenceMarketSettings({newProfileSettings, onChange}) {
                 Reference Market:
             </Typography.Title>
             <AutoComplete options={options}
+                disabled={!isCurrentProfile}
                 style={
                     {width: "100%"}
                 }

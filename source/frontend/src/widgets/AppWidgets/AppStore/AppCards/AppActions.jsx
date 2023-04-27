@@ -2,6 +2,7 @@ import {Popconfirm} from "antd";
 import AntButton, {buttonTypes, buttonVariants} from "../../../../components/Buttons/AntButton";
 import {faCopy} from "@fortawesome/free-solid-svg-icons";
 import {
+    BranchesOutlined,
     CloudDownloadOutlined,
     CloudUploadOutlined,
     DeleteOutlined,
@@ -9,6 +10,8 @@ import {
     ShoppingCartOutlined
 } from "@ant-design/icons";
 import {useState} from "react";
+import AppInfoModal from "./AppInfoModal";
+import {strategyModeName} from "../AppStore";
 
 
 export default function AppActions({
@@ -20,7 +23,9 @@ export default function AppActions({
     handleUpload,
     configureDuplication,
     configureUpload,
-    otherActions
+    otherActions,
+    infoContent,
+    onConfigure
 }) { // const isMouseHover = true
     const buttonStyle = {
         display: "flex",
@@ -29,7 +34,10 @@ export default function AppActions({
     }
     return (
         <div style={
-            {width: '100%'}
+            {
+                width: '100%',
+                margin: "auto"
+            }
         }>
             <div style={
                 {
@@ -43,11 +51,13 @@ export default function AppActions({
                         marginTop: "20px"
                     } : (isMouseHover ? {
                         ... buttonStyle,
-                        position: "absolute",
-                        top: "-100px",
-                        // bottom: "0px",
-                            left: "0px",
-                        justifyContent: "center",
+                        // marginTop: "20px",
+                        // position: "absolute",
+                        // top: "auto",
+                        // bottom: "auto",
+                        margin: "auto",
+                        // left: "0px",
+                        justifyContent: "center"
                     } : {
                         ... buttonStyle,
                         display: "none"
@@ -56,10 +66,12 @@ export default function AppActions({
                     <OnHoverActions handleSelect={handleSelect}
                         configureDuplication={configureDuplication}
                         configureUpload={configureUpload}
+                        onConfigure={onConfigure}
                         handleDuplication={handleDuplication}
                         handleUninstall={handleUninstall}
                         handleUpload={handleUpload}
                         otherActions={otherActions}
+                        infoContent={infoContent}
                         app={app}/>
                 </div>
                 <div style={
@@ -69,8 +81,8 @@ export default function AppActions({
                     } : {
                         ... buttonStyle,
                         position: "absolute",
-                        bottom: "0px",
-                        left: "0px",
+                        top: "-18px",
+                        left: "-10px",
                         // marginLeft: "-20px"
                     }
                 }>
@@ -109,7 +121,8 @@ function NoHoverActions({app}) {
         <>
 
             <AntButton style={
-                    {margin: "3px"}
+                    { // margin: "3px"
+                    }
                 }
                 buttonType={
                     buttonTypes.fontSecondary
@@ -133,7 +146,9 @@ function OnHoverActions({
     handleUpload,
     configureUpload,
     handleDownload,
-    otherActions
+    otherActions,
+    infoContent,
+    onConfigure
 }) {
     let buttonText
     let buttonIcon
@@ -149,9 +164,10 @@ function OnHoverActions({
             } else {
                 onButtonClick = handleUpload
                 buttonIcon = DollarOutlined
-                buttonText = `Sell ${
-                    app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
-                }`
+                buttonText = `Sell`
+                // ${
+                //     app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
+                // }`
                 confirmDescription = configureUpload ?. ()
             }
         } else {
@@ -176,7 +192,7 @@ function OnHoverActions({
             <ConfirmAction onConfirm={onButtonClick}
                 antIconComponent={buttonIcon}
                 confirmTitle={
-                    buttonText + "?"
+                    `${buttonText}?`
                 }
                 confirmDescription={confirmDescription}
                 confirmButtonText={buttonText}
@@ -185,16 +201,36 @@ function OnHoverActions({
                 <ConfirmAction faIconComponent={faCopy}
                     onConfirm={handleSelect}
                     confirmTitle={
-                        "Select " + app.title + "?"
+                        `Select ${app.title}?`
                     }
                     confirmButtonText={"Select now"}
                     buttonTitle={
-                        "Select " + (
-                        app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
-                    )
+                        "Select "
+                        //     + (
+                        //     app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
+                        // )
                     }/>
             )
         }
+            {
+            (
+                <AppInfoModal app={app}
+                    infoContent={infoContent}/>
+            )
+        }
+            {
+            app.is_selected && (
+                <AntButton style={
+                        {margin: "3px"}
+                    }
+                    antIconComponent={BranchesOutlined}
+                    onClick={onConfigure}
+                    buttonVariant="text">
+                    {`Configure ${app.categories[0]}`}
+                </AntButton>
+            )
+        }
+            {otherActions}
             {
             app.is_installed && (
                 <ConfirmAction faIconComponent={faCopy}
@@ -203,25 +239,25 @@ function OnHoverActions({
                         configureDuplication ?. ()
                     }
                     confirmTitle={
-                        "Clone " + app.title + "?"
+                        `Clone ${app.title}?`
                     }
                     confirmButtonText={"Clone now"}
                     buttonTitle={"Clone & Customize"}/>
             )
         }
-            {otherActions}
             {
             app.is_installed && (
                 <ConfirmAction antIconComponent={DeleteOutlined}
                     onConfirm={handleUninstall}
                     confirmTitle={
-                        "Uninstall " + app.title + "?"
+                        `Uninstall ${app.title}?`
                     }
                     confirmButtonText={"Uninstall now"}
                     buttonTitle={
-                        "Uninstall " + (
-                        app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
-                    )
+                        "Uninstall"
+                        //     + (
+                        //     app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
+                        // )
                     }/>
             )
         } </>

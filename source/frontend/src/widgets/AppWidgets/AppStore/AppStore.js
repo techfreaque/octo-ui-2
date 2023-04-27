@@ -17,7 +17,7 @@ export default function AppStore() {
     const botInfo = useBotInfoContext();
     const appStoreUser = useAppStoreUserContext()
     const isLoggedIn = Boolean(appStoreUser?.token)
-    const availableCategories = (Object.keys(appStoreData)?.filter(category => (! hiddenCategories.includes(category))) || [])
+    const availableCategories =  appStoreData && (Object.keys(appStoreData)?.filter(category => (! hiddenCategories.includes(category))) || [])
 
     const [selectedCategories, setSelectedCategories] = React.useState(strategyName);
     const _useFetchAppStoreData = useFetchAppStoreData();
@@ -29,9 +29,10 @@ export default function AppStore() {
 
     const content = (
         <AppList selectedCategories={
-                selectedCategories
+            selectedCategories
                 // ?.replace(/_/g, " ")
             }
+            setSelectedCategories={setSelectedCategories}
             appStoreData={appStoreData}/>
     )
     const menuItems = [
