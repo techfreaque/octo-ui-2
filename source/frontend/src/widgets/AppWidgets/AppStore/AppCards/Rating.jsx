@@ -1,4 +1,4 @@
-export default function RatingComponent({rating, votes}) {
+export default function RatingComponent({rating, votes, style}) {
     // const formatCash = n => {
     //     if (n < 1e3)
     //         return n.toString();
@@ -25,7 +25,8 @@ export default function RatingComponent({rating, votes}) {
                 display: "flex",
                 alignItems: "center",
                 fontSize: "12px",
-                lineHeight: "16px"
+                lineHeight: "16px",
+                ...style
             }
         }>
             {

@@ -12,15 +12,16 @@ export default function AppCard({
 }) {
     const botColors = useBotColorsContext()
     const boxShadowColor = (app?.is_selected || isMouseHover) ? botColors?.borderActive : "rgb(0 0 0 / 24%)"
+    const card_style = {
+        boxShadow: `0px 0px 3px ${boxShadowColor}`,
+        borderRadius: "4px",
+        transition: "all 200ms linear 0ms",
+    }
     return (
         <Card className='productCard' hoverable
-            style={
-                {
-                    boxShadow: `0px 0px 3px ${boxShadowColor}`,
-                    borderRadius: "4px",
-                    transition: "all 200ms linear 0ms"
-                }
-            }
+            style={app?.is_selected ? {
+                ...card_style
+            } : {...card_style, height: '420px', maxWidth: '380px',}}
             cover={
                 (
                     <CardImage avatarImage={'https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png'}
@@ -46,7 +47,7 @@ export default function AppCard({
                             }/>
                         )
                     }
-                    description={
+                    description={!app?.is_selected &&
                         (
                             <CardDescription category={category}
                                 isMouseHover={isMouseHover}

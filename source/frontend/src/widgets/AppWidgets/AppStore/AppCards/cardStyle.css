@@ -1,6 +1,6 @@
-/* .productCard:hover {
-    transform: translateY(-2px);
-  } */
+.productCard:hover {
+    transform: translateY(-1px);
+  }
 
 
 .fullStar {

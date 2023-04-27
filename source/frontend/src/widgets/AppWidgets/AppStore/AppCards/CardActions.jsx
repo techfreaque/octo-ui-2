@@ -25,7 +25,7 @@ export default function AppActions({
     const buttonStyle = {
         display: "flex",
         flexWrap: "wrap",
-        minHeight: "76px"
+        minHeight: "76px",
     }
     return (
         <div style={
@@ -37,8 +37,10 @@ export default function AppActions({
                     {width: "100%"}
             }>
                 <div style={
-                    isMouseHover ? buttonStyle : {
-                        ... buttonStyle,
+                    (isMouseHover || app?.is_selected) ? {
+                        ...buttonStyle,
+                        justifyContent:'left', marginTop: '30px'} : {
+                        ...buttonStyle,
                         display: "none"
                     }
                 }>
@@ -52,10 +54,10 @@ export default function AppActions({
                         app={app}/>
                 </div>
                 <div style={
-                    isMouseHover ? {
-                        ... buttonStyle,
-                        display: "none"
-                    } : buttonStyle
+                    (isMouseHover | app?.is_selected) ? {
+                        ...buttonStyle,
+                        display: "none",
+                    } : {...buttonStyle, position: "absolute", bottom: "-28px", left: "10px"}
                 }>
                     <NoHoverActions app={app}/>
                 </div>
@@ -133,7 +135,7 @@ function OnHoverActions({
                 onButtonClick = handleUpload
                 buttonIcon = DollarOutlined
                 buttonText = `Sell ${
-                    app.categories[0]
+                    app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
                 }`
                 confirmDescription = configureUpload ?. ()
             }
@@ -172,7 +174,7 @@ function OnHoverActions({
                     }
                     confirmButtonText={"Select now"}
                     buttonTitle={
-                        "Select " + app.categories[0]
+                        "Select " + (app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0])
                     }/>
             )
         }
@@ -184,12 +186,13 @@ function OnHoverActions({
                         configureDuplication ?. ()
                     }
                     confirmTitle={
-                        "Duplicate " + app.title + "?"
+                        "Clone " + app.title + "?"
                     }
-                    confirmButtonText={"Duplicate now"}
-                    buttonTitle={"Duplicate & Customize"}/>
+                    confirmButtonText={"Clone now"}
+                    buttonTitle={"Clone & Customize"}/>
             )
         }
+            {otherActions} 
             {
             app.is_installed && (
                 <ConfirmAction antIconComponent={DeleteOutlined}
@@ -199,11 +202,11 @@ function OnHoverActions({
                     }
                     confirmButtonText={"Uninstall now"}
                     buttonTitle={
-                        "Uninstall " + app.categories[0]
+                        "Uninstall " + (app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0])
                     }/>
             )
         }
-            {otherActions} </>
+        </>
     )
 }
 
