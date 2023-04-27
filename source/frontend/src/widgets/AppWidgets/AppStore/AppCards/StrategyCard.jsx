@@ -1,7 +1,7 @@
 import {deleteProfile, duplicateProfile, selectProfile} from "../../../../api/actions";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
 import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
-import AppActions from "./CardActions";
+import AppActions from "./AppActions";
 import {backendRoutes} from "../../../../constants/backendConstants";
 import {useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
 import {useState} from "react";

@@ -1,5 +1,4 @@
 import {useState} from 'react';
-import './cardStyle.css';
 import TradingModeCard from './TradingModeCard';
 import StrategyCard from './StrategyCard';
 import {Grid} from '@mui/material';
@@ -54,7 +53,7 @@ function SelectedCardContainer({app, children}) {
                     {
                         margin: "auto",
                         height: "100%",
-                        maxWidth: "600px"
+                        maxWidth: "500px"
                     }
                 }
                 item

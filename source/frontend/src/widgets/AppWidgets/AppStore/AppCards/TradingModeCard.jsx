@@ -1,4 +1,4 @@
-import PriceComponent from "./CardActions";
+import AppActions from "./AppActions";
 import {useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
 import {useState} from "react";
 import UploadApp from "./UploadApp";
@@ -34,7 +34,7 @@ export default function TradingModeCard({
             avatarUrl={"https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png"}
             category={category}
             isMouseHover={isMouseHover}>
-            <PriceComponent isMouseHover={isMouseHover}
+            <AppActions isMouseHover={isMouseHover}
                 handleUpload={handleProfileUpload}
                 configureUpload={configureAppUpload}
                 app={app}/>

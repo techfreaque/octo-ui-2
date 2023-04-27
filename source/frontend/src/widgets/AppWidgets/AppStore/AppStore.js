@@ -4,7 +4,8 @@ import AppList from "./AppList";
 import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import TradingConfig from "../Configuration/TradingConfig";
 import ProfileAvatar from "../Stats/ProfileAvatar";
-import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import "./AppCards/ratingStyle.css"
 
 const hiddenCategories = ["Legacy Strategy"]
 export const strategyModeSettingsName = "Strategy Mode Settings"

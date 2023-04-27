@@ -21,28 +21,37 @@ export default function AppActions({
     configureDuplication,
     configureUpload,
     otherActions
-}) {
+}) { // const isMouseHover = true
     const buttonStyle = {
         display: "flex",
         flexWrap: "wrap",
-        minHeight: "76px",
+        // minHeight: "76px"
     }
     return (
         <div style={
             {width: '100%'}
         }>
-
-            <div key="productCardPrice"
-                style={
-                    {width: "100%"}
+            <div style={
+                {
+                    width: "100%",
+                    position: "relative"
+                }
             }>
                 <div style={
-                    (isMouseHover || app?.is_selected) ? {
-                        ...buttonStyle,
-                        justifyContent:'left', marginTop: '30px'} : {
-                        ...buttonStyle,
+                    (app ?. is_selected ? {
+                        ... buttonStyle,
+                        marginTop: "20px"
+                    } : (isMouseHover ? {
+                        ... buttonStyle,
+                        position: "absolute",
+                        top: "-100px",
+                        // bottom: "0px",
+                            left: "0px",
+                        justifyContent: "center",
+                    } : {
+                        ... buttonStyle,
                         display: "none"
-                    }
+                    }))
                 }>
                     <OnHoverActions handleSelect={handleSelect}
                         configureDuplication={configureDuplication}
@@ -54,10 +63,16 @@ export default function AppActions({
                         app={app}/>
                 </div>
                 <div style={
-                    (isMouseHover | app?.is_selected) ? {
-                        ...buttonStyle,
-                        display: "none",
-                    } : {...buttonStyle, position: "absolute", bottom: "-28px", left: "10px"}
+                    (isMouseHover | app ?. is_selected) ? {
+                        ... buttonStyle,
+                        display: "none"
+                    } : {
+                        ... buttonStyle,
+                        position: "absolute",
+                        bottom: "0px",
+                        left: "0px",
+                        // marginLeft: "-20px"
+                    }
                 }>
                     <NoHoverActions app={app}/>
                 </div>
@@ -174,7 +189,9 @@ function OnHoverActions({
                     }
                     confirmButtonText={"Select now"}
                     buttonTitle={
-                        "Select " + (app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0])
+                        "Select " + (
+                        app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
+                    )
                     }/>
             )
         }
@@ -192,7 +209,7 @@ function OnHoverActions({
                     buttonTitle={"Clone & Customize"}/>
             )
         }
-            {otherActions} 
+            {otherActions}
             {
             app.is_installed && (
                 <ConfirmAction antIconComponent={DeleteOutlined}
@@ -202,11 +219,12 @@ function OnHoverActions({
                     }
                     confirmButtonText={"Uninstall now"}
                     buttonTitle={
-                        "Uninstall " + (app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0])
+                        "Uninstall " + (
+                        app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
+                    )
                     }/>
             )
-        }
-        </>
+        } </>
     )
 }
 
@@ -221,6 +239,7 @@ export function ConfirmAction({
     antIconComponent
 }) {
     const [open, setOpen] = useState(false);
+    // eslint-disable-next-line no-unused-vars
     const [confirmLoading, setConfirmLoading] = useState(false);
 
     const showPopconfirm = () => {

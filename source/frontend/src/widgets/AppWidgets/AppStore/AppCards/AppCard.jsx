@@ -1,5 +1,5 @@
 import {Card} from "antd";
-import {CardAvatar, CardDescription, CardImage, CardTitle} from "./CardComponents";
+import {CardAvatar, CardDescription, CardCover, CardTitle} from "./CardComponents";
 import {useBotColorsContext} from "../../../../context/config/BotColorsProvider";
 
 export default function AppCard({
@@ -11,20 +11,22 @@ export default function AppCard({
     category
 }) {
     const botColors = useBotColorsContext()
-    const boxShadowColor = (app?.is_selected || isMouseHover) ? botColors?.borderActive : "rgb(0 0 0 / 24%)"
-    const card_style = {
+    const boxShadowColor = (app ?. is_selected || isMouseHover) ? botColors ?. borderActive : "rgb(0 0 0 / 24%)"
+    const cardStyle = {
         boxShadow: `0px 0px 3px ${boxShadowColor}`,
         borderRadius: "4px",
-        transition: "all 200ms linear 0ms",
+        transition: "all 200ms linear 0ms"
     }
+    if (isMouseHover) {
+        cardStyle.transform = "translateY(-1px)"
+    }
+
     return (
-        <Card className='productCard' hoverable
-            style={app?.is_selected ? {
-                ...card_style
-            } : {...card_style, height: '420px', maxWidth: '380px',}}
+        <Card hoverable
+            style={cardStyle}
             cover={
                 (
-                    <CardImage avatarImage={'https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png'}
+                    <CardCover avatarImage={'https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png'}
                         app={app}/>
                 )
             }
@@ -37,7 +39,9 @@ export default function AppCard({
             <div>
                 <Card.Meta avatar={
                         (
-                            <CardAvatar avatarImage={avatarUrl}/>
+                            <>
+                                <CardAvatar avatarImage={avatarUrl}/>
+                            </>
                         )
                     }
                     title={
@@ -47,13 +51,15 @@ export default function AppCard({
                             }/>
                         )
                     }
-                    description={!app?.is_selected &&
+                    description={
+                        // !app?.is_selected &&
                         (
                             <CardDescription category={category}
+
                                 isMouseHover={isMouseHover}
                                 app={app}/>
                         )
-                    }/> {children} </div>
-        </Card>
+                    }/>
+            </div>{children}</Card>
     )
 }
