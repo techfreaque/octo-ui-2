@@ -13,6 +13,8 @@ class AnalysisModePlotSettingsTypes:
     TABLE_SETTINGS_TITLE: str = "Tables"
     DICTIONARY_SETTINGS_NAME: str = "_dictionary"
     DICTIONARY_SETTINGS_TITLE: str = "Other Displays"
+    PIE_CHARTS_SETTINGS_NAME: str = "_pie_charts"
+    PIE_CHARTS_SETTINGS_TITLE: str = "Pie Charts"
 
 
 class UserInputOtherSchemaValuesTypes(enum.Enum):

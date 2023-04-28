@@ -72,8 +72,12 @@ def register_bot_info_routes(plugin):
         real_time_strategies_active: bool = False
         any_exchange_is_futures: bool = False
         missing_tentacles = set()
-        strategy_config = {}
-        profiles = {}
+        profiles = {
+            profile.profile_id: profile.as_dict()
+            for profile in models.get_profiles(commons_enums.ProfileType.LIVE).values()
+        }
+        media_url = flask.url_for("tentacle_media", _external=True)
+        strategy_config: dict = models.get_strategy_config(media_url, missing_tentacles)
         try:
             (
                 exchange_manager,
@@ -100,12 +104,6 @@ def register_bot_info_routes(plugin):
                     if real_time_strategy_data:
                         real_time_strategies_active = real_time_strategy_data.activated
                 symbols = models.get_enabled_trading_pairs()
-                profiles = {
-                    profile.profile_id: profile.as_dict()
-                    for profile in models.get_profiles(
-                        commons_enums.ProfileType.LIVE
-                    ).values()
-                }
 
                 activated_evaluators = models.get_config_activated_evaluators()
                 evaluator_names = [
@@ -146,13 +144,10 @@ def register_bot_info_routes(plugin):
                         .producers[0]
                         .trigger_time_frames
                     )
-                media_url = flask.url_for("tentacle_media", _external=True)
                 # config_candles_count = models.get_config_required_candles_count(
                 #     exchange_manager
                 # )
-                strategy_config = models.get_strategy_config(
-                    media_url, missing_tentacles
-                )
+
             else:
                 trading_mode_name = None
 
@@ -163,7 +158,9 @@ def register_bot_info_routes(plugin):
                 if try_counter <= 5:
                     interfaces_util.run_in_bot_async_executor(asyncio.sleep(4))
                     return _bot_info(exchange=exchange, try_counter=try_counter)
-            raise error
+            basic_utils.get_octo_ui_2_logger().exception(
+                error, True, "Failed to get bot info"
+            )
         return {
             "success": True,
             "message": "Successfully fetched bot base data",

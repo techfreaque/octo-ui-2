@@ -45,7 +45,7 @@ export default function RatingComponent({app, rating, votes, style}) {
                 4,
                 ].map(starId => (
                         
-                <Rating rating={rating}
+                <Rating key={starId} rating={rating}
                     onRatingChange={()=>onRatingChange(starId)}
                     starId={starId}/>
             ))

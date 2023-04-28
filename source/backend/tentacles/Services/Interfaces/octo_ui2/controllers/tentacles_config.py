@@ -95,3 +95,30 @@ def register_tentacles_config_routes(plugin):
         if not success:
             return util.get_rest_reply(flask.jsonify(str(err)), code=400)
         return util.get_rest_reply(flask.jsonify(data))
+
+    route = "/update_profile/<action>"
+    methods = ["GET"]
+    if cross_origin := import_cross_origin_if_enabled():
+
+        @plugin.blueprint.route(route, methods=methods)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def select_profile(action):
+            return _select_profile(action)
+
+    else:
+
+        @plugin.blueprint.route(route, methods=methods)
+        @login.login_required_when_activated
+        def select_profile(action):
+            return _select_profile(action)
+
+    def _select_profile(action):
+        if action == "select":
+            profile_id = flask.request.args.get("profile_id")
+            models.convert_to_live_profile(profile_id)
+            models.select_profile(profile_id)
+            return {
+                "success": True,
+                "message": "Profile successfully selected.",
+            }

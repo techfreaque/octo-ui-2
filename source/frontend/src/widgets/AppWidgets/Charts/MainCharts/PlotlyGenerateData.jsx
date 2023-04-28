@@ -33,8 +33,13 @@ export function setPlotData(
                 plotDataToStore[thisChartLocation] = plotData[thisChartLocation]
                 hasCharts = true
                 return;
+            } else if (thisChartLocation === "pie-chart" && plotData[thisChartLocation]) {
+                setLayouts[thisChartLocation]({...layouts[thisChartLocation], grid: {rows: 1, columns: 2}})
+                plotDataToStore[thisChartLocation] = plotData[thisChartLocation]
+                hasCharts = true
+            } else {
+                setLayouts[thisChartLocation]()
             }
-            setLayouts[thisChartLocation]()
         })
         if (hasCharts) {
             setCharts(plotDataToStore)
@@ -186,33 +191,13 @@ function _createCharts({
     optimizerCampaign, chartIdentifier,
     uiConfig, chartsInfo, chartLocation
 }) {
-    _createChartedElements({
-        chartDetails,
-        yAxisId, xAxisId,
-        backtestingId,
-        optimizerId,
-        optimizerCampaign,
-        chartIdentifier,
-        uiConfig,
-        chartsInfo,
-        chartLocation
-    }).forEach(element => {
-        plotData[chartLocation].push(element);
-    })
-
-}
-
-function _createChartedElements({
-    chartDetails, yAxisId, xAxisId, backtestingId,
-    optimizerId, optimizerCampaign, chartIdentifier,
-    uiConfig, chartsInfo, chartLocation
-}) {
-    const createdChartedElements = [];
     if (chartDetails.x === null) {
         if (chartDetails.values) {
-            createdChartedElements.push(_createPieChartElement(chartDetails))
+             plotData[chartLocation].push(_createPieChartElement({chartsInfo, chartDetails, chartIdentifier,backtestingId
+                ,optimizerId,
+                optimizerCampaign}))
         } 
-        return createdChartedElements;
+        return
     }
     if (chartDetails.kind === "candlestick" && displayCandlesAsLines(chartDetails.x.length, uiConfig)) {
         chartDetails.kind = "scattergl";
@@ -225,7 +210,7 @@ function _createChartedElements({
             }
             chartDetails.y = chartDetails[plotSource];
             chartDetails.title = `${originTitle} [${plotSource}]`
-            createdChartedElements.push(
+             plotData[chartLocation].push(
                 _createChartedElement({
                     chartDetails, yAxisId,
                     xAxisId, backtestingId,
@@ -237,7 +222,7 @@ function _createChartedElements({
             );
         })
     } else {
-        createdChartedElements.push(
+         plotData[chartLocation].push(
             _createChartedElement({
                 chartDetails, yAxisId,
                 xAxisId, backtestingId,
@@ -248,7 +233,6 @@ function _createChartedElements({
             })
         );
     }
-    return createdChartedElements;
 }
 
 function displayCandlesAsLines(candlesCount, uiConfig) {
@@ -268,8 +252,25 @@ function displayCandlesAsLines(candlesCount, uiConfig) {
     return default_max_candles_line_sources;
 }
 
-function _createPieChartElement(chartDetails) {
-    return chartDetails
+function _createPieChartElement({chartsInfo, chartDetails, chartIdentifier,backtestingId
+    ,optimizerId,
+    optimizerCampaign }) {
+        const chartedElement = {
+            type: chartDetails.kind, labels: chartDetails.labels, values: chartDetails.values,
+        text: chartDetails.text,         name: `${chartDetails.title} (${chartIdentifier})`,
+        user_title: chartDetails.title,        backtesting_id: backtestingId,
+            optimizer_id: optimizerId,
+            hole: chartDetails.hole,
+            textposition: 'inside',
+        campaign_name: optimizerCampaign,}
+    if (chartsInfo.pieChartId === 0) {
+        chartedElement.domain = { column: 1 }
+        chartsInfo.pieChartId  = 1
+    } if (!chartsInfo.pieChartId) { 
+        chartedElement.domain = { column: 0 }
+        chartsInfo.pieChartId  = 0
+    }
+    return chartedElement
 }
 function _createChartedElement({
     chartDetails, yAxisId, xAxisId, backtestingId, optimizerId, optimizerCampaign, chartIdentifier, plotOnlyY, chartsInfo, chartLocation
@@ -347,7 +348,7 @@ function createAxisIfNotExists(axisType, axisId, layout, uiConfig, chartDetails)
 
 function formatAsRangeTime(timestamp) {
     return new Date(
-        timestamp - (new Date(timestamp).getTimezoneOffset() * 60_000)
+        timestamp - (new Date(timestamp).getTimezoneOffset() * 60000)
     ).toISOString().substr(0, 19).replace('T', ' ');
 }
 

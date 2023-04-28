@@ -92,9 +92,15 @@ export const useLogoutFromAppStore = () => {
 export const useUploadToAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const appStoreUser = useAppStoreUserContext()
-    const logic = useCallback((app, setIsloading) => {
+    const logic = useCallback((app, appFile, setIsloading) => {
         setIsloading(true)
-        uploadApp(appStoreDomain, app, appStoreUser, () => setIsloading(false))
+        uploadApp({
+            storeDomain: appStoreDomain,
+            appFile,
+            appDetails: app,
+            appStoreUser,
+            onSuccess: () => setIsloading(false)
+        })
     }, [appStoreDomain, appStoreUser]);
     return logic;
 }
@@ -144,18 +150,15 @@ export const AppStoreDataProvider = ({children}) => {
         appStoreDomain && fetchAppStoreData(false)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [appStoreDomain, botInfo])
-    return (
-        <AppStoreDataContext.Provider value={appStoreData}>
-            <UpdateAppStoreDataContext.Provider value={setAppStoreData}>
-                <AppStoreDomainContext.Provider value={appStoreDomain}>
-                    <UpdateAppStoreUserContext.Provider value={setAppStoreUserData}>
-                        <AppStoreUserContext.Provider value={appStoreUserData}>
-                            <UpdateAppStoreDomainContext.Provider value={setAppStoreDomain}>
-                                {children} </UpdateAppStoreDomainContext.Provider>
-                        </AppStoreUserContext.Provider>
-                    </UpdateAppStoreUserContext.Provider>
-                </AppStoreDomainContext.Provider>
-            </UpdateAppStoreDataContext.Provider>
-        </AppStoreDataContext.Provider>
-    );
+    return (<AppStoreDataContext.Provider value={appStoreData}>
+        <UpdateAppStoreDataContext.Provider value={setAppStoreData}>
+            <AppStoreDomainContext.Provider value={appStoreDomain}>
+                <UpdateAppStoreUserContext.Provider value={setAppStoreUserData}>
+                    <AppStoreUserContext.Provider value={appStoreUserData}>
+                        <UpdateAppStoreDomainContext.Provider value={setAppStoreDomain}> {children} </UpdateAppStoreDomainContext.Provider>
+                    </AppStoreUserContext.Provider>
+                </UpdateAppStoreUserContext.Provider>
+            </AppStoreDomainContext.Provider>
+        </UpdateAppStoreDataContext.Provider>
+    </AppStoreDataContext.Provider>);
 };

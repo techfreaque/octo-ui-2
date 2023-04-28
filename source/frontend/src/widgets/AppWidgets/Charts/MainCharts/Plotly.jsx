@@ -1,44 +1,36 @@
-import { useMemo } from 'react';
+import {useMemo} from 'react';
 import Plot from 'react-plotly.js';
 
 export const allChartLocations = ["main-chart", "sub-chart"]
 
-export default function PlotlyChart({ chartLocation, setLayouts,
-    layout,
-    chartData }) {
-    const divId = getDivId(chartLocation)
-    return useMemo(() => (
-        chartData && layout
-        && <Plot
-            // data={data}
+export default function PlotlyChart({chartLocation, setLayouts, layout, chartData}) {
+        const divId = getDivId(chartLocation)
+            return useMemo(() => (chartData && layout && <Plot
             data={chartData}
-            // layout={Olayout}
-            layout={{ ...layout,     grid: {
-        rows: 1,
-        columns: 2
-    } }}
+            layout={{  ...layout, }}
             config={getPlotlyConfig()}
             divId={divId}
-            onRelayout={(chart) => relayout(chart, chartLocation, setLayouts)}
-        />
-    ),
+            onRelayout={(chart) => relayout(chart, chartLocation, setLayouts)} />),
         // eslint-disable-next-line react-hooks/exhaustive-deps
-        [chartData, layout, divId, chartLocation])
+        [chartData, layout, divId, chartLocation]
+    )
 }
 
-
-function relayout(ed, chartLocation, setLayouts) {
-    if (
-        Object.entries(ed).length === 0
-        // || Object.keys(ed)[0].includes("yaxis")
-    ) { return; }
+function relayout (ed, chartLocation, setLayouts) {
+    if (Object.entries(ed).length === 0
+    // || Object.keys(ed)[0].includes("yaxis")
+    ) {
+        return;
+    }
     // setLayouts(prevLayout => {
     const thisChartDiv = document.getElementById(getDivId(chartLocation));
     Object.keys(setLayouts).forEach((otherChartLocation) => {
         if (otherChartLocation !== chartLocation) {
             const chartDiv = document.getElementById(getDivId(otherChartLocation));
             if (chartDiv) {
-                const newLayout = { ...chartDiv.layout }
+                const newLayout = {
+                    ...chartDiv.layout
+                }
                 const x = newLayout.xaxis
                 const y = newLayout.yaxis
                 const y2 = newLayout.yaxis2
@@ -73,9 +65,7 @@ function relayout(ed, chartLocation, setLayouts) {
 
                     setLayouts[otherChartLocation](newLayout)
                 } else if (ed[xRange0]) {
-                    if (otherChartLocation !== chartLocation) {
-                    }
-                    x.autorange = false
+                    if (otherChartLocation !== chartLocation) {}x.autorange = false
                     x.range = []
                     x.range[0] = ed[xRange0];
                     x.range[1] = ed[xRange1]
@@ -148,22 +138,23 @@ const yAutorange = 'yaxis.autorange'
 const yRange0 = 'yaxis.range[0]'
 // const yRange1 = 'yaxis.range[1]'
 
-export function getDivId(chartLocation) {
+export function getDivId (chartLocation) {
     return "plotly" + chartLocation
 }
 
-export function getPlotlyConfig() {
+export function getPlotlyConfig () {
     return {
         scrollZoom: true,
-        modeBarButtonsToRemove: ["select2d", "lasso2d", "toggleSpikelines"],
+        modeBarButtonsToRemove: [
+            "select2d", "lasso2d", "toggleSpikelines"
+        ],
         responsive: true,
         showEditInChartStudio: false,
         displaylogo: false // no logo to avoid 'rel="noopener noreferrer"' security issue (see https://webhint.io/docs/user-guide/hints/hint-disown-opener/)
     };
 }
 
-export function enableAxisSelect() {
-    // allow moving chart for selected y scale layer
+export function enableAxisSelect () { // allow moving chart for selected y scale layer
     const yaxis_resize_layers = document.getElementsByClassName('nsdrag drag cursor-ns-resize');
     Object.values(yaxis_resize_layers).forEach((yaxis_drag_layer) => {
         if (yaxis_drag_layer.getAttribute('listener') !== 'true') {

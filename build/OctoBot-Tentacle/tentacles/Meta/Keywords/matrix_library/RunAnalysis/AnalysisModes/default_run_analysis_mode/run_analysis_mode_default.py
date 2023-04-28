@@ -14,10 +14,10 @@ import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.run
 
 
 class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode):
-
     logger: logging.BotLogger = logging.get_logger("DefaultRunAnalysisMode")
     available_run_analyzer_plot_modules: dict = None
     available_run_analyzer_table_modules: dict = None
+    available_run_analyzer_pie_chart_modules: dict = None
     available_run_analyzer_dictionaries_modules: dict = None
     available_run_analyzer_module_names: list = None
     selected_run_analyzer_module_names: list = None
@@ -147,6 +147,15 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             group_input_title = (
                 analysis_enums.AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_TITLE
             )
+        elif cls.available_run_analyzer_pie_chart_modules.get(run_analyzer_module_name):
+            modules = cls.available_run_analyzer_pie_chart_modules
+            group_input_name = (
+                parent_input_name
+                + analysis_enums.AnalysisModePlotSettingsTypes.PIE_CHARTS_SETTINGS_NAME
+            )
+            group_input_title = (
+                analysis_enums.AnalysisModePlotSettingsTypes.PIE_CHARTS_SETTINGS_TITLE
+            )
         else:
             return
         cls._init_run_analyzer_user_inputs_group(
@@ -214,10 +223,12 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             cls.available_run_analyzer_plot_modules
             and cls.available_run_analyzer_table_modules
             and cls.available_run_analyzer_dictionaries_modules
+            and cls.available_run_analyzer_pie_chart_modules
         ):
             import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisEvaluators.Table as analysis_table
             import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisEvaluators.Plot as analysis_plots
             import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisEvaluators.Dictionaries as analysis_dictionaries
+            import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisEvaluators.PieCharts as analysis_pie_charts
 
             cls.available_run_analyzer_plot_modules = (
                 run_analysis_factory.get_installed_run_analyzer_modules(analysis_plots)
@@ -230,11 +241,17 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
                     analysis_dictionaries
                 )
             )
+            cls.available_run_analyzer_pie_chart_modules = (
+                run_analysis_factory.get_installed_run_analyzer_modules(
+                    analysis_pie_charts
+                )
+            )
             cls.available_run_analyzer_module_names: list = list(
                 set(
                     list(cls.available_run_analyzer_plot_modules.keys())
                     + list(cls.available_run_analyzer_table_modules.keys())
                     + list(cls.available_run_analyzer_dictionaries_modules.keys())
+                    + list(cls.available_run_analyzer_pie_chart_modules.keys())
                 )
             )
 
@@ -269,7 +286,6 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         live_id: typing.Optional[int] = None,
         optimization_campaign: typing.Optional[str] = None,
     ):
-
         try:
             await cls.init_mode_features(exchange_id)
         except Exception as error:
@@ -310,45 +326,46 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
         async with ctx.backtesting_results() as (run_database, run_display):
             with run_display.part("main-chart") as main_plotted_element:
                 with run_display.part("sub-chart") as sub_plotted_element:
-                    with run_display.part("table") as table_plotted_element:
-                        run_data = await init_base_data.get_base_data(
-                            ctx=ctx,
-                            exchange_id=exchange_id,
-                            is_backtesting=is_backtesting,
-                            run_database=run_database,
-                            run_display=run_display,
-                            main_plotted_element=main_plotted_element,
-                            sub_plotted_element=sub_plotted_element,
-                            table_plotted_element=table_plotted_element,
-                        )
-                        enabled_run_analyzers = (
-                            run_data.config.get(
-                                parent_input_name
-                                + cls.ENABLED_RUN_ANALYZERS_SETTING_NAME
+                    with run_display.part("pie-chart") as pie_chart_plotted_element:
+                        with run_display.part("table") as table_plotted_element:
+                            run_data = await init_base_data.get_base_data(
+                                ctx=ctx,
+                                exchange_id=exchange_id,
+                                is_backtesting=is_backtesting,
+                                run_database=run_database,
+                                run_display=run_display,
+                                main_plotted_element=main_plotted_element,
+                                sub_plotted_element=sub_plotted_element,
+                                pie_chart_plotted_element=pie_chart_plotted_element,
+                                table_plotted_element=table_plotted_element,
                             )
-                            or cls.available_run_analyzer_module_names
-                        )
-                        sorted_analyzers: typing.List[
-                            str
-                        ] = cls.get_sorted_run_analyzers(enabled_run_analyzers)
-                        if run_data.config.get(
-                            parent_input_name
-                            + cls.ENABLE_RUN_ANALYSIS_MODE_SETTING_NAME,
-                            True,
-                        ):
-                            for run_analyzer_module_name in sorted_analyzers:
-                                await cls._get_and_execute_run_analyzer_module(
-                                    run_analyzer_module_name=run_analyzer_module_name,
-                                    run_data=run_data,
-                                    parent_input_name=parent_input_name,
+                            enabled_run_analyzers = (
+                                run_data.config.get(
+                                    parent_input_name
+                                    + cls.ENABLED_RUN_ANALYZERS_SETTING_NAME
                                 )
-                        return run_data.run_display.to_json()
+                                or cls.available_run_analyzer_module_names
+                            )
+                            sorted_analyzers: typing.List[
+                                str
+                            ] = cls.get_sorted_run_analyzers(enabled_run_analyzers)
+                            if run_data.config.get(
+                                parent_input_name
+                                + cls.ENABLE_RUN_ANALYSIS_MODE_SETTING_NAME,
+                                True,
+                            ):
+                                for run_analyzer_module_name in sorted_analyzers:
+                                    await cls._get_and_execute_run_analyzer_module(
+                                        run_analyzer_module_name=run_analyzer_module_name,
+                                        run_data=run_data,
+                                        parent_input_name=parent_input_name,
+                                    )
+                            return run_data.run_display.to_json()
 
     @classmethod
     async def _get_and_execute_run_analyzer_module(
         cls, run_analyzer_module_name: str, run_data, parent_input_name: str
     ):
-
         if cls.available_run_analyzer_plot_modules.get(run_analyzer_module_name):
             run_analyzer_module = cls.available_run_analyzer_plot_modules
             _parent_input_name = (
@@ -368,6 +385,12 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             _parent_input_name = (
                 parent_input_name
                 + analysis_enums.AnalysisModePlotSettingsTypes.DICTIONARY_SETTINGS_NAME
+            )
+        elif cls.available_run_analyzer_pie_chart_modules.get(run_analyzer_module_name):
+            run_analyzer_module = cls.available_run_analyzer_pie_chart_modules
+            _parent_input_name = (
+                parent_input_name
+                + analysis_enums.AnalysisModePlotSettingsTypes.PIE_CHARTS_SETTINGS_NAME
             )
         await cls._evaluate_all_run_analyzers_in_module(
             run_analyzer_module_name=run_analyzer_module_name,

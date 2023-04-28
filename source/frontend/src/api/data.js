@@ -1,6 +1,6 @@
 import createNotification from "../components/Notifications/Notification";
 import {backendRoutes} from "../constants/backendConstants";
-import fetchAndStoreFromBot, {fetchAndGetFromBot, sendAndInterpretBotUpdate} from "./fetchAndStoreFromBot";
+import fetchAndStoreFromBot, {fetchAndGetFromBot, sendAndInterpretBotUpdate, sendFile} from "./fetchAndStoreFromBot";
 
 export async function fetchBotInfo(botDomain, setBotInfo, visibleExchanges, successNotification = false, setIsFinished = undefined) {
     await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo + "/" + visibleExchanges, setBotInfo, "get", {}, successNotification, false, setIsFinished);
@@ -170,23 +170,42 @@ export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData
     sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser?.token)
 }
 
-export async function uploadApp(storeDomain, appDetails, appStoreUser, onSuccess) {
+export async function uploadApp({
+    storeDomain,
+    appFile,
+    appDetails,
+    appStoreUser,
+    onSuccess
+}) {
     function onFail(updated_data, update_url, result, msg, status) {
         createNotification("Failed to upload the app", "danger")
         // saveAppStoreData(msg.data);
     }
-    function onSucces(updated_data, update_url, result, msg, status, request) {
+    function _onSucces(updated_data, update_url, result, msg, status, request) {
         if (msg.success) {
             // document.cookie = undefined;
             // saveAppStoreData({});
-            onSuccess?.()
+            onSuccess ?. ()
             createNotification("Your app is now published")
         } else {
             onFail(updated_data, update_url, result, msg, status)
         }
     }
     if (appStoreUser?.token) {
-        sendAndInterpretBotUpdate(appDetails, storeDomain + backendRoutes.appStoreUpload + `/${appDetails.categories[0]}/${appDetails.package_id}`, onSucces, onFail, "POST", true, appStoreUser.token)
+        sendFile({
+            url: storeDomain + backendRoutes.appStoreUpload + `/${
+                appDetails.categories[0]
+            }/${
+                appDetails.package_id
+            }`,
+            file: appFile,
+            fileName: appDetails.package_id + ".zip",
+            data: appDetails,
+            onSucces:_onSucces,
+            onError: onFail,
+            withCredentials: true,
+            token: appStoreUser.token
+        })
     } else {
         createNotification("You need to be signed in to upload an app", "warning")
         // saveAppStoreData({})
@@ -202,7 +221,7 @@ export async function rateApp(storeDomain, ratingInfo, appStoreUser, onSuccess) 
         if (msg.success) {
             // document.cookie = undefined;
             // saveAppStoreData({});
-            onSuccess?.()
+            // onSuccess ?. ()
             createNotification("Your app is now published")
         } else {
             onFail(updated_data, update_url, result, msg, status)

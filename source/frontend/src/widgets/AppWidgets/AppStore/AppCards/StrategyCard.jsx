@@ -8,9 +8,8 @@ import {useState} from "react";
 import UploadApp from "./UploadApp";
 import AppCard from "./AppCard";
 import ProfileModal from "../../Modals/ProfileModal/ProfileModal";
-import AntButton from "../../../../components/Buttons/AntButton";
 import { strategyModeName } from "../AppStore";
-import { BranchesOutlined } from "@ant-design/icons";
+import { getFile } from "../../../../api/fetchAndStoreFromBot";
 
 export default function StrategyCard({
     app,
@@ -46,22 +45,26 @@ export default function StrategyCard({
     }
     const uploadToAppStore = useUploadToAppStore()
     async function handleProfileUpload(setOpen) {
-        uploadToAppStore({
-            ...app,
-            ...uploadInfo
-        }, setIsloading)
-        setOpen(false)
+        const profileDownloadUrl = botDomain + backendRoutes.exportProfile + app.package_id
+        function uploadProfile(profileZip) { 
+            uploadToAppStore({
+                ...app,
+                ...uploadInfo
+            },profileZip, setIsloading)
+            setOpen(false)
+        }
+        getFile(profileDownloadUrl, uploadProfile)
     }
 
-    const additionalProfileInfo = botInfo ?. profiles ?. [app.package_id] || {}
+    const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
 
-    const currentAvatar = additionalProfileInfo ?. profile ?. avatar
+    const currentAvatar = additionalProfileInfo?.profile?.avatar
     const avatarUrl = currentAvatar === "default_profile.png" ? `${
         botDomain + backendRoutes.staticImg
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        additionalProfileInfo ?. profile ?. name ?. replace(/ /g, "_")
+        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
     }/${currentAvatar}`
 
     function configureAppUpload() {
@@ -88,7 +91,7 @@ export default function StrategyCard({
                         handleUninstall={handleDeleteProfile}
                         handleUpload={handleProfileUpload}
                         infoContent={(<div>
-                            Tesssst
+                            {app.description}
                         </div>)}
                         handleDuplication={handleProfileDuplication}
                         otherActions={

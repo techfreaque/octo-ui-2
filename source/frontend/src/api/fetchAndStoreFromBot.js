@@ -34,28 +34,54 @@ export async function sendAndInterpretBotUpdate(updated_data, update_url, succes
             }
         }
     }
+    addAuthToAjaxRequest(requestData, withCredentials, token)
+    return $.ajax(requestData)
+}
+
+function addAuthToAjaxRequest(requestData, withCredentials, token) {
     if (withCredentials && token) {
         requestData.headers = {
             Authorization: 'Bearer ' + token
         }
     }
-    return $.ajax(requestData)
 }
 
-export function sendFile(url, file, fileName, onSuccess, onError) {
-    var fd = new FormData();
-    fd.append('file', file, fileName)
-    var req = $.ajax({
+export async function sendFile({
+    url,
+    file,
+    fileName,
+    data = {},
+    onSuccess,
+    onError,
+    withCredentials,
+    token
+}) { // use FormaData to send an object with files
+    var formData = new FormData();
+    Object.keys(data).forEach(key => {
+        formData.append(key, data[key]);
+    })
+    formData.append('file', file, fileName)
+    const requestData = {
         url: url,
+        crossDomain: true,
         method: 'POST',
-        data: fd, // sends fields with filename mimetype etc
+        data: formData, // sends fields with filename mimetype etc
         processData: false, // don't let jquery process the data
-        contentType: false // let xhr set the content type
-    });
-    req.then(onSuccess ?. (), onError ?. ())
+        contentType: false, // let xhr set the content type,
+        success: onSuccess,
+        error: onError,
+    }
+    addAuthToAjaxRequest(requestData, withCredentials, token)
+    $.ajax(requestData);
 }
 export async function fetchAndGetFromBot(url, type = "get", dataToSend, success_callback, error_callback,) {
     return await sendAndInterpretBotUpdate(dataToSend, url, success_callback, error_callback, type)
+}
+
+export async function getFile(url, successCallback, errorCallback) {
+    fetch(url).then(res => res.blob()).then(blob => {
+        successCallback(blob)
+    });
 }
 
 export default async function fetchAndStoreFromBot(url, setBotDataFunction, type = "get", dataToSend, successNotification = false, keepPreviousValues = true, setIsFinished = undefined, failNotification = true,) {

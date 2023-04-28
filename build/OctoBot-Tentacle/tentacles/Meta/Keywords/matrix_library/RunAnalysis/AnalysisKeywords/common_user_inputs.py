@@ -67,6 +67,7 @@ def user_select_chart_location(
     parent_input_name: str,
     data_source_input_title: str,
     def_val="sub-chart",
+    chart_locations=["main-chart", "sub-chart"],
 ) -> str:
     return analysis_mode_plugin.CLASS_UI.user_input(
         parent_input_name + CHART_LOCATION_SUFFIX,
@@ -77,7 +78,7 @@ def user_select_chart_location(
         editor_options={
             commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
         },
-        options=["main-chart", "sub-chart"],
+        options=chart_locations,
         parent_input_name=parent_input_name,
     )
 

@@ -33,6 +33,7 @@ class RunAnalysisBaseDataGenerator:
         is_backtesting: bool,
         main_plotted_element: displayed_elements.DisplayedElements,
         sub_plotted_element: displayed_elements.DisplayedElements,
+        pie_chart_plotted_element: displayed_elements.DisplayedElements,
         table_plotted_element: displayed_elements.DisplayedElements,
     ):
         self._candles_by_symbol_and_time_frame: typing.Dict[
@@ -43,6 +44,7 @@ class RunAnalysisBaseDataGenerator:
         self._orders = None
         self._order_updates = None
         self._historical_portfolio_value = None
+        self._start_end_portfolio_values = None
         self._transactions = None
         self._cached_values_by_symbols: dict = {}
         self._symbols_dbs: dict = {}
@@ -57,6 +59,7 @@ class RunAnalysisBaseDataGenerator:
         # TODO remove
         self._plotted_elements_by_chart["main-chart"] = main_plotted_element
         self._plotted_elements_by_chart["sub-chart"] = sub_plotted_element
+        self._plotted_elements_by_chart["pie-chart"] = pie_chart_plotted_element
         self.table_plotted_element: displayed_elements.DisplayedElements = (
             table_plotted_element
         )
@@ -284,6 +287,18 @@ class RunAnalysisBaseDataGenerator:
                     self.account_type, exchange=self.exchange_name
                 ).all(commons_enums.RunDatabases.HISTORICAL_PORTFOLIO_VALUE.value)
             )
+        )
+
+    async def get_start_end_portfolio_values(self):
+        if not self._start_end_portfolio_values:
+            await self._load_start_end_portfolio_values()
+        return self._start_end_portfolio_values
+
+    async def _load_start_end_portfolio_values(self):
+        self._start_end_portfolio_values = (
+            await self.run_database.get_historical_portfolio_value_db(
+                self.account_type, exchange=self.exchange_name
+            ).all(commons_enums.RunDatabases.METADATA.value)
         )
 
     def _filter_cached_value_by_time_range(

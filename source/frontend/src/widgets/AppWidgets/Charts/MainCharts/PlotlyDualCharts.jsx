@@ -16,7 +16,7 @@ export default function PlotlyDualCharts({
     const [splitChartsPercent, setSplitChartsPercent] = useState({percent: 60, shouldUpdate: false})
     const mainRef = useRef()
     const subRef = useRef()
-    const activeChartLocations = charts ? Object.keys(charts) : []
+    const activeChartLocations = charts ? Object.keys(charts).filter(chart=>(allChartLocations.includes(chart))) : []
     const chartExist = activeChartLocations.length > 0
     const subChartExist = activeChartLocations.length > 1
 

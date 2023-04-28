@@ -14,6 +14,7 @@ async def get_base_data(
     run_display,
     main_plotted_element: displayed_elements.DisplayedElements,
     sub_plotted_element: displayed_elements.DisplayedElements,
+    pie_chart_plotted_element: displayed_elements.DisplayedElements,
     table_plotted_element: displayed_elements.DisplayedElements,
 ):
     # load and generate unified base data
@@ -34,6 +35,7 @@ async def get_base_data(
             is_backtesting=is_backtesting,
             main_plotted_element=main_plotted_element,
             sub_plotted_element=sub_plotted_element,
+            pie_chart_plotted_element=pie_chart_plotted_element,
             table_plotted_element=table_plotted_element,
         )
     elif metadata["trading_type"] == "future":
@@ -45,6 +47,7 @@ async def get_base_data(
             is_backtesting=is_backtesting,
             main_plotted_element=main_plotted_element,
             sub_plotted_element=sub_plotted_element,
+            pie_chart_plotted_element=pie_chart_plotted_element,
             table_plotted_element=table_plotted_element,
         )
     else:
