@@ -1,5 +1,6 @@
-import {Avatar, Typography} from "antd"
+import {Avatar, Tooltip, Typography} from "antd"
 import RatingComponent from "./Rating"
+import { CheckCircleOutlined } from "@ant-design/icons"
 
 export function CardTitle({title}) {
     return((
@@ -39,13 +40,22 @@ export function CardCover({app, avatarImage}) {
                 }/>
         </div>
     ) : (
-        <img alt={
-                app ?. title
+        <>  
+        <div>{
+            app?.is_installed && (
+            <Tooltip title="Installed">
+            <CheckCircleOutlined style={{position:'absolute',top:'2%', right:'2%'}}/>
+            </Tooltip>
+            )}
+        </div>
+            <img alt={
+                app?.title
             }
             style={
-
+                
                 {width: "99.7%"}
             }
             src={avatarImage}/>
-    )
+        </>
+        )
 }
