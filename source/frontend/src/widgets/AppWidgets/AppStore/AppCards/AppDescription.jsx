@@ -8,9 +8,9 @@ export function CardDescription({category, app, isMouseHover, cardActions}) {
         )
     }
     const lineHeight = 20
-    const lines = 3
+    const lines = 4
     const totalLineHeight = lineHeight * lines
-    const marginBottom = 30
+    const marginBottom = 35
     const marginTop = 10
     const lineHeightWithMargin = totalLineHeight + marginBottom + marginTop
 
@@ -19,7 +19,7 @@ export function CardDescription({category, app, isMouseHover, cardActions}) {
             <div style={
                 {
                     height: lineHeightWithMargin + 5 + "px",
-                    // overflow: "hidden"
+                    overflow: "hidden"
                 }
             }>
                 {

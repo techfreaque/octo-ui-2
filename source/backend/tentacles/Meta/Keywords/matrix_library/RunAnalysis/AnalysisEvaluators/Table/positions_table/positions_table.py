@@ -80,13 +80,14 @@ class PositionsTable(abstract_analysis_evaluator.AnalysisEvaluator):
                 ]
 
                 def datum_columns_callback(datum):
-                    datum[
-                        "total"
-                    ] = f"{datum['cost']} {datum['origin_value']['market']}"
-                    datum[
-                        "volume"
-                    ] = f"{datum['volume']} {datum['origin_value']['quantity_currency']}"
-                    datum["fees"] = f'{datum["fees_amount"]} {datum["fees_currency"]}'
+                    pass
+                    # datum[
+                    #     "total"
+                    # ] = f"{datum['cost']} {datum['origin_value']['market']}"
+                    # datum[
+                    #     "volume"
+                    # ] = f"{datum['volume']} {datum['origin_value']['quantity_currency']}"
+                    # datum["fees"] = f'{datum["fees_amount"]} {datum["fees_currency"]}'
 
                 table_keywords.plot_table_data(
                     data=transactions,

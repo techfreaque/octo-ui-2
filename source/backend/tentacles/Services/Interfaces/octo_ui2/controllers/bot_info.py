@@ -78,6 +78,22 @@ def register_bot_info_routes(plugin):
         }
         media_url = flask.url_for("tentacle_media", _external=True)
         strategy_config: dict = models.get_strategy_config(media_url, missing_tentacles)
+        symbols = models.get_enabled_trading_pairs()
+
+        activated_evaluators = models.get_config_activated_evaluators()
+        evaluator_names = [
+            activated_evaluator.get_name()
+            for activated_evaluator in activated_evaluators
+        ]
+        strategies = models.get_config_activated_strategies()
+        if strategies:
+            strategy_names = [strategy.get_name() for strategy in strategies]
+        available_time_frames = [
+            time_frame.value
+            for time_frame in time_frame_manager.sort_time_frames(
+                [_time_frame.value for _time_frame in commons_enums.TimeFrames]
+            )
+        ]
         try:
             (
                 exchange_manager,
@@ -103,16 +119,7 @@ def register_bot_info_routes(plugin):
                     real_time_strategy_data = trading_mode.real_time_strategy_data
                     if real_time_strategy_data:
                         real_time_strategies_active = real_time_strategy_data.activated
-                symbols = models.get_enabled_trading_pairs()
 
-                activated_evaluators = models.get_config_activated_evaluators()
-                evaluator_names = [
-                    activated_evaluator.get_name()
-                    for activated_evaluator in activated_evaluators
-                ]
-                strategies = models.get_config_activated_strategies()
-                if strategies:
-                    strategy_names = [strategy.get_name() for strategy in strategies]
                     # enabled_time_frames = models.get_strategy_required_time_frames(
                     #     strategies[0]
                     # )
@@ -125,12 +132,7 @@ def register_bot_info_routes(plugin):
                 traded_time_frames = [
                     tf.value for tf in models.get_traded_time_frames(exchange_manager)
                 ]
-                available_time_frames = [
-                    time_frame.value
-                    for time_frame in time_frame_manager.sort_time_frames(
-                        [_time_frame.value for _time_frame in commons_enums.TimeFrames]
-                    )
-                ]
+
                 if (
                     len(trading_mode.exchange_manager.trading_modes)
                     and len(trading_mode.exchange_manager.trading_modes[0].producers)

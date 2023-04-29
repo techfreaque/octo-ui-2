@@ -55,48 +55,54 @@ export default function StrategyCard({
         getFile(profileDownloadUrl, uploadProfile)
     }
 
-    const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
+    const additionalProfileInfo = botInfo ?. profiles ?. [app.package_id] || {}
 
-    const currentAvatar = additionalProfileInfo?.profile?.avatar
+    const currentAvatar = additionalProfileInfo ?. profile ?. avatar
     const avatarUrl = currentAvatar === "default_profile.png" ? `${
         botDomain + backendRoutes.staticImg
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
+        additionalProfileInfo ?. profile ?. name ?. replace(/ /g, "_")
     }/${currentAvatar}`
 
-    return (<AppCard app={app}
-        setMouseHover={setMouseHover}
-        avatarUrl={avatarUrl}
-        category={category}
-        isMouseHover={isMouseHover}
-        cardActions={
-            (<AppActions isMouseHover={isMouseHover}
-                // configureDuplication={configureDuplication}
-                setSelectedCategories={setSelectedCategories}
-                onConfigure={
-                    () => setSelectedCategories(strategyModeName)
-                }
-                handleSelect={handleSelectProfile}
-                handleUninstall={handleDeleteProfile}
-                handleUpload={handleProfileUpload}
-                setUploadInfo={setUploadInfo}
-                uploadInfo={uploadInfo}
-                infoContent={
-                    (<div> {
-                        app.description
-                    } </div>)
-                }
-                handleDuplication={handleProfileDuplication}
-                otherActions={
-                    (<>
-                        <ProfileModal profile={additionalProfileInfo}
-                            isCurrentProfile={
-                                app.is_selected
-                            }/>
-                    </>)
-                }
-                app={app}/>)
-        }/>)
+    return (
+        <AppCard app={app}
+            setMouseHover={setMouseHover}
+            avatarUrl={avatarUrl}
+            category={category}
+            isMouseHover={isMouseHover}
+            cardActions={
+                (
+                    <AppActions isMouseHover={isMouseHover}
+                        // configureDuplication={configureDuplication}
+                        setSelectedCategories={setSelectedCategories}
+                        onConfigure={
+                            () => setSelectedCategories(strategyModeName)
+                        }
+                        handleSelect={handleSelectProfile}
+                        handleUninstall={handleDeleteProfile}
+                        handleUpload={handleProfileUpload}
+                        setUploadInfo={setUploadInfo}
+                        uploadInfo={uploadInfo}
+                        infoContent={
+                            (
+                                <div> {
+                                    app.description
+                                } </div>
+                            )
+                        }
+                        handleDuplication={handleProfileDuplication}
+                        otherActions={
+                            (
+                                <ProfileModal profile={additionalProfileInfo}
+                                    isCurrentProfile={
+                                        app.is_selected
+                                    }/>
+                            )
+                        }
+                        app={app}/>
+                )
+            }/>
+    )
 }

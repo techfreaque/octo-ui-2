@@ -102,7 +102,7 @@ export default function ProfileModal({profile, isCurrentProfile}) {
         // }>
 <>
             <AppIconButton
-                // isSelected={isSelected}
+                isSelected={isCurrentProfile}
                 disabled={
                     ! isOnline
                 }

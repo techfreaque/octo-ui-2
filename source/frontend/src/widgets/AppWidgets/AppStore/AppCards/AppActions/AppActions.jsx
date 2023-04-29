@@ -78,7 +78,7 @@ export default function AppActions({
                 } : {
                     ... buttonStyle,
                     position: "absolute",
-                    top: "-18px",
+                    top: "-20px",
                     left: "-10px",
                     // marginLeft: "-20px"
                 }
@@ -155,7 +155,8 @@ function OnHoverActions({
         <AppInfoModal app={app}
             infoContent={infoContent}/>
         <ConfigureApp app={app}
-            onConfigure={onConfigure}/> {otherActions}
+            onConfigure={onConfigure} />
+        {otherActions}
         <CloneApp app={app}
             handleDuplication={handleDuplication}
             configureDuplication={configureDuplication}/>
