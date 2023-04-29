@@ -17,7 +17,7 @@ export default function RunDataTableW2UI({
     const displayedRunIds = useDisplayedRunIdsContext()
 
     useEffect(() => {
-        if (runData.data && hiddenMetadataColumns) createMetadataTable(
+        if (runData.data) createMetadataTable(
         tableTitle, tableId, runData.data,
         false,
         currentCampaignName, reloadData,
@@ -348,7 +348,7 @@ function _getUserInputColumns(
 ) {
     Object.keys(inputsByConfig[inputTentacle]).forEach((userInput) => {
         const key = userInputKey(userInput, inputTentacle);
-        if (!userInputKeys.includes(key) && !hiddenMetadataColumns.includes(key.replaceAll("_", " "))) {
+        if (!userInputKeys.includes(key) && !hiddenMetadataColumns?.includes(key.replaceAll("_", " "))) {
             userInputSampleValueByKey[key] = inputsByConfig[inputTentacle][userInput]
             if (userInputSampleValueByKey[key] instanceof Object && !(userInputSampleValueByKey[key] instanceof Array)) {
                 _getUserInputColumns(userInputColumns, userInput, userInputKeys, userInputSampleValueByKey,
