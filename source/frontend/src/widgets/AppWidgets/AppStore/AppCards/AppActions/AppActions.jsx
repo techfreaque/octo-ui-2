@@ -42,7 +42,7 @@ export default function AppActions({
             }
         }>
             <div style={
-                (app ?. is_selected ? {
+                (app?.is_selected ? {
                     ... buttonStyle,
                     marginTop: "20px"
                 } : (isMouseHover ? {
@@ -173,7 +173,7 @@ export function ConfirmAction({
     buttonTitle,
     faIconComponent,
     antIconComponent,
-    is_selected: isSelected
+    isSelected
 }) {
     const [open, setOpen] = useState(false);
     // eslint-disable-next-line no-unused-vars

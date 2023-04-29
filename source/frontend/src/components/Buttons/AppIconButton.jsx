@@ -1,7 +1,8 @@
+import { useMediaQuery } from "@mui/material";
 import AntButton from "./AntButton";
 
 export default function AppIconButton({
-    is_selected: isSelected,
+    isSelected,
     buttonTitle,
     faIconComponent,
     antIconComponent,
@@ -23,17 +24,20 @@ export default function AppIconButton({
 
         const newResult = result.includes('&') ? result.join(" ").replace(/& /g, "&\n") : result.join("\n")
         return newResult;
-
+        
     };
-    const noIconMargin = isSelected ? false : true
-    const size = isSelected ? undefined : 'small'
-    const buttonTitle_ = isSelected ? buttonTitle : splitText(buttonTitle);
-    const buttonStyle = isSelected ? undefined : {
+    const isBigScreen = useMediaQuery('(min-width:630px)');
+    const showBlockButton = isBigScreen  && isSelected
+
+    const noIconMargin = showBlockButton ? false : true
+    const size = showBlockButton ? undefined : 'small'
+    const buttonTitle_ = showBlockButton ? buttonTitle : splitText(buttonTitle);
+    const buttonStyle = showBlockButton ? undefined : {
         margin: "3px",
         display: 'block',
         height: 'fit-content'
     }
-    const spanStyle = isSelected ? undefined : {
+    const spanStyle = showBlockButton ? undefined : {
         whiteSpace: 'pre-line',
         wordWrap: 'break-word',
         fontSize: '12px',

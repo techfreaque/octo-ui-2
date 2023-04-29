@@ -48,3 +48,8 @@
   padding: 0px 0px 0px 5px;
   line-height: 0px
 }
+
+
+:where(.css-dev-only-do-not-override-4b6ehl).ant-rate .ant-rate-star:not(:last-child) {
+    margin-inline-end: 0px;
+}

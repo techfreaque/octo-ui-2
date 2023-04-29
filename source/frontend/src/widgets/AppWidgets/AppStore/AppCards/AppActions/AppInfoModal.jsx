@@ -13,7 +13,7 @@ export default function AppInfoModal({app, infoContent}) {
     }
     return (<>
         <AppIconButton
-            // isSelected={isSelected}
+            isSelected={app.is_selected}
             buttonTitle={`${
                 app.categories[0]
             } Info`}

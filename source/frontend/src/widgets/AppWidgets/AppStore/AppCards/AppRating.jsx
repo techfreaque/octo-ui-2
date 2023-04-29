@@ -1,10 +1,11 @@
-import { Tooltip } from "antd";
+import { Tooltip, Rate } from "antd";
 import "./ratingStyle.css";
 import { useRateAppStore } from "../../../../context/data/AppStoreDataProvider";
 import { useState } from "react";
 
 export default function AppRating({app, rating, votes, style}) {
     const formatCash = n => {
+        if (!n) return 0;
         if (n < 1e3)
             return n.toString();
 
@@ -40,27 +41,16 @@ export default function AppRating({app, rating, votes, style}) {
                 ...style
             }
         }>
-            <Tooltip title={
-            votes ? `${votes} votes ~${rating} stars on average` : `Nobody has rated this ${
-                app?.categories?.[0]?.toLowerCase()
-            } yet`
-        }> 
-            {
-                [
-                0,
-                1,
-                2,
-                3,
-                4,
-                ].map(starId => (
-                <Rating key={starId} rating={rating}
-                    onRatingChange={()=>onRatingChange(starId)}
-                    starId={starId}/>       
-            ))
-        }
+            <Rate allowHalf 
+                defaultValue={0}
+                value={rating}
+                disabled={!app.is_installed}
+                style={{color:'rgb(185, 179, 169)',
+                    fontSize:'14px',
+                }}
+                onChange={onRatingChange} />
             <span className='ratingComponent__votes'>
                 {votes_}</span>
-                </Tooltip>
         </div>
     );
 }

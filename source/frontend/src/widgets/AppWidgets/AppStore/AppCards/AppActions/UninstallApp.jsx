@@ -4,6 +4,7 @@ import {ConfirmAction} from "./AppActions";
 export default function UninstallApp({app, handleUninstall}) {
     return app.is_installed && (<ConfirmAction antIconComponent={DeleteOutlined}
         onConfirm={handleUninstall}
+        isSelected={app.is_selected}
         confirmTitle={
             `Uninstall ${
                 app.title

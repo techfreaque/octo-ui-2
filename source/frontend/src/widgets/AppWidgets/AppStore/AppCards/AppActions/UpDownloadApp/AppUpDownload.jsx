@@ -16,6 +16,7 @@ export default function AppUpDownload({
                 const buttonText = "Publish Update"
                 return (<ConfirmAction onConfirm={handleUpload}
                     antIconComponent={CloudUploadOutlined}
+                    isSelected={app.is_selected}
                     confirmTitle={buttonText}
                     confirmDescription={
                         (<UploadAppForm setUploadInfo={setUploadInfo}
@@ -32,6 +33,7 @@ export default function AppUpDownload({
                     app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
                 } Now`
                 return (<ConfirmAction onConfirm={handleUpload}
+                    isSelected={app.is_selected}
                     antIconComponent={DollarOutlined}
                     confirmTitle={confirmButtonText}
                     confirmDescription={
@@ -49,6 +51,7 @@ export default function AppUpDownload({
             return (<ConfirmAction onConfirm={handleDownload}
                 antIconComponent={CloudDownloadOutlined}
                 confirmTitle={buttonText}
+                isSelected={app.is_selected}
                 confirmDescription={
                     (<AppDownloadForm setUploadInfo={setUploadInfo}
                         uploadInfo={uploadInfo}

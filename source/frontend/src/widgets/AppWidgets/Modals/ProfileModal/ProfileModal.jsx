@@ -106,6 +106,7 @@ export default function ProfileModal({profile, isCurrentProfile}) {
                 disabled={
                     ! isOnline
                 }
+                spanStyle={{margin:'auto'}}
             buttonTitle={"Exchange Settings"}
             antIconComponent={BankOutlined}
             onClick={  () => setOpen(true)}/>
@@ -123,7 +124,8 @@ export default function ProfileModal({profile, isCurrentProfile}) {
                     saveProfile={saveProfile}
                     hasChanged={hasChanged}
                     saveProfileAndRestart={saveProfileAndRestart}/>
-            } </>
+            } 
+            </>
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [
         currentProfileTitle,
