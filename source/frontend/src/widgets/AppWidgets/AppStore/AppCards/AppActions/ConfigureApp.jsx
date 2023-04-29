@@ -1,16 +1,13 @@
 import {BranchesOutlined} from "@ant-design/icons";
-import AntButton from "../../../../../components/Buttons/AntButton";
+import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 
 export default function ConfigureApp({app, onConfigure}) {
-    return app.is_selected && (<AntButton style={
-            {margin: "3px"}
+    return app.is_selected && (<AppIconButton //  isSelected={isSelected}
+        buttonTitle={
+            `Configure ${
+                app.categories[0]
+            }`
         }
         antIconComponent={BranchesOutlined}
-        onClick={onConfigure}
-        buttonVariant="text"> {
-        `Configure ${
-            app.categories[0]
-        }`
-    } </AntButton>)
-
+        onClick={onConfigure}/>)
 }

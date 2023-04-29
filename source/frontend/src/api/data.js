@@ -224,7 +224,7 @@ export async function rateApp(storeDomain, ratingInfo, appStoreUser, onSuccess) 
     if (appStoreUser ?. token) {
         sendAndInterpretBotUpdate(ratingInfo, storeDomain + backendRoutes.appStoreRate, onSucces, onFail, "POST", true, appStoreUser.token)
     } else {
-        createNotification("You need to be signed in to upload an app", "warning")
+        createNotification("You need to be signed in to rate an app", "warning")
         // saveAppStoreData({})
     }
 }

@@ -122,5 +122,5 @@ export const registeredComponents = {
     ClosePairSelector,
     SavePairSelector,
     StraegyConfigurator,
-    LoginManager,
+    LoginManager
 };

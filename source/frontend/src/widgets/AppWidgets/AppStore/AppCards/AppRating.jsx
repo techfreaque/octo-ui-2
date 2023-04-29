@@ -53,10 +53,9 @@ export default function AppRating({app, rating, votes, style}) {
                 3,
                 4,
                 ].map(starId => (
-                        
                 <Rating key={starId} rating={rating}
                     onRatingChange={()=>onRatingChange(starId)}
-                    starId={starId}/>
+                    starId={starId}/>       
             ))
         }
             <span className='ratingComponent__votes'>

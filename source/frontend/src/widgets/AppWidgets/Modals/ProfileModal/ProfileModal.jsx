@@ -10,6 +10,7 @@ import {ProfileSettings} from "./ProfileSettings";
 import {ProfileTitle} from "./ProfileTitle";
 import AntButton from "../../../../components/Buttons/AntButton";
 import { BankOutlined } from "@ant-design/icons";
+import AppIconButton from "../../../../components/Buttons/AppIconButton";
 
 
 export default function ProfileModal({profile, isCurrentProfile}) {
@@ -93,16 +94,6 @@ export default function ProfileModal({profile, isCurrentProfile}) {
         setIsloading(false)
         setOpen(false)
     };
-
-    const buttonTitle = "Exchange\nSettings"
-    const noIconMargin = isCurrentProfile ? false : true
-    const size = isCurrentProfile ? undefined : 'small'
-    const buttonStyle = isCurrentProfile ? {margin: "3px"} : {margin: "3px", display: 'block', height: 'fit-content',}
-    const spanStyle = isCurrentProfile ? {} : {whiteSpace: 'pre-line', 
-                                            wordWrap: 'break-word',
-                                            fontSize: '12px',
-                                            lineHeight: '14px',
-                                            marginTop: '5px',}
     return useMemo(() => (
         // <Tooltip title={
         //     (
@@ -110,20 +101,14 @@ export default function ProfileModal({profile, isCurrentProfile}) {
         //     )
         // }>
 <>
-                <AntButton onClick={
-                        () => setOpen(true)
-                    }
-                antIconComponent={BankOutlined}
-                noIconMargin={noIconMargin}
-                size={size}
-                spanStyle={spanStyle}
+            <AppIconButton
+                // isSelected={isSelected}
                 disabled={
                     ! isOnline
                 }
-                style={buttonStyle}
-             buttonVariant="text"
-                >
-                    {buttonTitle}</AntButton>
+            buttonTitle={"Exchange Settings"}
+            antIconComponent={BankOutlined}
+            onClick={  () => setOpen(true)}/>
                 {
                 open && <ProfileModalElement open={open}
                     setIsloading={setIsloading}

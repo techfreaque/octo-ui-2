@@ -54,7 +54,7 @@ export const BotInfoProvider = ({children}) => {
     useEffect(() => {
         if (botInfo?.trigger_time_frames || botInfo?.traded_time_frames) {
             setVisibleTimeframes(prevTimeframes => {
-                const availableTimeframes = botInfo?.trigger_time_frames || botInfo?.traded_time_frames;
+                const availableTimeframes = (botInfo?.trigger_time_frames?.length && botInfo?.trigger_time_frames) || botInfo?.traded_time_frames;
                 if (availableTimeframes?.includes(prevTimeframes)) {
                     return prevTimeframes
                 } else {
@@ -63,26 +63,24 @@ export const BotInfoProvider = ({children}) => {
             });
             setVisiblePairs(prevPairs => {
                 if (botInfo?.symbols?.includes(prevPairs)) {
-                  return prevPairs
+                    return prevPairs
                 } else {
-                  return botInfo?.symbols?.[0]
+                    return botInfo?.symbols?.[0]
                 }
-              });
-              setVisibleExchanges(prevExchange => {
-            if (botInfo?.exchange_names?.includes(prevExchange)) {
-              return prevExchange
-          } else {
-              return botInfo?.exchange_name
-          }
+            });
+            setVisibleExchanges(prevExchange => {
+                if (botInfo?.exchange_names?.includes(prevExchange)) {
+                    return prevExchange
+                } else {
+                    return botInfo?.exchange_name
+                }
             });
         }
     }, [botInfo, setVisibleTimeframes, setVisiblePairs, setVisibleExchanges]);
 
-    return (
-        <BotInfoContext.Provider value={botInfo}>
-            <UpdateBotInfoContext.Provider value={setBotInfo}>
-                <BotExchangeInfoProvider> {children} </BotExchangeInfoProvider>
-            </UpdateBotInfoContext.Provider>
-        </BotInfoContext.Provider>
-    );
+    return (<BotInfoContext.Provider value={botInfo}>
+        <UpdateBotInfoContext.Provider value={setBotInfo}>
+            <BotExchangeInfoProvider> {children} </BotExchangeInfoProvider>
+        </UpdateBotInfoContext.Provider>
+    </BotInfoContext.Provider>);
 };

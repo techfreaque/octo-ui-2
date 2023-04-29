@@ -7,6 +7,7 @@ import ConfigureApp from "./ConfigureApp";
 import CloneApp from "./CloneApp";
 import UninstallApp from "./UninstallApp";
 import AppUpDownload from "./UpDownloadApp/AppUpDownload";
+import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 
 
 export default function AppActions({
@@ -22,7 +23,7 @@ export default function AppActions({
     otherActions,
     infoContent,
     onConfigure
- }) { //const = isMouseHover = true
+}) { // const = isMouseHover = true
     const buttonStyle = {
         display: "flex",
         flexWrap: "wrap",
@@ -41,11 +42,11 @@ export default function AppActions({
             }
         }>
             <div style={
-                (app?.is_selected ? {
-                    ...buttonStyle,
+                (app ?. is_selected ? {
+                    ... buttonStyle,
                     marginTop: "20px"
                 } : (isMouseHover ? {
-                    ...buttonStyle,
+                    ... buttonStyle,
                     // marginTop: "20px",
                     // position: "absolute",
                     // top: "auto",
@@ -54,7 +55,7 @@ export default function AppActions({
                     // left: "0px",
                     justifyContent: "center"
                 } : {
-                    ...buttonStyle,
+                    ... buttonStyle,
                     display: "none"
                 }))
             }>
@@ -71,11 +72,11 @@ export default function AppActions({
                     app={app}/>
             </div>
             <div style={
-                (isMouseHover | app?.is_selected) ? {
-                    ...buttonStyle,
+                (isMouseHover | app ?. is_selected) ? {
+                    ... buttonStyle,
                     display: "none"
                 } : {
-                    ...buttonStyle,
+                    ... buttonStyle,
                     position: "absolute",
                     top: "-18px",
                     left: "-10px",
@@ -163,7 +164,6 @@ function OnHoverActions({
     </>)
 }
 
-
 export function ConfirmAction({
     onConfirm,
     confirmDescription,
@@ -172,7 +172,7 @@ export function ConfirmAction({
     buttonTitle,
     faIconComponent,
     antIconComponent,
-    is_selected
+    is_selected: isSelected
 }) {
     const [open, setOpen] = useState(false);
     // eslint-disable-next-line no-unused-vars
@@ -181,35 +181,6 @@ export function ConfirmAction({
     const showPopconfirm = () => {
         setOpen(true);
     };
-    
-    const splitText = (text) => {
-        const words = text.split(" ");
-        const limit = 10;
-        const result = words.reduce((lines, word) => {
-          const lastLine = lines[lines.length - 1];
-          if (word.length < 3 || lastLine.length + word.length + 1 > limit) {
-            lines.push(word);
-          } else {
-            lines[lines.length - 1] += " " + word;
-          }
-          return lines;
-        }, [""]);
-        
-        const newResult = result.includes('&') ? result.join(" ").replace(/& /g, "&\n") : result.join("\n")
-        
-        return newResult;
-        
-      };
-    const noIconMargin = is_selected ? false : true
-    const size = is_selected ? undefined : 'small'
-    const buttonTitle_ = is_selected ? buttonTitle : splitText(buttonTitle);
-    const buttonStyle = is_selected ? undefined : {margin: "3px", display: 'block', height: 'fit-content',}
-    const spanStyle = is_selected ? undefined : {whiteSpace: 'pre-line', 
-                                            wordWrap: 'break-word',
-                                            fontSize: '12px',
-                                            lineHeight: '14px',
-                                            marginTop: '5px',}
-
     return (<Popconfirm title={confirmTitle}
         description={confirmDescription}
         open={open}
@@ -223,14 +194,10 @@ export function ConfirmAction({
         onCancel={
             () => setOpen(false)
     }>
-        <AntButton style={buttonStyle}
-            noIconMargin={noIconMargin}
-            size={size}
-            spanStyle={spanStyle}
+        <AppIconButton isSelected={isSelected}
+            buttonTitle={buttonTitle}
             faIconComponent={faIconComponent}
             antIconComponent={antIconComponent}
-            onClick={showPopconfirm}
-            buttonVariant="text"> {buttonTitle_} </AntButton>
+            onClick={showPopconfirm}/>
     </Popconfirm>)
 }
-

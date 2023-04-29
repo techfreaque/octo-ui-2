@@ -60,7 +60,7 @@ export function ProfileSettings({
                 }
                 disabled={loading}
                 href={
-                    botDomain + backendRoutes.exportProfile + newProfileSettings.profile.id
+                    botDomain + backendRoutes.exportProfile + newProfileSettings?.profile?.id
                 }
                 // onClick={handleProfileExport}
             >

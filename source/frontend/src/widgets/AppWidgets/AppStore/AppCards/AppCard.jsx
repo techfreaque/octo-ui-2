@@ -19,9 +19,9 @@ export default function AppCard({
         borderRadius: "4px",
         transition: "all 200ms linear 0ms",
     }
-    if (!app?.is_selected) {
-        cardStyle.height = "450px"
-    }
+    // if (!app?.is_selected) {
+    //     cardStyle.height = "450px"
+    // }
     if (isMouseHover) {
         cardStyle.transform = "translateY(-1px)"
     }

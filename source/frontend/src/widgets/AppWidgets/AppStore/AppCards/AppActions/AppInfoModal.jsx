@@ -4,6 +4,7 @@ import {useState} from "react";
 import {Modal} from "antd";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faXmark} from "@fortawesome/free-solid-svg-icons";
+import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 
 export default function AppInfoModal({app, infoContent}) {
     const [open, setOpen] = useState()
@@ -11,20 +12,13 @@ export default function AppInfoModal({app, infoContent}) {
         setOpen(false)
     }
     return (<>
-        <AntButton onClick={
-                () => setOpen(true)
-            }
-            antIconComponent={InfoCircleOutlined}
-            style={
-                {margin: "3px"}
-            }
-            buttonVariant="text"> {
-            `${
+        <AppIconButton
+            // isSelected={isSelected}
+            buttonTitle={`${
                 app.categories[0]
-            } Info`
-        }</AntButton>
-
-
+            } Info`}
+            antIconComponent={InfoCircleOutlined}
+            onClick={  () => setOpen(true)}/>
         <Modal open={open}
             onCancel={handleClose}
             title={
