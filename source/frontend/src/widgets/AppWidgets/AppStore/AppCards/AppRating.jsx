@@ -1,5 +1,7 @@
 import { Tooltip } from "antd";
 import "./ratingStyle.css";
+import { useRateAppStore } from "../../../../context/data/AppStoreDataProvider";
+import { useState } from "react";
 
 export default function AppRating({app, rating, votes, style}) {
     const formatCash = n => {
@@ -20,9 +22,11 @@ export default function AppRating({app, rating, votes, style}) {
 
     };
     const votes_ = formatCash(votes);
-    function onRatingChange(starId) {
-        // TODO use rating endpoint here
-        console.log()
+    const [isloading, setIsloading] = useState(false)
+
+    const rateAppStore = useRateAppStore()
+    async function onRatingChange(starId) { // TODO use rating endpoint here
+        rateAppStore({ rating: starId + 1, package_id: app.package_id }, setIsloading)
     }
     return (
         <div style={
@@ -36,7 +40,11 @@ export default function AppRating({app, rating, votes, style}) {
                 ...style
             }
         }>
-            <Tooltip title={`${votes} votes ~${rating} stars on average`} >
+            <Tooltip title={
+            votes ? `${votes} votes ~${rating} stars on average` : `Nobody has rated this ${
+                app?.categories?.[0]?.toLowerCase()
+            } yet`
+        }> 
             {
                 [
                 0,

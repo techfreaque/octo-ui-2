@@ -94,6 +94,15 @@ export default function ProfileModal({profile, isCurrentProfile}) {
         setOpen(false)
     };
 
+    const buttonTitle = "Exchange\nSettings"
+    const noIconMargin = isCurrentProfile ? false : true
+    const size = isCurrentProfile ? undefined : 'small'
+    const buttonStyle = isCurrentProfile ? {margin: "3px"} : {margin: "3px", display: 'block', height: 'fit-content',}
+    const spanStyle = isCurrentProfile ? {} : {whiteSpace: 'pre-line', 
+                                            wordWrap: 'break-word',
+                                            fontSize: '12px',
+                                            lineHeight: '14px',
+                                            marginTop: '5px',}
     return useMemo(() => (
         // <Tooltip title={
         //     (
@@ -105,15 +114,16 @@ export default function ProfileModal({profile, isCurrentProfile}) {
                         () => setOpen(true)
                     }
                 antIconComponent={BankOutlined}
-                    disabled={
-                        ! isOnline
-                    }
-                    style={
-                    {margin: "3px"}
+                noIconMargin={noIconMargin}
+                size={size}
+                spanStyle={spanStyle}
+                disabled={
+                    ! isOnline
                 }
+                style={buttonStyle}
              buttonVariant="text"
                 >
-                    Exchange Settings</AntButton>
+                    {buttonTitle}</AntButton>
                 {
                 open && <ProfileModalElement open={open}
                     setIsloading={setIsloading}
