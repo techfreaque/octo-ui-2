@@ -9,7 +9,7 @@ const profileCategoryName = "Strategy"
 
 export default function AppCards({app, isLoading, setIsloading, setSelectedCategories}) {
     const [isMouseHover, setMouseHover] = useState(false);
-    const category = app.categories.length > 1 ? 'Package' : app.categories[0]
+    const category = app?.categories?.length > 1 ? 'Package' : app?.categories?.[0]
     if (category === tradingModeCategoryName) {
         return (
             <SelectedCardContainer app={app}>

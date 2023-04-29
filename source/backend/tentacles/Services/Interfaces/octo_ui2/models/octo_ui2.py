@@ -1,9 +1,13 @@
-import os
+import octobot_commons.os_util as os_util
 
 
-CORS_ENABLED = os.getenv("CORS_MODE_ENABLED") or False
-DEV_MODE_ENABLED = os.getenv("API_DEV_MODE_ENABLED") or False
-SHARE_YOUR_OCOBOT = os.getenv("API_DEV_MODE_ENABLED") or False
+CORS_ENABLED = os_util.parse_boolean_environment_var("CORS_MODE_ENABLED", "False")
+DEV_MODE_ENABLED = os_util.parse_boolean_environment_var(
+    "API_DEV_MODE_ENABLED", "False"
+)
+SHARE_YOUR_OCOBOT = os_util.parse_boolean_environment_var(
+    "SHARE_YOUR_OCOBOT", "False"
+)
 
 
 def dev_mode_is_on():

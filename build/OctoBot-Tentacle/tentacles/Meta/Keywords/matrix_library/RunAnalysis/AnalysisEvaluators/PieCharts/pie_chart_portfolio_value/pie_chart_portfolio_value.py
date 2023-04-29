@@ -34,7 +34,10 @@ class PieChartPortfolio(abstract_analysis_evaluator.AnalysisEvaluator):
             default_chart_location="pie-chart",
         )
         if plotted_element is not None:
-            for portfolio_name in ("starting_portfolio", "ending_portfolio"):
+            for portfolio_name in (
+                "starting_portfolio",
+                "ending_portfolio",
+            ):
                 start_end_portfolio_values = (
                     await run_data.get_start_end_portfolio_values()
                 )
@@ -56,4 +59,5 @@ class PieChartPortfolio(abstract_analysis_evaluator.AnalysisEvaluator):
                         text="Current"
                         if portfolio_name == "starting_portfolio"
                         else "Starting",
+                        hole_size=0.4,
                     )

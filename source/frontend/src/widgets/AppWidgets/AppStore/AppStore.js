@@ -4,7 +4,7 @@ import AppList from "./AppList";
 import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import TradingConfig from "../Configuration/TradingConfig";
 import ProfileAvatar from "../Stats/ProfileAvatar";
-import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import "./AppCards/ratingStyle.css"
 
 const hiddenCategories = ["Legacy Strategy"]
@@ -17,7 +17,7 @@ export default function AppStore() {
     const botInfo = useBotInfoContext();
     const appStoreUser = useAppStoreUserContext()
     const isLoggedIn = Boolean(appStoreUser?.token)
-    const availableCategories =  appStoreData && (Object.keys(appStoreData)?.filter(category => (! hiddenCategories.includes(category))) || [])
+    const availableCategories = appStoreData && (Object.keys(appStoreData)?.filter(category => (! hiddenCategories.includes(category))) || [])
 
     const [selectedCategories, setSelectedCategories] = React.useState(strategyName);
     const _useFetchAppStoreData = useFetchAppStoreData();
@@ -27,45 +27,38 @@ export default function AppStore() {
     }, [botInfo, isLoggedIn]);
 
 
-    const content = (
-        <AppList selectedCategories={
+    const content = (<AppList selectedCategories={
             selectedCategories
-                // ?.replace(/_/g, " ")
-            }
-            setSelectedCategories={setSelectedCategories}
-            appStoreData={appStoreData}/>
-    )
+            // ?.replace(/_/g, " ")
+        }
+        setSelectedCategories={setSelectedCategories}
+        appStoreData={appStoreData}/>)
     const menuItems = [
-        ...availableCategories.map(categoryName => {
+        ...(availableCategories?.map(categoryName => {
             if (categoryName === strategyName) {
                 return {
                     label: botInfo?.current_profile?.profile?.name,
                     key: categoryName,
                     content: content,
-                    icon: (
-                        <ProfileAvatar marginRight="5px"/>
-                    )
+                    icon: (<ProfileAvatar marginRight="5px"/>)
                 }
             } else if (categoryName === strategyModeName) {
                 return {label: categoryName, key: categoryName, content: content, antIcon: "BranchesOutlined"}
             } else {
                 return {label: categoryName, content: content, key: categoryName}
             }
-        }), {
+        }) || []), {
             label: strategyModeSettingsName,
             key: strategyModeSettingsName,
             antIcon: "ControlOutlined",
             dontScroll: true,
             noPadding: true,
-            content: (
-                <TradingConfig/>)
+            content: (<TradingConfig/>)
         },
 
     ]
 
-    return Boolean(availableCategories.length) && (
-        <AntSidebar menuItems={menuItems}
-            currentlySelectedMenu={selectedCategories}
-            setCurrentlySelectedMenu={setSelectedCategories}/>
-    )
+    return Boolean(availableCategories?.length) && (<AntSidebar menuItems={menuItems}
+        currentlySelectedMenu={selectedCategories}
+        setCurrentlySelectedMenu={setSelectedCategories}/>)
 }

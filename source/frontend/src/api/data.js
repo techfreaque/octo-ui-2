@@ -52,7 +52,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.live = {
                     [botInfo.live_id]: {
                         [symbol]: {
-                            [timeFrame]: msg?.data
+                            [timeFrame]: msg ?. data
                         }
                     }
                 }
@@ -62,7 +62,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                         [optimizer_id]: {
                             [backtesting_id]: {
                                 [symbol]: {
-                                    [timeFrame]: msg?.data
+                                    [timeFrame]: msg ?. data
                                 }
                             }
                         }
@@ -73,7 +73,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                     [optimizer_id]: {
                         [backtesting_id]: {
                             [symbol]: {
-                                [timeFrame]: msg?.data
+                                [timeFrame]: msg ?. data
                             }
                         }
                     }
@@ -82,14 +82,14 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.backtesting[optimization_campaign][optimizer_id] = {
                     [backtesting_id]: {
                         [symbol]: {
-                            [timeFrame]: msg?.data
+                            [timeFrame]: msg ?. data
                         }
                     }
                 }
             } else {
                 newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
                     [symbol]: {
-                        [timeFrame]: msg?.data
+                        [timeFrame]: msg ?. data
                     }
                 }
             }
@@ -138,14 +138,14 @@ export async function fetchSymbolsInfo(setSymbolsInfo, botDomain) {
 
 export async function fetchAppStoreData(saveAppStoreData, storeDomain, installedTentaclesInfo, notification, appStoreUser) {
     function onSuccess(updated_data, update_url, result, msg, status) {
-        saveAppStoreData(msg?.data)
+        saveAppStoreData(msg ?. data)
         notification && createNotification("Successfully fetched package manager repositories")
     }
     function onFail(updated_data, update_url, result, msg, status) {
         notification && createNotification("Failed to fetch package manager repositories")
         // TODO add fallback
     }
-    await sendAndInterpretBotUpdate(installedTentaclesInfo, storeDomain + backendRoutes.appStoreFree, onSuccess, onFail, "POST", true, appStoreUser?.token)
+    await sendAndInterpretBotUpdate(installedTentaclesInfo, storeDomain + backendRoutes.appStoreFree, onSuccess, onFail, "POST", true, appStoreUser ?. token)
 }
 
 export async function fetchPackagesData(saveAppStoreData, botDomain, notification) {
@@ -167,7 +167,7 @@ export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser?.token)
+    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser ?. token)
 }
 
 export async function uploadApp({
@@ -177,21 +177,15 @@ export async function uploadApp({
     appStoreUser,
     onSuccess
 }) {
-    function onFail(updated_data, update_url, result, msg, status) {
+    function onFail(response) {
         createNotification("Failed to upload the app", "danger")
         // saveAppStoreData(msg.data);
     }
-    function _onSucces(updated_data, update_url, result, msg, status, request) {
-        if (msg.success) {
-            // document.cookie = undefined;
-            // saveAppStoreData({});
-            onSuccess ?. ()
-            createNotification("Your app is now published")
-        } else {
-            onFail(updated_data, update_url, result, msg, status)
-        }
+    function _onSucces(response) {
+        onSuccess ?. ()
+        createNotification("Your app is now published")
     }
-    if (appStoreUser?.token) {
+    if (appStoreUser ?. token) {
         sendFile({
             url: storeDomain + backendRoutes.appStoreUpload + `/${
                 appDetails.categories[0]
@@ -201,7 +195,7 @@ export async function uploadApp({
             file: appFile,
             fileName: appDetails.package_id + ".zip",
             data: appDetails,
-            onSucces:_onSucces,
+            onSuccess: _onSucces,
             onError: onFail,
             withCredentials: true,
             token: appStoreUser.token
@@ -214,7 +208,7 @@ export async function uploadApp({
 
 export async function rateApp(storeDomain, ratingInfo, appStoreUser, onSuccess) {
     function onFail(updated_data, update_url, result, msg, status) {
-        createNotification("Failed to upload the app", "danger")
+        createNotification("Failed rate app", "danger")
         // saveAppStoreData(msg.data);
     }
     function onSucces(updated_data, update_url, result, msg, status, request) {
@@ -222,12 +216,12 @@ export async function rateApp(storeDomain, ratingInfo, appStoreUser, onSuccess) 
             // document.cookie = undefined;
             // saveAppStoreData({});
             // onSuccess ?. ()
-            createNotification("Your app is now published")
+            createNotification("App rated successfully")
         } else {
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    if (appStoreUser?.token) {
+    if (appStoreUser ?. token) {
         sendAndInterpretBotUpdate(ratingInfo, storeDomain + backendRoutes.appStoreRate, onSucces, onFail, "POST", true, appStoreUser.token)
     } else {
         createNotification("You need to be signed in to upload an app", "warning")
@@ -250,7 +244,7 @@ export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStore
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    if (appStoreUser?.token) {
+    if (appStoreUser ?. token) {
         sendAndInterpretBotUpdate({}, storeDomain + backendRoutes.appStoreLogout, onSucces, onFail, "POST", true, appStoreUser.token)
     } else {
         createNotification("You are already logged out", "warning")

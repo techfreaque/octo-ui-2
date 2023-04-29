@@ -1,5 +1,5 @@
 export function CardDescription({category, app, isMouseHover, cardActions}) {
-    if (app ?. is_selected) {
+    if (app?.is_selected) {
         return (
             <> {
                 app.description

@@ -6,7 +6,8 @@
     "stopBot": "Detener robot",
     "updateBot": "Actualizar robot",
     "logout": "Cerrar sesión de Bot",
-    "closePairSelectorTooltip": "Haga clic para cerrar la configuración de intercambio"
+    "closePairSelectorTooltip": "Haga clic para cerrar la configuración de intercambio",
+    "colorModeSwitch": "Modo de color"
   },
   "notFoundPage": {
     "goHome": "Vete a casa",
@@ -19,7 +20,8 @@
   "plotting": {
     "switchtotheDisplaySettings": "Cambiar a la configuración de pantalla",
     "switchtotheTablesView": "Cambiar a la vista de tablas",
-    "switchtotheChartsView": "Cambiar a la vista de gráficos"
+    "switchtotheChartsView": "Cambiar a la vista de gráficos",
+    "switchToThePieChartView": "Cambiar al diseño de gráfico circular"
   },
   "profile": {
     "profileInfoButtonToolTip": "Abre la configuración del perfil."
@@ -41,5 +43,15 @@
   },
   "pairSelector": {
     "SaveAndRestart": "Guardar y reiniciar"
+  },
+  "exchangeSelector": {
+    "exchangeAuthenticatedTooltip": "Sus claves API son válidas.",
+    "exchangeNotAuthenticatedTooltip": "No se pudieron verificar sus claves de API. \nSe requieren claves API válidas para el comercio real.",
+    "isTestedExchangeTooltip": "Este intercambio es totalmente compatible y probado.",
+    "isTestedExchangeSimulatedTooltip": "Este intercambio se prueba y admite solo en modo de simulación.",
+    "isUntestedExchangeTooltip": "Este intercambio aún no se ha probado y no es compatible oficialmente."
+  },
+  "progress": {
+    "backtestingProgressTooltip": "El backtest está {{progressPercent}}% completado"
   }
 }

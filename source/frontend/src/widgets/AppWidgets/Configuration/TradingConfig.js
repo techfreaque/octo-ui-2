@@ -2,8 +2,6 @@ import {useUpdateHiddenBacktestingMetadataColumnsContext} from "../../../context
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import {tentacleConfigType, useFetchCurrentTradingTentaclesConfig, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
 import {AbstractTentaclesConfig} from "./TentaclesConfig";
-import {Tab} from "@mui/material";
-import StraegyConfigurator from "./StrategyConfigurator";
 
 export default function TradingConfig({content}) {
     const botInfo = useBotInfoContext()

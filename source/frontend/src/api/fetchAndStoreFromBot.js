@@ -67,12 +67,16 @@ export async function sendFile({
         method: 'POST',
         data: formData, // sends fields with filename mimetype etc
         processData: false, // don't let jquery process the data
-        contentType: false, // let xhr set the content type,
-        success: onSuccess,
-        error: onError,
+        contentType: false,
+        // let xhr set the content type,
+        // success: onSuccess,
+        // error: onError,
     }
     addAuthToAjaxRequest(requestData, withCredentials, token)
-    $.ajax(requestData);
+    var reqest = $.ajax(requestData);
+    reqest.then((response) => {
+        response?.success ? onSuccess ?. (response) : onError ?. (response)
+    })
 }
 export async function fetchAndGetFromBot(url, type = "get", dataToSend, success_callback, error_callback,) {
     return await sendAndInterpretBotUpdate(dataToSend, url, success_callback, error_callback, type)
