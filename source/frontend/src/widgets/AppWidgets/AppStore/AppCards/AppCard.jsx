@@ -17,7 +17,10 @@ export default function AppCard({
     const cardStyle = {
         boxShadow: `0px 0px 3px ${boxShadowColor}`,
         borderRadius: "4px",
-        transition: "all 200ms linear 0ms"
+        transition: "all 200ms linear 0ms",
+    }
+    if (!app?.is_selected) {
+        cardStyle.height = "450px"
     }
     if (isMouseHover) {
         cardStyle.transform = "translateY(-1px)"

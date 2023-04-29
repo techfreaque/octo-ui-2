@@ -46,7 +46,9 @@ export default function AntButton({
     marginRight = "0px",
 
     href,
-    children
+    children,
+    noIconMargin = false,
+    spanStyle = {}
 
 }) {
     const botColors = useBotColorsContext();
@@ -69,7 +71,7 @@ export default function AntButton({
         _style.color = botColors?.fontActive
     }
 
-    const spanStyle = {}
+    // const spanStyle = {}
     if (buttonVariant === buttonVariants.text) {
         spanStyle.display = 'flex'
     } else {
@@ -77,7 +79,7 @@ export default function AntButton({
         spanStyle.lineHeight = '5px'
     }
 
-    const iconMargin = (text || children) ? "5px" : "0px";
+    const iconMargin = (!noIconMargin && (text || children)) ? "5px" : "0px";
     return (
         <ConfigProvider theme={theme}>
             <Button icon={

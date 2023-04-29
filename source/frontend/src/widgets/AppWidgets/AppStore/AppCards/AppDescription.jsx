@@ -19,7 +19,7 @@ export function CardDescription({category, app, isMouseHover, cardActions}) {
             <div style={
                 {
                     height: lineHeightWithMargin + 5 + "px",
-                    overflow: "hidden"
+                    // overflow: "hidden"
                 }
             }>
                 {

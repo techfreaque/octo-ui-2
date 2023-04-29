@@ -1,7 +1,7 @@
 import { Tooltip } from "antd";
 import "./ratingStyle.css";
 
-export default function AppRating({app, rating, votes, style}) {
+export default function RatingComponent({app, rating, votes, style}) {
     const formatCash = n => {
         if (n < 1e3)
             return n.toString();
