@@ -24,6 +24,7 @@ class PlotTrades(abstract_analysis_evaluator.AnalysisEvaluator):
             default_chart_location="main-chart",
             default_data_source_enabled=True,
             can_select_symbols=True,
+            default_symbols=analysis_enums.SymbolsOptions.CURRENT_SYMBOL,
         )
 
     async def evaluate(
@@ -43,6 +44,7 @@ class PlotTrades(abstract_analysis_evaluator.AnalysisEvaluator):
                 run_data,
                 data_source_input_name=self.PLOT_TRADES_NAME,
                 analysis_type=analysis_type,
+                default_symbols=analysis_enums.SymbolsOptions.CURRENT_SYMBOL,
             )
             symbols = (
                 None

@@ -24,7 +24,8 @@
     "switchToThePieChartView": "Cambiar al diseño de gráfico circular"
   },
   "profile": {
-    "profileInfoButtonToolTip": "Abre la configuración del perfil."
+    "profileInfoButtonToolTip": "Abre la configuración del perfil.",
+    "profileSettingsButtonToolTip": "Abra la configuración de intercambio para esta estrategia."
   },
   "pairExchangeSettings": {
     "currentPairTooltip": "Seleccionar y configurar monedas y símbolos"

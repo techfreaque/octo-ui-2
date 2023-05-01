@@ -22,6 +22,7 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
             default_data_source_enabled=True,
             has_chart_location=False,
             can_select_symbols=True,
+            default_symbols=analysis_enums.SymbolsOptions.ALL_SYMBOLS,
         )
 
     async def evaluate(
@@ -39,6 +40,7 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
                 run_data,
                 data_source_input_name=self.TRADES_TABLE_NAME,
                 analysis_type=analysis_type,
+                default_symbols=analysis_enums.SymbolsOptions.ALL_SYMBOLS,
             )
             symbols = (
                 None
@@ -77,8 +79,12 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
                 ]
 
                 def datum_columns_callback(datum):
-                    datum["total"] = f"{datum['cost']} {datum['origin_value']['market']}"
-                    datum["volume"] = f"{datum['volume']} {datum['origin_value']['quantity_currency']}"
+                    datum[
+                        "total"
+                    ] = f"{datum['cost']} {datum['origin_value']['market']}"
+                    datum[
+                        "volume"
+                    ] = f"{datum['volume']} {datum['origin_value']['quantity_currency']}"
                     datum["fees"] = f'{datum["fees_amount"]} {datum["fees_currency"]}'
 
                 table_keywords.plot_table_data(
@@ -89,5 +95,5 @@ class TradesTable(abstract_analysis_evaluator.AnalysisEvaluator):
                     additional_columns=additional_columns,
                     additional_column_types=additional_column_types,
                     datum_columns_callback=datum_columns_callback,
-                    icon="ShoppingCartOutlined"
+                    icon="ShoppingCartOutlined",
                 )

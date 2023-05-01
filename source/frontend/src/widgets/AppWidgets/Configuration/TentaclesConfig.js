@@ -218,11 +218,12 @@ export function saveUserInputs(saveTentaclesConfig, setIsLoading, storageName = 
         }
         const tentacle = editorKey.split("##")[1];
         const errorsDesc = validateJSONEditor(editor)
-        if (errorsDesc.length === 0) {
-            tentaclesConfigByTentacle[tentacle] = editor.getValue();
-        } else {
+        if (errorsDesc) {
             save = false;
+            setIsLoading(false)
             createNotification(`Error when saving ${editorKey} configuration`, "danger", `${errorsDesc}`);
+        } else {
+            tentaclesConfigByTentacle[tentacle] = editor.getValue();
         }
     });
     if (save) { // _restoreCustomUserInputs(tentaclesConfigByTentacle);

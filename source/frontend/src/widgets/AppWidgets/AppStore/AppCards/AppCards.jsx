@@ -7,13 +7,14 @@ import {Grid} from '@mui/material';
 const tradingModeCategoryName = "Strategy Mode"
 const profileCategoryName = "Strategy"
 
-export default function AppCards({app, isLoading, setIsloading, setSelectedCategories}) {
+export default function AppCards({app, apps, isLoading, setIsloading, setSelectedCategories}) {
     const [isMouseHover, setMouseHover] = useState(false);
     const category = app?.categories?.length > 1 ? 'Package' : app?.categories?.[0]
     if (category === tradingModeCategoryName) {
         return (
             <SelectedCardContainer app={app}>
                 <TradingModeCard app={app}
+                    apps={apps}
                     setMouseHover={setMouseHover}
                     category={category}
                     setSelectedCategories={setSelectedCategories}

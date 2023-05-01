@@ -41,7 +41,6 @@ import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivate
 import SymbolsInfoTable from "../AppWidgets/Tables/SymbolsInfo";
 import DataTable from "../AppWidgets/Tables/DataTable";
 import LogoutButton from "../AppWidgets/Buttons/LogoutButton";
-import ProfileModal from "../AppWidgets/Modals/ProfileModal/ProfileModal";
 import Sidebar, {SidebarMenuItem} from "../LayoutWidgets/Sidebar/Sidebar";
 import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
 import Logo from "../AppWidgets/other/Logo";
@@ -103,7 +102,6 @@ export const registeredComponents = {
     SymbolsInfoTable,
     DataTable,
     LogoutButton,
-    ProfileModal,
     Sidebar,
     SidebarMenuItem,
     NotificationCenter,

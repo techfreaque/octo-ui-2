@@ -24,7 +24,8 @@
     "switchToThePieChartView": "切换到饼图布局"
   },
   "profile": {
-    "profileInfoButtonToolTip": "打开配置文件设置"
+    "profileInfoButtonToolTip": "打开配置文件设置",
+    "profileSettingsButtonToolTip": "打开此策略的交换设置。"
   },
   "pairExchangeSettings": {
     "currentPairTooltip": "选择和设置货币和符号"

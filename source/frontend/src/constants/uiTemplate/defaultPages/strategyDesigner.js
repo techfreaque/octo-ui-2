@@ -193,7 +193,18 @@ export const defaultStrategyDesignerPageLayout = {
                             "dontScroll": false,
                             "faIcon": "",
                             "title": "Strategy Manager",
-                            "toolBarContent": []
+                            "toolBarContent": [
+                                {
+                                    "antIcon": "DollarOutlined",
+                                    "command": "execute",
+                                    "component": "SendActionCommandToTradingMode",
+                                    "faIcon": "noIcon",
+                                    "title": "Execute trading mode"
+                                },
+                                {
+                                    "component": "ToggleActivateRealTimeStrategy"
+                                }
+                            ]
                         },
                         {
                             "antIcon": "ExperimentOutlined",

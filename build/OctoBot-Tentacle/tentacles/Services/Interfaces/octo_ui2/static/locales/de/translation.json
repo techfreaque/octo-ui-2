@@ -24,7 +24,8 @@
     "switchToThePieChartView": "Wechseln Sie zum Kreisdiagramm-Layout"
   },
   "profile": {
-    "profileInfoButtonToolTip": "Öffnen die Profileinstellungen"
+    "profileInfoButtonToolTip": "Öffnen die Profileinstellungen",
+    "profileSettingsButtonToolTip": "Öffnen Sie die Exchange-Einstellungen für diese Strategie."
   },
   "pairExchangeSettings": {
     "currentPairTooltip": "Währungen und Symbole auswählen und einrichten"

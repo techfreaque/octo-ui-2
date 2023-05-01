@@ -1,5 +1,5 @@
-import { Tooltip, Rate } from "antd";
-import "./ratingStyle.css";
+import { Rate } from "antd";
+// import "./ratingStyle.css";
 import { useRateAppStore } from "../../../../context/data/AppStoreDataProvider";
 import { useState } from "react";
 
@@ -56,43 +56,43 @@ export default function AppRating({app, rating, votes, style}) {
 }
 
 
-function Rating({ rating, starId, onRatingChange }) {
-    const starStyle = {
-        cursor: "pointer"
-    }
-    if (rating >= starId+1) {
-        return (
-            <FullStar onRatingChange={onRatingChange} starStyle={starStyle} />)
-    } else if (rating >= starId + .5) {
-        return (
-            <HalfStar onRatingChange={onRatingChange} starStyle={starStyle} />)
-    } else {
-        return (
-            <EmptyStar onRatingChange={onRatingChange} starStyle={starStyle} />)
+// function Rating({ rating, starId, onRatingChange }) {
+//     const starStyle = {
+//         cursor: "pointer"
+//     }
+//     if (rating >= starId+1) {
+//         return (
+//             <FullStar onRatingChange={onRatingChange} starStyle={starStyle} />)
+//     } else if (rating >= starId + .5) {
+//         return (
+//             <HalfStar onRatingChange={onRatingChange} starStyle={starStyle} />)
+//     } else {
+//         return (
+//             <EmptyStar onRatingChange={onRatingChange} starStyle={starStyle} />)
 
-    }
-}
-function FullStar({onRatingChange, starStyle}) {
-    return (
-        <svg onClick={onRatingChange} style={starStyle} width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="fullStar">
-            <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25"></path>
-        </svg>
-    )
-}
+//     }
+// }
+// function FullStar({onRatingChange, starStyle}) {
+//     return (
+//         <svg onClick={onRatingChange} style={starStyle} width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="fullStar">
+//             <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25"></path>
+//         </svg>
+//     )
+// }
 
-function HalfStar({onRatingChange, starStyle}) {
-    return (
-        <svg onClick={onRatingChange} style={starStyle} width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="halfStar">
-            <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25"></path>
-            <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 0 0"></path>
-        </svg>
-    )
-}
+// function HalfStar({onRatingChange, starStyle}) {
+//     return (
+//         <svg onClick={onRatingChange} style={starStyle} width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="halfStar">
+//             <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25"></path>
+//             <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 0 0"></path>
+//         </svg>
+//     )
+// }
 
-function EmptyStar({onRatingChange, starStyle}) {
-    return (
-        <svg onClick={onRatingChange} style={starStyle} width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="emptyStar">
-            <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25"></path>
-        </svg>
-    )
-}
+// function EmptyStar({onRatingChange, starStyle}) {
+//     return (
+//         <svg onClick={onRatingChange} style={starStyle} width="14" height="14" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" className="emptyStar">
+//             <path d="M 9.5 14.25 l -5.584 2.936 l 1.066 -6.218 L 0.465 6.564 l 6.243 -0.907 L 9.5 0 l 2.792 5.657 l 6.243 0.907 l -4.517 4.404 l 1.066 6.218 L 9.5 14.25"></path>
+//         </svg>
+//     )
+// }

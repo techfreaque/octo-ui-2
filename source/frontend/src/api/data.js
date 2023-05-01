@@ -232,13 +232,11 @@ export async function rateApp(storeDomain, ratingInfo, appStoreUser, onSuccess) 
 export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStoreUser) {
     function onFail(updated_data, update_url, result, msg, status) {
         createNotification("Failed to log out from App Store", "danger")
-        saveAppStoreData(msg.data);
+        saveAppStoreData({});
     }
     function onSucces(updated_data, update_url, result, msg, status, request) {
-        if (msg.success) { // const t = request.getResponseHeader('Set-Cookie')
-            document.cookie = undefined;
-            // TODO uncomment
-            // saveAppStoreData({});
+        if (msg.success) { 
+            saveAppStoreData({})
             createNotification("Successfully logged out from App Store")
         } else {
             onFail(updated_data, update_url, result, msg, status)

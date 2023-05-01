@@ -7,7 +7,8 @@ export default function AppIconButton({
     faIconComponent,
     antIconComponent,
     onClick,
-    disabled
+    disabled,
+    href
 }) {
     const splitText = (text) => {
         const words = text.split(" ");
@@ -32,22 +33,24 @@ export default function AppIconButton({
     const noIconMargin = showBlockButton ? false : true
     const size = showBlockButton ? undefined : 'small'
     const buttonTitle_ = showBlockButton ? buttonTitle : splitText(buttonTitle);
-    const buttonStyle = showBlockButton ? undefined : {
+    const buttonStyle = showBlockButton ? {} : {
         margin: "3px",
         display: 'block',
         height: 'fit-content'
     }
-    const spanStyle = showBlockButton ? undefined : {
+    const spanStyle = showBlockButton ? {display: "block"} : {
         whiteSpace: 'pre-line',
         wordWrap: 'break-word',
         fontSize: '12px',
         lineHeight: '14px',
         marginTop: '5px'
     }
-    return (<AntButton style={buttonStyle}
+    return (<AntButton 
         noIconMargin={noIconMargin}
         size={size}
+        href={href}
         disabled={disabled}
+        style={{    ...buttonStyle,  textDecoration:"none"}}
         spanStyle={spanStyle}
         faIconComponent={faIconComponent}
         antIconComponent={antIconComponent}

@@ -3,12 +3,11 @@ import {useBotDomainContext} from "../../../../context/config/BotDomainProvider"
 import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
 import AppActions from "./AppActions/AppActions";
 import {backendRoutes} from "../../../../constants/backendConstants";
-import {useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
+import {useInstallProfile, useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
 import {useState} from "react";
 import AppCard from "./AppCard";
-import ProfileModal from "../../Modals/ProfileModal/ProfileModal";
 import {strategyModeName} from "../AppStore";
-import {getFile} from "../../../../api/fetchAndStoreFromBot";
+import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
 
 export default function StrategyCard({
     app,
@@ -17,9 +16,10 @@ export default function StrategyCard({
     isMouseHover,
     isLoading,
     setIsloading,
-    setSelectedCategories
+    setSelectedCategories,
 }) {
     const [uploadInfo, setUploadInfo] = useState({})
+    const [downloadInfo, setDownloadInfo] = useState({})
     const botDomain = useBotDomainContext()
     const botInfo = useBotInfoContext()
     function onSuccess() {
@@ -32,6 +32,10 @@ export default function StrategyCard({
         await selectProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
         setOpen(false)
     }
+    const installProfile= useInstallProfile()
+    async function handleDownloadProfile(setOpen) {
+        installProfile({...downloadInfo, ...app}, setIsloading, setOpen)
+    }
     async function handleDeleteProfile(setOpen) {
         setIsloading(true)
         await deleteProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
@@ -42,28 +46,19 @@ export default function StrategyCard({
         await duplicateProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
         setOpen(false)
     }
+    const profileDownloadUrl = botDomain + backendRoutes.exportProfile + app.package_id
     const uploadToAppStore = useUploadToAppStore()
-    async function handleProfileUpload(setOpen) {
-        const profileDownloadUrl = botDomain + backendRoutes.exportProfile + app.package_id
-        function uploadProfile(profileZip) {
-            uploadToAppStore({
-                ...app,
-                ...uploadInfo
-            }, profileZip, setIsloading)
-            setOpen(false)
-        }
-        getFile(profileDownloadUrl, uploadProfile)
-    }
 
-    const additionalProfileInfo = botInfo ?. profiles ?. [app.package_id] || {}
 
-    const currentAvatar = additionalProfileInfo ?. profile ?. avatar
+    const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
+
+    const currentAvatar = additionalProfileInfo?.profile?.avatar
     const avatarUrl = currentAvatar === "default_profile.png" ? `${
         botDomain + backendRoutes.staticImg
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        additionalProfileInfo ?. profile ?. name ?. replace(/ /g, "_")
+        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
     }/${currentAvatar}`
 
     return (
@@ -80,11 +75,19 @@ export default function StrategyCard({
                         onConfigure={
                             () => setSelectedCategories(strategyModeName)
                         }
+                        downloadInfo={downloadInfo}
                         handleSelect={handleSelectProfile}
                         handleUninstall={handleDeleteProfile}
-                        handleUpload={handleProfileUpload}
+                        handleUpload={
+                            (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
+                        }
                         setUploadInfo={setUploadInfo}
+                        setDownloadInfo={setDownloadInfo}
                         uploadInfo={uploadInfo}
+                        exportUrl={
+                            backendRoutes.exportProfile + app.package_id
+                        }
+                        handleDownload={handleDownloadProfile}
                         infoContent={
                             (
                                 <div> {
@@ -95,7 +98,7 @@ export default function StrategyCard({
                         handleDuplication={handleProfileDuplication}
                         otherActions={
                             (
-                                <ProfileModal profile={additionalProfileInfo}
+                                <ProfileModalButton profile={additionalProfileInfo}
                                     isCurrentProfile={
                                         app.is_selected
                                     }/>

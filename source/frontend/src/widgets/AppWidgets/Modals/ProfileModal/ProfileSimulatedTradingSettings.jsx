@@ -6,11 +6,7 @@ import { useState } from "react"
 
 export function ProfileSimulatedSettings({newProfileSettings, onChange, setNewProfileSettings, isCurrentProfile}) {
     return (
-        <>
-            <Grid item
-                xs={12}>
-                <Typography.Title level={3}>Simulated Trading Settings</Typography.Title>
-            </Grid>
+        <Grid container spacing={2} style={{marginTop: "15px"}} >
             <Grid item
                 xs={12}
                 sm={6}>
@@ -54,7 +50,8 @@ export function ProfileSimulatedSettings({newProfileSettings, onChange, setNewPr
             </Grid>
             <ProfilePortfolioSettings newProfileSettings={newProfileSettings} isCurrentProfile={isCurrentProfile}
                 onChange={onChange}
-                setNewProfileSettings={setNewProfileSettings}/></>
+                setNewProfileSettings={setNewProfileSettings} />
+        </Grid>
     )
 }
 const addKey = "add"

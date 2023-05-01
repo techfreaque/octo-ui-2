@@ -21,11 +21,13 @@ export async function restartBot(botDomain, updateIsOnline, notification) {
         if (notification) 
             createNotification("The bot is restarting...", "success");
         
+
     }
     const failure = (updated_data, update_url, result, status, error) => {
         if (notification) 
             createNotification("Failed to restart bot", "danger",);
         
+
     }
     sendAndInterpretBotUpdate({}, botDomain + backendRoutes.restartBot, success, failure, "GET")
 }
@@ -147,16 +149,6 @@ export async function installAppPackage(appUrl, appName, botDomain, token) {
         requestData.token = token
     }
     sendAndInterpretBotUpdate(requestData, botDomain + backendRoutes.installApp, success, fail)
-}
-
-export async function installProfile(profileUrl, profileTitle, profileName, botDomain) {
-    const success = (updated_data, update_url, result, msg, status) => {
-        createNotification(`Successfully installed ${profileTitle}`)
-    }
-    const fail = (updated_data, update_url, result, msg, status) => {
-        createNotification(`Failed to install ${profileTitle}`, "danger")
-    }
-    sendAndInterpretBotUpdate({url: profileUrl, name: profileName}, botDomain + backendRoutes.importProfileFromUrl, success, fail)
 }
 
 export async function deleteTrades(botDomain, exchange_id) {
@@ -299,7 +291,7 @@ export async function selectProfile(botDomain, profileId, profileName, onSuccess
         onFail ?. ()
         createNotification(`Failed to select ${profileName} profile`, "danger")
     }
-    await sendAndInterpretBotUpdate({}, botDomain + backendRoutes.selectProfile + profileId, success, fail, "GET")
+    await sendAndInterpretBotUpdate({}, botDomain + backendRoutes.selectProfile + profileId, onSuccess || success, onFail || fail, "GET")
 }
 
 export async function getAllOrders(botDomain, setIsLoading, setOrders) {
@@ -386,7 +378,7 @@ export async function realTradingSwitch(botDomain, isRealTrading) {
     }, botDomain + backendRoutes.config, success, fail)
 }
 
-export async function updateConfig(botDomain, newConfig, profileName, onFail) {
+export async function updateConfig(botDomain, newConfig, profileName, onFail, onSuccess) {
     const success = (updated_data, update_url, result, msg, status) => {
         createNotification(`Successfully updated ${profileName} config`, "success", newConfig.restart_after_save && "OctoBot will restart now")
     }
@@ -394,7 +386,7 @@ export async function updateConfig(botDomain, newConfig, profileName, onFail) {
         onFail ?. ()
         createNotification(`Failed to update ${profileName} config`, "danger")
     }
-    await sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.config, success, fail)
+    await sendAndInterpretBotUpdate(newConfig, botDomain + backendRoutes.config, onSuccess || success, onFail || fail)
 }
 
 export async function resetTentaclesConfig(tentacles, botDomain, setIsResetting, fetchCurrentTentaclesConfig) {

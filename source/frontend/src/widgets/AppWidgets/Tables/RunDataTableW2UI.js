@@ -27,36 +27,41 @@ export function BacktestingRunDataTable() {
         if (currentOptimizerCampaignName) 
             fetchBacktestingRunData();
         
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botDomain, currentOptimizerCampaignName]);
-    return useMemo(() => (<RunDataTableW2UI
-            tableTitle="Select backtestings"
-            tableId="backtesting-runs"
+    return useMemo(() => (
+        <RunDataTableW2UI tableTitle="Select backtestings" tableId="backtesting-runs"
             runData={runData}
             currentCampaignName={currentOptimizerCampaignName}
             reloadData={fetchBacktestingRunData}
             deleteRuns={deleteBacktestingRunData}
             hiddenMetadataColumns={hiddenBacktestingMetadataColumns}
             restoreSettings={restoreSettings}
-            noData={<NoBacktestingData fetchBacktestingRunData={fetchBacktestingRunData}/>}
-        />
+            noData={
+                (
+                    <NoBacktestingData fetchBacktestingRunData={fetchBacktestingRunData}/>
+                )
+            }/>
     // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [runData, currentOptimizerCampaignName])
 }
 
 function NoBacktestingData({fetchBacktestingRunData}) {
-    return (<>
-        <h4>
-            No backtests finished yet. Once a backtest is finished, you can select it here to analyze the results.
-        </h4>
-        <h4>
-            <Button onClick={fetchBacktestingRunData}>
-                <FontAwesomeIcon icon={faRedo}
-                    style={
-                        {marginRight: "5px"}
-                    }/>
-                Reload Backtestings
-            </Button>
-        </h4>
-    </>)
+    return (
+        <>
+            <h4>
+                No backtests finished yet. Once a backtest is finished, you can select it here to analyze the results.
+            </h4>
+            <h4>
+                <Button onClick={fetchBacktestingRunData}>
+                    <FontAwesomeIcon icon={faRedo}
+                        style={
+                            {marginRight: "5px"}
+                        }/>
+                    Reload Backtestings
+                </Button>
+            </h4>
+        </>
+    )
 }

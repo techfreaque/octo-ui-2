@@ -6,7 +6,7 @@ export default function AppList({selectedCategories, appStoreData, setSelectedCa
     const [isLoading, setIsloading] = useState(false)
 
     const thisCategoryAppStoreData = appStoreData?.[selectedCategories] && Object.values(appStoreData[selectedCategories])
-    const preSortedAppStoreData = thisCategoryAppStoreData?.sort((a, b) => ((b?.is_selected && 1) - (a?.is_selected && 1)))
+    const preSortedAppStoreData = thisCategoryAppStoreData?.sort((a, b) => ((b?.is_selected ? 1 : 0) - (a?.is_selected ? 1:0)))
     return preSortedAppStoreData && (
         <Grid container
             spacing={2}>
@@ -18,6 +18,7 @@ export default function AppList({selectedCategories, appStoreData, setSelectedCa
                         }
                         setSelectedCategories={setSelectedCategories}
                         app={app}
+                        apps={preSortedAppStoreData}
                         isLoading={isLoading}
                         setIsloading={setIsloading}/>
                 )

@@ -2,7 +2,7 @@ import {DeleteOutlined} from "@ant-design/icons";
 import {ConfirmAction} from "./AppActions";
 
 export default function UninstallApp({app, handleUninstall}) {
-    return app.is_installed && (<ConfirmAction antIconComponent={DeleteOutlined}
+    return (app.is_installed && !app.is_selected) && (<ConfirmAction antIconComponent={DeleteOutlined}
         onConfirm={handleUninstall}
         isSelected={app.is_selected}
         confirmTitle={

@@ -55,6 +55,7 @@ export const backendRoutes = {
     deleteProfile: "/profiles_management/remove",
     importProfile: "/profiles_management/import",
     importProfileFromUrl: `/${basePath}/profiles/import`,
+    exportApp: `/${basePath}/export_tentacle/`,
     exportProfile: "/profiles_management/export?profile_id=",
     config: "/config",
     restartBot: "/commands/restart",

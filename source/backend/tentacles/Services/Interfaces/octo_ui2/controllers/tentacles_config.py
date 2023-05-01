@@ -1,11 +1,19 @@
 import flask
+from flask import Response
 import re
-import tentacles.Services.Interfaces.octo_ui2.models.config as config
-import tentacles.Services.Interfaces.web_interface.login as login
-import tentacles.Services.Interfaces.octo_ui2.utils.basic_utils as basic_utils
-import tentacles.Services.Interfaces.web_interface.util as util
+import os
+import shutil
 
+import octobot.constants as octobot_constants
+import octobot_tentacles_manager.api as tentacles_manager_api
+import octobot_tentacles_manager.constants as constants
+import tentacles.Services.Interfaces.web_interface.login as login
+import tentacles.Services.Interfaces.web_interface.util as util
+import tentacles.Services.Interfaces.web_interface.models.tentacles as tentacles_models
 import tentacles.Services.Interfaces.web_interface.models as models
+
+import tentacles.Services.Interfaces.octo_ui2.models.config as config
+import tentacles.Services.Interfaces.octo_ui2.utils.basic_utils as basic_utils
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import SHARE_YOUR_OCOBOT
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
@@ -118,7 +126,72 @@ def register_tentacles_config_routes(plugin):
             profile_id = flask.request.args.get("profile_id")
             models.convert_to_live_profile(profile_id)
             models.select_profile(profile_id)
+            models.schedule_delayed_command(models.restart_bot, delay=0.1)
             return {
                 "success": True,
                 "message": "Profile successfully selected.",
             }
+
+    route = "/export_tentacle/<package_name>"
+    methods = ["GET"]
+    if cross_origin := import_cross_origin_if_enabled():
+
+        @plugin.blueprint.route(route, methods=methods)
+        @cross_origin(origins="*")
+        @login.login_required_when_activated
+        def export_tentacle(package_name):
+            return _export_tentacle(package_name)
+
+    else:
+
+        @plugin.blueprint.route(route, methods=methods)
+        @login.login_required_when_activated
+        def export_tentacle(package_name):
+            return _export_tentacle(package_name)
+
+    def _export_tentacle(package_name):
+        root_dir = os.path.dirname(os.path.abspath(octobot_constants.OCTOBOT_FOLDER))
+        export_path = os.path.join(root_dir, constants.DEFAULT_EXPORT_DIR)
+        # clear first
+        try:
+            shutil.rmtree(export_path)
+        except FileNotFoundError:
+            pass
+        success = tentacles_models.call_tentacle_manager(
+            tentacles_manager_api.create_tentacles_package,
+            package_name=package_name,
+            output_dir=constants.DEFAULT_EXPORT_DIR,
+            tentacles_folder=constants.TENTACLES_PATH,
+            exported_tentacles_package=package_name,
+            in_zip=True,
+            with_dev_mode=False,
+            cythonize=False,
+            use_package_as_file_name=True,
+        )
+        if success:
+            zip_name: str = f"{package_name}.zip"
+            with open(os.path.join(export_path, zip_name), "rb") as f:
+                data = f.readlines()
+            shutil.rmtree(export_path)
+            return Response(
+                data,
+                headers={
+                    "Content-Type": "application/zip",
+                    "Content-Disposition": "attachment; filename=%s;" % zip_name,
+                },
+            )
+        raise RuntimeError("Failed to export tentacle package")
+
+
+# create_tentacles_package
+# package_name: str,
+#                                    tentacles_folder: str = constants.TENTACLES_PATH,
+#                                    output_dir: str = constants.DEFAULT_EXPORT_DIR,
+#                                    exported_tentacles_package: str = None,
+#                                    uploader_type: str = enums.UploaderTypes.S3.value,
+#                                    in_zip: bool = True,
+#                                    with_dev_mode: bool = False,
+#                                    use_package_as_file_name: bool = False,
+#                                    upload_details: list = None,
+#                                    metadata_file: str = None,
+#                                    cythonize: bool = False

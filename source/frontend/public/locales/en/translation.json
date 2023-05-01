@@ -24,7 +24,8 @@
     "switchToThePieChartView": "Switch to the pie chart layout"
   },
   "profile": {
-    "profileInfoButtonToolTip": "Open the profile settings"
+    "profileInfoButtonToolTip": "Open the profile settings",
+    "profileSettingsButtonToolTip": "Open the exchange settings for this strategy."
   },
   "pairExchangeSettings": {
     "currentPairTooltip": "Select and setup currencies and symbols"

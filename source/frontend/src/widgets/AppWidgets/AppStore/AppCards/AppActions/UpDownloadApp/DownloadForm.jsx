@@ -1,83 +1,38 @@
+import {useEffect} from "react"
 
-// const apiFields = {
-//     versionType: "version_type",
-//     versionTag: "version_tag",
-//     price: "price"
-// }
-
-export default function AppDownloadForm({setUploadInfo, uploadInfo, app}) {
-    // const versionTypeOptions = Object.keys(appVersionTypes).map(versionType => {
-    //     return {label: appVersionTypes[versionType].title, value: appVersionTypes[versionType].key}
-    // })
-    // const versionTagOptions = Object.keys(appVersionTags).map(versionTag => {
-    //     return {label: appVersionTags[versionTag].title, value: appVersionTags[versionTag].key}
-    // })
-    // function handleInputChange(key, value) {
-    //     setUploadInfo(prevInfo => ({
-    //         ...prevInfo,
-    //         [key]: value
-    //     }))
-    // }
-    // useEffect(() => {
-    //     setUploadInfo({
-    //         [apiFields.price]: 5,
-    //         [apiFields.versionType]: versionTypeOptions[0].value,
-    //         [apiFields.versionTag]: versionTagOptions[0].value,
-    //     })
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [])
-
+export default function AppDownloadForm({setDownloadInfo, downloadInfo, app}) {
+    useEffect(() => {
+        setDownloadInfo({should_select_profile: false, major_version: app.versions[0].major_version, minor_version: app.versions[0].minor_version, bug_fix_version: app.versions[0].bug_fix_version})
+    }, [])
     return (<div style={
         {marginRight: "20px"}
-    }>
-        {/* <UserInputLabel children
-            title={
-                `Select the realease type for your ${
-                    app.categories[0]
-                }`
-        }>
-            <Select defaultValue={
-                    versionTypeOptions[0].value
-                }
-                onChange={
-                    (value) => handleInputChange(apiFields.versionType, value)
-                }
-                style={
-                    {width: "100%"}
-                }
-                options={versionTypeOptions}/>
-        </UserInputLabel>
-        <UserInputLabel children
-            title={
-                `How stable is your ${
-                    app.categories[0]
-                }`
-        }>
-            <Select defaultValue={
-                    versionTagOptions[0].value
-                }
-                onChange={
-                    (value) => handleInputChange(apiFields.versionTag, value)
-                }
-                style={
-                    {width: "100%"}
-                }
-                options={versionTagOptions}/>
-        </UserInputLabel>
-        <UserInputLabel children
-            title={
-                `Define a monthly price for your ${
-                    app.categories[0]
-                }`
-        }>
-            <Input onChange={
-                    (event) => handleInputChange(apiFields.price, event?.target?.value)
-                }
-                value={
-                    uploadInfo?.price || app.price
-                }
-                addonAfter={<DollarCircleOutlined/>}
-                defaultValue="5"/>
-        </UserInputLabel> */}
-    </div>)
+    }> {
+        app?.versions?.map((version, index) => (<Version key={index} version={version}
+            setDownloadInfo={setDownloadInfo}
+            downloadInfo={downloadInfo}/>))
+    } </div>)
+}
+
+function Version({version, setDownloadInfo, downloadInfo}) {
+    const isSelected = ((version.major_version === downloadInfo.major_version) && (version.minor_version === downloadInfo.minor_version) && (version.bug_fix_version === downloadInfo.bug_fix_version))
+    function handdleVersionSelect() {
+        setDownloadInfo({should_select_profile: false, major_version: version.major_version, minor_version: version.minor_version, bug_fix_version: version.bug_fix_version})
+    };
+    const title = `${
+        `${
+            version.major_version
+        }.${
+            version.minor_version
+        }.${
+            version.bug_fix_version
+        }`
+    } ${
+        version.version_tag
+    }`
+    return (<div style={
+            isSelected ? {
+                backgroundColor: "blue"
+            } : {}
+        }
+        onClick={handdleVersionSelect}> {title} </div>)
 }

@@ -19,7 +19,7 @@ def init_data_source_settings(
     has_chart_location: bool = True,
     default_chart_location: str = "sub-chart",
     can_select_symbols: bool = False,
-    default_symbols: str = analysis_enums.SymbolsOptions.CURRENT_SYMBOL,
+    default_symbols: str = analysis_enums.SymbolsOptions.ALL_SYMBOLS,
 ):
     this_parent_input_name = parent_input_name + data_source_input_name
     analysis_mode_plugin.CLASS_UI.user_input(
@@ -187,9 +187,9 @@ def get_enabled_symbols(
     run_data: base_data_provider.RunAnalysisBaseDataGenerator,
     data_source_input_name: str,
     analysis_type: str,
-    def_val: str = analysis_enums.SymbolsOptions.CURRENT_SYMBOL,
+    default_symbols: str = analysis_enums.SymbolsOptions.ALL_SYMBOLS,
 ) -> str:
     return get_evaluator_settings(run_data, data_source_input_name, analysis_type).get(
         analysis_type + data_source_input_name + analysis_enums.ENABLE_SYMBOLS_SUFFIX,
-        def_val,
+        default_symbols,
     )
