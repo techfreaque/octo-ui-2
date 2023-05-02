@@ -41,9 +41,9 @@ export default function PlotlyDualCharts({
     }, [charts]);
 
 
-    return useMemo(() => (
+    return useMemo(() =>  (
         <>
-            <Crosshair/>
+           {!window.matchMedia("(pointer: coarse)").matches && (<Crosshair/>)}
             {
                 subChartExist?(<SplitResizableContent setPanelPercent = { setSplitChartsPercent }
             panelPercent={splitChartsPercent}

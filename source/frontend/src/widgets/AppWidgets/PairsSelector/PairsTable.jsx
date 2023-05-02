@@ -14,6 +14,7 @@ import {useUpdateVisiblePairsContext, useVisiblePairsContext} from '../../../con
 import {useVisibleExchangesContext} from '../../../context/config/VisibleExchangesProvider';
 import "./pairsTable.css"
 import AntTable from '../../../components/Tables/AntTable';
+import EnablerSwitch from '../../../components/UserInputs/EnablerSwich';
 
 export default function PairsTable() {
     const isOnline = useIsBotOnlineContext()
@@ -156,28 +157,13 @@ function SymbolEnabler({
     handleSettingChange
 }) {
     const disabledAfterRestart = !unsavedCurrencyList.includes(symbol) && isEnabled
-    const switchTheme = (availableAfterRestart || disabledAfterRestart) ? {
-        "token": {
-            "colorPrimary": "#ff1733",
-            "colorBgBase": "#ff1733",
-            "colorTextBase": "#ff1733"
-        }
-    } : {}
     return (
-        <Tooltip title={
-            availableAfterRestart ? `${symbol} will be enabled after save and restart` : (disabledAfterRestart && `${symbol} will be disabled after save and restart`)
-        }>
-            <div>
-                <ConfigProvider theme={switchTheme}>
-                    <Switch checked={
-                            availableAfterRestart || (! disabledAfterRestart && isEnabled)
-                        }
-                        onChange={
-                            (event) => handleSettingChange(event, exchange, symbol)
-                    }></Switch>
-                </ConfigProvider>
-            </div>
-        </Tooltip>
+       <EnablerSwitch
+        availableAfterRestart={availableAfterRestart}
+        title={symbol}
+        isEnabled={isEnabled}
+        disabledAfterRestart={disabledAfterRestart}
+        onChange={(event) => handleSettingChange(event, exchange, symbol)} />
     )
 }
 

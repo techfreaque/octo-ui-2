@@ -1,6 +1,6 @@
 import React, {useState, useContext, createContext, useEffect} from "react";
 import {useCallback} from "react";
-import {installAppPackage, installProfile, selectProfile} from "../../api/actions";
+import {installAppPackage, selectProfile} from "../../api/actions";
 import {
     fetchAppStoreData,
     fetchPackagesData,
@@ -179,11 +179,11 @@ export const useInstallProfile = () => {
         }
         sendAndInterpretBotUpdate({
             url: `${appStoreDomain}/download_app/${
-                appStoreUser.downloadToken
+                appStoreUser?.downloadToken
             }/${downloadInfo.major_version}/${downloadInfo.minor_version}/${downloadInfo.bug_fix_version}/${downloadInfo.package_id}.zip`,
             name: downloadInfo.title
         }, botDomain + backendRoutes.importProfileFromUrl, onSuccessInstall, onFailInstall)
-    }, [appStoreUser.downloadToken, botDomain, appStoreDomain]);
+    }, [appStoreUser?.downloadToken, botDomain, appStoreDomain]);
     return logic;
 }
 function useUpdateLoginToken() {
@@ -202,9 +202,9 @@ export const AppStoreDataProvider = ({children}) => {
     const fetchAppStoreData = useFetchAppStoreData()
     const botInfo = useBotInfoContext()
     useEffect(() => {
-        const items = JSON.parse(localStorage.getItem('storeSession'));
-        if (items) {
-            setAppStoreUserData(items);
+        const cookie = localStorage.getItem('storeSession')
+        if (cookie && cookie !== 'undefined') {
+            setAppStoreUserData(JSON.parse(cookie));
         }
     }, []);
     useEffect(() => {

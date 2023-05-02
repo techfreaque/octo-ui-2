@@ -32,7 +32,7 @@ const iconStyles = {
 export function AntIconByReactFunc({
     AntReactIcon,
     size = sizes.medium,
-    spin = false,
+    spin,
     marginRight= "0px"
 }) {
     return AntReactIcon && createElement(AntReactIcon, {

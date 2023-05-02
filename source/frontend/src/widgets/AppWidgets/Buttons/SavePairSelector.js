@@ -2,21 +2,24 @@ import {useMemo} from "react"
 import AntButton, {buttonTypes, buttonVariants} from "../../../components/Buttons/AntButton"
 import {SaveOutlined} from "@ant-design/icons"
 import {Trans} from "react-i18next"
-import {useCurrenciesLists, useHandleProfileUpdate, usePairSelectorMenuOpenContext, useUpdatePairSelectorMenuOpenContext} from "../../../context/data/BotExchangeInfoProvider"
+import {useCurrenciesLists, useExchangeConfigUpdateContext, useHandleProfileUpdate, usePairSelectorMenuOpenContext, useUpdatePairSelectorMenuOpenContext} from "../../../context/data/BotExchangeInfoProvider"
 
 export default function SavePairSelector() {
     const setPairSelectorMenuOpen = useUpdatePairSelectorMenuOpenContext()
     const pairSelectorMenuOpen = usePairSelectorMenuOpenContext()
     const {currentCurrencyList, unsavedCurrencyList} = useCurrenciesLists()
     const handleProfileUpdate = useHandleProfileUpdate()
+    const exchangeConfigUpdate = useExchangeConfigUpdateContext()
+    const exchangeConfigUpdateHasChanged = Boolean(exchangeConfigUpdate.global_config && Object.keys(exchangeConfigUpdate.global_config).length)
+    const hasUnsavedChanges = JSON.stringify(unsavedCurrencyList) !== JSON.stringify(currentCurrencyList)
+
     return useMemo(() => {
-        const hasUnsavedChanges = JSON.stringify(unsavedCurrencyList) !== JSON.stringify(currentCurrencyList)
         function handleSave(restartAfterSave = true) {
             handleProfileUpdate(restartAfterSave)
             setPairSelectorMenuOpen({open: false, wantsClose: false})
         }
         if (pairSelectorMenuOpen?.open) {
-            return hasUnsavedChanges && (
+            return (exchangeConfigUpdateHasChanged|| hasUnsavedChanges) && (
                 <span style={
                     {
                         margin: "auto",
@@ -41,5 +44,5 @@ export default function SavePairSelector() {
                 <></>
             )       
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [unsavedCurrencyList, currentCurrencyList, pairSelectorMenuOpen?.open, handleProfileUpdate])
+    }, [pairSelectorMenuOpen?.open, exchangeConfigUpdateHasChanged, hasUnsavedChanges])
 }

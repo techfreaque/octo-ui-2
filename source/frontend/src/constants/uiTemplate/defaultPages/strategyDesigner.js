@@ -1,4 +1,4 @@
-export const defaultStrategyDesignerPageLayout = {
+export const defaultStrategyDesignerPageLayout =  {
     "layout": [
         {
             "component": "DefaultLayout",
@@ -23,42 +23,13 @@ export const defaultStrategyDesignerPageLayout = {
                             "component": "ButtonWithModal",
                             "content": [
                                 {
-                                    "component": "ScrollableTabs",
-                                    "rightContent": [],
-                                    "tabs": [
-                                        {
-                                            "antIcon": "noIcon",
-                                            "component": "Tab",
-                                            "content": [
-                                                {
-                                                    "component": "PageBuilder"
-                                                }
-                                            ],
-                                            "dontScroll": false,
-                                            "faIcon": "wand-magic-sparkles",
-                                            "title": "UI Editor",
-                                            "toolBarContent": []
-                                        },
-                                        {
-                                            "antIcon": "noIcon",
-                                            "component": "Tab",
-                                            "content": [
-                                                {
-                                                    "component": "ResetConfigs"
-                                                }
-                                            ],
-                                            "dontScroll": false,
-                                            "faIcon": "",
-                                            "title": "Reset Settings",
-                                            "toolBarContent": []
-                                        }
-                                    ]
+                                    "component": "PageBuilder"
                                 }
                             ],
                             "displayAsAvatar": false,
                             "faIcon": "wand-magic-sparkles",
                             "iconOnly": true,
-                            "title": "Bot Settings"
+                            "title": "UI Editor"
                         },
                         {
                             "antIcon": "NotificationOutlined",
@@ -157,7 +128,6 @@ export const defaultStrategyDesignerPageLayout = {
                             ],
                             "displayAsAvatar": true,
                             "faIcon": "",
-                            "width": "500",
                             "iconOnly": true,
                             "title": "Account Settings"
                         }
@@ -230,7 +200,8 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": false,
                                             "faIcon": "noIcon",
                                             "label": "Backtesting Settings",
-                                            "noPadding": false
+                                            "noPadding": false,
+                                            "width": "1000"
                                         },
                                         {
                                             "antIcon": "UnorderedListOutlined",
@@ -244,7 +215,8 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": true,
                                             "faIcon": "noIcon",
                                             "label": "Backtesting Runs",
-                                            "noPadding": true
+                                            "noPadding": true,
+                                            "width": "1000"
                                         }
                                     ]
                                 }
@@ -284,7 +256,8 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": false,
                                             "faIcon": "noIcon",
                                             "label": "Optimizer Settings",
-                                            "noPadding": false
+                                            "noPadding": false,
+                                            "width": "1000"
                                         },
                                         {
                                             "antIcon": "PlayCircleOutlined",
@@ -298,7 +271,8 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": false,
                                             "faIcon": "noIcon",
                                             "label": "Run Config",
-                                            "noPadding": false
+                                            "noPadding": false,
+                                            "width": "1000"
                                         },
                                         {
                                             "antIcon": "OrderedListOutlined",
@@ -312,7 +286,8 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": false,
                                             "faIcon": "",
                                             "label": "Optimizer Queue",
-                                            "noPadding": true
+                                            "noPadding": true,
+                                            "width": "1000"
                                         },
                                         {
                                             "antIcon": "UnorderedListOutlined",
@@ -326,7 +301,8 @@ export const defaultStrategyDesignerPageLayout = {
                                             "dontScroll": true,
                                             "faIcon": "noIcon",
                                             "label": "Backtesting Runs",
-                                            "noPadding": true
+                                            "noPadding": true,
+                                            "width": "1000"
                                         }
                                     ]
                                 }
@@ -376,6 +352,19 @@ export const defaultStrategyDesignerPageLayout = {
                                     "dontScroll": false,
                                     "faIcon": "",
                                     "title": "Display Settings",
+                                    "toolBarContent": []
+                                },
+                                {
+                                    "antIcon": "RedoOutlined",
+                                    "component": "Tab",
+                                    "content": [
+                                        {
+                                            "component": "ResetConfigs"
+                                        }
+                                    ],
+                                    "dontScroll": false,
+                                    "faIcon": "",
+                                    "title": "Reset Configs",
                                     "toolBarContent": []
                                 }
                             ],

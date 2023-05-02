@@ -3,6 +3,7 @@ import {useEffect} from "react"
 export default function AppDownloadForm({setDownloadInfo, downloadInfo, app}) {
     useEffect(() => {
         setDownloadInfo({should_select_profile: false, major_version: app.versions[0].major_version, minor_version: app.versions[0].minor_version, bug_fix_version: app.versions[0].bug_fix_version})
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (<div style={
         {marginRight: "20px"}

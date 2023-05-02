@@ -26,11 +26,9 @@ export default function AppStore() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botInfo, isLoggedIn]);
 
-
-    const content = (<AppList selectedCategories={
-            selectedCategories
-            // ?.replace(/_/g, " ")
-        }
+    const currentStrategy = appStoreData.Strategy ? appStoreData.Strategy?.[Object.keys(appStoreData.Strategy).filter(strategy => (appStoreData.Strategy[strategy].is_selected))?.[0]] : {}
+    const content = (<AppList selectedCategories={selectedCategories}
+        currentStrategy={currentStrategy}
         setSelectedCategories={setSelectedCategories}
         appStoreData={appStoreData}/>)
     const menuItems = [
@@ -58,7 +56,7 @@ export default function AppStore() {
 
     ]
 
-    return Boolean(availableCategories?.length) && (<AntSidebar menuItems={menuItems}
+    return (<AntSidebar menuItems={menuItems}
         currentlySelectedMenu={selectedCategories}
         setCurrentlySelectedMenu={setSelectedCategories}/>)
 }

@@ -1,4 +1,4 @@
-import {Button, Popconfirm} from 'antd'
+import {Button, Card, Popconfirm} from 'antd'
 import React, {useState} from 'react'
 import { useBotDomainContext } from '../../../context/config/BotDomainProvider'
 import { useBotInfoContext } from '../../../context/data/BotInfoProvider'
@@ -11,6 +11,7 @@ import { resetStorage, resetTentaclesConfig } from '../../../api/actions'
 import ResetIndividual from './ResetIndividual'
 import { projectName } from '../../../constants/frontendConstants'
 import { Trans } from 'react-i18next'
+import Typography from 'antd/es/typography/Typography'
 
 
 export default function ResetConfigs() {
@@ -208,9 +209,14 @@ export default function ResetConfigs() {
   };
     return (<div style={
         {
-            margin: "25px"
+            margin: "25px",
+            marginLeft: "auto",
+            marginRight: "auto",
+            maxWidth: "600px"
         }
     }>
+        <Card>
+        <Typography.Title >Reset data and configuration</Typography.Title>
             {Object.keys(storages).map(storageKey => (
                 <ResetIndividual title={
                     storages[storageKey].title
@@ -257,5 +263,7 @@ export default function ResetConfigs() {
                         }><Trans i18nKey='Reset.Selected' /></Button>
                     </Popconfirm>
             </div>
+        </Card>
+
     </div>)
 }

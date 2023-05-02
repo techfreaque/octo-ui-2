@@ -16,10 +16,11 @@ export default function StrategyCard({
     isMouseHover,
     isLoading,
     setIsloading,
-    setSelectedCategories,
+    setSelectedCategories
 }) {
     const [uploadInfo, setUploadInfo] = useState({})
     const [downloadInfo, setDownloadInfo] = useState({})
+    const [cloneAppInfo, setCloneAppInfo] = useState({})
     const botDomain = useBotDomainContext()
     const botInfo = useBotInfoContext()
     function onSuccess() {
@@ -32,9 +33,12 @@ export default function StrategyCard({
         await selectProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
         setOpen(false)
     }
-    const installProfile= useInstallProfile()
+    const installProfile = useInstallProfile()
     async function handleDownloadProfile(setOpen) {
-        installProfile({...downloadInfo, ...app}, setIsloading, setOpen)
+        installProfile({
+            ...downloadInfo,
+            ...app
+        }, setIsloading, setOpen)
     }
     async function handleDeleteProfile(setOpen) {
         setIsloading(true)
@@ -43,69 +47,72 @@ export default function StrategyCard({
     }
     async function handleProfileDuplication(setOpen) {
         setIsloading(true)
-        await duplicateProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
+
+        await duplicateProfile({
+            botDomain,
+            profileId: app.package_id,
+            profileName: app.title,
+            newProfileName: cloneAppInfo.newProfileName,
+            selectNewProfile: cloneAppInfo.selectNewProfile,
+            onSuccess,
+            onFail: () => setIsloading(false)
+        })
         setOpen(false)
     }
     const profileDownloadUrl = botDomain + backendRoutes.exportProfile + app.package_id
     const uploadToAppStore = useUploadToAppStore()
 
 
-    const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
+    const additionalProfileInfo = botInfo ?. profiles ?. [app.package_id] || {}
 
-    const currentAvatar = additionalProfileInfo?.profile?.avatar
+    const currentAvatar = additionalProfileInfo ?. profile ?. avatar
     const avatarUrl = currentAvatar === "default_profile.png" ? `${
         botDomain + backendRoutes.staticImg
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
+        additionalProfileInfo ?. profile ?. name ?. replace(/ /g, "_")
     }/${currentAvatar}`
 
-    return (
-        <AppCard app={app}
-            setMouseHover={setMouseHover}
-            avatarUrl={avatarUrl}
-            category={category}
-            isMouseHover={isMouseHover}
-            cardActions={
-                (
-                    <AppActions isMouseHover={isMouseHover}
-                        // configureDuplication={configureDuplication}
-                        setSelectedCategories={setSelectedCategories}
-                        onConfigure={
-                            () => setSelectedCategories(strategyModeName)
-                        }
-                        downloadInfo={downloadInfo}
-                        handleSelect={handleSelectProfile}
-                        handleUninstall={handleDeleteProfile}
-                        handleUpload={
-                            (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
-                        }
-                        setUploadInfo={setUploadInfo}
-                        setDownloadInfo={setDownloadInfo}
-                        uploadInfo={uploadInfo}
-                        exportUrl={
-                            backendRoutes.exportProfile + app.package_id
-                        }
-                        handleDownload={handleDownloadProfile}
-                        infoContent={
-                            (
-                                <div> {
-                                    app.description
-                                } </div>
-                            )
-                        }
-                        handleDuplication={handleProfileDuplication}
-                        otherActions={
-                            (
-                                <ProfileModalButton profile={additionalProfileInfo}
-                                    isCurrentProfile={
-                                        app.is_selected
-                                    }/>
-                            )
-                        }
-                        app={app}/>
-                )
-            }/>
-    )
+    return (<AppCard app={app}
+        setMouseHover={setMouseHover}
+        avatarUrl={avatarUrl}
+        category={category}
+        isMouseHover={isMouseHover}
+        cardActions={
+            (<AppActions isMouseHover={isMouseHover}
+                // configureDuplication={configureDuplication}
+                setSelectedCategories={setSelectedCategories}
+                onConfigure={
+                    () => setSelectedCategories(strategyModeName)
+                }
+                downloadInfo={downloadInfo}
+                handleSelect={handleSelectProfile}
+                handleUninstall={handleDeleteProfile}
+                setCloneAppInfo={setCloneAppInfo}
+                cloneAppInfo={cloneAppInfo}
+                handleUpload={
+                    (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
+                }
+                setUploadInfo={setUploadInfo}
+                setDownloadInfo={setDownloadInfo}
+                uploadInfo={uploadInfo}
+                exportUrl={
+                    backendRoutes.exportProfile + app.package_id
+                }
+                handleDownload={handleDownloadProfile}
+                infoContent={
+                    (<div> {
+                        app.description
+                    } </div>)
+                }
+                handleDuplication={handleProfileDuplication}
+                otherActions={
+                    (<ProfileModalButton profile={additionalProfileInfo}
+                        isCurrentProfile={
+                            app.is_selected
+                        }/>)
+                }
+                app={app}/>)
+        }/>)
 }

@@ -6,24 +6,35 @@ import { useIsBotOnlineContext, useRestartBot } from "../../../../context/data/I
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import { updateConfig, updateProfileInfo } from "../../../../api/actions";
 import ProfileModal from "./ProfileModal";
+import { getProfileCurrencyUpdate, useCurrenciesLists, useExchangeConfigUpdateContext, useExchangeInfoContext } from "../../../../context/data/BotExchangeInfoProvider";
 
 export default function ProfileModalButton({profile, isCurrentProfile}) {
     const [open, setOpen] = useState(false);
     const fetchBotInfo = useFetchBotInfo()
     const [loading, setIsloading] = useState(false);
-    const [requiresInstantRestart, setRequiresInstantRestart] = useState(false);
+    const [requiresInstantRestart, setRequiresInstantRestart] = useState(true);
     // const botInfo = useBotInfoContext()
     const isOnline = useIsBotOnlineContext()
     const restartBot = useRestartBot()
     const botDomain = useBotDomainContext()
     const currentProfileTitle = (profile || {})?.profile?.name
     const [newProfileSettings, setNewProfileSettings] = useState(JSON.parse(JSON.stringify(profile || {})))
-    const hasChanged = JSON.stringify(profile || {}) !== JSON.stringify(newProfileSettings)
-
+    const {currentCurrencyList, unsavedCurrencyList} = useCurrenciesLists()
+    const currencyListChanged = JSON.stringify(unsavedCurrencyList) !== JSON.stringify(currentCurrencyList)
+    const exchangeConfigUpdate = useExchangeConfigUpdateContext()
+    const exchangeConfigUpdateHasChanged = Boolean(exchangeConfigUpdate.global_config && Object.keys(exchangeConfigUpdate.global_config).length)
+    const hasChanged = JSON.stringify(profile || {}) !== JSON.stringify(newProfileSettings) || currencyListChanged || exchangeConfigUpdateHasChanged
+    const exchangeInfo = useExchangeInfoContext();
+    const currencySettings = profile?.config?.["crypto-currencies"]
+    
     useEffect(() => {
         setNewProfileSettings(JSON.parse(JSON.stringify(profile || {})))
     }, [profile])
-
+    
+    useEffect(() => {
+        currencyListChanged && setRequiresInstantRestart(true)
+    }, [currencyListChanged])
+    
     async function saveProfile(event, restart = false) {
         setIsloading(true)
         const infoHasChanged = JSON.stringify((profile || {}).profile) !== JSON.stringify(newProfileSettings.profile)
@@ -31,19 +42,29 @@ export default function ProfileModalButton({profile, isCurrentProfile}) {
         function onFail() {
             setIsloading(false)
         }
+        const configUpdate = {
+            global_config: {},
+            removed_elements: [],
+            ...exchangeConfigUpdate,
+            restart_after_save: true,
+        }
+        if (currencyListChanged) {
+            getProfileCurrencyUpdate({
+                configUpdate,
+                currentCurrencyList,
+                currencySettings,
+                unsavedCurrencyList,
+                exchangeInfo
+            })
+        }
         if (configHasChanged) {
-            const configUpdate = {
-                global_config: {
-                    'trading_reference-market': newProfileSettings.config.trading["reference-market"],
-                    'trader_enabled': newProfileSettings.config.trader.enabled,
-                    'trader_load-trade-history': newProfileSettings.config.trader["load-trade-history"],
-                    'trader-simulator_enabled': newProfileSettings.config["trader-simulator"].enabled,
-                    'trader-simulator_fees_maker': newProfileSettings.config["trader-simulator"].fees.maker,
-                    'trader-simulator_fees_taker': newProfileSettings.config["trader-simulator"].fees.maker
-                },
-                removed_elements: [],
-                restart_after_save: false
-            }
+            
+                    configUpdate.global_config['trading_reference-market']= newProfileSettings.config.trading["reference-market"]
+                    configUpdate.global_config['trader_enabled']= newProfileSettings.config.trader.enabled
+                    configUpdate.global_config['trader_load-trade-history']= newProfileSettings.config.trader["load-trade-history"]
+                    configUpdate.global_config['trader-simulator_enabled']= newProfileSettings.config["trader-simulator"].enabled
+                    configUpdate.global_config['trader-simulator_fees_maker']= newProfileSettings.config["trader-simulator"].fees.maker
+                    configUpdate.global_config['trader-simulator_fees_taker']= newProfileSettings.config["trader-simulator"].fees.maker
             const newPortfolio = newProfileSettings.config["trader-simulator"]["starting-portfolio"]
             const portfolioCoins = new Set([
                 ...Object.keys(newProfileSettings.config["trader-simulator"]["starting-portfolio"]),
@@ -59,9 +80,10 @@ export default function ProfileModalButton({profile, isCurrentProfile}) {
                     configUpdate.removed_elements.push(coinKey)
                 }
             })
-            await updateConfig(botDomain, configUpdate, newProfileSettings.profile.name, onFail)
         }
-
+        if (currencyListChanged || exchangeConfigUpdateHasChanged || configHasChanged) {
+                            await updateConfig(botDomain, configUpdate, newProfileSettings.profile.name, onFail)
+            }
         if (infoHasChanged) {
             await updateProfileInfo(botDomain, {
                 id: newProfileSettings.profile.id,
@@ -126,8 +148,9 @@ export default function ProfileModalButton({profile, isCurrentProfile}) {
             )
             }
             </>
+    ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    ), [
+        [
         currentProfileTitle,
         profile,
         hasChanged,

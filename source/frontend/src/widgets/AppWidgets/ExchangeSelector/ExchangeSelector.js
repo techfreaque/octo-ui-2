@@ -1,14 +1,15 @@
 import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import {useVisibleExchangesContext} from "../../../context/config/VisibleExchangesProvider";
-import {useFetchServicesInfo, useServicesInfoContext} from "../../../context/data/BotExchangeInfoProvider";
+import {useFetchServicesInfo, useServicesInfoContext, useUpdateExchangeConfigUpdateContext} from "../../../context/data/BotExchangeInfoProvider";
 import AntTable from "../../../components/Tables/AntTable";
 import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
-import {Input, Space, Switch, Tooltip} from "antd";
+import {Input, Space, Tooltip} from "antd";
 import {CheckCircleOutlined, ExclamationCircleOutlined, QuestionCircleOutlined, WarningOutlined} from "@ant-design/icons";
 import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
 import {Trans} from "react-i18next";
 import {useBotColorsContext} from "../../../context/config/BotColorsProvider";
+import EnablerSwitch from "../../../components/UserInputs/EnablerSwich";
 
 export default function ExchangeSelector() {
     const botDomain = useBotDomainContext();
@@ -25,6 +26,32 @@ export default function ExchangeSelector() {
     const exchangesData = []
     const enabledExchanges = []
     const configExchanges = servicesInfo?.exchanges ? Object.keys(servicesInfo.exchanges) : []
+    const [newConfigExchanges, setNewConfigExchanges] = useState({})
+    const setExchangeConfigUpdate = useUpdateExchangeConfigUpdateContext()
+    useEffect(() => {
+        setExchangeConfigUpdate({global_config: {}, removed_elements: []})
+        setNewConfigExchanges({})
+    }, [JSON.stringify(configExchanges)])
+    function handleSettingChange(exchangeName, inputName, newSetting) {
+        setNewConfigExchanges(prevExchanges => {
+            const newExchanges = {
+                ...prevExchanges
+            }
+            if (! newExchanges?.[exchangeName]) {
+                newExchanges[exchangeName] = {}
+            }
+            newExchanges[exchangeName][inputName] = newSetting
+            return newExchanges
+        })
+
+        setExchangeConfigUpdate(prevSettings => {
+            const newSettings = {
+                ...prevSettings
+            }
+            newSettings.global_config[`exchanges_${exchangeName}_${inputName}`] = newSetting
+            return newSettings
+        })
+    }
     function addExchangeToTable({
         exchangeName,
         exchangeType,
@@ -43,86 +70,89 @@ export default function ExchangeSelector() {
         enabled && enabledExchanges.push(exchangeName)
         exchangesData.push({
             exchange: exchangeName,
-            exchangeLabel: enabled ? (authSuccess ? (
-                <div style={
-                    {
-                        color: botColors?.success
-                    }
-                }>
-                    <Tooltip title={
-                        <Trans
-                        i18nKey="exchangeSelector.exchangeAuthenticatedTooltip"/>
-                    }>
-                        {
-                        `${exchangeName} `
-                    }
-                        <CheckCircleOutlined/>
-                    </Tooltip>
-                </div>
-            ) : (
-                <div style={
-                    {
-                        color: botColors?.error
-                    }
-                }>
-                    <Tooltip title={
-                        <Trans
-                        i18nKey="exchangeSelector.exchangeNotAuthenticatedTooltip"/>
-                    }>
-                        {
-                        `${exchangeName} `
-                    }
-                        <ExclamationCircleOutlined/>
-                    </Tooltip>
-                </div>
-            )) : exchangeName,
-            key: exchangeName,
-            sandboxed: sandboxed,
-            apiKey: apiKey,
-            enabledLabel: (
-                <Switch checked={enabled}></Switch>
-            ),
-            enabled,
-            apiSecret,
-            apiPassword,
-            exchangeType,
-            exchangeTypeLabel: supportedExchangeTypes?.length > 1 ? (
-                <RadioButtonGroup menuItems={
-                        supportedExchangeTypes?.map((exchangeType) => ({label: exchangeType, key: exchangeType}))
-                    }
-                    // onChange={handleChange}
-                    selected={exchangeType}/>
-            ) : exchangeType,
-            isTestedExchange: isTested || (isTestedSimulated && "simulation"),
-            isTestedExchangeLabel: isTested ? (
+            exchangeLabel: enabled ? (authSuccess ? (<div style={
+                {
+                    color: botColors?.success
+                }
+            }>
                 <Tooltip title={
                     <Trans
-                    i18nKey="exchangeSelector.isTestedExchangeTooltip"/>
-                }>
+                    i18nKey="exchangeSelector.exchangeAuthenticatedTooltip"/>
+                }> {
+                    `${exchangeName} `
+                }
                     <CheckCircleOutlined/>
                 </Tooltip>
-            ) : (isTestedSimulated ? (
+            </div>) : (<div style={
+                {
+                    color: botColors?.error
+                }
+            }>
                 <Tooltip title={
                     <Trans
-                    i18nKey="exchangeSelector.isTestedExchangeSimulatedTooltip"/>
-                }>
+                    i18nKey="exchangeSelector.exchangeNotAuthenticatedTooltip"/>
+                }> {
+                    `${exchangeName} `
+                }
                     <ExclamationCircleOutlined/>
                 </Tooltip>
-            ) : (
-                <Tooltip title={
-                    <Trans
-                    i18nKey="exchangeSelector.isUntestedExchangeTooltip"/>
-                }>
-                    <QuestionCircleOutlined/>
-                </Tooltip>
-            )),
+            </div>)) : exchangeName,
+            key: exchangeName,
+            sandboxed,
+            sandboxedLabel: (<EnablerSwitch availableAfterRestart={
+                    !sandboxed && newConfigExchanges?.[exchangeName]?.sandboxed
+                }
+                title={exchangeName}
+                isEnabled={sandboxed}
+                disabledAfterRestart={
+                    sandboxed && newConfigExchanges?.[exchangeName]?.sandboxed === false
+                }
+                onChange={
+                    (value) => handleSettingChange(exchangeName, "sandboxed", value)
+                }/>),
+            enabledLabel: (<EnablerSwitch availableAfterRestart={
+                    !enabled && newConfigExchanges?.[exchangeName]?.enabled
+                }
+                title={exchangeName}
+                isEnabled={enabled}
+                disabledAfterRestart={
+                    enabled && newConfigExchanges?.[exchangeName]?.enabled === false
+                }
+                onChange={
+                    (value) => handleSettingChange(exchangeName, "enabled", value)
+                }/>),
+            enabled,
+            apiKey: newConfigExchanges?.[exchangeName]?.["api-key"] !== undefined ? newConfigExchanges?.[exchangeName]?.["api-key"] : apiKey,
+            apiSecret: newConfigExchanges?.[exchangeName]?.["api-secret"] !== undefined ? newConfigExchanges?.[exchangeName]?.["api-secret"] : apiSecret,
+            apiPassword: newConfigExchanges?.[exchangeName]?.["api-password"] !== undefined ? newConfigExchanges?.[exchangeName]?.["api-password"] : apiPassword,
+            exchangeType,
+            exchangeTypeLabel: supportedExchangeTypes?.length > 1 ? (<RadioButtonGroup menuItems={
+                    supportedExchangeTypes?.map((exchangeType) => ({label: exchangeType, key: exchangeType}))
+                }
+                // onChange={handleChange}
+                selected={exchangeType}/>) : exchangeType,
+            isTestedExchange: isTested || (isTestedSimulated && "simulation"),
+            isTestedExchangeLabel: isTested ? (<Tooltip title={
+                <Trans
+                i18nKey="exchangeSelector.isTestedExchangeTooltip"/>
+            }>
+                <CheckCircleOutlined/>
+            </Tooltip>) : (isTestedSimulated ? (<Tooltip title={
+                <Trans
+                i18nKey="exchangeSelector.isTestedExchangeSimulatedTooltip"/>
+            }>
+                <ExclamationCircleOutlined/>
+            </Tooltip>) : (<Tooltip title={
+                <Trans
+                i18nKey="exchangeSelector.isUntestedExchangeTooltip"/>
+            }>
+                <QuestionCircleOutlined/>
+            </Tooltip>)),
             selected: visibleExchanges === exchangeName,
             configurable,
             hasWebsockets,
             authSuccess,
-            hasWebsocketsLabel: hasWebsockets ? (
-                <CheckCircleOutlined/>) : (
-                <WarningOutlined/>)
+            hasWebsocketsLabel: hasWebsockets ? (<CheckCircleOutlined/>) : (<WarningOutlined/>)
 
         })
     };
@@ -147,53 +177,58 @@ export default function ExchangeSelector() {
     // put enabled ones on top, then config existing ones and others at the bottom
     exchangesData.sort((a, b) => ((+ b?.enabled) - (+ a?.enabled) || a?.exchange?.localeCompare(b?.exchange)));
 
-    return (
-        <AntTable onFilterChange={filterData}
-            columns={columns}
-            // maxWidth="950px"
-            expandable={
-                {
-                    expandedRowRender: (record) => (
-                        (
-                            <p style={
-                                {margin: 0}
-                            }>
-                                <Space direction="vertical">
+    return (<AntTable onFilterChange={filterData}
+        columns={columns}
+        // maxWidth="950px"
+        expandable={
+            {
+                expandedRowRender: (record) => (
+                    (<div style={
+                        {margin: 0}
+                    }>
+                        <Space direction="vertical">
 
-                                    <Input addonBefore="API Key"
-                                        value={
-                                            record?.apiKey
-                                        }
-                                        // defaultValue="mysite"
-                                    />
-                                    <Input addonBefore="API Secret"
-                                        value={
-                                            record?.apiSecret
-                                        }
-                                        // defaultValue="mysite"
-                                    />
-                                    <Input addonBefore="API Password"
-                                        value={
-                                            record?.apiPassword
-                                        }
-                                        // defaultValue="mysite"
-                                    />
-                                </Space>
-                            </p>
-                        )
-                    ),
-                    rowExpandable: (record) => (true)
-                }
+                            <Input addonBefore="API Key"
+                                onChange={
+                                    (event) => handleSettingChange(record.exchange, "api-key", event.target.value)
+                                }
+                                value={
+                                    record?.apiKey
+                                }
+                                // defaultValue="mysite"
+                            />
+                            <Input addonBefore="API Secret"
+                                onChange={
+                                    (event) => handleSettingChange(record.exchange, "api-secret", event.target.value)
+                                }
+                                value={
+                                    record?.apiSecret
+                                }
+                                // defaultValue="mysite"
+                            />
+                            <Input addonBefore="API Password"
+                                onChange={
+                                    (event) => handleSettingChange(record.exchange, "api-password", event.target.value)
+                                }
+                                value={
+                                    record?.apiPassword
+                                }
+                                // defaultValue="mysite"
+                            />
+                        </Space>
+                    </div>)
+                ),
+                rowExpandable: (record) => (true)
             }
-            data={exchangesData}/>
-    );
+        }
+        data={exchangesData}/>);
 }
 
 const columns = [
     {
         title: 'Exchange',
         dataIndex: 'exchangeLabel',
-        // width: '40%',
+        width: '25%',
         key: 'exchange',
         // ...getColumnSearchProps('exchange'),
         sorter: (a, b) => a.exchange.localeCompare(b.exchange),
@@ -201,7 +236,8 @@ const columns = [
             'descend', 'ascend'
         ],
         // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
-    }, {
+    },
+    {
         title: 'Type',
         dataIndex: 'exchangeTypeLabel',
         // width: '15%',
@@ -212,7 +248,9 @@ const columns = [
             'descend', 'ascend'
         ],
         // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
-    }, {
+    },
+ 
+    {
         title: 'Enabled',
         dataIndex: 'enabledLabel',
         key: 'enabled',
@@ -256,7 +294,7 @@ const columns = [
         title: 'Tested',
         dataIndex: 'isTestedExchangeLabel',
         key: 'isTestedExchange',
-        width: '15%',
+        // width: '15%',
         filters: [
             {
                 text: "Untested",
@@ -274,6 +312,25 @@ const columns = [
         sorter: (a, b) => (
             (a.isTestedExchange === true ? 1 : 0) - (b.isTestedExchange === true ? 1 : 0) || (a.isTestedExchange === "simulated" ? 1 : 0) - (b.isTestedExchange === "simulated" ? 1 : 0)
         ),
+        sortDirections: ['descend', 'ascend']
+    },   {
+        title: 'Use Testnet',
+        dataIndex: 'sandboxedLabel',
+        key: 'sandboxed',
+        // width: '15%',
+        filters: [
+            {
+                text: "Real Exchange",
+                value: false
+            }, {
+                text: "Test Net Exchange",
+                value: true
+            },
+
+        ],
+        sorter: (a, b) => {
+            return(a.sandboxed === true ? 1 : 0) - (b.sandboxed === true ? 1 : 0)
+        },
         sortDirections: ['descend', 'ascend']
     },
 ];

@@ -17,6 +17,7 @@ export default function TradingModeCard({
     isLoading,
     setIsloading,
     setSelectedCategories,
+    currentStrategy,
     apps
 }) {
     const [uploadInfo, setUploadInfo] = useState({})
@@ -76,6 +77,7 @@ export default function TradingModeCard({
                 infoContent={
                     app.description
                 }
+                isReadOnlyStrategy={currentStrategy?.is_from_store}
                 onConfigure={
                     () => setSelectedCategories(strategyModeSettingsName)
                 }

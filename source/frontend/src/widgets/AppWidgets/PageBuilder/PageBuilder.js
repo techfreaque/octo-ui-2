@@ -41,7 +41,7 @@ export default function PageBuilder() {
             <div style={
                 {margin: "20px"}
             }>
-                <h1>Page Builder</h1>
+                <h1>Customize the UI</h1>
                 <Alert severity="info"
                     style={
                         {backgroundColor: 'transparent'}

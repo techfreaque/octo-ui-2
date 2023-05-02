@@ -22,11 +22,13 @@ export async function restartBot(botDomain, updateIsOnline, notification) {
             createNotification("The bot is restarting...", "success");
         
 
+
     }
     const failure = (updated_data, update_url, result, status, error) => {
         if (notification) 
             createNotification("Failed to restart bot", "danger",);
         
+
 
     }
     sendAndInterpretBotUpdate({}, botDomain + backendRoutes.restartBot, success, failure, "GET")
@@ -88,12 +90,12 @@ export async function startOptimizer(botDomain, optimizerRunSettings, optimizerS
         createNotification(result.message, "danger")
     }
     sendAndInterpretBotUpdate({
-        ...optimizerRunSettings,
+        ... optimizerRunSettings,
         exchange_ids: optimizerRunSettings.exchange_names.map(exchangeName => (ids_by_exchange_name[exchangeName])),
         config: optimizerSettingsForm,
 
         // TODO remove when stock supports ids
-        data_source: optimizerRunSettings?.data_files?.[0] || "current_bot_data",
+        data_source: optimizerRunSettings ?. data_files ?. [0] || "current_bot_data",
         exchange_id: ids_by_exchange_name[optimizerRunSettings.exchange_names[0]]
     }, botDomain + backendRoutes.optimizerStart, success, failure)
 }
@@ -107,7 +109,7 @@ export async function addToOptimizerQueue(botDomain, optimizerRunSettings, optim
         createNotification(result.message, "danger")
     }
     sendAndInterpretBotUpdate({
-        ...optimizerRunSettings,
+        ... optimizerRunSettings,
         // exchange_id: exchageId,
         optimizer_config: optimizerSettingsForm
     }, botDomain + backendRoutes.optimizerAddToQueue, success, failure)
@@ -256,16 +258,27 @@ export async function updateProfileInfo(botDomain, newProfileInfo, onFail) {
     await sendAndInterpretBotUpdate(newProfileInfo, botDomain + backendRoutes.updateProfileInfo, success, fail, "POST")
 }
 
-export async function duplicateProfile(botDomain, profileId, profileName, onSuccess, onFail) {
+export async function duplicateProfile({
+    botDomain,
+    profileId,
+    profileName,
+    newProfileName,
+    selectNewProfile,
+    onSuccess,
+    onFail
+}) {
     const success = (updated_data, update_url, result, msg, status) => {
         onSuccess ?. ()
-        createNotification(`Successfully duplicated ${profileName} profile`)
+        createNotification(`Successfully created ${newProfileName} strategy`)
     }
     const fail = (updated_data, update_url, result, msg, status) => {
         onFail ?. ()
         createNotification(`Failed to duplicate ${profileName} profile`, "danger")
     }
-    await sendAndInterpretBotUpdate({}, botDomain + backendRoutes.duplicateProfile + profileId, success, fail, "GET")
+    await sendAndInterpretBotUpdate({
+        new_profile_name: newProfileName,
+        select_new_profile: selectNewProfile
+    }, botDomain + backendRoutes.duplicateProfile + profileId, success, fail, "POST")
 }
 
 export async function deleteProfile(botDomain, profileId, profileName, onSuccess, onFail) {
@@ -392,7 +405,7 @@ export async function updateConfig(botDomain, newConfig, profileName, onFail, on
 export async function resetTentaclesConfig(tentacles, botDomain, setIsResetting, fetchCurrentTentaclesConfig) {
     Promise.all(tentacles.forEach(tentacle => {
         const failure = (updated_data, update_url, result, msg, status) => {
-            createNotification(`Failed to reset ${tentacle} config`, "danger", msg?.message)
+            createNotification(`Failed to reset ${tentacle} config`, "danger", msg ?. message)
         }
         const success = (updated_data, update_url, result, msg, status) => {
             if (status === "success") {
@@ -413,7 +426,7 @@ export async function resetStorage(storage, botDomain, setIsResetting, reloadUiD
     const failure = (updated_data, update_url, result, msg, status) => {
         createNotification(`Failed to clear ${
             storage.title
-        } storage`, "danger", msg?.message)
+        } storage`, "danger", msg ?. message)
         setIsResetting(false)
     }
     const success = (updated_data, update_url, result, msg, status) => {

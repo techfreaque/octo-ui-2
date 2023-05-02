@@ -44,6 +44,8 @@ export const useCurrenciesLists = () => {
 
 const ServicesInfoContext = createContext();
 const UpdateServicesInfoContext = createContext();
+const ExchangeConfigUpdateContext = createContext();
+const UpdateExchangeConfigUpdateContext = createContext();
 
 export const useServicesInfoContext = () => {
     return useContext(ServicesInfoContext);
@@ -51,6 +53,13 @@ export const useServicesInfoContext = () => {
 
 export const useUpdateServicesInfoContext = () => {
     return useContext(UpdateServicesInfoContext);
+};
+export const useExchangeConfigUpdateContext = () => {
+    return useContext(ExchangeConfigUpdateContext);
+};
+
+export const useUpdateExchangeConfigUpdateContext = () => {
+    return useContext(UpdateExchangeConfigUpdateContext);
 };
 
 export const useFetchExchangeInfo = () => {
@@ -78,19 +87,27 @@ export const useHandleProfileUpdate = () => {
     const botInfo = useBotInfoContext();
     const currenciesLists = useCurrenciesLists()
     const exchangeInfo = useExchangeInfoContext();
-    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
+    const currencySettings = botInfo ?. current_profile ?. config ?. ["crypto-currencies"]
+    const exchangeConfigUpdate = useExchangeConfigUpdateContext()
+
     const logic = useCallback((restartAfterSave = false) => {
-        const hasUnsavedChanges = JSON.stringify(currenciesLists.unsavedCurrencyList) !== JSON.stringify(currenciesLists.currentCurrencyList)
         handleProfileUpdate({
-            hasUnsavedChanges,
             currentCurrencyList: currenciesLists.currentCurrencyList,
             unsavedCurrencyList: currenciesLists.unsavedCurrencyList,
+            exchangeConfigUpdate,
             exchangeInfo,
             botDomain,
             currencySettings,
             restartAfterSave
         })
-    }, [currenciesLists, exchangeInfo, botDomain, currencySettings]);
+    }, [
+        currenciesLists.currentCurrencyList,
+        currenciesLists.unsavedCurrencyList,
+        exchangeConfigUpdate,
+        exchangeInfo,
+        botDomain,
+        currencySettings
+    ]);
     return logic;
 };
 
@@ -121,9 +138,10 @@ export const BotExchangeInfoProvider = ({children}) => {
     const [servicesInfo, setServicesInfo] = useState();
     const [menuIsOpen, setMenuIsOpen] = useState({open: false, wantsClose: false});
     const botInfo = useBotInfoContext();
-    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
+    const currencySettings = botInfo ?. current_profile ?. config ?. ["crypto-currencies"]
     const [toSaveCurrencySettings, setToSaveCurrencySettings] = useState();
     const [currenciesLists, setCurrenciesLists] = useState();
+    const [exchangeConfigUpdate, setExchangeConfigUpdate] = useState({global_config: {}, removed_elements: []})
 
     const {currencyList: currentCurrencyList, currencySettings: currentCurrencySettings} = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
     const {currencyList: unsavedCurrencyList} = convertSymbolSettingsToNewFormat(toSaveCurrencySettings, exchangeInfo)
@@ -137,92 +155,114 @@ export const BotExchangeInfoProvider = ({children}) => {
         setCurrenciesLists({currentCurrencyList: JSON.parse(currentCurrencyListJson), unsavedCurrencyList: JSON.parse(unsavedCurrencyListJson)})
     }, [currentCurrencyListJson, unsavedCurrencyListJson])
 
-    return (
-        <ExchangeInfoContext.Provider value={exchangeInfo}>
-            <UpdateExchangeInfoContext.Provider value={setExchangeInfo}>
-                <PairSelectorMenuOpenContext.Provider value={menuIsOpen}>
-                    <UpdatePairSelectorMenuOpenContext.Provider value={setMenuIsOpen}>
-                        <ServicesInfoContext.Provider value={servicesInfo}>
-                            <UpdateServicesInfoContext.Provider value={setServicesInfo}>
-                                <CurrenciesListsContext.Provider value={currenciesLists}>
-                                    <UpdateToSaveCurrencySettingsContext.Provider value={setToSaveCurrencySettings}>
-                                        {children} </UpdateToSaveCurrencySettingsContext.Provider>
-                                </CurrenciesListsContext.Provider>
-                            </UpdateServicesInfoContext.Provider>
-                        </ServicesInfoContext.Provider>
-                    </UpdatePairSelectorMenuOpenContext.Provider>
-                </PairSelectorMenuOpenContext.Provider>
-            </UpdateExchangeInfoContext.Provider>
-        </ExchangeInfoContext.Provider>
-    );
+    return (<ExchangeInfoContext.Provider value={exchangeInfo}>
+        <UpdateExchangeInfoContext.Provider value={setExchangeInfo}>
+            <PairSelectorMenuOpenContext.Provider value={menuIsOpen}>
+                <UpdatePairSelectorMenuOpenContext.Provider value={setMenuIsOpen}>
+                    <ServicesInfoContext.Provider value={servicesInfo}>
+                        <UpdateServicesInfoContext.Provider value={setServicesInfo}>
+                            <ExchangeConfigUpdateContext.Provider value={exchangeConfigUpdate}>
+                                <UpdateExchangeConfigUpdateContext.Provider value={setExchangeConfigUpdate}>
+                                    <CurrenciesListsContext.Provider value={currenciesLists}>
+                                        <UpdateToSaveCurrencySettingsContext.Provider value={setToSaveCurrencySettings}> {children} </UpdateToSaveCurrencySettingsContext.Provider>
+                                    </CurrenciesListsContext.Provider>
+                                </UpdateExchangeConfigUpdateContext.Provider>
+                            </ExchangeConfigUpdateContext.Provider>
+                        </UpdateServicesInfoContext.Provider>
+                    </ServicesInfoContext.Provider>
+                </UpdatePairSelectorMenuOpenContext.Provider>
+            </PairSelectorMenuOpenContext.Provider>
+        </UpdateExchangeInfoContext.Provider>
+    </ExchangeInfoContext.Provider>);
 };
 
 function handleProfileUpdate({
-    hasUnsavedChanges,
     currentCurrencyList,
     unsavedCurrencyList,
     exchangeInfo,
     botDomain,
     currencySettings,
-    restartAfterSave
+    restartAfterSave,
+    exchangeConfigUpdate
+
 }) {
+    const hasUnsavedChanges = JSON.stringify(unsavedCurrencyList) !== JSON.stringify(currentCurrencyList)
+    const exchangeConfigUpdateHasChanged = Boolean(exchangeConfigUpdate.global_config && Object.keys(exchangeConfigUpdate.global_config).length)
+    const configUpdate = {
+        ...exchangeConfigUpdate,
+        'restart_after_save': restartAfterSave
+    }
     if (hasUnsavedChanges) {
-        const configUpdate = {
-            'global_config': {},
-            removed_elements: [],
-            'restart_after_save': restartAfterSave
-        }
-        new Set([
-            ...currentCurrencyList,
-            ...unsavedCurrencyList
-        ]).forEach(symbol => {
-            if (currentCurrencyList.includes(symbol) && !unsavedCurrencyList.includes(symbol)) {
-                let pairKey
-                if (currencySettings?.[symbol]) {
-                    pairKey = symbol
-                } else {
-                    const currencyName = exchangeInfo?.currency_name_info?.[parseSymbol(symbol).base]?.n
-                    if (currencySettings[currencyName]?.pairs?.includes(symbol)) {
-                        pairKey = currencyName
-                    } else {
-                        for (const currency in currencySettings) {
-                            if (currencySettings[currency].pairs?.includes(symbol)) {
-                                pairKey = currency
-                                break
-                            }
-                        }
-                    }
-                };
-                pairKey && ! configUpdate['removed_elements'].includes(`crypto-currencies_${pairKey}`) && configUpdate['removed_elements'].push(`crypto-currencies_${pairKey}`)
-            } else if (!currentCurrencyList.includes(symbol) && unsavedCurrencyList.includes(symbol)) {
-                configUpdate['global_config'][`crypto-currencies_${symbol}_pairs`] = [symbol]
-                configUpdate['global_config'][`crypto-currencies_${symbol}_enabled`] = true
-            }
+        getProfileCurrencyUpdate({
+            configUpdate,
+            currentCurrencyList,
+            currencySettings,
+            unsavedCurrencyList,
+            exchangeInfo
         })
+    }
+    if (exchangeConfigUpdateHasChanged || hasUnsavedChanges) {
+
         function onFail() { // setIsloading(false)
         }
         updateConfig(botDomain, configUpdate, "current profile", onFail)
     }
 }
 
+export function getProfileCurrencyUpdate({
+    configUpdate,
+    currentCurrencyList,
+    currencySettings,
+    unsavedCurrencyList,
+    exchangeInfo
+}) {
+    new Set([
+        ...currentCurrencyList,
+        ...unsavedCurrencyList
+    ]).forEach(symbol => {
+        if (currentCurrencyList.includes(symbol) && !unsavedCurrencyList.includes(symbol)) {
+            let pairKey
+            if (currencySettings ?. [symbol]) {
+                pairKey = symbol
+            } else {
+                const currencyName = exchangeInfo ?. currency_name_info ?. [parseSymbol(symbol).base] ?. n
+                if (currencySettings[currencyName] ?. pairs ?. includes(symbol)) {
+                    pairKey = currencyName
+                } else {
+                    for (const currency in currencySettings) {
+                        if (currencySettings[currency].pairs ?. includes(symbol)) {
+                            pairKey = currency
+                            break
+                        }
+                    }
+                }
+            };
+            pairKey && !configUpdate['removed_elements'].includes(`crypto-currencies_${pairKey}`) && configUpdate['removed_elements'].push(`crypto-currencies_${pairKey}`)
+        } else if (!currentCurrencyList.includes(symbol) && unsavedCurrencyList.includes(symbol)) {
+            configUpdate['global_config'][`crypto-currencies_${symbol}_pairs`] = [symbol]
+            configUpdate['global_config'][`crypto-currencies_${symbol}_enabled`] = true
+        }
+    })
+}
+
 function convertSymbolSettingsToNewFormat(originalCurrencySettings, exchangeInfo) {
     const currencyList = []
     const currencySettings = {}
     originalCurrencySettings && Object.keys(originalCurrencySettings).forEach(currency => {
-        if (originalCurrencySettings[currency]?.enabled !== false) {
-            originalCurrencySettings[currency]?.pairs?.forEach(pair => {
+        if (originalCurrencySettings[currency] ?. enabled !== false) {
+            originalCurrencySettings[currency] ?. pairs ?. forEach(pair => {
                 currencyList.push(pair)
                 currencySettings[pair] = {
                     enabled: true,
                     pairs: [pair],
-                    currency: exchangeInfo?.currency_name_info?.[parseSymbol(pair).base]?.n
+                    currency: exchangeInfo ?. currency_name_info ?. [parseSymbol(pair).base] ?. n
                 }
             })
         }
     })
     return {
-        currencyList: currencyList?.sort(
-            (a, b) => a?.localeCompare(b)
+        currencyList: currencyList ?. sort(
+            (a, b) => a ?. localeCompare(b)
         ),
         currencySettings
     }

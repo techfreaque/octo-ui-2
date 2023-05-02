@@ -50,7 +50,7 @@ export const backendRoutes = {
     exchangeLogo: "/exchange_logo",
     currencyLogos: "/currency_logos",
     updateProfileInfo: `${basePath}/update_profile_info`,
-    duplicateProfile: "/profiles_management/duplicate?profile_id=",
+    duplicateProfile: `${basePath}/update_profile/duplicate?profile_id=`,
     selectProfile: `${basePath}/update_profile/select?profile_id=`,
     deleteProfile: "/profiles_management/remove",
     importProfile: "/profiles_management/import",

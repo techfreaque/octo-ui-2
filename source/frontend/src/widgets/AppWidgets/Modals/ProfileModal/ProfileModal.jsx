@@ -116,7 +116,7 @@ export default function ProfileModal({
             {display: 'flex'}
         }
         footer={
-            [(<div style={
+            [(<div key={"profile"} style={
                 {display: "flex"}
             }>
                 <div>

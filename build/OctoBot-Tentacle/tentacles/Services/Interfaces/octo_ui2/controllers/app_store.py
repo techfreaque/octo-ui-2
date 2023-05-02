@@ -145,10 +145,13 @@ def register_appstore_routes(plugin):
                     success=False,
                     message=f"Invalid profile url {url}",
                 )
-            except Exception as err:
+            except Exception as error:
+                basic_utils.get_octo_ui_2_logger().exception(
+                    error, True, f"Error when importing Strategy: {error}"
+                )
                 return basic_utils.get_response(
                     success=False,
-                    message=f"Error when importing profile: {err}",
+                    message=f"Error when importing profile: {error}",
                 )
         return basic_utils.get_response(
             success=False,
