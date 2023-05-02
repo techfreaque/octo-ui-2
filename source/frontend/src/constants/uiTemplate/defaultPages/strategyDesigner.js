@@ -123,9 +123,10 @@ export const defaultStrategyDesignerPageLayout =  {
                             "component": "ButtonWithModal",
                             "content": [
                                 {
-                                    "component": "LoginManager"
+                                    "component": "LoginManager",
                                 }
                             ],
+                            "width": "450px",
                             "displayAsAvatar": true,
                             "faIcon": "",
                             "iconOnly": true,
