@@ -23,7 +23,6 @@ export default function AppStore() {
     const appStoreUser = useAppStoreUserContext()
     const isLoggedIn = Boolean(appStoreUser?.token)
     const availableCategories = appStoreData && (Object.keys(appStoreData)?.filter(category => (! hiddenCategories.includes(category))) || [])
-
     const [selectedCategories, setSelectedCategories] = useState();
     const [isSaving, setIsSaving] = useState(false);
     const _useFetchAppStoreData = useFetchAppStoreData();
@@ -85,7 +84,6 @@ export default function AppStore() {
             ]
         },
     ]
-
     return (<AntSidebar menuItems={menuItems}
         currentlySelectedMenu={selectedCategories}
         defaultSelected={

@@ -351,7 +351,7 @@ export const defaultStrategyDesignerPageLayout =  {
                                     ],
                                     "dontScroll": false,
                                     "faIcon": "",
-                                    "title": "Display Settings",
+                                    "title": "Other Display Settings",
                                     "toolBarContent": []
                                 },
                                 {

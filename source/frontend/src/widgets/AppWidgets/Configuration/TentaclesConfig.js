@@ -316,6 +316,7 @@ function _createTentacleConfigTab({
         try {
             Object.values(schema?.properties).forEach(property => property && _addGridDisplayOptions(property, null));
             window.$$counter = window.$$counter + 1 || 1
+            schema.options.disable_collapse = true
             Object.keys(schema?.properties).length !== 0 && tabsData.push(displayStyle === displayStyles.tabs ? createTab({
                 configName,
                 schema,

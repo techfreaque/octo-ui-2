@@ -41,7 +41,7 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             other_schema_values={
                 analysis_enums.UserInputOtherSchemaValuesTypes.DISPLAY_AS_TAB.value: True
             },
-            title="Live Run Analysis Mode",
+            title="Live Display Settings",
         )
         analysis_mode_plugin.CLASS_UI.user_input(
             analysis_enums.AnalysisModeSettingsTypes.BACKTESTING_RUN_ANALYSIS_MODE_SETTINGS_NAME,
@@ -54,7 +54,7 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             other_schema_values={
                 analysis_enums.UserInputOtherSchemaValuesTypes.DISPLAY_AS_TAB.value: True
             },
-            title="Backtesting Run Analysis Mode",
+            title="Backtesting Display Settings",
         )
         cls._init_run_analyzers_user_inputs(
             analysis_mode_plugin,
