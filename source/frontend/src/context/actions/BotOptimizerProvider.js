@@ -86,6 +86,9 @@ export const useAddToOptimizerQueue = () => {
                 addToOptimizerQueue(botDomain, optimizerSettings, optimizerForm?.optimizer_inputs, exchageId, setBotIsOptimizing, fetchOptimizerQueue)
             }
         }
+        else {
+            createNotification("Failed to add to the queue", "danger", "The exchange is not initialized")
+        }
     }, [
         optimizerSettings,
         exchageId,

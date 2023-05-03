@@ -6,7 +6,7 @@ import {useIsBotOnlineContext, useUpdateIsBotOnlineContext} from "../../../conte
 import {Trans} from "react-i18next";
 import AntButton, {buttonTypes} from "../../../components/Buttons/AntButton";
 
-export default function StopBotButton() {
+export default function StopBotButton({onClick}) {
     const [isLoading, setIsloading] = useState(false);
     const updateIsOnline = useUpdateIsBotOnlineContext()
     const isOnline = useIsBotOnlineContext()
@@ -17,7 +17,11 @@ export default function StopBotButton() {
             }
             block={true}
             onClick={
-                () => stopBot(botDomain, updateIsOnline, setIsloading)
+                () => {
+                    stopBot(botDomain, updateIsOnline, setIsloading)
+                    onClick ?. ()
+
+                }
             }
             buttonType={
                 buttonTypes.error
@@ -26,5 +30,5 @@ export default function StopBotButton() {
             text={
                 (<Trans i18nKey="buttons.stopBot"/>)
             }/>);
-    }, [botDomain, isLoading, isOnline, updateIsOnline])
+    }, [botDomain, isLoading, isOnline, onClick, updateIsOnline])
 }

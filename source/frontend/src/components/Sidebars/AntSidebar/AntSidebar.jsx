@@ -10,10 +10,10 @@ import {useEffect} from "react";
 import {useMediaQuery} from "@mui/material";
 const {Panel} = Collapse;
 
-export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrentlySelectedMenu}) {
+export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrentlySelectedMenu, defaultSelected}) {
     const botColors = useBotColorsContext();
     const hasContent = menuItems && Boolean(menuItems?.length)
-    const defaultSelected = hasContent && getKeyFromLabel(Object.values(menuItems)[0])
+    const _defaultSelected = hasContent && (defaultSelected ?defaultSelected:getKeyFromLabel(Object.values(menuItems)[0]))
     const [_currentlySelectedMenu, _setCurrentlySelectedMenu] = useState();
     const [hideText, setHideText] = useState(false);
     const iSmallScreen = useMediaQuery('(max-width:800px)');
@@ -29,11 +29,11 @@ export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrent
         }
     }, [iSmallScreen]);
     useEffect(() => {
-        if (defaultSelected) {
-            actualSetCurrentlySelectedMenu(defaultSelected);
+        if (_defaultSelected) {
+            actualSetCurrentlySelectedMenu(_defaultSelected);
         }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [defaultSelected]);
+    }, [_defaultSelected]);
     // function toggleHideMenuItemText() {
     //     setHideText(prevState => (!prevState));
     // }
@@ -110,7 +110,6 @@ function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
         }
     }
 }
-
 
 function MenuItems({
     menuItems,
@@ -298,7 +297,8 @@ function SideBarButton({
                     }
                     size={"large"}
                     type="text"
-                    onClick={handleCurentChange}
+                    onClick={menuItem.onClick || handleCurentChange}
+                    disabled={menuItem.disabled}
                     block>
                     {
                     menuItem.icon && (

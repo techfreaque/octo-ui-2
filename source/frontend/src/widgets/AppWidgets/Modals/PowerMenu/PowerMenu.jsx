@@ -5,10 +5,10 @@ import StopBotButton from '../../Buttons/StopBotButton';
 import LogoutButton from '../../Buttons/LogoutButton';
 import {Dropdown, Tooltip, Button} from 'antd';
 import {useBotDomainContext} from '../../../../context/config/BotDomainProvider';
-import { useState } from 'react';
-import { useBotInfoContext } from '../../../../context/data/BotInfoProvider';
-import { PoweroffOutlined } from '@ant-design/icons';
-import { Trans } from 'react-i18next';
+import {useState} from 'react';
+import {useBotInfoContext} from '../../../../context/data/BotInfoProvider';
+import {PoweroffOutlined} from '@ant-design/icons';
+import {Trans} from 'react-i18next';
 import AntButton from '../../../../components/Buttons/AntButton';
 import ColorModeSwitch from '../../Buttons/ColorModeSwitcher';
 
@@ -17,70 +17,67 @@ export default function PowerMenu() {
     const [open, setOpen] = useState()
     // const botColors = useBotColorsContext()
     const botInfo = useBotInfoContext();
-    return (
-        <Dropdown onOpenChange={(state)=>setOpen(state)} menu={
-                {
-                    items: open ? [
-                        botInfo?.can_logout && {
-                            key: 'logout',
-                            label: (
-                                <LogoutButton/>)
-                        },
-                        {
-                            key: 'restart',
-                            label: (
-                                <RestartBotButton/>)
-                        },
-                        {
-                            key: 'update',
-                            label: (
-                                <UpdateBotButton/>)
-                        },
-                        {
-                            key: 'stop',
-                            label: (
-                                <StopBotButton/>)
-                        },
-                        {
-                            key: 'colorMode',
-                            label: (
-                                <ColorModeSwitch/>)
-                        },
-                        {
-                            key: 'back',
-                            label: (
-                                <Button variant="outlined"         block={true}
-                                    href={botDomain}><Trans i18nKey="buttons.backToOctoBot" /></Button>
-                            )
-                        },
-                    ] : []
-                }
+    const handleClose = () => setOpen(false)
+    return (<Dropdown onOpenChange={
+            (state) => setOpen(state)
+        }
+        menu={
+            {
+                items: open ? [
+                    botInfo?.can_logout && {
+                        key: 'logout',
+                        label: (<LogoutButton onClick={handleClose}/>)
+                    },
+                    {
+                        key: 'restart',
+                        label: (<RestartBotButton onClick={handleClose}/>)
+                    },
+                    {
+                        key: 'update',
+                        label: (<UpdateBotButton onClick={handleClose}/>)
+                    },
+                    {
+                        key: 'stop',
+                        label: (<StopBotButton onClick={handleClose}/>)
+                    }, {
+                        key: 'colorMode',
+                        label: (<ColorModeSwitch onClick={handleClose}/>)
+                    }, {
+                        key: 'back',
+                        label: (<Button onClick={handleClose}
+                            variant="outlined"
+                            block={true}
+                            href={botDomain}><Trans i18nKey="buttons.backToOctoBot"/></Button>)
+                    },
+                ] : []
             }
-            overlayStyle={
-                {
-                    // minWidth: "150px",
-                    // width: "150px",
+        }
+        overlayStyle={
+            {
+                // minWidth: "150px",
+                // width: "150px",
 
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    // backgroundColor: botColors?.background
-                }
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                // backgroundColor: botColors?.background
             }
-            trigger="click"
-            placement="topRight"
-            arrow>
-            <Tooltip placement="topRight"
-                title={"Power Menu"}
-                arrow={false}>
-                <div>
-                    <AntButton buttonVariant="text">
-                        <PoweroffOutlined style={{fontSize:'22px'}} />    
-                    </AntButton>
-                </div>
-            </Tooltip>
-        </Dropdown>
-    )
+        }
+        trigger="click"
+        placement="topRight"
+        arrow>
+        <Tooltip placement="topRight"
+            title={"Power Menu"}
+            arrow={false}>
+            <div>
+                <AntButton buttonVariant="text">
+                    <PoweroffOutlined style={
+                        {fontSize: '22px'}
+                    }/>
+                </AntButton>
+            </div>
+        </Tooltip>
+    </Dropdown>)
 }
 // export default function PowerMenu1() {
 //     const [open, setOpen] = React.useState(false);

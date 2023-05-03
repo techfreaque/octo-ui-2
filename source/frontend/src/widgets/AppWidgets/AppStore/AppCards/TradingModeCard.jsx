@@ -82,9 +82,9 @@ export default function TradingModeCard({
                     () => setSelectedCategories(strategyModeSettingsName)
                 }
                 handleSelect={handleSelectStrategyMode}
-                handleUpload={
-                    (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
-                }
+                // handleUpload={
+                //     (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
+                // }
                 setUploadInfo={setUploadInfo}
                 uploadInfo={uploadInfo}
                 app={app}/>)

@@ -4,11 +4,11 @@ import {useIsBotOnlineContext, useUpdateIsBotOnlineContext} from "../../../conte
 import {useNavigate} from "react-router-dom";
 import {backendRoutes} from "../../../constants/backendConstants";
 import {logOutBot} from "../../../api/actions";
-import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
-import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
-import { Trans } from "react-i18next";
+import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
+import AntButton, {buttonTypes} from "../../../components/Buttons/AntButton";
+import {Trans} from "react-i18next";
 
-export default function LogoutButton() {
+export default function LogoutButton({onClick}) {
     const [isLoading, setIsloading] = useState(false);
     const updateIsOnline = useUpdateIsBotOnlineContext()
     const isOnline = useIsBotOnlineContext()
@@ -21,18 +21,20 @@ export default function LogoutButton() {
         navigate(backendRoutes.loginBot);
     }
     return useMemo(() => {
-        return botInfo?.can_logout && (
-            <AntButton disabled={disabled}
-                onClick={
-                    // onLoggedOut
-                    () => logOutBot(botDomain, updateIsOnline, setIsloading, onLoggedOut)
+        return botInfo?.can_logout && (<AntButton disabled={disabled}
+            onClick={
+                () => {
+                    logOutBot(botDomain, updateIsOnline, setIsloading, onLoggedOut)
+                    onClick ?. ()
                 }
-                block={true}
-                buttonType={buttonTypes.warning}
-                antIcon= "LogoutOutlined"
-                text= {<Trans i18nKey="buttons.logout"/>}
-            />
-        );
+            }
+            block={true}
+            buttonType={
+                buttonTypes.warning
+            }
+            antIcon="LogoutOutlined"
+            text=
+            {(<Trans i18nKey="buttons.logout"/>)}/>);
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [botDomain, disabled, updateIsOnline])
+    }, [botDomain, disabled, updateIsOnline, onClick])
 }

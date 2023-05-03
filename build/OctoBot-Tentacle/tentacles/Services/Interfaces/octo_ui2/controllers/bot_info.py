@@ -9,7 +9,6 @@ import octobot_commons.optimization_campaign as optimization_campaign
 import octobot_commons.enums as commons_enums
 import octobot_commons.symbols.symbol_util as symbol_util
 import octobot_services.interfaces as interfaces
-import octobot_services.interfaces as services_interfaces
 import octobot_services.interfaces.util as interfaces_util
 import tentacles.Services.Interfaces.web_interface as web_interface
 
@@ -21,7 +20,7 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
 )
 
-TIME_TO_START = 120
+TIME_TO_START = 40
 
 
 def register_bot_info_routes(plugin):
@@ -95,11 +94,6 @@ def register_bot_info_routes(plugin):
             )
         ]
         try:
-            (
-                exchange_manager,
-                exchange_name,
-                exchange_id,
-            ) = models.get_first_exchange_data(exchange)
             exchange_managers = interfaces.AbstractInterface.get_exchange_managers()
             for _exchange_manager in exchange_managers:
                 any_exchange_is_futures = (
@@ -110,6 +104,12 @@ def register_bot_info_routes(plugin):
                 ids_by_exchange_name[
                     _exchange_manager.exchange_name
                 ] = _exchange_manager.id
+            # current exchange data
+            (
+                exchange_manager,
+                exchange_name,
+                exchange_id,
+            ) = models.get_first_exchange_data(exchange)
             if exchange_manager.trading_modes:
                 trading_mode = exchange_manager.trading_modes[0]
                 trading_mode_name = trading_mode.get_name()
@@ -157,9 +157,8 @@ def register_bot_info_routes(plugin):
             is_starting = True
             running_seconds = time.time() - interfaces.get_bot_api().get_start_time()
             if running_seconds < TIME_TO_START:
-                if try_counter <= 5:
-                    interfaces_util.run_in_bot_async_executor(asyncio.sleep(4))
-                    return _bot_info(exchange=exchange, try_counter=try_counter)
+                interfaces_util.run_in_bot_async_executor(asyncio.sleep(2))
+                return _bot_info(exchange=exchange, try_counter=try_counter)
             basic_utils.get_octo_ui_2_logger().exception(
                 error, True, "Failed to get bot info"
             )
@@ -201,7 +200,7 @@ def register_bot_info_routes(plugin):
                 "real_time_strategies_active": real_time_strategies_active,
                 "available_api_actions": available_api_actions,
                 "data_files": models.get_data_files_with_description(),
-                "octobot_version": services_interfaces.AbstractInterface.project_version,
+                "octobot_version": interfaces.AbstractInterface.project_version,
             },
         }
 

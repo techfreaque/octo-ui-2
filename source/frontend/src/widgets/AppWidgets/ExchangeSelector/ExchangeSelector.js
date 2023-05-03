@@ -1,7 +1,7 @@
 import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
-import {useEffect, useState} from "react";
+import {useEffect} from "react";
 import {useVisibleExchangesContext} from "../../../context/config/VisibleExchangesProvider";
-import {useFetchServicesInfo, useServicesInfoContext, useUpdateExchangeConfigUpdateContext} from "../../../context/data/BotExchangeInfoProvider";
+import {useFetchServicesInfo, useHandleExchangeSettingChange, useNewConfigExchangesContext, useServicesInfoContext} from "../../../context/data/BotExchangeInfoProvider";
 import AntTable from "../../../components/Tables/AntTable";
 import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 import {Input, Space, Tooltip} from "antd";
@@ -18,6 +18,8 @@ export default function ExchangeSelector() {
     const botColors = useBotColorsContext()
     const servicesInfo = useServicesInfoContext()
     const fetchServicesInfo = useFetchServicesInfo()
+    const newConfigExchanges = useNewConfigExchangesContext()
+    const handleSettingChange = useHandleExchangeSettingChange()
     useEffect(() => {
         isOnline && fetchServicesInfo()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -26,32 +28,7 @@ export default function ExchangeSelector() {
     const exchangesData = []
     const enabledExchanges = []
     const configExchanges = servicesInfo?.exchanges ? Object.keys(servicesInfo.exchanges) : []
-    const [newConfigExchanges, setNewConfigExchanges] = useState({})
-    const setExchangeConfigUpdate = useUpdateExchangeConfigUpdateContext()
-    useEffect(() => {
-        setExchangeConfigUpdate({global_config: {}, removed_elements: []})
-        setNewConfigExchanges({})
-    }, [JSON.stringify(configExchanges)])
-    function handleSettingChange(exchangeName, inputName, newSetting) {
-        setNewConfigExchanges(prevExchanges => {
-            const newExchanges = {
-                ...prevExchanges
-            }
-            if (! newExchanges?.[exchangeName]) {
-                newExchanges[exchangeName] = {}
-            }
-            newExchanges[exchangeName][inputName] = newSetting
-            return newExchanges
-        })
 
-        setExchangeConfigUpdate(prevSettings => {
-            const newSettings = {
-                ...prevSettings
-            }
-            newSettings.global_config[`exchanges_${exchangeName}_${inputName}`] = newSetting
-            return newSettings
-        })
-    }
     function addExchangeToTable({
         exchangeName,
         exchangeType,
@@ -122,15 +99,19 @@ export default function ExchangeSelector() {
                     (value) => handleSettingChange(exchangeName, "enabled", value)
                 }/>),
             enabled,
-            apiKey: newConfigExchanges?.[exchangeName]?.["api-key"] !== undefined ? newConfigExchanges?.[exchangeName]?.["api-key"] : apiKey,
-            apiSecret: newConfigExchanges?.[exchangeName]?.["api-secret"] !== undefined ? newConfigExchanges?.[exchangeName]?.["api-secret"] : apiSecret,
-            apiPassword: newConfigExchanges?.[exchangeName]?.["api-password"] !== undefined ? newConfigExchanges?.[exchangeName]?.["api-password"] : apiPassword,
+            apiKey: newConfigExchanges?.[exchangeName]?.["api-key"] !== undefined ? newConfigExchanges[exchangeName]["api-key"] : apiKey,
+            apiSecret: newConfigExchanges?.[exchangeName]?.["api-secret"] !== undefined ? newConfigExchanges[exchangeName]["api-secret"] : apiSecret,
+            apiPassword: newConfigExchanges?.[exchangeName]?.["api-password"] !== undefined ? newConfigExchanges[exchangeName]["api-password"] : apiPassword,
             exchangeType,
-            exchangeTypeLabel: supportedExchangeTypes?.length > 1 ? (<RadioButtonGroup menuItems={
-                    supportedExchangeTypes?.map((exchangeType) => ({label: exchangeType, key: exchangeType}))
+            exchangeTypeLabel: supportedExchangeTypes?.length > 1 ? (<RadioButtonGroup selected={
+                    newConfigExchanges?.[exchangeName]?.["exchange-type"] !== undefined ? newConfigExchanges[exchangeName]["exchange-type"] : exchangeType
                 }
-                // onChange={handleChange}
-                selected={exchangeType}/>) : exchangeType,
+                onChange={
+                    (value) => handleSettingChange(exchangeName, "exchange-type", value)
+                }
+                menuItems={
+                    supportedExchangeTypes?.map((exchangeType) => ({label: exchangeType, key: exchangeType}))
+                }/>) : exchangeType,
             isTestedExchange: isTested || (isTestedSimulated && "simulation"),
             isTestedExchangeLabel: isTested ? (<Tooltip title={
                 <Trans
@@ -228,7 +209,7 @@ const columns = [
     {
         title: 'Exchange',
         dataIndex: 'exchangeLabel',
-        width: '25%',
+        width: '22%',
         key: 'exchange',
         // ...getColumnSearchProps('exchange'),
         sorter: (a, b) => a.exchange.localeCompare(b.exchange),
@@ -240,7 +221,7 @@ const columns = [
     {
         title: 'Type',
         dataIndex: 'exchangeTypeLabel',
-        // width: '15%',
+        width: '20%',
         key: 'exchangeType',
         // ...getColumnSearchProps('exchange'),
         sorter: (a, b) => a?.exchangeType?.localeCompare(b.exchangeType),
@@ -249,7 +230,7 @@ const columns = [
         ],
         // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
     },
- 
+
     {
         title: 'Enabled',
         dataIndex: 'enabledLabel',
@@ -313,7 +294,7 @@ const columns = [
             (a.isTestedExchange === true ? 1 : 0) - (b.isTestedExchange === true ? 1 : 0) || (a.isTestedExchange === "simulated" ? 1 : 0) - (b.isTestedExchange === "simulated" ? 1 : 0)
         ),
         sortDirections: ['descend', 'ascend']
-    },   {
+    }, {
         title: 'Use Testnet',
         dataIndex: 'sandboxedLabel',
         key: 'sandboxed',

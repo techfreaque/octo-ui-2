@@ -8,11 +8,7 @@ export function validateJSONEditor(editor) {
     const errors = editor.validate();
     let errorsDesc
     if (errors.length) {
-        if (errors[0].property === 'uniqueItems') {
-            return
-        }
-            window.console && console.error("Errors when validating editor:", errors);
-        
+        window.console && console.error("Errors when validating editor:", errors);
         errors.forEach((error) => {
             errorsDesc = `${errorsDesc}${
                 error.path.split("root.")[1]

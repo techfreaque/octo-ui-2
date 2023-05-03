@@ -54,5 +54,8 @@
   },
   "progress": {
     "backtestingProgressTooltip": "Backtest ist zu {{progressPercent}} % abgeschlossen"
+  },
+  "apps": {
+    "cantSelectStrategyModeTooltip": "Du kannst den Modus einer Nur-Lese-Strategie nicht ändern. \nKlone eine Strategie, um alle Einstellungen anzupassen."
   }
 }

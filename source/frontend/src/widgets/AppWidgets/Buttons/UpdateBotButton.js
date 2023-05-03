@@ -5,7 +5,7 @@ import {updateBot} from "../../../api/actions";
 import {Trans} from "react-i18next";
 import AntButton, {buttonTypes} from "../../../components/Buttons/AntButton";
 
-export default function UpdateBotButton() {
+export default function UpdateBotButton({onClick}) {
     const [isLoading, setIsloading] = useState(false);
     const updateIsOnline = useUpdateIsBotOnlineContext()
     const isOnline = useIsBotOnlineContext()
@@ -15,7 +15,10 @@ export default function UpdateBotButton() {
     return useMemo(() => {
         return (<AntButton disabled={disabled}
             onClick={
-                () => updateBot(botDomain, updateIsOnline, setIsloading)
+                () => {
+                    updateBot(botDomain, updateIsOnline, setIsloading)
+                    onClick ?. ()
+                }
             }
             block={true}
             buttonType={
@@ -26,5 +29,5 @@ export default function UpdateBotButton() {
                 <Trans
             i18nKey="buttons.updateBot"/>
             }/>)
-    }, [botDomain, disabled, updateIsOnline])
+    }, [botDomain, disabled, onClick, updateIsOnline])
 }

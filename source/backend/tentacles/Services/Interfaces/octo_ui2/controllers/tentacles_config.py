@@ -18,6 +18,7 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import SHARE_YOUR_OC
 from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
 )
+import tentacles.Services.Interfaces.octo_ui2.models.config as models_config
 
 
 def register_tentacles_config_routes(plugin):
@@ -105,7 +106,7 @@ def register_tentacles_config_routes(plugin):
         return util.get_rest_reply(flask.jsonify(data))
 
     route = "/update_profile/<action>"
-    methods = ["GET"]
+    methods = ["GET", "POST"]
     if cross_origin := import_cross_origin_if_enabled():
 
         @plugin.blueprint.route(route, methods=methods)
@@ -124,12 +125,31 @@ def register_tentacles_config_routes(plugin):
     def _select_profile(action):
         if action == "select":
             profile_id = flask.request.args.get("profile_id")
-            models.convert_to_live_profile(profile_id)
-            models.select_profile(profile_id)
-            models.schedule_delayed_command(models.restart_bot, delay=0.1)
+            models_config.select_profile(profile_id)
             return {
                 "success": True,
                 "message": "Profile successfully selected.",
+            }
+        if action == "duplicate":
+            profile_id = flask.request.args.get("profile_id")
+            request_data = flask.request.get_json()
+            new_profile_name = request_data.get("new_profile_name")
+            select_new_profile = request_data.get("select_new_profile")
+
+            new_profile = models.duplicate_profile(profile_id)
+            models_config.update_profile(
+                new_profile.profile_id, {"name": new_profile_name}
+            )
+            if select_new_profile:
+                models_config.select_profile(new_profile.profile_id)
+                return {
+                    "success": True,
+                    "message": "Profile successfully duplicated & selected.",
+                }
+
+            return {
+                "success": True,
+                "message": "Profile successfully duplicated.",
             }
 
     route = "/export_tentacle/<package_name>"

@@ -16,7 +16,7 @@ export default function AppUpDownload({
         if (app.is_owner) {
             if (app.is_from_store) {
                 const buttonText = "Publish Update"
-                return (<ConfirmAction onConfirm={handleUpload}
+                return handleUpload && (<ConfirmAction onConfirm={handleUpload}
                     antIconComponent={CloudUploadOutlined}
                     isSelected={
                         app.is_selected
@@ -36,7 +36,7 @@ export default function AppUpDownload({
                 const confirmButtonText = `Publish ${
                     app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0]
                 } Now`
-                return (<ConfirmAction onConfirm={handleUpload}
+                return handleUpload && (<ConfirmAction onConfirm={handleUpload}
                     isSelected={
                         app.is_selected
                     }
@@ -54,7 +54,8 @@ export default function AppUpDownload({
             const buttonText = `Update ${
                 app.categories[0]
             }`
-            return (<ConfirmAction onConfirm={handleDownload}
+
+            return handleDownload && (<ConfirmAction onConfirm={handleDownload}
                 antIconComponent={CloudDownloadOutlined}
                 confirmTitle={buttonText}
                 isSelected={
@@ -73,7 +74,8 @@ export default function AppUpDownload({
     } else if (app.price) {
         if (app.is_owner) {
             const confirmButtonText = "Download"
-            return (<ConfirmAction onConfirm={handleDownload}
+
+            return handleDownload && (<ConfirmAction onConfirm={handleDownload}
                 antIconComponent={CloudDownloadOutlined}
                 confirmTitle={confirmButtonText}
                 confirmDescription={
@@ -89,7 +91,8 @@ export default function AppUpDownload({
             const confirmButtonText = `Buy for ${
                 app.price
             }$ / month`
-            return (<ConfirmAction onConfirm={handleDownload}
+
+            return handleDownload && (<ConfirmAction onConfirm={handleDownload}
                 antIconComponent={ShoppingCartOutlined}
                 confirmTitle={confirmButtonText}
                 confirmDescription={
@@ -104,7 +107,7 @@ export default function AppUpDownload({
         }
     } else {
         const confirmButtonText = 'Download For Free'
-        return (<ConfirmAction onConfirm={handleDownload}
+        return handleDownload && (<ConfirmAction onConfirm={handleDownload}
             antIconComponent={CloudDownloadOutlined}
             confirmTitle={confirmButtonText}
             confirmDescription={

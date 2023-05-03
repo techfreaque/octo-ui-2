@@ -3,7 +3,7 @@ import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import {tentacleConfigType, useFetchCurrentTradingTentaclesConfig, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
 import {AbstractTentaclesConfig} from "./TentaclesConfig";
 
-export default function TradingConfig({content}) {
+export default function TradingConfigTabs({content}) {
     const botInfo = useBotInfoContext()
     const fetchCurrentTentaclesConfig = useFetchCurrentTradingTentaclesConfig()
     const currentTentaclesConfig = useTentaclesConfigContext()

@@ -1,11 +1,15 @@
-import React from "react";
+import {useEffect, useState} from "react";
 import {useAppStoreDataContext, useAppStoreUserContext, useFetchAppStoreData} from "../../../context/data/AppStoreDataProvider";
 import AppList from "./AppList";
 import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
-import TradingConfig from "../Configuration/TradingConfig";
 import ProfileAvatar from "../Stats/ProfileAvatar";
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import "./AppCards/ratingStyle.css"
+import {Typography} from "antd";
+import {tentacleConfigType, useFetchCurrentTradingTentaclesConfig, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
+import {useUpdateHiddenBacktestingMetadataColumnsContext} from "../../../context/data/BotPlottedElementsProvider";
+import {displayStyles, saveUserInputs, tradingConfigTabs} from "../Configuration/TentaclesConfig";
+import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 
 const hiddenCategories = ["Legacy Strategy"]
 export const strategyModeSettingsName = "Strategy Mode Settings"
@@ -15,18 +19,29 @@ export const strategyModeName = "Strategy Mode"
 export default function AppStore() {
     const appStoreData = useAppStoreDataContext();
     const botInfo = useBotInfoContext();
+    const isOnline = useIsBotOnlineContext();
     const appStoreUser = useAppStoreUserContext()
     const isLoggedIn = Boolean(appStoreUser?.token)
     const availableCategories = appStoreData && (Object.keys(appStoreData)?.filter(category => (! hiddenCategories.includes(category))) || [])
 
-    const [selectedCategories, setSelectedCategories] = React.useState(strategyName);
+    const [selectedCategories, setSelectedCategories] = useState();
+    const [isSaving, setIsSaving] = useState(false);
     const _useFetchAppStoreData = useFetchAppStoreData();
-    React.useEffect(() => {
+    const fetchCurrentTentaclesConfig = useFetchCurrentTradingTentaclesConfig()
+    useEffect(() => {
         _useFetchAppStoreData();
+        fetchCurrentTentaclesConfig();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botInfo, isLoggedIn]);
-
+    const currentTentaclesConfig = useTentaclesConfigContext()
+    const saveTentaclesConfig = useSaveTentaclesConfig()
+    function handleUserInputSave() {
+        saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, true), setIsSaving, "tradingConfig")
+    }
+    const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
     const currentStrategy = appStoreData.Strategy ? appStoreData.Strategy?.[Object.keys(appStoreData.Strategy).filter(strategy => (appStoreData.Strategy[strategy].is_selected))?.[0]] : {}
+    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+    const modeSettingschildren = currentTentaclesTradingConfig && tradingConfigTabs({displayStyle: displayStyles.sidebar, userInputs: currentTentaclesTradingConfig, setHiddenMetadataColumns})
     const content = (<AppList selectedCategories={selectedCategories}
         currentStrategy={currentStrategy}
         setSelectedCategories={setSelectedCategories}
@@ -51,12 +66,30 @@ export default function AppStore() {
             antIcon: "ControlOutlined",
             dontScroll: true,
             noPadding: true,
-            content: (<TradingConfig/>)
+            content: (<Typography.Title style={
+                {
+                    marginLeft: "15px",
+                    marginTop: "20px"
+                }
+            }>
+                Select a setting category from the sidebar
+            </Typography.Title>),
+            children: [
+                ...(modeSettingschildren || []), {
+                    label: "Save Settings",
+                    key: "saveSettings",
+                    antIcon: "SaveOutlined",
+                    onClick: handleUserInputSave,
+                    disabled: isSaving || ! isOnline
+                }
+            ]
         },
-
     ]
 
     return (<AntSidebar menuItems={menuItems}
         currentlySelectedMenu={selectedCategories}
+        defaultSelected={
+            (currentTentaclesTradingConfig?.[botInfo.trading_mode_name] ? botInfo?.trading_mode_name : botInfo.trading_mode_name) || strategyModeSettingsName
+        }
         setCurrentlySelectedMenu={setSelectedCategories}/>)
 }

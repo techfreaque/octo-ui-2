@@ -2,13 +2,13 @@ import {Modal} from "@mui/material";
 import {Box} from "@mui/system";
 import {useMemo, useState} from "react";
 import {realTradingSwitch} from "../../../../api/actions";
-import {useBotConfigContext} from "../../../../context/config/BotConfigProvider";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
 import {Space, Tooltip, Alert, Typography} from "antd";
 import {sizes} from "../../../../constants/frontendConstants";
 import {DollarOutlined, PauseOutlined, RobotOutlined} from "@ant-design/icons";
 import {AntIconByReactFunc} from "../../../../components/Icons/AntIcon";
 import AntButton, { buttonTypes } from "../../../../components/Buttons/AntButton";
+import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 
 const { Paragraph, Title  } = Typography;
 
@@ -17,9 +17,9 @@ export default function RealTradingSwitch() {
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const botDomain = useBotDomainContext()
-    const botConfigs = useBotConfigContext()
-    const isRealTrading = botConfigs?.data?.profile.trader.enabled
-    const isSimulatedTrading = botConfigs?.data?.profile["trader-simulator"].enabled
+    const botInfo = useBotInfoContext()
+    const isRealTrading = botInfo?.current_profile?.config.trader.enabled
+    const isSimulatedTrading = botInfo?.current_profile?.config["trader-simulator"].enabled
     const title = isRealTrading ? "Real trading" : isSimulatedTrading ? "Simulated trading" : "Trading paused"
     return useMemo(() => {
         const icon = isRealTrading ? (<AntIconByReactFunc AntReactIcon={DollarOutlined}

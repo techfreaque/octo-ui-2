@@ -54,5 +54,8 @@
   },
   "progress": {
     "backtestingProgressTooltip": "El backtest está {{progressPercent}}% completado"
+  },
+  "apps": {
+    "cantSelectStrategyModeTooltip": "No puede cambiar el modo en una estrategia de solo lectura. \nClona una estrategia para personalizar todos los ajustes."
   }
 }

@@ -90,12 +90,12 @@ export async function startOptimizer(botDomain, optimizerRunSettings, optimizerS
         createNotification(result.message, "danger")
     }
     sendAndInterpretBotUpdate({
-        ... optimizerRunSettings,
+        ...optimizerRunSettings,
         exchange_ids: optimizerRunSettings.exchange_names.map(exchangeName => (ids_by_exchange_name[exchangeName])),
         config: optimizerSettingsForm,
 
         // TODO remove when stock supports ids
-        data_source: optimizerRunSettings ?. data_files ?. [0] || "current_bot_data",
+        data_source: optimizerRunSettings?.data_files?.[0] || "current_bot_data",
         exchange_id: ids_by_exchange_name[optimizerRunSettings.exchange_names[0]]
     }, botDomain + backendRoutes.optimizerStart, success, failure)
 }
@@ -109,7 +109,7 @@ export async function addToOptimizerQueue(botDomain, optimizerRunSettings, optim
         createNotification(result.message, "danger")
     }
     sendAndInterpretBotUpdate({
-        ... optimizerRunSettings,
+        ...optimizerRunSettings,
         // exchange_id: exchageId,
         optimizer_config: optimizerSettingsForm
     }, botDomain + backendRoutes.optimizerAddToQueue, success, failure)
@@ -382,13 +382,15 @@ export async function realTradingSwitch(botDomain, isRealTrading) {
     const fail = (updated_data, update_url, result, msg, status) => {
         createNotification(`Failed to switch to ${title} trading`, "danger")
     }
-    sendAndInterpretBotUpdate({
+    const configUpdate = {
         global_config: {
             trader_enabled: ! isRealTrading,
-            trader_simulator_enabled: isRealTrading
+            "trader-simulator_enabled": isRealTrading
         },
+        removed_elements: [],
         restart_after_save: true
-    }, botDomain + backendRoutes.config, success, fail)
+    }
+    sendAndInterpretBotUpdate(configUpdate, botDomain + backendRoutes.config, success, fail)
 }
 
 export async function updateConfig(botDomain, newConfig, profileName, onFail, onSuccess) {
@@ -405,7 +407,7 @@ export async function updateConfig(botDomain, newConfig, profileName, onFail, on
 export async function resetTentaclesConfig(tentacles, botDomain, setIsResetting, fetchCurrentTentaclesConfig) {
     Promise.all(tentacles.forEach(tentacle => {
         const failure = (updated_data, update_url, result, msg, status) => {
-            createNotification(`Failed to reset ${tentacle} config`, "danger", msg ?. message)
+            createNotification(`Failed to reset ${tentacle} config`, "danger", msg?.message)
         }
         const success = (updated_data, update_url, result, msg, status) => {
             if (status === "success") {
@@ -426,7 +428,7 @@ export async function resetStorage(storage, botDomain, setIsResetting, reloadUiD
     const failure = (updated_data, update_url, result, msg, status) => {
         createNotification(`Failed to clear ${
             storage.title
-        } storage`, "danger", msg ?. message)
+        } storage`, "danger", msg?.message)
         setIsResetting(false)
     }
     const success = (updated_data, update_url, result, msg, status) => {

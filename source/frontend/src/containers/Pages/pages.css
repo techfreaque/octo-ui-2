@@ -59,3 +59,8 @@ body {
 .Mui-disabled.MuiTabs-scrollButtons {
     display: none !important;
   }
+
+/* TODO remove */
+.alert.alert-danger {
+    display: none
+}

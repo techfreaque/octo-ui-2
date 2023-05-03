@@ -17,6 +17,8 @@ const UpdateToSaveCurrencySettingsContext = createContext();
 const CurrenciesListsContext = createContext();
 const PairSelectorMenuOpenContext = createContext();
 const UpdatePairSelectorMenuOpenContext = createContext();
+const NewConfigExchangesContext = createContext();
+const UpdateNewConfigExchangesContext = createContext();
 
 export const useExchangeInfoContext = () => {
     return useContext(ExchangeInfoContext);
@@ -24,6 +26,14 @@ export const useExchangeInfoContext = () => {
 
 const useUpdateToSaveCurrencySettings = () => {
     return useContext(UpdateToSaveCurrencySettingsContext);
+};
+
+export const useNewConfigExchangesContext = () => {
+    return useContext(NewConfigExchangesContext);
+};
+
+export const useUpdateNewConfigExchangesContext = () => {
+    return useContext(UpdateNewConfigExchangesContext);
 };
 
 export const usePairSelectorMenuOpenContext = () => {
@@ -87,7 +97,7 @@ export const useHandleProfileUpdate = () => {
     const botInfo = useBotInfoContext();
     const currenciesLists = useCurrenciesLists()
     const exchangeInfo = useExchangeInfoContext();
-    const currencySettings = botInfo ?. current_profile ?. config ?. ["crypto-currencies"]
+    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
     const exchangeConfigUpdate = useExchangeConfigUpdateContext()
 
     const logic = useCallback((restartAfterSave = false) => {
@@ -133,17 +143,44 @@ export const useHandleSettingChange = () => {
     return logic;
 };
 
+
+export const useHandleExchangeSettingChange = () => {
+    const setNewConfigExchanges = useUpdateNewConfigExchangesContext()
+    const setExchangeConfigUpdate = useUpdateExchangeConfigUpdateContext()
+    const logic = useCallback((exchangeName, inputName, newSetting) => {
+        setNewConfigExchanges(prevExchanges => {
+            const newExchanges = {
+                ...prevExchanges
+            }
+            if (! newExchanges?.[exchangeName]) {
+                newExchanges[exchangeName] = {}
+            }
+            newExchanges[exchangeName][inputName] = newSetting
+            return newExchanges
+        })
+        setExchangeConfigUpdate(prevSettings => {
+            const newSettings = {
+                ...prevSettings
+            }
+            newSettings.global_config[`exchanges_${exchangeName}_${inputName}`] = newSetting
+            return newSettings
+        })
+    }, [setExchangeConfigUpdate, setNewConfigExchanges]);
+    return logic;
+};
+
 export const BotExchangeInfoProvider = ({children}) => {
     const [exchangeInfo, setExchangeInfo] = useState();
     const [servicesInfo, setServicesInfo] = useState();
     const [menuIsOpen, setMenuIsOpen] = useState({open: false, wantsClose: false});
     const botInfo = useBotInfoContext();
-    const currencySettings = botInfo ?. current_profile ?. config ?. ["crypto-currencies"]
+    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
     const [toSaveCurrencySettings, setToSaveCurrencySettings] = useState();
     const [currenciesLists, setCurrenciesLists] = useState();
     const [exchangeConfigUpdate, setExchangeConfigUpdate] = useState({global_config: {}, removed_elements: []})
+    const [newConfigExchanges, setNewConfigExchanges] = useState({})
 
-    const {currencyList: currentCurrencyList, currencySettings: currentCurrencySettings} = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
+    const { currencyList: currentCurrencyList, currencySettings: currentCurrencySettings } = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
     const {currencyList: unsavedCurrencyList} = convertSymbolSettingsToNewFormat(toSaveCurrencySettings, exchangeInfo)
     const currentCurrencySettingsJson = JSON.stringify(currentCurrencySettings)
     const currentCurrencyListJson = JSON.stringify(currentCurrencyList)
@@ -155,19 +192,30 @@ export const BotExchangeInfoProvider = ({children}) => {
         setCurrenciesLists({currentCurrencyList: JSON.parse(currentCurrencyListJson), unsavedCurrencyList: JSON.parse(unsavedCurrencyListJson)})
     }, [currentCurrencyListJson, unsavedCurrencyListJson])
 
+    const configExchanges = servicesInfo?.exchanges ? Object.keys(servicesInfo.exchanges) : []
+    useEffect(() => {
+        setExchangeConfigUpdate({global_config: {}, removed_elements: []})
+        setNewConfigExchanges({})
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(configExchanges)])
+
     return (<ExchangeInfoContext.Provider value={exchangeInfo}>
         <UpdateExchangeInfoContext.Provider value={setExchangeInfo}>
             <PairSelectorMenuOpenContext.Provider value={menuIsOpen}>
                 <UpdatePairSelectorMenuOpenContext.Provider value={setMenuIsOpen}>
                     <ServicesInfoContext.Provider value={servicesInfo}>
                         <UpdateServicesInfoContext.Provider value={setServicesInfo}>
-                            <ExchangeConfigUpdateContext.Provider value={exchangeConfigUpdate}>
-                                <UpdateExchangeConfigUpdateContext.Provider value={setExchangeConfigUpdate}>
-                                    <CurrenciesListsContext.Provider value={currenciesLists}>
-                                        <UpdateToSaveCurrencySettingsContext.Provider value={setToSaveCurrencySettings}> {children} </UpdateToSaveCurrencySettingsContext.Provider>
-                                    </CurrenciesListsContext.Provider>
-                                </UpdateExchangeConfigUpdateContext.Provider>
-                            </ExchangeConfigUpdateContext.Provider>
+                            <NewConfigExchangesContext.Provider value={newConfigExchanges}>
+                                <UpdateNewConfigExchangesContext.Provider value={setNewConfigExchanges}>
+                                    <ExchangeConfigUpdateContext.Provider value={exchangeConfigUpdate}>
+                                        <UpdateExchangeConfigUpdateContext.Provider value={setExchangeConfigUpdate}>
+                                            <CurrenciesListsContext.Provider value={currenciesLists}>
+                                                <UpdateToSaveCurrencySettingsContext.Provider value={setToSaveCurrencySettings}> {children} </UpdateToSaveCurrencySettingsContext.Provider>
+                                            </CurrenciesListsContext.Provider>
+                                        </UpdateExchangeConfigUpdateContext.Provider>
+                                    </ExchangeConfigUpdateContext.Provider>
+                                </UpdateNewConfigExchangesContext.Provider>
+                            </NewConfigExchangesContext.Provider>
                         </UpdateServicesInfoContext.Provider>
                     </ServicesInfoContext.Provider>
                 </UpdatePairSelectorMenuOpenContext.Provider>
@@ -222,15 +270,15 @@ export function getProfileCurrencyUpdate({
     ]).forEach(symbol => {
         if (currentCurrencyList.includes(symbol) && !unsavedCurrencyList.includes(symbol)) {
             let pairKey
-            if (currencySettings ?. [symbol]) {
+            if (currencySettings?.[symbol]) {
                 pairKey = symbol
             } else {
-                const currencyName = exchangeInfo ?. currency_name_info ?. [parseSymbol(symbol).base] ?. n
-                if (currencySettings[currencyName] ?. pairs ?. includes(symbol)) {
+                const currencyName = exchangeInfo?.currency_name_info?.[parseSymbol(symbol).base]?.n
+                if (currencySettings[currencyName]?.pairs?.includes(symbol)) {
                     pairKey = currencyName
                 } else {
                     for (const currency in currencySettings) {
-                        if (currencySettings[currency].pairs ?. includes(symbol)) {
+                        if (currencySettings[currency].pairs?.includes(symbol)) {
                             pairKey = currency
                             break
                         }
@@ -249,20 +297,20 @@ function convertSymbolSettingsToNewFormat(originalCurrencySettings, exchangeInfo
     const currencyList = []
     const currencySettings = {}
     originalCurrencySettings && Object.keys(originalCurrencySettings).forEach(currency => {
-        if (originalCurrencySettings[currency] ?. enabled !== false) {
-            originalCurrencySettings[currency] ?. pairs ?. forEach(pair => {
+        if (originalCurrencySettings[currency]?.enabled !== false) {
+            originalCurrencySettings[currency]?.pairs?.forEach(pair => {
                 currencyList.push(pair)
                 currencySettings[pair] = {
                     enabled: true,
                     pairs: [pair],
-                    currency: exchangeInfo ?. currency_name_info ?. [parseSymbol(pair).base] ?. n
+                    currency: exchangeInfo?.currency_name_info?.[parseSymbol(pair).base]?.n
                 }
             })
         }
     })
     return {
-        currencyList: currencyList ?. sort(
-            (a, b) => a ?. localeCompare(b)
+        currencyList: currencyList?.sort(
+            (a, b) => a?.localeCompare(b)
         ),
         currencySettings
     }
