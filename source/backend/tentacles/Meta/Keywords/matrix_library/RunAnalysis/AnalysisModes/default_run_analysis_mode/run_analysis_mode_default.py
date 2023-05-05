@@ -49,7 +49,8 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
             None,
             inputs,
             editor_options={
-                commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
+                commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12,
+                commons_enums.UserInputEditorOptionsTypes.DISABLE_COLLAPSE.value: True,
             },
             other_schema_values={
                 analysis_enums.UserInputOtherSchemaValuesTypes.DISPLAY_AS_TAB.value: True
@@ -191,7 +192,8 @@ class DefaultRunAnalysisMode(abstract_run_analysis_mode.AbstractRunAnalysisMode)
                 title=group_input_title,
                 parent_input_name=parent_input_name,
                 editor_options={
-                    commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12
+                    commons_enums.UserInputEditorOptionsTypes.GRID_COLUMNS.value: 12,
+                    commons_enums.UserInputEditorOptionsTypes.DISABLE_COLLAPSE.value: True,
                 },
             )
             cls.initialized_group_input_name.append(True)

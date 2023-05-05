@@ -4,8 +4,8 @@ import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import {useState} from "react";
 import {Typography} from "antd";
 import {createTable} from "../../../components/Tables/w2ui/W2UI";
-import { cancelOrders } from "../../../api/actions";
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import {cancelOrders} from "../../../api/actions";
+import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
 
 export default function W2uiDataTable() {
     const [menuItems, setMenuItems] = useState()
@@ -15,9 +15,7 @@ export default function W2uiDataTable() {
         const newMenuItems = {}
         plottedElements && Object.keys(plottedElements).forEach(liveOrBacktest => {
             if (liveOrBacktest === "live") {
-                generateTablesAndSidebarItems({
-                    plottedElements: plottedElements[liveOrBacktest], liveOrBacktest, newMenuItems, botDomain
-                })
+                generateTablesAndSidebarItems({plottedElements: plottedElements[liveOrBacktest], liveOrBacktest, newMenuItems, botDomain})
             } else {
                 plottedElements && Object.keys(plottedElements[liveOrBacktest]).forEach(campaignName => {
                     plottedElements && Object.keys(plottedElements[liveOrBacktest][campaignName]).forEach(optimizerId => {
@@ -35,7 +33,35 @@ export default function W2uiDataTable() {
         })
         setMenuItems(Object.values(newMenuItems))
     }, [botDomain, plottedElements]);
-    return (<AntSidebar menuItems={menuItems}/>)
+    return menuItems ?. length ? (
+        <AntSidebar menuItems={menuItems}/>
+    ) : (
+        <div style={
+            {
+                marginLeft: "20px",
+                marginTop: "20px"
+            }
+        }>
+            <Typography.Title>
+                There are no historical trading data tables to display :(
+            </Typography.Title>
+            <Typography.Title level={2}>
+                To display tables for trades, orders, etc you can:
+            </Typography.Title>
+            <ul>
+                <li>
+                    Select a backtesting run
+                </li>
+                <li>
+                    Enter valid exchange api keys and activate real trading
+                </li>
+                <li>
+                    In simulation mode wait until your strategy takes the first trade
+                </li>
+            </ul>
+            <Typography.Paragraph></Typography.Paragraph>
+        </div>
+    )
 }
 
 
@@ -51,8 +77,8 @@ function generateTablesAndSidebarItems({
         const thisRun = plottedElements[runId]
         thisRun && Object.keys(thisRun).forEach(symbol => {
             thisRun[symbol] && Object.keys(thisRun[symbol]).forEach(timeframe => {
-                const subElements = thisRun[symbol][timeframe]?.data?.sub_elements
-                subElements?.forEach(subElement => {
+                const subElements = thisRun[symbol][timeframe] ?. data ?. sub_elements
+                subElements ?. forEach(subElement => {
                     if (subElement.name === "table") {
                         _generateTablesAndSidebarItems({
                             subElement,
@@ -78,22 +104,24 @@ function _generateTablesAndSidebarItems({
     runId,
     botDomain
 }) {
-    subElement?.data?.elements?.forEach(element => {
+    subElement ?. data ?. elements ?. forEach(element => {
         if (!newMenuItems[liveOrBacktest]) {
             newMenuItems[liveOrBacktest] = {
                 label: `${
                     liveOrBacktest.charAt(0).toUpperCase() + liveOrBacktest.slice(1)
-                    } trading`,
+                } trading`,
                 antIcon: liveOrBacktest === "live" ? "DollarOutlined" : "RobotOutlined",
-                content: (<Typography.Title level={2}>
-                    Select a table from the sidebar</Typography.Title>),
-                children: [],
+                content: (
+                    <Typography.Title level={2}>
+                        Select a table from the sidebar</Typography.Title>
+                ),
+                children: []
             }
         }
         const tableId = `${
             element.title.replace(/ /g, "_").replace(/\//g, "_")
         }-table`
-        element?.rows?.forEach((row, index) => {
+        element ?. rows ?. forEach((row, index) => {
             row.recid = index
         })
         let label
@@ -110,9 +138,9 @@ function _generateTablesAndSidebarItems({
                     text: 'Cancel selected orders',
                     tooltip: 'Cancel selected orders',
                     icon: 'w2ui-icon-cross',
-                    batch: true,
+                    batch: true
                 }
-                cancelCallback=(event)=> onOrderCancel(event, botDomain, tableId)
+                cancelCallback = (event) => onOrderCancel(event, botDomain, tableId)
             }
         } else {
             label = `${
@@ -122,12 +150,15 @@ function _generateTablesAndSidebarItems({
 
         newMenuItems[liveOrBacktest].children.push({
             label,
-            antIcon:element.config?.antIcon,
-            faIcon:element.config?.faIcon,
+            antIcon: element.config ?. antIcon,
+            faIcon: element.config ?. faIcon,
             noPadding: true,
-            content: (<TableFromElement tableId={tableId}
-                element={element} cancelCallback={cancelCallback}
-                additionalToolbarButtons={additionalToolbarButtons}/>)
+            content: (
+                <TableFromElement tableId={tableId}
+                    element={element}
+                    cancelCallback={cancelCallback}
+                    additionalToolbarButtons={additionalToolbarButtons}/>
+            )
         })
     })
 }
@@ -149,20 +180,22 @@ function TableFromElement({tableId, element, additionalToolbarButtons, cancelCal
             addToTable: false,
             reorderRows: false,
             onReorderRowCallback: null,
-            onDeleteCallback:cancelCallback
+            onDeleteCallback: cancelCallback
         });
         Object.values(additionalToolbarButtons).forEach(additionalButton => {
             table.toolbar.add(additionalButton);
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [tableId, element])
-    return (<div id={tableId}
-        style={
-            {
-                width: "100%",
-                height: "100%"
-            }
-        }/>)
+    return (
+        <div id={tableId}
+            style={
+                {
+                    width: "100%",
+                    height: "100%"
+                }
+            }/>
+    )
 }
 
 function onOrderCancel(event, botDomain, tableId) {

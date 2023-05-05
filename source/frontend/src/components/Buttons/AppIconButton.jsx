@@ -1,29 +1,38 @@
 import {useMediaQuery} from "@mui/material";
 import AntButton from "./AntButton";
-import { sizes } from "../../constants/frontendConstants";
+import {sizes} from "../../constants/frontendConstants";
 
 export default function AppIconButton({
     isSelected,
     buttonTitle,
+    icon,
     faIconComponent,
     antIconComponent,
+    antIconString,
+    faIconString,
     onClick,
     disabled,
-    href
+    href,
+    isResponsive = true
 }) {
     const isBigScreen = useMediaQuery('(min-width:585px)');
-    const showBlockButton = isBigScreen && isSelected
+    const showBlockButton = isResponsive ? (isBigScreen && isSelected) : false
     if (showBlockButton) {
-        return (<AntButton
-            href={href}
+        return (<AntButton href={href}
             disabled={disabled}
+            icon={icon}
             faIconComponent={faIconComponent}
             antIconComponent={antIconComponent}
+            antIcon={antIconString}
+            faIcon={faIconString}
             onClick={onClick}
             buttonVariant="text"> {buttonTitle} </AntButton>)
     } else {
         return (<AntButton noIconMargin={true}
-            size={sizes.small}
+            size={
+                sizes.small
+            }
+            icon={icon}
             href={href}
             disabled={disabled}
             style={
@@ -42,10 +51,14 @@ export default function AppIconButton({
                     marginTop: '5px'
                 }
             }
+            antIcon={antIconString}
+            faIcon={faIconString}
             faIconComponent={faIconComponent}
             antIconComponent={antIconComponent}
             onClick={onClick}
-            buttonVariant="text"> {splitText(buttonTitle)} </AntButton>)
+            buttonVariant="text"> {
+            splitText(buttonTitle)
+        } </AntButton>)
     }
 }
 

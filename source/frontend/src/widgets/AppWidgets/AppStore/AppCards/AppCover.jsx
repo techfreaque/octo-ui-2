@@ -45,13 +45,13 @@ export function AppCover({app, avatarImage}) {
                 }/>
             </Tooltip>)
         } </div>
-        <img alt={
+       {avatarImage&& <img alt={
                 app?.title
             }
             style={
 
                 {width: "99.7%"}
             }
-            src={avatarImage}/>
+            src={avatarImage}/>}
     </>)
 }

@@ -198,7 +198,7 @@ export function tradingConfigTabs({
         _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
         // _applyCustomPathUserInputs(editedUserInputs, tradingModeName);
         _createTentacleConfigTab({
-            configTitle: editedUserInputs[TentacleName].tentacle,
+            configTitle: (storageName === "tradingConfig" ? editedUserInputs[TentacleName].tentacle.split(/(?=[A-Z])/).join(" ") : editedUserInputs[TentacleName].tentacle),
             configName: editedUserInputs[TentacleName].tentacle,
             config: editedUserInputs[TentacleName].config,
             schema: editedUserInputs[TentacleName].schema,

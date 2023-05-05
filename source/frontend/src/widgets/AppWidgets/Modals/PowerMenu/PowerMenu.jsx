@@ -47,7 +47,7 @@ export default function PowerMenu() {
                         label: (<Button onClick={handleClose}
                             variant="outlined"
                             block={true}
-                            href={botDomain}><Trans i18nKey="buttons.backToOctoBot"/></Button>)
+                            href={botDomain+"/home"}><Trans i18nKey="buttons.backToOctoBot"/></Button>)
                     },
                 ] : []
             }

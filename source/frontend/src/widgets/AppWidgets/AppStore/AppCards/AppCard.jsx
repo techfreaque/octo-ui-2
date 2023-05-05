@@ -29,7 +29,8 @@ export default function AppCard({
     return (<Card // hoverable
         style={cardStyle}
         cover={
-            (<AppCover avatarImage={'https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png'}
+            (<AppCover
+                // avatarImage={'https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png'}
                 app={app}/>)
         }
         onMouseEnter={
