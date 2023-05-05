@@ -49,11 +49,11 @@ export default function AppActions({
             }
         }>
             <div style={
-                (app ?. is_selected ? {
-                    ... buttonStyle,
+                (app?.is_selected ? {
+                    ...buttonStyle,
                     marginTop: "20px"
                 } : (isMouseHover ? {
-                    ... buttonStyle,
+                    ...buttonStyle,
                     // marginTop: "20px",
                     // position: "absolute",
                     // top: "auto",
@@ -62,7 +62,7 @@ export default function AppActions({
                     // left: "0px",
                     justifyContent: "center"
                 } : {
-                    ... buttonStyle,
+                    ...buttonStyle,
                     display: "none"
                 }))
             }>
@@ -85,11 +85,11 @@ export default function AppActions({
                     app={app}/>
             </div>
             <div style={
-                (isMouseHover | app ?. is_selected) ? {
-                    ... buttonStyle,
+                (isMouseHover | app?.is_selected) ? {
+                    ...buttonStyle,
                     display: "none"
                 } : {
-                    ... buttonStyle,
+                    ...buttonStyle,
                     position: "absolute",
                     top: "-20px",
                     left: "-10px",

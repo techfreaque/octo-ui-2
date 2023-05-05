@@ -8,9 +8,7 @@ export default function AppUpDownload({
     handleUpload,
     setUploadInfo,
     uploadInfo,
-    handleDownload,
-    setDownloadInfo,
-    downloadInfo
+    handleDownload
 }) {
     if (app.is_installed) {
         if (app.is_owner) {
@@ -18,9 +16,7 @@ export default function AppUpDownload({
                 const buttonText = "Publish Update"
                 return handleUpload && (<ConfirmAction onConfirm={handleUpload}
                     antIconComponent={CloudUploadOutlined}
-                    isSelected={
-                        app.is_selected
-                    }
+                    isSelected={app.is_selected}
                     confirmTitle={buttonText}
                     confirmDescription={
                         (<UploadAppForm setUploadInfo={setUploadInfo}
@@ -58,13 +54,9 @@ export default function AppUpDownload({
             return handleDownload && (<ConfirmAction onConfirm={handleDownload}
                 antIconComponent={CloudDownloadOutlined}
                 confirmTitle={buttonText}
-                isSelected={
-                    app.is_selected
-                }
+                isSelected={app.is_selected}
                 confirmDescription={
-                    (<AppDownloadForm downloadInfo={downloadInfo}
-                        setDownloadInfo={setDownloadInfo}
-                        setUploadInfo={setUploadInfo}
+                    (<AppDownloadForm setUploadInfo={setUploadInfo}
                         uploadInfo={uploadInfo}
                         app={app}/>)
                 }
@@ -79,9 +71,7 @@ export default function AppUpDownload({
                 antIconComponent={CloudDownloadOutlined}
                 confirmTitle={confirmButtonText}
                 confirmDescription={
-                    (<AppDownloadForm downloadInfo={downloadInfo}
-                        setDownloadInfo={setDownloadInfo}
-                        setUploadInfo={setUploadInfo}
+                    (<AppDownloadForm setUploadInfo={setUploadInfo}
                         uploadInfo={uploadInfo}
                         app={app}/>)
                 }
@@ -91,17 +81,10 @@ export default function AppUpDownload({
             const confirmButtonText = `Buy for ${
                 app.price
             }$ / month`
-
             return handleDownload && (<ConfirmAction onConfirm={handleDownload}
                 antIconComponent={ShoppingCartOutlined}
                 confirmTitle={confirmButtonText}
-                confirmDescription={
-                    (<AppDownloadForm downloadInfo={downloadInfo}
-                        setDownloadInfo={setDownloadInfo}
-                        setUploadInfo={setUploadInfo}
-                        uploadInfo={uploadInfo}
-                        app={app}/>)
-                }
+                // confirmDescription={confirmDescription}
                 confirmButtonText={confirmButtonText}
                 buttonTitle={confirmButtonText}/>)
         }
@@ -111,9 +94,7 @@ export default function AppUpDownload({
             antIconComponent={CloudDownloadOutlined}
             confirmTitle={confirmButtonText}
             confirmDescription={
-                (<AppDownloadForm downloadInfo={downloadInfo}
-                    setDownloadInfo={setDownloadInfo}
-                    setUploadInfo={setUploadInfo}
+                (<AppDownloadForm setUploadInfo={setUploadInfo}
                     uploadInfo={uploadInfo}
                     app={app}/>)
             }

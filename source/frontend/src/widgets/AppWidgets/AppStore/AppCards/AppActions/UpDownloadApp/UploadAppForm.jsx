@@ -3,11 +3,13 @@ import {Input, Select} from "antd";
 import {appVersionTags, appVersionTypes} from "../../../storeConstants";
 import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
 import {useEffect} from "react";
+const { TextArea } = Input;
 
 const apiFields = {
     versionType: "version_type",
     versionTag: "version_tag",
-    price: "price"
+    price: "price",
+    releaseNotes: "release_notes",
 }
 
 export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
@@ -27,7 +29,9 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
         setUploadInfo({
             [apiFields.price]: 5,
             [apiFields.versionType]: versionTypeOptions[0].value,
-            [apiFields.versionTag]: versionTagOptions[0].value
+            [apiFields.versionTag]: versionTagOptions[0].value,
+            [apiFields.releaseNotes]: ""
+            
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -37,7 +41,7 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
     }>
         <UserInputLabel children
             title={
-                `Select the realease type for your ${
+                `Select the release notes for your ${
                     app.categories[0]
                 }`
         }>
@@ -68,6 +72,21 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
                     {width: "100%"}
                 }
                 options={versionTagOptions}/>
+        </UserInputLabel>
+        <UserInputLabel children
+            title={
+                'Release notes'
+        }>
+            <TextArea onChange={ (event) => handleInputChange(apiFields.realease_notes, event?.target?.value)}
+                autoSize={{
+                    minRows: 2,
+                    maxRows: 6,
+                  }}
+                />
+                <div
+                  style={{
+                    margin: '24px 0',
+                  }} />
         </UserInputLabel>
         <UserInputLabel children
             title={
