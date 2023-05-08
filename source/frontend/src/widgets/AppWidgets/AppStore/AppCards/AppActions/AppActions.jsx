@@ -1,4 +1,4 @@
-import {Popconfirm} from "antd";
+import {Popconfirm, Tooltip} from "antd";
 import AntButton, {buttonTypes, buttonVariants} from "../../../../../components/Buttons/AntButton";
 import {useState} from "react";
 import AppInfoModal from "./AppInfoModal";
@@ -112,7 +112,7 @@ function NoHoverActions({app}) {
             actionText = "Free"
         } else {
             actionText = `Sell ${
-                app.categories[0]
+                app?.categories?.[0] || "App"
             }`
         }
     } else if (app.is_installed) {
@@ -126,18 +126,16 @@ function NoHoverActions({app}) {
     } else {
         actionText = "Free"
     }
-    return (<>
-        <AntButton style={
-                { // margin: "3px"
-                }
+    return (<AntButton style={
+            { // margin: "3px"
             }
-            buttonType={
-                buttonTypes.fontSecondary
-            }
-            buttonVariant={
-                buttonVariants.text
-        }> {actionText} </AntButton>
-    </>)
+        }
+        buttonType={
+            buttonTypes.fontSecondary
+        }
+        buttonVariant={
+            buttonVariants.text
+    }> {actionText} </AntButton>)
     // if (app.is_owner)
 
 }
@@ -169,7 +167,8 @@ function OnHoverActions({
             setDownloadInfo={setDownloadInfo}
             uploadInfo={uploadInfo}
             handleDownload={handleDownload}/>
-        <SelectApp app={app} isReadOnlyStrategy={isReadOnlyStrategy}
+        <SelectApp app={app}
+            isReadOnlyStrategy={isReadOnlyStrategy}
             handleSelect={handleSelect}/>
         <AppInfoModal app={app}
             infoContent={infoContent}/> {
@@ -201,15 +200,31 @@ export function ConfirmAction({
     faIconComponent,
     antIconComponent,
     isSelected,
-    okButtonProps = {}
+    okButtonProps = {},
+    disabled = false,
+    disabledTooltipTitle = false,
+    formIsValidated = true,
+    confirmLoading
 }) {
     const [open, setOpen] = useState(false);
     // eslint-disable-next-line no-unused-vars
-    const [confirmLoading, setConfirmLoading] = useState(false);
 
     const showPopconfirm = () => {
         setOpen(true);
     };
+    if (disabled) {
+        return (<Tooltip title={disabledTooltipTitle}>
+            <div>
+                <AppIconButton isSelected={isSelected}
+                    buttonTitle={buttonTitle}
+                    disabled={true}
+                    faIconComponent={faIconComponent}
+                    antIconComponent={antIconComponent}
+                    // onClick={showPopconfirm}
+                />
+            </div>
+        </Tooltip>)
+    }
     return (<Popconfirm title={confirmTitle}
         description={confirmDescription}
         open={open}
@@ -219,7 +234,8 @@ export function ConfirmAction({
         okButtonProps={
             {
                 loading: confirmLoading,
-                ...okButtonProps
+                ...okButtonProps,
+                disabled: !formIsValidated
             }
         }
         okText={confirmButtonText}

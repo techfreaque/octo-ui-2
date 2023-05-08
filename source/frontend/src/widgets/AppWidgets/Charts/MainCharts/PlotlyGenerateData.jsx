@@ -237,7 +237,7 @@ function _createCharts({
 
 function displayCandlesAsLines(candlesCount, uiConfig) {
     const default_max_candles_before_lines = 5000;
-    const settings = uiConfig[DISPLAY_SETTINGS_KEY];
+    const settings = uiConfig?.[DISPLAY_SETTINGS_KEY];
     if (typeof settings !== "undefined" && typeof settings[GRAPHS_KEY] !== "undefined") {
         return candlesCount > Number(settings[GRAPHS_KEY].max_candles_before_line_display);
     }

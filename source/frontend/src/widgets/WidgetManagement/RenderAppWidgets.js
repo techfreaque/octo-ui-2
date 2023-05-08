@@ -6,7 +6,7 @@ import { isProduction } from "../../constants/frontendConstants";
 
 export default function AppWidgets(props) {
     return useMemo(() => {
-        if (props.layout && props.layout[0]) {
+        if (props.layout?.[0]) {
             return props.layout.map((element, index) => {
                 if (typeof registeredComponents[element.component] === "undefined") {
                     console.error("error loading widget: ", element.component, element, props);
@@ -14,9 +14,9 @@ export default function AppWidgets(props) {
                         `${index}-${
                             element.component
                         }`
-                    }></span>);
+                    } />);
               }
-              !isProduction && console.log("widget is loading: " + element.component, element)
+              !isProduction && console.log(`widget is loading: ${element.component}`, element)
                 try {
                     return (<ErrorBoundary key= {`${index}-${
                       element.component
@@ -32,23 +32,22 @@ export default function AppWidgets(props) {
                         `${index}-${
                             element.component
                         }`
-                    }></span>);
+                    } />);
                 }
             });
-        } else {
-          !isProduction &&  console.log("widget doesnt have a layout:", props);
         }
+        !isProduction &&  console.log("widget doesnt have a layout:", props);
     }, [props])
 }
 
 
-class ErrorBoundary extends React.Component {
+export class ErrorBoundary extends React.Component {
     state = {
         error: null,
         errorInfo: null
     };
     componentDidCatch(error, errorInfo) {
-        this.setState({error: error, errorInfo: errorInfo});
+        this.setState({error, errorInfo});
     }
     render() {
         if (this.state.errorInfo) {
@@ -57,7 +56,7 @@ class ErrorBoundary extends React.Component {
                 <details style={
                     {whiteSpace: "pre-wrap"}
                 }> {
-                    this.state.error && this.state.error.toString()
+                    this.state.error?.toString()
                 }
                     <br/> {
                     this.state.errorInfo.componentStack

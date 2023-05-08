@@ -11,18 +11,23 @@ export default function AppInfoModal({app, infoContent}) {
     function handleClose() {
         setOpen(false)
     }
-    return (<>
-        <AppIconButton
-            isSelected={app.is_selected}
-            buttonTitle={`${
-                app.categories[0]
-            } Info`}
+    return infoContent && (<>
+        <AppIconButton isSelected={
+                app.is_selected
+            }
+            buttonTitle={
+                `${
+                    app.categories[0]
+                } Info`
+            }
             antIconComponent={InfoCircleOutlined}
-            onClick={  () => setOpen(true)}/>
+            onClick={
+                () => setOpen(true)
+            }/>
         <Modal open={open}
             onCancel={handleClose}
             title={
-                app.title + " | " + app.categories[0]
+                `${app.title} | ${app.categories[0]}`
             }
             centered
             width="700px"
@@ -42,7 +47,5 @@ export default function AppInfoModal({app, infoContent}) {
                     Cancel
                 </AntButton>),]
         }> {infoContent} </Modal>
-
-
     </>)
 }

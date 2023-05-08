@@ -1,16 +1,24 @@
 import {DollarCircleOutlined} from "@ant-design/icons";
-import {Input, Select} from "antd";
+import {
+    Alert,
+    Input,
+    Select,
+    Tooltip,
+    Typography
+} from "antd";
 import {appVersionTags, appVersionTypes} from "../../../storeConstants";
 import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
 import {useEffect} from "react";
-const { TextArea } = Input;
+const {TextArea} = Input;
 
-const apiFields = {
+export const apiFields = {
     versionType: "version_type",
     versionTag: "version_tag",
     price: "price",
-    releaseNotes: "release_notes",
+    releaseNotes: "release_notes"
 }
+
+export const minReleaseNotesLength = 100
 
 export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
     const versionTypeOptions = Object.keys(appVersionTypes).map(versionType => {
@@ -27,11 +35,11 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
     }
     useEffect(() => {
         setUploadInfo({
-            [apiFields.price]: 5,
+            [apiFields.price]: 0,
             [apiFields.versionType]: versionTypeOptions[0].value,
             [apiFields.versionTag]: versionTagOptions[0].value,
             [apiFields.releaseNotes]: ""
-            
+
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -74,19 +82,25 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
                 options={versionTagOptions}/>
         </UserInputLabel>
         <UserInputLabel children
-            title={
-                'Release notes'
-        }>
-            <TextArea onChange={ (event) => handleInputChange(apiFields.realease_notes, event?.target?.value)}
-                autoSize={{
-                    minRows: 2,
-                    maxRows: 6,
-                  }}
-                />
-                <div
-                  style={{
-                    margin: '24px 0',
-                  }} />
+            title={'Release notes'}> {
+            uploadInfo?.[apiFields.releaseNotes]?.length < minReleaseNotesLength && (<Alert message={
+                `Let your users know what you've changed. Add at least ${
+                    minReleaseNotesLength - (uploadInfo?.[apiFields.releaseNotes]?.length || 0)
+                } more characters`
+            } type="info" />)
+        }
+            <TextArea onChange={
+                    (event) => handleInputChange(apiFields.releaseNotes, event?.target?.value)
+                }
+                autoSize={
+                    {
+                        minRows: 2,
+                        maxRows: 6
+                    }
+                }/>
+            <div style={
+                {margin: '24px 0'}
+            }/>
         </UserInputLabel>
         <UserInputLabel children
             title={
@@ -94,14 +108,28 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
                     app.categories[0]
                 }`
         }>
-            <Input onChange={
-                    (event) => handleInputChange(apiFields.price, event?.target?.value)
-                }
-                value={
-                    uploadInfo?.price || app.price
-                }
-                addonAfter={<DollarCircleOutlined/>}
-                defaultValue="5"/>
+            <Tooltip title={
+                (<>
+                    <Typography.Title level={5}>
+                        Selling apps is not supported yet :(
+                    </Typography.Title>
+                    <Typography.Paragraph>
+                        Share them for free or wait a bit..
+                    </Typography.Paragraph>
+                </>)
+            }>
+                <div>
+                    <Input onChange={
+                            (event) => handleInputChange(apiFields.price, event?.target?.value)
+                        }
+                        value={
+                            uploadInfo?.price || app.price
+                        }
+                        disabled={true}
+                        addonAfter={<DollarCircleOutlined/>}
+                        defaultValue="0"/>
+                </div>
+            </Tooltip>
         </UserInputLabel>
     </div>)
 }

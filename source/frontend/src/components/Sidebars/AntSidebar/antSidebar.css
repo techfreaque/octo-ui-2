@@ -85,11 +85,11 @@
     background-color: unset;
 }
 
-.ant-side-bar .root-menu > div > div > div > .dark-content-box {
+.ant-side-bar .root-menu>div>div>div>.dark-content-box {
     background-color: var(--dark-backgroundSecondary);
 }
 
-.ant-side-bar .root-menu > div > div > div > .light-content-box {
+.ant-side-bar .root-menu>div>div>div>.light-content-box {
     background-color: var(--dark-backgroundSecondary);
 }
 
@@ -99,4 +99,14 @@
 
 .ant-side-bar .light.light-icon-position-end {
     background-color: unset;
+}
+
+/* small screen tweaks */
+
+.small-screen .dark-header {
+    /* margin: auto; */
+    padding: 0 !important;
+}
+.small-screen .dark-expand-icon {
+    display: none !important
 }

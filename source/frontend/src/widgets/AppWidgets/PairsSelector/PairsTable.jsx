@@ -1,12 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import {ConfigProvider, Switch, Tooltip} from 'antd';
 import {useEffect} from 'react';
-import {
-    useCurrenciesLists,
-    useExchangeInfoContext,
-    useFetchExchangeInfo,
-    useHandleSettingChange,
-} from '../../../context/data/BotExchangeInfoProvider';
+import {useCurrenciesLists, useExchangeInfoContext, useFetchExchangeInfo, useHandleSettingChange} from '../../../context/data/BotExchangeInfoProvider';
 import {useIsBotOnlineContext} from '../../../context/data/IsBotOnlineProvider';
 import {useBotDomainContext} from '../../../context/config/BotDomainProvider';
 import {useUpdateVisibleExchangesContext} from '../../../context/config/VisibleExchangesProvider';
@@ -33,7 +27,9 @@ export default function PairsTable() {
 
     const fetchExchangeInfo = useFetchExchangeInfo()
     useEffect(() => {
-        isOnline && fetchExchangeInfo()
+        if (isOnline) {
+            fetchExchangeInfo()
+        };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOnline, botDomain])
 
@@ -118,7 +114,7 @@ function getData({
 
             preSorteddata.push({
                 key: symbol,
-                exchange: exchange,
+                exchange,
                 symbolLabel: (isEnabled && ! isSelected) ? (
                     <a href="#"
                         onClick={
@@ -136,7 +132,7 @@ function getData({
                         handleSettingChange={handleSettingChange}/>
                 ),
                 enabled: isEnabled,
-                availableAfterRestart: availableAfterRestart,
+                availableAfterRestart,
                 selected: isSelected
             })
         })
@@ -158,12 +154,13 @@ function SymbolEnabler({
 }) {
     const disabledAfterRestart = !unsavedCurrencyList.includes(symbol) && isEnabled
     return (
-       <EnablerSwitch
-        availableAfterRestart={availableAfterRestart}
-        title={symbol}
-        isEnabled={isEnabled}
-        disabledAfterRestart={disabledAfterRestart}
-        onChange={(event) => handleSettingChange(event, exchange, symbol)} />
+        <EnablerSwitch availableAfterRestart={availableAfterRestart}
+            title={symbol}
+            isEnabled={isEnabled}
+            disabledAfterRestart={disabledAfterRestart}
+            onChange={
+                (event) => handleSettingChange(event, exchange, symbol)
+            }/>
     )
 }
 

@@ -17,8 +17,13 @@ class AnalysisModePlotSettingsTypes:
     PIE_CHARTS_SETTINGS_TITLE: str = "Pie Charts"
 
 
+class UserInputEditorOptionsTypes(enum.Enum):
+    ANT_ICON = "antIcon"  # used by octo ui2
+
+
 class UserInputOtherSchemaValuesTypes(enum.Enum):
     DISPLAY_AS_TAB = "display_as_tab"  # used by octo ui2
+    TAB_ORDER = "order"  # used by octo ui2
 
 
 class SymbolsOptions:

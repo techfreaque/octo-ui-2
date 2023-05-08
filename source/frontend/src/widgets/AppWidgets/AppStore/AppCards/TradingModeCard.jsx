@@ -1,13 +1,13 @@
 import AppActions from "./AppActions/AppActions";
-import {useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
+import {useInstallAppPackage, useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
 import {useState} from "react";
-import AppCard from "./AppCard";
 import {strategyModeSettingsName} from "../AppStore";
 import {useBotDomainContext} from "../../../../context/config/BotDomainProvider";
 import {backendRoutes} from "../../../../constants/backendConstants";
 import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
 import {updateConfig} from "../../../../api/actions";
 import createNotification from "../../../../components/Notifications/Notification";
+import AppCardTemplate from "./AppCardTemplate";
 
 export default function TradingModeCard({
     app,
@@ -23,10 +23,18 @@ export default function TradingModeCard({
     const [uploadInfo, setUploadInfo] = useState({})
     const botDomain = useBotDomainContext()
     const botInfo = useBotInfoContext()
-    const profileDownloadUrl = botDomain + backendRoutes.exportApp + app.package_id
+    const [downloadInfo, setDownloadInfo] = useState({})
+
+    const profileDownloadUrl = botDomain + backendRoutes.exportApp + app.origin_package
 
     const selectedApps = apps.filter(app => app.is_selected)
-
+    const installApp = useInstallAppPackage()
+    async function handleDownloadApp(setOpen) {
+        installApp({
+            ...downloadInfo,
+            ...app
+        }, setIsloading, setOpen)
+    }
     const uploadToAppStore = useUploadToAppStore()
     function onSuccess() {
         createNotification(`Successfully selected ${
@@ -66,7 +74,7 @@ export default function TradingModeCard({
         setOpen(false)
 
     }
-    return (<AppCard app={app}
+    return (<AppCardTemplate app={app}
         setMouseHover={setMouseHover}
         avatarUrl={"https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png"}
         category={category}
@@ -77,14 +85,22 @@ export default function TradingModeCard({
                 infoContent={
                     app.description
                 }
-                isReadOnlyStrategy={currentStrategy?.is_from_store}
+                isReadOnlyStrategy={
+                    currentStrategy?.is_from_store
+                }
                 onConfigure={
                     () => setSelectedCategories(strategyModeSettingsName)
                 }
+                downloadInfo={downloadInfo}
+
+                setDownloadInfo={setDownloadInfo}
+
+                handleDownload={handleDownloadApp}
+
                 handleSelect={handleSelectStrategyMode}
-                // handleUpload={
-                //     (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
-                // }
+                handleUpload={
+                    (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
+                }
                 setUploadInfo={setUploadInfo}
                 uploadInfo={uploadInfo}
                 app={app}/>)

@@ -15,10 +15,9 @@ export function CardDescription({category, app, isMouseHover, cardActions}) {
     const lineHeightWithMargin = totalLineHeight + marginBottom + marginTop
 
     return (
-        <>
             <div style={
                 {
-                    height: lineHeightWithMargin + 5 + "px",
+                    height: `${lineHeightWithMargin + 5}px`,
                     overflow: "hidden"
                 }
             }>
@@ -35,7 +34,6 @@ export function CardDescription({category, app, isMouseHover, cardActions}) {
                         app={app}/>
                 )
             } </div>
-        </>
     )
 }
 
@@ -52,10 +50,10 @@ function NonHoverDescription({
         <>
             <div style={
                 {
-                    marginBottom: marginBottom + "px",
-                    marginTop: marginTop + "px",
-                    height: totalLineHeight + "px",
-                    maxHeight: totalLineHeight + "px"
+                    marginBottom: `${marginBottom}px`,
+                    marginTop: `${marginTop}px`,
+                    height: `${totalLineHeight}px`,
+                    maxHeight: `${totalLineHeight}px`
                 }
             }>
                 <span style={
@@ -66,9 +64,9 @@ function NonHoverDescription({
                         // overflow: "hidden",
                         width: "100%",
 
-                        lineHeight: lineHeight + "px",
-                        height: totalLineHeight + "px",
-                        maxHeight: totalLineHeight + "px",
+                        lineHeight: `${lineHeight}px`,
+                        height: `${totalLineHeight}px`,
+                        maxHeight: `${totalLineHeight}px`,
                         overflow: "hidden"
                     }
                 }>

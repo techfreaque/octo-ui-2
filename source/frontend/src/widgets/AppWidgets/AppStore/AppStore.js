@@ -4,11 +4,11 @@ import AppList from "./AppList";
 import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import ProfileAvatar from "../Stats/ProfileAvatar";
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
-import "./AppCards/ratingStyle.css"
+import "./AppCards/appRatingStyle.css"
 import {Typography} from "antd";
 import {tentacleConfigType, useFetchCurrentTradingTentaclesConfig, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
 import {useUpdateHiddenBacktestingMetadataColumnsContext} from "../../../context/data/BotPlottedElementsProvider";
-import {displayStyles, saveUserInputs, tradingConfigTabs} from "../Configuration/TentaclesConfig";
+import {displayStyles, saveUserInputs, generateTradingConfigTabs} from "../Configuration/TentaclesConfig";
 import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 
 const hiddenCategories = ["Legacy Strategy"]
@@ -24,6 +24,7 @@ export default function AppStore() {
     const isLoggedIn = Boolean(appStoreUser?.token)
     const availableCategories = appStoreData && (Object.keys(appStoreData)?.filter(category => (! hiddenCategories.includes(category))) || [])
     const [selectedCategories, setSelectedCategories] = useState();
+    const [tradingConfigTabs, setTradingConfigTabs] = useState();
     const [isSaving, setIsSaving] = useState(false);
     const _useFetchAppStoreData = useFetchAppStoreData();
     const fetchCurrentTentaclesConfig = useFetchCurrentTradingTentaclesConfig()
@@ -40,26 +41,34 @@ export default function AppStore() {
     const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
     const currentStrategy = appStoreData.Strategy ? appStoreData.Strategy?.[Object.keys(appStoreData.Strategy).filter(strategy => (appStoreData.Strategy[strategy].is_selected))?.[0]] : {}
     const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
-    const modeSettingschildren = currentTentaclesTradingConfig && tradingConfigTabs({displayStyle: displayStyles.sidebar, userInputs: currentTentaclesTradingConfig, setHiddenMetadataColumns})
+
+    useEffect(() => {
+        if (currentTentaclesTradingConfig) {
+            setTradingConfigTabs(generateTradingConfigTabs({displayStyle: displayStyles.sidebar, userInputs: currentTentaclesTradingConfig, setHiddenMetadataColumns}))
+        };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [currentTentaclesTradingConfig])
+
     const content = (<AppList selectedCategories={selectedCategories}
         currentStrategy={currentStrategy}
         setSelectedCategories={setSelectedCategories}
         appStoreData={appStoreData}/>)
     const menuItems = [
-        ...(availableCategories?.map(categoryName => {
+        ...(availableCategories?.filter(category => (category === strategyName || category === strategyModeName))?.map(categoryName => {
             if (categoryName === strategyName) {
                 return {
                     label: botInfo?.current_profile?.profile?.name,
                     key: categoryName,
-                    content: content,
+                    content,
                     icon: (<ProfileAvatar marginRight="5px"/>)
                 }
             } else if (categoryName === strategyModeName) {
-                return {label: categoryName, key: categoryName, content: content, antIcon: "BranchesOutlined"}
+                return {label: categoryName, key: categoryName, content, antIcon: "BranchesOutlined"}
             } else {
-                return {label: categoryName, content: content, key: categoryName}
+                return {label: categoryName, content, key: categoryName}
             }
-        }) || []), {
+        }) || []),
+        {
             label: strategyModeSettingsName,
             key: strategyModeSettingsName,
             antIcon: "ControlOutlined",
@@ -74,7 +83,7 @@ export default function AppStore() {
                 Select a setting category from the sidebar
             </Typography.Title>),
             children: [
-                ...(modeSettingschildren || []), {
+                ...(tradingConfigTabs || []), {
                     label: "Save Settings",
                     key: "saveSettings",
                     antIcon: "SaveOutlined",
@@ -83,11 +92,27 @@ export default function AppStore() {
                 }
             ]
         },
+        {
+            label: "Other Apps",
+            key: "other_apps",
+            antIcon: "AppstoreAddOutlined",
+            dontScroll: true,
+            noPadding: true,
+            content: (<Typography.Title style={
+                {
+                    marginLeft: "15px",
+                    marginTop: "20px"
+                }
+            }>
+                Select a app category from the sidebar
+            </Typography.Title>),
+            children: availableCategories?.filter(category => (category !== strategyName && category !== strategyModeName))?.map(categoryName=>({label: categoryName, content, key: categoryName}))
+        },
     ]
     return (<AntSidebar menuItems={menuItems}
         currentlySelectedMenu={selectedCategories}
         defaultSelected={
-            (currentTentaclesTradingConfig?.[botInfo.trading_mode_name] ? botInfo?.trading_mode_name : botInfo.trading_mode_name) || strategyModeSettingsName
+            (currentTentaclesTradingConfig?.[botInfo?.trading_mode_name] ? botInfo.trading_mode_name : botInfo?.trading_mode_name) || strategyModeSettingsName
         }
         setCurrentlySelectedMenu={setSelectedCategories}/>)
 }

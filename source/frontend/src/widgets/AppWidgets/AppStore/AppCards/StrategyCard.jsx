@@ -5,9 +5,9 @@ import AppActions from "./AppActions/AppActions";
 import {backendRoutes} from "../../../../constants/backendConstants";
 import {useInstallProfile, useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
 import {useState} from "react";
-import AppCard from "./AppCard";
 import {strategyModeName} from "../AppStore";
 import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
+import AppCardTemplate from "./AppCardTemplate";
 
 export default function StrategyCard({
     app,
@@ -63,18 +63,18 @@ export default function StrategyCard({
     const uploadToAppStore = useUploadToAppStore()
 
 
-    const additionalProfileInfo = botInfo ?. profiles ?. [app.package_id] || {}
+    const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
 
-    const currentAvatar = additionalProfileInfo ?. profile ?. avatar
+    const currentAvatar = additionalProfileInfo?.profile?.avatar
     const avatarUrl = currentAvatar === "default_profile.png" ? `${
         botDomain + backendRoutes.staticImg
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        additionalProfileInfo ?. profile ?. name ?. replace(/ /g, "_")
+        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
     }/${currentAvatar}`
 
-    return (<AppCard app={app}
+    return (<AppCardTemplate app={app}
         setMouseHover={setMouseHover}
         avatarUrl={avatarUrl}
         category={category}

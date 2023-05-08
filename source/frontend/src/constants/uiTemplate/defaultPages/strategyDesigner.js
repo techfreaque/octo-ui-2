@@ -19,6 +19,14 @@ export const defaultStrategyDesignerPageLayout =  {
                             "component": "RefreshBotData"
                         },
                         {
+                            "component": "AppStoreCartModal",
+                            "content": [
+                                {
+                                    "component": "AppStoreCart"
+                                }
+                            ],
+                        },
+                        {
                             "antIcon": "noIcon",
                             "component": "ButtonWithModal",
                             "content": [
@@ -202,10 +210,9 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "faIcon": "noIcon",
                                             "label": "Backtesting Settings",
                                             "noPadding": false,
-                                            "width": "1000"
                                         },
                                         {
-                                            "antIcon": "UnorderedListOutlined",
+                                            "antIcon": "OrderedListOutlined",
                                             "children": [],
                                             "component": "SidebarMenuItem",
                                             "content": [
@@ -217,7 +224,6 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "faIcon": "noIcon",
                                             "label": "Backtesting Runs",
                                             "noPadding": true,
-                                            "width": "1000"
                                         }
                                     ]
                                 }
@@ -258,7 +264,6 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "faIcon": "noIcon",
                                             "label": "Optimizer Settings",
                                             "noPadding": false,
-                                            "width": "1000"
                                         },
                                         {
                                             "antIcon": "PlayCircleOutlined",
@@ -273,7 +278,6 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "faIcon": "noIcon",
                                             "label": "Run Config",
                                             "noPadding": false,
-                                            "width": "1000"
                                         },
                                         {
                                             "antIcon": "OrderedListOutlined",
@@ -288,22 +292,6 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "faIcon": "",
                                             "label": "Optimizer Queue",
                                             "noPadding": true,
-                                            "width": "1000"
-                                        },
-                                        {
-                                            "antIcon": "UnorderedListOutlined",
-                                            "children": [],
-                                            "component": "SidebarMenuItem",
-                                            "content": [
-                                                {
-                                                    "component": "BacktestingRunDataTable"
-                                                }
-                                            ],
-                                            "dontScroll": true,
-                                            "faIcon": "noIcon",
-                                            "label": "Backtesting Runs",
-                                            "noPadding": true,
-                                            "width": "1000"
                                         }
                                     ]
                                 }

@@ -1,5 +1,4 @@
 import { Rate } from "antd";
-// import "./ratingStyle.css";
 import { useRateAppStore } from "../../../../context/data/AppStoreDataProvider";
 import { useState } from "react";
 
@@ -10,20 +9,20 @@ export default function AppRating({app, rating, votes, style}) {
             return n.toString();
 
         if (n >= 1e3 && n < 1e6)
-            return + (n / 1e3).toFixed(2) + "K";
+            return `${+ (n / 1e3).toFixed(2)}K`;
 
         if (n >= 1e6 && n < 1e9)
-            return + (n / 1e6).toFixed(2) + "M";
+            return `${+ (n / 1e6).toFixed(2)}M`;
 
         if (n >= 1e9 && n < 1e12)
-            return + (n / 1e9).toFixed(2) + "B";
+            return `${+ (n / 1e9).toFixed(2)}B`;
 
         if (n >= 1e12)
-            return + (n / 1e12).toFixed(2) + "T";
+            return `${+ (n / 1e12).toFixed(2)}T`;
 
     };
     const votes_ = formatCash(votes);
-    const [isloading, setIsloading] = useState(false)
+    const [, setIsloading] = useState(false)
 
     const rateAppStore = useRateAppStore()
     async function onRatingChange(starId) { // TODO use rating endpoint here

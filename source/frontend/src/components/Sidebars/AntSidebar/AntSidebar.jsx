@@ -38,9 +38,8 @@ export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrent
     // function toggleHideMenuItemText() {
     //     setHideText(prevState => (!prevState));
     // }
+    const [activeMenus, setActiveMenus] = useState([])
     return useMemo(() => {
-        const activeMenus = []
-        const currentContent = hasContent && findCurrentContent(menuItems, actualCurrentlySelectedMenu, activeMenus)
         return hasContent && (<div style={
             {
                 height: "100%",
@@ -73,41 +72,75 @@ export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrent
                         setCurrentlySelectedMenu={actualSetCurrentlySelectedMenu}/>
                 </div>
             </div>
-            <div style={
-                {
-                    // width: `calc(100% - ${sideBarWidth}px)`,
-                    width: "100%",
-                    padding: currentContent?.noPadding ? "" : "15px",
-                    height: "100%",
-                    overflowY: currentContent?.dontScroll ? undefined : "auto",
-                    overflowX: "hidden"
-                }
-            }> {
-                currentContent?.content
-            } </div>
+
+            <DisplayCurrentContent menuItemsData={menuItems}
+                currentlySelectedMenu={actualCurrentlySelectedMenu}
+                setActiveMenus={setActiveMenus}/>
         </div>)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
+        hasContent,
         botColors?.border,
-        actualCurrentlySelectedMenu,
         menuItems,
-        hideText
+        actualCurrentlySelectedMenu,
+        activeMenus,
+        hideText,
+        actualSetCurrentlySelectedMenu
     ])
 }
 
-function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
+function DisplayCurrentContent({menuItemsData, currentlySelectedMenu, setActiveMenus}) {
+    const [content, setContent] = useState()
+    useEffect(() => {
+        const newActiveMenus = []
+        const newContent = []
+        findCurrentContent(menuItemsData, currentlySelectedMenu, newActiveMenus, newContent)
+        setActiveMenus(newActiveMenus)
+        setContent(newContent)
+    }, [currentlySelectedMenu, menuItemsData, setActiveMenus])
+
+    return (<> {content} </>)
+}
+
+function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus, content) {
+    let anyChildrenHasContent = false
     for (const menuItemData of menuItemsData) {
         if (getKeyFromLabel(menuItemData) === currentlySelectedMenu) {
             activeMenus.push(getKeyFromLabel(menuItemData))
-            return menuItemData
+            anyChildrenHasContent = true
+            pushContent(content, menuItemData, true)
+
         } else if (menuItemData.children) {
-            const foundContent = findCurrentContent(menuItemData.children, currentlySelectedMenu, activeMenus)
-            if (foundContent) {
+            const thisAnyChildrenHasContent = findCurrentContent(menuItemData.children, currentlySelectedMenu, activeMenus, content)
+            if (thisAnyChildrenHasContent) {
+                pushContent(content, menuItemData)
                 activeMenus.push(getKeyFromLabel(menuItemData))
-                return foundContent
             }
+        } else {
+            pushContent(content, menuItemData)
         }
+
     }
+    return anyChildrenHasContent
+}
+
+function pushContent(content, menuItemData, visible=false) {
+    content.push((<div key={
+            menuItemData.label
+        }
+        style={
+            {
+                ...(visible ? {} : {
+                    display: "none"
+                }),
+                width: "100%",
+                padding: menuItemData?.noPadding ? "" : "15px",
+                height: "100%",
+                overflowY: menuItemData?.dontScroll ? undefined : "auto",
+                overflowX: "hidden"
+            }
+    }> {
+        menuItemData.content
+    }</div>))
 }
 
 function MenuItems({
@@ -118,6 +151,7 @@ function MenuItems({
     isSubMenu,
     hideText
 }) {
+    const botColors = useBotColorsContext()
     return menuItems.map((menuItem) => {
         const style = isSubMenu ? {
             margin: "5px"
@@ -127,12 +161,15 @@ function MenuItems({
             }
             style={style}
             className={
-                isSubMenu ? "sub-menu" : "root-menu"
+                isSubMenu ? "sub-menu" : `root-menu${
+                    hideText ? " small-screen" : ""
+                }`
         }>
             <MenuItem mode="inline"
                 hideText={hideText}
                 menuItem={menuItem}
                 isSubMenu={isSubMenu}
+                botColors={botColors}
                 currentlySelectedMenu={currentlySelectedMenu}
                 setCurrentlySelectedMenu={setCurrentlySelectedMenu}
                 activeMenus={activeMenus}/>
@@ -146,7 +183,8 @@ function MenuItem({
     setCurrentlySelectedMenu,
     activeMenus,
     isSubMenu,
-    hideText
+    hideText,
+    botColors
 }) {
     function handleCurentChange() {
         setCurrentlySelectedMenu(getKeyFromLabel(menuItem))
@@ -161,6 +199,7 @@ function MenuItem({
 
     return useMemo(() => (menuItem.children?.length ? (<NestedSideBarMenuItem colorMode={colorMode}
         activeMenus={activeMenus}
+        botColors={botColors}
         hideText={hideText}
         currentlySelectedMenu={currentlySelectedMenu}
         setCurrentlySelectedMenu={setCurrentlySelectedMenu}
@@ -169,6 +208,8 @@ function MenuItem({
         hideText={hideText}
         buttonStyle={buttonStyle}
         handleCurentChange={handleCurentChange}
+        activeMenus={activeMenus}
+        botColors={botColors}
         menuItem={menuItem}/>)),
     // eslint-disable-next-line react-hooks/exhaustive-deps
         [
@@ -188,7 +229,8 @@ function NestedSideBarMenuItem({
     setCurrentlySelectedMenu,
     handleCurentChange,
     menuItem,
-    hideText
+    hideText,
+    botColors
 }) {
     return (<Collapse prefixCls={
             `${colorMode}`
@@ -198,34 +240,44 @@ function NestedSideBarMenuItem({
         style={
             {border: "none"}
         }
-        expandIconPosition="end"
+        expandIconPosition={"end"}
+        // expandIcon={()=>(<></>)}
         destroyInactivePanel={true}
-        // showArrow={true}
+        // showArrow={!hideText}
     >
         <Panel header={
-            hideText ? (<div style={
+                hideText ? (<div style={
                     {display: "flex"}
                 }>
-                <AppIconButton isSelected={false}
-                    buttonTitle={
-                        menuItem.label
-                    }
-                    icon={menuItem?.icon}
-                    isResponsive={false}
-                    antIconString={
-                        menuItem.antIcon
-                    }
-                    faIconString={
-                        menuItem.faIcon
-                    }
-                    onClick={
-                        menuItem.onClick || handleCurentChange
-                    }
-                    disabled={
-                        menuItem.disabled
-                    } />
-                </div>
-                ) : (<div style={
+                    <AppIconButton isSelected={false}
+                        style={
+                            {
+                                margin: "auto",
+                                ...(activeMenus.includes(getKeyFromLabel(menuItem)) ? {
+                                    color: botColors?.fontActive
+                                } : {})
+                            }
+                        }
+                        buttonTitle={
+                            menuItem.label
+                        }
+                        icon={
+                            menuItem?.icon
+                        }
+                        isResponsive={false}
+                        antIconString={
+                            menuItem.antIcon
+                        }
+                        faIconString={
+                            menuItem.faIcon
+                        }
+                        onClick={
+                            menuItem.onClick || handleCurentChange
+                        }
+                        disabled={
+                            menuItem.disabled
+                        }/>
+                </div>) : (<div style={
                     {display: "flex"}
                 }> {
                     menuItem?.icon && menuItem.icon
@@ -267,7 +319,9 @@ function SideBarButton({
     handleCurentChange,
     menuItem,
     isSubMenu,
-    hideText
+    hideText,
+    activeMenus,
+    botColors
 }) {
     const buttonContainerStyle = isSubMenu ? {} : {
         padding: "5px"
@@ -282,6 +336,14 @@ function SideBarButton({
         }
     }> {
         hideText ? (<AppIconButton isSelected={false}
+            style={
+                {
+                    margin: "auto",
+                    ...(activeMenus.includes(getKeyFromLabel(menuItem)) ? {
+                        color: botColors?.fontActive
+                    } : {})
+                }
+            }
             buttonTitle={
                 menuItem.label
             }
@@ -289,7 +351,9 @@ function SideBarButton({
             antIconString={
                 menuItem.antIcon
             }
-            icon={menuItem?.icon}
+            icon={
+                menuItem?.icon
+            }
             faIconString={
                 menuItem.faIcon
             }

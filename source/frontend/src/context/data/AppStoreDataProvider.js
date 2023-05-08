@@ -1,6 +1,6 @@
 import React, {useState, useContext, createContext, useEffect} from "react";
 import {useCallback} from "react";
-import {installAppPackage, selectProfile} from "../../api/actions";
+import {selectProfile} from "../../api/actions";
 import {
     fetchAppStoreData,
     fetchPackagesData,
@@ -16,6 +16,7 @@ import {useBotInfoContext} from "./BotInfoProvider";
 import {getFile, sendAndInterpretBotUpdate} from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import {backendRoutes} from "../../constants/backendConstants";
+import { apiFields, minReleaseNotesLength } from "../../widgets/AppWidgets/AppStore/AppCards/AppActions/UpDownloadApp/UploadAppForm";
 
 
 const AppStoreDataContext = createContext();
@@ -23,7 +24,16 @@ const UpdateAppStoreDataContext = createContext();
 
 const AppStoreDomainContext = createContext();
 const UpdateAppStoreDomainContext = createContext();
+const AppStoreCartContext = createContext();
+const UpdateAppStoreCartContext = createContext();
 
+export const useAppStoreCartContext = () => {
+    return useContext(AppStoreCartContext);
+};
+
+export const useUpdateAppStoreCartContext = () => {
+    return useContext(UpdateAppStoreCartContext);
+};
 export const useAppStoreDomainContext = () => {
     return useContext(AppStoreDomainContext);
 };
@@ -55,10 +65,10 @@ const _useFetchAppStoreData = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const botInfo = useBotInfoContext()
     return useCallback((installedTentaclesInfo, notification, appStoreUser) => {
-        appStoreDomain && fetchAppStoreData(saveAppStoreData, appStoreDomain, {
+        if (appStoreDomain) fetchAppStoreData(saveAppStoreData, appStoreDomain, {
             installedTentaclesInfo,
             botInfo
-        }, notification, appStoreUser)
+        }, notification, appStoreUser);
     }, [appStoreDomain, saveAppStoreData, botInfo])
 }
 
@@ -66,110 +76,163 @@ export const useFetchAppStoreData = () => {
     const botDomain = useBotDomainContext()
     const fetchAppStoreData = _useFetchAppStoreData()
     const appStoreUser = useAppStoreUserContext()
-    const logic = useCallback((notification = false) => {
+    return useCallback((notification = false) => {
         fetchPackagesData((newData) => fetchAppStoreData(newData, notification, appStoreUser), botDomain, notification)
     }, [appStoreUser, botDomain, fetchAppStoreData]);
-    return logic;
 }
 
 export const useLoginToAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const updateAppStoreUser = useUpdateLoginToken()
     const appStoreUser = useAppStoreUserContext()
-    const logic = useCallback((userData, onLoggedIn) => {
+    return useCallback((userData, onLoggedIn) => {
         loginToAppStore(updateAppStoreUser, appStoreDomain, userData, appStoreUser, onLoggedIn)
     }, [updateAppStoreUser, appStoreDomain, appStoreUser]);
-    return logic;
 }
 
 export const useLogoutFromAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const updateAppStoreUser = useUpdateLoginToken()
     const appStoreUser = useAppStoreUserContext()
-    const logic = useCallback(() => {
+    return useCallback(() => {
         logoutFromAppStore(updateAppStoreUser, appStoreDomain, appStoreUser)
     }, [updateAppStoreUser, appStoreDomain, appStoreUser]);
-    return logic;
+}
+
+export function validateUploadIndo(uploadInfo) {
+    return uploadInfo?.[apiFields.releaseNotes]?.length > minReleaseNotesLength
 }
 
 export const useUploadToAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const appStoreUser = useAppStoreUserContext()
-    const logic = useCallback((app, uploadInfo, appDownloadUrl, setIsloading, setOpen) => {
+    return useCallback((app, uploadInfo, appDownloadUrl, setIsloading, setOpen) => {
         setIsloading(true)
-        function handleAppUpload(appFile) {
-            uploadApp({
-                storeDomain: appStoreDomain,
-                appFile: appFile,
-                appDetails: {
-                    ...app,
-                    ...(uploadInfo || {})
-                },
-                appStoreUser,
-                onSuccess: () => setIsloading(false)
-            })
-            setOpen(false)
+        if (validateUploadIndo(uploadInfo)) {
+            setIsloading(false)
+            createNotification("Enter release notes before you upload", "danger")
+        } else {
+            function handleAppUpload(appFile) {
+                uploadApp({
+                    storeDomain: appStoreDomain,
+                    appFile,
+                    appDetails: {
+                        ...app,
+                        ...(uploadInfo || {})
+                    },
+                    appStoreUser,
+                    onSuccess: () => setIsloading(false)
+                })
+                setOpen(false)
+            }
+            getFile(appDownloadUrl, handleAppUpload)
         }
-        getFile(appDownloadUrl, handleAppUpload)
-
     }, [appStoreDomain, appStoreUser]);
-    return logic;
 }
 
 export const useRateAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const appStoreUser = useAppStoreUserContext()
-    const logic = useCallback((rateInfo, setIsloading) => {
+    return useCallback((rateInfo, setIsloading) => {
         setIsloading(true)
         rateApp(appStoreDomain, rateInfo, appStoreUser, () => setIsloading(false))
     }, [appStoreDomain, appStoreUser]);
-    return logic;
+}
+
+export const useAddToAppStoreCart = () => {
+    const setAppStoreCart = useUpdateAppStoreCartContext()
+    return useCallback((app) => {
+        if (app?.categories?.[0]) {
+            setAppStoreCart(prevCart => {
+                const newCart = {
+                    ...prevCart
+                }
+                if (newCart?.[app.categories[0]]) {
+                    newCart[app.categories[0]][app.package_id] = app
+                } else {
+                    newCart[app.categories[0]] = {
+                        [app.package_id]: app
+                    }
+                }
+                return newCart
+            })
+            createNotification("Successfully added to the cart", "success")
+        } else {
+            createNotification("Cant buy a non store app", "danger")
+        }
+    }, [setAppStoreCart]);
 }
 
 export const useSignupToAppStore = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const updateAppStoreUser = useUpdateLoginToken()
-    const logic = useCallback((userData, onLoggedIn) => {
+    return useCallback((userData, onLoggedIn) => {
         signupToAppStore(updateAppStoreUser, appStoreDomain, userData, onLoggedIn)
     }, [appStoreDomain, updateAppStoreUser]);
-    return logic;
 }
 
 export const useInstallAppPackage = () => {
     const botDomain = useBotDomainContext()
-    const logic = useCallback((packageUrl, packageNameAndVersion, token) => {
-        installAppPackage(packageUrl, packageNameAndVersion, botDomain, token)
-    }, [botDomain]);
-    return logic;
+    const appStoreDomain = useAppStoreDomainContext()
+    const appStoreUser = useAppStoreUserContext()
+
+    return useCallback((downloadInfo, setIsloading, setOpen) => {
+        setIsloading(true)
+
+        const success = (updated_data, update_url, result, msg, status) => {
+            createNotification(`Successfully installed ${
+                downloadInfo.title
+            }`)
+            setIsloading(false)
+            setOpen(false)
+        }
+        const fail = (updated_data, update_url, result, msg, status) => {
+            createNotification(`Failed to install ${
+                downloadInfo.title
+            }`, "danger")
+            setIsloading(false)
+        }
+        const requestData = {
+            url: getAppUrlFromDownloadInfo(downloadInfo, appStoreDomain, appStoreUser)
+        }
+        sendAndInterpretBotUpdate(requestData, botDomain + backendRoutes.installApp, success, fail)
+    }, [appStoreDomain, appStoreUser, botDomain]);
 }
 
 export const useInstallProfile = () => {
     const appStoreDomain = useAppStoreDomainContext()
     const botDomain = useBotDomainContext()
     const appStoreUser = useAppStoreUserContext()
-    const logic = useCallback((downloadInfo, setIsloading, setOpen) => {
+    return useCallback((downloadInfo, setIsloading, setOpen) => {
         setIsloading(true)
         const onFailInstall = (updated_data, update_url, result, msg, status) => {
             setIsloading(false)
-            createNotification(`Failed to install ${downloadInfo.title}`, "danger")
+            createNotification(`Failed to install ${
+                downloadInfo.title
+            }`, "danger")
         }
         const onSuccessInstall = (updated_data, update_url, result, msg, status) => {
             if (msg.success) {
-                
-                createNotification(`Successfully installed ${downloadInfo.title}`)
-                if (downloadInfo.should_select_profile) { 
+
+                createNotification(`Successfully installed ${
+                    downloadInfo.title
+                }`)
+                if (downloadInfo.should_select_profile) {
                     const onSelectSuccess = () => {
                         setIsloading(false)
-                        createNotification(`Successfully selected ${downloadInfo.title}`)
+                        createNotification(`Successfully selected ${
+                            downloadInfo.title
+                        }`)
                         setOpen(false)
                     }
                     const onSelectFail = () => {
-                        createNotification(`Failed to select ${downloadInfo.title}`, "danger")
+                        createNotification(`Failed to select ${
+                            downloadInfo.title
+                        }`, "danger")
                         setOpen(false)
                     }
                     selectProfile(botDomain, downloadInfo.package_id, downloadInfo.title, onSelectSuccess, onSelectFail)
-                }
-                else {
+                } else {
                     setIsloading(false)
                     setOpen(false)
                 }
@@ -178,25 +241,37 @@ export const useInstallProfile = () => {
             }
         }
         sendAndInterpretBotUpdate({
-            url: `${appStoreDomain}/download_app/${
-                appStoreUser?.downloadToken
-            }/${downloadInfo.major_version}/${downloadInfo.minor_version}/${downloadInfo.bug_fix_version}/${downloadInfo.package_id}.zip`,
+            url: getAppUrlFromDownloadInfo(downloadInfo, appStoreDomain, appStoreUser),
             name: downloadInfo.title
         }, botDomain + backendRoutes.importProfileFromUrl, onSuccessInstall, onFailInstall)
-    }, [appStoreUser?.downloadToken, botDomain, appStoreDomain]);
-    return logic;
+    }, [appStoreDomain, appStoreUser, botDomain]);
 }
+
+function getAppUrlFromDownloadInfo(downloadInfo, appStoreDomain, appStoreUser) {
+    return `${appStoreDomain}/download_app/${
+        appStoreUser?.downloadToken
+    }/${
+        downloadInfo.major_version
+    }/${
+        downloadInfo.minor_version
+    }/${
+        downloadInfo.bug_fix_version
+    }/${
+        downloadInfo.package_id
+    }.zip`
+}
+
 function useUpdateLoginToken() {
     const updateAppStoreUser = useUpdateAppStoreUserContext()
-    const logic = useCallback((tokens) => {
+    return useCallback((tokens) => {
         localStorage.setItem('storeSession', JSON.stringify(tokens));
         updateAppStoreUser(tokens)
     }, [updateAppStoreUser]);
-    return logic;
 }
 
 export const AppStoreDataProvider = ({children}) => {
     const [appStoreData, setAppStoreData] = useState({});
+    const [appStoreCart, setAppStoreCart] = useState({});
     const [appStoreUserData, setAppStoreUserData] = useState({});
     const [appStoreDomain, setAppStoreDomain] = useState(isProduction ? appStoreDomainProduction : process.env.REACT_APP_STORE_DOMAIN);
     const fetchAppStoreData = useFetchAppStoreData()
@@ -208,18 +283,22 @@ export const AppStoreDataProvider = ({children}) => {
         }
     }, []);
     useEffect(() => {
-        appStoreDomain && fetchAppStoreData(false)
+        if (appStoreDomain) fetchAppStoreData(false);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [appStoreDomain, botInfo])
     return (<AppStoreDataContext.Provider value={appStoreData}>
         <UpdateAppStoreDataContext.Provider value={setAppStoreData}>
-            <AppStoreDomainContext.Provider value={appStoreDomain}>
-                <UpdateAppStoreUserContext.Provider value={setAppStoreUserData}>
-                    <AppStoreUserContext.Provider value={appStoreUserData}>
-                        <UpdateAppStoreDomainContext.Provider value={setAppStoreDomain}> {children} </UpdateAppStoreDomainContext.Provider>
-                    </AppStoreUserContext.Provider>
-                </UpdateAppStoreUserContext.Provider>
-            </AppStoreDomainContext.Provider>
+            <AppStoreCartContext.Provider value={appStoreCart}>
+                <UpdateAppStoreCartContext.Provider value={setAppStoreCart}>
+                    <AppStoreDomainContext.Provider value={appStoreDomain}>
+                        <UpdateAppStoreUserContext.Provider value={setAppStoreUserData}>
+                            <AppStoreUserContext.Provider value={appStoreUserData}>
+                                <UpdateAppStoreDomainContext.Provider value={setAppStoreDomain}> {children} </UpdateAppStoreDomainContext.Provider>
+                            </AppStoreUserContext.Provider>
+                        </UpdateAppStoreUserContext.Provider>
+                    </AppStoreDomainContext.Provider>
+                </UpdateAppStoreCartContext.Provider>
+            </AppStoreCartContext.Provider>
         </UpdateAppStoreDataContext.Provider>
     </AppStoreDataContext.Provider>);
 };

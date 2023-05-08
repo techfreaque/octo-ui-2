@@ -1,5 +1,5 @@
 import {iconStringToComponent} from "../../components/Icons/AntIcon";
-import { availablePanelPositionsArray } from "../AppWidgets/Buttons/CurrentPanelPosition";
+import {availablePanelPositionsArray} from "../AppWidgets/Buttons/CurrentPanelPosition";
 import {allChartLocations} from "../AppWidgets/Charts/MainCharts/Plotly";
 import {availableConfigKeysList} from "../AppWidgets/Configuration/Form";
 import {availableUIConfigKeys} from "../AppWidgets/Configuration/UIConfig";
@@ -15,18 +15,22 @@ export default function appWidgetsProps() {
         ], "string"),
         ...generateSimpleProp("label", ["SidebarMenuItem"], "string"),
         ...generateSimpleProp("command", ["SendActionCommandToTradingMode"], "string"),
-        ...generateSimpleProp("tentacleNames", ["TentaclesConfig"], "string", undefined,undefined,undefined,"RunAnalysisModePlugin" ),
-        ...generateSimpleProp("dontScroll", ["Tab", "SidebarMenuItem"], "boolean", "checkbox"),
+        ...generateSimpleProp("tentacleNames", ["TentaclesConfig"], "string", undefined, undefined, undefined, "RunAnalysisModePlugin"),
+        ...generateSimpleProp("dontScroll", [
+            "Tab", "SidebarMenuItem"
+        ], "boolean", "checkbox"),
         ...generateSimpleProp("noPadding", "SidebarMenuItem", "boolean", "checkbox", undefined, undefined, false),
-        ...generateSimpleProp("width", "SidebarMenuItem", "string", undefined, undefined, undefined, "1000"),
+        ...generateSimpleProp("width", "ButtonWithModal", "string", undefined, undefined, undefined, "1000"),
         ...generateSimpleProp("iconOnly", "ButtonWithModal", "boolean", "checkbox", undefined, undefined, true),
         ...generateSimpleProp("displayAsAvatar", "ButtonWithModal", "boolean", "checkbox", undefined, undefined, false),
         ...generateSimpleProp("configKey", "Configuration", "string", undefined, availableConfigKeysList),
         ...generateSimpleProp("position", "CurrentPanelPosition", "string", undefined, availablePanelPositionsArray),
         ...generateSimpleProp("configKeys", "UIConfig", "array", "select", availableUIConfigKeys, true),
-        ...generateSimpleProp("faIcon", ["Tab","ButtonWithModal","SendActionCommandToTradingMode", "SidebarMenuItem"], "string"),
-        ...generateSimpleProp("antIcon", ["Tab",
-            "ButtonWithModal", "SendActionCommandToTradingMode", "SidebarMenuItem"
+        ...generateSimpleProp("faIcon", [
+            "Tab", "ButtonWithModal", "SendActionCommandToTradingMode", "SidebarMenuItem"
+        ], "string"),
+        ...generateSimpleProp("antIcon", [
+            "Tab", "ButtonWithModal", "SendActionCommandToTradingMode", "SidebarMenuItem"
         ], "string", undefined, Object.keys(iconStringToComponent), undefined),
         ...generateSimpleProp("chartLocation", "PlotlyChart", "string", undefined, allChartLocations),
         ...generateSimpleProp("dataSource", "DataTable", "string", undefined, dataTableSourcesList),
@@ -37,7 +41,15 @@ export default function appWidgetsProps() {
         ...generateAppWidgetProp("tabs", "ScrollableTabs"),
         ...generateAppWidgetProp("settingsContent", "ChartTablePieCombo"),
         ...generateAppWidgetProp("headerContent", ["DefaultLayout", "SimpleLayout"]),
-        ...generateAppWidgetProp("content", ["SidebarMenuItem", "Tab", "ButtonWithModal", "TradingConfig", "TentaclesConfig", "PairsSelector"]),
+        ...generateAppWidgetProp("content", [
+            "AppStoreCartModal",
+            "SidebarMenuItem",
+            "Tab",
+            "ButtonWithModal",
+            "TradingConfig",
+            "TentaclesConfig",
+            "PairsSelector"
+        ]),
         ...generateAppWidgetProp("toolBarContent", ["Tab"]),
         ...generateAppWidgetProp("pageContent", "SimpleLayout"),
         ...generateAppWidgetProp("upperContent", ["DefaultLayout", "SplitMainContent"]),

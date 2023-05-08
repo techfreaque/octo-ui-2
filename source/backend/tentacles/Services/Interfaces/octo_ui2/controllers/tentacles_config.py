@@ -192,14 +192,14 @@ def register_tentacles_config_routes(plugin):
             zip_name: str = f"{package_name}.zip"
             with open(os.path.join(export_path, zip_name), "rb") as f:
                 data = f.readlines()
-            shutil.rmtree(export_path)
-            return Response(
-                data,
-                headers={
-                    "Content-Type": "application/zip",
-                    "Content-Disposition": "attachment; filename=%s;" % zip_name,
-                },
-            )
+                shutil.rmtree(export_path)
+                return Response(
+                    data,
+                    headers={
+                        "Content-Type": "application/zip",
+                        "Content-Disposition": "attachment; filename=%s;" % zip_name,
+                    },
+                )
         raise RuntimeError("Failed to export tentacle package")
 
 

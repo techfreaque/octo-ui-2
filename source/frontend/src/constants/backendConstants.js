@@ -34,7 +34,7 @@ export const backendRoutes = {
     logoutBot: `${basePath}/logout`,
     getLogs: `${basePath}/logs`,
     exportLogs: "/export_logs",
-    
+
     proConfig: `${proBasePath}/pro_config`,
     optimizerQueueUpdate: `${proBasePath}/optimizer/update`,
     optimizerAddToQueue: `${proBasePath}/optimizer/add`,
@@ -99,7 +99,21 @@ export const TIMESTAMP_DATA = [
     "end_time"
 ];
 export const ID_DATA = ["id", "backtesting id", "optimizer id"];
-export const METADATA_HIDDEN_FIELDS = ["backtesting files", "user inputs"]
+export const METADATA_HIDDEN_FIELDS = [
+    "backtesting files",
+    "user inputs",
+    "end portfolio",
+    "start portfolio",
+    "R² end balance",
+    "duration",
+    "trades",
+    "name",
+    "leverage",
+    "markets profitability",
+    "future_contracts",
+    "start_time",
+    "end_time",
+]
 export const METADATA_UNDISPLAYED_FIELDS = ["children"]
 export const CUSTOM_USER_INPUT_PATH_SEPARATOR = "/"
 export const _INPUT_SEPARATOR = "_------_";

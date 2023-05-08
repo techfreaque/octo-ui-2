@@ -137,21 +137,6 @@ export async function stopOptimizer(botDomain, setBotIsOptimizing) {
     sendAndInterpretBotUpdate({}, botDomain + backendRoutes.optimizerStop, success, failure)
 }
 
-export async function installAppPackage(appUrl, appName, botDomain, token) {
-    const success = (updated_data, update_url, result, msg, status) => {
-        createNotification(`Successfully installed ${appName}`)
-    }
-    const fail = (updated_data, update_url, result, msg, status) => {
-        createNotification(`Failed to install ${appName}`, "danger")
-    }
-    const requestData = {
-        url: appUrl
-    }
-    if (token) {
-        requestData.token = token
-    }
-    sendAndInterpretBotUpdate(requestData, botDomain + backendRoutes.installApp, success, fail)
-}
 
 export async function deleteTrades(botDomain, exchange_id) {
     const success = (updated_data, update_url, result, msg, status) => {
