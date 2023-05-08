@@ -1,74 +1,97 @@
-import { w2confirm, w2ui } from "w2ui/dist/w2ui.es6.js"
+import {w2confirm, w2ui} from "w2ui/dist/w2ui.es6.js"
 import {
-    hidden_class, ID_DATA,
-    ID_SEPARATOR, MAX_SEARCH_LABEL_SIZE, METADATA_HIDDEN_FIELDS,
-    METADATA_UNDISPLAYED_FIELDS, TENTACLE_SEPARATOR, TIMESTAMP_DATA
+    hidden_class,
+    ID_DATA,
+    ID_SEPARATOR,
+    MAX_SEARCH_LABEL_SIZE,
+    METADATA_HIDDEN_FIELDS,
+    METADATA_UNDISPLAYED_FIELDS,
+    TENTACLE_SEPARATOR,
+    TIMESTAMP_DATA
 } from "../../../constants/backendConstants";
-import { useEffect, useMemo } from "react";
-import { createTable } from "../../../components/Tables/w2ui/W2UI";
-import { useDisplayedRunIdsContext, useUpdateDisplayedRunIdsContext } from "../../../context/data/BotPlottedElementsProvider";
+import {useEffect, useMemo} from "react";
+import {createTable} from "../../../components/Tables/w2ui/W2UI";
+import {useDisplayedRunIdsContext, useUpdateDisplayedRunIdsContext} from "../../../context/data/BotPlottedElementsProvider";
 import createNotification from "../../Notifications/Notification";
 
 export default function RunDataTableW2UI({
-    tableTitle, tableId, runData, currentCampaignName, noData, reloadData, deleteRuns,
-    hiddenMetadataColumns, restoreSettings
+    tableTitle,
+    tableId,
+    runData,
+    currentCampaignName,
+    noData,
+    reloadData,
+    deleteRuns,
+    hiddenMetadataColumns,
+    restoreSettings
 }) {
     const setDisplayedRunIds = useUpdateDisplayedRunIdsContext()
     const displayedRunIds = useDisplayedRunIdsContext()
 
     useEffect(() => {
-        if (runData.data) createMetadataTable(
-        tableTitle, tableId, runData.data,
-        false,
-        currentCampaignName, reloadData,
-        deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings);
+        if (runData.data) 
+            createMetadataTable(tableTitle, tableId, runData.data, false, currentCampaignName, reloadData, deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings);
+        
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [runData, currentCampaignName, hiddenMetadataColumns]);
+    }, [JSON.stringify(runData), currentCampaignName, hiddenMetadataColumns]);
     return useMemo(() => (
-        <div id={`${tableId}-container`} style={{ height: "100%" }}>
-            <div id={`${tableId}-no-message`} className="text-center mx-4 my-4">
-                {noData}
-            </div>
-            <div id={`${tableId}-table`} style={{ height: "100%" }} />
+        <div id={
+                `${tableId}-container`
+            }
+            style={
+                {height: "100%"}
+        }>
+            <div id={
+                    `${tableId}-no-message`
+                }
+                className="text-center mx-4 my-4">
+                {noData} </div>
+            <div id={
+                    `${tableId}-table`
+                }
+                style={
+                    {height: "100%"}
+                }/>
         </div>
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     ), [])
 }
 
-function createMetadataTable(
-    tableTitle, tableId, metadata,
-    forceSelectLatest, currentCampaignName,
-    reloadData, deleteBacktestingRuns, hiddenMetadataColumns,
-    setDisplayedRunIds, displayedRunIds, restoreSettings
-) {
-    document.getElementsByClassName(`${tableId}-container`).innerHTML = undefined;
+function createMetadataTable(tableTitle, tableId, metadata, forceSelectLatest, currentCampaignName, reloadData, deleteBacktestingRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings) {
     if (metadata !== null && metadata.length) {
         function handleSelection(tableName, event) {
             function handleSelection2() {
                 setDisplayedRunIds(prev_selection => {
                     const selection = getSelectedBacktestingRunIdentifiers(tableName)
-                    return { ...prev_selection, backtesting: selection }
+                    return {
+                        ...prev_selection,
+                        backtesting: selection
+                    }
                 })
             }
             event.onComplete = handleSelection2
         }
-        const sortedMetadata = metadata.sort((a, b) => b.timestamp - a.timestamp);
+        const sortedMetadata = JSON.parse(JSON.stringify(metadata.sort((a, b) => b.timestamp - a.timestamp)));
         document.getElementById(`${tableId}-no-message`).classList.add(hidden_class);
         const keys = Object.keys(sortedMetadata[0]).filter(key => !METADATA_UNDISPLAYED_FIELDS.includes(key));
         const runDataColumns = keys.map((key) => {
             return {
                 field: key,
                 text: key,
-                size: `${1 / keys.length * 100}%`,
+                size: `${
+                    1 / keys.length * 100
+                }%`,
                 sortable: true,
                 hidden: METADATA_HIDDEN_FIELDS.includes(key),
-                render: TIMESTAMP_DATA.includes(key) ? "datetime" :
-                    ID_DATA.includes(key) ? "int" : undefined,
+                render: TIMESTAMP_DATA.includes(key) ? "datetime" : ID_DATA.includes(key) ? "int" : undefined
             }
         })
         // Always put the id attribute first
         _ensureBacktestingMetadataColumnsOrder(runDataColumns);
-        const columnGroups = [{ text: "Run information", span: runDataColumns.length }];
+        const columnGroups = [{
+                text: "Run information",
+                span: runDataColumns.length
+            }];
         // Keep 1st column displayed to enable tree expand
         const runDataHidableColumns = runDataColumns.slice(1, runDataColumns.length);
         // Build user inputs columns. They are hidden by default
@@ -82,22 +105,18 @@ function createMetadataTable(
         //     hiddenMetadataColumns = [];
         // }
         sortedMetadata.forEach((run_metadata) => {
-            if (typeof run_metadata["user inputs"] !== "undefined") {
+            if (run_metadata["user inputs"]) {
                 Object.keys(run_metadata["user inputs"]).forEach((inputTentacle) => {
-                    const hasTentacle = !addedTentacles.includes(inputTentacle);
-                    _getUserInputColumns(userInputColumns, inputTentacle, userInputKeys, userInputSampleValueByKey,
-                        inputPerTentacle, run_metadata["user inputs"], hiddenMetadataColumns);
-                    if (!hasTentacle) {
+                    const hasTentacle = ! addedTentacles.includes(inputTentacle);
+                    _getUserInputColumns(userInputColumns, inputTentacle, userInputKeys, userInputSampleValueByKey, inputPerTentacle, run_metadata["user inputs"], hiddenMetadataColumns);
+                    if (! hasTentacle) {
                         addedTentacles.push(inputTentacle);
                     }
                 })
             }
         })
         Object.keys(inputPerTentacle).forEach((key) => {
-            columnGroups.push({
-                text: key,
-                span: inputPerTentacle[key]
-            });
+            columnGroups.push({text: key, span: inputPerTentacle[key]});
         })
         userInputColumns.sort((a, b) => {
             const aField = a.field.split(TENTACLE_SEPARATOR).reverse().join("");
@@ -109,7 +128,9 @@ function createMetadataTable(
             }
             return 0;
         });
-        const userInputKeySize = `${1 / (userInputColumns.length + runDataColumns.length - runDataHidableColumns.length) * 100}%`;
+        const userInputKeySize = `${
+            1 / (userInputColumns.length + runDataColumns.length - runDataHidableColumns.length) * 100
+        }%`;
         userInputColumns.forEach((column) => {
             column.size = userInputKeySize;
         })
@@ -119,18 +140,21 @@ function createMetadataTable(
             const splitKey = key.split(TENTACLE_SEPARATOR);
             let sampleValue = userInputSampleValueByKey[key];
             if (sampleValue === null) {
-                console.error(
-                    `Impossible to guess type of ${key} user input (no sample value). Using text as search type`
-                );
+                console.error(`Impossible to guess type of ${key} user input (no sample value). Using text as search type`);
                 sampleValue = "";
             }
-            const label = splitKey[0].length > MAX_SEARCH_LABEL_SIZE ?
-                `${splitKey[0].slice(0, MAX_SEARCH_LABEL_SIZE)} ...` : splitKey[0];
+            const label = splitKey[0].length > MAX_SEARCH_LABEL_SIZE ? `${
+                splitKey[0].slice(0, MAX_SEARCH_LABEL_SIZE)
+            } ...` : splitKey[0];
             return {
                 field: key,
-                label: `${label} (${splitKey[1]})`,
-                type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(null,
-                    { type: null, field: key }, "text", sampleValue),
+                label: `${label} (${
+                    splitKey[1]
+                })`,
+                type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(null, {
+                    type: null,
+                    field: key
+                }, "text", sampleValue)
             }
         })
         let recordId = 0;
@@ -142,34 +166,42 @@ function createMetadataTable(
             return {
                 field: key,
                 label: key,
-                type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(records,
-                    { type: null, field: key }, "text", null),
+                type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(records, {
+                    type: null,
+                    field: key
+                }, "text", null)
             };
         });
         _ensureBacktestingMetadataColumnsOrder(runDataSearches);
         const searches = runDataSearches.concat(userInputSearches);
-        const searchData = [
-            {
+        const searchData = [{
                 field: 'optimization campaign',
                 value: currentCampaignName,
                 operator: 'is',
                 type: 'text'
-            }
-        ]
-        const sortData = [
-            {
+            }]
+        const sortData = [{
                 field: "timestamp",
                 direction: "asc"
-            }
-        ];
-        const table = createTable({elementID:`${tableId}-table`, name:tableTitle, tableName:tableId,
-            searches, columns, records, columnGroups, searchData, sortData,
-            selectable:true, addToTable:false, reorderRows:false, deleteRows:false, onReorderRowCallback:null, onDeleteCallback:null});
-        _addBacktestingMetadataTableButtons(
-            table, runDataHidableColumns, userInputColumns,
-            forceSelectLatest, currentCampaignName, reloadData,
-            deleteBacktestingRuns, restoreSettings, records
-        )
+            }];
+        const table = createTable({
+            elementID: `${tableId}-table`,
+            name: tableTitle,
+            tableName: tableId,
+            searches,
+            columns,
+            records,
+            columnGroups,
+            searchData,
+            sortData,
+            selectable: true,
+            addToTable: false,
+            reorderRows: false,
+            deleteRows: false,
+            onReorderRowCallback: null,
+            onDeleteCallback: null
+        });
+        _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userInputColumns, forceSelectLatest, currentCampaignName, reloadData, deleteBacktestingRuns, restoreSettings, records)
         table.on("select", (event) => handleSelection(tableId, event))
         table.on("unselect", (event) => handleSelection(tableId, event))
         if (records.length) {
@@ -189,21 +221,16 @@ function createMetadataTable(
 }
 
 
-function _addBacktestingMetadataTableButtons(
-    table, runDataHidableColumns, userInputColumns,
-    forceSelectLatest, currentOptimizerCampaignName,
-    reloadData, deleteBacktestingRuns, restoreSettings, records
-) {
-    // tabs
+function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userInputColumns, forceSelectLatest, currentOptimizerCampaignName, reloadData, deleteBacktestingRuns, restoreSettings, records) { // tabs
     function showRunInfo() {
-        table.showColumn(...runDataHidableColumns.map((column) => column.field))
-        table.hideColumn(...userInputColumns.map((column) => column.field))
+        table.showColumn(... runDataHidableColumns.map((column) => column.field))
+        table.hideColumn(... userInputColumns.map((column) => column.field))
         table.toolbar.disable('show-run-info');
         table.toolbar.enable('show-user-inputs');
     }
     function showUserInputInfo() {
-        table.hideColumn(...runDataHidableColumns.map((column) => column.field))
-        table.showColumn(...userInputColumns.map((column) => column.field))
+        table.hideColumn(... runDataHidableColumns.map((column) => column.field))
+        table.showColumn(... userInputColumns.map((column) => column.field))
         table.toolbar.disable('show-user-inputs');
         table.toolbar.enable('show-run-info');
     }
@@ -221,22 +248,19 @@ function _addBacktestingMetadataTableButtons(
 
     function _deleteRuns(selectedIds) {
         const toDeleteRuns = selectedIds.map((recId) => table.get(recId))
-        w2confirm(`Delete these ${toDeleteRuns.length} runs ?`)
-            .yes(() => {
-                deleteBacktestingRuns(toDeleteRuns.map((run) => {
-                    return {
-                        backtesting_id: getIdFromTableRow(run),
-                        optimizer_id: getOptimizerIdFromTableRow(run),
-                        campaign_name: getCampaignNameFromTableRow(run),
-                    }
-                }))
-            });
+        w2confirm(`Delete these ${
+            toDeleteRuns.length
+        } runs ?`).yes(() => {
+            deleteBacktestingRuns(toDeleteRuns.map((run) => {
+                return {backtesting_id: getIdFromTableRow(run), optimizer_id: getOptimizerIdFromTableRow(run), campaign_name: getCampaignNameFromTableRow(run)}
+            }))
+        });
     }
     function deleteSelectedRuns(event) {
         event.force = true;
         event.onComplete = () => {
             const selectedIds = table.getSelection()
-            if (selectedIds?.length === 0) {
+            if (selectedIds ?. length === 0) {
                 return createNotification("Select a run to delete first", "danger")
             }
             _deleteRuns(selectedIds)
@@ -247,26 +271,43 @@ function _addBacktestingMetadataTableButtons(
         event.onComplete = () => _deleteRuns(table.last.searchIds)
 
     }
-    table.toolbar.add({ type: 'button', id: 'show-run-info', text: 'Run info', icon: 'fa fa-bolt', disabled: true, onClick: showRunInfo });
-    table.toolbar.add({ type: 'button', id: 'show-user-inputs', text: 'User inputs', icon: 'fa fa-user-cog', onClick: showUserInputInfo })
     table.toolbar.add({
-        type: 'button', id: 'show-current-optimization-campaign',
-        text: `Current optimization campaign: ${currentOptimizerCampaignName}`,
-        icon: 'fas fa-list', onClick: () => showCurrentOptimizationCampaignOnly(currentOptimizerCampaignName)
+        type: 'button',
+        id: 'show-run-info',
+        text: 'Run info',
+        icon: 'fa fa-bolt',
+        disabled: true,
+        onClick: showRunInfo
+    });
+    table.toolbar.add({
+        type: 'button',
+        id: 'show-user-inputs',
+        text: 'User inputs',
+        icon: 'fa fa-user-cog',
+        onClick: showUserInputInfo
     })
-    table.toolbar.add({ type: 'spacer' });
+    table.toolbar.add({
+        type: 'button',
+        id: 'show-current-optimization-campaign',
+        text: `Current optimization campaign: ${currentOptimizerCampaignName}`,
+        icon: 'fas fa-list',
+        onClick: () => showCurrentOptimizationCampaignOnly(currentOptimizerCampaignName)
+    })
+    table.toolbar.add({type: 'spacer'});
 
     function _restoreSettings() {
         const selectedRuns = table.getSelection()
         if (selectedRuns && selectedRuns.length === 1) {
             function removeSpacesOnlyFromKeys(inputs) {
                 inputs && Object.keys(inputs).forEach((inputKey) => {
-                    const newInputKey = inputKey?.replace(/ /g, "_")
+                    const newInputKey = inputKey ?. replace(/ /g, "_")
                     if (newInputKey && newInputKey !== inputKey) {
                         inputs[newInputKey] = inputs[inputKey]
                         delete inputs[inputKey]
                     }
-                    if (typeof inputs[newInputKey] === 'object') removeSpacesOnlyFromKeys(inputs[newInputKey]);
+                    if (typeof inputs[newInputKey] === 'object') 
+                        removeSpacesOnlyFromKeys(inputs[newInputKey]);
+                    
                 })
                 return inputs
             }
@@ -278,21 +319,31 @@ function _addBacktestingMetadataTableButtons(
         createNotification("Error restoring user iputs", "danger", "You must select one run");
     }
     table.toolbar.add({
-        type: 'button', id: 'restore-run',
-        text: 'Restore settings', icon: 'fa fa-download', onClick: _restoreSettings
+        type: 'button',
+        id: 'restore-run',
+        text: 'Restore settings',
+        icon: 'fa fa-download',
+        onClick: _restoreSettings
     })
     table.toolbar.add({
-        type: 'button', id: 'refresh-backtesting-runs',
-        text: 'Refresh', icon: 'w2ui-icon-reload', onClick: reloadData
+        type: 'button',
+        id: 'refresh-backtesting-runs',
+        text: 'Refresh',
+        icon: 'w2ui-icon-reload',
+        onClick: reloadData
     })
     table.toolbar.add({
-        type: 'button', id: 'delete_selected_runs',
-        text: 'Delete', icon: 'fa fa-trash',
+        type: 'button',
+        id: 'delete_selected_runs',
+        text: 'Delete',
+        icon: 'fa fa-trash',
         onClick: deleteSelectedRuns
     });
     table.toolbar.add({
-        type: 'button', id: 'delete_visible_runs',
-        text: 'Delete visible', icon: 'fa fa-trash',
+        type: 'button',
+        id: 'delete_visible_runs',
+        text: 'Delete visible',
+        icon: 'fa fa-trash',
         onClick: deleteShownRuns
     });
 }
@@ -318,11 +369,7 @@ function getSelectedBacktestingRunIdentifiers(tableName) {
     if (typeof table !== "undefined") {
         return table.getSelection().map(recid => {
             const row = table.get(recid);
-            return mergeRunIdentifiers(
-                getIdFromTableRow(row),
-                getOptimizerIdFromTableRow(row),
-                getCampaignNameFromTableRow(row)
-            );
+            return mergeRunIdentifiers(getIdFromTableRow(row), getOptimizerIdFromTableRow(row), getCampaignNameFromTableRow(row));
         })
     }
     return [];
@@ -342,26 +389,16 @@ export function userInputKey(userInput, tentacle) {
     return `${userInput}${TENTACLE_SEPARATOR}${tentacle}`;
 }
 
-function _getUserInputColumns(
-    userInputColumns, inputTentacle, userInputKeys, userInputSampleValueByKey,
-    inputPerTentacle, inputsByConfig, hiddenMetadataColumns
-) {
+function _getUserInputColumns(userInputColumns, inputTentacle, userInputKeys, userInputSampleValueByKey, inputPerTentacle, inputsByConfig, hiddenMetadataColumns) {
     Object.keys(inputsByConfig[inputTentacle]).forEach((userInput) => {
         const key = userInputKey(userInput, inputTentacle);
-        if (!userInputKeys.includes(key) && !hiddenMetadataColumns?.includes(key.replaceAll("_", " "))) {
+        if (! userInputKeys.includes(key) && ! hiddenMetadataColumns ?. includes(key.replaceAll("_", " "))) {
             userInputSampleValueByKey[key] = inputsByConfig[inputTentacle][userInput]
             if (userInputSampleValueByKey[key] instanceof Object && !(userInputSampleValueByKey[key] instanceof Array)) {
-                _getUserInputColumns(userInputColumns, userInput, userInputKeys, userInputSampleValueByKey,
-                    inputPerTentacle, inputsByConfig[inputTentacle], hiddenMetadataColumns
-                )
+                _getUserInputColumns(userInputColumns, userInput, userInputKeys, userInputSampleValueByKey, inputPerTentacle, inputsByConfig[inputTentacle], hiddenMetadataColumns)
             } else {
                 userInputKeys.push(key);
-                userInputColumns.push({
-                    field: key,
-                    text: userInput,
-                    sortable: true,
-                    hidden: true
-                });
+                userInputColumns.push({field: key, text: userInput, sortable: true, hidden: true});
                 if (typeof inputPerTentacle[inputTentacle] === "undefined") {
                     inputPerTentacle[inputTentacle] = 1;
                 } else {
@@ -419,10 +456,14 @@ function _formatMetadataRow(row, recordId) {
         }
     })
     if (typeof row.children === "undefined") {
-        row.id = `${row.id}`
+        row.id = `${
+            row.id
+        }`
     } else {
         const optimizerId = row.children[0]["optimizer id"]
-        row.id = `${row.id} [optimizer ${optimizerId}]`
+        row.id = `${
+            row.id
+        } [optimizer ${optimizerId}]`
         const subRows = [];
         row.children.forEach((rowChild) => {
             recordId = _formatMetadataRow(rowChild, recordId)
@@ -432,16 +473,18 @@ function _formatMetadataRow(row, recordId) {
             children: subRows
         }
         delete row.children
-    }
-    row.recid = recordId++;
+    } row.recid = recordId++;
     return recordId
 }
 
-function _filterOptimizationCampaign(table, currentOptimizerCampaignName) {
-    // default search and sort
-    table.search(
-        [{ field: 'optimization campaign', value: currentOptimizerCampaignName, operator: 'is' }], 'AND'
-    )
+function _filterOptimizationCampaign(table, currentOptimizerCampaignName) { // default search and sort
+    table.search([
+        {
+            field: 'optimization campaign',
+            value: currentOptimizerCampaignName,
+            operator: 'is'
+        }
+    ], 'AND')
     // force "is" operator as it is not used in text searches by default
     table.searchData[0].operator = "is"
     table.localSearch()

@@ -12,10 +12,10 @@ export default function AppList({selectedCategories, appStoreData, setSelectedCa
     return preSortedAppStoreData && (<Grid container
         spacing={2}> {
         preSortedAppStoreData.map((app, index) => {
-            return (<ErrorBoundary>
-                <AppCard key={
+            return (<ErrorBoundary key={
                         app.package_id + index
-                    }
+                    }>
+                <AppCard
                     currentStrategy={currentStrategy}
                     setSelectedCategories={setSelectedCategories}
                     app={app}
