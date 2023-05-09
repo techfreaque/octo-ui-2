@@ -232,15 +232,14 @@ export async function cancelOrders(botDomain, orderIdsArray, setIsCancelling) {
     sendAndInterpretBotUpdate(orderIdsArray, botDomain + backendRoutes.cancelOrders, success, fail, "POST")
 }
 
-export async function updateProfileInfo(botDomain, newProfileInfo, onFail) {
+export async function updateProfileInfo(botDomain, newProfileInfo, onFail, onSuccess) {
     const success = (updated_data, update_url, result, msg, status) => {
         createNotification("Successfully updated profile info")
     }
     const fail = (updated_data, update_url, result, msg, status) => {
-        onFail ?. ()
         createNotification("Failed to updated profile info", "danger")
     }
-    await sendAndInterpretBotUpdate(newProfileInfo, botDomain + backendRoutes.updateProfileInfo, success, fail, "POST")
+    await sendAndInterpretBotUpdate(newProfileInfo, botDomain + backendRoutes.updateProfileInfo, onSuccess||success, onFail||fail, "POST")
 }
 
 export async function duplicateProfile({

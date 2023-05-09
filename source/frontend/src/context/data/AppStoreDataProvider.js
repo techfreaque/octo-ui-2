@@ -109,9 +109,6 @@ export const useUploadToAppStore = () => {
     return useCallback((app, uploadInfo, appDownloadUrl, setIsloading, setOpen) => {
         setIsloading(true)
         if (validateUploadIndo(uploadInfo)) {
-            setIsloading(false)
-            createNotification("Enter release notes before you upload", "danger")
-        } else {
             function handleAppUpload(appFile) {
                 uploadApp({
                     storeDomain: appStoreDomain,
@@ -126,6 +123,9 @@ export const useUploadToAppStore = () => {
                 setOpen(false)
             }
             getFile(appDownloadUrl, handleAppUpload)
+        } else {
+            setIsloading(false)
+            createNotification("Enter release notes before you upload", "danger")
         }
     }, [appStoreDomain, appStoreUser]);
 }

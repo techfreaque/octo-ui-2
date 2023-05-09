@@ -95,6 +95,21 @@ function generateTablesAndSidebarItems({
         })
     })
 }
+
+export function createTradingOrBacktestingTab(liveOrBacktest) {
+    return {
+            label: `${
+            liveOrBacktest.charAt(0).toUpperCase() + liveOrBacktest.slice(1)
+        } trading`,
+        antIcon: liveOrBacktest === "live" ? "DollarOutlined" : "RobotOutlined",
+        content: (
+            <Typography.Title level={2}>
+                Select a table from the sidebar</Typography.Title>
+        ),
+        children: []
+    }
+}
+
 function _generateTablesAndSidebarItems({
     subElement,
     liveOrBacktest,
@@ -106,17 +121,7 @@ function _generateTablesAndSidebarItems({
 }) {
     subElement ?. data ?. elements ?. forEach(element => {
         if (!newMenuItems[liveOrBacktest]) {
-            newMenuItems[liveOrBacktest] = {
-                label: `${
-                    liveOrBacktest.charAt(0).toUpperCase() + liveOrBacktest.slice(1)
-                } trading`,
-                antIcon: liveOrBacktest === "live" ? "DollarOutlined" : "RobotOutlined",
-                content: (
-                    <Typography.Title level={2}>
-                        Select a table from the sidebar</Typography.Title>
-                ),
-                children: []
-            }
+            newMenuItems[liveOrBacktest] = createTradingOrBacktestingTab(liveOrBacktest)
         }
         const tableId = `${
             element.title.replace(/ /g, "_").replace(/\//g, "_")

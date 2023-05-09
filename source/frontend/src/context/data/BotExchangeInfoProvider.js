@@ -86,7 +86,7 @@ export const useFetchServicesInfo = () => {
     const setServicesInfo = useUpdateServicesInfoContext();
     const botDomain = useBotDomainContext();
     const logic = useCallback((successNotification = false, setIsFinished = undefined) => {
-        setIsFinished && setIsFinished(false)
+        setIsFinished?.(false)
         fetchServicesInfo(botDomain, setServicesInfo, successNotification, setIsFinished);
     }, [setServicesInfo, botDomain]);
     return logic;

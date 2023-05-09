@@ -7,6 +7,7 @@ import { useBotDomainContext } from "../../../../context/config/BotDomainProvide
 import { updateConfig, updateProfileInfo } from "../../../../api/actions";
 import ProfileModal from "./ProfileModal";
 import { getProfileCurrencyUpdate, useCurrenciesLists, useExchangeConfigUpdateContext, useExchangeInfoContext } from "../../../../context/data/BotExchangeInfoProvider";
+import createNotification from "../../../../components/Notifications/Notification";
 
 export default function ProfileModalButton({profile, isCurrentProfile}) {
     const [open, setOpen] = useState(false);
@@ -40,6 +41,7 @@ export default function ProfileModalButton({profile, isCurrentProfile}) {
         const infoHasChanged = JSON.stringify((profile || {}).profile) !== JSON.stringify(newProfileSettings.profile)
         const configHasChanged = JSON.stringify((profile || {}).config) !== JSON.stringify(newProfileSettings.config)
         function onFail() {
+            createNotification("Successfully updated profile info")
             setIsloading(false)
         }
         const configUpdate = {
@@ -82,7 +84,7 @@ export default function ProfileModalButton({profile, isCurrentProfile}) {
             })
         }
         if (currencyListChanged || exchangeConfigUpdateHasChanged || configHasChanged) {
-                            await updateConfig(botDomain, configUpdate, newProfileSettings.profile.name, onFail)
+                            await updateConfig(botDomain, configUpdate, newProfileSettings.profile.name, ()=>setIsloading(false))
             }
         if (infoHasChanged) {
             await updateProfileInfo(botDomain, {
