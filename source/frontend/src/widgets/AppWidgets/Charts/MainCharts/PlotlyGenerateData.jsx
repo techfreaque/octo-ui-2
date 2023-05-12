@@ -28,7 +28,7 @@ export function setPlotData(plottedElements, uiConfig, visibleTimeframes, visibl
             return;
         } else if (thisChartLocation === "pie-chart" && plotData[thisChartLocation]) {
             setLayouts[thisChartLocation]({
-                ... layouts[thisChartLocation],
+                ...layouts[thisChartLocation],
                 grid: {
                     rows: 1,
                     columns: 2
@@ -79,7 +79,7 @@ function getOrGenerateLayout(layouts, uiConfig, chartLocation) {
         },
         width: window.innerWidth
     };
-    if (uiConfig ?. [DISPLAY_SETTINGS_KEY] ?. [GRAPHS_KEY] ?. display_unified_tooltip) {
+    if (uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_unified_tooltip) {
         layout.hovermode = "x unified";
         layout.hoverlabel = {
             bgcolor: "#131722",
@@ -152,8 +152,8 @@ function formatSubData({
                     return;
                 }
                 const chartIdentifier = backtestingId ? optimizerId ? `${backtestingId}:${optimizerId} - ${optimizerCampaign}` : `${backtestingId} - ${optimizerCampaign}` : `live ${liveId}`;
-                const thisData = subElements[pair][timeframe] ?. data ?. sub_elements;
-                thisData ?. forEach((sub_element) => {
+                const thisData = subElements[pair][timeframe]?.data?.sub_elements;
+                thisData?.forEach((sub_element) => {
                     if (sub_element.type !== "chart") {
                         return;
                     }
@@ -164,7 +164,7 @@ function formatSubData({
                     const layout = getOrGenerateLayout(layouts, uiConfig, chartLocation)
                     let yAxisId = 1
                     let xAxisId = 1;
-                    sub_element ?. data ?. elements ?. forEach((chartDetails) => {
+                    sub_element?.data?.elements?.forEach((chartDetails) => {
                         if (chartDetails.own_yaxis && yAxisId < 4) {
                             yAxisId++;
                         }
@@ -264,7 +264,7 @@ function _createCharts({
 
 function displayCandlesAsLines(candlesCount, uiConfig) {
     const default_max_candles_before_lines = 5000;
-    const settings = uiConfig ?. [DISPLAY_SETTINGS_KEY];
+    const settings = uiConfig?.[DISPLAY_SETTINGS_KEY];
     if (typeof settings !== "undefined" && typeof settings[GRAPHS_KEY] !== "undefined") {
         return candlesCount > Number(settings[GRAPHS_KEY].max_candles_before_line_display);
     }
@@ -401,7 +401,7 @@ function getAxisTemplate(axisKey, uiConfig, axisType, chartDetails) {
     if (axisType === "x" && chartDetails.x_type !== null) {
         axis.type = chartDetails.x_type;
     } else if (axisType === "y") {
-        axis.type = uiConfig ?. [DISPLAY_SETTINGS_KEY] ?. [GRAPHS_KEY] ?. display_use_log_scale === true ? "log" : "linear";
+        axis.type = uiConfig?.[DISPLAY_SETTINGS_KEY]?.[GRAPHS_KEY]?.display_use_log_scale === true ? "log" : "linear";
     }
     return axis
 }

@@ -280,15 +280,8 @@ export async function deleteProfile(botDomain, profileId, profileName, onSuccess
 }
 
 export async function selectProfile(botDomain, profileId, profileName, onSuccess, onFail) {
-    const success = (updated_data, update_url, result, msg, status) => {
-        onSuccess ?. ()
-        createNotification(`Successfully selected ${profileName} profile`)
-    }
-    const fail = (updated_data, update_url, result, msg, status) => {
-        onFail ?. ()
-        createNotification(`Failed to select ${profileName} profile`, "danger")
-    }
-    await sendAndInterpretBotUpdate({}, botDomain + backendRoutes.selectProfile + profileId, onSuccess || success, onFail || fail, "GET")
+
+    await sendAndInterpretBotUpdate({}, botDomain + backendRoutes.selectProfile + profileId, onSuccess, onFail, "GET")
 }
 
 export async function getAllOrders(botDomain, setIsLoading, setOrders) {

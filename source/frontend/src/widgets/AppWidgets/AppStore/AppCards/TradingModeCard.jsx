@@ -8,6 +8,7 @@ import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
 import {updateConfig, updateProfileInfo} from "../../../../api/actions";
 import createNotification from "../../../../components/Notifications/Notification";
 import AppCardTemplate from "./AppCardTemplate";
+import {useRestartBot} from "../../../../context/data/IsBotOnlineProvider";
 
 export default function TradingModeCard({
     app,
@@ -18,12 +19,14 @@ export default function TradingModeCard({
     setIsloading,
     setSelectedCategories,
     currentStrategy,
-    apps
+    apps,
+    didHoverOnce
 }) {
     const [uploadInfo, setUploadInfo] = useState({})
     const botDomain = useBotDomainContext()
     const botInfo = useBotInfoContext()
     const [downloadInfo, setDownloadInfo] = useState({})
+    const restartBot = useRestartBot()
 
     const profileDownloadUrl = botDomain + backendRoutes.exportApp + app.origin_package
 
@@ -36,23 +39,27 @@ export default function TradingModeCard({
         }, setIsloading, setOpen)
     }
     const uploadToAppStore = useUploadToAppStore()
-    const newlySelectedRequirements = app?.requirements
+    const newlySelectedRequirements = app ?. requirements
     function onFail() {
         createNotification("Failed to select trading mode", "danger", `Not able to select ${
             app.title
         }`)
     }
-
-    function onSuccessSetRequirements() {
+    function onSuccessSetRequirements(setOpen) {
         createNotification(`Successfully selected ${
             app.title
         }`)
-
+        setOpen(false)
+        restartBot(true)
     }
-    function onSuccessSelection() {
+    function onSuccessSelection(setOpen) {
         updateProfileInfo(botDomain, {
-            required_trading_modes: newlySelectedRequirements
-        }, onFail, onSuccessSetRequirements)
+            id: botInfo.current_profile.profile.id,
+            required_trading_tentacles: [
+                app.package_id,
+                ...(newlySelectedRequirements || []),
+            ]
+        }, onFail, () => onSuccessSetRequirements(setOpen))
     }
     async function handleSelectStrategyMode(setOpen) {
         setIsloading(true)
@@ -64,22 +71,21 @@ export default function TradingModeCard({
             restart_after_save: false
         }
         // disable previous apps
-        if (selectedApps?.[0]) {
-            configUpdate.trading_config[selectedApps?.[0].package_id] = "false"
-            if (selectedApps?.[0]?.requirements?.length) {
+        if (selectedApps ?. [0]) {
+            configUpdate.trading_config[selectedApps ?. [0].package_id] = "false"
+            if (selectedApps ?. [0] ?. requirements ?. length) {
                 selectedApps[0].requirements.forEach(requirement => configUpdate.evaluator_config[requirement] = false)
             }
         }
         // enable selected apps
         configUpdate.trading_config[app.package_id] = "true"
-        if (newlySelectedRequirements?.length) {
+        if (newlySelectedRequirements ?. length) {
 
             newlySelectedRequirements.forEach(requirement => configUpdate.evaluator_config[requirement] = true)
         }
-        await updateConfig(botDomain, configUpdate, botInfo.current_profile.profile.name, onFail, onSuccessSelection)
+        await updateConfig(botDomain, configUpdate, botInfo.current_profile.profile.name, onFail, () => onSuccessSelection(setOpen))
         setIsloading(false)
         setOpen(false)
-
     }
     return (
         <AppCardTemplate app={app}
@@ -95,13 +101,13 @@ export default function TradingModeCard({
                             app.description
                         }
                         isReadOnlyStrategy={
-                            currentStrategy?.is_from_store
+                            currentStrategy ?. is_from_store
                         }
                         onConfigure={
                             () => setSelectedCategories(strategyModeSettingsName)
                         }
                         downloadInfo={downloadInfo}
-
+                        didHoverOnce={didHoverOnce}
                         setDownloadInfo={setDownloadInfo}
 
                         handleDownload={handleDownloadApp}

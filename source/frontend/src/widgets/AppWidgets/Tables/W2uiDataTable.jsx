@@ -33,7 +33,7 @@ export default function W2uiDataTable() {
         })
         setMenuItems(Object.values(newMenuItems))
     }, [botDomain, plottedElements]);
-    return menuItems ?. length ? (
+    return menuItems?.length ? (
         <AntSidebar menuItems={menuItems}/>
     ) : (
         <div style={
@@ -77,8 +77,8 @@ function generateTablesAndSidebarItems({
         const thisRun = plottedElements[runId]
         thisRun && Object.keys(thisRun).forEach(symbol => {
             thisRun[symbol] && Object.keys(thisRun[symbol]).forEach(timeframe => {
-                const subElements = thisRun[symbol][timeframe] ?. data ?. sub_elements
-                subElements ?. forEach(subElement => {
+                const subElements = thisRun[symbol][timeframe]?.data?.sub_elements
+                subElements?.forEach(subElement => {
                     if (subElement.name === "table") {
                         _generateTablesAndSidebarItems({
                             subElement,
@@ -119,14 +119,14 @@ function _generateTablesAndSidebarItems({
     runId,
     botDomain
 }) {
-    subElement ?. data ?. elements ?. forEach(element => {
+    subElement?.data?.elements?.forEach(element => {
         if (!newMenuItems[liveOrBacktest]) {
             newMenuItems[liveOrBacktest] = createTradingOrBacktestingTab(liveOrBacktest)
         }
         const tableId = `${
             element.title.replace(/ /g, "_").replace(/\//g, "_")
         }-table`
-        element ?. rows ?. forEach((row, index) => {
+        element?.rows?.forEach((row, index) => {
             row.recid = index
         })
         let label
@@ -155,8 +155,8 @@ function _generateTablesAndSidebarItems({
 
         newMenuItems[liveOrBacktest].children.push({
             label,
-            antIcon: element.config ?. antIcon,
-            faIcon: element.config ?. faIcon,
+            antIcon: element.config?.antIcon,
+            faIcon: element.config?.faIcon,
             noPadding: true,
             content: (
                 <TableFromElement tableId={tableId}

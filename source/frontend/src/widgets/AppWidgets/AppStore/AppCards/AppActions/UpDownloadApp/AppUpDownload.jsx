@@ -9,7 +9,9 @@ export default function AppUpDownload({
     handleUpload,
     setUploadInfo,
     uploadInfo,
-    handleDownload
+    handleDownload,
+    downloadInfo,
+    setDownloadInfo
 }) {
     const appStoreUser = useAppStoreUserContext()
 
@@ -83,8 +85,8 @@ export default function AppUpDownload({
                 }
                 disabledTooltipTitle={"You need to be signed in to download updates."}
                 confirmDescription={
-                    (<AppDownloadForm setUploadInfo={setUploadInfo}
-                        uploadInfo={uploadInfo}
+                    (<AppDownloadForm             downloadInfo={downloadInfo}
+            setDownloadInfo={setDownloadInfo}
                         app={app}/>)
                 }
                 confirmButtonText={buttonText}
@@ -102,8 +104,8 @@ export default function AppUpDownload({
                 }
                 disabledTooltipTitle={"You need to be signed in to download apps."}
                 confirmDescription={
-                    (<AppDownloadForm setUploadInfo={setUploadInfo}
-                        uploadInfo={uploadInfo}
+                    (<AppDownloadForm             downloadInfo={downloadInfo}
+            setDownloadInfo={setDownloadInfo}
                         app={app}/>)
                 }
                 confirmButtonText={confirmButtonText}
@@ -131,8 +133,8 @@ export default function AppUpDownload({
             }
             disabledTooltipTitle={"You need to be signed in to download free apps."}
             confirmDescription={
-                (<AppDownloadForm setUploadInfo={setUploadInfo}
-                    uploadInfo={uploadInfo}
+                (<AppDownloadForm             downloadInfo={downloadInfo}
+            setDownloadInfo={setDownloadInfo}
                     app={app}/>)
             }
             confirmButtonText={confirmButtonText}

@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import TradingModeCard from './TradingModeCard';
 import StrategyCard from './StrategyCard';
 import {Grid} from '@mui/material';
@@ -17,63 +17,86 @@ export default function AppCard({
     currentStrategy
 }) {
     const [isMouseHover, setMouseHover] = useState(false);
-    const category = app?.categories?.length > 1 ? 'Package' : app?.categories?.[0]
+    const [didHoverOnce, setDidHoverOnce] = useState(false)
+    useEffect(() => {
+        if (isMouseHover && !didHoverOnce) {
+            setDidHoverOnce(true)
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [isMouseHover])
+
+    const category = app ?. categories ?. length > 1 ? 'Package' : app ?. categories ?. [0]
     if (category === tradingModeCategoryName) {
-        return (<SelectedCardContainer app={app}>
-            <TradingModeCard app={app}
-                apps={apps}
-                currentStrategy={currentStrategy}
-                setMouseHover={setMouseHover}
-                category={category}
-                setSelectedCategories={setSelectedCategories}
-                isLoading={isLoading}
-                setIsloading={setIsloading}
-                isMouseHover={isMouseHover}/>
-        </SelectedCardContainer>)
+        return (
+            <SelectedCardContainer app={app}>
+                <TradingModeCard app={app}
+                    apps={apps}
+                    currentStrategy={currentStrategy}
+                    setMouseHover={setMouseHover}
+                    category={category}
+                    didHoverOnce={didHoverOnce}
+                    setSelectedCategories={setSelectedCategories}
+                    isLoading={isLoading}
+                    setIsloading={setIsloading}
+                    isMouseHover={isMouseHover}/>
+            </SelectedCardContainer>
+        )
     } else if (category === profileCategoryName) {
-        return (<SelectedCardContainer app={app}>
-            <StrategyCard app={app}
-                isLoading={isLoading}
-                setIsloading={setIsloading}
-                setMouseHover={setMouseHover}
-                category={category}
-                setSelectedCategories={setSelectedCategories}
-                isMouseHover={isMouseHover}
-                // isMouseHover={true}
-            />
-        </SelectedCardContainer>)
+        return (
+            <SelectedCardContainer app={app}>
+                <StrategyCard app={app}
+                    isLoading={isLoading}
+                    setIsloading={setIsloading}
+                    setMouseHover={setMouseHover}
+                    category={category}
+                    didHoverOnce={didHoverOnce}
+                    setSelectedCategories={setSelectedCategories}
+                    isMouseHover={isMouseHover}
+                    // isMouseHover={true}
+                />
+            </SelectedCardContainer>
+        )
     } else {
-        return (<SelectedCardContainer app={app}>
-            <OtherAppCard app={app}
-                isLoading={isLoading}
-                setIsloading={setIsloading}
-                setMouseHover={setMouseHover}
-                category={category}
-                setSelectedCategories={setSelectedCategories}
-                isMouseHover={isMouseHover}
-                // isMouseHover={true}
-            />
-        </SelectedCardContainer>)
+        return (
+            <SelectedCardContainer app={app}>
+                <OtherAppCard app={app}
+                    isLoading={isLoading}
+                    setIsloading={setIsloading}
+                    setMouseHover={setMouseHover}
+                    category={category}
+                    didHoverOnce={didHoverOnce}
+                    setSelectedCategories={setSelectedCategories}
+                    isMouseHover={isMouseHover}
+                    // isMouseHover={true}
+                />
+            </SelectedCardContainer>
+        )
     }
 };
 
 
 function SelectedCardContainer({app, children}) {
-    return app?.is_selected ? (<Grid item
-    xs={12}> {children}</Grid>) : (<Grid style={
-        {
-            margin: "auto",
-            height: "100%",
-            // maxWidth: "500px"
-        }
-    }
-    item
-    xs={12}
-    sm={12}
-    md={12}
-    lg={6}
-    xl={4}
-    xxl={4}> {children}</Grid>);
+    return app ?. is_selected ? (
+        <Grid item
+            xs={12}>
+            {children}</Grid>
+    ) : (
+        <Grid style={
+                {
+                    margin: "auto",
+                    height: "100%",
+                    // maxWidth: "500px"
+                }
+            }
+            item
+            xs={12}
+            sm={12}
+            md={12}
+            lg={6}
+            xl={4}
+            xxl={4}>
+            {children}</Grid>
+    );
 }
 
 

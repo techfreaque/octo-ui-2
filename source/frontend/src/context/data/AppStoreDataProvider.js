@@ -249,7 +249,7 @@ export const useInstallProfile = () => {
 
 function getAppUrlFromDownloadInfo(downloadInfo, appStoreDomain, appStoreUser) {
     return `${appStoreDomain}/download_app/${
-        appStoreUser?.downloadToken
+        appStoreUser?.download_token
     }/${
         downloadInfo.major_version
     }/${

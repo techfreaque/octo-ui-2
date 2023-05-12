@@ -6,13 +6,13 @@ export const pieChartName = "pie-chart"
 export default function DualPieChart({setLayouts, layouts, charts}) {
     const mainRef = useRef()
     const [menuItems, setMenuItems] = useState()
-    const layout = layouts ?. [pieChartName]
-    const pieCharts = charts ?. [pieChartName]
+    const layout = layouts?.[pieChartName]
+    const pieCharts = charts?.[pieChartName]
     useEffect(() => { // pie chart
-        updateChartDimensions(setLayouts[pieChartName], mainRef ?. current ?. clientHeight)
+        updateChartDimensions(setLayouts[pieChartName], mainRef?.current?.clientHeight)
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [
-        mainRef ?. current ?. clientHeight,
+        mainRef?.current?.clientHeight,
     ])
     useEffect(() => {
         const newMenuItems = generateSidebarMenu(layout, pieCharts, setLayouts)
@@ -49,8 +49,8 @@ function updateChartDimensions(setLayout, height) { // update layout when dimens
 function generateSidebarMenu(layout, pieCharts, setLayouts) {
     const newMenuItems = {}
 
-    pieCharts ?. forEach(chart => {
-        const liveOrBacktest = chart.backtesting_id === undefined ? "Live" : "Backtesting"
+    pieCharts?.forEach(chart => {
+        const liveOrBacktest = chart.backtesting_id === undefined ? "live" : "backtesting"
         if (! newMenuItems[liveOrBacktest]) {
             newMenuItems[liveOrBacktest] = createTradingOrBacktestingTab(liveOrBacktest)
         }

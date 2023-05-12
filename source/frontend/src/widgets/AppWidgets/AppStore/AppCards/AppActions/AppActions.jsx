@@ -1,6 +1,5 @@
 import {Popconfirm, Tooltip} from "antd";
 import AntButton, {buttonTypes, buttonVariants} from "../../../../../components/Buttons/AntButton";
-import {useState} from "react";
 import AppInfoModal from "./AppInfoModal";
 import SelectApp from "./SelectApp";
 import ConfigureApp from "./ConfigureApp";
@@ -9,6 +8,7 @@ import UninstallApp from "./UninstallApp";
 import AppUpDownload from "./UpDownloadApp/AppUpDownload";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 import ExportApp from "./ExportApp";
+import { useState } from "react";
 
 
 export default function AppActions({
@@ -29,77 +29,82 @@ export default function AppActions({
     handleDownload,
     setDownloadInfo,
     downloadInfo,
-    isReadOnlyStrategy
+    isReadOnlyStrategy,
+    didHoverOnce,
 }) { // const = isMouseHover = true
     const buttonStyle = {
         display: "flex",
         flexWrap: "wrap",
         // minHeight: "76px"
     }
-    return (<div style={
-        {
-            width: '100%',
-            margin: "auto"
-        }
-    }>
+
+    return (
         <div style={
             {
-                width: "100%",
-                position: "relative"
+                width: '100%',
+                margin: "auto"
             }
         }>
             <div style={
-                (app?.is_selected ? {
-                    ...buttonStyle,
-                    marginTop: "20px"
-                } : (isMouseHover ? {
-                    ...buttonStyle,
-                    // marginTop: "20px",
-                    // position: "absolute",
-                    // top: "auto",
-                    // bottom: "auto",
-                    margin: "auto",
-                    // left: "0px",
-                    justifyContent: "center"
-                } : {
-                    ...buttonStyle,
-                    display: "none"
-                }))
-            }>
-                <OnHoverActions handleSelect={handleSelect}
-                    setUploadInfo={setUploadInfo}
-                    setDownloadInfo={setDownloadInfo}
-                    uploadInfo={uploadInfo}
-                    setCloneAppInfo={setCloneAppInfo}
-                    cloneAppInfo={cloneAppInfo}
-                    downloadInfo={downloadInfo}
-                    onConfigure={onConfigure}
-                    handleDownload={handleDownload}
-                    handleDuplication={handleDuplication}
-                    handleUninstall={handleUninstall}
-                    handleUpload={handleUpload}
-                    otherActions={otherActions}
-                    infoContent={infoContent}
-                    isReadOnlyStrategy={isReadOnlyStrategy}
-                    exportUrl={exportUrl}
-                    app={app}/>
-            </div>
-            <div style={
-                (isMouseHover | app?.is_selected) ? {
-                    ...buttonStyle,
-                    display: "none"
-                } : {
-                    ...buttonStyle,
-                    position: "absolute",
-                    top: "-20px",
-                    left: "-10px",
-                    // marginLeft: "-20px"
+                {
+                    width: "100%",
+                    position: "relative"
                 }
             }>
-                <NoHoverActions app={app}/>
+                <div style={
+                    (app ?. is_selected ? {
+                        ... buttonStyle,
+                        marginTop: "20px"
+                    } : (isMouseHover ? {
+                        ... buttonStyle,
+                        // marginTop: "20px",
+                        // position: "absolute",
+                        // top: "auto",
+                        // bottom: "auto",
+                        margin: "auto",
+                        // left: "0px",
+                        justifyContent: "center"
+                    } : {
+                        ... buttonStyle,
+                        display: "none"
+                    }))
+                }>
+                    {
+                    (didHoverOnce || app ?. is_selected) && <OnHoverActions handleSelect={handleSelect}
+                        setUploadInfo={setUploadInfo}
+                        setDownloadInfo={setDownloadInfo}
+                        uploadInfo={uploadInfo}
+                        setCloneAppInfo={setCloneAppInfo}
+                        cloneAppInfo={cloneAppInfo}
+                        downloadInfo={downloadInfo}
+                        onConfigure={onConfigure}
+                        handleDownload={handleDownload}
+                        handleDuplication={handleDuplication}
+                        handleUninstall={handleUninstall}
+                        handleUpload={handleUpload}
+                        otherActions={otherActions}
+                        infoContent={infoContent}
+                        isReadOnlyStrategy={isReadOnlyStrategy}
+                        exportUrl={exportUrl}
+                        app={app}/>
+                } </div>
+                <div style={
+                    (isMouseHover | app ?. is_selected) ? {
+                        ... buttonStyle,
+                        display: "none"
+                    } : {
+                        ... buttonStyle,
+                        position: "absolute",
+                        top: "-20px",
+                        left: "-10px",
+                        // marginLeft: "-20px"
+                    }
+                }>
+                    <NoHoverActions app={app}/>
+                </div>
             </div>
         </div>
-    </div>)
+    )
 }
 function NoHoverActions({app}) {
     let actionText
@@ -112,7 +117,7 @@ function NoHoverActions({app}) {
             actionText = "Free"
         } else {
             actionText = `Sell ${
-                app?.categories?.[0] || "App"
+                app ?. categories ?. [0] || "App"
             }`
         }
     } else if (app.is_installed) {
@@ -126,16 +131,19 @@ function NoHoverActions({app}) {
     } else {
         actionText = "Free"
     }
-    return (<AntButton style={
-            { // margin: "3px"
+    return (
+        <AntButton style={
+                { // margin: "3px"
+                }
             }
-        }
-        buttonType={
-            buttonTypes.fontSecondary
-        }
-        buttonVariant={
-            buttonVariants.text
-    }> {actionText} </AntButton>)
+            buttonType={
+                buttonTypes.fontSecondary
+            }
+            buttonVariant={
+                buttonVariants.text
+        }>
+            {actionText} </AntButton>
+    )
     // if (app.is_owner)
 
 }
@@ -159,36 +167,44 @@ function OnHoverActions({
     downloadInfo,
     isReadOnlyStrategy
 }) {
-    return (<>
-        <AppUpDownload app={app}
-            handleUpload={handleUpload}
-            setUploadInfo={setUploadInfo}
-            downloadInfo={downloadInfo}
-            setDownloadInfo={setDownloadInfo}
-            uploadInfo={uploadInfo}
-            handleDownload={handleDownload}/>
-        <SelectApp app={app}
-            isReadOnlyStrategy={isReadOnlyStrategy}
-            handleSelect={handleSelect}/>
-        <AppInfoModal app={app}
-            infoContent={infoContent}/> {
-        onConfigure && (<ConfigureApp app={app}
-            onConfigure={onConfigure}/>)
-    }
-        {otherActions}
-        {
-        handleDuplication && (<CloneApp app={app}
-            handleDuplication={handleDuplication}
-            setCloneAppInfo={setCloneAppInfo}
-            cloneAppInfo={cloneAppInfo}/>)
-    }
-        {
-        exportUrl && (<ExportApp app={app}
-            exportUrl={exportUrl}/>)
-    }
-        <UninstallApp app={app}
-            handleUninstall={handleUninstall}/>
-    </>)
+    return (
+        <>
+            <AppUpDownload app={app}
+                handleUpload={handleUpload}
+                setUploadInfo={setUploadInfo}
+                downloadInfo={downloadInfo}
+                setDownloadInfo={setDownloadInfo}
+                uploadInfo={uploadInfo}
+                handleDownload={handleDownload}/>
+            <SelectApp app={app}
+                isReadOnlyStrategy={isReadOnlyStrategy}
+                handleSelect={handleSelect}/>
+            <AppInfoModal app={app}
+                infoContent={infoContent}/> {
+            onConfigure && (
+                <ConfigureApp app={app}
+                    onConfigure={onConfigure}/>
+            )
+        }
+            {otherActions}
+            {
+            handleDuplication && (
+                <CloneApp app={app}
+                    handleDuplication={handleDuplication}
+                    setCloneAppInfo={setCloneAppInfo}
+                    cloneAppInfo={cloneAppInfo}/>
+            )
+        }
+            {
+            exportUrl && (
+                <ExportApp app={app}
+                    exportUrl={exportUrl}/>
+            )
+        }
+            <UninstallApp app={app}
+                handleUninstall={handleUninstall}/>
+        </>
+    )
 }
 
 export function ConfirmAction({
@@ -213,39 +229,43 @@ export function ConfirmAction({
         setOpen(true);
     };
     if (disabled) {
-        return (<Tooltip title={disabledTooltipTitle}>
-            <div>
-                <AppIconButton isSelected={isSelected}
-                    buttonTitle={buttonTitle}
-                    disabled={true}
-                    faIconComponent={faIconComponent}
-                    antIconComponent={antIconComponent}
-                    // onClick={showPopconfirm}
-                />
-            </div>
-        </Tooltip>)
+        return (
+            <Tooltip title={disabledTooltipTitle}>
+                <div>
+                    <AppIconButton isSelected={isSelected}
+                        buttonTitle={buttonTitle}
+                        disabled={true}
+                        faIconComponent={faIconComponent}
+                        antIconComponent={antIconComponent}
+                        // onClick={showPopconfirm}
+                    />
+                </div>
+            </Tooltip>
+        )
     }
-    return (<Popconfirm title={confirmTitle}
-        description={confirmDescription}
-        open={open}
-        onConfirm={
-            () => onConfirm(setOpen)
-        }
-        okButtonProps={
-            {
-                loading: confirmLoading,
-                ...okButtonProps,
-                disabled: !formIsValidated
+    return (
+        <Popconfirm title={confirmTitle}
+            description={confirmDescription}
+            open={open}
+            onConfirm={
+                () => onConfirm(setOpen)
             }
-        }
-        okText={confirmButtonText}
-        onCancel={
-            () => setOpen(false)
-    }>
-        <AppIconButton isSelected={isSelected}
-            buttonTitle={buttonTitle}
-            faIconComponent={faIconComponent}
-            antIconComponent={antIconComponent}
-            onClick={showPopconfirm}/>
-    </Popconfirm>)
+            okButtonProps={
+                {
+                    loading: confirmLoading,
+                    ...okButtonProps,
+                    disabled: !formIsValidated
+                }
+            }
+            okText={confirmButtonText}
+            onCancel={
+                () => setOpen(false)
+        }>
+            <AppIconButton isSelected={isSelected}
+                buttonTitle={buttonTitle}
+                faIconComponent={faIconComponent}
+                antIconComponent={antIconComponent}
+                onClick={showPopconfirm}/>
+        </Popconfirm>
+    )
 }

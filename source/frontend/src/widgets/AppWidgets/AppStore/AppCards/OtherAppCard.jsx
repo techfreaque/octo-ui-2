@@ -15,7 +15,8 @@ export default function OtherAppCard({
     setIsloading,
     setSelectedCategories,
     currentStrategy,
-    apps
+    apps,
+    didHoverOnce
 }) {
     const [uploadInfo, setUploadInfo] = useState({})
     const botDomain = useBotDomainContext()
@@ -71,6 +72,8 @@ export default function OtherAppCard({
         cardActions={
             (<AppActions isMouseHover={isMouseHover}
                 setSelectedCategories={setSelectedCategories}
+                didHoverOnce={didHoverOnce}
+
                 // infoContent={
                 //     app.description
                 // }

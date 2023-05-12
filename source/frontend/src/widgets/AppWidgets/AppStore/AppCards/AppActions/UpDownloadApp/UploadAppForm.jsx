@@ -18,7 +18,7 @@ export const apiFields = {
     releaseNotes: "release_notes"
 }
 
-export const minReleaseNotesLength = 100
+export const minReleaseNotesLength = 50
 
 export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
     const versionTypeOptions = Object.keys(appVersionTypes).map(versionType => {

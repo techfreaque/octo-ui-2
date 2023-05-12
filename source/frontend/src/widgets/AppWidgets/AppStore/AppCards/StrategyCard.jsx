@@ -8,6 +8,8 @@ import {useState} from "react";
 import {strategyModeName} from "../AppStore";
 import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
 import AppCardTemplate from "./AppCardTemplate";
+import {useRestartBot} from "../../../../context/data/IsBotOnlineProvider";
+import createNotification from "../../../../components/Notifications/Notification";
 
 export default function StrategyCard({
     app,
@@ -16,22 +18,32 @@ export default function StrategyCard({
     isMouseHover,
     isLoading,
     setIsloading,
-    setSelectedCategories
+    setSelectedCategories,
+    didHoverOnce
 }) {
     const [uploadInfo, setUploadInfo] = useState({})
     const [downloadInfo, setDownloadInfo] = useState({})
     const [cloneAppInfo, setCloneAppInfo] = useState({})
     const botDomain = useBotDomainContext()
     const botInfo = useBotInfoContext()
-    function onSuccess() {
-        setIsloading(false)
-        // handleClose()
-        // fetchBotInfo(true)
-    }
+    const restartBot = useRestartBot()
+
     async function handleSelectProfile(setOpen) {
+        function onSuccess() {
+            setIsloading(false)
+            createNotification(`Successfully selected ${
+                app.title
+            }`)
+            setOpen(false)
+            restartBot(true)
+        }
+        const onFail = (updated_data, update_url, result, msg, status) => {
+            createNotification(`Failed to select ${
+                app.title
+            }`, "danger")
+        }
         setIsloading(true)
-        await selectProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
-        setOpen(false)
+        await selectProfile(botDomain, app.package_id, app.title, onSuccess, onFail)
     }
     const installProfile = useInstallProfile()
     async function handleDownloadProfile(setOpen) {
@@ -42,7 +54,7 @@ export default function StrategyCard({
     }
     async function handleDeleteProfile(setOpen) {
         setIsloading(true)
-        await deleteProfile(botDomain, app.package_id, app.title, onSuccess, () => setIsloading(false))
+        await deleteProfile(botDomain, app.package_id, app.title, () => setIsloading(false), () => setIsloading(false))
         setOpen(false)
     }
     async function handleProfileDuplication(setOpen) {
@@ -54,7 +66,7 @@ export default function StrategyCard({
             profileName: app.title,
             newProfileName: cloneAppInfo.newProfileName,
             selectNewProfile: cloneAppInfo.selectNewProfile,
-            onSuccess,
+            onSuccess: () => setIsloading(false),
             onFail: () => setIsloading(false)
         })
         setOpen(false)
@@ -63,56 +75,65 @@ export default function StrategyCard({
     const uploadToAppStore = useUploadToAppStore()
 
 
-    const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
+    const additionalProfileInfo = botInfo ?. profiles ?. [app.package_id] || {}
 
-    const currentAvatar = additionalProfileInfo?.profile?.avatar
+    const currentAvatar = additionalProfileInfo ?. profile ?. avatar
     const avatarUrl = currentAvatar === "default_profile.png" ? `${
         botDomain + backendRoutes.staticImg
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
+        additionalProfileInfo ?. profile ?. name ?. replace(/ /g, "_")
     }/${currentAvatar}`
 
-    return (<AppCardTemplate app={app}
-        setMouseHover={setMouseHover}
-        avatarUrl={avatarUrl}
-        category={category}
-        isMouseHover={isMouseHover}
-        cardActions={
-            (<AppActions isMouseHover={isMouseHover}
-                // configureDuplication={configureDuplication}
-                setSelectedCategories={setSelectedCategories}
-                onConfigure={
-                    () => setSelectedCategories(strategyModeName)
-                }
-                downloadInfo={downloadInfo}
-                handleSelect={handleSelectProfile}
-                handleUninstall={handleDeleteProfile}
-                setCloneAppInfo={setCloneAppInfo}
-                cloneAppInfo={cloneAppInfo}
-                handleUpload={
-                    (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
-                }
-                setUploadInfo={setUploadInfo}
-                setDownloadInfo={setDownloadInfo}
-                uploadInfo={uploadInfo}
-                exportUrl={
-                    backendRoutes.exportProfile + app.package_id
-                }
-                handleDownload={handleDownloadProfile}
-                infoContent={
-                    (<div> {
-                        app.description
-                    } </div>)
-                }
-                handleDuplication={handleProfileDuplication}
-                otherActions={
-                    (<ProfileModalButton profile={additionalProfileInfo}
-                        isCurrentProfile={
-                            app.is_selected
-                        }/>)
-                }
-                app={app}/>)
-        }/>)
+    return (
+        <AppCardTemplate app={app}
+            setMouseHover={setMouseHover}
+            avatarUrl={avatarUrl}
+            category={category}
+            isMouseHover={isMouseHover}
+            cardActions={
+                (
+                    <AppActions isMouseHover={isMouseHover}
+                        // configureDuplication={configureDuplication}
+                        setSelectedCategories={setSelectedCategories}
+                        onConfigure={
+                            () => setSelectedCategories(strategyModeName)
+                        }
+                        didHoverOnce={didHoverOnce}
+                        downloadInfo={downloadInfo}
+                        handleSelect={handleSelectProfile}
+                        handleUninstall={handleDeleteProfile}
+                        setCloneAppInfo={setCloneAppInfo}
+                        cloneAppInfo={cloneAppInfo}
+                        handleUpload={
+                            (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
+                        }
+                        setUploadInfo={setUploadInfo}
+                        setDownloadInfo={setDownloadInfo}
+                        uploadInfo={uploadInfo}
+                        exportUrl={
+                            backendRoutes.exportProfile + app.package_id
+                        }
+                        handleDownload={handleDownloadProfile}
+                        infoContent={
+                            (
+                                <div> {
+                                    app.description
+                                } </div>
+                            )
+                        }
+                        handleDuplication={handleProfileDuplication}
+                        otherActions={
+                            (
+                                <ProfileModalButton profile={additionalProfileInfo}
+                                    isCurrentProfile={
+                                        app.is_selected
+                                    }/>
+                            )
+                        }
+                        app={app}/>
+                )
+            }/>
+    )
 }
