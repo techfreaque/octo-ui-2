@@ -8,9 +8,9 @@ export default function AppRating({app, rating, votes, style}) {
     const appStoreUser = useAppStoreUserContext()
     const isSignedIn = Boolean(appStoreUser?.token)
     const rateAppStore = useRateAppStore()
-    async function onRatingChange(starId) {
+    async function onRatingChange(myRating) {
         rateAppStore({
-            rating: starId + 1,
+            rating: myRating,
             package_id: app.package_id
         }, setIsloading)
     }
@@ -28,7 +28,7 @@ export default function AppRating({app, rating, votes, style}) {
             }
         }>
             <Tooltip title={
-                app.is_from_store ? (isSignedIn ? undefined : "Sign into "+projectName+ " to rate an app") : "Share the app before you can rate it"
+                app.is_from_store ? (isSignedIn ? undefined : `Sign into ${projectName} to rate an app`) : "Share the app before you can rate it"
             }>
                 <div>
                     <Rate allowHalf

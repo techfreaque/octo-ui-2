@@ -8,7 +8,7 @@ import UninstallApp from "./UninstallApp";
 import AppUpDownload from "./UpDownloadApp/AppUpDownload";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 import ExportApp from "./ExportApp";
-import { useState } from "react";
+import {useState} from "react";
 
 
 export default function AppActions({
@@ -30,12 +30,11 @@ export default function AppActions({
     setDownloadInfo,
     downloadInfo,
     isReadOnlyStrategy,
-    didHoverOnce,
-}) { // const = isMouseHover = true
+    didHoverOnce
+}) {
     const buttonStyle = {
         display: "flex",
         flexWrap: "wrap",
-        // minHeight: "76px"
     }
 
     return (
@@ -57,16 +56,11 @@ export default function AppActions({
                         marginTop: "20px"
                     } : (isMouseHover ? {
                         ... buttonStyle,
-                        // marginTop: "20px",
-                        // position: "absolute",
-                        // top: "auto",
-                        // bottom: "auto",
                         margin: "auto",
-                        // left: "0px",
                         justifyContent: "center"
                     } : {
-                        ... buttonStyle,
-                        display: "none"
+                                ...buttonStyle,
+                        display : "none"
                     }))
                 }>
                     {
@@ -220,14 +214,14 @@ export function ConfirmAction({
     disabled = false,
     disabledTooltipTitle = false,
     formIsValidated = true,
-    confirmLoading
+    confirmLoading,
+    open,
+    setOpen
 }) {
-    const [open, setOpen] = useState(false);
-    // eslint-disable-next-line no-unused-vars
+    const [_open, _setOpen] = useState(false);
+    const actualOpen = setOpen ? open : _open
+    const actualSetOpen = setOpen ? setOpen : _setOpen
 
-    const showPopconfirm = () => {
-        setOpen(true);
-    };
     if (disabled) {
         return (
             <Tooltip title={disabledTooltipTitle}>
@@ -246,9 +240,9 @@ export function ConfirmAction({
     return (
         <Popconfirm title={confirmTitle}
             description={confirmDescription}
-            open={open}
+            open={actualOpen}
             onConfirm={
-                () => onConfirm(setOpen)
+                () => onConfirm(actualSetOpen)
             }
             okButtonProps={
                 {
@@ -259,13 +253,22 @@ export function ConfirmAction({
             }
             okText={confirmButtonText}
             onCancel={
-                () => setOpen(false)
+                () => actualSetOpen(false)
         }>
             <AppIconButton isSelected={isSelected}
                 buttonTitle={buttonTitle}
                 faIconComponent={faIconComponent}
                 antIconComponent={antIconComponent}
-                onClick={showPopconfirm}/>
+                onClick={
+                    () => actualSetOpen(true)
+                }/>
         </Popconfirm>
     )
+}
+
+export function handlePopConfirmOpen(setInfo, isOpen) {
+    setInfo(prevIfo => ({
+        ...prevIfo,
+        open: isOpen
+    }))
 }

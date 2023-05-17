@@ -11,11 +11,15 @@ export default function ButtonWithModal({
     faIcon,
     iconOnly,
     displayAsAvatar,
-    width
+    width,
+    open,
+    setOpen
 }) {
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
-    const handleClose = () => setOpen(false);
+    const [_open, _setOpen] = useState(false);
+    const actualOpen = open || _open
+    const actualSetOpen = setOpen || _setOpen
+    const handleOpen = () => actualSetOpen(true);
+    const handleClose = () => actualSetOpen(false);
     return (
         <div style={
             {
@@ -53,20 +57,28 @@ export default function ButtonWithModal({
                                 marginRight={"0px"}/>
                         )
                     }
-                         {
+                        {
                         !iconOnly && title
                     } </AntButton>
                 </div>
             </Tooltip>
             {
-            open && (<ModalContent open={open} width={width}
-                handleClose={handleClose}
-                content={content}/>)
+            actualOpen && (
+                <ModalContent open={actualOpen}
+                    width={width}
+                    handleClose={handleClose}
+                    content={content}/>
+            )
         } </div>
     );
 }
 
-function ModalContent({open, handleClose, content, width=1000}) {
+function ModalContent({
+    open,
+    handleClose,
+    content,
+    width = 1000
+}) {
     return (
         <Modal open={open}
             onCancel={handleClose}

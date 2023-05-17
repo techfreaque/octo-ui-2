@@ -3,10 +3,7 @@ import TradingModeCard from './TradingModeCard';
 import StrategyCard from './StrategyCard';
 import {Grid} from '@mui/material';
 import OtherAppCard from './OtherAppCard';
-
-
-const tradingModeCategoryName = "Strategy Mode"
-const profileCategoryName = "Strategy"
+import { strategyModeName, strategyName } from '../storeConstants';
 
 export default function AppCard({
     app,
@@ -18,15 +15,17 @@ export default function AppCard({
 }) {
     const [isMouseHover, setMouseHover] = useState(false);
     const [didHoverOnce, setDidHoverOnce] = useState(false)
+    const [uploadInfo, setUploadInfo] = useState({})
+    const [downloadInfo, setDownloadInfo] = useState({})
     useEffect(() => {
         if (isMouseHover && !didHoverOnce) {
             setDidHoverOnce(true)
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isMouseHover])
-
-    const category = app ?. categories ?. length > 1 ? 'Package' : app ?. categories ?. [0]
-    if (category === tradingModeCategoryName) {
+    const _isMouseHover = isMouseHover || uploadInfo.open || downloadInfo.open
+    const category = app?.categories?.length > 1 ? 'Package' : app?.categories?.[0]
+    if (category === strategyModeName) {
         return (
             <SelectedCardContainer app={app}>
                 <TradingModeCard app={app}
@@ -38,10 +37,14 @@ export default function AppCard({
                     setSelectedCategories={setSelectedCategories}
                     isLoading={isLoading}
                     setIsloading={setIsloading}
-                    isMouseHover={isMouseHover}/>
+                    isMouseHover={_isMouseHover}
+                    uploadInfo={uploadInfo}
+                    setUploadInfo={setUploadInfo}
+                    downloadInfo={downloadInfo}
+                    setDownloadInfo={setDownloadInfo}/>
             </SelectedCardContainer>
         )
-    } else if (category === profileCategoryName) {
+    } else if (category === strategyName) {
         return (
             <SelectedCardContainer app={app}>
                 <StrategyCard app={app}
@@ -51,9 +54,11 @@ export default function AppCard({
                     category={category}
                     didHoverOnce={didHoverOnce}
                     setSelectedCategories={setSelectedCategories}
-                    isMouseHover={isMouseHover}
-                    // isMouseHover={true}
-                />
+                    isMouseHover={_isMouseHover}
+                    uploadInfo={uploadInfo}
+                    setUploadInfo={setUploadInfo}
+                    downloadInfo={downloadInfo}
+                    setDownloadInfo={setDownloadInfo}/>
             </SelectedCardContainer>
         )
     } else {
@@ -66,9 +71,11 @@ export default function AppCard({
                     category={category}
                     didHoverOnce={didHoverOnce}
                     setSelectedCategories={setSelectedCategories}
-                    isMouseHover={isMouseHover}
-                    // isMouseHover={true}
-                />
+                    isMouseHover={_isMouseHover}
+                    uploadInfo={uploadInfo}
+                    setUploadInfo={setUploadInfo}
+                    downloadInfo={downloadInfo}
+                    setDownloadInfo={setDownloadInfo}/>
             </SelectedCardContainer>
         )
     }
@@ -76,7 +83,7 @@ export default function AppCard({
 
 
 function SelectedCardContainer({app, children}) {
-    return app ?. is_selected ? (
+    return app?.is_selected ? (
         <Grid item
             xs={12}>
             {children}</Grid>
@@ -236,7 +243,7 @@ function SelectedCardContainer({app, children}) {
 //                         }
 //                         onClick={
 //                             () => {
-//                                 app?.categories?.includes("Strategy") ? installProfile(appVersion.url, app.title, app.name) : installAppPackage(appVersion.url, app.title + " " + appVersion.version, token)
+//                                 app?.categories?.includes(profileCategoryName) ? installProfile(appVersion.url, app.title, app.name) : installAppPackage(appVersion.url, app.title + " " + appVersion.version, token)
 //                             }
 //                     }>
 //                         {

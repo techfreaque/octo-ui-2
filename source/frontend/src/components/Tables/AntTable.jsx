@@ -84,7 +84,7 @@ export default function AntTable({
         });
     };
 
-    const _data = onFilterChange(tableParams, data)
+    const _data = onFilterChange? onFilterChange(tableParams, data) : data
     return (
         <div className='pairs-table'
             style={

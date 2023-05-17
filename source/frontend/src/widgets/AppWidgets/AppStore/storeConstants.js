@@ -1,3 +1,10 @@
+export const hiddenCategories = ["Legacy Strategy"]
+export const strategyModeSettingsName = "Strategy Mode Settings"
+export const strategyName = "Strategy"
+export const strategyModeName = "Strategy Mode"
+export const appPackagesName = "App Packages"
+
+
 export const appVersionTypes = {
     BUG_FIX_VERSION: {
         title: "Minor Bug Fix Update",

@@ -1,25 +1,32 @@
-import {CheckCircleFilled, ExclamationCircleFilled, SyncOutlined} from "@ant-design/icons"
-import {Badge, Typography} from "antd"
-import {useEffect, useState} from "react"
+import {CheckCircleFilled, ExclamationCircleFilled, ShoppingCartOutlined, SyncOutlined} from "@ant-design/icons"
+import {
+    Alert,
+    Badge,
+    Card,
+    Tooltip,
+    Typography
+} from "antd"
+import {useEffect} from "react"
 
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton"
 import {useBotColorsContext} from "../../../../../../context/config/BotColorsProvider"
 import AntTable from "../../../../../../components/Tables/AntTable"
+import {useAddToAppStoreCart, useAppStoreDataContext, useIsInAppStoreCart, useUpdateAppStoreCartIsOpenContext} from "../../../../../../context/data/AppStoreDataProvider"
+import {IsInstalledIcon, IsNotInstalledIcon} from "../../AppCover"
+import AntButton from "../../../../../../components/Buttons/AntButton"
+import {Grid} from "@mui/material"
+import {strategyName} from "../../../storeConstants"
 
 
-export default function AppDownloadForm({setDownloadInfo, downloadInfo, app}) {
-    // useEffect(() => {
-    //     setDownloadInfo({should_select_profile: false, major_version: app.versions[0].major_version, minor_version: app.versions[0].minor_version, bug_fix_version: app.versions[0].bug_fix_version})
-    // // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, [])
-
+export default function AppDownloadForm({setDownloadInfo, downloadInfo, app, handleDownload}) {
     return (
         <div style={
             {marginRight: "20px"}
         }>
-            <UpdateAvailable/>
-            <UpToDate app={app}/>
+            {/* <UpdateAvailable/>
+            <UpToDate app={app}/> */}
             <AppVersions app={app}
+                handleDownload={handleDownload}
                 setDownloadInfo={setDownloadInfo}
                 downloadInfo={downloadInfo}/>
 
@@ -132,15 +139,57 @@ const versionTypes = [
         // disabled: true
     },
 ]
-function AppVersions({app, setDownloadInfo, downloadInfo}) { // const [versionType, setVersionType] = useState("stable_version")
+function AppVersions({app, setDownloadInfo, downloadInfo, handleDownload}) { // const [versionType, setVersionType] = useState("stable_version")
     const botColors = useBotColorsContext()
+
+
+    const reversedVersions = app.versions ?. reverse()
+    const preSorteddata = reversedVersions ?. filter(version => (downloadInfo ?. visibleVersionTypes ?. includes(version.version_tag))).map(version => {
+
+        const title = `${
+
+            version.major_version
+        }.${
+            version.minor_version
+        }.${
+            version.bug_fix_version
+        } ${
+            versionTagKeyToTitle[version.version_tag]
+        } - ${
+            app.title
+        }`
+        const isSelected = ((version.major_version === downloadInfo ?. major_version) && (version.minor_version === downloadInfo ?. minor_version) && (version.bug_fix_version === downloadInfo ?. bug_fix_version))
+        return {
+            key: title,
+            major_version: version.major_version,
+            minor_version: version.minor_version,
+            bug_fix_version: version.bug_fix_version,
+            title: (
+                <div onClick={
+                        () => handdleVersionSelect(setDownloadInfo, version, handleAccordionChange)
+                    }
+                    style={
+                        isSelected ? {
+                            color: botColors ?. fontActive
+                        } : {}
+                }>
+                    {title} </div>
+            )
+        }
+    })
     useEffect(() => {
         setDownloadInfo(prevDownloadInfo => ({
             ...prevDownloadInfo,
-            visibleVersionTypes: ["stable_version", 'alpha_version', 'beta_version']
+            visibleVersionTypes: [
+                "stable_version", 'alpha_version', 'beta_version'
+            ],
+            major_version: reversedVersions ?. [0] ?. major_version,
+            minor_version: reversedVersions ?. [0] ?. minor_version,
+            bug_fix_version: reversedVersions ?. [0] ?. bug_fix_version,
+            versionDetailsOpen: reversedVersions ?. length ? true : false
         }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [app])
+    }, [reversedVersions])
 
     function handleVersionFilterChange(versionTypeKey) {
         setDownloadInfo(prevDownloadInfo => ({
@@ -151,17 +200,339 @@ function AppVersions({app, setDownloadInfo, downloadInfo}) { // const [versionTy
             ]
         }))
     }
+    function handleAccordionChange(detailsOpen) {
+        setDownloadInfo(prevDownloadInfo => ({
+            ...prevDownloadInfo,
+            versionDetailsOpen: detailsOpen
+        }))
+    }
     const selectedVersion = app ?. versions ?. filter(version => (downloadInfo ?. major_version === version.major_version && downloadInfo ?. minor_version === version.minor_version && downloadInfo ?. bug_fix_version === version.bug_fix_version)) ?. [0]
+
+
+    return (
+        <>
+            <VersionSelector app={app}
+                handleAccordionChange={handleAccordionChange}
+                handleVersionFilterChange={handleVersionFilterChange}
+                downloadInfo={downloadInfo}
+                preSorteddata={preSorteddata}/>
+            <div style={
+                {
+                    marginTop: '20px',
+                    marginBottom: '10px',
+                    // width: "350px"
+
+                }
+            }>
+                {
+                (selectedVersion && downloadInfo.versionDetailsOpen) && (
+                    <>
+                        <Typography.Title level={3}>
+                            {
+                            `v${
+                                selectedVersion.major_version
+                            }.${
+                                selectedVersion.minor_version
+                            }.${
+                                selectedVersion.bug_fix_version
+                            } ${
+                                versionTagKeyToTitle[selectedVersion.version_tag]
+                            } Details:`
+                        }</Typography.Title>
+                        <Alert type="info"
+                            showIcon={true}
+                            message={
+                                `${
+                                    app.title
+                                } uses following Packages:`
+                            }
+                            style={
+                                {marginBottom: "5px"}
+                            }/>
+
+                        <RequiredPackages app={app}
+                            selectedVersion={selectedVersion}
+                            downloadInfo={downloadInfo}
+                            handleDownload={handleDownload}
+                            setDownloadInfo={setDownloadInfo}/>
+
+
+                        <Typography.Title level={5}>
+                            {
+                            `Release Notes of ${
+                                app.title
+                            } v${
+                                selectedVersion.major_version
+                            }.${
+                                selectedVersion.minor_version
+                            }.${
+                                selectedVersion.bug_fix_version
+                            } ${
+                                versionTagKeyToTitle[selectedVersion.version_tag]
+                            }:`
+                        } </Typography.Title>
+                        <Typography.Text> {
+                            selectedVersion.release_notes
+                        } </Typography.Text>
+
+                    </>
+                )
+            } </div>
+        </>
+    )
+}
+
+function RequiredPackages({
+    app,
+    selectedVersion,
+    downloadInfo,
+    handleDownload,
+    setDownloadInfo
+}) {
+    const appStoreData = useAppStoreDataContext();
+    const requiredAppsByTentaclePackage = {}
+    const requiredApps = [
+        app.package_id,
+        ...(selectedVersion ?. requirements ? selectedVersion.requirements : [])
+    ]
+    requiredApps.forEach(requirement => {
+        for (const potentialRequiredAppCategory in appStoreData) {
+            for (const potentialRequiredAppName in appStoreData[potentialRequiredAppCategory]) {
+                const potentialRequiredApp = appStoreData[potentialRequiredAppCategory][potentialRequiredAppName]
+                if (potentialRequiredApp.package_id === requirement) {
+                    if (! requiredAppsByTentaclePackage[potentialRequiredApp.origin_package]) {
+                        requiredAppsByTentaclePackage[potentialRequiredApp.origin_package] = [];
+                    }
+                    if (potentialRequiredApp.origin_package) {
+                        requiredAppsByTentaclePackage[potentialRequiredApp.origin_package].push(potentialRequiredApp)
+                    } else {
+                        const t = 1
+                    }
+                }
+            }
+        }
+    })
+    return (
+        <Grid container
+            spacing={2}>
+
+            {
+            requiredAppsByTentaclePackage && Object.keys(requiredAppsByTentaclePackage).map(requiredAppPackage => (
+                <RequiredPackage app={app}
+                    requiredAppsByTentaclePackage={requiredAppsByTentaclePackage}
+                    requiredAppPackage={requiredAppPackage}
+                    downloadInfo={downloadInfo}
+                    handleDownload={handleDownload}
+                    setDownloadInfo={setDownloadInfo}/>
+            ))
+        } </Grid>
+    )
+}
+
+function RequiredPackage({
+    app,
+    requiredAppsByTentaclePackage,
+    requiredAppPackage,
+    downloadInfo,
+    handleDownload,
+    setDownloadInfo
+}) {
+    const addAppStoreCart = useAddToAppStoreCart()
+    const checkIsInStoreCart = useIsInAppStoreCart()
+    const mainPackageApp = requiredAppsByTentaclePackage[requiredAppPackage][0]
+    const packageInstalled = mainPackageApp ?. is_installed
+    const isOriginPackage = mainPackageApp ?. origin_package === app.origin_package
+    const mainPackageInCart = checkIsInStoreCart(mainPackageApp)
+    const setOpenBasket = useUpdateAppStoreCartIsOpenContext()
+    return (
+        <Grid item
+            xs={12}
+            md={6}
+            lg={4}
+
+            style={
+                {height: "100%"}
+        }>
+            <Card key={requiredAppPackage}
+                style={
+                    {
+                        marginBottom: "5px",
+                        height: "100%"
+                    }
+            }>
+                <Tooltip title={
+                    packageInstalled ? "The App package is already installed" : "The App Package isn't installed yet"
+                }>
+                    <Typography.Title level={5}
+                        style={
+                            {marginBottom: "5px"}
+                    }>
+                        {
+                        packageInstalled ? (
+                            <IsInstalledIcon topRight={false}/>
+                        ) : (
+                            <IsNotInstalledIcon topRight={false}/>
+                        )
+                    }
+                        <span> {
+                            mainPackageApp.categories ?. [0] === strategyName ? mainPackageApp.title : requiredAppPackage
+                        } </span>
+                    </Typography.Title>
+                </Tooltip>
+                <Typography.Paragraph style={
+                    {marginBottom: "5px"}
+                }>
+                    {
+                    ! packageInstalled && (mainPackageApp.price ? mainPackageApp.price + "$ / month" : "free")
+                } </Typography.Paragraph>
+                {/* <Alert type="info"
+                    showIcon={true}
+                    message={
+                        `${
+                            app.title
+                        } uses:`
+                    }
+                    style={
+                        {marginBottom: "5px"}
+                    }
+                    // description={
+                    //     (
+ 
+                    //     )
+                    // }
+                    
+                    /> */}
+                Required Apps:
+                <ul> {
+                    requiredAppsByTentaclePackage[requiredAppPackage].map((requiredApp, index) => (
+                        <Tooltip title={
+                                requiredApp ?. is_installed ? "The App is already installed" : "The App isn't installed yet"
+                            }
+                            key={
+                                requiredApp ?. title || index
+                        }>
+                            <div style={
+                                {display: "flex"}
+                            }>
+                                {
+                                requiredApp.is_installed ? (
+                                    <IsInstalledIcon topRight={false}/>
+                                ) : (
+                                    <IsNotInstalledIcon topRight={false}/>
+                                )
+                            }
+
+
+                                <span style={
+                                    {marginLeft: "5px"}
+                                }>
+                                    {
+                                    `${
+                                        requiredApp ?. title
+                                    }`
+                                } </span>
+                            </div>
+                        </Tooltip>
+                    ))
+                } </ul>
+                {
+                packageInstalled ? (isOriginPackage ? (
+                    <AntButton block={true}
+                        style={
+                            {marginTop: "10px"}
+                        }
+                        disabled={
+                            downloadInfo.isDownloading
+                        }
+                        onClick={
+                            () => handleDownload((isDownloading) => setDownloadInfo(prevInfo => ({
+                                ...prevInfo,
+                                isDownloading
+                            })), mainPackageApp)
+                        }
+                        antIconComponent={ShoppingCartOutlined}>
+                        Update Now
+                    </AntButton>
+                ) : (
+                    <></>
+                //      {/* <AntButton block={true}
+                // style={
+                //      {marginTop: "10px"}
+                // }
+                // onClick={
+                //      () => handleDownload(mainPackageApp)
+                // }
+                // antIconComponent={ShoppingCartOutlined}>
+                // More about this package
+                //      </AntButton> */}
+                )) : (mainPackageApp.price ? (mainPackageInCart ? (
+                    <AntButton block={true}
+                        style={
+                            {marginTop: "10px"}
+                        }
+                        onClick={
+                            () => setOpenBasket(true)
+                        }
+                        antIconComponent={ShoppingCartOutlined}>
+                        Go to Shopping Basket
+                    </AntButton>
+                ) : (
+                    <AntButton block={true}
+                        style={
+                            {marginTop: "10px"}
+                        }
+                        onClick={
+                            () => addAppStoreCart(mainPackageApp)
+                        }
+                        antIconComponent={ShoppingCartOutlined}>
+                        Add To Shopping Basket
+                    </AntButton>
+                )) : (
+                    <AntButton block={true}
+                        style={
+                            {marginTop: "10px"}
+                        }
+                        disabled={mainPackageInCart}
+                        onClick={
+                            () => addAppStoreCart(mainPackageApp)
+                        }
+                        antIconComponent={ShoppingCartOutlined}>
+                        Download for free
+                    </AntButton>
+                ))
+            } </Card>
+        </Grid>
+    )
+}
+
+function VersionSelector({
+    app,
+    handleAccordionChange,
+    handleVersionFilterChange,
+    downloadInfo,
+    preSorteddata
+}) {
     return (
         <div style={
-            {
-                marginTop: '20px',
-                width: "350px"
-            }
+            {marginTop: '20px'}
         }>
-            <Typography.Title level={4}>Select a version type</Typography.Title>
+            <Typography.Title level={3}
+                onClick={
+                    () => handleAccordionChange(false)
+            }>
+                {
+                downloadInfo.versionDetailsOpen ? `See all versions of ${
+                    app.title
+                }` : `Versions of ${
+                    app.title
+                }`
+            }</Typography.Title>
             <div style={
-                {display: "flex"}
+                (downloadInfo.versionDetailsOpen ? {
+                    display: "none"
+                } : {
+                    display: "flex"
+                })
             }>
                 {
                 versionTypes.map(versionTypeObj => (
@@ -184,167 +555,52 @@ function AppVersions({app, setDownloadInfo, downloadInfo}) { // const [versionTy
                         }/>
                 ))
             } </div>
-            <div>
-                <VersionTable app={app}
-                    downloadInfo={downloadInfo}/> {
-                { /* app ?. versions ?. filter(version => (downloadInfo ?. visibleVersionTypes ?. includes(version.version_tag))).map((version, index) => (
-                    <Version key={index}
-                        version={version}
-                        botColors={botColors}
-                        setDownloadInfo={setDownloadInfo}
-                        downloadInfo={downloadInfo}/>
-                )) */
-                }
-            } </div>
             <div style={
                 {
-                    marginTop: '20px',
-                    marginBottom: '10px'
+                    maxHeight: "250px",
+                    overflowY: "auto",
+                    ...(
+                        (downloadInfo.versionDetailsOpen ? {
+                            display: "none"
+                        } : {})
+                    )
                 }
             }>
-                {
-                selectedVersion && (
-                    <>
-                        <Typography.Title level={4}>Selected Version Details</Typography.Title>
-                        <Typography.Text>v{
-                            `${
-                                selectedVersion.major_version
-                            }.${
-                                selectedVersion.minor_version
-                            }.${
-                                selectedVersion.bug_fix_version
-                            } ${
-                                selectedVersion.version_tag
-                            }`
-                        } </Typography.Text>
-                        <Typography.Title level={5}>
-
-                            {
-                            selectedVersion.release_notes
-                        } </Typography.Title>
-
-                    </>
-                )
-            } </div>
+                <AntTable maxWidth="100%"
+                    columns={versionColumns}
+                    data={preSorteddata}/>
+            </div>
         </div>
     )
 }
 
-function VersionTable({app, downloadInfo}) {
 
-    const columns = [
-        {
-            title: 'Version',
-            dataIndex: 'title',
-            key: 'title',
-            // width: '40%',
-            // sorter: (a, b) => a.symbol.localeCompare(b.symbol),
-            // sortDirections: [
-            //     'descend', 'ascend'
-            // ],
-            // searchColumnKey: "symbol"
-        },
-        // {
-        //     title: 'Exchange',
-        //     dataIndex: 'exchange',
-        //     width: '40%',
-        //     key: 'exchange',
-        //     // ...getColumnSearchProps('exchange'),
-        //     sorter: (a, b) => a.exchange.localeCompare(b.exchange),
-        //     sortDirections: [
-        //         'descend', 'ascend'
-        //     ],
+const versionTagKeyToTitle = {
+    alpha_version: "Alpha Version",
+    beta_version: "Beta Version",
+    stable_version: "Stable Version"
+}
 
-        //     // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
-        // },
-        // {
-        //     title: 'Enabled',
-        //     dataIndex: 'enabledLabel',
-        //     key: 'enabled',
-        //     width: '20%',
-        //     filters: [
-        //         {
-        //             text: "Disabled",
-        //             value: false
-        //         }, {
-        //             text: "Enabled",
-        //             value: true
-        //         },
-        //     ],
-        //     // ... getColumnSearchProps('enabledLabel'),
-        //     // sorter: (a, b) => (
-        //     //     (a.enabled && 1) - (b.enabled && 1) || (a.availableAfterRestart && 1) - (b.availableAfterRestart && 1)
-        //     // ),
-        //     // sortDirections: ['descend', 'ascend']
-        // },
-    ];
-    const preSorteddata = app ?. versions ?. filter(version => (downloadInfo ?. visibleVersionTypes ?. includes(version.version_tag))).map(version => {
-
-        const title = `${
-
-            version.major_version
-        }.${
-            version.minor_version
-        }.${
-            version.bug_fix_version
-        } ${
-            version.version_tag
-        }`
-        return {key: title, title}
-    })
-    return (
-        <AntTable // onFilterChange={filterData}
-            columns={columns}
-            data={preSorteddata}/>
-    );
+const defaultTentaclePackages = {
+    "OctoBot-Default-Tentacles": {},
+    "Matrix-Basic-Tentacles": {}
 
 }
-// function filterData(tableParams, data) {
-//     return data.filter((item) => {
-//         // if (tableParams?.filters?.symbol && tableParams?.filters?.symbol?.every(symbol => {
-//         //     return !item.symbol.replace("/", "").replace(":", "").toLowerCase().includes(symbol.replace("/", "").replace(":", "").toLowerCase())
-//         // })) {
-//         //     return false;
-//         // }
-//         // if (tableParams?.filters?.exchange && tableParams?.filters?.exchange?.every(exchange => (item.exchange !== exchange))) {
-//         //     return false;
-//         // }
-//         // if (tableParams?.filters?.enabled && ! tableParams?.filters?.enabled?.includes(item.enabled)) {
-//         //     return false;
-//         // }
-//         return true;
-//     })
-// }
 
+const versionColumns = [{
+        title: 'Select a version',
+        dataIndex: 'title',
+        key: 'title'
+    }];
 
-function Version({version, setDownloadInfo, downloadInfo, botColors}) {
-    const isSelected = ((version.major_version === downloadInfo ?. major_version) && (version.minor_version === downloadInfo ?. minor_version) && (version.bug_fix_version === downloadInfo ?. bug_fix_version))
-    function handdleVersionSelect() {
-        setDownloadInfo(prevDownloadInfo => ({
-            ...prevDownloadInfo,
-            should_select_profile: false,
-            major_version: version.major_version,
-            minor_version: version.minor_version,
-            bug_fix_version: version.bug_fix_version
-        }))
-    };
-    const title = `${
+function handdleVersionSelect(setDownloadInfo, version, handleAccordionChange) {
+    handleAccordionChange(true)
 
-        version.major_version
-    }.${
-        version.minor_version
-    }.${
-        version.bug_fix_version
-    } ${
-        version.version_tag
-    }`
-    return (
-        <div style={
-                isSelected ? {
-                    color: botColors ?. fontActive
-                } : {}
-            }
-            onClick={handdleVersionSelect}>
-            {title} </div>
-    )
-}
+    setDownloadInfo(prevDownloadInfo => ({
+        ...prevDownloadInfo,
+        should_select_profile: false,
+        major_version: version.major_version,
+        minor_version: version.minor_version,
+        bug_fix_version: version.bug_fix_version
+    }))
+};

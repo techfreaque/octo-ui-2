@@ -174,6 +174,9 @@ export const defaultStrategyDesignerPageLayout =  {
                             "title": "Strategy Manager",
                             "toolBarContent": [
                                 {
+                                    "component": "SaveTradingModeSettings"
+                                },
+                                {
                                     "antIcon": "DollarOutlined",
                                     "command": "execute",
                                     "component": "SendActionCommandToTradingMode",

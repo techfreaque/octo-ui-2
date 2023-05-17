@@ -29,6 +29,9 @@ def update_profile(profile_id, json_profile):
     profile.name = new_name
     profile.description = json_profile.get("description", profile.description)
     profile.avatar = json_profile.get("avatar", profile.avatar)
+    profile.required_trading_tentacles = json_profile.get(
+        "required_trading_tentacles", profile.required_trading_tentacles
+    )
     profile.validate_and_save_config()
     if renamed:
         profile.rename_folder(new_name.replace(" ", "_"), False)

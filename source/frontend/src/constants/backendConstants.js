@@ -42,6 +42,7 @@ export const backendRoutes = {
     optimizerStart: `${proBasePath}/optimizer/start`,
 
     installApp: `${basePath}/tentacle_packages?update_type=add_package`,
+    uninstallApp: `${basePath}/tentacle_packages?update_type=uninstall_modules`,
     optimizerStop: `${advancedPath}/strategy-optimizer?update_type=cancel_optimizer`,
 
     profileMedia: `${basePath}/profile_media/user/profiles`,

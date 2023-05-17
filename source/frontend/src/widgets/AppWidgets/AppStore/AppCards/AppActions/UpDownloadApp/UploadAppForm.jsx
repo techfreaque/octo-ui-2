@@ -3,10 +3,10 @@ import {
     Alert,
     Input,
     Select,
-    Tooltip,
-    Typography
+    Switch,
+    Tooltip
 } from "antd";
-import {appVersionTags, appVersionTypes} from "../../../storeConstants";
+import {appVersionTags, appVersionTypes, strategyName} from "../../../storeConstants";
 import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
 import {useEffect} from "react";
 const {TextArea} = Input;
@@ -27,6 +27,7 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
     const versionTagOptions = Object.keys(appVersionTags).map(versionTag => {
         return {label: appVersionTags[versionTag].title, value: appVersionTags[versionTag].key}
     })
+    const isStrategy = app.categories?.[0] === strategyName
     function handleInputChange(key, value) {
         setUploadInfo(prevInfo => ({
             ...prevInfo,
@@ -34,25 +35,56 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
         }))
     }
     useEffect(() => {
-        setUploadInfo({
-            [apiFields.price]: 0,
-            [apiFields.versionType]: versionTypeOptions[0].value,
-            [apiFields.versionTag]: versionTagOptions[0].value,
-            [apiFields.releaseNotes]: ""
-
+        setUploadInfo(prevInfo => {
+            return {
+                ...prevInfo,
+                includePackage: isStrategy ? true : prevInfo.includePackage,
+                [apiFields.price]: prevInfo[apiFields.price] || app.price || 0,
+                [apiFields.versionType]: prevInfo[apiFields.versionType] || versionTypeOptions[0].value,
+                [apiFields.versionTag]: prevInfo[apiFields.versionTag] || versionTagOptions[0].value,
+            }
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [app])
 
-    return (<div style={
-        {marginRight: "20px"}
-    }>
-        <UserInputLabel children
-            title={
-                `Select the release notes for your ${
-                    app.categories[0]
-                }`
+    return (
+        <div style={
+            {marginRight: "20px"}
         }>
+            {
+            ! isStrategy && (
+                <UserInputLabel children
+                    title={"Upload new package version"}>
+                    <Switch checked={
+                            uploadInfo?.includePackage
+                        }
+                        onChange={
+                            (checked) => handleInputChange("includePackage", checked)
+                        }/>
+                </UserInputLabel>
+            )
+        }
+            {
+            uploadInfo?.includePackage && <UploadPackage versionTypeOptions={versionTypeOptions}
+                app={app}
+                versionTagOptions={versionTagOptions}
+                uploadInfo={uploadInfo}
+                handleInputChange={handleInputChange}/>
+        } </div>
+    )
+}
+
+
+function UploadPackage({
+    versionTypeOptions,
+    app,
+    versionTagOptions,
+    uploadInfo,
+    handleInputChange
+}) {
+    return (<> {
+        app.is_from_store && <UserInputLabel children
+            title={`Select the type of your update`}>
             <Select defaultValue={
                     versionTypeOptions[0].value
                 }
@@ -64,6 +96,7 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
                 }
                 options={versionTypeOptions}/>
         </UserInputLabel>
+    }
         <UserInputLabel children
             title={
                 `How stable is your ${
@@ -82,54 +115,55 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
                 options={versionTagOptions}/>
         </UserInputLabel>
         <UserInputLabel children
-            title={'Release notes'}> {
-            uploadInfo?.[apiFields.releaseNotes]?.length < minReleaseNotesLength && (<Alert message={
-                `Let your users know what you've changed. Add at least ${
-                    minReleaseNotesLength - (uploadInfo?.[apiFields.releaseNotes]?.length || 0)
-                } more characters`
-            } type="info" />)
+            title={'Share release notes'}>
+            {
+            uploadInfo?.[apiFields.releaseNotes]?.length < minReleaseNotesLength && (
+                                                                                                <Alert message={(<>
+                                                                                                        <div>Let your users know what you've changed. 
+                                                                                                            </div>
+                                                                                                            <div>
+                                                                                                                {`Add at least ${minReleaseNotesLength - (uploadInfo?.[apiFields.releaseNotes]?.length || 0)} more characters`}
+                                                                                                            </div>
+                                                                                                            
+                                                                                                        </>)
+                                                                                                    }
+                                                                                                        type="info"
+                                                                                                        style={{marginBottom: "5px"}}
+                                                                                                    />
+                                                                                            )
+                                                                                        }
+                                                                                            <TextArea onChange={
+                                                                                                    (event) => handleInputChange(apiFields.releaseNotes, event?.target?.value)
+                                                                                                }
+                                                                                                autoSize={
+                                                                                                    {
+                                                                                                        minRows: 2,
+                                                                                                        maxRows: 6
+                                                                                                    }
+                                                                                                }/>
+                                                                                            <div style={
+                                                                                                {margin: '24px 0'}
+                                                                                            }/>
+                                                                    </UserInputLabel>
+                                                                    <UserInputLabel children
+                                                                            title={
+                                                                                `Define a monthly price for your ${
+                                                                                    app.categories[0]
+                                                                                }`
+                                                                        }>
+                                                                            <Tooltip title={"Define a price for your app"}>
+                                                                                <div>
+                                                                                    <Input onChange={
+                                                                                            (event) => handleInputChange(apiFields.price, event?.target?.value)
+                                                                                        }
+                                                                                        value={
+                                                                                            uploadInfo?.price || app.price
+                                                                                        }
+                                                                                        addonAfter={<DollarCircleOutlined/>}
+                                                                                        defaultValue="0"/>
+                                                                                </div>
+                                                                            </Tooltip>
+                                                                        </UserInputLabel>
+                                                                                            </>
+            )
         }
-            <TextArea onChange={
-                    (event) => handleInputChange(apiFields.releaseNotes, event?.target?.value)
-                }
-                autoSize={
-                    {
-                        minRows: 2,
-                        maxRows: 6
-                    }
-                }/>
-            <div style={
-                {margin: '24px 0'}
-            }/>
-        </UserInputLabel>
-        <UserInputLabel children
-            title={
-                `Define a monthly price for your ${
-                    app.categories[0]
-                }`
-        }>
-            <Tooltip title={
-                (<>
-                    <Typography.Title level={5}>
-                        Selling apps is not supported yet :(
-                    </Typography.Title>
-                    <Typography.Paragraph>
-                        Share them for free or wait a bit..
-                    </Typography.Paragraph>
-                </>)
-            }>
-                <div>
-                    <Input onChange={
-                            (event) => handleInputChange(apiFields.price, event?.target?.value)
-                        }
-                        value={
-                            uploadInfo?.price || app.price
-                        }
-                        disabled={true}
-                        addonAfter={<DollarCircleOutlined/>}
-                        defaultValue="0"/>
-                </div>
-            </Tooltip>
-        </UserInputLabel>
-    </div>)
-}

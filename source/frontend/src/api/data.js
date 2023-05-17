@@ -170,65 +170,6 @@ export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData
     sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser ?. token)
 }
 
-export async function uploadApp({
-    storeDomain,
-    appFile,
-    appDetails,
-    appStoreUser,
-    onSuccess
-}) {
-    function onFail(response) {
-        createNotification("Failed to upload the app", "danger")
-        // saveAppStoreData(msg.data);
-    }
-    function _onSucces(response) {
-        onSuccess ?. ()
-        createNotification("Your app is now published")
-    }
-    if (appStoreUser ?. token) {
-        sendFile({
-            url: storeDomain + backendRoutes.appStoreUpload + `/${
-                appDetails.categories[0]
-            }/${
-                appDetails.package_id
-            }`,
-            file: appFile,
-            fileName: appDetails.package_id + ".zip",
-            data: appDetails,
-            onSuccess: _onSucces,
-            onError: onFail,
-            withCredentials: true,
-            token: appStoreUser.token
-        })
-    } else {
-        createNotification("You need to be signed in to upload an app", "warning")
-        // saveAppStoreData({})
-    }
-}
-
-export async function rateApp(storeDomain, ratingInfo, appStoreUser, onSuccess) {
-    function onFail(updated_data, update_url, result, msg, status) {
-        createNotification("Failed rate app", "danger")
-        // saveAppStoreData(msg.data);
-    }
-    function onSucces(updated_data, update_url, result, msg, status, request) {
-        if (msg.success) {
-            // document.cookie = undefined;
-            // saveAppStoreData({});
-            // onSuccess ?. ()
-            createNotification("App rated successfully")
-        } else {
-            onFail(updated_data, update_url, result, msg, status)
-        }
-    }
-    if (appStoreUser ?. token) {
-        sendAndInterpretBotUpdate(ratingInfo, storeDomain + backendRoutes.appStoreRate, onSucces, onFail, "POST", true, appStoreUser.token)
-    } else {
-        createNotification("You need to be signed in to rate an app", "warning")
-        // saveAppStoreData({})
-    }
-}
-
 export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStoreUser) {
     function onFail(updated_data, update_url, result, msg, status) {
         createNotification("Failed to log out from App Store", "danger")

@@ -13,7 +13,7 @@ export default function AppList({selectedCategories, appStoreData, setSelectedCa
         spacing={2}> {
         preSortedAppStoreData.map((app, index) => {
             return (<ErrorBoundary key={
-                        app.package_id + index
+                        (app.package_id || app.origin_package) + index
                     }>
                 <AppCard
                     currentStrategy={currentStrategy}

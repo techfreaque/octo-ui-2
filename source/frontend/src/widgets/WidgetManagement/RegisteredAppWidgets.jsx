@@ -57,6 +57,7 @@ import SavePairSelector from "../AppWidgets/Buttons/SavePairSelector";
 import StraegyConfigurator from "../AppWidgets/Configuration/StrategyConfigurator";
 import LoginManager from "../AppWidgets/AppStore/Login";
 import AppStoreCartModal, {AppStoreCart} from "../AppWidgets/AppStore/Cart";
+import SaveTradingModeSettings from "../AppWidgets/Buttons/SaveTradingModeSettings";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -124,4 +125,5 @@ export const registeredComponents = {
     LoginManager,
     AppStoreCart,
     AppStoreCartModal,
+    SaveTradingModeSettings
 };

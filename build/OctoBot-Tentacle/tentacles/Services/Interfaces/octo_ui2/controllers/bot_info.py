@@ -185,6 +185,8 @@ def register_bot_info_routes(plugin):
                 ),
                 "profiles": profiles,
                 "can_logout": flask_login.current_user.is_authenticated,
+                "is_owner": not SHARE_YOUR_OCOBOT
+                or (SHARE_YOUR_OCOBOT and flask_login.current_user.is_authenticated),
                 "any_exchange_is_futures": any_exchange_is_futures,
                 "evaluator_names": evaluator_names,
                 "time_frames": available_time_frames,

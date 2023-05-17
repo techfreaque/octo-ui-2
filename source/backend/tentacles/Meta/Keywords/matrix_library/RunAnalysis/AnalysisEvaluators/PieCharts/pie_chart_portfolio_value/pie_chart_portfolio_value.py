@@ -43,7 +43,9 @@ class PieChartPortfolio(abstract_analysis_evaluator.AnalysisEvaluator):
                 )
                 values = []
                 labels = []
-                if len(start_end_portfolio_values):
+                if len(start_end_portfolio_values) and start_end_portfolio_values[
+                    0
+                ].get(portfolio_name):
                     for curency, balance in start_end_portfolio_values[0][
                         portfolio_name
                     ].items():

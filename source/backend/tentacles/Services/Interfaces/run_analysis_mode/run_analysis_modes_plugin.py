@@ -10,8 +10,9 @@ import octobot_trading.api as trading_api
 import octobot_services.interfaces.util as interfaces_util
 import tentacles.Services.Interfaces.web_interface.plugins as plugins
 import tentacles.Services.Interfaces.web_interface.models.trading as trading_model
-import tentacles.Meta.Keywords.matrix_library.RunAnalysis.AnalysisModes.default_run_analysis_mode.run_analysis_mode_default as run_analysis_mode_default
-import tentacles.Meta.Keywords.matrix_library.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
+import tentacles.Meta.Keywords.RunAnalysis.AnalysisModes.default_run_analysis_mode.run_analysis_mode_default as run_analysis_mode_default
+import tentacles.Meta.Keywords.RunAnalysis.RunAnalysisFactory.analysis_errors as analysis_errors
+
 
 class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
     NAME = "run_analysis_modes"
@@ -74,18 +75,18 @@ class RunAnalysisModePlugin(plugins.AbstractWebInterfacePlugin):
                 # TODO remove at some point
             try:
                 return interfaces_util.run_in_bot_async_executor(
-                cls.get_old_version_plot_data(
-                    exchange_id=exchange_id,
-                    trading_mode=trading_mode_class,
-                    exchange_name=exchange_name,
-                    symbol=symbol,
-                    time_frame=time_frame,
-                    optimization_campaign_name=optimization_campaign,
-                    backtesting_id=backtesting_id,
-                    live_id=live_id,
-                    optimizer_id=optimizer_id,
+                    cls.get_old_version_plot_data(
+                        exchange_id=exchange_id,
+                        trading_mode=trading_mode_class,
+                        exchange_name=exchange_name,
+                        symbol=symbol,
+                        time_frame=time_frame,
+                        optimization_campaign_name=optimization_campaign,
+                        backtesting_id=backtesting_id,
+                        live_id=live_id,
+                        optimizer_id=optimizer_id,
+                    )
                 )
-            )
             except Exception:
                 pass
         return {}

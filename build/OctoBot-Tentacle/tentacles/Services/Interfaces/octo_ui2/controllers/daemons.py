@@ -7,7 +7,7 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
 )
 
 try:
-    import tentacles.Meta.Keywords.matrix_library.pro_tentacles.pro_keywords.orders.managed_order_pro.daemons.ping_pong.ping_pong_storage as ping_pong_storage
+    import tentacles.Meta.Keywords.pro_tentacles.pro_keywords.orders.managed_order_pro.daemons.ping_pong.ping_pong_storage as ping_pong_storage
 except (ModuleNotFoundError, ImportError):
     ping_pong_storage = None
 

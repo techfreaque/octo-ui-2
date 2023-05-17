@@ -3,13 +3,13 @@ import {useBotDomainContext} from "../../../../context/config/BotDomainProvider"
 import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
 import AppActions from "./AppActions/AppActions";
 import {backendRoutes} from "../../../../constants/backendConstants";
-import {useInstallProfile, useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
+import {useInstallAnyAppPackage, useUploadToAppStore} from "../../../../context/data/AppStoreDataProvider";
 import {useState} from "react";
-import {strategyModeName} from "../AppStore";
 import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
 import AppCardTemplate from "./AppCardTemplate";
 import {useRestartBot} from "../../../../context/data/IsBotOnlineProvider";
 import createNotification from "../../../../components/Notifications/Notification";
+import { strategyModeName } from "../storeConstants";
 
 export default function StrategyCard({
     app,
@@ -19,10 +19,12 @@ export default function StrategyCard({
     isLoading,
     setIsloading,
     setSelectedCategories,
-    didHoverOnce
+    didHoverOnce,
+    uploadInfo,
+    setUploadInfo,
+    downloadInfo,
+    setDownloadInfo
 }) {
-    const [uploadInfo, setUploadInfo] = useState({})
-    const [downloadInfo, setDownloadInfo] = useState({})
     const [cloneAppInfo, setCloneAppInfo] = useState({})
     const botDomain = useBotDomainContext()
     const botInfo = useBotInfoContext()
@@ -45,12 +47,9 @@ export default function StrategyCard({
         setIsloading(true)
         await selectProfile(botDomain, app.package_id, app.title, onSuccess, onFail)
     }
-    const installProfile = useInstallProfile()
-    async function handleDownloadProfile(setOpen) {
-        installProfile({
-            ...downloadInfo,
-            ...app
-        }, setIsloading, setOpen)
+    const installAnyAppPackage = useInstallAnyAppPackage()
+    async function handleDownloadApp(setOpen, otherApp) {
+        installAnyAppPackage(downloadInfo, otherApp || app, setIsloading, setOpen)
     }
     async function handleDeleteProfile(setOpen) {
         setIsloading(true)
@@ -75,15 +74,15 @@ export default function StrategyCard({
     const uploadToAppStore = useUploadToAppStore()
 
 
-    const additionalProfileInfo = botInfo ?. profiles ?. [app.package_id] || {}
+    const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
 
-    const currentAvatar = additionalProfileInfo ?. profile ?. avatar
+    const currentAvatar = additionalProfileInfo?.profile?.avatar
     const avatarUrl = currentAvatar === "default_profile.png" ? `${
         botDomain + backendRoutes.staticImg
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        additionalProfileInfo ?. profile ?. name ?. replace(/ /g, "_")
+        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
     }/${currentAvatar}`
 
     return (
@@ -115,7 +114,7 @@ export default function StrategyCard({
                         exportUrl={
                             backendRoutes.exportProfile + app.package_id
                         }
-                        handleDownload={handleDownloadProfile}
+                        handleDownload={handleDownloadApp}
                         infoContent={
                             (
                                 <div> {

@@ -1,11 +1,16 @@
 import abc
 import os
+import shutil
 import aiohttp
 import flask
+import jsonschema
 
 import octobot_commons.authentication as authentication
 import octobot_commons.profiles as profiles
 import octobot_commons.constants as constants
+import octobot_commons.logging as bot_logging
+import octobot_commons.errors as errors
+from octobot_commons.profiles.profile import Profile
 import octobot_commons.profiles.profile_sharing as profile_sharing
 import octobot_services.constants as services_constants
 import octobot_services.interfaces.util as interfaces_util
@@ -116,21 +121,22 @@ def register_appstore_routes(plugin):
             try:
                 name = request_data["name"]
                 url = request_data["url"]
-                file_path = profiles.download_profile(url, name)
+                file_path = profiles.download_profile(url, name.replace(" ", "_"))
                 temp_profile_name = profile_sharing._get_profile_name(name, file_path)
-
                 profile = profile_sharing.install_profile(
-                    file_path,
-                    temp_profile_name,
-                    ".",
-                    True,
-                    True,
+                    import_path=file_path,
+                    profile_name=temp_profile_name,
+                    bot_install_path=".",
+                    replace_if_exists=True,
+                    is_imported=False,
                     origin_url=url,
                     profile_schema=constants.PROFILE_FILE_SCHEMA,
                 )
                 if profile.name != temp_profile_name:
                     profile.rename_folder(
-                        profile_sharing._get_unique_profile_folder_from_name(profile),
+                        profile_sharing._get_unique_profile_folder_from_name(
+                            profile
+                        ).replace(" ", "_"),
                         False,
                     )
                 interfaces_util.get_edited_config(dict_only=False).load_profiles()
@@ -159,39 +165,39 @@ def register_appstore_routes(plugin):
         )
 
 
-class TentacleInstallAuthenticator(authentication.Authenticator):
-    AUTHORIZATION_HEADER = "Authorization"
-    _authenticated_session: aiohttp.ClientSession = None
+# class TentacleInstallAuthenticator(authentication.Authenticator):
+#     AUTHORIZATION_HEADER = "Authorization"
+#     _authenticated_session: aiohttp.ClientSession = None
 
-    def add_authentication_token(self, password_token):
-        self.password_token = password_token
+#     def add_authentication_token(self, password_token):
+#         self.password_token = password_token
 
-    @abc.abstractmethod
-    def is_logged_in(self):
-        """
-        :return: True when authenticated
-        """
-        return True if self.password_token else False
+#     @abc.abstractmethod
+#     def is_logged_in(self):
+#         """
+#         :return: True when authenticated
+#         """
+#         return True if self.password_token else False
 
-    @abc.abstractmethod
-    def logout(self):
-        self._authenticated_session.close()
+#     @abc.abstractmethod
+#     def logout(self):
+#         self._authenticated_session.close()
 
-    @abc.abstractmethod
-    def get_aiohttp_session(self):
-        if self.password_token:
-            self._authenticated_session = aiohttp.ClientSession(
-                headers={self.AUTHORIZATION_HEADER: f"token {self.password_token}"}
-            )
-            return self._authenticated_session
-        return None
+#     @abc.abstractmethod
+#     def get_aiohttp_session(self):
+#         if self.password_token:
+#             self._authenticated_session = aiohttp.ClientSession(
+#                 headers={self.AUTHORIZATION_HEADER: f"token {self.password_token}"}
+#             )
+#             return self._authenticated_session
+#         return None
 
-    @abc.abstractmethod
-    def must_be_authenticated_through_authenticator(self):
-        """
-        :return: True when this authenticator has to be validated
-        """
-        return True
+#     @abc.abstractmethod
+#     def must_be_authenticated_through_authenticator(self):
+#         """
+#         :return: True when this authenticator has to be validated
+#         """
+#         return True
 
 
 def _handle_package_operation(update_type):
@@ -209,14 +215,7 @@ def _handle_package_operation(update_type):
                 path_or_url, action = next(iter(request_data.items()))
                 path_or_url = path_or_url.strip()
             if action == "register_and_install":
-                token = request_data.get(services_constants.CONFIG_TOKEN)
-                if token:
-                    authenticator: TentacleInstallAuthenticator = (
-                        TentacleInstallAuthenticator.instance()
-                    )
-                    authenticator.add_authentication_token(token)
-                else:
-                    authenticator = authentication.Authenticator.instance()
+                authenticator = authentication.Authenticator.instance()
                 installation_result = models.install_packages(
                     path_or_url, version, authenticator=authenticator
                 )
