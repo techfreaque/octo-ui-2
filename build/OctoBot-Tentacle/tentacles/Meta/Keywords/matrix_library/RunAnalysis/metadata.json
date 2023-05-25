@@ -1,6 +1,0 @@
-{
-  "version": "1.0.2",
-  "origin_package": "Matrix-O-UI",
-  "tentacles": ["RunAnalysis"],
-  "tentacles-requirements": []
-}
