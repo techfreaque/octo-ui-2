@@ -10,9 +10,40 @@ try:
     import tentacles.Meta.Keywords.pro_tentacles.pro_keywords.orders.managed_order_pro.daemons.ping_pong.ping_pong_storage as ping_pong_storage
 except (ModuleNotFoundError, ImportError):
     ping_pong_storage = None
+try:
+    from tentacles.Meta.Keywords.pro_tentacles.evaluators.neural_net_classification.neural_nets import (
+        network_utils,
+    )
+except (ModuleNotFoundError, ImportError):
+    network_utils = None
 
 
 def register_daemons_routes(plugin):
+    if network_utils:
+        route = "/stop_training"
+        methods = ["POST", "GET"]
+
+        if cross_origin := import_cross_origin_if_enabled():
+
+            @plugin.blueprint.route(route, methods=methods)
+            @cross_origin(origins="*")
+            @login.login_required_when_activated
+            def stop_training():
+                return _stop_training()
+
+        else:
+
+            @plugin.blueprint.route(route, methods=methods)
+            @login.login_required_when_activated
+            def stop_training():
+                return _stop_training()
+
+        def _stop_training():
+            network_utils.SHOULD_STOP_TRAINING = True
+            return basic_utils.get_response(success=True)
+
+        route = "/daemons/reset"
+        methods = ["POST", "GET"]
     if ping_pong_storage:
         route = "/daemons"
         methods = ["POST", "GET"]

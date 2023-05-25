@@ -23,8 +23,8 @@ export default function AppStore() {
     const appStoreData = useAppStoreDataContext();
     const botInfo = useBotInfoContext();
     const appStoreUser = useAppStoreUserContext()
-    const isLoggedIn = Boolean(appStoreUser ?. token)
-    const availableCategories = appStoreData && (Object.keys(appStoreData) ?. filter(category => (!hiddenCategories.includes(category))) || [])
+    const isLoggedIn = Boolean(appStoreUser?.token)
+    const availableCategories = appStoreData && (Object.keys(appStoreData)?.filter(category => (!hiddenCategories.includes(category))) || [])
     const [selectedCategories, setSelectedCategories] = useState();
     const [tradingConfigTabs, setTradingConfigTabs] = useState();
     const _useFetchAppStoreData = useFetchAppStoreData();
@@ -37,8 +37,8 @@ export default function AppStore() {
     const currentTentaclesConfig = useTentaclesConfigContext()
 
     const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
-    const currentStrategy = appStoreData.Strategy ? appStoreData.Strategy ?. [Object.keys(appStoreData.Strategy).filter(strategy => (appStoreData.Strategy[strategy].is_selected)) ?. [0]] : {}
-    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
+    const currentStrategy = appStoreData?.Strategy ? appStoreData.Strategy?.[Object.keys(appStoreData.Strategy).filter(strategy => (appStoreData.Strategy[strategy].is_selected))?.[0]] : {}
+    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
 
     useEffect(() => {
         if (currentTentaclesTradingConfig) {
@@ -54,10 +54,10 @@ export default function AppStore() {
             appStoreData={appStoreData}/>
     )
     const menuItems = [
-        ...(availableCategories ?. filter(category => (category === strategyName || category === strategyModeName)) ?. map(categoryName => {
+        ...(availableCategories?.filter(category => (category === strategyName || category === strategyModeName))?.map(categoryName => {
             if (categoryName === strategyName) {
                 return {
-                    label: botInfo ?. current_profile ?. profile ?. name,
+                    label: botInfo?.current_profile?.profile?.name,
                     key: categoryName,
                     content,
                     icon: (
@@ -112,14 +112,14 @@ export default function AppStore() {
                     Select a app category from the sidebar
                 </Typography.Title>
             ),
-            children: availableCategories ?. filter(category => (category !== strategyName && category !== strategyModeName && category !== appPackagesName)) ?. map(categoryName => ({label: categoryName, content, key: categoryName}))
+            children: availableCategories?.filter(category => (category !== strategyName && category !== strategyModeName && category !== appPackagesName))?.map(categoryName => ({label: categoryName, content, key: categoryName}))
         },
     ]
     return (
         <AntSidebar menuItems={menuItems}
             currentlySelectedMenu={selectedCategories}
             defaultSelected={
-                (currentTentaclesTradingConfig ?. [botInfo ?. trading_mode_name] ? botInfo.trading_mode_name : botInfo ?. trading_mode_name) || strategyModeSettingsName
+                (currentTentaclesTradingConfig?.[botInfo?.trading_mode_name] ? botInfo.trading_mode_name : botInfo?.trading_mode_name) || strategyModeSettingsName
             }
             setCurrentlySelectedMenu={setSelectedCategories}/>
     )

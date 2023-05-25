@@ -19,6 +19,7 @@ export const backendRoutes = {
     appStoreSignup: `/register`,
     appStoreUpload: `/upload_app`,
     appStoreRate: `/rate_app`,
+    appStoreCreatePayment: `/create-payment`,
     packagesData: `${basePath}/tentacles-info`,
     appStorePremium: `/premium/repo`,
     daemons: `${basePath}/daemons`,
@@ -44,6 +45,7 @@ export const backendRoutes = {
     installApp: `${basePath}/tentacle_packages?update_type=add_package`,
     uninstallApp: `${basePath}/tentacle_packages?update_type=uninstall_modules`,
     optimizerStop: `${advancedPath}/strategy-optimizer?update_type=cancel_optimizer`,
+    trainingStop: `${basePath}/stop_training`,
 
     profileMedia: `${basePath}/profile_media/user/profiles`,
     staticImg: "/static/img",

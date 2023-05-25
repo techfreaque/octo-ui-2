@@ -23,12 +23,19 @@ export const buttonVariants = {
     text: "text"
 }
 
+export const buttonSizes = {
+    small: "small",
+    middle: "middle",
+    large: "large"
+}
+
 export default function AntButton({
     buttonType = buttonTypes.success,
     onClick,
     text,
     style,
     buttonVariant = buttonVariants.outline,
+    size = buttonSizes.middle,
     block = false,
     disabled = false,
     iconSize = sizes.small,
@@ -48,14 +55,15 @@ export default function AntButton({
     href,
     children,
     noIconMargin = false,
-    spanStyle = {}
+    spanStyle = {},
+    target
 
 }) {
     const botColors = useBotColorsContext();
     const _style = block ? { // justifyContent: "center"
     } : {}
     if (buttonType === buttonTypes.black) {
-        _style.color = botColors?.white
+        _style.color = botColors ?. white
     }
     const theme = {
         token: {
@@ -68,7 +76,7 @@ export default function AntButton({
     }
 
     if (selected) {
-        _style.color = botColors?.fontActive
+        _style.color = botColors ?. fontActive
     }
 
     const _spanStyle = spanStyle
@@ -82,7 +90,7 @@ export default function AntButton({
     const iconMargin = (!noIconMargin && (text || children)) ? "5px" : "0px";
     return (
         <ConfigProvider theme={theme}>
-            <Button  icon={
+            <Button icon={
                     (
                         <> {
                             (faIcon || antIcon) && (
@@ -125,14 +133,16 @@ export default function AntButton({
                 disabled={disabled}
                 onClick={onClick}
                 href={href}
+                size={size}
+                target={target}
                 style={
                     {
                         marginRight,
                         marginTop: "auto",
                         marginBottom: "auto",
                         display: "flex",
-                        textDecoration:"none",
-                        ..._style,
+                        textDecoration: "none",
+                        ... _style,
                         ...style
                     }
             }>
@@ -140,7 +150,7 @@ export default function AntButton({
                 <span style={
                     {
                         margin: "auto",
-                        ..._spanStyle
+                        ... _spanStyle
                     }
                 }>
                     {text}

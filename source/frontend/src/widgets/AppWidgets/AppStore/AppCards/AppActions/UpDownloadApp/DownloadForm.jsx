@@ -305,8 +305,6 @@ function RequiredPackages({
                     }
                     if (potentialRequiredApp.origin_package) {
                         requiredAppsByTentaclePackage[potentialRequiredApp.origin_package].push(potentialRequiredApp)
-                    } else {
-                        const t = 1
                     }
                 }
             }
@@ -317,8 +315,13 @@ function RequiredPackages({
             spacing={2}>
 
             {
-            requiredAppsByTentaclePackage && Object.keys(requiredAppsByTentaclePackage).map(requiredAppPackage => (
-                <RequiredPackage app={app}
+            requiredAppsByTentaclePackage && Object.keys(requiredAppsByTentaclePackage).map((requiredAppPackage, index) => (
+                <RequiredPackage key={
+                        `${
+                            app.package_id
+                        }${index}`
+                    }
+                    app={app}
                     requiredAppsByTentaclePackage={requiredAppsByTentaclePackage}
                     requiredAppPackage={requiredAppPackage}
                     downloadInfo={downloadInfo}
@@ -337,13 +340,10 @@ function RequiredPackage({
     handleDownload,
     setDownloadInfo
 }) {
-    const addAppStoreCart = useAddToAppStoreCart()
-    const checkIsInStoreCart = useIsInAppStoreCart()
     const mainPackageApp = requiredAppsByTentaclePackage[requiredAppPackage][0]
-    const packageInstalled = mainPackageApp ?. is_installed
-    const isOriginPackage = mainPackageApp ?. origin_package === app.origin_package
-    const mainPackageInCart = checkIsInStoreCart(mainPackageApp)
-    const setOpenBasket = useUpdateAppStoreCartIsOpenContext()
+    const packageInstalled = requiredAppsByTentaclePackage[requiredAppPackage].every(thisApp => {
+        return thisApp ?. is_installed
+    })
     return (
         <Grid item
             xs={12}
@@ -409,7 +409,9 @@ function RequiredPackage({
                                 requiredApp ?. is_installed ? "The App is already installed" : "The App isn't installed yet"
                             }
                             key={
-                                requiredApp ?. title || index
+                                `${
+                                    requiredApp ?. package_id
+                                }${index}`
                         }>
                             <div style={
                                 {display: "flex"}
@@ -421,8 +423,6 @@ function RequiredPackage({
                                     <IsNotInstalledIcon topRight={false}/>
                                 )
                             }
-
-
                                 <span style={
                                     {marginLeft: "5px"}
                                 }>
@@ -435,74 +435,106 @@ function RequiredPackage({
                         </Tooltip>
                     ))
                 } </ul>
-                {
-                packageInstalled ? (isOriginPackage ? (
-                    <AntButton block={true}
-                        style={
-                            {marginTop: "10px"}
-                        }
-                        disabled={
-                            downloadInfo.isDownloading
-                        }
-                        onClick={
-                            () => handleDownload((isDownloading) => setDownloadInfo(prevInfo => ({
-                                ...prevInfo,
-                                isDownloading
-                            })), mainPackageApp)
-                        }
-                        antIconComponent={ShoppingCartOutlined}>
-                        Update Now
-                    </AntButton>
-                ) : (
-                    <></>
-                //      {/* <AntButton block={true}
-                // style={
-                //      {marginTop: "10px"}
-                // }
-                // onClick={
-                //      () => handleDownload(mainPackageApp)
-                // }
-                // antIconComponent={ShoppingCartOutlined}>
-                // More about this package
-                //      </AntButton> */}
-                )) : (mainPackageApp.price ? (mainPackageInCart ? (
-                    <AntButton block={true}
-                        style={
-                            {marginTop: "10px"}
-                        }
-                        onClick={
-                            () => setOpenBasket(true)
-                        }
-                        antIconComponent={ShoppingCartOutlined}>
-                        Go to Shopping Basket
-                    </AntButton>
-                ) : (
-                    <AntButton block={true}
-                        style={
-                            {marginTop: "10px"}
-                        }
-                        onClick={
-                            () => addAppStoreCart(mainPackageApp)
-                        }
-                        antIconComponent={ShoppingCartOutlined}>
-                        Add To Shopping Basket
-                    </AntButton>
-                )) : (
-                    <AntButton block={true}
-                        style={
-                            {marginTop: "10px"}
-                        }
-                        disabled={mainPackageInCart}
-                        onClick={
-                            () => addAppStoreCart(mainPackageApp)
-                        }
-                        antIconComponent={ShoppingCartOutlined}>
-                        Download for free
-                    </AntButton>
-                ))
-            } </Card>
+                <DownloadPackageButton handleDownload={handleDownload}
+                    mainPackageApp={mainPackageApp}
+                    packageInstalled={packageInstalled}
+                    setDownloadInfo={setDownloadInfo}
+                    app={app}
+                    downloadInfo={downloadInfo}/>
+            </Card>
         </Grid>
     )
+}
+
+function DownloadPackageButton({
+    handleDownload,
+    setDownloadInfo,
+    downloadInfo,
+    mainPackageApp,
+    packageInstalled,
+    app
+}) {
+    const addAppStoreCart = useAddToAppStoreCart()
+    const checkIsInStoreCart = useIsInAppStoreCart()
+    const isOriginPackage = mainPackageApp ?. origin_package === app.origin_package
+    const mainPackageInCart = checkIsInStoreCart(mainPackageApp)
+    const setOpenBasket = useUpdateAppStoreCartIsOpenContext()
+
+    function thisHandleDownload() {
+        handleDownload((isDownloading) => setDownloadInfo(prevInfo => ({
+            ...prevInfo,
+            isDownloading
+        })), (! isOriginPackage && mainPackageApp))
+    }
+    if (packageInstalled && (!mainPackageApp.price || mainPackageApp.has_paid)) {
+        return (
+            <AntButton block={true}
+                style={
+                    {marginTop: "10px"}
+                }
+                disabled={
+                    downloadInfo.isDownloading
+                }
+                onClick={thisHandleDownload}
+                antIconComponent={ShoppingCartOutlined}>
+                Update Now
+            </AntButton>
+        )
+    } else if (mainPackageApp.price) {
+        if (mainPackageApp.has_paid) {
+            return (
+                <AntButton block={true}
+                    style={
+                        {marginTop: "10px"}
+                    }
+                    disabled={mainPackageInCart}
+                    onClick={thisHandleDownload}
+                    antIconComponent={ShoppingCartOutlined}>
+                    Download Now
+                </AntButton>
+            )
+        } else if (mainPackageInCart) {
+            return (
+                <AntButton block={true}
+                    style={
+                        {marginTop: "10px"}
+                    }
+                    onClick={
+                        () => setOpenBasket(true)
+                    }
+                    antIconComponent={ShoppingCartOutlined}>
+                    Go to Shopping Basket
+                </AntButton>
+            )
+        } else {
+            return (
+                <AntButton block={true}
+                    style={
+                        {marginTop: "10px"}
+                    }
+                    onClick={
+                        () => addAppStoreCart(mainPackageApp)
+                    }
+                    antIconComponent={ShoppingCartOutlined}>
+                    Add To Shopping Basket
+                </AntButton>
+            )
+        }
+    } else {
+        return (
+            <AntButton block={true}
+                style={
+                    {marginTop: "10px"}
+                }
+                disabled={mainPackageInCart}
+                onClick={thisHandleDownload}
+                antIconComponent={ShoppingCartOutlined}>
+                Download for free
+            </AntButton>
+        )
+
+    }
+
 }
 
 function VersionSelector({

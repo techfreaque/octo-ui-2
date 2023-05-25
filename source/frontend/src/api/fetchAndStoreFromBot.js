@@ -68,15 +68,17 @@ export async function sendFile({
         data: formData, // sends fields with filename mimetype etc
         processData: false, // don't let jquery process the data
         contentType: false,
+        success: onSuccess,
+        error: onError,
         // let xhr set the content type,
         // success: onSuccess,
         // error: onError,
     }
     addAuthToAjaxRequest(requestData, withCredentials, token)
-    var reqest = $.ajax(requestData);
-    reqest.then((response) => {
-        response?.success ? onSuccess ?. (response) : onError ?. (response)
-    })
+    $.ajax(requestData);
+    // reqest.then((response) => {
+    //     response ?. success ? onSuccess ?. (response) : onError ?. (response)
+    // })
 }
 export async function fetchAndGetFromBot(url, type = "get", dataToSend, success_callback, error_callback,) {
     return await sendAndInterpretBotUpdate(dataToSend, url, success_callback, error_callback, type)
@@ -94,15 +96,15 @@ export default async function fetchAndStoreFromBot(url, setBotDataFunction, type
         setIsFinished && setIsFinished(true)
     }
     const success = (updated_data, update_url, result, msg, status) => {
-        if (msg?.success !== true) {
+        if (msg ?. success !== true) {
             fail(updated_data, update_url, result, msg, status)
         } else {
-            const data = msg?.data || msg
+            const data = msg ?. data || msg
             keepPreviousValues ? setBotDataFunction((prevData) => ({
                 ...prevData,
-                ...data
+                ... data
             })) : setBotDataFunction(data)
-            successNotification && createNotification(msg?.message || "Successfully fetched data", "success")
+            successNotification && createNotification(msg ?. message || "Successfully fetched data", "success")
             setIsFinished && setIsFinished(true)
 
         }

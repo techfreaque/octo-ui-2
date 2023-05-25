@@ -39,7 +39,7 @@ export default function TentaclesConfig({
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botInfo])
     return useMemo(() => {
-        if (!currentTentaclesConfig) {
+        if (! currentTentaclesConfig) {
             return;
         }
         const configs = {}
@@ -133,7 +133,7 @@ export function AbstractTentaclesConfig({
                                 antIconComponent={SaveOutlined}
                                 iconSize={
                                     sizes.medium
-                            } />
+                                }/>
                         </>
                     )
                 }
@@ -337,9 +337,7 @@ function _createTentacleConfigTab({
     if (schema?.properties) {
         try {
             Object.values(schema?.properties).forEach(property => property && _addGridDisplayOptions(property, null));
-            window.$$counter = window.$$counter + 1 || 1
             schema.options.disable_collapse = true
-            schema.options.disable_edit_json = false
             Object.keys(schema?.properties).length !== 0 && tabsData.push(displayStyle === displayStyles.tabs ? createTab({
                 configName,
                 schema,
@@ -385,9 +383,6 @@ function createSidebarItem({
                 }
                 {...defaultJsonEditorSettings()}
                 display_required_only={true}
-                counter={
-                    window.$$counter
-                }
                 storageName={storageName}/>
         )
     }
@@ -423,9 +418,6 @@ function createTab({
                 }
                 {...defaultJsonEditorSettings()}
                 display_required_only={true}
-                counter={
-                    window.$$counter
-                }
                 storageName={storageName}/>
         )
     }

@@ -9,7 +9,7 @@ import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
 import AppCardTemplate from "./AppCardTemplate";
 import {useRestartBot} from "../../../../context/data/IsBotOnlineProvider";
 import createNotification from "../../../../components/Notifications/Notification";
-import { strategyModeName } from "../storeConstants";
+import {strategyModeName} from "../storeConstants";
 
 export default function StrategyCard({
     app,
@@ -49,7 +49,13 @@ export default function StrategyCard({
     }
     const installAnyAppPackage = useInstallAnyAppPackage()
     async function handleDownloadApp(setOpen, otherApp) {
-        installAnyAppPackage(downloadInfo, otherApp || app, setIsloading, setOpen)
+        const theApp = otherApp ? {
+            ... otherApp,
+            bug_fix_version: 0,
+            major_version: 0,
+            minor_version: 0
+        } : app
+        installAnyAppPackage(downloadInfo, theApp, setIsloading, setOpen)
     }
     async function handleDeleteProfile(setOpen) {
         setIsloading(true)
@@ -74,15 +80,15 @@ export default function StrategyCard({
     const uploadToAppStore = useUploadToAppStore()
 
 
-    const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
+    const additionalProfileInfo = botInfo ?. profiles ?. [app.package_id] || {}
 
-    const currentAvatar = additionalProfileInfo?.profile?.avatar
+    const currentAvatar = additionalProfileInfo ?. profile ?. avatar
     const avatarUrl = currentAvatar === "default_profile.png" ? `${
         botDomain + backendRoutes.staticImg
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
+        additionalProfileInfo ?. profile ?. name ?. replace(/ /g, "_")
     }/${currentAvatar}`
 
     return (

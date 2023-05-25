@@ -23,12 +23,18 @@ export default function OtherAppCard({
 }) {
     const botDomain = useBotDomainContext()
     const profileDownloadUrl = botDomain + backendRoutes.exportApp + app.origin_package
-    const installAnyAppPackage= useInstallAnyAppPackage()
+    const installAnyAppPackage = useInstallAnyAppPackage()
     async function handleDownloadApp(setOpen, otherApp) {
-        installAnyAppPackage(downloadInfo, otherApp || app, setIsloading, setOpen)
+        const theApp = otherApp ? {
+            ... otherApp,
+            bug_fix_version: 0,
+            major_version: 0,
+            minor_version: 0
+        } : app
+        installAnyAppPackage(downloadInfo, theApp, setIsloading, setOpen)
     }
     const uninstallAppPackage = useUnInstallAppPackage()
-    async function handleUninstallApp(setOpen) { 
+    async function handleUninstallApp(setOpen) {
         uninstallAppPackage(app, setIsloading, setOpen)
     }
     const uploadToAppStore = useUploadToAppStore()

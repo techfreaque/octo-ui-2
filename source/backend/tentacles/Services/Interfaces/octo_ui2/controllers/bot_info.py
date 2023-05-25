@@ -20,6 +20,13 @@ from tentacles.Services.Interfaces.octo_ui2.models.octo_ui2 import (
     import_cross_origin_if_enabled,
 )
 
+try:
+    from tentacles.Meta.Keywords.pro_tentacles.evaluators.neural_net_classification.neural_nets import (
+        network_utils,
+    )
+except (ImportError, ModuleNotFoundError):
+    network_utils = None
+
 TIME_TO_START = 40
 
 
@@ -93,6 +100,8 @@ def register_bot_info_routes(plugin):
                 [_time_frame.value for _time_frame in commons_enums.TimeFrames]
             )
         ]
+        should_stop_training: bool = False
+        any_neural_net_active: bool = False
         try:
             exchange_managers = interfaces.AbstractInterface.get_exchange_managers()
             for _exchange_manager in exchange_managers:
@@ -119,10 +128,12 @@ def register_bot_info_routes(plugin):
                     real_time_strategy_data = trading_mode.real_time_strategy_data
                     if real_time_strategy_data:
                         real_time_strategies_active = real_time_strategy_data.activated
-
                     # enabled_time_frames = models.get_strategy_required_time_frames(
                     #     strategies[0]
                     # )
+                if network_utils:
+                    should_stop_training = network_utils.SHOULD_STOP_TRAINING
+                    any_neural_net_active = network_utils.ANY_NEURAL_NET_ACTIVE
 
                 # enabled_time_frames = (
                 #     models.get_strategy_required_time_frames(activated_strategy)
@@ -183,6 +194,8 @@ def register_bot_info_routes(plugin):
                         for s in symbols
                     ]
                 ),
+                "should_stop_training": should_stop_training,
+                "any_neural_net_active": any_neural_net_active,
                 "profiles": profiles,
                 "can_logout": flask_login.current_user.is_authenticated,
                 "is_owner": not SHARE_YOUR_OCOBOT

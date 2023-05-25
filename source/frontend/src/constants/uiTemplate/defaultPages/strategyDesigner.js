@@ -174,6 +174,9 @@ export const defaultStrategyDesignerPageLayout =  {
                             "title": "Strategy Manager",
                             "toolBarContent": [
                                 {
+                                    "component": "StopTrainingButton",
+                                },
+                                {
                                     "component": "SaveTradingModeSettings"
                                 },
                                 {
@@ -235,6 +238,9 @@ export const defaultStrategyDesignerPageLayout =  {
                             "faIcon": "noIcon",
                             "title": "Backtesting",
                             "toolBarContent": [
+                                {
+                                    "component": "StopTrainingButton",
+                                },
                                 {
                                     "component": "StopBacktestingButton"
                                 },
