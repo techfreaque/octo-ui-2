@@ -12,7 +12,7 @@ import ButtonWithModal from "../Modals/ButtonWithModal"
 import AntTable from "../../../components/Tables/AntTable"
 import AntButton, {buttonSizes, buttonTypes} from "../../../components/Buttons/AntButton"
 import {CloseCircleOutlined, DollarCircleOutlined} from "@ant-design/icons"
-import { Refresh } from "@mui/icons-material"
+import {Refresh} from "@mui/icons-material"
 
 export default function AppStoreCartModal({content}) {
     const appStoreCart = useAppStoreCartContext()
@@ -87,13 +87,10 @@ export function AppStoreCart({setIsloading}) {
                 appStorePaymentUrl ? (
                     <div>
                         <Space>
-                            <AntButton buttonType={
-                                    buttonTypes.warning
-                                }
-                                size={
+                            <AntButton size={
                                     buttonSizes.large
                                 }
-                                onClick={cancelStorePayment}
+                                // onClick={}
                                 antIconComponent={Refresh}>
                                 No Payment Detected - Check Payment Status
                             </AntButton>
