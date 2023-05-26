@@ -1,9 +1,6 @@
 import flask
 
 from tentacles.Services.Interfaces.octo_ui2.utils import basic_utils
-from tentacles.Services.Interfaces.run_analysis_mode.run_analysis_modes_plugin import (
-    RunAnalysisModePlugin,
-)
 import tentacles.Services.Interfaces.web_interface.login as login
 import tentacles.Services.Interfaces.web_interface.models as models
 import tentacles.Services.Interfaces.web_interface.util as util
@@ -42,6 +39,10 @@ def register_plot_data_routes(plugin):
             return _run_plotted_data()
 
     def _run_plotted_data():
+        from tentacles.Services.Interfaces.run_analysis_mode.run_analysis_modes_plugin import (
+            RunAnalysisModePlugin,
+        )
+
         try:
             request_data = flask.request.get_json()
             trading_mode = models.get_config_activated_trading_mode()

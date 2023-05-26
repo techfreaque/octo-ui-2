@@ -160,7 +160,9 @@ class RunAnalysisBaseDataGenerator:
             lows.append(candle[commons_enums.PriceIndexes.IND_PRICE_LOW.value])
             closes.append(candle[commons_enums.PriceIndexes.IND_PRICE_CLOSE.value])
             volumes.append(candle[commons_enums.PriceIndexes.IND_PRICE_VOL.value])
-            times.append(candle[commons_enums.PriceIndexes.IND_PRICE_TIME.value] * 1000)
+            times.append(
+                float(candle[commons_enums.PriceIndexes.IND_PRICE_TIME.value] * 1000)
+            )
         return [
             numpy.array(times),
             numpy.array(opens),

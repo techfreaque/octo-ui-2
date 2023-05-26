@@ -5,6 +5,8 @@ License: GPL V3
 Octo UI2 is a web-based user interface for OctoBot, designed to provide users with a centralized platform to manage and automate their trading strategies. Just like how the gnome desktop environment is an essential component of the Linux/GNU operating system, Octo UI2 plays a crucial role in the OctoBot ecosystem. It provides a similar level of functionality and integration, enabling users to effectively manage and automate their trading strategies.
 
 # Current State
+## Watch the demo video
+[![Watch the demo video](https://i1.ytimg.com/vi/8T8joudUZ1U/hqdefault.jpg)](https://youtu.be/8T8joudUZ1U)
 
 Octo UI2 is presently in the beta phase and functions as a Tentacle extension for OctoBot. It offers users a customizable web UI that supports plotting, editing, and testing both real and simulated trading strategies. \
 Additionally, the UI includes features for backtesting and analyzing trading results. Since the project is still in its early stages, there might be some bugs that need fixing, and many new features are still being added to enhance the user experience.

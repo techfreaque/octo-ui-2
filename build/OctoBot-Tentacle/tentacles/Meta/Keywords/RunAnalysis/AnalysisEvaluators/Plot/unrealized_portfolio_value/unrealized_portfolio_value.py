@@ -46,7 +46,7 @@ class UnrealizedPortfolioValue(abstract_analysis_evaluator.AnalysisEvaluator):
         if plotted_element is not None:
             historical_portfolio_value = await run_data.get_historical_portfolio_value()
             for row in historical_portfolio_value:
-                x.append(row["t"] * 1000)
+                x.append(float(row["t"] * 1000))
                 for asset, value in row["v"].items():
                     if y.get(asset) is None:
                         y[asset] = []

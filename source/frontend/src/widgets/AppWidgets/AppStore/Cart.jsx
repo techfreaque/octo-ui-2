@@ -85,7 +85,7 @@ export function AppStoreCart({setIsloading}) {
                 } </Typography.Title>
                 {
                 appStorePaymentUrl ? (
-                    <div>
+                    <Space>
                         <Space>
                             <AntButton size={
                                     buttonSizes.large
@@ -117,7 +117,7 @@ export function AppStoreCart({setIsloading}) {
                                 Finalize Payment
                             </AntButton>
                         </Space>
-                    </div>
+                    </Space>
                 ) : (
                     <Space>
                         <AntButton antIconComponent={DollarCircleOutlined}
