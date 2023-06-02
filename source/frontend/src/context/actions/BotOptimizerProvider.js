@@ -59,22 +59,22 @@ export const useStartOptimizer = () => {
     const fetchProConfig = useFetchProConfig()
     const logic = useCallback(() => { // TODO validate settings
         if (optimizerSettings && idsByExchangeName) {
-            if (! optimizerForm ?. optimizer_inputs ?. user_inputs) { // settings not loaded yet, use directly from settings storage
+            if (! optimizerForm?.optimizer_inputs?.user_inputs) { // settings not loaded yet, use directly from settings storage
                 fetchProConfig((fetchedOptimizerForm) => {
-                    if (fetchedOptimizerForm ?. optimizer_inputs) {
+                    if (fetchedOptimizerForm?.optimizer_inputs) {
                         startOptimizer(botDomain, optimizerSettings, fetchedOptimizerForm.optimizer_inputs, idsByExchangeName, setBotIsOptimizing)
                     } else {
                         createNotification("Failed to add to optimizer queue", "danger", "Check your optimizer run configuration")
                     }
                 })
             } else {
-                startOptimizer(botDomain, optimizerSettings, optimizerForm ?. optimizer_inputs, idsByExchangeName, setBotIsOptimizing)
+                startOptimizer(botDomain, optimizerSettings, optimizerForm?.optimizer_inputs, idsByExchangeName, setBotIsOptimizing)
             }
         }
     }, [
         optimizerSettings,
         idsByExchangeName,
-        optimizerForm ?. optimizer_inputs,
+        optimizerForm?.optimizer_inputs,
         fetchProConfig,
         botDomain,
         setBotIsOptimizing
@@ -94,16 +94,16 @@ export const useAddToOptimizerQueue = () => {
     const fetchProConfig = useFetchProConfig()
     const logic = useCallback(() => {
         if (optimizerSettings && exchageId) {
-            if (! optimizerForm ?. optimizer_inputs ?. user_inputs) { // settings not loaded yet, use directly from settings storage
+            if (! optimizerForm?.optimizer_inputs?.user_inputs) { // settings not loaded yet, use directly from settings storage
                 fetchProConfig((fetchedOptimizerForm) => {
-                    if (fetchedOptimizerForm ?. optimizer_inputs) {
+                    if (fetchedOptimizerForm?.optimizer_inputs) {
                         addToOptimizerQueue(botDomain, optimizerSettings, fetchedOptimizerForm.optimizer_inputs, exchageId, setBotIsOptimizing, fetchOptimizerQueue)
                     } else {
                         createNotification("Failed to add to optimizer queue", "danger", "Check your optimizer run configuration")
                     }
                 })
             } else {
-                addToOptimizerQueue(botDomain, optimizerSettings, optimizerForm ?. optimizer_inputs, exchageId, setBotIsOptimizing, fetchOptimizerQueue)
+                addToOptimizerQueue(botDomain, optimizerSettings, optimizerForm?.optimizer_inputs, exchageId, setBotIsOptimizing, fetchOptimizerQueue)
             }
         } else {
             createNotification("Failed to add to the queue", "danger", "The exchange is not initialized")
@@ -129,14 +129,14 @@ export const BotOptimizerProvider = ({children}) => {
         if (data) {
             setOptimizerProgress(data)
         }
-        if (data ?. status === "starting" || data ?. status === "computing") {
+        if (data?.status === "starting" || data?.status === "computing") {
             setBotIsOptimizing(true);
             setTimeout(function () {
                 socket.emit('strategy_optimizer_status')
             }, 2000);
         } else {
             setBotIsOptimizing(prevState => {
-                if (data ?. status === "finished" && prevState) { // createNotification("Backtest finished successfully")
+                if (data?.status === "finished" && prevState) { // createNotification("Backtest finished successfully")
                 }
                 return false
             });

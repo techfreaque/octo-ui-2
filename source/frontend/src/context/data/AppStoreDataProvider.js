@@ -190,7 +190,7 @@ export const useUploadToAppStore = () => {
             setIsloading(false)
             createNotification("Enter release notes before you upload", "danger")
         }
-    }, [appStoreDomain, appStoreUser, botInfo.octobot_version]);
+    }, [appStoreDomain, appStoreUser.token, botInfo.octobot_version, updateAppStoreUser]);
 }
 
 export const useRateAppStore = () => {
@@ -337,7 +337,6 @@ export const useSignupToAppStore = () => {
 export const useInstallAnyAppPackage = () => {
     const installProfile = useInstallProfile()
     const installApp = useInstallAppPackage()
-
     return useCallback((downloadInfo, app, setIsloading, setOpen) => {
         if (app.categories?.[0] === strategyName) {
             installProfile({
@@ -347,7 +346,7 @@ export const useInstallAnyAppPackage = () => {
         } else {
             installApp(downloadInfo, app, setIsloading, setOpen)
         }
-    })
+    }, [installApp, installProfile])
 }
 
 export const useInstallAppPackage = () => {

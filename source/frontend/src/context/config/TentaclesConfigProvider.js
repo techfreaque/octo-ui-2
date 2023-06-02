@@ -89,7 +89,7 @@ export const useSaveTentaclesConfig = () => {
     const loadCurrentTradingTentaclesConfig = useFetchCurrentTradingTentaclesConfig();
     const loadTentaclesConfig = useFetchTentaclesConfig();
     const botDomain = useBotDomainContext()
-    return useCallback((newConfigs, setIsSaving, reloadPlots = false, isTradingConfig = true) => {
+    return useCallback((newConfigs, setIsSaving, reloadPlots = false, isTradingConfig = true, keepExisting=true) => {
         const failure = (updated_data, update_url, result, msg, status) => {
             setIsSaving ?. (false)
             createNotification(msg)
@@ -108,7 +108,7 @@ export const useSaveTentaclesConfig = () => {
                 loadTentaclesConfig(tentacles, onFinish)
             }
         }
-        sendAndInterpretBotUpdate(newConfigs, botDomain + (isTradingConfig ? backendRoutes.updateTentaclesConfig : backendRoutes.updateTentaclesConfigNoReload), success, failure)
+        sendAndInterpretBotUpdate(newConfigs, botDomain + (isTradingConfig ? `${backendRoutes.updateTentaclesConfig}&keep_existing=${keepExisting}` : backendRoutes.updateTentaclesConfigNoReload), success, failure)
     }, [botDomain, fetchPlotData, loadCurrentTradingTentaclesConfig, loadTentaclesConfig]);
 };
 

@@ -96,15 +96,15 @@ export default async function fetchAndStoreFromBot(url, setBotDataFunction, type
         setIsFinished && setIsFinished(true)
     }
     const success = (updated_data, update_url, result, msg, status) => {
-        if (msg ?. success !== true) {
+        if (msg?.success !== true) {
             fail(updated_data, update_url, result, msg, status)
         } else {
-            const data = msg ?. data || msg
+            const data = msg?.data || msg
             keepPreviousValues ? setBotDataFunction((prevData) => ({
                 ...prevData,
-                ... data
+                ...data
             })) : setBotDataFunction(data)
-            successNotification && createNotification(msg ?. message || "Successfully fetched data", "success")
+            successNotification && createNotification(msg?.message || "Successfully fetched data", "success")
             setIsFinished && setIsFinished(true)
 
         }

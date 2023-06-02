@@ -14,7 +14,8 @@ import {parseSymbol} from "../../components/SymbolsUtil/SymbolsUtil";
 const ExchangeInfoContext = createContext();
 const UpdateExchangeInfoContext = createContext();
 const UpdateToSaveCurrencySettingsContext = createContext();
-const CurrenciesListsContext = createContext();
+const CurrentCurrencyListContext = createContext();
+const UnsavedCurrencyListContext = createContext();
 const PairSelectorMenuOpenContext = createContext();
 const UpdatePairSelectorMenuOpenContext = createContext();
 const NewConfigExchangesContext = createContext();
@@ -48,8 +49,12 @@ export const useUpdateExchangeInfoContext = () => {
     return useContext(UpdateExchangeInfoContext);
 };
 
-export const useCurrenciesLists = () => {
-    return useContext(CurrenciesListsContext);
+export const useCurrentCurrencyListContext = () => {
+    return useContext(CurrentCurrencyListContext);
+};
+
+export const useUnsavedCurrencyListContext = () => {
+    return useContext(UnsavedCurrencyListContext);
 };
 
 const ServicesInfoContext = createContext();
@@ -86,7 +91,7 @@ export const useFetchServicesInfo = () => {
     const setServicesInfo = useUpdateServicesInfoContext();
     const botDomain = useBotDomainContext();
     const logic = useCallback((successNotification = false, setIsFinished = undefined) => {
-        setIsFinished?.(false)
+        setIsFinished ?. (false)
         fetchServicesInfo(botDomain, setServicesInfo, successNotification, setIsFinished);
     }, [setServicesInfo, botDomain]);
     return logic;
@@ -95,29 +100,23 @@ export const useFetchServicesInfo = () => {
 export const useHandleProfileUpdate = () => {
     const botDomain = useBotDomainContext();
     const botInfo = useBotInfoContext();
-    const currenciesLists = useCurrenciesLists()
+    const currentCurrencyList = useCurrentCurrencyListContext()
+    const unsavedCurrencyList = useUnsavedCurrencyListContext()
     const exchangeInfo = useExchangeInfoContext();
     const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
     const exchangeConfigUpdate = useExchangeConfigUpdateContext()
 
     const logic = useCallback((restartAfterSave = false) => {
         handleProfileUpdate({
-            currentCurrencyList: currenciesLists.currentCurrencyList,
-            unsavedCurrencyList: currenciesLists.unsavedCurrencyList,
+            currentCurrencyList,
+            unsavedCurrencyList,
             exchangeConfigUpdate,
             exchangeInfo,
             botDomain,
             currencySettings,
             restartAfterSave
         })
-    }, [
-        currenciesLists.currentCurrencyList,
-        currenciesLists.unsavedCurrencyList,
-        exchangeConfigUpdate,
-        exchangeInfo,
-        botDomain,
-        currencySettings
-    ]);
+    }, [currentCurrencyList, unsavedCurrencyList, exchangeConfigUpdate, exchangeInfo, botDomain, currencySettings]);
     return logic;
 };
 
@@ -176,21 +175,24 @@ export const BotExchangeInfoProvider = ({children}) => {
     const botInfo = useBotInfoContext();
     const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
     const [toSaveCurrencySettings, setToSaveCurrencySettings] = useState();
-    const [currenciesLists, setCurrenciesLists] = useState();
+    const [currentCurrencyList, setCurrentCurrencyList] = useState();
+    const [unsavedCurrencyList, setUnsavedCurrencyList] = useState();
     const [exchangeConfigUpdate, setExchangeConfigUpdate] = useState({global_config: {}, removed_elements: []})
     const [newConfigExchanges, setNewConfigExchanges] = useState({})
 
-    const { currencyList: currentCurrencyList, currencySettings: currentCurrencySettings } = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
-    const {currencyList: unsavedCurrencyList} = convertSymbolSettingsToNewFormat(toSaveCurrencySettings, exchangeInfo)
-    const currentCurrencySettingsJson = JSON.stringify(currentCurrencySettings)
-    const currentCurrencyListJson = JSON.stringify(currentCurrencyList)
-    const unsavedCurrencyListJson = JSON.stringify(unsavedCurrencyList)
     useEffect(() => {
+        const {currencyList: _currentCurrencyList, currencySettings: currentCurrencySettings} = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
+        const currentCurrencySettingsJson = JSON.stringify(currentCurrencySettings)
         setToSaveCurrencySettings(JSON.parse(currentCurrencySettingsJson));
-    }, [currentCurrencySettingsJson])
+    }, [currencySettings, exchangeInfo])
     useEffect(() => {
-        setCurrenciesLists({currentCurrencyList: JSON.parse(currentCurrencyListJson), unsavedCurrencyList: JSON.parse(unsavedCurrencyListJson)})
-    }, [currentCurrencyListJson, unsavedCurrencyListJson])
+        const {currencyList: _currentCurrencyList, currencySettings: currentCurrencySettings} = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
+        const {currencyList: _unsavedCurrencyList} = convertSymbolSettingsToNewFormat(toSaveCurrencySettings, exchangeInfo)
+        const currentCurrencyListJson = JSON.stringify(_currentCurrencyList)
+        const unsavedCurrencyListJson = JSON.stringify(_unsavedCurrencyList)
+        setUnsavedCurrencyList(JSON.parse(unsavedCurrencyListJson))
+        setCurrentCurrencyList(JSON.parse(currentCurrencyListJson))
+    }, [currencySettings, exchangeInfo, toSaveCurrencySettings])
 
     const configExchanges = servicesInfo?.exchanges ? Object.keys(servicesInfo.exchanges) : []
     useEffect(() => {
@@ -209,9 +211,11 @@ export const BotExchangeInfoProvider = ({children}) => {
                                 <UpdateNewConfigExchangesContext.Provider value={setNewConfigExchanges}>
                                     <ExchangeConfigUpdateContext.Provider value={exchangeConfigUpdate}>
                                         <UpdateExchangeConfigUpdateContext.Provider value={setExchangeConfigUpdate}>
-                                            <CurrenciesListsContext.Provider value={currenciesLists}>
-                                                <UpdateToSaveCurrencySettingsContext.Provider value={setToSaveCurrencySettings}> {children} </UpdateToSaveCurrencySettingsContext.Provider>
-                                            </CurrenciesListsContext.Provider>
+                                            <CurrentCurrencyListContext.Provider value={currentCurrencyList}>
+                                                <UnsavedCurrencyListContext.Provider value={unsavedCurrencyList}>
+                                                    <UpdateToSaveCurrencySettingsContext.Provider value={setToSaveCurrencySettings}> {children} </UpdateToSaveCurrencySettingsContext.Provider>
+                                                </UnsavedCurrencyListContext.Provider>
+                                            </CurrentCurrencyListContext.Provider>
                                         </UpdateExchangeConfigUpdateContext.Provider>
                                     </ExchangeConfigUpdateContext.Provider>
                                 </UpdateNewConfigExchangesContext.Provider>

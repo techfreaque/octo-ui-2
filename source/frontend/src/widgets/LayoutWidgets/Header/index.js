@@ -9,23 +9,39 @@ import "./header.css";
 
 export default function Header({leftContent, rightContent}) {
     const botColors = useBotColorsContext();
-    return (<div style={
-        {
-            borderBottom: "solid 2px " + botColors?.border
-        }
-    }>
-        <Navbar id="header" style={{overflowX: "hidden"}}>
-                        <Logo/>
-            <Container  id="header-content"  fluid style={{overflowX: "auto",
-                whiteSpace: "nowrap"}} >
+    return (
+        <div style={
+            {
+                    borderBottom: `solid 2px ${
+                    botColors?.border
+                }`
+            }
+        }>
+            <Navbar id="header"
+                style={
+                    {overflowX: "hidden"}
+            }>
+                <Logo/>
+                <Container id="header-content" fluid
+                    style={
+                        {
+                            overflowX: "auto",
+                            whiteSpace: "nowrap"
+                        }
+                }>
                     <Nav className="me-auto">
-                    {
-                    leftContent && (<AppWidgets layout={leftContent}/>)
-                } </Nav>
-                <Nav> {
-                    rightContent && (<AppWidgets layout={rightContent}/>)
-                        } </Nav>
-            </Container>
-        </Navbar>
-    </div>);
+                        {
+                        leftContent && (
+                            <AppWidgets layout={leftContent}/>
+                        )
+                    } </Nav>
+                    <Nav> {
+                        rightContent && (
+                            <AppWidgets layout={rightContent}/>
+                        )
+                    } </Nav>
+                </Container>
+            </Navbar>
+        </div>
+    );
 }

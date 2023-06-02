@@ -50,7 +50,7 @@ export default function StrategyCard({
     const installAnyAppPackage = useInstallAnyAppPackage()
     async function handleDownloadApp(setOpen, otherApp) {
         const theApp = otherApp ? {
-            ... otherApp,
+            ...otherApp,
             bug_fix_version: 0,
             major_version: 0,
             minor_version: 0
@@ -80,15 +80,15 @@ export default function StrategyCard({
     const uploadToAppStore = useUploadToAppStore()
 
 
-    const additionalProfileInfo = botInfo ?. profiles ?. [app.package_id] || {}
+    const additionalProfileInfo = botInfo?.profiles?.[app.package_id] || {}
 
-    const currentAvatar = additionalProfileInfo ?. profile ?. avatar
+    const currentAvatar = additionalProfileInfo?.profile?.avatar
     const avatarUrl = currentAvatar === "default_profile.png" ? `${
         botDomain + backendRoutes.staticImg
     }/${currentAvatar}` : `${
         botDomain + backendRoutes.profileMedia
     }/${
-        additionalProfileInfo ?. profile ?. name ?. replace(/ /g, "_")
+        additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
     }/${currentAvatar}`
 
     return (

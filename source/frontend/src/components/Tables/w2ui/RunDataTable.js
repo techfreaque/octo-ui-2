@@ -223,14 +223,14 @@ function createMetadataTable(tableTitle, tableId, metadata, forceSelectLatest, c
 
 function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userInputColumns, forceSelectLatest, currentOptimizerCampaignName, reloadData, deleteBacktestingRuns, restoreSettings, records) { // tabs
     function showRunInfo() {
-        table.showColumn(... runDataHidableColumns.map((column) => column.field))
-        table.hideColumn(... userInputColumns.map((column) => column.field))
+        table.showColumn(...runDataHidableColumns.map((column) => column.field))
+        table.hideColumn(...userInputColumns.map((column) => column.field))
         table.toolbar.disable('show-run-info');
         table.toolbar.enable('show-user-inputs');
     }
     function showUserInputInfo() {
-        table.hideColumn(... runDataHidableColumns.map((column) => column.field))
-        table.showColumn(... userInputColumns.map((column) => column.field))
+        table.hideColumn(...runDataHidableColumns.map((column) => column.field))
+        table.showColumn(...userInputColumns.map((column) => column.field))
         table.toolbar.disable('show-user-inputs');
         table.toolbar.enable('show-run-info');
     }
@@ -260,7 +260,7 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
         event.force = true;
         event.onComplete = () => {
             const selectedIds = table.getSelection()
-            if (selectedIds ?. length === 0) {
+            if (selectedIds?.length === 0) {
                 return createNotification("Select a run to delete first", "danger")
             }
             _deleteRuns(selectedIds)
@@ -300,7 +300,7 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
         if (selectedRuns && selectedRuns.length === 1) {
             function removeSpacesOnlyFromKeys(inputs) {
                 inputs && Object.keys(inputs).forEach((inputKey) => {
-                    const newInputKey = inputKey ?. replace(/ /g, "_")
+                    const newInputKey = inputKey?.replace(/ /g, "_")
                     if (newInputKey && newInputKey !== inputKey) {
                         inputs[newInputKey] = inputs[inputKey]
                         delete inputs[inputKey]
@@ -392,7 +392,7 @@ export function userInputKey(userInput, tentacle) {
 function _getUserInputColumns(userInputColumns, inputTentacle, userInputKeys, userInputSampleValueByKey, inputPerTentacle, inputsByConfig, hiddenMetadataColumns) {
     Object.keys(inputsByConfig[inputTentacle]).forEach((userInput) => {
         const key = userInputKey(userInput, inputTentacle);
-        if (! userInputKeys.includes(key) && ! hiddenMetadataColumns ?. includes(key.replaceAll("_", " "))) {
+        if (! userInputKeys.includes(key) && ! hiddenMetadataColumns?.includes(key.replaceAll("_", " "))) {
             userInputSampleValueByKey[key] = inputsByConfig[inputTentacle][userInput]
             if (userInputSampleValueByKey[key] instanceof Object && !(userInputSampleValueByKey[key] instanceof Array)) {
                 _getUserInputColumns(userInputColumns, userInput, userInputKeys, userInputSampleValueByKey, inputPerTentacle, inputsByConfig[inputTentacle], hiddenMetadataColumns)

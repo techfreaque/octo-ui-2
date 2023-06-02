@@ -16,7 +16,7 @@ export function AppAvatar({avatarImage}) {
 }
 
 export function AppCover({app, avatarImage}) {
-    return app ?. is_selected ? (
+    return app?.is_selected ? (
         <div style={
             {display: 'flex'}
         }>
@@ -27,7 +27,7 @@ export function AppCover({app, avatarImage}) {
                         marginTop: "30px"
                     }
             }>Current {
-                app ?. categories[0]
+                app?.categories[0]
             }</Typography.Title>
             <AppRating rating={
                     app.rating
@@ -47,7 +47,7 @@ export function AppCover({app, avatarImage}) {
             </div>
             {
             avatarImage && <img alt={
-                    app ?. title
+                    app?.title
                 }
                 style={
 
@@ -69,7 +69,7 @@ export function IsInstalledIcon({topRight}) {
                     top: '2%',
                     right: '2%'
                 } : {}),
-                color: botColors ?. success
+                color: botColors?.success
             }
         }/>
     )
@@ -85,7 +85,7 @@ export function IsNotInstalledIcon({topRight}) {
                     top: '2%',
                     right: '2%'
                 } : {}),
-                color: botColors ?. error
+                color: botColors?.error
             }
         }/>
     )
@@ -95,7 +95,7 @@ export function IsInstalledIndicator({
     topRight = true,
     tooltipText = "Installed"
 }) {
-    return app ?. is_installed && (
+    return app?.is_installed && (
         <Tooltip title={tooltipText}>
             <div>
                 <IsInstalledIcon topRight={topRight}/>

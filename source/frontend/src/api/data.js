@@ -1,6 +1,6 @@
 import createNotification from "../components/Notifications/Notification";
 import {backendRoutes} from "../constants/backendConstants";
-import fetchAndStoreFromBot, {fetchAndGetFromBot, sendAndInterpretBotUpdate, sendFile} from "./fetchAndStoreFromBot";
+import fetchAndStoreFromBot, {fetchAndGetFromBot, sendAndInterpretBotUpdate} from "./fetchAndStoreFromBot";
 
 export async function fetchBotInfo(botDomain, setBotInfo, visibleExchanges, successNotification = false, setIsFinished = undefined) {
     await fetchAndStoreFromBot(botDomain + backendRoutes.botInfo + "/" + visibleExchanges, setBotInfo, "get", {}, successNotification, false, setIsFinished);
@@ -52,7 +52,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.live = {
                     [botInfo.live_id]: {
                         [symbol]: {
-                            [timeFrame]: msg ?. data
+                            [timeFrame]: msg?.data
                         }
                     }
                 }
@@ -62,7 +62,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                         [optimizer_id]: {
                             [backtesting_id]: {
                                 [symbol]: {
-                                    [timeFrame]: msg ?. data
+                                    [timeFrame]: msg?.data
                                 }
                             }
                         }
@@ -73,7 +73,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                     [optimizer_id]: {
                         [backtesting_id]: {
                             [symbol]: {
-                                [timeFrame]: msg ?. data
+                                [timeFrame]: msg?.data
                             }
                         }
                     }
@@ -82,14 +82,14 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.backtesting[optimization_campaign][optimizer_id] = {
                     [backtesting_id]: {
                         [symbol]: {
-                            [timeFrame]: msg ?. data
+                            [timeFrame]: msg?.data
                         }
                     }
                 }
             } else {
                 newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
                     [symbol]: {
-                        [timeFrame]: msg ?. data
+                        [timeFrame]: msg?.data
                     }
                 }
             }
@@ -138,14 +138,14 @@ export async function fetchSymbolsInfo(setSymbolsInfo, botDomain) {
 
 export async function fetchAppStoreData(saveAppStoreData, storeDomain, installedTentaclesInfo, notification, appStoreUser) {
     function onSuccess(updated_data, update_url, result, msg, status) {
-        saveAppStoreData(msg ?. data)
+        saveAppStoreData(msg?.data)
         notification && createNotification("Successfully fetched package manager repositories")
     }
     function onFail(updated_data, update_url, result, msg, status) {
         notification && createNotification("Failed to fetch package manager repositories")
         // TODO add fallback
     }
-    await sendAndInterpretBotUpdate(installedTentaclesInfo, storeDomain + backendRoutes.appStoreFree, onSuccess, onFail, "POST", true, appStoreUser ?. token)
+    await sendAndInterpretBotUpdate(installedTentaclesInfo, storeDomain + backendRoutes.appStoreFree, onSuccess, onFail, "POST", true, appStoreUser?.token)
 }
 
 export async function fetchPackagesData(saveAppStoreData, botDomain, notification) {
@@ -167,7 +167,7 @@ export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser ?. token)
+    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser?.token)
 }
 
 export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStoreUser) {
@@ -183,7 +183,7 @@ export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStore
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    if (appStoreUser ?. token) {
+    if (appStoreUser?.token) {
         sendAndInterpretBotUpdate({}, storeDomain + backendRoutes.appStoreLogout, onSucces, onFail, "POST", true, appStoreUser.token)
     } else {
         createNotification("You are already logged out", "warning")

@@ -13,6 +13,7 @@ import {useFetchTentaclesConfig} from "../../../context/config/TentaclesConfigPr
 import {SaveOutlined} from "@ant-design/icons";
 import {sizes} from "../../../constants/frontendConstants";
 import AntButton from "../../../components/Buttons/AntButton";
+import StrategyFlowBuilder from "./StrategyFlowBuilder/StrategyFlowBuilder";
 
 
 export function useCurrentTentacleConfig(tentacleType = tentacleConfigType.tentacles) {
@@ -188,6 +189,8 @@ export const displayStyles = {
     sidebar: "sidebar"
 }
 
+export const strategyFlowMakerName = "StrategyFlowMakerMode"
+
 export function generateTradingConfigTabs({
     userInputs,
     setHiddenMetadataColumns,
@@ -202,25 +205,46 @@ export function generateTradingConfigTabs({
     destroyAllEditors(storageName)
 
     // avoid working on original elements as they will be edited for custom user inputs
-    const editedUserInputs = JSON.parse(JSON.stringify(userInputs));
     window[getCustomDisplayAsTabInputsStorage(storageName)] = {}
-    Object.keys(editedUserInputs).forEach(TentacleName => { // _applyCustomPathUserInputs(editedUserInputs, tradingModeName);
-        create_custom_tabs({tentacleInputs: editedUserInputs[TentacleName], tabsData, storageName, displayStyle})
-        _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
-        _createTentacleConfigTab({
-            configTitle: (storageName === "tradingConfig" ? editedUserInputs[TentacleName].tentacle.split(/(?=[A-Z])/).join(" ") : editedUserInputs[TentacleName].tentacle),
-            configName: editedUserInputs[TentacleName].tentacle,
-            config: editedUserInputs[TentacleName].config,
-            schema: editedUserInputs[TentacleName].schema,
-            editorKey: editedUserInputs[TentacleName].tentacle_type,
-            antIcon: editedUserInputs[TentacleName].tentacle_type === "trading_mode" ? "BranchesOutlined" : (editedUserInputs[TentacleName].tentacle_type === "evaluator" ? "ControlOutlined" : undefined),
-            tabsData,
-            storageName,
-            displayStyle
-        });
+    const tentacleNames = Object.keys(userInputs)
+    if (tentacleNames.includes(strategyFlowMakerName)) {
+        tabsData.push({
+            label: replaceUppercaseWithSpace(strategyFlowMakerName),
+            key: strategyFlowMakerName,
+            order: -1,
+            antIcon: "RocketOutlined",
+            content: (
+                <StrategyFlowBuilder
+                    tradingModeKey={strategyFlowMakerName}/>
+            // <JsonEditor schema={schema}
+            //     startval={config}
+            //     editorName={
+            //         `${editorKey}##${configName}`
+            //     }
+            //     {...defaultJsonEditorSettings()}
+            //     display_required_only={true}
+            //     storageName={storageName}/>
+            )
+        })
+    } else {
+        const editedUserInputs = JSON.parse(JSON.stringify(userInputs));
+        tentacleNames.forEach(tentacleName => { // _applyCustomPathUserInputs(editedUserInputs, tradingModeName);
+            create_custom_tabs({tentacleInputs: editedUserInputs[tentacleName], tabsData, storageName, displayStyle})
+            _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
+            _createTentacleConfigTab({
+                configTitle: (storageName === "tradingConfig" ? replaceUppercaseWithSpace(editedUserInputs[tentacleName].tentacle) : editedUserInputs[tentacleName].tentacle),
+                configName: editedUserInputs[tentacleName].tentacle,
+                config: editedUserInputs[tentacleName].config,
+                schema: editedUserInputs[tentacleName].schema,
+                editorKey: editedUserInputs[tentacleName].tentacle_type,
+                antIcon: editedUserInputs[tentacleName].tentacle_type === "trading_mode" ? "BranchesOutlined" : (editedUserInputs[tentacleName].tentacle_type === "evaluator" ? "ControlOutlined" : undefined),
+                tabsData,
+                storageName,
+                displayStyle
+            });
 
-    })
-    tabsData.sort((a, b) => {
+        })
+    } tabsData.sort((a, b) => {
         if (a.order < b.order) {
             return -1;
         }
@@ -236,6 +260,9 @@ export function generateTradingConfigTabs({
     ]
 }
 
+function replaceUppercaseWithSpace(string) {
+    return string.split(/(?=[A-Z])/).join(" ").replace(/_/g, " ")
+}
 function getCustomDisplayAsTabInputsStorage(storageName) {
     return `${storageName}customDisplayAsTabInputs`
 }

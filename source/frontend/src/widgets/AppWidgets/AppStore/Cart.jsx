@@ -18,7 +18,7 @@ export default function AppStoreCartModal({content}) {
     const appStoreCart = useAppStoreCartContext()
     const open = useAppStoreCartIsOpenContext()
     const setOpen = useUpdateAppStoreCartIsOpenContext()
-    return(appStoreCart && Object.keys(appStoreCart) ?. length > 0) && (
+    return(appStoreCart && Object.keys(appStoreCart)?.length > 0) && (
         <ButtonWithModal title={"Shopping Cart"}
             content={content}
             open={open}
@@ -41,7 +41,7 @@ export function AppStoreCart({setIsloading}) {
         const firstAppInPackage = appStoreCart[originPackage][Object.keys(appStoreCart[originPackage])[0]]
         totalPrice += firstAppInPackage.price * 12
         return {
-            ... firstAppInPackage,
+            ...firstAppInPackage,
             key: originPackage,
             price: `${
                 firstAppInPackage.price

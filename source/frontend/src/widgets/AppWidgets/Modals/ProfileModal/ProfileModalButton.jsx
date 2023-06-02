@@ -6,7 +6,7 @@ import { useIsBotOnlineContext, useRestartBot } from "../../../../context/data/I
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import { updateConfig, updateProfileInfo } from "../../../../api/actions";
 import ProfileModal from "./ProfileModal";
-import { getProfileCurrencyUpdate, useCurrenciesLists, useExchangeConfigUpdateContext, useExchangeInfoContext } from "../../../../context/data/BotExchangeInfoProvider";
+import { getProfileCurrencyUpdate, useCurrentCurrencyListContext, useExchangeConfigUpdateContext, useExchangeInfoContext, useUnsavedCurrencyListContext } from "../../../../context/data/BotExchangeInfoProvider";
 import createNotification from "../../../../components/Notifications/Notification";
 
 export default function ProfileModalButton({profile, isCurrentProfile}) {
@@ -20,7 +20,8 @@ export default function ProfileModalButton({profile, isCurrentProfile}) {
     const botDomain = useBotDomainContext()
     const currentProfileTitle = (profile || {})?.profile?.name
     const [newProfileSettings, setNewProfileSettings] = useState(JSON.parse(JSON.stringify(profile || {})))
-    const {currentCurrencyList, unsavedCurrencyList} = useCurrenciesLists()
+    const currentCurrencyList = useCurrentCurrencyListContext()
+    const unsavedCurrencyList = useUnsavedCurrencyListContext()
     const currencyListChanged = JSON.stringify(unsavedCurrencyList) !== JSON.stringify(currentCurrencyList)
     const exchangeConfigUpdate = useExchangeConfigUpdateContext()
     const exchangeConfigUpdateHasChanged = Boolean(exchangeConfigUpdate.global_config && Object.keys(exchangeConfigUpdate.global_config).length)

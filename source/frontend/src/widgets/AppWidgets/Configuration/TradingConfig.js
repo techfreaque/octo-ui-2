@@ -2,18 +2,18 @@ import {useUpdateHiddenBacktestingMetadataColumnsContext} from "../../../context
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import {tentacleConfigType, useFetchCurrentTradingTentaclesConfig, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
 import {AbstractTentaclesConfig} from "./TentaclesConfig";
+import { useMemo } from "react";
 
 export default function TradingConfigTabs({content}) {
     const botInfo = useBotInfoContext()
     const fetchCurrentTentaclesConfig = useFetchCurrentTradingTentaclesConfig()
-    const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+    const currentTentaclesConfig = useCurrentTradingConfig()
     const saveTentaclesConfig = useSaveTentaclesConfig()
     const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext()
     return (
         <AbstractTentaclesConfig botInfo={botInfo}
             fetchCurrentTentaclesConfig={fetchCurrentTentaclesConfig}
-            currentTentaclesTradingConfig={currentTentaclesTradingConfig}
+            currentTentaclesTradingConfig={currentTentaclesConfig}
             saveTentaclesConfig={saveTentaclesConfig}
             setHiddenMetadataColumns={setHiddenMetadataColumns}
             // additionalTabs={
@@ -34,3 +34,10 @@ export default function TradingConfigTabs({content}) {
             content={content}/>
     )
 }
+
+export function useCurrentTradingConfig() {
+    const currentTentaclesConfig = useTentaclesConfigContext()
+    return useMemo(() => {
+        return currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+    }, [currentTentaclesConfig])
+} 

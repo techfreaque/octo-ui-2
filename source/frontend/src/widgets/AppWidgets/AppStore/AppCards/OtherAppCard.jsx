@@ -26,7 +26,7 @@ export default function OtherAppCard({
     const installAnyAppPackage = useInstallAnyAppPackage()
     async function handleDownloadApp(setOpen, otherApp) {
         const theApp = otherApp ? {
-            ... otherApp,
+            ...otherApp,
             bug_fix_version: 0,
             major_version: 0,
             minor_version: 0

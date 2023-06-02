@@ -1,4 +1,3 @@
-
 // change also in pages.css
 export const defaultColors = {
     dark: {
@@ -12,16 +11,17 @@ export const defaultColors = {
         fontActive: "#1e53e5",
         border: "#2a2e39",
         borderActive: "#1e53e5",
-        borderGlow:"#1d1d5f",
+        borderGlow: "#1d1d5f",
         warning: "#faad14",
         success: "#5aef70",
         error: "#ff4d4f",
         primary: "#0d6efd",
+        purple: "#800080",
         black: "#131722",
         white: "#b2b5be",
         // primary: "#722ED1",
         tags: {
-            primary: "blue",
+            primary: "blue"
         },
         candles: {
             wick: {
@@ -52,15 +52,16 @@ export const defaultColors = {
         fontActive: "#1e53e5",
         border: "#0000002B",
         borderActive: "#1e53e5",
-        borderGlow:"#1d1d5f",
+        borderGlow: "#1d1d5f",
         warning: "#fb3",
         success: "#00c851",
         error: "#ff4d4f",
         primary: "#0d6efd",
+        purple: "#800080",
         black: "#131722",
         white: "#131722",
         tags: {
-            primary: "blue",
+            primary: "blue"
         },
         candles: {
             wick: {

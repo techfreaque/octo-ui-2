@@ -51,11 +51,11 @@ export default function AppActions({
                 }
             }>
                 <div style={
-                    (app ?. is_selected ? {
-                        ... buttonStyle,
+                    (app?.is_selected ? {
+                        ...buttonStyle,
                         marginTop: "20px"
                     } : (isMouseHover ? {
-                        ... buttonStyle,
+                        ...buttonStyle,
                         margin: "auto",
                         justifyContent: "center"
                     } : {
@@ -64,7 +64,7 @@ export default function AppActions({
                     }))
                 }>
                     {
-                    (didHoverOnce || app ?. is_selected) && <OnHoverActions handleSelect={handleSelect}
+                    (didHoverOnce || app?.is_selected) && <OnHoverActions handleSelect={handleSelect}
                         setUploadInfo={setUploadInfo}
                         setDownloadInfo={setDownloadInfo}
                         uploadInfo={uploadInfo}
@@ -83,11 +83,11 @@ export default function AppActions({
                         app={app}/>
                 } </div>
                 <div style={
-                    (isMouseHover | app ?. is_selected) ? {
-                        ... buttonStyle,
+                    (isMouseHover | app?.is_selected) ? {
+                        ...buttonStyle,
                         display: "none"
                     } : {
-                        ... buttonStyle,
+                        ...buttonStyle,
                         position: "absolute",
                         top: "-20px",
                         left: "-10px",
@@ -111,7 +111,7 @@ function NoHoverActions({app}) {
             actionText = "Free"
         } else {
             actionText = `Sell ${
-                app ?. categories ?. [0] || "App"
+                app?.categories?.[0] || "App"
             }`
         }
     } else if (app.is_installed) {

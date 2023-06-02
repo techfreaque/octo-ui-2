@@ -1,6 +1,8 @@
 export const projectName = "O UI2"
 export const projectDescription = "OctoBot trading bot frontend"
 export const appStoreDomainProduction = "https://apps.a42.ch"
+export const projectDownloadUrl = "https://github.com/techfreaque/octo-ui-2"
+
 // export const appStoreDomainProduction = "https://apps-dev.a42.ch"
 
 export const isProduction = process.env.NODE_ENV !== "development"

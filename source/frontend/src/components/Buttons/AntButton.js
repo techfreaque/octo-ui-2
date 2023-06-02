@@ -63,7 +63,7 @@ export default function AntButton({
     const _style = block ? { // justifyContent: "center"
     } : {}
     if (buttonType === buttonTypes.black) {
-        _style.color = botColors ?. white
+        _style.color = botColors?.white
     }
     const theme = {
         token: {
@@ -76,7 +76,7 @@ export default function AntButton({
     }
 
     if (selected) {
-        _style.color = botColors ?. fontActive
+        _style.color = botColors?.fontActive
     }
 
     const _spanStyle = spanStyle
@@ -142,7 +142,7 @@ export default function AntButton({
                         marginBottom: "auto",
                         display: "flex",
                         textDecoration: "none",
-                        ... _style,
+                        ..._style,
                         ...style
                     }
             }>
@@ -150,7 +150,7 @@ export default function AntButton({
                 <span style={
                     {
                         margin: "auto",
-                        ... _spanStyle
+                        ..._spanStyle
                     }
                 }>
                     {text}

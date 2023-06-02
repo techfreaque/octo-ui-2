@@ -71,6 +71,7 @@ def register_bot_info_routes(plugin):
         exchange_ids: list = []
         exchange_id = None
         available_api_actions = None
+        installed_blocks_info = None
         symbols = traded_time_frames = activated_evaluators = []
         available_time_frames = []
         strategy_names = []
@@ -122,6 +123,8 @@ def register_bot_info_routes(plugin):
             if exchange_manager.trading_modes:
                 trading_mode = exchange_manager.trading_modes[0]
                 trading_mode_name = trading_mode.get_name()
+                if hasattr(trading_mode, "block_factory"):
+                    installed_blocks_info = trading_mode.block_factory.installed_blocks_info
                 if hasattr(trading_mode, "AVAILABLE_API_ACTIONS"):
                     available_api_actions = trading_mode.AVAILABLE_API_ACTIONS
                 if hasattr(trading_mode, "real_time_strategy_data"):
@@ -194,6 +197,7 @@ def register_bot_info_routes(plugin):
                         for s in symbols
                     ]
                 ),
+                "installed_blocks_info": installed_blocks_info,
                 "should_stop_training": should_stop_training,
                 "any_neural_net_active": any_neural_net_active,
                 "profiles": profiles,

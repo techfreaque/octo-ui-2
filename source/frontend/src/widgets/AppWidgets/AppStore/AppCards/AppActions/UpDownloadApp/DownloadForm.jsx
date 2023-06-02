@@ -75,7 +75,7 @@ function UpdateAvailable() {
 
 function UpToDate(app) {
     const {Title} = Typography;
-    const category = app ?. categories ?. length > 1 ? 'Package' : app ?. categories ?. [0]
+    const category = app?.categories?.length > 1 ? 'Package' : app?.categories?.[0]
     return (
         <div style={
             {
@@ -143,8 +143,8 @@ function AppVersions({app, setDownloadInfo, downloadInfo, handleDownload}) { // 
     const botColors = useBotColorsContext()
 
 
-    const reversedVersions = app.versions ?. reverse()
-    const preSorteddata = reversedVersions ?. filter(version => (downloadInfo ?. visibleVersionTypes ?. includes(version.version_tag))).map(version => {
+    const reversedVersions = app.versions?.reverse()
+    const preSorteddata = reversedVersions?.filter(version => (downloadInfo?.visibleVersionTypes?.includes(version.version_tag))).map(version => {
 
         const title = `${
 
@@ -158,7 +158,7 @@ function AppVersions({app, setDownloadInfo, downloadInfo, handleDownload}) { // 
         } - ${
             app.title
         }`
-        const isSelected = ((version.major_version === downloadInfo ?. major_version) && (version.minor_version === downloadInfo ?. minor_version) && (version.bug_fix_version === downloadInfo ?. bug_fix_version))
+        const isSelected = ((version.major_version === downloadInfo?.major_version) && (version.minor_version === downloadInfo?.minor_version) && (version.bug_fix_version === downloadInfo?.bug_fix_version))
         return {
             key: title,
             major_version: version.major_version,
@@ -170,7 +170,7 @@ function AppVersions({app, setDownloadInfo, downloadInfo, handleDownload}) { // 
                     }
                     style={
                         isSelected ? {
-                            color: botColors ?. fontActive
+                            color: botColors?.fontActive
                         } : {}
                 }>
                     {title} </div>
@@ -183,10 +183,10 @@ function AppVersions({app, setDownloadInfo, downloadInfo, handleDownload}) { // 
             visibleVersionTypes: [
                 "stable_version", 'alpha_version', 'beta_version'
             ],
-            major_version: reversedVersions ?. [0] ?. major_version,
-            minor_version: reversedVersions ?. [0] ?. minor_version,
-            bug_fix_version: reversedVersions ?. [0] ?. bug_fix_version,
-            versionDetailsOpen: reversedVersions ?. length ? true : false
+            major_version: reversedVersions?.[0]?.major_version,
+            minor_version: reversedVersions?.[0]?.minor_version,
+            bug_fix_version: reversedVersions?.[0]?.bug_fix_version,
+            versionDetailsOpen: reversedVersions?.length ? true : false
         }))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [reversedVersions])
@@ -194,8 +194,8 @@ function AppVersions({app, setDownloadInfo, downloadInfo, handleDownload}) { // 
     function handleVersionFilterChange(versionTypeKey) {
         setDownloadInfo(prevDownloadInfo => ({
             ...prevDownloadInfo,
-            visibleVersionTypes: downloadInfo ?. visibleVersionTypes ?. includes(versionTypeKey) ? downloadInfo.visibleVersionTypes.filter(thissVersionKey => (thissVersionKey !== versionTypeKey)) : [
-                ...(downloadInfo ?. visibleVersionTypes || []),
+            visibleVersionTypes: downloadInfo?.visibleVersionTypes?.includes(versionTypeKey) ? downloadInfo.visibleVersionTypes.filter(thissVersionKey => (thissVersionKey !== versionTypeKey)) : [
+                ...(downloadInfo?.visibleVersionTypes || []),
                 versionTypeKey
             ]
         }))
@@ -206,7 +206,7 @@ function AppVersions({app, setDownloadInfo, downloadInfo, handleDownload}) { // 
             versionDetailsOpen: detailsOpen
         }))
     }
-    const selectedVersion = app ?. versions ?. filter(version => (downloadInfo ?. major_version === version.major_version && downloadInfo ?. minor_version === version.minor_version && downloadInfo ?. bug_fix_version === version.bug_fix_version)) ?. [0]
+    const selectedVersion = app?.versions?.filter(version => (downloadInfo?.major_version === version.major_version && downloadInfo?.minor_version === version.minor_version && downloadInfo?.bug_fix_version === version.bug_fix_version))?.[0]
 
 
     return (
@@ -293,7 +293,7 @@ function RequiredPackages({
     const requiredAppsByTentaclePackage = {}
     const requiredApps = [
         app.package_id,
-        ...(selectedVersion ?. requirements ? selectedVersion.requirements : [])
+        ...(selectedVersion?.requirements ? selectedVersion.requirements : [])
     ]
     requiredApps.forEach(requirement => {
         for (const potentialRequiredAppCategory in appStoreData) {
@@ -342,7 +342,7 @@ function RequiredPackage({
 }) {
     const mainPackageApp = requiredAppsByTentaclePackage[requiredAppPackage][0]
     const packageInstalled = requiredAppsByTentaclePackage[requiredAppPackage].every(thisApp => {
-        return thisApp ?. is_installed
+        return thisApp?.is_installed
     })
     return (
         <Grid item
@@ -375,7 +375,7 @@ function RequiredPackage({
                         )
                     }
                         <span> {
-                            mainPackageApp.categories ?. [0] === strategyName ? mainPackageApp.title : requiredAppPackage
+                            mainPackageApp.categories?.[0] === strategyName ? mainPackageApp.title : requiredAppPackage
                         } </span>
                     </Typography.Title>
                 </Tooltip>
@@ -406,11 +406,11 @@ function RequiredPackage({
                 <ul> {
                     requiredAppsByTentaclePackage[requiredAppPackage].map((requiredApp, index) => (
                         <Tooltip title={
-                                requiredApp ?. is_installed ? "The App is already installed" : "The App isn't installed yet"
+                                requiredApp?.is_installed ? "The App is already installed" : "The App isn't installed yet"
                             }
                             key={
                                 `${
-                                    requiredApp ?. package_id
+                                    requiredApp?.package_id
                                 }${index}`
                         }>
                             <div style={
@@ -428,7 +428,7 @@ function RequiredPackage({
                                 }>
                                     {
                                     `${
-                                        requiredApp ?. title
+                                        requiredApp?.title
                                     }`
                                 } </span>
                             </div>
@@ -456,7 +456,7 @@ function DownloadPackageButton({
 }) {
     const addAppStoreCart = useAddToAppStoreCart()
     const checkIsInStoreCart = useIsInAppStoreCart()
-    const isOriginPackage = mainPackageApp ?. origin_package === app.origin_package
+    const isOriginPackage = mainPackageApp?.origin_package === app.origin_package
     const mainPackageInCart = checkIsInStoreCart(mainPackageApp)
     const setOpenBasket = useUpdateAppStoreCartIsOpenContext()
 
@@ -573,7 +573,7 @@ function VersionSelector({
                         }
                         isSelected={false}
                         active={
-                            downloadInfo ?. visibleVersionTypes ?. includes(versionTypeObj.key)
+                            downloadInfo?.visibleVersionTypes?.includes(versionTypeObj.key)
                         }
                         buttonTitle={
                             versionTypeObj.label

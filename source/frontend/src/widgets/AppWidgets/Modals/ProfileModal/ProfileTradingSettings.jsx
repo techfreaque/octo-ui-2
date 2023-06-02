@@ -1,8 +1,6 @@
 import {Grid} from "@mui/material"
 import {AutoComplete, Radio, Typography} from "antd"
 import {useState} from "react"
-import {ProfileRealSettings} from "./ProfileRealTradingSettings"
-import {ProfileSimulatedSettings} from "./ProfileSimulatedTradingSettings"
 
 const tradingTypes = {
     realTrading: {

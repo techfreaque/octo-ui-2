@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import {useEffect} from 'react';
-import {useCurrenciesLists, useExchangeInfoContext, useFetchExchangeInfo, useHandleSettingChange} from '../../../context/data/BotExchangeInfoProvider';
+import {useCurrentCurrencyListContext, useExchangeInfoContext, useFetchExchangeInfo, useHandleSettingChange, useUnsavedCurrencyListContext} from '../../../context/data/BotExchangeInfoProvider';
 import {useIsBotOnlineContext} from '../../../context/data/IsBotOnlineProvider';
 import {useBotDomainContext} from '../../../context/config/BotDomainProvider';
 import {useUpdateVisibleExchangesContext} from '../../../context/config/VisibleExchangesProvider';
@@ -19,7 +19,8 @@ export default function PairsTable() {
     const visiblePairs = useVisiblePairsContext();
     const exchangeInfo = useExchangeInfoContext();
     const handleSettingChange = useHandleSettingChange();
-    const {currentCurrencyList, unsavedCurrencyList} = useCurrenciesLists()
+    const currentCurrencyList = useCurrentCurrencyListContext()
+    const unsavedCurrencyList = useUnsavedCurrencyListContext()
     function handlePairSelection(symbol, exchange) {
         setVisibleExchanges(exchange)
         setVisiblePairs(symbol.replace("/", "|"))
@@ -113,7 +114,7 @@ function getData({
             const availableAfterRestart = unsavedCurrencyList.includes(symbol) && ! isEnabled
 
             preSorteddata.push({
-                key: symbol,
+                key: `${symbol}${exchange}`,
                 exchange,
                 symbolLabel: (isEnabled && ! isSelected) ? (
                     <a href="#"

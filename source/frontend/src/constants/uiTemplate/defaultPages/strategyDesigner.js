@@ -60,6 +60,20 @@ export const defaultStrategyDesignerPageLayout =  {
                             "position": "footerHalf"
                         },
                         {
+                            "antIcon": "BulbOutlined",
+                            "component": "ButtonWithModal",
+                            "content": [
+                                {
+                                    "component": "ProjectHomePage"
+                                }
+                            ],
+                            width:1500,
+                            "displayAsAvatar": false,
+                            "faIcon": "",
+                            "iconOnly": true,
+                            "title": "About the Project"
+                        },
+                        {
                             "component": "PowerMenu"
                         }
                     ]

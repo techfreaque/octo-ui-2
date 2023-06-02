@@ -10,8 +10,7 @@ export default function RadioButtonGroup({rightContent, menuItems, onChange, sel
                 marginRight: "5px"
             }
     }>
-        <Space> 
-        {
+        <Space> {
             menuItems?.map(item => {
                 return (<Tooltip key={
                         item.key
@@ -19,13 +18,18 @@ export default function RadioButtonGroup({rightContent, menuItems, onChange, sel
                     title={
                         item?.toolTipText
                 }>
-                    <AntButton 
-                        selected={selected === item.key}
-                        onClick={() => onChange && onChange(item.key)} 
-                        text = {item.label}
-                        buttonVariant="text"
-                    />
-                     
+                    <div>
+                        <AntButton selected={
+                                selected === item.key
+                            }
+                            onClick={
+                                () => onChange?.(item.key)
+                            }
+                            text={
+                                item.label
+                            }
+                            buttonVariant="text"/>
+                    </div>
                 </Tooltip>)
             })
         }
