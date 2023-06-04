@@ -20,47 +20,203 @@ const nodeDirectionKeysToHandleType = {
 
 const handleStyles = {
     top: {
-        0: {},
+        0: {
+            left: "50%",
+            right: "50%"
+        },
         1: {
-            left: "25%",
+            left: "20%",
             right: "auto"
         },
         2: {
-            right: "25%",
-            left: "auto"
+            right: "20%",
+            left: "auto",
+            marginRight: "-100px"
+
         }
     },
     bottom: {
-        0: {},
+        0: {
+            left: "50%",
+            right: "50%"
+        },
         1: {
-            left: "25%",
+            left: "20%",
             right: "auto"
         },
         2: {
-            right: "25%",
-            left: "auto"
+            right: "20%",
+            left: "auto",
+            marginRight: "-100px"
+
+        },
+        3: {
+            bottom: "25px",
+            top: "auto"
+        },
+        4: {
+            bottom: "25px",
+            top: "auto"
+        },
+        5: {
+            bottom: "130px",
+            top: "auto"
+        },
+        6: {
+            bottom: "130px",
+            top: "auto"
         }
     },
     left: {
-        0: {},
+        0: {
+            top: "50%",
+            bottom: "50%"
+        },
         1: {
-            top: "25%",
+            top: "20%",
             bottom: "auto"
         },
         2: {
-            bottom: "25%",
+            bottom: "20%",
             top: "auto"
         }
     },
     right: {
-        0: {},
+        0: {
+            top: "50%",
+            bottom: "50%"
+        },
         1: {
-            top: "25%",
+            top: "20%",
             bottom: "auto"
         },
         2: {
-            bottom: "25%",
+            bottom: "20%",
             top: "auto"
+        }
+    }
+}
+
+
+const handleLabelLeftStyle = {
+    transform: "rotate(-90deg)",
+    width: "100px",
+    marginTop: "-20px",
+    height: "40px",
+    left: "-50px"
+}
+
+const handleLabelRightStyle = {
+    transform: "rotate(-90deg)",
+    width: "100px",
+    marginTop: "-20px",
+    height: "40px",
+    right: "-50px"
+}
+const handleLabelTopStyle = {
+    width: "100px",
+    marginLeft: "-50px",
+    height: "40px",
+    top: "-30px"
+}
+
+const handleLabelBottomStyle = {
+    width: "100px",
+    marginLeft: "-50px",
+    height: "40px",
+    bottom: "-20px"
+}
+
+const handleLabelStyles = {
+    top: {
+        0: {
+            left: "50%",
+            right: "50%",
+            ...handleLabelTopStyle
+        },
+        1: {
+            left: "20%",
+            right: "auto",
+            ...handleLabelTopStyle
+        },
+        2: {
+            right: "20%",
+            left: "auto",
+            ...handleLabelTopStyle,
+            marginRight: "-50px"
+        }
+    },
+    bottom: {
+        0: {
+            left: "50%",
+            right: "50%",
+            ...handleLabelBottomStyle
+        },
+        1: {
+            left: "20%",
+            right: "auto",
+            ...handleLabelBottomStyle
+        },
+        2: {
+            right: "20%",
+            left: "auto",
+            ...handleLabelBottomStyle,
+            marginRight: "-50px"
+        },
+        3: {
+            bottom: "25px",
+            top: "auto",
+            ...handleLabelLeftStyle
+        },
+        4: {
+            bottom: "25px ",
+            top: "auto",
+            ...handleLabelRightStyle
+        },
+        5: {
+            bottom: "130px",
+            top: "auto",
+            ...handleLabelLeftStyle
+        },
+        6: {
+            bottom: "130px ",
+            top: "auto",
+            ...handleLabelRightStyle
+        }
+    },
+    left: {
+        0: {
+            top: "50%",
+            bottom: "50%",
+            ...handleLabelLeftStyle
+        },
+        1: {
+            top: "20%",
+            bottom: "auto",
+            ...handleLabelLeftStyle
+        },
+        2: {
+            bottom: "20%",
+            top: "auto",
+            ...handleLabelLeftStyle
+        }
+    },
+    right: {
+        0: {
+            top: "50%",
+            bottom: "50%",
+            ...handleLabelRightStyle
+
+        },
+        1: {
+            top: "20%",
+            bottom: "auto",
+            ...handleLabelRightStyle
+        },
+        2: {
+            bottom: "20%",
+            top: "auto",
+            ...handleLabelRightStyle
         }
     }
 }
@@ -71,37 +227,43 @@ export default function StrategyBlockNode(props) {
         const ioNodes = {}
         ioSchema && Object.keys(ioSchema).forEach(nodeKey => {
             const node = ioSchema[nodeKey]
+            if (! node?.options) {
+                return;
+            }
             if (! ioNodes[node?.options?.side]) {
                 ioNodes[node?.options?.side] = []
             }
-            ioNodes[node?.options?.side].push (
+            const id = `${
+                node?.options?.io_node_type
+            }${
+                node?.options?.io_node_id
+            }`
+            ioNodes[node.options.side].push (
                 <NodeHandle direction={
-                        nodeDirectionKeysToHandleType?.[node?.options?.direction]
+                        nodeDirectionKeysToHandleType[node.options.direction]
+                    }
+                    handleDescriptionStyle={
+                        handleLabelStyles[node.options.side]?.[ioNodes[node.options.side]?.length]
                     }
                     color={
-                        node?.options?.color
+                        node.options.color
                     }
                     style={
-                        handleStyles?.[node?.options?.side]?.[ioNodes[node?.options?.side]?.length]
+                        handleStyles[node.options.side]?.[ioNodes[node.options.side]?.length]
                     }
                     position={
-                        nodeSideKeysToClass[node?.options?.side]
+                        nodeSideKeysToClass[node.options.side]
                     }
                     title={
-                        node?.options?.title
+                        node.options.title
                     }
                     type={
-                        node?.options?.io_node_type
+                        node.options.io_node_type
                     }
-                    id={
-                        `${
-                            node?.options?.io_node_type
-                        }${
-                            node?.options?.io_node_id
-                        }`
-                    }
+                    key={id}
+                    id={id}
                     isConnectable={
-                        props.isConnectable
+                        node.options.is_connectable
                     }/>
             )
         })
@@ -130,12 +292,11 @@ export default function StrategyBlockNode(props) {
             } </NodeContainer>
         )
     }, [
-        config,
-        ioSchema,
+        JSON.stringify(config),
+        JSON.stringify(ioSchema),
         props.id,
-        props.isConnectable,
         props.selected,
-        schema
+        JSON.stringify(schema)
     ])
 }
 

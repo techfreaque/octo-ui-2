@@ -67,6 +67,7 @@ export const backendRoutes = {
     loginBot: "/login",
 
     updateTentaclesConfig: "/config_tentacles?action=update&reload=true",
+    updateTentaclesConfigAndReRun: "/config_tentacles?action=update&reload_scripts=true",
     updateTentaclesConfigNoReload: "/config_tentacles?action=update",
     resetTentaclesConfig: "/config_tentacle?action=factory_reset&reload=true",
     backtesting: "/backtesting",

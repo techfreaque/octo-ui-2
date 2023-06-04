@@ -4,19 +4,26 @@ import Plot from 'react-plotly.js';
 export const allChartLocations = ["main-chart", "sub-chart"]
 
 export default function PlotlyChart({chartLocation, setLayouts, layout, chartData}) {
+    return useMemo(() => {
         const divId = getDivId(chartLocation)
-            return useMemo(() => (chartData && layout && <Plot
-            data={chartData}
-            layout={{  ...layout, }}
-            config={getPlotlyConfig()}
-            divId={divId}
-            onRelayout={(chart) => relayout(chart, chartLocation, setLayouts)} />),
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-        [chartData, layout, divId, chartLocation]
-    )
+        return chartData && layout && (
+            <Plot data={chartData}
+                layout={layout}
+                config={
+                    getPlotlyConfig()
+                }
+                divId={divId}
+                onRelayout={
+                    (chart) => {
+                        relayout(chart, chartLocation, setLayouts)
+                    }
+                }/>
+        )
+    },
+        [chartData, chartLocation, layout, setLayouts])
 }
 
-function relayout (ed, chartLocation, setLayouts) {
+function relayout(ed, chartLocation, setLayouts) {
     if (Object.entries(ed).length === 0
     // || Object.keys(ed)[0].includes("yaxis")
     ) {
@@ -29,7 +36,7 @@ function relayout (ed, chartLocation, setLayouts) {
             const chartDiv = document.getElementById(getDivId(otherChartLocation));
             if (chartDiv) {
                 const newLayout = {
-                    ...chartDiv.layout
+                    ... chartDiv.layout
                 }
                 const x = newLayout.xaxis
                 const y = newLayout.yaxis
@@ -138,11 +145,11 @@ const yAutorange = 'yaxis.autorange'
 const yRange0 = 'yaxis.range[0]'
 // const yRange1 = 'yaxis.range[1]'
 
-export function getDivId (chartLocation) {
+export function getDivId(chartLocation) {
     return "plotly" + chartLocation
 }
 
-export function getPlotlyConfig () {
+export function getPlotlyConfig() {
     return {
         scrollZoom: true,
         modeBarButtonsToRemove: [
@@ -154,7 +161,7 @@ export function getPlotlyConfig () {
     };
 }
 
-export function enableAxisSelect () { // allow moving chart for selected y scale layer
+export function enableAxisSelect() { // allow moving chart for selected y scale layer
     const yaxis_resize_layers = document.getElementsByClassName('nsdrag drag cursor-ns-resize');
     Object.values(yaxis_resize_layers).forEach((yaxis_drag_layer) => {
         if (yaxis_drag_layer.getAttribute('listener') !== 'true') {

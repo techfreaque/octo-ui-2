@@ -1,10 +1,12 @@
 import {useMemo} from 'react';
-import {SplitResizableContent} from '../../../LayoutWidgets/SplitMainContent';
+import {getSplitterClasses} from '../../../LayoutWidgets/SplitMainContent';
 import PlotlyChart, {allChartLocations, enableAxisSelect} from './Plotly';
-import {useEffect, useState} from 'react';
-import {useRef} from 'react';
+import {useEffect} from 'react';
 import "./crosshair.css"
-import Crosshair, { handleCrosshairOnMouseEnter, handleCrosshairOnMouseLeave } from './Crosshair';
+import Crosshair, {handleCrosshairOnMouseEnter, handleCrosshairOnMouseLeave} from './Crosshair';
+import useMeasure from 'react-use-measure';
+import Splitter, {SplitDirection} from '@devbookhq/splitter'
+import {useColorModeContext} from '../../../../context/config/ColorModeProvider';
 
 
 export default function PlotlyDualCharts({
@@ -12,118 +14,148 @@ export default function PlotlyDualCharts({
     charts,
     setLayouts,
     layouts
-}) {
-    const [splitChartsPercent, setSplitChartsPercent] = useState({percent: 60, shouldUpdate: false})
-    const mainRef = useRef()
-    const subRef = useRef()
-    const activeChartLocations = charts ? Object.keys(charts).filter(chart=>(allChartLocations.includes(chart))) : []
-    const chartExist = activeChartLocations.length > 0
-    const subChartExist = activeChartLocations.length > 1
-
-    useEffect(() => {
-        // main chart
-        updateChartDimensions(activeChartLocations, chartLocations[0], setLayouts, mainRef?.current?.clientHeight,)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        mainRef?.current?.clientHeight,
-        splitChartsPercent
-    ])
-    useEffect(() => {
-        // sub chart
-        updateChartDimensions(activeChartLocations, chartLocations[1], setLayouts, subRef?.current?.clientHeight)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        subRef?.current?.clientHeight,
-        splitChartsPercent
-    ])
+}) { 
     useEffect(() => {
         enableAxisSelect()
     }, [charts]);
 
+    return useMemo(() => {
+        const activeChartLocations = charts ? Object.keys(charts).filter(chart => (allChartLocations.includes(chart))) : []
+        const chartExist = activeChartLocations.length > 0
+        const subChartExist = activeChartLocations.length > 1
+        return (
+            <> {
+                !window.matchMedia("(pointer: coarse)").matches && (
+                    <Crosshair/>)
+            }
+                {
+                subChartExist ? (
+                    <DualChart chartLocations={chartLocations}
+                        setLayouts={setLayouts}
+                        layouts={layouts}
+                        charts={charts}/>
+                ) : chartExist && (
+                    <div style={
+                        {
+                            height: "100%",
+                            width: "100%"
+                        }
+                    }>
+                        <Chart chartLocations={
+                                chartLocations[0]
+                            }
+                            setLayouts={setLayouts}
+                            layout={
+                                layouts[chartLocations[0]]
+                            }
+                            chart={
+                                charts[chartLocations[0]]
+                            }/></div>
+                )
+            } </>
+        )
+    }, [charts, chartLocations, setLayouts, layouts])
+}
 
-    return useMemo(() =>  (
-        <>
-           {!window.matchMedia("(pointer: coarse)").matches && (<Crosshair/>)}
-            {
-                subChartExist?(<SplitResizableContent setPanelPercent = { setSplitChartsPercent }
-            panelPercent={splitChartsPercent}
-            minHeights="0, 0"
-            upperContent={
-                (<div style={
+
+function DualChart({chartLocations, setLayouts, layouts, charts}) {
+    const botColorMode = useColorModeContext();
+    return useMemo(() => {
+        const gutterClassName = Math.random().toString(36).slice(2, 7)
+        return (
+            <Splitter direction={
+                    SplitDirection.Vertical
+                }
+                initialSizes={
+                    [60, 40]
+                }
+                minHeights={[0, 0]}
+                classes={
+                    getSplitterClasses(botColorMode)
+                }
+                gutterClassName={gutterClassName}>
+                <div style={
                         {
                             height: "100%",
                             width: "100%"
                         }
                     }
                     onMouseEnter={handleCrosshairOnMouseEnter}
-                    onMouseLeave={handleCrosshairOnMouseLeave}
-                    ref={mainRef}>
-                    <PlotlyChart chartLocation={
+                    onMouseLeave={handleCrosshairOnMouseLeave}>
+                    <Chart chartLocation={
                             chartLocations[0]
                         }
                         setLayouts={setLayouts}
                         layout={
                             layouts[chartLocations[0]]
                         }
-                        chartData={
+                        chart={
                             charts[chartLocations[0]]
                         }/>
-                </div>)
-            }
-            lowerContent={
-                (<div style={
+                </div>
+                <div style={
                         {
                             height: "100%",
                             width: "100%"
                         }
                     }
                     onMouseEnter={handleCrosshairOnMouseEnter}
-                    onMouseLeave={handleCrosshairOnMouseLeave}
-                    ref={subRef}>
-                    <PlotlyChart chartLocation={
+                    onMouseLeave={handleCrosshairOnMouseLeave}>
+                    <Chart chartLocation={
                             chartLocations[1]
                         }
                         setLayouts={setLayouts}
                         layout={
                             layouts[chartLocations[1]]
                         }
-                        chartData={
+                        chart={
                             charts[chartLocations[1]]
-                        }/></div>)
-            }/>) : chartExist && (<div style={
+                        }/>
+                </div>
+            </Splitter>
+        )
+    }, [
+        botColorMode,
+        chartLocations,
+        charts,
+        layouts,
+        setLayouts
+    ])
+
+}
+
+function Chart({chartLocation, setLayouts, layout, chart}) {
+    const [containerRef, {
+            width,
+            height
+        }
+    ] = useMeasure();
+    return useMemo(() => (
+        <div  style={
                 {
                     height: "100%",
                     width: "100%"
                 }
             }
-            ref={mainRef}>
-            <PlotlyChart chartLocation={
-                    chartLocations[0]
-                }
+            ref={containerRef}>
+            <PlotlyChart chartLocation={chartLocation}
                 setLayouts={setLayouts}
                 layout={
-                    layouts[chartLocations[0]]
+                    {
+                        ...layout,
+                        width,
+                        height
+                    }
                 }
-                chartData={
-                    charts[chartLocations[0]]
-                } /></div>)}
-            </>
-            ),
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-        [charts, layouts, chartLocations])
-}
-
-function updateChartDimensions(activeChartLocations, chartLocation, setLayouts, height) {
-    // update layout when dimensions change
-    if (activeChartLocations.includes(chartLocation) && height) {
-        setLayouts[chartLocation](prevLayout => {
-            const newLayout = {
-                ...prevLayout
-            }
-            newLayout.height = height
-            newLayout.width = window.innerWidth
-            return newLayout
-        })
-    }
-
+                chartData={chart}/>
+        </div>
+    ), [
+        chart,
+        chartLocation,
+        containerRef,
+        height,
+        layout,
+        setLayouts,
+        width
+    ])
 }

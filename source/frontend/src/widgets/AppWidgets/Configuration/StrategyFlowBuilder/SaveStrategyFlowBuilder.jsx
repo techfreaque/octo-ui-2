@@ -1,5 +1,5 @@
 import {Tooltip} from "antd";
-import {SaveOutlined} from "@ant-design/icons";
+import {ReloadOutlined} from "@ant-design/icons";
 import {useSaveTentaclesConfig} from "../../../../context/config/TentaclesConfigProvider";
 import {useIsBotOnlineContext} from "../../../../context/data/IsBotOnlineProvider";
 import AntButton from "../../../../components/Buttons/AntButton";
@@ -34,18 +34,15 @@ export default function SaveStrategyFlowBuilderSettings({
                                 config,
                                 nodes,
                                 edges,
-                                setIsSaving
+                                setIsSaving,
+                                reloadPlots: true,
+                                successNotification: false
                             })
                         }
                         disabled={
                             isSaving || ! isOnline
                         }
-                        // buttonVariant="text"
-                        antIconComponent={SaveOutlined}
-                        // style={
-                        //     {fontSize: '22px'}
-                        // }
-                    >Save Strategy Flow Settings</AntButton>
+                        antIconComponent={ReloadOutlined}>Reload Plots</AntButton>
                 </div>
             </Tooltip>
         </div>
@@ -53,7 +50,7 @@ export default function SaveStrategyFlowBuilderSettings({
 }
 
 export function getNodeEditor(nodeId) {
-    return window ?. [`$${flowBuilderStorageKey}`] ?. [nodeId]
+    return window?.[`$${flowBuilderStorageKey}`]?.[nodeId]
 }
 
 export function useSaveFlowBuilderSettings() {
@@ -63,7 +60,9 @@ export function useSaveFlowBuilderSettings() {
         config,
         nodes,
         edges,
-        setIsSaving
+        setIsSaving,
+        reloadPlots,
+        successNotification = false
     }) => {
         const newConfigs = {}
         newConfigs[tradingModeKey] = {
@@ -71,13 +70,13 @@ export function useSaveFlowBuilderSettings() {
         }
         newConfigs[tradingModeKey].nodes = nodes.reduce((dict, node, index) => {
             const editor = getNodeEditor(node.id)
-            const settings = editor ?. getValue() || {};
+            const settings = editor?.getValue() || {};
             return(dict[node.id] = {
                 ...node,
                 [getNodeConfigKey(node.id)]: settings
             }, dict)
         }, {});
         newConfigs[tradingModeKey].edges = edges
-        saveTentaclesConfig(newConfigs, setIsSaving, true, true, false)
+        saveTentaclesConfig(newConfigs, setIsSaving, reloadPlots, true, false, successNotification)
     }, [saveTentaclesConfig])
 }

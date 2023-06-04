@@ -1,4 +1,4 @@
-import {useCallback, useRef, useState} from "react";
+import {useCallback, useMemo, useRef, useState} from "react";
 import {
     Controls,
     ReactFlow,
@@ -10,15 +10,13 @@ import {
 } from "reactflow";
 import "reactflow/dist/style.css";
 import "./strategyFlowBuilder.css";
-import {useBotColorsContext} from "../../../../context/config/BotColorsProvider";
-import SaveStrategyFlowBuilderSettings, {useSaveFlowBuilderSettings} from "./SaveStrategyFlowBuilder";
-import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
-import {Tooltip} from "antd";
+import {useSaveFlowBuilderSettings} from "./SaveStrategyFlowBuilder";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
 import StrategyBlockNode from "./CustomNodes/StrategyBlockNode";
-import { BuildingBlocksSidebar } from "./BuildingBlocksSideBar";
+import {BuildingBlocksSidebar} from "./BuildingBlocksSideBar";
 
-const getId = () => Date.now().toString(36) + Math.random().toString(36).substring(2);
+const getId = () => Date.now().toString(36) + Math.random().toString(36).substring(2)
+
 export default function StrategyFlowBuilder({tradingModeKey}) {
     return (
         <ReactFlowProvider>
@@ -27,21 +25,20 @@ export default function StrategyFlowBuilder({tradingModeKey}) {
     )
 }
 
-const nodeTypes = {
-    StrategyBlockNode
-};
-
 
 function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
     const [isSaving, setIsSaving] = useState(false);
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
-    const nodesConfig = currentTentaclesTradingConfig ?. [tradingModeKey] ?. config
+    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+    const nodesConfig = currentTentaclesTradingConfig?.[tradingModeKey]?.config
     const reactFlowWrapper = useRef(null);
-    const [nodes, setNodes, onNodesChange] = useNodesState((nodesConfig ?. nodes && Object.values(nodesConfig ?. nodes)) || []);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(nodesConfig ?. edges || []);
+    const [nodes, setNodes, onNodesChange] = useNodesState((nodesConfig?.nodes && Object.values(nodesConfig?.nodes)) || []);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(nodesConfig?.edges || []);
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const handleUserInputSave = useSaveFlowBuilderSettings()
+    // const getClosestEdge = useGetClosestEdge()
+
+    const nodeTypes = useMemo(() => ({StrategyBlockNode}), [])
 
     const onConnect = useCallback((params) => {
         setEdges((eds) => addEdge(params, eds))
@@ -53,16 +50,8 @@ function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
         event.dataTransfer.dropEffect = "move";
     }, []);
 
-    // const onSave = useCallback(() => {
-    //     if (reactFlowInstance) {
-    //         const flow = reactFlowInstance.toObject();
-    //         localStorage.setItem(flowKey, JSON.stringify(flow));
-    //     }
-    // }, [reactFlowInstance]);
-
     const onDrop = useCallback((event) => {
         event.preventDefault();
-
         const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
         const {nodesData, nodeType} = JSON.parse(event.dataTransfer.getData("application/reactflow"));
 
@@ -92,7 +81,8 @@ function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
             config: currentTentaclesTradingConfig,
             nodes: uptoDateNodes,
             edges,
-            setIsSaving
+            setIsSaving,
+            reloadPlots: false
         })
     }, [
         currentTentaclesTradingConfig,
@@ -102,39 +92,42 @@ function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
         setNodes,
         tradingModeKey
     ]);
-    // const {setViewport} = useReactFlow();
 
-    // const onRestore = useCallback(() => {
-    //     const restoreFlow = async () => {
-    //         const flow = JSON.parse(localStorage.getItem(flowKey));
-
-    //         if (flow) {
-    //             const {
-    //                 x = 0,
-    //                 y = 0,
-    //                 zoom = 1
-    //             } = flow.viewport;
-    //             if (flow.nodes.length) {
-    //                 let nope
-    //                 [nope, id] = flow.nodes[flow.nodes.length - 1].id.split("_");
-    //                 id = Number(id + 1)
-    //             }
-    //             setNodes(flow.nodes || []);
-    //             setEdges(flow.edges || []);
-    //             setViewport({x, y, zoom});
+    // // auto connect to closest node
+    // const onNodeDragStop = useCallback((_, node) => {
+    //     const closeEdge = getClosestEdge(node);
+    //     closeEdge && setEdges((es) => {
+    //         const nextEdges = es.filter((e) => e.className !== 'temp');
+    //         if (closeEdge) {
+    //             nextEdges.push(closeEdge);
     //         }
-    //     };
+    //         return nextEdges;
+    //     });
+    // }, [getClosestEdge, setEdges]);
 
-    //     restoreFlow();
-    // }, [setNodes, setViewport]);
+    // // show connect to closest node
+    // const onNodeDrag = useCallback((_, node) => {
+    //     const closeEdge = getClosestEdge(node);
+    //     closeEdge && setEdges((es) => {
+    //         const nextEdges = es.filter((e) => e.className !== 'temp');
+    //         if (closeEdge && ! nextEdges.find((ne) => ne.source === closeEdge.source && ne.target === closeEdge.target)) {
+    //             closeEdge.className = 'temp';
+    //             nextEdges.push(closeEdge);
+    //         }
 
-    // useEffect(() => {
-    //     onRestore()
-    // }, [])
+    //         return nextEdges;
+    //     });
+    // }, [getClosestEdge, setEdges]);
 
     return currentTentaclesTradingConfig && (
         <div className="dndflow">
             <div className="reactflow-wrapper"
+                style={
+                    {
+                        // transform: "scale(0.5)",
+                        // transformOrigin: "0% 0% 0px"
+                    }
+                }
                 ref={reactFlowWrapper}>
                 <ReactFlow nodes={nodes}
                     edges={edges}
@@ -145,7 +138,7 @@ function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
                     onDrop={onDrop}
                     onDragOver={onDragOver}
                     fitView
-                    maxZoom={500}
+                    maxZoom={5000}
                     nodeTypes={nodeTypes}>
                     <Controls/>
                 </ReactFlow>
@@ -159,3 +152,40 @@ function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
         </div>
     );
 }
+
+// function useGetClosestEdge() {
+//     const store = useStoreApi();
+//     return useCallback((node) => {
+//         const MIN_DISTANCE = 400
+//         const {nodeInternals} = store.getState();
+//         const storeNodes = Array.from(nodeInternals.values());
+//         const closestNode = storeNodes.reduce((res, n) => {
+//             if (n.id !== node.id) {
+//                 const dx = n.positionAbsolute.x - node.positionAbsolute.x;
+//                 const dy = n.positionAbsolute.y - node.positionAbsolute.y;
+//                 const d = Math.sqrt(dx * dx + dy * dy);
+//                 if (d < res.distance && d < MIN_DISTANCE) {
+//                     res.distance = d;
+//                     res.node = n;
+//                 }
+//             }
+//             return res;
+//         }, {
+//             distance: Number.MAX_VALUE,
+//             node: null
+//         });
+//         if (! closestNode.node) {
+//             return null;
+//         }
+//         const closeNodeIsSource = closestNode.node.positionAbsolute.x < node.positionAbsolute.x;
+//         return {
+//                 id: `${
+//                 node.id
+//             }-${
+//                 closestNode.node.id
+//             }`,
+//             source: closeNodeIsSource ? closestNode.node.id : node.id,
+//             target: closeNodeIsSource ? node.id : closestNode.node.id
+//         };
+//     }, [store]);
+// }
