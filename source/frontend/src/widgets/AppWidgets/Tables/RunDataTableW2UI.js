@@ -51,7 +51,7 @@ function NoBacktestingData({fetchBacktestingRunData}) {
     return (
         <>
             <h4>
-                No backtests finished yet. Once a backtest is finished, you can select it here to analyze the results.
+                No backtests finished yet. Once a backtest is finished, you can select them here to analyze the results.
             </h4>
             <h4>
                 <Button onClick={fetchBacktestingRunData}>

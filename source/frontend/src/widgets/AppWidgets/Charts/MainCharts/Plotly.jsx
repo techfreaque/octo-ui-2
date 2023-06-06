@@ -8,7 +8,7 @@ export default function PlotlyChart({chartLocation, setLayouts, layout, chartDat
         const divId = getDivId(chartLocation)
         return chartData && layout && (
             <Plot data={chartData}
-                layout={layout}
+                layout={JSON.parse(JSON.stringify(layout))}
                 config={
                     getPlotlyConfig()
                 }
@@ -20,23 +20,22 @@ export default function PlotlyChart({chartLocation, setLayouts, layout, chartDat
                 }/>
         )
     },
-        [chartData, chartLocation, layout, setLayouts])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+        [chartData, chartLocation, JSON.stringify(layout)])
 }
 
 function relayout(ed, chartLocation, setLayouts) {
     if (Object.entries(ed).length === 0
-    // || Object.keys(ed)[0].includes("yaxis")
     ) {
         return;
     }
-    // setLayouts(prevLayout => {
     const thisChartDiv = document.getElementById(getDivId(chartLocation));
     Object.keys(setLayouts).forEach((otherChartLocation) => {
-        if (otherChartLocation !== chartLocation) {
+        if (otherChartLocation !== chartLocation && allChartLocations.includes(otherChartLocation) ) {
             const chartDiv = document.getElementById(getDivId(otherChartLocation));
             if (chartDiv) {
                 const newLayout = {
-                    ... chartDiv.layout
+                    ...chartDiv.layout
                 }
                 const x = newLayout.xaxis
                 const y = newLayout.yaxis
@@ -72,7 +71,7 @@ function relayout(ed, chartLocation, setLayouts) {
 
                     setLayouts[otherChartLocation](newLayout)
                 } else if (ed[xRange0]) {
-                    if (otherChartLocation !== chartLocation) {}x.autorange = false
+                    x.autorange = false
                     x.range = []
                     x.range[0] = ed[xRange0];
                     x.range[1] = ed[xRange1]
@@ -118,24 +117,9 @@ function relayout(ed, chartLocation, setLayouts) {
                 }
             }
         }
-        // if (otherChartLocation !== chartLocation) {
-        //     //     //     // TODO remove when range isnt messed up anymore
 
-        //     //     //     // y.range[0] = chartDiv.layout.yaxis.range[0]
-        //     //     //     // y.range[1] = chartDiv.layout.yaxis.range[1]
-        //     //     //     y.autorange = chartDiv.layout.yaxis.autorange
-
-        //     y.autorange = true
-        //     y.range[0] = undefined
-        //     y.range[1] = undefined
-        //     //     delete y.range
-        // } else {
-        //     y.autorange = false
-
-        // }
     });
-    // return newLayouts
-    // })
+
 }
 
 const xAutorange = 'xaxis.autorange'

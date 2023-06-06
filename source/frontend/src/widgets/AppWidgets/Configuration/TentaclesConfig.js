@@ -7,13 +7,13 @@ import createNotification from "../../../components/Notifications/Notification";
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
-import JsonEditor from "@techfreaque/json-editor-react";
 import {tentacleConfigType, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
 import {useFetchTentaclesConfig} from "../../../context/config/TentaclesConfigProvider";
 import {SaveOutlined} from "@ant-design/icons";
 import {sizes} from "../../../constants/frontendConstants";
 import AntButton from "../../../components/Buttons/AntButton";
 import StrategyFlowBuilder from "./StrategyFlowBuilder/StrategyFlowBuilder";
+import JsonEditor from "@techfreaque/json-editor-react";
 
 
 export function useCurrentTentacleConfig(tentacleType = tentacleConfigType.tentacles) {

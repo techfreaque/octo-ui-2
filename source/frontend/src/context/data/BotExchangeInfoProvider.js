@@ -181,12 +181,12 @@ export const BotExchangeInfoProvider = ({children}) => {
     const [newConfigExchanges, setNewConfigExchanges] = useState({})
 
     useEffect(() => {
-        const {currencyList: _currentCurrencyList, currencySettings: currentCurrencySettings} = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
+        const {currencySettings: currentCurrencySettings} = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
         const currentCurrencySettingsJson = JSON.stringify(currentCurrencySettings)
         setToSaveCurrencySettings(JSON.parse(currentCurrencySettingsJson));
     }, [currencySettings, exchangeInfo])
     useEffect(() => {
-        const {currencyList: _currentCurrencyList, currencySettings: currentCurrencySettings} = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
+        const {currencyList: _currentCurrencyList} = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo)
         const {currencyList: _unsavedCurrencyList} = convertSymbolSettingsToNewFormat(toSaveCurrencySettings, exchangeInfo)
         const currentCurrencyListJson = JSON.stringify(_currentCurrencyList)
         const unsavedCurrencyListJson = JSON.stringify(_unsavedCurrencyList)

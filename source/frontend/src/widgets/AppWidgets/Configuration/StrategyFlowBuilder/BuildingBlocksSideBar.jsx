@@ -108,6 +108,7 @@ function BlockTemplate({ blocks, onDragStart, blockType, searchText }) {
 
                 return (
                     <Tooltip key={blockName}
+                        placement={"left"}
                         title={
                             block.description
                         }>

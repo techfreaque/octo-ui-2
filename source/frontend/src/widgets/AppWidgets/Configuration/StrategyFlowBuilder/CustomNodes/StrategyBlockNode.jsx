@@ -291,13 +291,8 @@ export default function StrategyBlockNode(props) {
                 ioNodes?.bottom
             } </NodeContainer>
         )
-    }, [
-        JSON.stringify(config),
-        JSON.stringify(ioSchema),
-        props.id,
-        props.selected,
-        JSON.stringify(schema)
-    ])
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [JSON.stringify(config), JSON.stringify(ioSchema), props.id, props.selected, JSON.stringify(schema)])
 }
 
 export function useCurrentNodeSchema({nodeId}) {

@@ -1,4 +1,3 @@
-import {Tooltip} from "antd";
 import {ReloadOutlined} from "@ant-design/icons";
 import {useSaveTentaclesConfig} from "../../../../context/config/TentaclesConfigProvider";
 import {useIsBotOnlineContext} from "../../../../context/data/IsBotOnlineProvider";
@@ -24,9 +23,7 @@ export default function SaveStrategyFlowBuilderSettings({
                 marginRight: "5px"
             }
         }>
-            <Tooltip placement="topRight"
-                title={"Save Strategy Mode Settings"}
-                arrow={false}>
+
                 <div>
                     <AntButton onClick={
                             () => handleUserInputSave({
@@ -36,15 +33,17 @@ export default function SaveStrategyFlowBuilderSettings({
                                 edges,
                                 setIsSaving,
                                 reloadPlots: true,
-                                successNotification: false
+                                successNotification: true
                             })
                         }
                         disabled={
                             isSaving || ! isOnline
                         }
-                        antIconComponent={ReloadOutlined}>Reload Plots</AntButton>
+                        icon={(<span style={{marginRight: "5px"}}>
+                        <ReloadOutlined spin={isSaving || ! isOnline} />
+                        </span>
+                        )}>Reload Plots</AntButton>
                 </div>
-            </Tooltip>
         </div>
     )
 }
@@ -64,6 +63,7 @@ export function useSaveFlowBuilderSettings() {
         reloadPlots,
         successNotification = false
     }) => {
+        setIsSaving?.(true)
         const newConfigs = {}
         newConfigs[tradingModeKey] = {
             ...config[tradingModeKey].config

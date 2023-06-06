@@ -119,7 +119,8 @@ async def _get_cached_values_to_display(
                         )
                         if plotted_displayed_value is None:
                             logger.error(
-                                f"Impossible to plot {cache_displayed_value}: "
+                                f"Impossible to plot {cache_displayed_value} "
+                                f"/ {cached_value_metadata.get('title', '')} : "
                                 "unset y axis value"
                             )
                             return []

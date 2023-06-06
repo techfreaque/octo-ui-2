@@ -17,6 +17,11 @@ try:
 except (ModuleNotFoundError, ImportError):
     network_utils = None
 
+try:
+    import tentacles.StrategyBlocks.EvaluatorBlock.neural_net_classification.neural_nets.network_utils as block_network_utils
+except (ImportError, ModuleNotFoundError):
+    block_network_utils = None
+
 
 def register_daemons_routes(plugin):
     if network_utils:
@@ -39,7 +44,12 @@ def register_daemons_routes(plugin):
                 return _stop_training()
 
         def _stop_training():
-            network_utils.SHOULD_STOP_TRAINING = True
+            if network_utils:
+                network_utils.SHOULD_STOP_TRAINING = True
+
+            if block_network_utils:
+                block_network_utils.SHOULD_STOP_TRAINING = True
+
             return basic_utils.get_response(success=True)
 
         route = "/daemons/reset"

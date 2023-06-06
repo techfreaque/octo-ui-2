@@ -1,4 +1,3 @@
-import JsonEditor from "@techfreaque/json-editor-react";
 import defaultJsonEditorSettings from "../../../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import {flowBuilderStorageKey} from "./StrategyBlockNode";
 import {
@@ -14,6 +13,7 @@ import {useMemo} from "react";
 import {useSaveFlowBuilderSettings} from "../SaveStrategyFlowBuilder";
 import {strategyFlowMakerName} from "../../TentaclesConfig";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../../context/config/TentaclesConfigProvider";
+import JsonEditor from "@techfreaque/json-editor-react";
 
 export function NodeContainer({children, color, selected}) {
     const botColors = useBotColorsContext();
@@ -52,12 +52,9 @@ export function NodeEditor({schema, config, nodeId}) {
                 // setIsSaving
             })
         }
-    }, [config, handleUserInputSave, store])
+    }, [currentTentaclesTradingConfig, handleUserInputSave, store])
 
     return useMemo(() => {
-        const editors = window ?. [`$${flowBuilderStorageKey}`]
-        editors ?. [nodeId] ?. destroy()
-        delete editors ?. [nodeId]
         return schema && (
             <div>
                 <JsonEditor schema={schema}

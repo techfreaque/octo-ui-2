@@ -25,7 +25,6 @@ export default function StrategyFlowBuilder({tradingModeKey}) {
     )
 }
 
-
 function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
     const [isSaving, setIsSaving] = useState(false);
     const currentTentaclesConfig = useTentaclesConfigContext()
@@ -41,9 +40,19 @@ function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
     const nodeTypes = useMemo(() => ({StrategyBlockNode}), [])
 
     const onConnect = useCallback((params) => {
-        setEdges((eds) => addEdge(params, eds))
-        // onSave()
-    }, [setEdges]);
+        let uptoDateEdges
+        setEdges((eds) => {
+            uptoDateEdges = addEdge(params, eds)
+            return uptoDateEdges
+        })
+        handleUserInputSave({
+            tradingModeKey,
+            config: currentTentaclesTradingConfig,
+            nodes,
+            edges: uptoDateEdges,
+            reloadPlots: false
+        })
+    }, [currentTentaclesTradingConfig, handleUserInputSave, nodes, setEdges, tradingModeKey]);
 
     const onDragOver = useCallback((event) => {
         event.preventDefault();
@@ -81,7 +90,6 @@ function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
             config: currentTentaclesTradingConfig,
             nodes: uptoDateNodes,
             edges,
-            setIsSaving,
             reloadPlots: false
         })
     }, [

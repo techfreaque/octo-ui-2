@@ -1,7 +1,6 @@
-import {CheckCircleFilled, ExclamationCircleFilled, ShoppingCartOutlined, SyncOutlined} from "@ant-design/icons"
+import {ShoppingCartOutlined} from "@ant-design/icons"
 import {
     Alert,
-    Badge,
     Card,
     Tooltip,
     Typography
@@ -35,83 +34,83 @@ export default function AppDownloadForm({setDownloadInfo, downloadInfo, app, han
 }
 
 
-function UpdateAvailable() {
-    const {Title} = Typography;
-    return (
-        <div style={
-            {
-                display: 'flex',
-                alignItems: 'center'
-            }
-        }>
-            <Badge count={
-                    (
-                        <ExclamationCircleFilled style={
-                            {
-                                color: '#faad14',
-                                fontSize: '14px'
-                            }
-                        }/>
-                    )
-                }
-                offset={
-                    [-3, 20]
-            }>
-                <SyncOutlined style={
-                    {fontSize: '24px'}
-                }/>
-            </Badge>
-            <Title level={3}
-                style={
-                    {
-                        marginLeft: '10px',
-                        marginBottom: '0px'
-                    }
-            }>
-                Update available</Title>
-        </div>
-    )
-}
+// function UpdateAvailable() {
+//     const {Title} = Typography;
+//     return (
+//         <div style={
+//             {
+//                 display: 'flex',
+//                 alignItems: 'center'
+//             }
+//         }>
+//             <Badge count={
+//                     (
+//                         <ExclamationCircleFilled style={
+//                             {
+//                                 color: '#faad14',
+//                                 fontSize: '14px'
+//                             }
+//                         }/>
+//                     )
+//                 }
+//                 offset={
+//                     [-3, 20]
+//             }>
+//                 <SyncOutlined style={
+//                     {fontSize: '24px'}
+//                 }/>
+//             </Badge>
+//             <Title level={3}
+//                 style={
+//                     {
+//                         marginLeft: '10px',
+//                         marginBottom: '0px'
+//                     }
+//             }>
+//                 Update available</Title>
+//         </div>
+//     )
+// }
 
-function UpToDate(app) {
-    const {Title} = Typography;
-    const category = app?.categories?.length > 1 ? 'Package' : app?.categories?.[0]
-    return (
-        <div style={
-            {
-                display: 'flex',
-                alignItems: 'center'
-            }
-        }>
-            <Badge count={
-                    (
-                        <CheckCircleFilled style={
-                            {
-                                color: '#5aef70',
-                                fontSize: '14px'
-                            }
-                        }/>
-                    )
-                }
-                offset={
-                    [-3, 20]
-            }>
-                <SyncOutlined style={
-                    {fontSize: '24px'}
-                }/>
-            </Badge>
-            <Title level={3}
-                style={
-                    {
-                        marginLeft: '10px',
-                        marginBottom: '0px'
-                    }
-            }>
-                Your {category}
-                is up to date</Title>
-        </div>
-    )
-}
+// function UpToDate(app) {
+//     const {Title} = Typography;
+//     const category = app?.categories?.length > 1 ? 'Package' : app?.categories?.[0]
+//     return (
+//         <div style={
+//             {
+//                 display: 'flex',
+//                 alignItems: 'center'
+//             }
+//         }>
+//             <Badge count={
+//                     (
+//                         <CheckCircleFilled style={
+//                             {
+//                                 color: '#5aef70',
+//                                 fontSize: '14px'
+//                             }
+//                         }/>
+//                     )
+//                 }
+//                 offset={
+//                     [-3, 20]
+//             }>
+//                 <SyncOutlined style={
+//                     {fontSize: '24px'}
+//                 }/>
+//             </Badge>
+//             <Title level={3}
+//                 style={
+//                     {
+//                         marginLeft: '10px',
+//                         marginBottom: '0px'
+//                     }
+//             }>
+//                 Your {category}
+//                 is up to date</Title>
+//         </div>
+//     )
+// }
 
 const versionTypes = [
     {
@@ -613,11 +612,11 @@ const versionTagKeyToTitle = {
     stable_version: "Stable Version"
 }
 
-const defaultTentaclePackages = {
-    "OctoBot-Default-Tentacles": {},
-    "Matrix-Basic-Tentacles": {}
+// const defaultTentaclePackages = {
+//     "OctoBot-Default-Tentacles": {},
+//     "Matrix-Basic-Tentacles": {}
 
-}
+// }
 
 const versionColumns = [{
         title: 'Select a version',

@@ -26,6 +26,10 @@ try:
     )
 except (ImportError, ModuleNotFoundError):
     network_utils = None
+try:
+    import tentacles.StrategyBlocks.EvaluatorBlock.neural_net_classification.neural_nets.network_utils as block_network_utils
+except (ImportError, ModuleNotFoundError):
+    block_network_utils = None
 
 TIME_TO_START = 40
 
@@ -124,7 +128,9 @@ def register_bot_info_routes(plugin):
                 trading_mode = exchange_manager.trading_modes[0]
                 trading_mode_name = trading_mode.get_name()
                 if hasattr(trading_mode, "block_factory"):
-                    installed_blocks_info = trading_mode.block_factory.installed_blocks_info
+                    installed_blocks_info = (
+                        trading_mode.block_factory.installed_blocks_info
+                    )
                 if hasattr(trading_mode, "AVAILABLE_API_ACTIONS"):
                     available_api_actions = trading_mode.AVAILABLE_API_ACTIONS
                 if hasattr(trading_mode, "real_time_strategy_data"):
@@ -137,6 +143,14 @@ def register_bot_info_routes(plugin):
                 if network_utils:
                     should_stop_training = network_utils.SHOULD_STOP_TRAINING
                     any_neural_net_active = network_utils.ANY_NEURAL_NET_ACTIVE
+                if block_network_utils:
+                    should_stop_training = (
+                        should_stop_training or block_network_utils.SHOULD_STOP_TRAINING
+                    )
+                    any_neural_net_active = (
+                        any_neural_net_active
+                        or block_network_utils.ANY_NEURAL_NET_ACTIVE
+                    )
 
                 # enabled_time_frames = (
                 #     models.get_strategy_required_time_frames(activated_strategy)

@@ -20,7 +20,7 @@ export default function CurrentPanelPosition({position}) {
         panelPercent: (position === availablePanelPositions.maximized ? 0 : (position === availablePanelPositions.minimized ? 100 : 50))
     }
     if (position === availablePanelPositions.maximized) {
-        return currentPanel?.percent > 5 && (
+        return currentPanel?.percent > 0.1 && (
             <PanelSize {...props}/>
         )
     } else if (position === availablePanelPositions.minimized) {
@@ -32,7 +32,7 @@ export default function CurrentPanelPosition({position}) {
             <PanelSize {...props}/>
         )
     } else if (position === availablePanelPositions.footerHalf) {
-        return currentPanel?.percent === 100 && (
+        return currentPanel?.percent > 98 && (
             <PanelSize {...props}/>
         )
     }
@@ -62,7 +62,7 @@ function PanelSize({title, icon, panelPercent}) {
                             antIcon={icon}
                             style={
                                 {fontSize: '22px'}
-                        }></AntButton>
+                        }/>
                     </div>
                 </Tooltip>
             </div>

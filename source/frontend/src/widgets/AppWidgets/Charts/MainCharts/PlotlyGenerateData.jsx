@@ -328,7 +328,8 @@ function _createChartedElement({
         optimizer_id: optimizerId,
         campaign_name: optimizerCampaign,
         line: {
-            shape: chartDetails.line_shape
+            shape: chartDetails.line_shape,
+            color: chartDetails.color?.[0],
         },
         marker: {}
     }
