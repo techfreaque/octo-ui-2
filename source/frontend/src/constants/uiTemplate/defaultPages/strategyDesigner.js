@@ -60,18 +60,7 @@ export const defaultStrategyDesignerPageLayout =  {
                             "position": "footerHalf"
                         },
                         {
-                            "antIcon": "BulbOutlined",
-                            "component": "ButtonWithModal",
-                            "content": [
-                                {
-                                    "component": "ProjectHomePage"
-                                }
-                            ],
-                            width:1500,
-                            "displayAsAvatar": false,
-                            "faIcon": "",
-                            "iconOnly": true,
-                            "title": "About the Project"
+                            "component": "ProjectHomePageModal",
                         },
                         {
                             "component": "PowerMenu"
@@ -275,6 +264,9 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "children": [],
                                             "component": "SidebarMenuItem",
                                             "content": [
+                                                {
+                                                    "component": "OptimizerNotInstalled",
+                                                },
                                                 {
                                                     "component": "UIConfig",
                                                     "configKeys": [

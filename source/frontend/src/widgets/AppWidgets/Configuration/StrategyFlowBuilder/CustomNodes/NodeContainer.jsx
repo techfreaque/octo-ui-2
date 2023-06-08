@@ -9,7 +9,7 @@ import {
     useStoreApi
 } from "reactflow";
 import {useBotColorsContext} from "../../../../../context/config/BotColorsProvider";
-import {useMemo} from "react";
+import {useCallback, useMemo} from "react";
 import {useSaveFlowBuilderSettings} from "../SaveStrategyFlowBuilder";
 import {strategyFlowMakerName} from "../../TentaclesConfig";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../../context/config/TentaclesConfigProvider";
@@ -22,7 +22,8 @@ export function NodeContainer({children, color, selected}) {
             {
                 border: `2px solid ${
                     color
-                }`,
+                    }`,
+                borderRadius: "8px",
                 padding: "10px",
                 maxWidth: "400px",
                 backgroundColor: botColors.background,
@@ -39,8 +40,8 @@ export function NodeEditor({schema, config, nodeId}) {
     const handleUserInputSave = useSaveFlowBuilderSettings()
     const store = useStoreApi();
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
-    const handleAutoSave = useMemo(() => {
+    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+    const handleAutoSave = useCallback(() => {
         return() => {
             const {nodeInternals, edges} = store.getState();
             const nodes = Array.from(nodeInternals).map(([, node]) => node);
@@ -66,7 +67,8 @@ export function NodeEditor({schema, config, nodeId}) {
                     storageName={flowBuilderStorageKey}/>
             </div>
         )
-    }, [nodeId, schema, config, handleAutoSave])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [nodeId, JSON.stringify(schema), JSON.stringify(config)])
 }
 
 const selector = (s) => ({nodeInternals: s.nodeInternals, edges: s.edges});
@@ -145,7 +147,7 @@ export function NodeHandle({
                         borderRadius: "5px",
                         background: "none",
                         zIndex: 2,
-                        ... handleStyle,
+                        ...handleStyle,
                         ...style,
                         border: "none"
                     }

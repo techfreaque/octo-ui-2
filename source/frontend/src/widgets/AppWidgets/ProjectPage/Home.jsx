@@ -1,10 +1,34 @@
 import {Grid} from "@mui/material";
-import {Card, Typography} from "antd";
+import {Card, Tooltip, Typography} from "antd";
 import AntButton from "../../../components/Buttons/AntButton";
 import {buttonVariants} from "../../../components/Buttons/AntButton";
 import {buttonTypes} from "../../../components/Buttons/AntButton";
-import {CloudDownloadOutlined, CloudServerOutlined, RocketOutlined, ThunderboltOutlined} from "@ant-design/icons";
-import {projectDownloadUrl} from "../../../constants/frontendConstants";
+import {CloudDownloadOutlined, CloudServerOutlined} from "@ant-design/icons";
+import {projectDownloadUrl, projectName} from "../../../constants/frontendConstants";
+import ButtonWithModal from "../Modals/ButtonWithModal";
+import {useProjectInfoOpenContext, useUpdateProjectInfoOpenContext} from "../../../context/data/BotInfoProvider";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faDocker, faLinux, faWindows} from "@fortawesome/free-brands-svg-icons";
+import {RocketLaunchOutlined} from "@mui/icons-material";
+
+export function ProjectHomePageModal() {
+    const projectInfoOpen = useProjectInfoOpenContext()
+    const setProjectInfoOpen = useUpdateProjectInfoOpenContext()
+    return (
+        <ButtonWithModal title={"About the Project"}
+            content={
+                [{
+                        "component": "ProjectHomePage"
+                    }]
+            }
+            antIcon={"BulbOutlined"}
+            iconOnly={true}
+            displayAsAvatar={false}
+            width={"1500"}
+            open={projectInfoOpen}
+            setOpen={setProjectInfoOpen}/>
+    )
+}
 
 export default function ProjectHomePage() {
     return (
@@ -14,7 +38,8 @@ export default function ProjectHomePage() {
             }
             spacing={2}>
             <Grid item
-                sm={12}>
+                sm={12}
+            style={{margin: "unset 150px"}}>
                 <Typography.Title level={2}>
                     Revolutionize Your Trading Strategy with Cutting-Edge Automation Solutions
                 </Typography.Title>
@@ -29,16 +54,16 @@ export default function ProjectHomePage() {
                 </Typography.Paragraph>
                 <Typography.Paragraph>
                     Say goodbye to manual execution and hello to streamlined efficiency.
-                                    Take the leap into the future of trading and unlock new possibilities for success.
+                                                                                                                                                                                Take the leap into the future of trading and unlock new possibilities for success.
                 </Typography.Paragraph>
             </Grid>
             <Grid item
                 sm={12}
-                md={6}>
+                md={4}>
                 <Card style={
                     {height: "100%"}
                 }>
-                    <RocketOutlined style={
+                    <RocketLaunchOutlined style={
                         {fontSize: "60px"}
                     }/>
                     <TitleSubTitleCombo title="Get Your Custom Trading Bot" subTitle="Automate Your Strategy and Boost Your Trading Success"/>
@@ -54,6 +79,8 @@ export default function ProjectHomePage() {
                     <AntButton buttonVariant={
                             buttonVariants.primary
                         }
+                        target="blank"
+                        href={"mailto:max@a42.ch?subject=Let's discuss my trading bot project!"}
                         style={
                             {margin: "auto"}
                         }
@@ -67,7 +94,7 @@ export default function ProjectHomePage() {
             </Grid>
             <Grid item
                 sm={12}
-                md={6}>
+                md={4}>
                 <Card style={
                     {
                         height: "100%",
@@ -87,23 +114,28 @@ export default function ProjectHomePage() {
                     <Typography.Paragraph>
                         With hassle-free management, you can unleash the full potential of your trading strategy.
                     </Typography.Paragraph>
-                    <AntButton buttonVariant={
-                            buttonVariants.primary
-                        }
-                        style={
-                            {margin: "auto"}
-                        }
-                        block={true}
-                        buttonType={
-                            buttonTypes.success
-                    }>
-                        Deploy Your Bot in the Cloud Now!
-                    </AntButton>
+                    <Tooltip title={"Cloud deployment will be available soon!"}>
+                        <div>
+                            <AntButton disabled={true}
+                                buttonVariant={
+                                    buttonVariants.primary
+                                }
+                                style={
+                                    {margin: "auto"}
+                                }
+                                block={true}
+                                buttonType={
+                                    buttonTypes.success
+                            }>
+                                Deploy Your Bot in the Cloud Now!
+                            </AntButton>
+                        </div>
+                    </Tooltip>
                 </Card>
             </Grid>
             <Grid item
                 sm={12}
-                md={6}>
+                md={4}>
                 <Card style={
                     {height: "100%"}
                 }>
@@ -117,6 +149,22 @@ export default function ProjectHomePage() {
                     <Typography.Paragraph>
                         Take control of your trading decisions and unlock new possibilities.
                     </Typography.Paragraph>
+                    <div style={
+                        {marginBottom: "20px"}
+                    }>
+                        <FontAwesomeIcon size="5x"
+                            icon={faDocker}/>
+                        <FontAwesomeIcon style={
+                                {
+                                    marginLeft: "10px",
+                                    marginRight: "10px"
+                                }
+                            }
+                            size="5x"
+                            icon={faWindows}/>
+                        <FontAwesomeIcon size="5x"
+                            icon={faLinux}/>
+                    </div>
                     <AntButton buttonVariant={
                             buttonVariants.primary
                         }
@@ -133,7 +181,7 @@ export default function ProjectHomePage() {
                     </AntButton>
                 </Card>
             </Grid>
-            <Grid item
+            {/* <Grid item
                 sm={12}
                 md={6}>
                 <Card style={
@@ -142,7 +190,7 @@ export default function ProjectHomePage() {
                     <ThunderboltOutlined style={
                         {fontSize: "60px"}
                     }/>
-                    <TitleSubTitleCombo title="Join the community" subTitle="Access Premium Strategies and Exclusive Support"/>
+                    <TitleSubTitleCombo title="Get The Ultimate Edition" subTitle="Access Premium Strategies and Exclusive Support"/>
                     <Typography.Paragraph>
                         Unlock a wealth of premium strategies, apps, and our exclusive OctoBot distribution, all while becoming part of a thriving community.
                     </Typography.Paragraph>
@@ -163,21 +211,116 @@ export default function ProjectHomePage() {
                         Get the ultimate version today!
                     </AntButton>
                 </Card>
+            </Grid> */}
+            <Grid item
+                xs={12} style={{marginTop: "150px"}}>
+                <Typography.Title level={2}>
+                    {
+                    `A special thanks to all Open Source Projects that are used within ${projectName}`
+                } </Typography.Title>
+                <TitleSubTitleCombo subTitle={"The Kernel and Backend for the bot"}
+                    title={"OctoBot"}
+                    startLevel={3}/>
+                <Typography.Paragraph>
+                    Without OctoBot the project would be nothing
+                    <AntButton style={
+                            {
+                                marginLeft: "auto",
+                                marginRight: "auto"
+                            }
+                        }
+                        href="https://octobot.online"
+                        target="blank">
+                        Check out and support the OctoBot Project
+                    </AntButton>
+                </Typography.Paragraph>
+                <TitleSubTitleCombo subTitle={"Library used to build the frontend"}
+                    title={"react.js"}
+                    startLevel={3}/>
+                <Typography.Paragraph>
+                    We all hate FaceBook, but react is nice
+                    <AntButton style={
+                            {
+                                marginLeft: "auto",
+                                marginRight: "auto"
+                            }
+                        }
+                        href="https://react.dev/"
+                        target="blank">
+                        Check out the react project
+                    </AntButton>
+                </Typography.Paragraph>
+                <TitleSubTitleCombo subTitle={"Charting library"}
+                    title={"Plotly"}
+                    startLevel={3}/>
+                <Typography.Paragraph>
+                    <AntButton style={
+                            {
+                                marginLeft: "auto",
+                                marginRight: "auto"
+                            }
+                        }
+                        href="https://plotly.com/javascript/"
+                        target="blank">
+                        Check out the plotly project
+                    </AntButton>
+                </Typography.Paragraph>
+                <TitleSubTitleCombo subTitle={"Flow chart library used for the Strategy Designer"}
+                    title={"Reactflow"}
+                    startLevel={3}/>
+                <Typography.Paragraph>
+                    <AntButton style={
+                            {
+                                marginLeft: "auto",
+                                marginRight: "auto"
+                            }
+                        }
+                        href="https://reactflow.dev"
+                        target="blank">
+                        Check out the Reactflow project
+                    </AntButton>
+                </Typography.Paragraph>
+                <TitleSubTitleCombo subTitle={"Machine learning library used for the neural net evaluator"}
+                    title={"tensorflow"}
+                    startLevel={3}/>
+                <Typography.Paragraph>
+                    So simple to use and yet so powerful
+                    <AntButton style={
+                            {
+                                marginLeft: "auto",
+                                marginRight: "auto"
+                            }
+                        }
+                        href="https://www.tensorflow.org"
+                        target="blank">
+                        Check out the tensorflow project
+                    </AntButton>
+                </Typography.Paragraph>
+                <Typography.Title level={3}>
+                    And many more that you can find in the requirements.txt
+                </Typography.Title>
             </Grid>
         </Grid>
+
     )
 }
 
 
-function TitleSubTitleCombo({title, subTitle}) {
+function TitleSubTitleCombo({
+    title,
+    subTitle,
+    startLevel = 2
+}) {
     return (
         <>
-            <Typography.Title level={2}
+            <Typography.Title level={startLevel}
                 style={
                     {marginBottom: "0px"}
             }>
                 {title} </Typography.Title>
-            <Typography.Title level={3}
+            <Typography.Title level={
+                    startLevel + 1
+                }
                 style={
                     {marginTop: "0px"}
             }>

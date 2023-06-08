@@ -89,7 +89,7 @@ export const useSaveTentaclesConfig = () => {
     const loadCurrentTradingTentaclesConfig = useFetchCurrentTradingTentaclesConfig();
     const loadTentaclesConfig = useFetchTentaclesConfig();
     const botDomain = useBotDomainContext()
-    return useCallback((newConfigs, setIsSaving, reloadPlots = false, isTradingConfig = true, keepExisting = true, successNotification=true) => {
+    return useCallback((newConfigs, setIsSaving, reloadPlots = false, isTradingConfig = true, keepExisting = true, successNotification = true) => {
         const failure = (updated_data, update_url, result, msg, status) => {
             setIsSaving ?. (false)
             createNotification(msg)
@@ -97,9 +97,9 @@ export const useSaveTentaclesConfig = () => {
         const onFinish = (updated_data, update_url, result, msg, status) => {
             setIsSaving ?. (false)
             successNotification && createNotification("Successfully save tentacles config")
-            if (reloadPlots) 
-                fetchPlotData();
-            
+            if (reloadPlots) {
+                fetchPlotData()
+            };
         }
         const success = (updated_data, update_url, result, msg, status) => {
             if (isTradingConfig) {
@@ -109,11 +109,9 @@ export const useSaveTentaclesConfig = () => {
                 loadTentaclesConfig(tentacles, onFinish)
             }
         }
-        sendAndInterpretBotUpdate(newConfigs, botDomain + (
-            isTradingConfig ? `${
-                reloadPlots ? backendRoutes.updateTentaclesConfigAndReRun : backendRoutes.updateTentaclesConfig
-            }&keep_existing=${keepExisting}` : backendRoutes.updateTentaclesConfigNoReload
-        ), success, failure)
+        sendAndInterpretBotUpdate(newConfigs, botDomain + (isTradingConfig ? `${
+            reloadPlots ? backendRoutes.updateTentaclesConfigAndReRun : backendRoutes.updateTentaclesConfig
+        }&keep_existing=${keepExisting}` : backendRoutes.updateTentaclesConfigNoReload), success, failure)
     }, [botDomain, fetchPlotData, loadCurrentTradingTentaclesConfig, loadTentaclesConfig]);
 };
 
@@ -126,20 +124,15 @@ export const useSaveTentaclesConfigAndSendAction = () => {
             createNotification("Failed to executed trading mode", "danger")
         }
         const success = (updated_data, update_url, result, msg, status) => {
-            if (reloadPlots) 
-                fetchPlotData();
-            
+            if (reloadPlots) {
+                fetchPlotData()
+            };
             setIsLoading(false)
             createNotification("Successfully executed trading mode")
         }
-        sendAndInterpretBotUpdate(
-            newConfigs,
-            `${
-                botDomain + backendRoutes.updateTentaclesConfigAndSendCommand
-            }/${actionType}`,
-            successCallback || success,
-            fail || failureCallback
-        )
+        sendAndInterpretBotUpdate(newConfigs, `${
+            botDomain + backendRoutes.updateTentaclesConfigAndSendCommand
+        }/${actionType}`, successCallback || success, fail || failureCallback)
     }, [fetchPlotData, botDomain]);
 };
 

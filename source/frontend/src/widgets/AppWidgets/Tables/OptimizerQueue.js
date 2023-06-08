@@ -1,10 +1,17 @@
-
-import { Button } from "@mui/material";
-import { useEffect } from "react";
-import { createTable } from "../../../components/Tables/w2ui/W2UI";
-import { userInputKey } from "../../../components/UserInputs/utils";
-import { hidden_class, ID_DATA, MAX_SEARCH_LABEL_SIZE, TENTACLE_SEPARATOR, TIMESTAMP_DATA } from "../../../constants/backendConstants";
-import { useFetchOptimizerQueue, useOptimizerQueueContext, useSaveOptimizerQueue, useUpdateOptimizerQueueCounterContext } from "../../../context/data/OptimizerQueueProvider";
+import {Button} from "@mui/material";
+import {useEffect} from "react";
+import {createTable} from "../../../components/Tables/w2ui/W2UI";
+import {userInputKey} from "../../../components/UserInputs/utils";
+import {
+    hidden_class,
+    ID_DATA,
+    MAX_SEARCH_LABEL_SIZE,
+    TENTACLE_SEPARATOR,
+    TIMESTAMP_DATA
+} from "../../../constants/backendConstants";
+import {useFetchOptimizerQueue, useOptimizerQueueContext, useSaveOptimizerQueue, useUpdateOptimizerQueueCounterContext} from "../../../context/data/OptimizerQueueProvider";
+import {OptimizerNotInstalled} from "../Configuration/OptimizerConfigForm/OptimizerConfigForm";
+import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 
 
 export default function OptimizerQueueTable() {
@@ -13,31 +20,42 @@ export default function OptimizerQueueTable() {
     const updateOptimizerQueueCounter = useUpdateOptimizerQueueCounterContext()
     const saveOptimizerQueue = useSaveOptimizerQueue()
     const containerId = "optimizer-queue-table"
+    const botInfo = useBotInfoContext()
+    const uiProInstalled = botInfo ?. ui_pro_installed
     useEffect(() => {
-        fetchOptimizerQueue()
+        uiProInstalled && fetchOptimizerQueue()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [uiProInstalled]);
     useEffect(() => {
-        if (optimizerQueue) updateOptimizerQueueEditor(
-        optimizerQueue, saveOptimizerQueue, containerId);
-        updateOptimizerQueueCount(optimizerQueue, updateOptimizerQueueCounter);
-
+        if (optimizerQueue) {
+            updateOptimizerQueueEditor(optimizerQueue, saveOptimizerQueue, containerId);
+            updateOptimizerQueueCount(optimizerQueue, updateOptimizerQueueCounter);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [optimizerQueue]);
 
-    return (<>
-        <div className="text-center mx-4 my-4">
-            <Button onClick={fetchOptimizerQueue}>Reload optimizer queue</Button>
-        </div>
-        <div id={"optimizer-queue-container"} style={{ height: "100%" }}>
-            <div id={"optimizer-queue-no-message"} className="text-center mx-4 my-4">
-                <h4>
-                    The optimizer queue is empty
-                </h4>
+    return (
+        <>
+            <OptimizerNotInstalled/>
+            <div className="text-center mx-4 my-4">
+                <Button onClick={fetchOptimizerQueue}>Reload optimizer queue</Button>
             </div>
-            <div id={containerId} style={{ height: "100%" }} />
-        </div>
-    </>
+            <div id={"optimizer-queue-container"}
+                style={
+                    {height: "100%"}
+            }>
+                <div id={"optimizer-queue-no-message"}
+                    className="text-center mx-4 my-4">
+                    <h4>
+                        The optimizer queue is empty
+                    </h4>
+                </div>
+                <div id={containerId}
+                    style={
+                        {height: "100%"}
+                    }/>
+            </div>
+        </>
     )
 }
 
@@ -47,7 +65,7 @@ function updateOptimizerQueueEditor(optimizerQueue, saveOptimizerQueue, containe
 
 function updateOptimizerQueueCount(optimizerQueue, updateOptimizerQueueCounter) {
     let count = 0;
-    if (optimizerQueue?.length) {
+    if (optimizerQueue ?. length) {
         optimizerQueue.forEach(optimizerRun => {
             count += Object.keys(optimizerRun.runs).length;
         });
@@ -84,7 +102,11 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
     const queueDiv = document.createElement('div');
     queueDiv.id = divID;
     queueDiv.style.height = "500px";
-    const queueInfo = { id: optimizerId, deletedRows: [], deleteEveryRun: false }
+    const queueInfo = {
+        id: optimizerId,
+        deletedRows: [],
+        deleteEveryRun: false
+    }
     queueParentDiv.append(queueDiv);
 
     const keys = [];
@@ -92,9 +114,12 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
     const tentaclesInputsCounts = {};
     Object.values(optimizerRun.runs).forEach((run) => {
         Object.values(run).forEach((inputDetail) => {
-            const label = inputDetail.user_input.length > MAX_SEARCH_LABEL_SIZE ? `${inputDetail.user_input.slice(0,
-                MAX_SEARCH_LABEL_SIZE)} ...` : inputDetail.user_input;
-            const addedLabel = `${label} (${inputDetail.tentacle})`
+            const label = inputDetail.user_input.length > MAX_SEARCH_LABEL_SIZE ? `${
+                inputDetail.user_input.slice(0, MAX_SEARCH_LABEL_SIZE)
+            } ...` : inputDetail.user_input;
+            const addedLabel = `${label} (${
+                inputDetail.tentacle
+            })`
             if (addedLabels.includes(addedLabel)) {
                 return;
             }
@@ -106,22 +131,18 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
                 tentaclesInputsCounts[inputDetail.tentacle] = 1;
             } else {
                 tentaclesInputsCounts[inputDetail.tentacle]++;
-            }
-            addedLabels.push(addedLabel);
+            } addedLabels.push(addedLabel);
         });
     })
     const columns = keys.map((key) => {
         return {
-            field: key.field,
-            text: key.text,
-            size: `${1 / keys.length * 100}%`,
-            sortable: true,
+                field: key.field, text: key.text, size: `${
+                1 / keys.length * 100
+            }%`,
+            sortable: true
         }
     });
-    const columnGroups = Object.keys(tentaclesInputsCounts).map((key) => ({
-        text: key,
-        span: tentaclesInputsCounts[key]
-    }));
+    const columnGroups = Object.keys(tentaclesInputsCounts).map((key) => ({text: key, span: tentaclesInputsCounts[key]}));
     const records = []
     let recId = 0;
     const userInputSamples = {};
@@ -141,8 +162,10 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
         return {
             field: key.field,
             label: key.text,
-            type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(null,
-                { type: null, field: key }, "text", sampleValue),
+            type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(null, {
+                type: null,
+                field: key
+            }, "text", sampleValue)
         }
     });
     function _onReorderRow(event) {
@@ -164,10 +187,22 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
         event.onComplete = _updateOptimizerQueue;
     }
     const tableName = `${divID}-table`;
-    const table = createTable({elementID:divID, name:tableTitle,
-        tableName, searches, columns, records, columnGroups, searchData:[], sortData:[],
-        selectable: true, addToTable: false, reorderRows: true, deleteRows: true,
-        onReorderRowCallback: _onReorderRow, onDeleteCallback: _onDelete
+    const table = createTable({
+        elementID: divID,
+        name: tableTitle,
+        tableName,
+        searches,
+        columns,
+        records,
+        columnGroups,
+        searchData: [],
+        sortData: [],
+        selectable: true,
+        addToTable: false,
+        reorderRows: true,
+        deleteRows: true,
+        onReorderRowCallback: _onReorderRow,
+        onDeleteCallback: _onDelete
     });
 
     function randomizeRecords() {
@@ -185,18 +220,13 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
             }
             const splitKey = key.split(TENTACLE_SEPARATOR);
             const inputName = splitKey[0];
-            run.push({
-                user_input: inputName,
-                tentacle: splitKey[1].split(","),
-                value: record[key],
-                deleted,
-            });
+            run.push({user_input: inputName, tentacle: splitKey[1].split(","), value: record[key], deleted});
         });
         return run;
     }
     function _updateOptimizerQueue(event) {
         let UpdatedRuns = [];
-        if (!queueInfo.deleteEveryRun) {
+        if (! queueInfo.deleteEveryRun) {
             UpdatedRuns = table.records.map((record) => _createRunData(record, false));
             UpdatedRuns = UpdatedRuns.concat(queueInfo.deletedRows.map((record) => _createRunData(record, true)));
         }
@@ -204,7 +234,7 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
             updatedQueue: {
                 id: parseInt(queueInfo.id),
                 delete_every_run: Boolean(queueInfo.deleteEveryRun),
-                runs: UpdatedRuns,
+                runs: UpdatedRuns
             }
         }
         saveOptimizerQueue(updatedQueue);
@@ -213,10 +243,15 @@ function _createOptimizerRunQueueTable(optimizerRun, mainContainer, saveOptimize
     }
 
     function _addOptimizerQueueTableButtons() {
-        table.toolbar.add({ type: 'button', id: 'show-run-info', text: 'Randomize', img: 'fas fa-random', onClick: randomizeRecords });
+        table.toolbar.add({
+            type: 'button',
+            id: 'show-run-info',
+            text: 'Randomize',
+            img: 'fas fa-random',
+            onClick: randomizeRecords
+        });
     }
 }
-
 
 
 function _getTableDataType(records, search, defaultValue, sampleValue) {

@@ -18,9 +18,9 @@ export default function SaveStrategyFlowBuilderSettings({
     return (
         <div style={
             {
-                marginTop: "auto",
-                marginBottom: "auto",
-                marginRight: "5px"
+                position: "absolute",
+                marginTop: "10px",
+                right: "10px",
             }
         }>
 
@@ -36,6 +36,7 @@ export default function SaveStrategyFlowBuilderSettings({
                                 successNotification: true
                             })
                         }
+                    style={{zIndex: 2}}
                         disabled={
                             isSaving || ! isOnline
                         }

@@ -4,6 +4,7 @@ import {useIsBotOnlineContext, useUpdateIsBotOnlineContext} from "../../../conte
 import {updateBot} from "../../../api/actions";
 import {Trans} from "react-i18next";
 import AntButton, {buttonTypes} from "../../../components/Buttons/AntButton";
+import { Tooltip } from "antd";
 
 export default function UpdateBotButton({onClick}) {
     const [isLoading, setIsloading] = useState(false);
@@ -11,15 +12,18 @@ export default function UpdateBotButton({onClick}) {
     const isOnline = useIsBotOnlineContext()
     const botDomain = useBotDomainContext();
     const disabled = isLoading || ! isOnline
-
     return useMemo(() => {
-        return (<AntButton disabled={disabled}
+        return (
+            <Tooltip title="Updating your bot from the UI will be supported soon!" placement="left" >
+                <div>
+                <AntButton disabled={true || disabled
+            }
             onClick={
                 () => {
                     updateBot(botDomain, updateIsOnline, setIsloading)
                     onClick ?. ()
                 }
-            }
+            }     
             block={true}
             buttonType={
                 buttonTypes.warning
@@ -28,6 +32,9 @@ export default function UpdateBotButton({onClick}) {
             text={
                 <Trans
             i18nKey="buttons.updateBot"/>
-            }/>)
+            } />
+                </div>
+            </Tooltip>
+                )
     }, [botDomain, disabled, onClick, updateIsOnline])
 }

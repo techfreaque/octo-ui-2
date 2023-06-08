@@ -20,7 +20,7 @@
     --dark-candles-border-red: rgb(103, 58, 183);
     
 
-    --light-background: #fff;
+    --light-background: rgb(243 243 243);
     --light-backgroundSecondary: #00000005;
     --light-backgroundHover: #0000000f;
     --light-backgroundActive: #e6f4ff;
@@ -63,4 +63,10 @@ body {
 /* TODO remove */
 .alert.alert-danger {
     display: none
+}
+
+
+.ant-modal-close {
+    width: 40px !important;
+    height: 40px !important;
 }

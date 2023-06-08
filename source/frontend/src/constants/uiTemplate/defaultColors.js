@@ -42,7 +42,7 @@ export const defaultColors = {
         }
     },
     light: {
-        background: "#fff",
+        background: "rgb(243 243 243)",
         backgroundSecondary: "rgba(0, 0, 0, 0.02)",
         backgroundHover: "rgba(0,0,0,.06)",
         backgroundActive: "#e6f4ff",

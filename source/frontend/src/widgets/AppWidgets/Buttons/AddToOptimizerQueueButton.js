@@ -2,10 +2,16 @@ import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useBotIsOptimizingContext, useAddToOptimizerQueue } from "../../../context/actions/BotOptimizerProvider";
 import { useMemo } from "react";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 
 export default function AddToOptimizerQueueButton() {
   const isOptimizer = useBotIsOptimizingContext()
   const AddToOptimizerQueue = useAddToOptimizerQueue()
+  const botInfo = useBotInfoContext()
+  const uiProInstalled = botInfo?.ui_pro_installed
+  const isOnline = useIsBotOnlineContext()
+
   return useMemo(() => {
     return !isOptimizer && (
       <AntButton 
@@ -14,8 +20,8 @@ export default function AddToOptimizerQueueButton() {
         faIconComponent={faPlus}
         text="Add to Queue"
         marginRight="5px"
+        disabled={!uiProInstalled||!isOnline}
       />
     );
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isOptimizer])
+  }, [AddToOptimizerQueue, isOnline, isOptimizer, uiProInstalled])
 }

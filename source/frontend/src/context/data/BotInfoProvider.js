@@ -14,9 +14,19 @@ import {useIsBotOnlineContext} from "./IsBotOnlineProvider";
 import {BotExchangeInfoProvider} from "./BotExchangeInfoProvider";
 
 
+const ProjectInfoOpenContext = createContext();
+const UpdateProjectInfoOpenContext = createContext();
+
+export const useProjectInfoOpenContext = () => {
+    return useContext(ProjectInfoOpenContext);
+};
+
+export const useUpdateProjectInfoOpenContext = () => {
+    return useContext(UpdateProjectInfoOpenContext);
+};
+
 const BotInfoContext = createContext();
 const UpdateBotInfoContext = createContext();
-
 export const useBotInfoContext = () => {
     return useContext(BotInfoContext);
 };
@@ -43,6 +53,7 @@ export const useFetchBotInfo = () => {
 
 export const BotInfoProvider = ({children}) => {
     const [botInfo, setBotInfo] = useState();
+    const [projectInfoOpen, setProjectInfoOpen] = useState(false);
     const botDomain = useBotDomainContext();
     const isBotOnline = useIsBotOnlineContext();
     const setVisibleTimeframes = useUpdateVisibleTimeFramesContext();
@@ -78,9 +89,15 @@ export const BotInfoProvider = ({children}) => {
         }
     }, [botInfo, setVisibleTimeframes, setVisiblePairs, setVisibleExchanges]);
 
-    return (<BotInfoContext.Provider value={botInfo}>
-        <UpdateBotInfoContext.Provider value={setBotInfo}>
-            <BotExchangeInfoProvider> {children} </BotExchangeInfoProvider>
-        </UpdateBotInfoContext.Provider>
-    </BotInfoContext.Provider>);
+    return (
+        <BotInfoContext.Provider value={botInfo}>
+            <UpdateBotInfoContext.Provider value={setBotInfo}>
+                <ProjectInfoOpenContext.Provider value={projectInfoOpen}>
+                    <UpdateProjectInfoOpenContext.Provider value={setProjectInfoOpen}>
+                        <BotExchangeInfoProvider> {children} </BotExchangeInfoProvider>
+                    </UpdateProjectInfoOpenContext.Provider>
+                </ProjectInfoOpenContext.Provider>
+            </UpdateBotInfoContext.Provider>
+        </BotInfoContext.Provider>
+    );
 };

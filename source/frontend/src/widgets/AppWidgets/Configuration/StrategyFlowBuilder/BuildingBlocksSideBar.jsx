@@ -1,74 +1,46 @@
 import {Input, Tooltip, Typography} from "antd";
 import {useBotColorsContext} from "../../../../context/config/BotColorsProvider";
 import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
-import SaveStrategyFlowBuilderSettings from "./SaveStrategyFlowBuilder";
 import {SearchOutlined} from "@ant-design/icons";
 import {useMemo, useState} from "react";
 
 
-export function BuildingBlocksSidebar({
-    tradingModeKey,
-    config,
-    nodes,
-    edges,
-    isSaving,
-    setIsSaving
-}) {
+export default function BuildingBlocksSidebar() {
     const botInfo = useBotInfoContext()
     const [searchText, setSearchText] = useState("")
     const installedBlocksInfo = botInfo.installed_blocks_info
     const botColors = useBotColorsContext();
     return useMemo(() => (
-            <aside style={
-                {
-                    maxWidth: "300px",
-                    overflowX: "auto",
-                    color: botColors.font,
-                    background: botColors.background,
-                    borderLeft: `1px solid ${
-                        botColors.border
-                    }`
-                }
-            }>
-                <SaveStrategyFlowBuilderSettings tradingModeKey={tradingModeKey}
-                    config={config}
-                    nodes={nodes}
-                    isSaving={isSaving}
-                    setIsSaving={setIsSaving}
-                    edges={edges}/>
-                <Input.Search style={
-                        {marginTop: "10px"}
-                    }
-                    onChange={
-                        (event) => setSearchText(event.target.value)
-                    }
-                    placeholder="Search for ema, rsi, strategy..."
-                    enterButton={
-                        (<span >
-                            <SearchOutlined style={{ margin: "auto" }} />
-                        </span>
-                            )
-                    }
-                    size="large"/>
-                <Typography.Paragraph style={
+        <aside style={
+            {
+                color: botColors.font,
+                background: botColors.background
+            }
+        }>
+            <Input.Search style={
                     {marginTop: "10px"}
-                }>You can drag these building blocks to the pane</Typography.Paragraph>
-                <BlockTemplates installedBlocksInfo={installedBlocksInfo}
-                    searchText={searchText}/>
-            </aside>
-        ), [
-        botColors.background,
-        botColors.border,
-        botColors.font,
-        config,
-        edges,
-        installedBlocksInfo,
-        isSaving,
-        nodes,
-        searchText,
-        setIsSaving,
-        tradingModeKey
-    ]);
+                }
+                onChange={
+                    (event) => setSearchText(event.target.value)
+                }
+                placeholder="Search for ema, rsi, strategy..."
+                enterButton={
+                    (
+                        <span>
+                            <SearchOutlined style={
+                                {margin: "auto"}
+                            }/>
+                        </span>
+                    )
+                }
+                size="large"/>
+            <Typography.Paragraph style={
+                {marginTop: "10px"}
+            }>You can drag these building blocks to the pane</Typography.Paragraph>
+            <BlockTemplates installedBlocksInfo={installedBlocksInfo}
+                searchText={searchText}/>
+        </aside>
+    ), [botColors.background, botColors.font, installedBlocksInfo, searchText]);
 }
 
 function BlockTemplates({installedBlocksInfo, searchText}) {
@@ -85,7 +57,7 @@ function BlockTemplates({installedBlocksInfo, searchText}) {
         };
         return installedBlocksInfo && Object.keys(installedBlocksInfo).map(blockType => (
             <div key={blockType}>
-                <h3>{blockType}</h3>
+                <h3>{blockType.replace("Block", " Block")}</h3>
                 <BlockTemplate blocks={
                         installedBlocksInfo[blockType]
                     }
@@ -96,7 +68,7 @@ function BlockTemplates({installedBlocksInfo, searchText}) {
         ))
     }, [installedBlocksInfo, searchText])
 }
-function BlockTemplate({ blocks, onDragStart, blockType, searchText }) {
+function BlockTemplate({blocks, onDragStart, blockType, searchText}) {
     return useMemo(() => {
         const _searchText = searchText?.toLowerCase()
         return blocks && Object.keys(blocks).map(blockName => {
@@ -108,25 +80,37 @@ function BlockTemplate({ blocks, onDragStart, blockType, searchText }) {
 
                 return (
                     <Tooltip key={blockName}
-                        placement={"left"}
+                        placement={"right"}
                         title={
                             block.description
-                        }>
-                        <div className="dndnode"
-                            style={
-                                { borderColor: block.color }
+                    }>
+                        <div style={
+                                {
+                                    padding: "4px",
+                                    border: `1px solid ${
+                                        block.color
+                                    }`,
+                                    borderRadius: "8px",
+                                    marginBottom: "10px",
+                                    display: "flex",
+                                    textAlign: "center",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    cursor: "grab"
+                                }
                             }
                             onDragStart={handleOnDragStart}
                             draggable>
                             {
-                                block.title
-                            } </div>
+                            block.title
+                        } </div>
                     </Tooltip>
                 )
-            }
-            else {
-                return (<span key={blockName}/>)
+            } else {
+                return (
+                    <span key={blockName}/>
+                )
             }
         })
-    },[blockType, blocks, onDragStart, searchText])
+    }, [blockType, blocks, onDragStart, searchText])
 }

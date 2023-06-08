@@ -132,17 +132,17 @@ const handleLabelStyles = {
         0: {
             left: "50%",
             right: "50%",
-            ...handleLabelTopStyle
+            ... handleLabelTopStyle
         },
         1: {
             left: "20%",
             right: "auto",
-            ...handleLabelTopStyle
+            ... handleLabelTopStyle
         },
         2: {
             right: "20%",
             left: "auto",
-            ...handleLabelTopStyle,
+            ... handleLabelTopStyle,
             marginRight: "-50px"
         }
     },
@@ -150,73 +150,73 @@ const handleLabelStyles = {
         0: {
             left: "50%",
             right: "50%",
-            ...handleLabelBottomStyle
+            ... handleLabelBottomStyle
         },
         1: {
             left: "20%",
             right: "auto",
-            ...handleLabelBottomStyle
+            ... handleLabelBottomStyle
         },
         2: {
             right: "20%",
             left: "auto",
-            ...handleLabelBottomStyle,
+            ... handleLabelBottomStyle,
             marginRight: "-50px"
         },
         3: {
             bottom: "25px",
             top: "auto",
-            ...handleLabelLeftStyle
+            ... handleLabelLeftStyle
         },
         4: {
             bottom: "25px ",
             top: "auto",
-            ...handleLabelRightStyle
+            ... handleLabelRightStyle
         },
         5: {
             bottom: "130px",
             top: "auto",
-            ...handleLabelLeftStyle
+            ... handleLabelLeftStyle
         },
         6: {
             bottom: "130px ",
             top: "auto",
-            ...handleLabelRightStyle
+            ... handleLabelRightStyle
         }
     },
     left: {
         0: {
             top: "50%",
             bottom: "50%",
-            ...handleLabelLeftStyle
+            ... handleLabelLeftStyle
         },
         1: {
             top: "20%",
             bottom: "auto",
-            ...handleLabelLeftStyle
+            ... handleLabelLeftStyle
         },
         2: {
             bottom: "20%",
             top: "auto",
-            ...handleLabelLeftStyle
+            ... handleLabelLeftStyle
         }
     },
     right: {
         0: {
             top: "50%",
             bottom: "50%",
-            ...handleLabelRightStyle
+            ... handleLabelRightStyle
 
         },
         1: {
             top: "20%",
             bottom: "auto",
-            ...handleLabelRightStyle
+            ... handleLabelRightStyle
         },
         2: {
             bottom: "20%",
             top: "auto",
-            ...handleLabelRightStyle
+            ... handleLabelRightStyle
         }
     }
 }
@@ -227,29 +227,29 @@ export default function StrategyBlockNode(props) {
         const ioNodes = {}
         ioSchema && Object.keys(ioSchema).forEach(nodeKey => {
             const node = ioSchema[nodeKey]
-            if (! node?.options) {
+            if (! node ?. options) {
                 return;
             }
-            if (! ioNodes[node?.options?.side]) {
-                ioNodes[node?.options?.side] = []
+            if (! ioNodes[node ?. options ?. side]) {
+                ioNodes[node ?. options ?. side] = []
             }
             const id = `${
-                node?.options?.io_node_type
+                node ?. options ?. io_node_type
             }${
-                node?.options?.io_node_id
+                node ?. options ?. io_node_id
             }`
             ioNodes[node.options.side].push (
                 <NodeHandle direction={
                         nodeDirectionKeysToHandleType[node.options.direction]
                     }
                     handleDescriptionStyle={
-                        handleLabelStyles[node.options.side]?.[ioNodes[node.options.side]?.length]
+                        handleLabelStyles[node.options.side] ?. [ioNodes[node.options.side] ?. length]
                     }
                     color={
                         node.options.color
                     }
                     style={
-                        handleStyles[node.options.side]?.[ioNodes[node.options.side]?.length]
+                        handleStyles[node.options.side] ?. [ioNodes[node.options.side] ?. length]
                     }
                     position={
                         nodeSideKeysToClass[node.options.side]
@@ -269,41 +269,47 @@ export default function StrategyBlockNode(props) {
         })
         return (
             <NodeContainer color={
-                    schema?.options?.color
+                    schema ?. options ?. color
                 }
                 selected={
                     props.selected
             }>
                 {
-                ioNodes?.top
+                ioNodes ?. top
             }
                 {
-                ioNodes?.left
+                ioNodes ?. left
             }
                 <NodeEditor nodeId={
                         props.id
                     }
                     schema={schema}
                     config={config}/> {
-                ioNodes?.right
+                ioNodes ?. right
             }
                 {
-                ioNodes?.bottom
+                ioNodes ?. bottom
             } </NodeContainer>
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(config), JSON.stringify(ioSchema), props.id, props.selected, JSON.stringify(schema)])
+    }, [
+        JSON.stringify(config),
+        JSON.stringify(ioSchema),
+        props.id,
+        props.selected,
+        JSON.stringify(schema)
+    ])
 }
 
 export function useCurrentNodeSchema({nodeId}) {
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
-    const nodesSchema = currentTentaclesTradingConfig?.[strategyFlowMakerName]?.schema
-    const nodesConfig = currentTentaclesTradingConfig?.[strategyFlowMakerName]?.config
+    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
+    const nodesSchema = currentTentaclesTradingConfig ?. [strategyFlowMakerName] ?. schema
+    const nodesConfig = currentTentaclesTradingConfig ?. [strategyFlowMakerName] ?. config
     return {
-        ioSchema: nodesSchema?.properties?.nodes?.properties?.[nodeId]?.properties?.[getNodeIoSchemaKey(nodeId)]?.properties,
-        schema: nodesSchema?.properties?.nodes?.properties?.[nodeId]?.properties?.[getNodeConfigKey(nodeId)],
-        config: nodesConfig?.nodes?.[nodeId]?.[getNodeConfigKey(nodeId)]
+        ioSchema: nodesSchema ?. properties ?. nodes ?. properties ?. [nodeId] ?. properties ?. [getNodeIoSchemaKey(nodeId)] ?. properties,
+        schema: nodesSchema ?. properties ?. nodes ?. properties ?. [nodeId] ?. properties ?. [getNodeConfigKey(nodeId)],
+        config: nodesConfig ?. nodes ?. [nodeId] ?. [getNodeConfigKey(nodeId)]
     }
 }
 

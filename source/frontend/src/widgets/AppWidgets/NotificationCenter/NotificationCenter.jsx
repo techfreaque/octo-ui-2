@@ -25,7 +25,7 @@ export default function NotificationCenter() {
             })
         })
     })
-
+    notificationHistory.reverse()
     return logHistory && (
         <>
             <Typography.Title level={2}><Trans i18nKey="notificationCenter.botNotifications"/></Typography.Title>
@@ -53,7 +53,7 @@ export default function NotificationCenter() {
                                     item.Time && ` - ${
                                         item.Time
                                     }`
-                                }`
+                                }${index}`
                             }
                             message={
                                 `${
@@ -66,7 +66,7 @@ export default function NotificationCenter() {
                             }
                             description={
                                 item.Message.split("<br>").map(row => (
-                                    <div> {row}</div>
+                                    <div key={row}> {row}</div>
                                 ))
                             }
                             type={
@@ -107,19 +107,23 @@ export default function NotificationCenter() {
                                 `${
                                     item.Source
                                 }${
-                                    item.Time && " - " + item.Time
+                                    item.Time && ` - ${
+                                        item.Time
+                                    }`
                                 }`
                             }
                             key={
                                 `${
                                     item.Source
                                 }${
-                                    item.Time && " - " + item.Time
-                                }`
+                                    item.Time && ` - ${
+                                        item.Time
+                                    }`
+                                }${index}`
                             }
                             description={
                                 item.Message.split("<br>").map(row => (
-                                    <div> {row}</div>
+                                    <div key={row}> {row}</div>
                                 ))
                             }
                             type={

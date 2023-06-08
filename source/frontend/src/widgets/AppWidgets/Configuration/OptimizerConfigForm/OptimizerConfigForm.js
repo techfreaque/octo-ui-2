@@ -6,39 +6,45 @@ import OptimizerSettingTemplate from "./OptimizerInputTemplate";
 import select2 from "select2/dist/js/select2.js" // required
 import {useFetchProConfig, useGetAndSaveOptimizerForm, useOptimizerEditorContext} from "../../../../context/config/OptimizerEditorProvider";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
+import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
+import {Alert, Typography} from "antd";
+import {projectProName} from "../../../../constants/frontendConstants";
 
 export default function OptimizerConfigForm() {
     const optimizerEditor = useOptimizerEditorContext()
     const optimizerConfig = optimizerEditor ? (optimizerEditor[OPTIMIZER_INPUTS_KEY] || {}) : null
     const formIsBuilt = Boolean(optimizerConfig)
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
     const fetchProConfig = useFetchProConfig()
-
+    const botInfo = useBotInfoContext()
+    const uiProInstalled = botInfo ?. ui_pro_installed
     useEffect(() => {
-        fetchProConfig()
+        uiProInstalled && fetchProConfig()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    }, [uiProInstalled])
 
     useEffect(() => {
-        currentTentaclesTradingConfig && optimizerConfig && _buildOptimizerSettingsForm(currentTentaclesTradingConfig, optimizerConfig);
+        currentTentaclesTradingConfig && (optimizerConfig || ! uiProInstalled) && _buildOptimizerSettingsForm(currentTentaclesTradingConfig, optimizerConfig);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTentaclesTradingConfig, formIsBuilt]);
     return useMemo(() => {
         return (
-            <div onBlur={saveOptimizerForm}>
-                {/* <div>
+            <>
+                <OptimizerNotInstalled/>
+                <div onBlur={saveOptimizerForm}>
+                    {/* <div>
                 <AntButton buttonType={
                         buttonTypes.primary
                     }
                     onClick={saveOptimizerForm}
                     text="Save Optimizer Form"/>
             </div> */}
-                <div id="strategy-optimizer-inputs">
-                    <OptimizerSettingTemplate/>
-                </div>
-                {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
+                    <div id="strategy-optimizer-inputs">
+                        <OptimizerSettingTemplate/>
+                    </div>
+                    {/* <div id="strategy-optimizer-filters" className="my-4 mx-2 pb-4">
                     <h4>
                         Run filters
                     </h4>
@@ -47,9 +53,33 @@ export default function OptimizerConfigForm() {
                     </p>
                     <OptimizerRunFilterTemplate />
                 </div> */} </div>
+            </>
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTentaclesConfig, formIsBuilt])
+}
+
+export function OptimizerNotInstalled() {
+    const botInfo = useBotInfoContext()
+    const uiProInstalled = botInfo ?. ui_pro_installed
+    return ! uiProInstalled && (
+        <Alert style={
+                {margin: "10px"}
+            }
+            showIcon
+            type="warning"
+            message={
+                (
+                    <Typography.Title level={3}>
+                        {
+                        `Seems like you haven't installed ${projectProName}`
+                    } </Typography.Title>
+                )
+            }
+            description={
+                `${projectProName} is required to use the Optimizer`
+            }/>
+    )
 }
 
 async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, setFormIsBuilt) {
@@ -69,7 +99,7 @@ async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, setF
         const inputGroupId = _appendInputGroupFromTemplate(settingsRoot, tentacleName);
         const inputGroupElement = $(document.getElementById(inputGroupId));
         const inputGroupContent = inputGroupElement.find(".input-content");
-        const configInputs = typeof optimizerConfig.user_inputs === "undefined" ? {} : optimizerConfig.user_inputs
+        const configInputs = typeof optimizerConfig ?. user_inputs === "undefined" ? {} : optimizerConfig ?. user_inputs
         Object.values(element.schema.properties).forEach(function (inputDetail) {
             if (_buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetail, configInputs, tentacleName, inputDetail.options.name)) {
                 atLeastOneUserInput = true;
@@ -203,7 +233,7 @@ function _buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetails
 }
 function _buildOptimizerNestedConfigSettingsForm(inputGroupContent, inputDetail, configValues, parentInputIdentifier) {
     let atLeastOneUserInput = false;
-    const nestedInputGroupId = _appendNestedInputGroupFromTemplate(inputGroupContent, parentInputIdentifier, inputDetail.options.name);
+    const nestedInputGroupId = _appendNestedInputGroupFromTemplate(inputGroupContent, parentInputIdentifier, inputDetail.title || inputDetail.options.name);
     const nestedInputGroupElement = $(document.getElementById(nestedInputGroupId));
     const nestedInputGroupContent = nestedInputGroupElement.find(".input-content");
     Object.keys(inputDetail.properties).forEach(function (nestedInput) {
@@ -308,7 +338,7 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
             inputDetail.options.name
         }-Input-setting-${valueType}`));
         if (valueType === "options") {
-            if (inputDetail?.enum) {
+            if (inputDetail ?. enum) {
                 inputDetail.enum.forEach((value) => {
                     const isSelected = values.includes(value);
                     valuesSelect.append(new Option(value, value, false, isSelected));

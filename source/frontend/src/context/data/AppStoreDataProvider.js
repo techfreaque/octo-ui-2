@@ -15,8 +15,8 @@ import {useBotInfoContext} from "./BotInfoProvider";
 import {getFile, sendAndInterpretBotUpdate, sendFile} from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import {backendRoutes} from "../../constants/backendConstants";
-import {apiFields, minReleaseNotesLength} from "../../widgets/AppWidgets/AppStore/AppCards/AppActions/UpDownloadApp/UploadAppForm";
-import {strategyName} from "../../widgets/AppWidgets/AppStore/storeConstants";
+import {apiFields, minReleaseNotesLength} from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppActions/UpDownloadApp/UploadAppForm";
+import {strategyName} from "../../widgets/AppWidgets/StrategyConfigurator/storeConstants";
 
 
 const AppStoreDataContext = createContext();
@@ -123,7 +123,7 @@ export const useLogoutFromAppStore = () => {
 }
 
 export function validateUploadIndo(uploadInfo) {
-    return uploadInfo?.[apiFields.releaseNotes]?.length > minReleaseNotesLength || ! uploadInfo?.includePackage
+    return uploadInfo ?. [apiFields.releaseNotes] ?. length > minReleaseNotesLength || ! uploadInfo ?. includePackage
 }
 
 export const useUploadToAppStore = () => {
@@ -135,7 +135,7 @@ export const useUploadToAppStore = () => {
     return useCallback((app, uploadInfo, appDownloadUrl, setIsloading, setOpen) => {
         setIsloading(true)
         if (validateUploadIndo(uploadInfo)) {
-            if (appStoreUser?.token) {
+            if (appStoreUser ?. token) {
                 const appDetails = {
                     ...app,
                     octobot_version: botInfo.octobot_version,
@@ -210,7 +210,7 @@ export const useRateAppStore = () => {
                 onFail(updated_data, update_url, result, msg, status)
             }
         }
-        if (appStoreUser?.token) {
+        if (appStoreUser ?. token) {
             sendAndInterpretBotUpdate(ratingInfo, appStoreDomain + backendRoutes.appStoreRate, onSucces, onFail, "POST", true, appStoreUser.token)
         } else {
             createNotification("You need to be signed in to rate an app", "warning")
@@ -221,12 +221,12 @@ export const useRateAppStore = () => {
 export const useAddToAppStoreCart = () => {
     const setAppStoreCart = useUpdateAppStoreCartContext()
     return useCallback((app) => {
-        if (app?.categories?.[0]) {
+        if (app ?. categories ?. [0]) {
             setAppStoreCart(prevCart => {
                 const newCart = {
                     ...prevCart
                 }
-                if (newCart?.[app.origin_package]) {
+                if (newCart ?. [app.origin_package]) {
                     newCart[app.origin_package][app.package_id] = app
                 } else {
                     newCart[app.origin_package] = {
@@ -249,7 +249,7 @@ export const useRemoveFromAppStoreCart = () => {
             const newCart = {
                 ...prevCart
             }
-            if (newCart?.[origin_package]) {
+            if (newCart ?. [origin_package]) {
                 delete newCart[origin_package]
             }
             return newCart
@@ -284,7 +284,7 @@ export const useCreatePaymentFromAppStoreCart = () => {
                 onFail(updated_data, update_url, result, msg, status)
             }
         }
-        if (appStoreUser?.token) {
+        if (appStoreUser ?. token) {
             sendAndInterpretBotUpdate({
                 origin_packages
             }, appStoreDomain + backendRoutes.appStoreCreatePayment, onSucces, onFail, "POST", true, appStoreUser.token)
@@ -298,11 +298,11 @@ export const useCancelStorePayment = () => {
     const setAppStorePaymentUrl = useUpdateAppStorePaymentUrlContext()
     const appStorePaymentUrl = useAppStorePaymentUrlContext()
     return useCallback(() => {
-        fetch(appStorePaymentUrl?.cancelUrl);
+        fetch(appStorePaymentUrl ?. cancelUrl);
         setAppStorePaymentUrl()
         createNotification("Payment cancelled")
     }, [
-        appStorePaymentUrl?.cancelUrl,
+        appStorePaymentUrl ?. cancelUrl,
         setAppStorePaymentUrl
     ]);
 }
@@ -310,7 +310,7 @@ export const useCancelStorePayment = () => {
 export const useIsInAppStoreCart = () => {
     const appStoreCart = useAppStoreCartContext()
     return useCallback((app) => {
-        return Boolean(appStoreCart?.[app?.origin_package])
+        return Boolean(appStoreCart ?. [app ?. origin_package])
     }, [appStoreCart]);
 }
 
@@ -320,9 +320,9 @@ export const useAppHasPremiumRequirement = () => {
         if (app.price) {
             return true
         } else if (app.requirements) {
-            app.requirements?.forEach(requirement => {})
+            app.requirements ?. forEach(requirement => {})
         }
-        return Boolean(appStoreCart?.[app.origin_package])
+        return Boolean(appStoreCart ?. [app.origin_package])
     }, [appStoreCart]);
 }
 
@@ -338,7 +338,7 @@ export const useInstallAnyAppPackage = () => {
     const installProfile = useInstallProfile()
     const installApp = useInstallAppPackage()
     return useCallback((downloadInfo, app, setIsloading, setOpen) => {
-        if (app.categories?.[0] === strategyName) {
+        if (app.categories ?. [0] === strategyName) {
             installProfile({
                 ...downloadInfo,
                 ...app
@@ -460,7 +460,7 @@ export const useInstallProfile = () => {
 
 function getAppUrlFromDownloadInfo(downloadInfo, appStoreDomain, appStoreUser) {
     return `${appStoreDomain}/download_app/${
-        appStoreUser?.download_token
+        appStoreUser ?. download_token
     }/${
         downloadInfo.major_version
     }/${
@@ -486,7 +486,7 @@ export const AppStoreDataProvider = ({children}) => {
     const [appStoreCartIsOpen, setAppStoreCartIsOpen] = useState(false);
     const [appStorePaymentUrl, setAppStorePaymentUrl] = useState();
     const [appStoreUserData, setAppStoreUserData] = useState({});
-    const [appStoreDomain, setAppStoreDomain] = useState(isProduction ? appStoreDomainProduction : process.env.REACT_APP_STORE_DOMAIN);
+    const [appStoreDomain, setAppStoreDomain] = useState(isProduction ? appStoreDomainProduction : (process.env.REACT_APP_STORE_DEVELOPMENT_DOMAIN||appStoreDomainProduction));
     const fetchAppStoreData = useFetchAppStoreData()
     const botInfo = useBotInfoContext()
     useEffect(() => {

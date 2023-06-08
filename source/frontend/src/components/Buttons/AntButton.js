@@ -78,6 +78,9 @@ export default function AntButton({
     if (selected) {
         _style.color = botColors?.fontActive
     }
+    if (href) {
+        _style.width = "fit-content"
+    }
 
     const _spanStyle = spanStyle
     if (buttonVariant === buttonVariants.text) {

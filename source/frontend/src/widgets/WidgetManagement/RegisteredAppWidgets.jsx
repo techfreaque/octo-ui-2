@@ -8,7 +8,7 @@ import Configuration from "../AppWidgets/Configuration/Form";
 import TimeFrameSelector from "../AppWidgets/TimeFrameSelector/TimeFrameSelector";
 import Header from "../LayoutWidgets/Header";
 import ColorModeSwitch from "../AppWidgets/Buttons/ColorModeSwitcher";
-import AppStore from "../AppWidgets/AppStore/AppStore";
+import AppStore from "../AppWidgets/StrategyConfigurator/StrategyConfigurator";
 import CurrentPortfolioTable from "../AppWidgets/Tables/CurrentPortfolio";
 import TradingConfig from "../AppWidgets/Configuration/TradingConfig";
 import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
@@ -19,7 +19,7 @@ import UIConfig from "../AppWidgets/Configuration/UIConfig";
 import StartBacktestingButton from "../AppWidgets/Buttons/StartBacktestingButton";
 import StopBacktestingButton from "../AppWidgets/Buttons/StopBacktestingButton";
 import OptimizerQueueTable from "../AppWidgets/Tables/OptimizerQueue";
-import OptimizerConfigForm from "../AppWidgets/Configuration/OptimizerConfigForm/OptimizerConfigForm";
+import OptimizerConfigForm, {OptimizerNotInstalled} from "../AppWidgets/Configuration/OptimizerConfigForm/OptimizerConfigForm";
 import OptimizerRunsToBeAdded from "../AppWidgets/Stats/OptimizerRunsToBeAdded";
 import StartOptimizerButton from "../AppWidgets/Buttons/StartOptimizerButton";
 import StopOptimizerButton from "../AppWidgets/Buttons/StopOptimizerButton";
@@ -54,13 +54,11 @@ import CurrentPanelPosition from "../AppWidgets/Buttons/CurrentPanelPosition";
 import DataCollectorProgress from "../AppWidgets/Progress/DataCollectorProgress";
 import ClosePairSelector from "../AppWidgets/Buttons/ClosePairSelector";
 import SavePairSelector from "../AppWidgets/Buttons/SavePairSelector";
-import StraegyConfigurator from "../AppWidgets/Configuration/StrategyConfigurator";
-import LoginManager from "../AppWidgets/AppStore/Login";
-import AppStoreCartModal, {AppStoreCart} from "../AppWidgets/AppStore/Cart";
+import LoginManager from "../AppWidgets/StrategyConfigurator/Login";
+import AppStoreCartModal, {AppStoreCart} from "../AppWidgets/StrategyConfigurator/Cart";
 import SaveTradingModeSettings from "../AppWidgets/Buttons/SaveTradingModeSettings";
 import StopTrainingButton from "../AppWidgets/Buttons/StopTrainingButton";
-import ProjectHomePage from "../AppWidgets/ProjectPage/Home";
-import StrategyFlowBuilder from "../AppWidgets/Configuration/StrategyFlowBuilder/StrategyFlowBuilder";
+import ProjectHomePage, {ProjectHomePageModal} from "../AppWidgets/ProjectPage/Home";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -124,12 +122,12 @@ export const registeredComponents = {
     DataCollectorProgress,
     ClosePairSelector,
     SavePairSelector,
-    StraegyConfigurator,
     LoginManager,
     AppStoreCart,
     AppStoreCartModal,
     SaveTradingModeSettings,
     StopTrainingButton,
     ProjectHomePage,
-    StrategyFlowBuilder
+    ProjectHomePageModal,
+    OptimizerNotInstalled
 };

@@ -3,6 +3,8 @@ import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
 import IconFromString from '../../../components/Icons/IconFromString';
 import {Tooltip, Modal, Avatar} from 'antd';
 import AntButton from '../../../components/Buttons/AntButton';
+import { CloseOutlined } from "@ant-design/icons";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 
 export default function ButtonWithModal({
     title,
@@ -79,6 +81,7 @@ function ModalContent({
     content,
     width = 1000
 }) {
+    const botColors = useBotColorsContext()
     return (
         <Modal open={open}
             onCancel={handleClose}
@@ -86,6 +89,9 @@ function ModalContent({
             centered
             footer={null}
             closable={true}
+            closeIcon={(<CloseOutlined  style={{ fontSize: "40px", height: "40px" ,color: botColors?.warning }} 
+                
+                />)}
             // closable={false}
             keyboard
             zIndex={1000}>

@@ -12,9 +12,7 @@ import {useFetchTentaclesConfig} from "../../../context/config/TentaclesConfigPr
 import {SaveOutlined} from "@ant-design/icons";
 import {sizes} from "../../../constants/frontendConstants";
 import AntButton from "../../../components/Buttons/AntButton";
-import StrategyFlowBuilder from "./StrategyFlowBuilder/StrategyFlowBuilder";
 import JsonEditor from "@techfreaque/json-editor-react";
-
 
 export function useCurrentTentacleConfig(tentacleType = tentacleConfigType.tentacles) {
     const currentTentaclesConfig = useTentaclesConfigContext()
@@ -32,16 +30,17 @@ export default function TentaclesConfig({
     const currentTentaclesNonTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tentacles]
     const tentacles = tentacleNames.split(",")
     const saveTentaclesConfig = useSaveTentaclesConfig()
-    function handleTentaclesUpdate() {
-        fetchTentaclesConfig(tentacleNames.split(","))
-    }
     useEffect(() => {
-        handleTentaclesUpdate()
+        fetchTentaclesConfig(tentacleNames.split(","))
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [botInfo])
+    const _additionalTabs = useGetAdditionalTabs(additionalTabs)
     return useMemo(() => {
-        if (! currentTentaclesConfig) {
+        if (! currentTentaclesNonTradingConfig) {
             return;
+        }
+        function handleTentaclesUpdate() {
+            fetchTentaclesConfig(tentacleNames.split(","))
         }
         const configs = {}
         tentacles?.forEach(tentacle => {
@@ -53,33 +52,38 @@ export default function TentaclesConfig({
                 saveTentaclesConfig={saveTentaclesConfig}
                 content={content}
                 additionalTabsAfter={
-                    additionalTabs.map(tab => {
-                        const tabId = tab.title.replace(/ /g, "_")
-                        return {
-                            ...tab,
-                            tabId,
-                            title: (
-                                <Tab key={tabId}
-                                    label={
-                                        tab.title
-                                    }
-                                    value={tabId}
-                                    sx={
-                                        {textTransform: 'none'}
-                                    }/>
-                            ),
-                            content: (
-                                <AppWidgets layout={
-                                    tab.content
-                                }/>
-                            )
-                        }
-                    })
+                    _additionalTabs
                 }
                 storageName={tentacleNames}/>
         )
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [botInfo, content, currentTentaclesNonTradingConfig, tentacleNames])
+    }, [_additionalTabs, content, currentTentaclesNonTradingConfig, fetchTentaclesConfig, saveTentaclesConfig, tentacleNames, tentacles])
+}
+
+function useGetAdditionalTabs(additionalTabs) {
+    return useMemo(() => (
+        additionalTabs?.map(tab => {
+            const tabId = tab.title.replace(/ /g, "_")
+            return {
+                ...tab,
+                tabId,
+                title: (
+                    <Tab key={tabId}
+                        label={
+                            tab.title
+                        }
+                        value={tabId}
+                        sx={
+                            {textTransform: 'none'}
+                        }/>
+                ),
+                content: (
+                    <AppWidgets layout={
+                        tab.content
+                    }/>
+                )
+            }
+        })
+    ),[additionalTabs])
 }
 
 
@@ -201,50 +205,28 @@ export function generateTradingConfigTabs({
 }) {
     const tabsData = []
     // window.trading_mode_objects = {}
-
     destroyAllEditors(storageName)
-
     // avoid working on original elements as they will be edited for custom user inputs
     window[getCustomDisplayAsTabInputsStorage(storageName)] = {}
     const tentacleNames = Object.keys(userInputs)
-    if (tentacleNames.includes(strategyFlowMakerName)) {
-        tabsData.push({
-            label: replaceUppercaseWithSpace(strategyFlowMakerName),
-            key: strategyFlowMakerName,
-            order: -1,
-            antIcon: "RocketOutlined",
-            content: (
-                <StrategyFlowBuilder
-                    tradingModeKey={strategyFlowMakerName}/>
-            // <JsonEditor schema={schema}
-            //     startval={config}
-            //     editorName={
-            //         `${editorKey}##${configName}`
-            //     }
-            //     {...defaultJsonEditorSettings()}
-            //     display_required_only={true}
-            //     storageName={storageName}/>
-            )
-        })
-    } else {
-        const editedUserInputs = JSON.parse(JSON.stringify(userInputs));
-        tentacleNames.forEach(tentacleName => { // _applyCustomPathUserInputs(editedUserInputs, tradingModeName);
-            create_custom_tabs({tentacleInputs: editedUserInputs[tentacleName], tabsData, storageName, displayStyle})
-            _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
-            _createTentacleConfigTab({
-                configTitle: (storageName === "tradingConfig" ? replaceUppercaseWithSpace(editedUserInputs[tentacleName].tentacle) : editedUserInputs[tentacleName].tentacle),
-                configName: editedUserInputs[tentacleName].tentacle,
-                config: editedUserInputs[tentacleName].config,
-                schema: editedUserInputs[tentacleName].schema,
-                editorKey: editedUserInputs[tentacleName].tentacle_type,
-                antIcon: editedUserInputs[tentacleName].tentacle_type === "trading_mode" ? "BranchesOutlined" : (editedUserInputs[tentacleName].tentacle_type === "evaluator" ? "ControlOutlined" : undefined),
-                tabsData,
-                storageName,
-                displayStyle
-            });
+    const editedUserInputs = JSON.parse(JSON.stringify(userInputs));
+    tentacleNames.forEach(tentacleName => { // _applyCustomPathUserInputs(editedUserInputs, tradingModeName);
+        create_custom_tabs({tentacleInputs: editedUserInputs[tentacleName], tabsData, storageName, displayStyle})
+        _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns)
+        _createTentacleConfigTab({
+            configTitle: (storageName === "tradingConfig" ? replaceUppercaseWithSpace(editedUserInputs[tentacleName].tentacle) : editedUserInputs[tentacleName].tentacle),
+            configName: editedUserInputs[tentacleName].tentacle,
+            config: editedUserInputs[tentacleName].config,
+            schema: editedUserInputs[tentacleName].schema,
+            editorKey: editedUserInputs[tentacleName].tentacle_type,
+            antIcon: editedUserInputs[tentacleName].tentacle_type === "trading_mode" ? "BranchesOutlined" : (editedUserInputs[tentacleName].tentacle_type === "evaluator" ? "ControlOutlined" : undefined),
+            tabsData,
+            storageName,
+            displayStyle
+        });
 
-        })
-    } tabsData.sort((a, b) => {
+    })
+    tabsData.sort((a, b) => {
         if (a.order < b.order) {
             return -1;
         }
@@ -260,8 +242,8 @@ export function generateTradingConfigTabs({
     ]
 }
 
-function replaceUppercaseWithSpace(string) {
-    return string.split(/(?=[A-Z])/).join(" ").replace(/_/g, " ")
+export function replaceUppercaseWithSpace(string) {
+    return string?.split(/(?=[A-Z])/).join(" ").replace(/_/g, " ")
 }
 function getCustomDisplayAsTabInputsStorage(storageName) {
     return `${storageName}customDisplayAsTabInputs`

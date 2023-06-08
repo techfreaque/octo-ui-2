@@ -8,8 +8,9 @@ import {
 import {useBotDomainContext} from "./BotDomainProvider";
 import {fetchProConfig, saveProConfig} from "../../api/configs";
 import {getOptimizerSettingsValues} from "../../widgets/AppWidgets/Configuration/OptimizerConfigForm/OptimizerConfigForm";
-import {OPTIMIZER_INPUTS_KEY} from "../../constants/backendConstants";
+import {OPTIMIZER_INPUTS_KEY, backendRoutes} from "../../constants/backendConstants";
 import createNotification from "../../components/Notifications/Notification";
+import { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
 
 const OptimizerEditorCounterContext = createContext();
 const UpdateOptimizerEditorCounterContext = createContext();
@@ -35,10 +36,13 @@ export const useUpdateOptimizerEditorContext = () => {
 export const useFetchProConfig = () => {
     const setOptimizerEditor = useUpdateOptimizerEditorContext();
     const botDomain = useBotDomainContext();
-    const logic = useCallback((onFinished) => {
-        fetchProConfig(botDomain, setOptimizerEditor,onFinished);
+    return useCallback((onFinished) => {
+        const success = (updated_data, update_url, result, msg, status) => {
+            setOptimizerEditor(msg)
+            onFinished?.(msg)
+        }
+        sendAndInterpretBotUpdate({}, botDomain + backendRoutes.proConfig, success, undefined, "get")
     }, [setOptimizerEditor, botDomain]);
-    return logic;
 };
 
 export const useGetAndSaveOptimizerForm = () => {
