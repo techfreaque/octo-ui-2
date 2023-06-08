@@ -13,7 +13,7 @@ const {Panel} = Collapse;
 
 export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrentlySelectedMenu, defaultSelected}) {
     const botColors = useBotColorsContext();
-    const hasContent = menuItems && Boolean(menuItems ?. length)
+    const hasContent = menuItems && Boolean(menuItems?.length)
     const _defaultSelected = hasContent && (defaultSelected ? defaultSelected : getKeyFromLabel(Object.values(menuItems)[0]))
     const [_currentlySelectedMenu, _setCurrentlySelectedMenu] = useState();
     const [hideText, setHideText] = useState(false);
@@ -54,7 +54,7 @@ export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrent
                             // `${sideBarWidth}px`,
                             height: "100%",
                             borderRight: `4px solid ${
-                                botColors ?. border
+                                botColors?.border
                             }`
                         }
                     }
@@ -82,7 +82,7 @@ export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrent
         )
     }, [
         hasContent,
-        botColors ?. border,
+        botColors?.border,
         menuItems,
         actualCurrentlySelectedMenu,
         activeMenus,
@@ -91,7 +91,7 @@ export default function AntSidebar({menuItems, currentlySelectedMenu, setCurrent
     ])
 }
 
-function DisplayCurrentContent({menuItemsData, currentlySelectedMenu, setActiveMenus, activeMenus}) { // const [content, setContent] = useState()
+function DisplayCurrentContent({menuItemsData, currentlySelectedMenu, setActiveMenus}) { // const [content, setContent] = useState()
 
     useEffect(() => {
         const newActiveMenus = []
@@ -101,13 +101,13 @@ function DisplayCurrentContent({menuItemsData, currentlySelectedMenu, setActiveM
         // setContent(newContent)
     }, [currentlySelectedMenu, menuItemsData, setActiveMenus])
 
-    return menuItemsData ?. map((menuItemData) => {
+    return menuItemsData?.map((menuItemData) => {
         return (
             <Content menuItemData={menuItemData}
                 visible={
-                    activeMenus ?. includes(getKeyFromLabel(menuItemData))
+                    currentlySelectedMenu === getKeyFromLabel(menuItemData)
                 }
-                activeMenus={activeMenus}/>
+                currentlySelectedMenu={currentlySelectedMenu}/>
         )
     })
 }
@@ -134,10 +134,11 @@ function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
 function Content({
     menuItemData,
     visible = false,
-    activeMenus
+    currentlySelectedMenu
 }) {
     return (
-        <div key={
+        <>
+       { <div key={
                 menuItemData.label
             }
             style={
@@ -146,27 +147,28 @@ function Content({
                         display: "none"
                     }),
                     width: "100%",
-                    padding: menuItemData ?. noPadding ? "" : "15px",
+                    padding: menuItemData?.noPadding ? "" : "15px",
                     height: "100%",
-                    overflowY: menuItemData ?. dontScroll ? undefined : "auto",
+                    overflowY: menuItemData?.dontScroll ? undefined : "auto",
                     overflowX: "hidden"
                 }
         }>
             {
             useMemo(() => (menuItemData.content), [menuItemData.content])
         }
+        </div>}
             {
             useMemo(() => {
-                return menuItemData ?. children ?. map((subMenuItemData) => (
+                return menuItemData?.children?.map((subMenuItemData) => (
                     <Content menuItemData={subMenuItemData}
                         visible={
-                            activeMenus ?. includes(getKeyFromLabel(menuItemData))
+                            currentlySelectedMenu === getKeyFromLabel(subMenuItemData)
                         }
-                        activeMenus={activeMenus}/>
+                        currentlySelectedMenu={currentlySelectedMenu}/>
                 ))
-            }, [activeMenus, menuItemData])
-        } </div>
-    )
+            }, [currentlySelectedMenu, menuItemData])
+            }
+            </>  )
 }
 
 function MenuItems({
@@ -216,16 +218,16 @@ function MenuItem({
 }) {
     function handleCurentChange() {
         setCurrentlySelectedMenu(getKeyFromLabel(menuItem))
-        menuItem ?. onClick ?. (menuItem)
+        menuItem?.onClick ?. (menuItem)
     }
     const colorMode = useColorModeContext()
     const colors = useBotColorsContext()
     const buttonStyle = getKeyFromLabel(menuItem) === currentlySelectedMenu ? { // backgroundColor: colors ?. backgroundActive,
-        color: colors ?. fontActive
+        color: colors?.fontActive
     } : {}
 
 
-    return useMemo(() => (menuItem.children ?. length ? (
+    return useMemo(() => (menuItem.children?.length ? (
         <NestedSideBarMenuItem colorMode={colorMode}
             activeMenus={activeMenus}
             botColors={botColors}
@@ -288,7 +290,7 @@ function NestedSideBarMenuItem({
                                     {
                                         margin: "auto",
                                         ...(activeMenus.includes(getKeyFromLabel(menuItem)) ? {
-                                            color: botColors ?. fontActive
+                                            color: botColors?.fontActive
                                         } : {})
                                     }
                                 }
@@ -296,7 +298,7 @@ function NestedSideBarMenuItem({
                                     menuItem.label
                                 }
                                 icon={
-                                    menuItem ?. icon
+                                    menuItem?.icon
                                 }
                                 isResponsive={false}
                                 antIconString={
@@ -317,7 +319,7 @@ function NestedSideBarMenuItem({
                             {display: "flex"}
                         }>
                             {
-                            menuItem ?. icon && menuItem.icon
+                            menuItem?.icon && menuItem.icon
                         }
                             <IconFromString faIcon={
                                     menuItem.faIcon
@@ -384,7 +386,7 @@ function SideBarButton({
         <div style={
             {
                 width: "100%",
-                ... buttonContainerStyle
+                ...buttonContainerStyle
             }
         }>
             {
@@ -394,7 +396,7 @@ function SideBarButton({
                         {
                             margin: "auto",
                             ...(activeMenus.includes(getKeyFromLabel(menuItem)) ? {
-                                color: botColors ?. fontActive
+                                color: botColors?.fontActive
                             } : {})
                         }
                     }
@@ -406,7 +408,7 @@ function SideBarButton({
                         menuItem.antIcon
                     }
                     icon={
-                        menuItem ?. icon
+                        menuItem?.icon
                     }
                     faIconString={
                         menuItem.faIcon
@@ -421,7 +423,7 @@ function SideBarButton({
                 <Button style={
                         {
                             ...buttonStyle,
-                            ... buttonStyleForIcon,
+                            ...buttonStyleForIcon,
                             textAlign: "start"
                         }
                     }
@@ -461,7 +463,7 @@ function getKeyFromLabel(menuItem) {
     if (menuItem.key) {
         return menuItem.key
     } else if (menuItem.label) {
-        return menuItem.label ?. replace(" ", "_")
+        return menuItem.label?.replace(" ", "_")
     }
     console.error("A sidebar menu item has no label")
 }

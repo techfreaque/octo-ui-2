@@ -6,7 +6,7 @@ import {
     useEffect
 } from "react";
 import {useBotDomainContext} from "./BotDomainProvider";
-import {fetchProConfig, saveProConfig} from "../../api/configs";
+import {saveProConfig} from "../../api/configs";
 import {getOptimizerSettingsValues} from "../../widgets/AppWidgets/Configuration/OptimizerConfigForm/OptimizerConfigForm";
 import {OPTIMIZER_INPUTS_KEY, backendRoutes} from "../../constants/backendConstants";
 import createNotification from "../../components/Notifications/Notification";

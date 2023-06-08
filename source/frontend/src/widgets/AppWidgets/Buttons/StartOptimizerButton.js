@@ -12,7 +12,7 @@ export default function StartOptimizerButton() {
   const isOnline = useIsBotOnlineContext()
   const isDataCollecting = useBotIsDataCollectingContext()
   const botInfo = useBotInfoContext()
-  const uiProInstalled = botInfo ?. ui_pro_installed
+  const uiProInstalled = botInfo?.ui_pro_installed
   return useMemo(() => {
     return !isOptimizer && (
       <AntButton 

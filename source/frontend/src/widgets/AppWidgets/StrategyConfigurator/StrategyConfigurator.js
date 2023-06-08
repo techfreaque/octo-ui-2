@@ -101,7 +101,7 @@ export default function AppStore() {
                     {
                         label: (
                             <BuildingBlocksSidebar/>),
-                        key: strategyFlowMakerName,
+                        key: "flowModeSidebar",
                         labelIsContent: true,
                         order: -1
                     }

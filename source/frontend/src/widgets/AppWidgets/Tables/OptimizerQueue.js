@@ -21,7 +21,7 @@ export default function OptimizerQueueTable() {
     const saveOptimizerQueue = useSaveOptimizerQueue()
     const containerId = "optimizer-queue-table"
     const botInfo = useBotInfoContext()
-    const uiProInstalled = botInfo ?. ui_pro_installed
+    const uiProInstalled = botInfo?.ui_pro_installed
     useEffect(() => {
         uiProInstalled && fetchOptimizerQueue()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -65,7 +65,7 @@ function updateOptimizerQueueEditor(optimizerQueue, saveOptimizerQueue, containe
 
 function updateOptimizerQueueCount(optimizerQueue, updateOptimizerQueueCounter) {
     let count = 0;
-    if (optimizerQueue ?. length) {
+    if (optimizerQueue?.length) {
         optimizerQueue.forEach(optimizerRun => {
             count += Object.keys(optimizerRun.runs).length;
         });

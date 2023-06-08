@@ -15,11 +15,11 @@ export default function OptimizerConfigForm() {
     const optimizerConfig = optimizerEditor ? (optimizerEditor[OPTIMIZER_INPUTS_KEY] || {}) : null
     const formIsBuilt = Boolean(optimizerConfig)
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
+    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
     const saveOptimizerForm = useGetAndSaveOptimizerForm()
     const fetchProConfig = useFetchProConfig()
     const botInfo = useBotInfoContext()
-    const uiProInstalled = botInfo ?. ui_pro_installed
+    const uiProInstalled = botInfo?.ui_pro_installed
     useEffect(() => {
         uiProInstalled && fetchProConfig()
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -61,7 +61,7 @@ export default function OptimizerConfigForm() {
 
 export function OptimizerNotInstalled() {
     const botInfo = useBotInfoContext()
-    const uiProInstalled = botInfo ?. ui_pro_installed
+    const uiProInstalled = botInfo?.ui_pro_installed
     return ! uiProInstalled && (
         <Alert style={
                 {margin: "10px"}
@@ -99,7 +99,7 @@ async function _buildOptimizerSettingsForm(schemaElements, optimizerConfig, setF
         const inputGroupId = _appendInputGroupFromTemplate(settingsRoot, tentacleName);
         const inputGroupElement = $(document.getElementById(inputGroupId));
         const inputGroupContent = inputGroupElement.find(".input-content");
-        const configInputs = typeof optimizerConfig ?. user_inputs === "undefined" ? {} : optimizerConfig ?. user_inputs
+        const configInputs = typeof optimizerConfig?.user_inputs === "undefined" ? {} : optimizerConfig?.user_inputs
         Object.values(element.schema.properties).forEach(function (inputDetail) {
             if (_buildOptimizerConfigElementSettingForm(inputGroupContent, inputDetail, configInputs, tentacleName, inputDetail.options.name)) {
                 atLeastOneUserInput = true;
@@ -338,7 +338,7 @@ function _updateInputDetailValues(valueType, inputDetail, configValues, tentacle
             inputDetail.options.name
         }-Input-setting-${valueType}`));
         if (valueType === "options") {
-            if (inputDetail ?. enum) {
+            if (inputDetail?.enum) {
                 inputDetail.enum.forEach((value) => {
                     const isSelected = values.includes(value);
                     valuesSelect.append(new Option(value, value, false, isSelected));
