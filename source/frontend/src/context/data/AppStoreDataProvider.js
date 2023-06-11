@@ -2,7 +2,6 @@ import React, {useState, useContext, createContext, useEffect} from "react";
 import {useCallback} from "react";
 import {selectProfile} from "../../api/actions";
 import {
-    fetchAppStoreData,
     fetchPackagesData,
     loginToAppStore,
     logoutFromAppStore,
@@ -82,17 +81,19 @@ export const useAppStoreDataContext = () => {
 const _useFetchAppStoreData = () => {
     const saveAppStoreData = useSaveAppStoreDataContext()
     const appStoreDomain = useAppStoreDomainContext()
-    const botInfo = useBotInfoContext()
     return useCallback((installedTentaclesInfo, notification, appStoreUser) => {
-        if (appStoreDomain) 
-            fetchAppStoreData(saveAppStoreData, appStoreDomain, {
-                installedTentaclesInfo,
-                botInfo
-            }, notification, appStoreUser);
-        
-
-
-    }, [appStoreDomain, saveAppStoreData, botInfo])
+        if (appStoreDomain) {
+            function onSuccess(updated_data, update_url, result, msg, status) {
+                saveAppStoreData(msg?.data)
+                notification && createNotification("Successfully fetched package manager repositories")
+            }
+            function onFail(updated_data, update_url, result, msg, status) {
+                notification && createNotification("Failed to fetch package manager repositories")
+                // TODO add fallback
+            }
+            sendAndInterpretBotUpdate(installedTentaclesInfo, appStoreDomain + backendRoutes.appStoreFree, onSuccess, onFail, "POST", true, appStoreUser?.token)
+        }
+    }, [appStoreDomain, saveAppStoreData])
 }
 
 export const useFetchAppStoreData = () => {
@@ -122,8 +123,8 @@ export const useLogoutFromAppStore = () => {
     }, [updateAppStoreUser, appStoreDomain, appStoreUser]);
 }
 
-export function validateUploadIndo(uploadInfo) {
-    return uploadInfo?.[apiFields.releaseNotes]?.length > minReleaseNotesLength || ! uploadInfo?.includePackage
+export function validateUploadInfo(uploadInfo) {
+    return(uploadInfo?.[apiFields.releaseNotes]?.length || 0) > minReleaseNotesLength || uploadInfo?.includePackage !== true
 }
 
 export const useUploadToAppStore = () => {
@@ -134,7 +135,7 @@ export const useUploadToAppStore = () => {
 
     return useCallback((app, uploadInfo, appDownloadUrl, setIsloading, setOpen) => {
         setIsloading(true)
-        if (validateUploadIndo(uploadInfo)) {
+        if (validateUploadInfo(uploadInfo)) {
             if (appStoreUser?.token) {
                 const appDetails = {
                     ...app,
@@ -190,7 +191,12 @@ export const useUploadToAppStore = () => {
             setIsloading(false)
             createNotification("Enter release notes before you upload", "danger")
         }
-    }, [appStoreDomain, appStoreUser.token, botInfo.octobot_version, updateAppStoreUser]);
+    }, [
+        appStoreDomain,
+        appStoreUser?.token,
+        botInfo.octobot_version,
+        updateAppStoreUser
+    ]);
 }
 
 export const useRateAppStore = () => {
@@ -215,11 +221,62 @@ export const useRateAppStore = () => {
         } else {
             createNotification("You need to be signed in to rate an app", "warning")
         }
-    }, [appStoreDomain, appStoreUser]);
+    }, [appStoreDomain, appStoreUser?.token]);
+}
+
+export const usePublishApp = () => {
+    const appStoreDomain = useAppStoreDomainContext()
+    const appStoreUser = useAppStoreUserContext()
+    return useCallback((package_id, setIsloading) => {
+        setIsloading(true)
+        function onFail(updated_data, update_url, result, msg, status) {
+            setIsloading(false)
+            createNotification("Failed to publish app", "danger")
+        }
+        function onSucces(updated_data, update_url, result, msg, status, request) {
+            if (msg.success) {
+                setIsloading(false)
+                createNotification("App published successfully")
+            } else {
+                onFail(updated_data, update_url, result, msg, status)
+            }
+        }
+        if (appStoreUser?.token) {
+            sendAndInterpretBotUpdate({package_id}, appStoreDomain + backendRoutes.appPublishApp, onSucces, onFail, "POST", true, appStoreUser.token)
+        } else {
+            createNotification("You need to be signed in to publish an app", "warning")
+        }
+    }, [appStoreDomain, appStoreUser?.token]);
+}
+
+export const useUnpublishApp = () => {
+    const appStoreDomain = useAppStoreDomainContext()
+    const appStoreUser = useAppStoreUserContext()
+    return useCallback((package_id, setIsloading) => {
+        setIsloading(true)
+        function onFail(updated_data, update_url, result, msg, status) {
+            setIsloading(false)
+            createNotification("Failed to unpublish app", "danger")
+        }
+        function onSucces(updated_data, update_url, result, msg, status, request) {
+            if (msg.success) {
+                setIsloading(false)
+                createNotification("App unpublished successfully")
+            } else {
+                onFail(updated_data, update_url, result, msg, status)
+            }
+        }
+        if (appStoreUser?.token) {
+            sendAndInterpretBotUpdate({package_id}, appStoreDomain + backendRoutes.appUnpublishApp, onSucces, onFail, "POST", true, appStoreUser.token)
+        } else {
+            createNotification("You need to be signed in to unpublish an app", "warning")
+        }
+    }, [appStoreDomain, appStoreUser?.token]);
 }
 
 export const useAddToAppStoreCart = () => {
     const setAppStoreCart = useUpdateAppStoreCartContext()
+    const cancelStorePayment = useCancelStorePayment()
     return useCallback((app) => {
         if (app?.categories?.[0]) {
             setAppStoreCart(prevCart => {
@@ -233,13 +290,15 @@ export const useAddToAppStoreCart = () => {
                         [app.package_id]: app
                     }
                 }
+                localStorage.setItem('cart', JSON.stringify(newCart));
                 return newCart
             })
+            cancelStorePayment(false)
             createNotification("Successfully added to the cart", "success")
         } else {
             createNotification("Cant buy a non store app", "danger")
         }
-    }, [setAppStoreCart]);
+    }, [cancelStorePayment, setAppStoreCart]);
 }
 
 export const useRemoveFromAppStoreCart = () => {
@@ -252,6 +311,7 @@ export const useRemoveFromAppStoreCart = () => {
             if (newCart?.[origin_package]) {
                 delete newCart[origin_package]
             }
+            localStorage.setItem('cart', JSON.stringify(newCart));
             return newCart
         })
         createNotification("Package removed from the cart", "success")
@@ -276,8 +336,10 @@ export const useCreatePaymentFromAppStoreCart = () => {
         }
         function onSucces(updated_data, update_url, result, msg, status, request) {
             if (msg.success) {
-                setIsloading ?. (false)
-                setAppStorePaymentUrl({paymentUrl: msg.payment_url, cancelUrl: msg.cancel_url})
+                setIsloading?.(false)
+                const payment = { paymentUrl: msg.payment_url, cancelUrl: msg.cancel_url }
+                setAppStorePaymentUrl(payment)
+                localStorage.setItem('payment', JSON.stringify(payment));
                 window.open(msg.payment_url, '_blank').focus();
                 createNotification("Payment created")
             } else {
@@ -291,20 +353,69 @@ export const useCreatePaymentFromAppStoreCart = () => {
         } else {
             createNotification("You need to be signed in to buy apps", "warning")
         }
-    }, [appStoreDomain, appStoreUser.token, setAppStorePaymentUrl, updateAppStoreUser]);
+    }, [appStoreDomain, appStoreUser?.token, setAppStorePaymentUrl, updateAppStoreUser]);
 }
 
 export const useCancelStorePayment = () => {
     const setAppStorePaymentUrl = useUpdateAppStorePaymentUrlContext()
     const appStorePaymentUrl = useAppStorePaymentUrlContext()
-    return useCallback(() => {
+    return useCallback((notification = true) => {
         fetch(appStorePaymentUrl?.cancelUrl);
         setAppStorePaymentUrl()
-        createNotification("Payment cancelled")
+        localStorage.setItem('payment', JSON.stringify());
+        notification && createNotification("Payment cancelled")
     }, [
         appStorePaymentUrl?.cancelUrl,
         setAppStorePaymentUrl
     ]);
+}
+
+export const useCheckStorePayment = () => {
+    const setAppStorePaymentUrl = useUpdateAppStorePaymentUrlContext()
+    const appStorePaymentUrl = useAppStorePaymentUrlContext()
+    const appStoreDomain = useAppStoreDomainContext()
+    const appStoreUser = useAppStoreUserContext()
+    const setAppStoreCart = useUpdateAppStoreCartContext()
+    const fetchAppStoreData = useFetchAppStoreData()
+    return useCallback((notification = true) => {
+        const cancelUrl = appStorePaymentUrl?.cancelUrl.split("/")
+        const checkInfo = { token: cancelUrl[cancelUrl.length-1] }
+        function onFail() {
+            createNotification("Payment not detected yet", "warning")
+        }
+        function onSuccess(updated_data, update_url, result, msg, status) {
+            if (msg?.is_paid) {
+                fetchAppStoreData(false);
+                setAppStoreCart()
+                localStorage.setItem('cart', JSON.stringify());
+                setAppStorePaymentUrl()
+                localStorage.setItem('payment', JSON.stringify());
+                createNotification("Payment successful", "info", "You can download the app now", 50_000_000)
+            } else {
+                onFail()
+            }
+        }
+        sendAndInterpretBotUpdate(checkInfo, appStoreDomain + backendRoutes.appStoreCheckPayment, onSuccess, onFail, "POST", true, appStoreUser?.token)
+    }, [appStoreDomain, appStorePaymentUrl?.cancelUrl, appStoreUser?.token, fetchAppStoreData, setAppStoreCart, setAppStorePaymentUrl]);
+}
+
+export const useGetUsers = () => {
+    const appStoreDomain = useAppStoreDomainContext()
+    const appStoreUser = useAppStoreUserContext()
+    return useCallback((setAppStoreUsers) => {
+        function onFail() {
+            // createNotification("Failed to load Users", "warning")
+        }
+        function onSuccess(updated_data, update_url, result, msg, status) {
+            if (msg.success) {   
+                setAppStoreUsers(msg)
+                // createNotification("Successfully loaded users")
+            }
+        }
+        if (appStoreUser?.token){
+            sendAndInterpretBotUpdate({}, appStoreDomain + backendRoutes.appStoreUsers, onSuccess, onFail, "POST", true, appStoreUser.token)
+        }
+    }, [appStoreDomain, appStoreUser?.token]);
 }
 
 export const useIsInAppStoreCart = () => {
@@ -486,7 +597,7 @@ export const AppStoreDataProvider = ({children}) => {
     const [appStoreCartIsOpen, setAppStoreCartIsOpen] = useState(false);
     const [appStorePaymentUrl, setAppStorePaymentUrl] = useState();
     const [appStoreUserData, setAppStoreUserData] = useState({});
-    const [appStoreDomain, setAppStoreDomain] = useState(isProduction ? appStoreDomainProduction : (process.env.REACT_APP_STORE_DEVELOPMENT_DOMAIN||appStoreDomainProduction));
+    const [appStoreDomain, setAppStoreDomain] = useState(isProduction ? appStoreDomainProduction : (process.env.REACT_APP_STORE_DEVELOPMENT_DOMAIN || appStoreDomainProduction));
     const fetchAppStoreData = useFetchAppStoreData()
     const botInfo = useBotInfoContext()
     useEffect(() => {
@@ -494,39 +605,42 @@ export const AppStoreDataProvider = ({children}) => {
         if (cookie && cookie !== 'undefined') {
             setAppStoreUserData(JSON.parse(cookie));
         }
+        const cart = localStorage.getItem('cart')
+        if (cart && cart !== 'undefined') {
+            setAppStoreCart(JSON.parse(cart));
+        }
+        const payment = localStorage.getItem('payment')
+        if (payment && payment !== 'undefined') {
+            setAppStorePaymentUrl(JSON.parse(payment));
+        }
     }, []);
     useEffect(() => {
         if (appStoreDomain) {
             fetchAppStoreData(false);
         }
-
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [appStoreDomain, botInfo])
-    return (
-        <AppStoreDataContext.Provider value={appStoreData}>
-            <UpdateAppStoreDataContext.Provider value={setAppStoreData}>
-                <AppStoreCartContext.Provider value={appStoreCart}>
-                    <UpdateAppStoreCartContext.Provider value={setAppStoreCart}>
-                        <AppStoreCartIsOpenContext.Provider value={appStoreCartIsOpen}>
-                            <UpdateAppStoreCartIsOpenContext.Provider value={setAppStoreCartIsOpen}>
-                                <AppStoreDomainContext.Provider value={appStoreDomain}>
-                                    <UpdateAppStoreUserContext.Provider value={setAppStoreUserData}>
-                                        <AppStoreUserContext.Provider value={appStoreUserData}>
-                                            <AppStorePaymentUrlContext.Provider value={appStorePaymentUrl}>
-                                                <UpdateAppStorePaymentUrlContext.Provider value={setAppStorePaymentUrl}>
-                                                    <UpdateAppStoreDomainContext.Provider value={setAppStoreDomain}>
-                                                        {children} </UpdateAppStoreDomainContext.Provider>
-                                                </UpdateAppStorePaymentUrlContext.Provider>
-                                            </AppStorePaymentUrlContext.Provider>
-                                        </AppStoreUserContext.Provider>
-                                    </UpdateAppStoreUserContext.Provider>
-                                </AppStoreDomainContext.Provider>
-                            </UpdateAppStoreCartIsOpenContext.Provider>
-                        </AppStoreCartIsOpenContext.Provider>
-                    </UpdateAppStoreCartContext.Provider>
-                </AppStoreCartContext.Provider>
-            </UpdateAppStoreDataContext.Provider>
-        </AppStoreDataContext.Provider>
-    );
+    return (<AppStoreDataContext.Provider value={appStoreData}>
+        <UpdateAppStoreDataContext.Provider value={setAppStoreData}>
+            <AppStoreCartContext.Provider value={appStoreCart}>
+                <UpdateAppStoreCartContext.Provider value={setAppStoreCart}>
+                    <AppStoreCartIsOpenContext.Provider value={appStoreCartIsOpen}>
+                        <UpdateAppStoreCartIsOpenContext.Provider value={setAppStoreCartIsOpen}>
+                            <AppStoreDomainContext.Provider value={appStoreDomain}>
+                                <UpdateAppStoreUserContext.Provider value={setAppStoreUserData}>
+                                    <AppStoreUserContext.Provider value={appStoreUserData}>
+                                        <AppStorePaymentUrlContext.Provider value={appStorePaymentUrl}>
+                                            <UpdateAppStorePaymentUrlContext.Provider value={setAppStorePaymentUrl}>
+                                                <UpdateAppStoreDomainContext.Provider value={setAppStoreDomain}> {children} </UpdateAppStoreDomainContext.Provider>
+                                            </UpdateAppStorePaymentUrlContext.Provider>
+                                        </AppStorePaymentUrlContext.Provider>
+                                    </AppStoreUserContext.Provider>
+                                </UpdateAppStoreUserContext.Provider>
+                            </AppStoreDomainContext.Provider>
+                        </UpdateAppStoreCartIsOpenContext.Provider>
+                    </AppStoreCartIsOpenContext.Provider>
+                </UpdateAppStoreCartContext.Provider>
+            </AppStoreCartContext.Provider>
+        </UpdateAppStoreDataContext.Provider>
+    </AppStoreDataContext.Provider>);
 };

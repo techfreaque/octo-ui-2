@@ -5,7 +5,7 @@ import {
     Tooltip,
     Typography
 } from "antd"
-import {useEffect} from "react"
+import {useEffect, useState} from "react"
 
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton"
 import {useBotColorsContext} from "../../../../../../context/config/BotColorsProvider"
@@ -14,7 +14,7 @@ import {useAddToAppStoreCart, useAppStoreDataContext, useIsInAppStoreCart, useUp
 import {IsInstalledIcon, IsNotInstalledIcon} from "../../AppCover"
 import AntButton from "../../../../../../components/Buttons/AntButton"
 import {Grid} from "@mui/material"
-import {strategyName} from "../../../storeConstants"
+import {appPackagesName, strategyName} from "../../../storeConstants"
 
 
 export default function AppDownloadForm({setDownloadInfo, downloadInfo, app, handleDownload}) {
@@ -243,7 +243,7 @@ function AppVersions({app, setDownloadInfo, downloadInfo, handleDownload}) { // 
                             message={
                                 `${
                                     app.title
-                                } uses following Packages:`
+                                } is part of these Packages:`
                             }
                             style={
                                 {marginBottom: "5px"}
@@ -339,10 +339,12 @@ function RequiredPackage({
     handleDownload,
     setDownloadInfo
 }) {
+    const botColors = useBotColorsContext()
     const mainPackageApp = requiredAppsByTentaclePackage[requiredAppPackage][0]
     const packageInstalled = requiredAppsByTentaclePackage[requiredAppPackage].every(thisApp => {
         return thisApp?.is_installed
     })
+    const [showAllAppsInpackage, setShowAllAppsInpackage] = useState(false)
     return (
         <Grid item
             xs={12}
@@ -434,6 +436,11 @@ function RequiredPackage({
                         </Tooltip>
                     ))
                 } </ul>
+
+                <div onClick={() => setShowAllAppsInpackage(prevState => (!prevState))} style={{cursor: "pointer", ...(showAllAppsInpackage? { }:{color: botColors?.fontActive})}}>
+                All included apps in package:  
+                </div>
+                {showAllAppsInpackage && (<AllAppsInPackage requiredAppPackage={requiredAppPackage} />)}
                 <DownloadPackageButton handleDownload={handleDownload}
                     mainPackageApp={mainPackageApp}
                     packageInstalled={packageInstalled}
@@ -443,6 +450,34 @@ function RequiredPackage({
             </Card>
         </Grid>
     )
+}
+
+function AllAppsInPackage({ requiredAppPackage }) {
+    const appStoreData = useAppStoreDataContext();
+
+    return (
+        <ul>
+
+        {
+                Object.keys(appStoreData).map((category) => {
+                
+                return category !== appPackagesName&& (
+                    <div key={category}>
+                    {
+                        Object.keys(appStoreData[category]).map((app_id) => {
+            if (appStoreData[category][app_id].origin_package === requiredAppPackage) {
+                return (
+                    <div key={`${category}${app_id}`}>
+                        {appStoreData[category][app_id].title}
+                    </div>
+                        )
+            } else {
+                return (<span key={`${category}${app_id}`}></span>)
+            }
+        })    }</div>)
+            })}
+        </ul>
+            )
 }
 
 function DownloadPackageButton({
@@ -466,7 +501,7 @@ function DownloadPackageButton({
         })), (! isOriginPackage && mainPackageApp))
     }
     if (packageInstalled && (!mainPackageApp.price || mainPackageApp.has_paid)) {
-        return (
+        return !mainPackageApp.updated_by_distro &&(
             <AntButton block={true}
                 style={
                     {marginTop: "10px"}
@@ -486,7 +521,6 @@ function DownloadPackageButton({
                     style={
                         {marginTop: "10px"}
                     }
-                    disabled={mainPackageInCart}
                     onClick={thisHandleDownload}
                     antIconComponent={ShoppingCartOutlined}>
                     Download Now

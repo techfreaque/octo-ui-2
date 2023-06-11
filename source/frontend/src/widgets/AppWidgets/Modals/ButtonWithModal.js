@@ -15,7 +15,8 @@ export default function ButtonWithModal({
     displayAsAvatar,
     width,
     open,
-    setOpen
+    setOpen,
+    iconStyle
 }) {
     const [_open, _setOpen] = useState(false);
     const actualOpen = open || _open
@@ -47,14 +48,14 @@ export default function ButtonWithModal({
                                     icon={
                                         (
                                             <IconFromString faIcon={faIcon}
-                                                antIcon={antIcon}
+                                                antIcon={antIcon} style={iconStyle}
                                                 marginRight={"0px"}/>
                                         )
                                     }/> {
                                 !iconOnly && title
                             } </>
                         ) : (
-                            <IconFromString faIcon={faIcon}
+                            <IconFromString faIcon={faIcon}  style={iconStyle}
                                 antIcon={antIcon}
                                 marginRight={"0px"}/>
                         )

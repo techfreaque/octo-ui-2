@@ -10,6 +10,7 @@ import AppCardTemplate from "./AppCardTemplate";
 import {useRestartBot} from "../../../../context/data/IsBotOnlineProvider";
 import createNotification from "../../../../components/Notifications/Notification";
 import {strategyModeName} from "../storeConstants";
+import {CleanDescription} from "./AppDescription";
 
 export default function StrategyCard({
     app,
@@ -91,54 +92,48 @@ export default function StrategyCard({
         additionalProfileInfo?.profile?.name?.replace(/ /g, "_")
     }/${currentAvatar}`
 
-    return (
-        <AppCardTemplate app={app}
-            setMouseHover={setMouseHover}
-            avatarUrl={avatarUrl}
-            category={category}
-            isMouseHover={isMouseHover}
-            cardActions={
-                (
-                    <AppActions isMouseHover={isMouseHover}
-                        // configureDuplication={configureDuplication}
-                        setSelectedCategories={setSelectedCategories}
-                        onConfigure={
-                            () => setSelectedCategories(strategyModeName)
-                        }
-                        didHoverOnce={didHoverOnce}
-                        downloadInfo={downloadInfo}
-                        handleSelect={handleSelectProfile}
-                        handleUninstall={handleDeleteProfile}
-                        setCloneAppInfo={setCloneAppInfo}
-                        cloneAppInfo={cloneAppInfo}
-                        handleUpload={
-                            (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
-                        }
-                        setUploadInfo={setUploadInfo}
-                        setDownloadInfo={setDownloadInfo}
-                        uploadInfo={uploadInfo}
-                        exportUrl={
-                            backendRoutes.exportProfile + app.package_id
-                        }
-                        handleDownload={handleDownloadApp}
-                        infoContent={
-                            (
-                                <div> {
-                                    app.description
-                                } </div>
-                            )
-                        }
-                        handleDuplication={handleProfileDuplication}
-                        otherActions={
-                            (
-                                <ProfileModalButton profile={additionalProfileInfo}
-                                    isCurrentProfile={
-                                        app.is_selected
-                                    }/>
-                            )
-                        }
-                        app={app}/>
-                )
-            }/>
-    )
+    return (<AppCardTemplate app={app}
+        setMouseHover={setMouseHover}
+        avatarUrl={avatarUrl}
+        category={category}
+        isMouseHover={isMouseHover}
+        cardActions={
+            (<AppActions isMouseHover={isMouseHover}
+                // configureDuplication={configureDuplication}
+                setSelectedCategories={setSelectedCategories}
+                onConfigure={
+                    () => setSelectedCategories(strategyModeName)
+                }
+                didHoverOnce={didHoverOnce}
+                downloadInfo={downloadInfo}
+                handleSelect={handleSelectProfile}
+                handleUninstall={handleDeleteProfile}
+                setCloneAppInfo={setCloneAppInfo}
+                cloneAppInfo={cloneAppInfo}
+                handleUpload={
+                    (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
+                }
+                setUploadInfo={setUploadInfo}
+                setDownloadInfo={setDownloadInfo}
+                uploadInfo={uploadInfo}
+                exportUrl={
+                    backendRoutes.exportProfile + app.package_id
+                }
+                handleDownload={handleDownloadApp}
+                infoContent={
+                    (<div>
+                        <CleanDescription description={
+                            app.description
+                        }/>
+                    </div>)
+                }
+                handleDuplication={handleProfileDuplication}
+                otherActions={
+                    (<ProfileModalButton profile={additionalProfileInfo}
+                        isCurrentProfile={
+                            app.is_selected
+                        }/>)
+                }
+                app={app}/>)
+        }/>)
 }

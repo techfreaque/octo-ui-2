@@ -102,11 +102,12 @@ function DisplayCurrentContent({menuItemsData, currentlySelectedMenu, setActiveM
     }, [currentlySelectedMenu, menuItemsData, setActiveMenus])
 
     return menuItemsData?.map((menuItemData) => {
+        const key = getKeyFromLabel(menuItemData)
         return (
             <Content menuItemData={menuItemData}
+                key={key}
                 visible={
-                    currentlySelectedMenu === getKeyFromLabel(menuItemData)
-                }
+                    currentlySelectedMenu ===                     key                }
                 currentlySelectedMenu={currentlySelectedMenu}/>
         )
     })
@@ -159,13 +160,15 @@ function Content({
         </div>}
             {
             useMemo(() => {
-                return menuItemData?.children?.map((subMenuItemData) => (
-                    <Content menuItemData={subMenuItemData}
+                return menuItemData?.children?.map((subMenuItemData) => {
+                    const key = getKeyFromLabel(subMenuItemData)
+                    return (
+                    <Content key={key} menuItemData={subMenuItemData}
                         visible={
-                            currentlySelectedMenu === getKeyFromLabel(subMenuItemData)
+                            currentlySelectedMenu === key
                         }
                         currentlySelectedMenu={currentlySelectedMenu}/>
-                ))
+                )})
             }, [currentlySelectedMenu, menuItemData])
             }
             </>  )

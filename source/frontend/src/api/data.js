@@ -136,18 +136,6 @@ export async function fetchSymbolsInfo(setSymbolsInfo, botDomain) {
     return await fetchAndStoreFromBot(botDomain + backendRoutes.symbolsInfo, setSymbolsInfo, "GET", {}, false, false, undefined, false);
 }
 
-export async function fetchAppStoreData(saveAppStoreData, storeDomain, installedTentaclesInfo, notification, appStoreUser) {
-    function onSuccess(updated_data, update_url, result, msg, status) {
-        saveAppStoreData(msg?.data)
-        notification && createNotification("Successfully fetched package manager repositories")
-    }
-    function onFail(updated_data, update_url, result, msg, status) {
-        notification && createNotification("Failed to fetch package manager repositories")
-        // TODO add fallback
-    }
-    await sendAndInterpretBotUpdate(installedTentaclesInfo, storeDomain + backendRoutes.appStoreFree, onSuccess, onFail, "POST", true, appStoreUser?.token)
-}
-
 export async function fetchPackagesData(saveAppStoreData, botDomain, notification) {
     await fetchAndStoreFromBot(botDomain + backendRoutes.packagesData, saveAppStoreData, "get", {}, false, false, undefined, notification);
 }

@@ -39,8 +39,8 @@ export default function ProjectHomePage() {
             spacing={2}>
             <Grid item
                 sm={12}
-            style={{margin: "unset 150px"}}>
-                <Typography.Title level={2}>
+           >
+                <Typography.Title level={2}  style={{marginTop: "150px", marginBottom: "100px"}}>
                     Revolutionize Your Trading Strategy with Cutting-Edge Automation Solutions
                 </Typography.Title>
                 <Typography.Paragraph>
@@ -52,7 +52,7 @@ export default function ProjectHomePage() {
                 <Typography.Paragraph>
                     By harnessing cutting-edge technology, our custom trading bot empowers you to stay ahead of the curve and optimize your trading strategy like never before.
                 </Typography.Paragraph>
-                <Typography.Paragraph>
+                <Typography.Paragraph style={{marginBottom: "100px"}}>
                     Say goodbye to manual execution and hello to streamlined efficiency.
                                                                                                                                                                                 Take the leap into the future of trading and unlock new possibilities for success.
                 </Typography.Paragraph>

@@ -2,13 +2,11 @@ import {
     CloudDownloadOutlined,
     CloudUploadOutlined,
     DollarOutlined,
-    LeftOutlined,
-    ShoppingCartOutlined
-} from "@ant-design/icons";
+    LeftOutlined} from "@ant-design/icons";
 import {handlePopConfirmOpen} from "../AppActions";
 import UploadAppForm from "./UploadAppForm";
 import AppDownloadForm from "./DownloadForm";
-import {useAppStoreUserContext, validateUploadIndo} from "../../../../../../context/data/AppStoreDataProvider";
+import {useAppStoreUserContext, validateUploadInfo} from "../../../../../../context/data/AppStoreDataProvider";
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
 import AntButton from "../../../../../../components/Buttons/AntButton";
 import {Modal, Tooltip, Typography} from "antd";
@@ -43,7 +41,7 @@ export default function AppUpDownload({
                         ! isSignedIn
                     }
                     formIsValidated={
-                        validateUploadIndo(uploadInfo)
+                        validateUploadInfo(uploadInfo)
                     }
                     open={
                         uploadInfo.open
@@ -65,6 +63,7 @@ export default function AppUpDownload({
             const confirmButtonText = `Publish ${
                 app.categories?.length ? "App" : (app.categories[0] === 'Strategy Mode' ? 'Strat Mode' : app.categories[0])
             } Now`
+            const isValidated = validateUploadInfo(uploadInfo)
             return handleUpload && (<UpDownloadloadAppModal onConfirm={
                     () => handleUpload((isopen) => handlePopConfirmOpen(setUploadInfo, isopen))
                 }
@@ -78,9 +77,7 @@ export default function AppUpDownload({
                 disabled={
                     ! isSignedIn
                 }
-                formIsValidated={
-                    validateUploadIndo(uploadInfo)
-                }
+                formIsValidated={isValidated}
                 open={
                     uploadInfo.open
                 }
@@ -96,7 +93,7 @@ export default function AppUpDownload({
                 buttonTitle={buttonText}/>);
         } else {
             const buttonText = `Update ${
-                app.categories?.length ? "App" : app.categories[0]
+                app.categories?.length ? app.categories[0] : "App"
             }`
 
             return handleDownload && (<UpDownloadloadAppModal // onConfirm={handleDownload}
@@ -159,7 +156,7 @@ export default function AppUpDownload({
             return handleDownload && (<UpDownloadloadAppModal // onConfirm={
                 //     () => addAppStoreCart(app)
                 // }
-                antIconComponent={ShoppingCartOutlined}
+                antIconComponent={CloudDownloadOutlined}
                 // confirmButtonIcon={ShoppingCartOutlined}
                 confirmTitle={
                     `Buy ${
@@ -179,10 +176,16 @@ export default function AppUpDownload({
                 setInfo={setDownloadInfo}
                 // confirmButtonText={"Add To Shopping Basket"}
                 buttonTitle={
-                    `Buy for ${
-                        app.price
-                    }$ a month`
-                }/>)
+                    `Download ${
+                        app.categories?.length ? app.categories[0] : "App"
+                    }`
+                }
+                // buttonTitle={
+                //     `Buy for ${
+                //         app.price
+                //     }$ a month`
+                // }
+            />)
         }
     } else {
         const confirmButtonText = 'Download For Free'
@@ -224,7 +227,8 @@ function UpDownloadloadAppModal({
     confirmButtonText,
     buttonTitle,
     confirmButtonIcon,
-    smallModal
+    smallModal,
+    formIsValidated
 }) {
     return (<>
         <Tooltip title={
@@ -252,7 +256,7 @@ function UpDownloadloadAppModal({
                 smallModal ? "450px" : "1200px"
             }
             footer={
-                [(<div style={
+                [(<div key={"up-download-modal-footer"} style={
                     {
                         display: "flex",
                         marginLeft: "auto"
@@ -276,9 +280,11 @@ function UpDownloadloadAppModal({
                     {
                     confirmButtonText && (<AntButton key="confirm"
                         antIconComponent={confirmButtonIcon}
-                        size="large"
+                            size="large"
+                            disabled ={formIsValidated=== false}
                         onClick={onConfirm}> {confirmButtonText} </AntButton>)
                 } </div>),]
-        }> {confirmDescription} </Modal>
+        }
+        > {confirmDescription} </Modal>
     </>)
 }

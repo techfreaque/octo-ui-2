@@ -47,7 +47,8 @@ export default function PowerMenu() {
                         label: (<Button onClick={handleClose}
                             variant="outlined"
                             block={true}
-                            href={botDomain+"/home"}><Trans i18nKey="buttons.backToOctoBot"/></Button>)
+                            target='blank'
+                            href={`${botDomain}/home`}><Trans i18nKey="buttons.backToOctoBot"/></Button>)
                     },
                 ] : []
             }
@@ -67,7 +68,7 @@ export default function PowerMenu() {
         placement="topRight"
         arrow>
         <Tooltip placement="topRight"
-            title={"Power Menu"}
+            title={(<Trans i18nKey="modal.powerMenuTooltip"/>)}
             arrow={false}>
             <div>
                 <AntButton buttonVariant="text">

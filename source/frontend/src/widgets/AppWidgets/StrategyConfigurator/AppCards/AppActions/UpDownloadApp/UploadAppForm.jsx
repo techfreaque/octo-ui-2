@@ -41,37 +41,32 @@ export default function UploadAppForm({setUploadInfo, uploadInfo, app}) {
                 includePackage: isStrategy ? true : prevInfo.includePackage,
                 [apiFields.price]: prevInfo[apiFields.price] || app.price || 0,
                 [apiFields.versionType]: prevInfo[apiFields.versionType] || versionTypeOptions[0].value,
-                [apiFields.versionTag]: prevInfo[apiFields.versionTag] || versionTagOptions[0].value,
+                [apiFields.versionTag]: prevInfo[apiFields.versionTag] || versionTagOptions[0].value
             }
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [app])
 
-    return (
-        <div style={
-            {marginRight: "20px"}
-        }>
-            {
-            ! isStrategy && (
-                <UserInputLabel children
-                    title={"Upload new package version"}>
-                    <Switch checked={
-                            uploadInfo?.includePackage
-                        }
-                        onChange={
-                            (checked) => handleInputChange("includePackage", checked)
-                        }/>
-                </UserInputLabel>
-            )
-        }
-            {
-            uploadInfo?.includePackage && <UploadPackage versionTypeOptions={versionTypeOptions}
-                app={app}
-                versionTagOptions={versionTagOptions}
-                uploadInfo={uploadInfo}
-                handleInputChange={handleInputChange}/>
-        } </div>
-    )
+    return (<div style={
+        {marginRight: "20px"}
+    }> {
+        ! isStrategy && (<UserInputLabel children
+            title={"Upload new package version"}>
+            <Switch checked={
+                    uploadInfo?.includePackage
+                }
+                onChange={
+                    (checked) => handleInputChange("includePackage", checked)
+                }/>
+        </UserInputLabel>)
+    }
+        {
+        uploadInfo?.includePackage && <UploadPackage versionTypeOptions={versionTypeOptions}
+            app={app}
+            versionTagOptions={versionTagOptions}
+            uploadInfo={uploadInfo}
+            handleInputChange={handleInputChange}/>
+    } </div>)
 }
 
 
@@ -115,55 +110,53 @@ function UploadPackage({
                 options={versionTagOptions}/>
         </UserInputLabel>
         <UserInputLabel children
-            title={'Share release notes'}>
-            {
-            uploadInfo?.[apiFields.releaseNotes]?.length < minReleaseNotesLength && (
-                                                                                                <Alert message={(<>
-                                                                                                        <div>Let your users know what you've changed. 
-                                                                                                            </div>
-                                                                                                            <div>
-                                                                                                                {`Add at least ${minReleaseNotesLength - (uploadInfo?.[apiFields.releaseNotes]?.length || 0)} more characters`}
-                                                                                                            </div>
-                                                                                                            
+            title={'Share release notes'}> {
+            (uploadInfo?.[apiFields.releaseNotes]?.length||0) < minReleaseNotesLength && (
+                                                                                                            <Alert message={(<>
+                                                                                                                    <div>Let your users know what you've changed. 
+                                                                                                                        </div>
+                                                                                                                        <div>
+                                                                                                                            {`Add at least ${minReleaseNotesLength - (uploadInfo?.[apiFields.releaseNotes]?.length || 0)} more characters`}
+                                                                                                                        </div>
+                                                                                                                        
+                                                                                                                    </>)
+                                                                                                                }
+                                                                                                                    type="info"
+                                                                                                                    style={{marginBottom: "5px"}}
+                                                                                                                />
+                                                                                                        )
+                                                                                                    }
+                                                                                                        <TextArea onChange={
+                                                                                                                (event) => handleInputChange(apiFields.releaseNotes, event?.target?.value)
+                                                                                                            }
+                                                                                                            autoSize={
+                                                                                                                {
+                                                                                                                    minRows: 2,
+                                                                                                                    maxRows: 6
+                                                                                                                }
+                                                                                                            }/>
+                                                                                                        <div style={
+                                                                                                            {margin: '24px 0'}
+                                                                                                        }/>
+                                                                                </UserInputLabel>
+                                                                                <UserInputLabel children
+                                                                                        title={
+                                                                                            `Define a monthly price for your ${
+                                                                                                app.categories[0]
+                                                                                            }`
+                                                                                    }>
+                                                                                        <Tooltip title={"Define a price for your app"}>
+                                                                                            <div>
+                                                                                                <Input onChange={
+                                                                                                        (event) => handleInputChange(apiFields.price, event?.target?.value)
+                                                                                                    }
+                                                                                                    value={
+                                                                                                        uploadInfo?.price || app.price
+                                                                                                    }
+                                                                                                    addonAfter={<DollarCircleOutlined/>}
+                                                                                                    defaultValue="0"/>
+                                                                                            </div>
+                                                                                        </Tooltip>
+                                                                                    </UserInputLabel>
                                                                                                         </>)
-                                                                                                    }
-                                                                                                        type="info"
-                                                                                                        style={{marginBottom: "5px"}}
-                                                                                                    />
-                                                                                            )
-                                                                                        }
-                                                                                            <TextArea onChange={
-                                                                                                    (event) => handleInputChange(apiFields.releaseNotes, event?.target?.value)
-                                                                                                }
-                                                                                                autoSize={
-                                                                                                    {
-                                                                                                        minRows: 2,
-                                                                                                        maxRows: 6
-                                                                                                    }
-                                                                                                }/>
-                                                                                            <div style={
-                                                                                                {margin: '24px 0'}
-                                                                                            }/>
-                                                                    </UserInputLabel>
-                                                                    <UserInputLabel children
-                                                                            title={
-                                                                                `Define a monthly price for your ${
-                                                                                    app.categories[0]
-                                                                                }`
-                                                                        }>
-                                                                            <Tooltip title={"Define a price for your app"}>
-                                                                                <div>
-                                                                                    <Input onChange={
-                                                                                            (event) => handleInputChange(apiFields.price, event?.target?.value)
-                                                                                        }
-                                                                                        value={
-                                                                                            uploadInfo?.price || app.price
-                                                                                        }
-                                                                                        addonAfter={<DollarCircleOutlined/>}
-                                                                                        defaultValue="0"/>
-                                                                                </div>
-                                                                            </Tooltip>
-                                                                        </UserInputLabel>
-                                                                                            </>
-            )
         }

@@ -4,6 +4,11 @@ export const strategyName = "Strategy"
 export const strategyModeName = "Strategy Mode"
 export const appPackagesName = "App Packages"
 
+export const AppPublishStatus = {
+    draft: "draft",
+    published: "published",
+    unpublished: "unpublished"
+}
 
 export const appVersionTypes = {
     BUG_FIX_VERSION: {
@@ -17,7 +22,7 @@ export const appVersionTypes = {
     MAJOR_VERSION: {
         title: "Major Update",
         key: "major_version"
-    },
+    }
 }
 
 

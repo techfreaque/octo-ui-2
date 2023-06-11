@@ -9,6 +9,8 @@ import AppUpDownload from "./UpDownloadApp/AppUpDownload";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 import ExportApp from "./ExportApp";
 import {useState} from "react";
+import PublishApp from "./PublishApp";
+import UnpublishApp from "./UnpublishApp";
 
 
 export default function AppActions({
@@ -64,7 +66,7 @@ export default function AppActions({
                     }))
                 }>
                     {
-                    (didHoverOnce || app?.is_selected) && <OnHoverActions handleSelect={handleSelect}
+                    (didHoverOnce || app?.is_selected) && (<OnHoverActions handleSelect={handleSelect}
                         setUploadInfo={setUploadInfo}
                         setDownloadInfo={setDownloadInfo}
                         uploadInfo={uploadInfo}
@@ -80,7 +82,7 @@ export default function AppActions({
                         infoContent={infoContent}
                         isReadOnlyStrategy={isReadOnlyStrategy}
                         exportUrl={exportUrl}
-                        app={app}/>
+                        app={app}/>)
                 } </div>
                 <div style={
                     (isMouseHover | app?.is_selected) ? {
@@ -109,6 +111,8 @@ function NoHoverActions({app}) {
             }$`
         } else if (app.is_from_store) {
             actionText = "Free"
+        } else if (app.updated_by_distro){
+            actionText = ""
         } else {
             actionText = `Sell ${
                 app?.categories?.[0] || "App"
@@ -119,9 +123,10 @@ function NoHoverActions({app}) {
             app.categories[0]
         }`
     } else if (app.price) {
-        actionText = `${
-            app.price
-        }$`
+        // actionText = `${
+        //     app.price
+        // }$`
+        actionText = "Download"
     } else {
         actionText = "Free"
     }
@@ -196,7 +201,9 @@ function OnHoverActions({
             )
         }
             <UninstallApp app={app}
-                handleUninstall={handleUninstall}/>
+                handleUninstall={handleUninstall} />
+            <PublishApp app={app} />
+            <UnpublishApp app={app} />
         </>
     )
 }

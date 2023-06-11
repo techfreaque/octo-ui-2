@@ -1,26 +1,25 @@
-import {useEffect, useRef, useState} from "react";
+import {useEffect, useState} from "react";
 import PlotlyChart from "../MainCharts/Plotly";
 import {createTradingOrBacktestingTab} from "../../Tables/W2uiDataTable";
 import AntSidebar from "../../../../components/Sidebars/AntSidebar/AntSidebar";
+import useMeasure from "react-use-measure";
 export const pieChartName = "pie-chart"
 export default function DualPieChart({setLayouts, layouts, charts}) {
-    const mainRef = useRef()
+    const [containerRef, {
+        width,
+        height
+    }
+    ] = useMeasure();
     const [menuItems, setMenuItems] = useState()
     const layout = layouts?.[pieChartName]
     const pieCharts = charts?.[pieChartName]
-    useEffect(() => { // pie chart
-        updateChartDimensions(setLayouts[pieChartName], mainRef?.current?.clientHeight)
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [
-        mainRef?.current?.clientHeight,
-    ])
     useEffect(() => {
-        const newMenuItems = generateSidebarMenu(layout, pieCharts, setLayouts)
+        const newMenuItems = generateSidebarMenu({...layout, width, height}, pieCharts, setLayouts)
         setMenuItems(Object.values(newMenuItems))
-    }, [layout, pieCharts, setLayouts])
+    }, [height, layout, pieCharts, setLayouts, width])
 
     return (
-        <div ref={mainRef}
+        <div ref={containerRef}
             style={
                 {
                     width: "100%",
@@ -32,23 +31,8 @@ export default function DualPieChart({setLayouts, layouts, charts}) {
     )
 }
 
-function updateChartDimensions(setLayout, height) { // update layout when dimensions change
-    if (height) {
-        setLayout(prevLayout => {
-            const newLayout = {
-                ...prevLayout
-            }
-            newLayout.height = height
-            newLayout.width = window.innerWidth
-            return newLayout
-        })
-    }
-
-}
-
 function generateSidebarMenu(layout, pieCharts, setLayouts) {
     const newMenuItems = {}
-
     pieCharts?.forEach(chart => {
         const liveOrBacktest = chart.backtesting_id === undefined ? "live" : "backtesting"
         if (! newMenuItems[liveOrBacktest]) {

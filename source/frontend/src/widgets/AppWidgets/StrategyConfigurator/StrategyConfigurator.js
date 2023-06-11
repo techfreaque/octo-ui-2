@@ -44,7 +44,7 @@ export default function AppStore() {
             setTradingConfigTabs(generateTradingConfigTabs({displayStyle: displayStyles.sidebar, userInputs: currentTentaclesTradingConfig, setHiddenMetadataColumns}))
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentTentaclesTradingConfig])
+    }, [currentTentaclesTradingConfig, isFlowMode])
 
     return useMemo(() => {
         const currentStrategy = appStoreData?.Strategy ? appStoreData.Strategy?.[Object.keys(appStoreData.Strategy).filter(strategy => (appStoreData.Strategy[strategy].is_selected))?.[0]] : {}

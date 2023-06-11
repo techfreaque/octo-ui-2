@@ -1,6 +1,6 @@
 {
-  "version": "0.6.2",
-  "origin_package": "Matrix-O-UI",
+  "version": "0.9.23",
+  "origin_package": "Octane-Default-Tentacles",
   "tentacles": [
     "RunAnalysisModePlugin"
   ],

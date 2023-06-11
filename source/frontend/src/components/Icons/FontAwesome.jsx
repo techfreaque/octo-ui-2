@@ -33,11 +33,12 @@ export default function FontAwesomeIconByString({
     faIcon,
     size = sizes.medium,
     marginRight = "7px",
-    spin
+    spin,
+    style={},
 }) {
     const className = spin ? `fa-spin fa-${iconStyles.size[size]} far fa-${faIcon}` : `fa-${iconStyles.size[size]} fas fa-${faIcon}`
     return faIcon && (<i className={className}
         style={
-            {marginRight, lineHeight: "normal"}
+            {marginRight, lineHeight: "normal", ...style}
         }/>)
 }

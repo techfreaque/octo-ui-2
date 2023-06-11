@@ -7,17 +7,19 @@ export default function IconFromString({
     antIcon,
     size = sizes.medium,
     marginRight = "0px",
-    spin
+    spin,
+    style
 }) {
     if (antIcon && antIcon !== iconStringNoIcon) {
-        return (
-            <AntIconByString iconString={antIcon}
-                size={size} spin={spin} marginRight={marginRight} />
-        )
+        return (<AntIconByString iconString={antIcon}
+            style={style}
+            size={size}
+            spin={spin}
+            marginRight={marginRight}/>)
     } else if (faIcon) {
-        return (
-            <FontAwesomeIconByString faIcon={faIcon}
-                marginRight={marginRight} spin={spin}/>
-        )
+        return (<FontAwesomeIconByString faIcon={faIcon}
+            style={style}
+            marginRight={marginRight}
+            spin={spin}/>)
     }
 }

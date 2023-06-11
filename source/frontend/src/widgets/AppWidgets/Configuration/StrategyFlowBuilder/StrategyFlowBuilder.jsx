@@ -1,4 +1,4 @@
-import {useCallback, useMemo, useRef, useState} from "react";
+import {useCallback, useEffect, useMemo, useRef, useState} from "react";
 import {
     Controls,
     ReactFlow,
@@ -34,6 +34,13 @@ function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
     const nodesConfig = currentTentaclesTradingConfig?.[strategyFlowMakerName]?.config
     const [nodes, setNodes, onNodesChange] = useNodesState((nodesConfig?.nodes && Object.values(nodesConfig?.nodes)) || []);
     const [edges, setEdges, onEdgesChange] = useEdgesState(nodesConfig?.edges || []);
+
+useEffect(() => {
+    setNodes((nodesConfig?.nodes && Object.values(nodesConfig?.nodes)) || [])
+    setEdges(nodesConfig?.edges || [])
+}, [JSON.stringify(nodesConfig?.nodes), JSON.stringify(nodesConfig?.edges)])
+
+
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
     const handleUserInputSave = useSaveFlowBuilderSettings()
     // const getClosestEdge = useGetClosestEdge()
