@@ -59,6 +59,7 @@ import AppStoreCartModal, {AppStoreCart} from "../AppWidgets/StrategyConfigurato
 import SaveTradingModeSettings from "../AppWidgets/Buttons/SaveTradingModeSettings";
 import StopTrainingButton from "../AppWidgets/Buttons/StopTrainingButton";
 import ProjectHomePage, {ProjectHomePageModal} from "../AppWidgets/ProjectPage/Home";
+import DemoInfo from "../AppWidgets/ProjectPage/DemoInfo";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -129,5 +130,6 @@ export const registeredComponents = {
     StopTrainingButton,
     ProjectHomePage,
     ProjectHomePageModal,
-    OptimizerNotInstalled
+    OptimizerNotInstalled,
+    DemoInfo
 };

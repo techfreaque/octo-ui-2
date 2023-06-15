@@ -1,9 +1,9 @@
 import React, {useMemo, useState} from "react";
 import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
-import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
+import {useBotInfoContext, useIsDemoMode} from "../../../context/data/BotInfoProvider";
 import {useSaveTentaclesConfigAndSendAction} from "../../../context/config/TentaclesConfigProvider";
-import { saveUserInputs } from "../Configuration/TentaclesConfig";
-import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import {saveUserInputs} from "../Configuration/TentaclesConfig";
+import AntButton, {buttonTypes} from "../../../components/Buttons/AntButton";
 
 export default function SendActionCommandToTradingMode({
     command,
@@ -17,12 +17,14 @@ export default function SendActionCommandToTradingMode({
     const [isExecuting, setIsExecuting] = useState(false)
     const saveTentaclesConfigAndSendAction = useSaveTentaclesConfigAndSendAction()
     const botInfo = useBotInfoContext()
-    const availableApiActions = botInfo?.available_api_actions
-    const isAvailableApiAction = availableApiActions?.includes(command)
+    const isDemo = useIsDemoMode()
     return useMemo(() => {
+        const availableApiActions = botInfo?.available_api_actions
+        const isAvailableApiAction = availableApiActions?.includes(command)
         return isAvailableApiAction && (
-            <AntButton 
-                disabled={! isOnline || isExecuting}
+            <AntButton disabled={
+                    ! isOnline || isExecuting || isDemo
+                }
                 onClick={
                     () => sendActionCommandToTradingMode(command, saveTentaclesConfigAndSendAction, setIsExecuting)
                 }
@@ -30,11 +32,21 @@ export default function SendActionCommandToTradingMode({
                 buttonType={color}
                 faIcon={faIcon}
                 antIcon={antIcon}
-                text={title} 
-            />
+                text={title}/>
         );
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isAvailableApiAction, isOnline, isExecuting, variant, color, faIcon, antIcon, title, command])
+    }, [
+        botInfo?.available_api_actions,
+        command,
+        isOnline,
+        isExecuting,
+        isDemo,
+        variant,
+        color,
+        faIcon,
+        antIcon,
+        title,
+        saveTentaclesConfigAndSendAction
+    ])
 }
 
 export function sendActionCommandToTradingMode(command, saveTentaclesConfigAndSendAction, setIsExecuting, successCallback, failCallback) {

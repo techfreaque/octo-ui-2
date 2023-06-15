@@ -5,7 +5,7 @@ import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 import {sizes} from '../../../constants/frontendConstants';
 import {SyncOutlined} from '@ant-design/icons';
 import {AntIconByReactFunc} from '../../../components/Icons/AntIcon';
-import { Trans } from 'react-i18next';
+import {Trans} from 'react-i18next';
 import AntButton from '../../../components/Buttons/AntButton';
 
 
@@ -14,9 +14,7 @@ export default function RefreshBotData() {
     const botIsOnline = useIsBotOnlineContext()
     const [isFinished, setIsFinished] = useState(true)
     const [didJustStartFetching, setDidJustStartFetching] = useState(false);
-
     const isFetching = !isFinished || ! botIsOnline || didJustStartFetching;
-
     useEffect(() => {
         let timer;
         if (didJustStartFetching) {
@@ -27,11 +25,13 @@ export default function RefreshBotData() {
 
         return() => clearTimeout(timer);
     }, [didJustStartFetching]);
-
     return useMemo(() => {
         return (
             <Tooltip placement="top"
-                title={<Trans i18nKey="buttons.softRefresh" />}
+                title={
+                    <Trans
+                i18nKey="buttons.softRefresh"/>
+                }
                 arrow={false}>
                 <div>
                     <AntButton disabled={isFetching}
@@ -40,7 +40,7 @@ export default function RefreshBotData() {
                                 setDidJustStartFetching(true);
                                 fetchBotInfo(true, setIsFinished);
                             })
-                    }
+                        }
                         buttonVariant="text">
                         <AntIconByReactFunc AntReactIcon={SyncOutlined}
                             size={
@@ -51,6 +51,5 @@ export default function RefreshBotData() {
                 </div>
             </Tooltip>
         );
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [isFetching, botIsOnline])
+    }, [isFetching, fetchBotInfo])
 }

@@ -1,4 +1,10 @@
+import { Tooltip } from "antd"
+import { useUpdateProjectInfoOpenContext } from "../../../context/data/BotInfoProvider"
+import logo from "./octane-logo.png"
+
 export default function Logo() {
+    const setProjectInfoOpen = useUpdateProjectInfoOpenContext()
+
     return (<div style={
         {
             marginTop: "auto",
@@ -7,12 +13,12 @@ export default function Logo() {
     }>
         <div style={
             {
-                fontFamily: "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,'Noto Sans',sans-serif,'Apple Color Emoji','Segoe UI Emoji','Segoe UI Symbol','Noto Color Emoji'",
-                fontSize: "24px",
-                margin: "0px 11px",
-                whiteSpace: "nowrap"
+                margin: "0px 5px",
             }
-        }>O UI
+        }>
+            <Tooltip title={"Click to learn more about Octane"}>
+                <img onClick={() => setProjectInfoOpen(true)} height={"28px"} style={{ cursor: "pointer" }} alt="Octane Logo" src={logo} />
+            </Tooltip>
         </div>
     </div>)
 }

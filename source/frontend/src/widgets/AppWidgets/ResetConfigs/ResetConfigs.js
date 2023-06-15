@@ -1,7 +1,7 @@
 import {Button, Card, Popconfirm} from 'antd'
 import React, {useState} from 'react'
 import { useBotDomainContext } from '../../../context/config/BotDomainProvider'
-import { useBotInfoContext } from '../../../context/data/BotInfoProvider'
+import { useBotInfoContext, useIsDemoMode } from '../../../context/data/BotInfoProvider'
 import { useFetchUiConfig, useSaveUiConfig } from '../../../context/config/UiConfigProvider'
 import { getEnabledTradingTentaclesList, useFetchCurrentTradingTentaclesConfig, useSaveTentaclesConfigAndSendAction } from '../../../context/config/TentaclesConfigProvider'
 import { backendRoutes } from '../../../constants/backendConstants'
@@ -22,6 +22,7 @@ export default function ResetConfigs() {
     const saveUiConfig = useSaveUiConfig()
     const fetchCurrentTentaclesConfig = useFetchCurrentTradingTentaclesConfig()
     const tentacles = getEnabledTradingTentaclesList(botInfo)
+    const isDemo = useIsDemoMode()
     const storages = {
         resetAllUIConfig: {
             key: "resetAllUIConfig",
@@ -253,7 +254,7 @@ export default function ResetConfigs() {
                             onCancel={handleCancel}
                     >
                         <Button disabled={
-                                isResetting || !Boolean(Object.values(checkedList).reduce((partialSum, a) => partialSum + a, 0))
+                              isDemo||  isResetting || !Boolean(Object.values(checkedList).reduce((partialSum, a) => partialSum + a, 0))
                             }
                             onClick={showPopconfirm}
                             type="primary"

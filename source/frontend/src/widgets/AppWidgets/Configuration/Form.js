@@ -1,7 +1,7 @@
 import React from "react";
 import {useGetBotConfig} from "../../../context/config/BotConfigProvider";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
-import JsonEditor from "@techfreaque/json-editor-react";
+import JsonEditor from "../../../components/Forms/JsonEditor/jedit";
 
 export const availableConfigKeys = {
     cryptoCurrencies: "profile/crypto-currencies",

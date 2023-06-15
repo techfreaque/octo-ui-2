@@ -1,5 +1,5 @@
-import JsonEditor from "@techfreaque/json-editor-react"
 import defaultJsonEditorSettings from "../../../../components/Forms/JsonEditor/JsonEditorDefaults"
+import JsonEditor from "../../../../components/Forms/JsonEditor/jedit"
 import { OPTIMIZER_INPUTS_KEY } from "../../../../constants/backendConstants"
 import { tentacleConfigType, useTentaclesConfigContext } from "../../../../context/config/TentaclesConfigProvider"
 import { useUiConfigContext } from "../../../../context/config/UiConfigProvider"

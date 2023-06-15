@@ -1,5 +1,4 @@
 import {Alert} from "@mui/material"
-import JsonEditor from "@techfreaque/json-editor-react"
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults"
 import createNotification from "../../../components/Notifications/Notification"
 import {botLayoutKey, oldBotLayoutKey} from "../../../constants/backendConstants"
@@ -10,6 +9,7 @@ import appWidgetsProps from "../../WidgetManagement/AppWidgetProps"
 import {registeredComponents} from "../../WidgetManagement/RegisteredAppWidgets"
 import { Button, Space } from 'antd';
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton"
+import JsonEditor from "../../../components/Forms/JsonEditor/jedit"
 
 
 

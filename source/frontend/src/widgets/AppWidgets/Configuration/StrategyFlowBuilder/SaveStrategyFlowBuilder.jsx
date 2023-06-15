@@ -4,6 +4,7 @@ import {useIsBotOnlineContext} from "../../../../context/data/IsBotOnlineProvide
 import AntButton from "../../../../components/Buttons/AntButton";
 import {flowBuilderStorageKey, getNodeConfigKey} from "./CustomNodes/StrategyBlockNode";
 import {useCallback} from "react";
+import { useIsDemoMode } from "../../../../context/data/BotInfoProvider";
 
 export default function SaveStrategyFlowBuilderSettings({
     tradingModeKey,
@@ -15,6 +16,7 @@ export default function SaveStrategyFlowBuilderSettings({
 }) {
     const isOnline = useIsBotOnlineContext()
     const handleUserInputSave = useSaveFlowBuilderSettings()
+    const isDemo = useIsDemoMode()
     return (
         <div style={
             {
@@ -38,7 +40,7 @@ export default function SaveStrategyFlowBuilderSettings({
                         }
                     style={{zIndex: 2}}
                         disabled={
-                            isSaving || ! isOnline
+                            isSaving || ! isOnline || isDemo
                         }
                         icon={(<span style={{marginRight: "5px"}}>
                         <ReloadOutlined spin={isSaving || ! isOnline} />

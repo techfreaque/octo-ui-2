@@ -5,9 +5,9 @@
     --dark-backgroundActive: #111a2c;
     --dark-font: #b2b5be;
     --dark-fontHover: #fff;
-    --dark-fontActive: #1e53e5;
+    --dark-fontActive: rgb(108 147 255);
     --dark-border: #2a2e39;
-    --dark-borderActive: #1e53e5;
+    --dark-borderActive: rgb(108 147 255);
     --dark-borderGlow:#1d1d5f;
     --dark-warning: #fb3;
     --dark-success: #00c851;

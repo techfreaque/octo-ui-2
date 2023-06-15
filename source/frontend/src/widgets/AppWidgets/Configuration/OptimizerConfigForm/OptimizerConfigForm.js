@@ -6,7 +6,7 @@ import OptimizerSettingTemplate from "./OptimizerInputTemplate";
 import select2 from "select2/dist/js/select2.js" // required
 import {useFetchProConfig, useGetAndSaveOptimizerForm, useOptimizerEditorContext} from "../../../../context/config/OptimizerEditorProvider";
 import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
-import {useBotInfoContext} from "../../../../context/data/BotInfoProvider";
+import {useBotInfoContext, useIsDemoMode} from "../../../../context/data/BotInfoProvider";
 import {Alert, Typography} from "antd";
 import {projectProName} from "../../../../constants/frontendConstants";
 
@@ -20,13 +20,15 @@ export default function OptimizerConfigForm() {
     const fetchProConfig = useFetchProConfig()
     const botInfo = useBotInfoContext()
     const uiProInstalled = botInfo?.ui_pro_installed
+    const isDemo = useIsDemoMode()
     useEffect(() => {
-        uiProInstalled && fetchProConfig()
+        uiProInstalled && !isDemo && fetchProConfig()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uiProInstalled])
 
     useEffect(() => {
-        currentTentaclesTradingConfig && (optimizerConfig || ! uiProInstalled) && _buildOptimizerSettingsForm(currentTentaclesTradingConfig, optimizerConfig);
+        currentTentaclesTradingConfig && (optimizerConfig || !uiProInstalled || isDemo)
+            && _buildOptimizerSettingsForm(currentTentaclesTradingConfig, optimizerConfig);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentTentaclesTradingConfig, formIsBuilt]);
     return useMemo(() => {

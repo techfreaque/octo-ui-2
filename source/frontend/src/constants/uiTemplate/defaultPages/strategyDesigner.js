@@ -1,4 +1,4 @@
-export const defaultStrategyDesignerPageLayout =  {
+export const defaultStrategyDesignerPageLayout = {
     "layout": [
         {
             "component": "DefaultLayout",
@@ -17,16 +17,14 @@ export const defaultStrategyDesignerPageLayout =  {
                         },
                         {
                             "component": "RefreshBotData"
-                        },
-                        {
+                        }, {
                             "component": "AppStoreCartModal",
                             "content": [
                                 {
                                     "component": "AppStoreCart"
                                 }
-                            ],
-                        },
-                        {
+                            ]
+                        }, {
                             "antIcon": "noIcon",
                             "component": "ButtonWithModal",
                             "content": [
@@ -37,9 +35,9 @@ export const defaultStrategyDesignerPageLayout =  {
                             "displayAsAvatar": false,
                             "faIcon": "wand-magic-sparkles",
                             "iconOnly": true,
-                            "title": "UI Editor"
-                        },
-                        {
+                            "title": "UI Editor",
+                            "width": "1000"
+                        }, {
                             "antIcon": "NotificationOutlined",
                             "component": "ButtonWithModal",
                             "content": [
@@ -50,19 +48,16 @@ export const defaultStrategyDesignerPageLayout =  {
                             "displayAsAvatar": false,
                             "faIcon": "",
                             "iconOnly": true,
-                            "title": "Notification Center"
-                        },
-                        {
+                            "title": "Notification Center",
+                            "width": "1000"
+                        }, {
                             "component": "RealTradingSwitch"
-                        },
-                        {
+                        }, {
                             "component": "CurrentPanelPosition",
                             "position": "footerHalf"
-                        },
-                        {
-                            "component": "ProjectHomePageModal",
-                        },
-                        {
+                        }, {
+                            "component": "ProjectHomePageModal"
+                        }, {
                             "component": "PowerMenu"
                         }
                     ]
@@ -99,8 +94,7 @@ export const defaultStrategyDesignerPageLayout =  {
                                                     "component": "SavePairSelector"
                                                 }
                                             ]
-                                        },
-                                        {
+                                        }, {
                                             "antIcon": "BankOutlined",
                                             "component": "Tab",
                                             "content": [
@@ -120,28 +114,26 @@ export const defaultStrategyDesignerPageLayout =  {
                                     ]
                                 }
                             ]
-                        },
-                        {
+                        }, {
                             "component": "TimeFrameSelector"
                         }
                     ],
                     "rightContent": [
                         {
                             "component": "ChartTypeSelector"
-                        },
-                        {
+                        }, {
                             "antIcon": "UserOutlined",
                             "component": "ButtonWithModal",
                             "content": [
                                 {
-                                    "component": "LoginManager",
+                                    "component": "LoginManager"
                                 }
                             ],
-                            "width": "450px",
                             "displayAsAvatar": true,
                             "faIcon": "",
                             "iconOnly": true,
-                            "title": "Account Settings"
+                            "title": "Account Settings",
+                            "width": "450px"
                         }
                     ]
                 }
@@ -153,12 +145,10 @@ export const defaultStrategyDesignerPageLayout =  {
                         {
                             "component": "CurrentPanelPosition",
                             "position": "minimized"
-                        },
-                        {
+                        }, {
                             "component": "CurrentPanelPosition",
                             "position": "half"
-                        },
-                        {
+                        }, {
                             "component": "CurrentPanelPosition",
                             "position": "maximized"
                         }
@@ -177,7 +167,10 @@ export const defaultStrategyDesignerPageLayout =  {
                             "title": "Strategy Manager",
                             "toolBarContent": [
                                 {
-                                    "component": "StopTrainingButton",
+                                    "component": "DemoInfo"
+                                },
+                                {
+                                    "component": "StopTrainingButton"
                                 },
                                 {
                                     "component": "SaveTradingModeSettings"
@@ -188,13 +181,11 @@ export const defaultStrategyDesignerPageLayout =  {
                                     "component": "SendActionCommandToTradingMode",
                                     "faIcon": "noIcon",
                                     "title": "Execute trading mode"
-                                },
-                                {
+                                }, {
                                     "component": "ToggleActivateRealTimeStrategy"
                                 }
                             ]
-                        },
-                        {
+                        }, {
                             "antIcon": "ExperimentOutlined",
                             "component": "Tab",
                             "content": [
@@ -208,19 +199,14 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "content": [
                                                 {
                                                     "component": "UIConfig",
-                                                    "configKeys": [
-                                                        "backtesting_run_settings",
-                                                        "optimization_campaign",
-                                                        "optimizer_campaigns_to_load"
-                                                    ]
+                                                    "configKeys": ["backtesting_run_settings", "optimization_campaign", "optimizer_campaigns_to_load"]
                                                 }
                                             ],
                                             "dontScroll": false,
                                             "faIcon": "noIcon",
                                             "label": "Backtesting Settings",
-                                            "noPadding": false,
-                                        },
-                                        {
+                                            "noPadding": false
+                                        }, {
                                             "antIcon": "OrderedListOutlined",
                                             "children": [],
                                             "component": "SidebarMenuItem",
@@ -232,7 +218,7 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "dontScroll": true,
                                             "faIcon": "noIcon",
                                             "label": "Backtesting Runs",
-                                            "noPadding": true,
+                                            "noPadding": true
                                         }
                                     ]
                                 }
@@ -242,17 +228,16 @@ export const defaultStrategyDesignerPageLayout =  {
                             "title": "Backtesting",
                             "toolBarContent": [
                                 {
-                                    "component": "StopTrainingButton",
-                                },
-                                {
+                                    "component": "DemoInfo"
+                                }, {
+                                    "component": "StopTrainingButton"
+                                }, {
                                     "component": "StopBacktestingButton"
-                                },
-                                {
+                                }, {
                                     "component": "StartBacktestingButton"
                                 }
                             ]
-                        },
-                        {
+                        }, {
                             "antIcon": "RocketOutlined",
                             "component": "Tab",
                             "content": [
@@ -265,22 +250,17 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "component": "SidebarMenuItem",
                                             "content": [
                                                 {
-                                                    "component": "OptimizerNotInstalled",
-                                                },
-                                                {
+                                                    "component": "OptimizerNotInstalled"
+                                                }, {
                                                     "component": "UIConfig",
-                                                    "configKeys": [
-                                                        "optimizer_run_settings",
-                                                        "optimization_campaign"
-                                                    ]
+                                                    "configKeys": ["optimizer_run_settings", "optimization_campaign"]
                                                 }
                                             ],
                                             "dontScroll": false,
                                             "faIcon": "noIcon",
                                             "label": "Optimizer Settings",
-                                            "noPadding": false,
-                                        },
-                                        {
+                                            "noPadding": false
+                                        }, {
                                             "antIcon": "PlayCircleOutlined",
                                             "children": [],
                                             "component": "SidebarMenuItem",
@@ -292,9 +272,8 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "dontScroll": false,
                                             "faIcon": "noIcon",
                                             "label": "Run Config",
-                                            "noPadding": false,
-                                        },
-                                        {
+                                            "noPadding": false
+                                        }, {
                                             "antIcon": "OrderedListOutlined",
                                             "children": [],
                                             "component": "SidebarMenuItem",
@@ -306,7 +285,7 @@ export const defaultStrategyDesignerPageLayout =  {
                                             "dontScroll": false,
                                             "faIcon": "",
                                             "label": "Optimizer Queue",
-                                            "noPadding": true,
+                                            "noPadding": true
                                         }
                                     ]
                                 }
@@ -316,6 +295,9 @@ export const defaultStrategyDesignerPageLayout =  {
                             "title": "Optimizer",
                             "toolBarContent": [
                                 {
+                                    "component": "DemoInfo"
+                                },
+                                {
                                     "component": "OptimizerQueueSize"
                                 },
                                 {
@@ -323,11 +305,9 @@ export const defaultStrategyDesignerPageLayout =  {
                                 },
                                 {
                                     "component": "AddToOptimizerQueueButton"
-                                },
-                                {
+                                }, {
                                     "component": "StopOptimizerButton"
-                                },
-                                {
+                                }, {
                                     "component": "StartOptimizerButton"
                                 }
                             ]
@@ -348,17 +328,14 @@ export const defaultStrategyDesignerPageLayout =  {
                                     "content": [
                                         {
                                             "component": "UIConfig",
-                                            "configKeys": [
-                                                "display_settings"
-                                            ]
+                                            "configKeys": ["display_settings"]
                                         }
                                     ],
                                     "dontScroll": false,
                                     "faIcon": "",
                                     "title": "Other Display Settings",
                                     "toolBarContent": []
-                                },
-                                {
+                                }, {
                                     "antIcon": "RedoOutlined",
                                     "component": "Tab",
                                     "content": [

@@ -11,7 +11,7 @@ import {
 } from "../../../constants/backendConstants";
 import {useFetchOptimizerQueue, useOptimizerQueueContext, useSaveOptimizerQueue, useUpdateOptimizerQueueCounterContext} from "../../../context/data/OptimizerQueueProvider";
 import {OptimizerNotInstalled} from "../Configuration/OptimizerConfigForm/OptimizerConfigForm";
-import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
+import {useBotInfoContext, useIsDemoMode} from "../../../context/data/BotInfoProvider";
 
 
 export default function OptimizerQueueTable() {
@@ -22,8 +22,9 @@ export default function OptimizerQueueTable() {
     const containerId = "optimizer-queue-table"
     const botInfo = useBotInfoContext()
     const uiProInstalled = botInfo?.ui_pro_installed
+    const isDemo = useIsDemoMode()
     useEffect(() => {
-        uiProInstalled && fetchOptimizerQueue()
+        uiProInstalled && !isDemo && fetchOptimizerQueue()
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [uiProInstalled]);
     useEffect(() => {

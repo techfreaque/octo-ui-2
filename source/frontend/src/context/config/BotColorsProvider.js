@@ -1,6 +1,7 @@
-import React, {useState, useContext, createContext, useEffect} from "react";
+import React, {useState, useContext, createContext, useEffect, useMemo} from "react";
 import {defaultColors} from "../../constants/uiTemplate/defaultColors";
-import {useColorModeContext} from "./ColorModeProvider";
+import {colorModes, useColorModeContext} from "./ColorModeProvider";
+import { ThemeProvider, createTheme } from "@mui/material";
 
 const BotColorsContext = createContext();
 const UpdateBotColorsContext = createContext();
@@ -16,16 +17,29 @@ export const useUpdateBotColorsContext = () => {
 export const BotColorsProvider = ({children}) => {
     const botColorMode = useColorModeContext();
     const [botColors, setBotColors] = useState(defaultColors.dark);
-
+    const mode = useColorModeContext()
     useEffect(() => {
         if (botColorMode) {
             setBotColors(defaultColors[botColorMode]);
         }
     }, [botColorMode]);
+    const theme = useMemo(() => {
+        document.body.classList.remove(mode === colorModes.dark ? colorModes.light : colorModes.dark);
+        document.body.classList.add(mode);
+        return createTheme({palette: {
+            mode,
+            primary: {
+                main: botColors?.fontActive,
+              },
+            }})
+    }, [botColors?.fontActive, mode]);
     return (
         <BotColorsContext.Provider value={botColors}>
             <UpdateBotColorsContext.Provider value={setBotColors}>
-                {children} </UpdateBotColorsContext.Provider>
+            <ThemeProvider theme={theme}>
+                {children}
+            </ThemeProvider>
+            </UpdateBotColorsContext.Provider>
         </BotColorsContext.Provider>
     );
 };

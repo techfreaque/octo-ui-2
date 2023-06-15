@@ -2,7 +2,16 @@ import {useMemo} from "react"
 import AntButton, {buttonTypes, buttonVariants} from "../../../components/Buttons/AntButton"
 import {SaveOutlined} from "@ant-design/icons"
 import {Trans} from "react-i18next"
-import {useCurrentCurrencyListContext, useExchangeConfigUpdateContext, useHandleProfileUpdate, usePairSelectorMenuOpenContext, useUnsavedCurrencyListContext, useUpdatePairSelectorMenuOpenContext} from "../../../context/data/BotExchangeInfoProvider"
+import {
+    useCurrentCurrencyListContext,
+    useExchangeConfigUpdateContext,
+    useHandleProfileUpdate,
+    usePairSelectorMenuOpenContext,
+    useUnsavedCurrencyListContext,
+    useUpdatePairSelectorMenuOpenContext
+} from "../../../context/data/BotExchangeInfoProvider"
+import {useIsDemoMode} from "../../../context/data/BotInfoProvider"
+import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider"
 
 export default function SavePairSelector() {
     const setPairSelectorMenuOpen = useUpdatePairSelectorMenuOpenContext()
@@ -11,7 +20,8 @@ export default function SavePairSelector() {
     const unsavedCurrencyList = useUnsavedCurrencyListContext()
     const handleProfileUpdate = useHandleProfileUpdate()
     const exchangeConfigUpdate = useExchangeConfigUpdateContext()
-    
+    const isDemo = useIsDemoMode()
+    const isOnline = useIsBotOnlineContext()
     return useMemo(() => {
         const exchangeConfigUpdateHasChanged = Boolean(exchangeConfigUpdate.global_config && Object.keys(exchangeConfigUpdate.global_config).length)
         const hasUnsavedChanges = JSON.stringify(unsavedCurrencyList) !== JSON.stringify(currentCurrencyList)
@@ -19,8 +29,8 @@ export default function SavePairSelector() {
             handleProfileUpdate(restartAfterSave)
             setPairSelectorMenuOpen({open: false, wantsClose: false})
         }
-        if (pairSelectorMenuOpen?.open) {
-            return(exchangeConfigUpdateHasChanged || hasUnsavedChanges) && (<span style={
+        return pairSelectorMenuOpen?.open && (exchangeConfigUpdateHasChanged || hasUnsavedChanges) && (
+            <span style={
                 {
                     margin: "auto",
                     display: "flex",
@@ -29,6 +39,9 @@ export default function SavePairSelector() {
             }>
                 <AntButton onClick={
                         () => handleSave(true)
+                    }
+                    disabled={
+                        isDemo || ! isOnline
                     }
                     antIconComponent={SaveOutlined}
                     buttonType={
@@ -39,9 +52,16 @@ export default function SavePairSelector() {
                 }>
                     <Trans i18nKey="pairSelector.SaveAndRestart"/>
                 </AntButton>
-            </span>)
-        } else 
-            (<></>)
-        
-    }, [currentCurrencyList, exchangeConfigUpdate.global_config, handleProfileUpdate, pairSelectorMenuOpen?.open, setPairSelectorMenuOpen, unsavedCurrencyList])
+            </span>
+        )
+    }, [
+        currentCurrencyList,
+        exchangeConfigUpdate.global_config,
+        handleProfileUpdate,
+        isDemo,
+        isOnline,
+        pairSelectorMenuOpen?.open,
+        setPairSelectorMenuOpen,
+        unsavedCurrencyList
+    ])
 }

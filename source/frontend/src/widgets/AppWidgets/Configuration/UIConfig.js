@@ -4,7 +4,7 @@ import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/Json
 import {useSaveUiConfig, useUiConfigContext} from "../../../context/config/UiConfigProvider";
 import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import "./uiConfig.css"
-import JsonEditor from "@techfreaque/json-editor-react";
+import JsonEditor from "../../../components/Forms/JsonEditor/jedit";
 
 export const availableUIConfigKeys = [
     "backtesting_run_settings",

@@ -9,9 +9,6 @@ export async function fetchBotInfo(botDomain, setBotInfo, visibleExchanges, succ
 export async function fetchExchangeInfo(botDomain, setExchangeInfo, successNotification = false, setIsFinished = undefined) {
     await fetchAndStoreFromBot(botDomain + backendRoutes.exchangeInfo, setExchangeInfo, "get", {}, successNotification, false, setIsFinished);
 }
-export async function fetchServicesInfo(botDomain, setServicesInfo, successNotification = false, setIsFinished = undefined) {
-    await fetchAndStoreFromBot(botDomain + backendRoutes.servicesInfo, setServicesInfo, "get", {}, successNotification, false, setIsFinished);
-}
 
 export async function getCurrencyLogos(botDomain, currencyIds, setCurrencyLogos) {
     await fetchAndStoreFromBot(botDomain + backendRoutes.currencyLogos, setCurrencyLogos, "post", {currency_ids: currencyIds});
@@ -52,7 +49,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.live = {
                     [botInfo.live_id]: {
                         [symbol]: {
-                            [timeFrame]: msg?.data
+                            [timeFrame]: msg ?. data
                         }
                     }
                 }
@@ -62,7 +59,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                         [optimizer_id]: {
                             [backtesting_id]: {
                                 [symbol]: {
-                                    [timeFrame]: msg?.data
+                                    [timeFrame]: msg ?. data
                                 }
                             }
                         }
@@ -73,7 +70,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                     [optimizer_id]: {
                         [backtesting_id]: {
                             [symbol]: {
-                                [timeFrame]: msg?.data
+                                [timeFrame]: msg ?. data
                             }
                         }
                     }
@@ -82,14 +79,14 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.backtesting[optimization_campaign][optimizer_id] = {
                     [backtesting_id]: {
                         [symbol]: {
-                            [timeFrame]: msg?.data
+                            [timeFrame]: msg ?. data
                         }
                     }
                 }
             } else {
                 newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
                     [symbol]: {
-                        [timeFrame]: msg?.data
+                        [timeFrame]: msg ?. data
                     }
                 }
             }
@@ -155,7 +152,7 @@ export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser?.token)
+    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser ?. token)
 }
 
 export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStoreUser) {
@@ -164,14 +161,14 @@ export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStore
         saveAppStoreData({});
     }
     function onSucces(updated_data, update_url, result, msg, status, request) {
-        if (msg.success) { 
+        if (msg.success) {
             saveAppStoreData({})
             createNotification("Successfully logged out from App Store")
         } else {
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    if (appStoreUser?.token) {
+    if (appStoreUser ?. token) {
         sendAndInterpretBotUpdate({}, storeDomain + backendRoutes.appStoreLogout, onSucces, onFail, "POST", true, appStoreUser.token)
     } else {
         createNotification("You are already logged out", "warning")

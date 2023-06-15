@@ -5,11 +5,13 @@ import React, {
     useCallback,
     useEffect
 } from "react";
-import {fetchExchangeInfo, fetchServicesInfo} from "../../api/data";
+import {fetchExchangeInfo} from "../../api/data";
 import {useBotDomainContext} from "../config/BotDomainProvider";
 import {useBotInfoContext} from "./BotInfoProvider";
 import {updateConfig} from "../../api/actions";
 import {parseSymbol} from "../../components/SymbolsUtil/SymbolsUtil";
+import {backendRoutes} from "../../constants/backendConstants";
+import fetchAndStoreFromBot from "../../api/fetchAndStoreFromBot";
 
 const ExchangeInfoContext = createContext();
 const UpdateExchangeInfoContext = createContext();
@@ -87,12 +89,13 @@ export const useFetchExchangeInfo = () => {
     return logic;
 };
 
-export const useFetchServicesInfo = () => {
+export const useFetchExchangesList = () => {
     const setServicesInfo = useUpdateServicesInfoContext();
     const botDomain = useBotDomainContext();
     const logic = useCallback((successNotification = false, setIsFinished = undefined) => {
         setIsFinished ?. (false)
-        fetchServicesInfo(botDomain, setServicesInfo, successNotification, setIsFinished);
+        fetchAndStoreFromBot(botDomain + backendRoutes.exchangesList, setServicesInfo, "get", {}, successNotification, false, setIsFinished);
+
     }, [setServicesInfo, botDomain]);
     return logic;
 };
@@ -103,7 +106,7 @@ export const useHandleProfileUpdate = () => {
     const currentCurrencyList = useCurrentCurrencyListContext()
     const unsavedCurrencyList = useUnsavedCurrencyListContext()
     const exchangeInfo = useExchangeInfoContext();
-    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
+    const currencySettings = botInfo ?. current_profile ?. config ?. ["crypto-currencies"]
     const exchangeConfigUpdate = useExchangeConfigUpdateContext()
 
     const logic = useCallback((restartAfterSave = false) => {
@@ -116,7 +119,14 @@ export const useHandleProfileUpdate = () => {
             currencySettings,
             restartAfterSave
         })
-    }, [currentCurrencyList, unsavedCurrencyList, exchangeConfigUpdate, exchangeInfo, botDomain, currencySettings]);
+    }, [
+        currentCurrencyList,
+        unsavedCurrencyList,
+        exchangeConfigUpdate,
+        exchangeInfo,
+        botDomain,
+        currencySettings
+    ]);
     return logic;
 };
 
@@ -151,7 +161,7 @@ export const useHandleExchangeSettingChange = () => {
             const newExchanges = {
                 ...prevExchanges
             }
-            if (! newExchanges?.[exchangeName]) {
+            if (! newExchanges ?. [exchangeName]) {
                 newExchanges[exchangeName] = {}
             }
             newExchanges[exchangeName][inputName] = newSetting
@@ -173,7 +183,7 @@ export const BotExchangeInfoProvider = ({children}) => {
     const [servicesInfo, setServicesInfo] = useState();
     const [menuIsOpen, setMenuIsOpen] = useState({open: false, wantsClose: false});
     const botInfo = useBotInfoContext();
-    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
+    const currencySettings = botInfo ?. current_profile ?. config ?. ["crypto-currencies"]
     const [toSaveCurrencySettings, setToSaveCurrencySettings] = useState();
     const [currentCurrencyList, setCurrentCurrencyList] = useState();
     const [unsavedCurrencyList, setUnsavedCurrencyList] = useState();
@@ -194,38 +204,41 @@ export const BotExchangeInfoProvider = ({children}) => {
         setCurrentCurrencyList(JSON.parse(currentCurrencyListJson))
     }, [currencySettings, exchangeInfo, toSaveCurrencySettings])
 
-    const configExchanges = servicesInfo?.exchanges ? Object.keys(servicesInfo.exchanges) : []
+    const configExchanges = servicesInfo ?. exchanges ? Object.keys(servicesInfo.exchanges) : []
     useEffect(() => {
         setExchangeConfigUpdate({global_config: {}, removed_elements: []})
         setNewConfigExchanges({})
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [JSON.stringify(configExchanges)])
 
-    return (<ExchangeInfoContext.Provider value={exchangeInfo}>
-        <UpdateExchangeInfoContext.Provider value={setExchangeInfo}>
-            <PairSelectorMenuOpenContext.Provider value={menuIsOpen}>
-                <UpdatePairSelectorMenuOpenContext.Provider value={setMenuIsOpen}>
-                    <ServicesInfoContext.Provider value={servicesInfo}>
-                        <UpdateServicesInfoContext.Provider value={setServicesInfo}>
-                            <NewConfigExchangesContext.Provider value={newConfigExchanges}>
-                                <UpdateNewConfigExchangesContext.Provider value={setNewConfigExchanges}>
-                                    <ExchangeConfigUpdateContext.Provider value={exchangeConfigUpdate}>
-                                        <UpdateExchangeConfigUpdateContext.Provider value={setExchangeConfigUpdate}>
-                                            <CurrentCurrencyListContext.Provider value={currentCurrencyList}>
-                                                <UnsavedCurrencyListContext.Provider value={unsavedCurrencyList}>
-                                                    <UpdateToSaveCurrencySettingsContext.Provider value={setToSaveCurrencySettings}> {children} </UpdateToSaveCurrencySettingsContext.Provider>
-                                                </UnsavedCurrencyListContext.Provider>
-                                            </CurrentCurrencyListContext.Provider>
-                                        </UpdateExchangeConfigUpdateContext.Provider>
-                                    </ExchangeConfigUpdateContext.Provider>
-                                </UpdateNewConfigExchangesContext.Provider>
-                            </NewConfigExchangesContext.Provider>
-                        </UpdateServicesInfoContext.Provider>
-                    </ServicesInfoContext.Provider>
-                </UpdatePairSelectorMenuOpenContext.Provider>
-            </PairSelectorMenuOpenContext.Provider>
-        </UpdateExchangeInfoContext.Provider>
-    </ExchangeInfoContext.Provider>);
+    return (
+        <ExchangeInfoContext.Provider value={exchangeInfo}>
+            <UpdateExchangeInfoContext.Provider value={setExchangeInfo}>
+                <PairSelectorMenuOpenContext.Provider value={menuIsOpen}>
+                    <UpdatePairSelectorMenuOpenContext.Provider value={setMenuIsOpen}>
+                        <ServicesInfoContext.Provider value={servicesInfo}>
+                            <UpdateServicesInfoContext.Provider value={setServicesInfo}>
+                                <NewConfigExchangesContext.Provider value={newConfigExchanges}>
+                                    <UpdateNewConfigExchangesContext.Provider value={setNewConfigExchanges}>
+                                        <ExchangeConfigUpdateContext.Provider value={exchangeConfigUpdate}>
+                                            <UpdateExchangeConfigUpdateContext.Provider value={setExchangeConfigUpdate}>
+                                                <CurrentCurrencyListContext.Provider value={currentCurrencyList}>
+                                                    <UnsavedCurrencyListContext.Provider value={unsavedCurrencyList}>
+                                                        <UpdateToSaveCurrencySettingsContext.Provider value={setToSaveCurrencySettings}>
+                                                            {children} </UpdateToSaveCurrencySettingsContext.Provider>
+                                                    </UnsavedCurrencyListContext.Provider>
+                                                </CurrentCurrencyListContext.Provider>
+                                            </UpdateExchangeConfigUpdateContext.Provider>
+                                        </ExchangeConfigUpdateContext.Provider>
+                                    </UpdateNewConfigExchangesContext.Provider>
+                                </NewConfigExchangesContext.Provider>
+                            </UpdateServicesInfoContext.Provider>
+                        </ServicesInfoContext.Provider>
+                    </UpdatePairSelectorMenuOpenContext.Provider>
+                </PairSelectorMenuOpenContext.Provider>
+            </UpdateExchangeInfoContext.Provider>
+        </ExchangeInfoContext.Provider>
+    );
 };
 
 function handleProfileUpdate({
@@ -274,15 +287,15 @@ export function getProfileCurrencyUpdate({
     ]).forEach(symbol => {
         if (currentCurrencyList.includes(symbol) && !unsavedCurrencyList.includes(symbol)) {
             let pairKey
-            if (currencySettings?.[symbol]) {
+            if (currencySettings ?. [symbol]) {
                 pairKey = symbol
             } else {
-                const currencyName = exchangeInfo?.currency_name_info?.[parseSymbol(symbol).base]?.n
-                if (currencySettings[currencyName]?.pairs?.includes(symbol)) {
+                const currencyName = exchangeInfo ?. currency_name_info ?. [parseSymbol(symbol).base] ?. n
+                if (currencySettings[currencyName] ?. pairs ?. includes(symbol)) {
                     pairKey = currencyName
                 } else {
                     for (const currency in currencySettings) {
-                        if (currencySettings[currency].pairs?.includes(symbol)) {
+                        if (currencySettings[currency].pairs ?. includes(symbol)) {
                             pairKey = currency
                             break
                         }
@@ -301,20 +314,20 @@ function convertSymbolSettingsToNewFormat(originalCurrencySettings, exchangeInfo
     const currencyList = []
     const currencySettings = {}
     originalCurrencySettings && Object.keys(originalCurrencySettings).forEach(currency => {
-        if (originalCurrencySettings[currency]?.enabled !== false) {
-            originalCurrencySettings[currency]?.pairs?.forEach(pair => {
+        if (originalCurrencySettings[currency] ?. enabled !== false) {
+            originalCurrencySettings[currency] ?. pairs ?. forEach(pair => {
                 currencyList.push(pair)
                 currencySettings[pair] = {
                     enabled: true,
                     pairs: [pair],
-                    currency: exchangeInfo?.currency_name_info?.[parseSymbol(pair).base]?.n
+                    currency: exchangeInfo ?. currency_name_info ?. [parseSymbol(pair).base] ?. n
                 }
             })
         }
     })
     return {
-        currencyList: currencyList?.sort(
-            (a, b) => a?.localeCompare(b)
+        currencyList: currencyList ?. sort(
+            (a, b) => a ?. localeCompare(b)
         ),
         currencySettings
     }

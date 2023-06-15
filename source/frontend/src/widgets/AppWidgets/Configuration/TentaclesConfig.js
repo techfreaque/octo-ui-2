@@ -4,7 +4,7 @@ import {useEffect, useMemo, useState} from "react";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import {userInputKey, validateJSONEditor} from "../../../components/UserInputs/utils";
 import createNotification from "../../../components/Notifications/Notification";
-import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
+import {useBotInfoContext, useIsDemoMode} from "../../../context/data/BotInfoProvider";
 import {useBotDomainContext} from "../../../context/config/BotDomainProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 import {tentacleConfigType, useSaveTentaclesConfig, useTentaclesConfigContext} from "../../../context/config/TentaclesConfigProvider";
@@ -12,7 +12,7 @@ import {useFetchTentaclesConfig} from "../../../context/config/TentaclesConfigPr
 import {SaveOutlined} from "@ant-design/icons";
 import {sizes} from "../../../constants/frontendConstants";
 import AntButton from "../../../components/Buttons/AntButton";
-import JsonEditor from "@techfreaque/json-editor-react";
+import JsonEditor from "../../../components/Forms/JsonEditor/jedit";
 
 export function useCurrentTentacleConfig(tentacleType = tentacleConfigType.tentacles) {
     const currentTentaclesConfig = useTentaclesConfigContext()
@@ -51,39 +51,43 @@ export default function TentaclesConfig({
                 currentTentaclesTradingConfig={configs}
                 saveTentaclesConfig={saveTentaclesConfig}
                 content={content}
-                additionalTabsAfter={
-                    _additionalTabs
-                }
+                additionalTabsAfter={_additionalTabs}
                 storageName={tentacleNames}/>
         )
-    }, [_additionalTabs, content, currentTentaclesNonTradingConfig, fetchTentaclesConfig, saveTentaclesConfig, tentacleNames, tentacles])
+    }, [
+        _additionalTabs,
+        content,
+        currentTentaclesNonTradingConfig,
+        fetchTentaclesConfig,
+        saveTentaclesConfig,
+        tentacleNames,
+        tentacles
+    ])
 }
 
 function useGetAdditionalTabs(additionalTabs) {
-    return useMemo(() => (
-        additionalTabs?.map(tab => {
-            const tabId = tab.title.replace(/ /g, "_")
-            return {
-                ...tab,
-                tabId,
-                title: (
-                    <Tab key={tabId}
-                        label={
-                            tab.title
-                        }
-                        value={tabId}
-                        sx={
-                            {textTransform: 'none'}
-                        }/>
-                ),
-                content: (
-                    <AppWidgets layout={
-                        tab.content
+    return useMemo(() => (additionalTabs?.map(tab => {
+        const tabId = tab.title.replace(/ /g, "_")
+        return {
+            ...tab,
+            tabId,
+            title: (
+                <Tab key={tabId}
+                    label={
+                        tab.title
+                    }
+                    value={tabId}
+                    sx={
+                        {textTransform: 'none'}
                     }/>
-                )
-            }
-        })
-    ),[additionalTabs])
+            ),
+            content: (
+                <AppWidgets layout={
+                    tab.content
+                }/>
+            )
+        }
+    })), [additionalTabs])
 }
 
 
@@ -125,6 +129,7 @@ export function AbstractTentaclesConfig({
     function handleUserInputSave() {
         saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, storageName === "tradingConfig"), setIsSaving, storageName)
     }
+    const isDemo = useIsDemoMode()
     return useMemo(() => {
         return tabs && defaultTabId && (
             <MuiTabs tabs={tabs}
@@ -133,7 +138,9 @@ export function AbstractTentaclesConfig({
                         <>
                             <AppWidgets layout={content}/>
                             <AntButton type="primary"
-                                disabled={isSaving}
+                                disabled={
+                                    isSaving || isDemo
+                                }
                                 onClick={handleUserInputSave}
                                 antIconComponent={SaveOutlined}
                                 iconSize={

@@ -1,15 +1,14 @@
 import {Grid} from "@mui/material";
 import {Card, Tooltip, Typography} from "antd";
 import AntButton from "../../../components/Buttons/AntButton";
-import {buttonVariants} from "../../../components/Buttons/AntButton";
-import {buttonTypes} from "../../../components/Buttons/AntButton";
-import {CloudDownloadOutlined, CloudServerOutlined} from "@ant-design/icons";
-import {projectDownloadUrl, projectName} from "../../../constants/frontendConstants";
+import {CloudDownloadOutlined, CloudServerOutlined, RocketOutlined} from "@ant-design/icons";
+import {projectDownloadUrl, projectName, sizes} from "../../../constants/frontendConstants";
 import ButtonWithModal from "../Modals/ButtonWithModal";
-import {useProjectInfoOpenContext, useUpdateProjectInfoOpenContext} from "../../../context/data/BotInfoProvider";
+import {useIsDemoMode, useProjectInfoOpenContext, useUpdateProjectInfoOpenContext} from "../../../context/data/BotInfoProvider";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faDocker, faLinux, faWindows} from "@fortawesome/free-brands-svg-icons";
 import {RocketLaunchOutlined} from "@mui/icons-material";
+import logo from "../other/octane-logo.png"
 
 export function ProjectHomePageModal() {
     const projectInfoOpen = useProjectInfoOpenContext()
@@ -31,6 +30,8 @@ export function ProjectHomePageModal() {
 }
 
 export default function ProjectHomePage() {
+    const isDemo = useIsDemoMode()
+    const setProjectInfoOpen = useUpdateProjectInfoOpenContext()
     return (
         <Grid container
             style={
@@ -38,9 +39,55 @@ export default function ProjectHomePage() {
             }
             spacing={2}>
             <Grid item
-                sm={12}
-           >
-                <Typography.Title level={2}  style={{marginTop: "150px", marginBottom: "100px"}}>
+                sm={12}>
+                <Typography.Title level={1}
+                    style={
+                        {
+                            marginTop: "150px",
+                            marginBottom: "100px",
+                            display: "flex"
+                        }
+                }>
+                    <span style={
+                        {marginLeft: "auto"}
+                    }>
+                        Welcome to the
+                    </span>
+                    <img height={"30px"}
+                        style={
+                            {margin: "auto 10px"}
+                        }
+                        alt="Octane Logo"
+                        src={logo}/>
+                    <span style={
+                        {marginRight: "auto"}
+                    }>
+                        Project
+                    </span>
+                </Typography.Title>
+                {
+                isDemo && (
+                    <AntButton style={
+                            {margin: "auto"}
+                        }
+                        onClick={
+                            () => setProjectInfoOpen(false)
+                        }
+                        antIconComponent={RocketOutlined}
+                        size={
+                            sizes.large
+                    }>
+                        Try the Demo Version
+                    </AntButton>
+                )
+            }
+                <Typography.Title level={2}
+                    style={
+                        {
+                            marginTop: "150px",
+                            // marginBottom: "100px"
+                        }
+                }>
                     Revolutionize Your Trading Strategy with Cutting-Edge Automation Solutions
                 </Typography.Title>
                 <Typography.Paragraph>
@@ -52,10 +99,36 @@ export default function ProjectHomePage() {
                 <Typography.Paragraph>
                     By harnessing cutting-edge technology, our custom trading bot empowers you to stay ahead of the curve and optimize your trading strategy like never before.
                 </Typography.Paragraph>
-                <Typography.Paragraph style={{marginBottom: "100px"}}>
+                <Typography.Paragraph style={
+                    {marginBottom: "100px"}
+                }>
                     Say goodbye to manual execution and hello to streamlined efficiency.
-                                                                                                                                                                                Take the leap into the future of trading and unlock new possibilities for success.
+                                                                                                                                                                                                                                            Take the leap into the future of trading and unlock new possibilities for success.
                 </Typography.Paragraph>
+            </Grid>
+            <Grid item
+                xs={12}>
+                <Typography.Title level={2}
+                    style={
+                        {display: "flex"}
+                }>
+                    <span style={
+                        {marginLeft: "auto"}
+                    }>
+                        Get
+                    </span>
+                    <img height={"25px"}
+                        style={
+                            {margin: "auto 10px"}
+                        }
+                        alt="Octane Logo"
+                        src={logo}/>
+                    <span style={
+                        {marginRight: "auto"}
+                    }>
+                        now!
+                    </span>
+                </Typography.Title>
             </Grid>
             <Grid item
                 sm={12}
@@ -76,18 +149,12 @@ export default function ProjectHomePage() {
                     <Typography.Paragraph>
                         Get in touch with a strategy developer today!
                     </Typography.Paragraph>
-                    <AntButton buttonVariant={
-                            buttonVariants.primary
-                        }
-                        target="blank"
+                    <AntButton target="blank"
                         href={"mailto:max@a42.ch?subject=Let's discuss my trading bot project!"}
                         style={
                             {margin: "auto"}
                         }
-                        block={true}
-                        buttonType={
-                            buttonTypes.success
-                    }>
+                        block={true}>
                         Transform Your Trading Today!
                     </AntButton>
                 </Card>
@@ -117,16 +184,10 @@ export default function ProjectHomePage() {
                     <Tooltip title={"Cloud deployment will be available soon!"}>
                         <div>
                             <AntButton disabled={true}
-                                buttonVariant={
-                                    buttonVariants.primary
-                                }
                                 style={
                                     {margin: "auto"}
                                 }
-                                block={true}
-                                buttonType={
-                                    buttonTypes.success
-                            }>
+                                block={true}>
                                 Deploy Your Bot in the Cloud Now!
                             </AntButton>
                         </div>
@@ -165,18 +226,12 @@ export default function ProjectHomePage() {
                         <FontAwesomeIcon size="5x"
                             icon={faLinux}/>
                     </div>
-                    <AntButton buttonVariant={
-                            buttonVariants.primary
-                        }
-                        block={true}
+                    <AntButton block={true}
                         style={
                             {margin: "auto"}
                         }
                         href={projectDownloadUrl}
-                        target="blank"
-                        buttonType={
-                            buttonTypes.success
-                    }>
+                        target="blank">
                         Get Your Free Trading Bot Today!
                     </AntButton>
                 </Card>
@@ -213,7 +268,10 @@ export default function ProjectHomePage() {
                 </Card>
             </Grid> */}
             <Grid item
-                xs={12} style={{marginTop: "150px"}}>
+                xs={12}
+                style={
+                    {marginTop: "150px"}
+            }>
                 <Typography.Title level={2}>
                     {
                     `A special thanks to all Open Source Projects that are used within ${projectName}`

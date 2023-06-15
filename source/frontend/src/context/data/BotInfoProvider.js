@@ -3,7 +3,8 @@ import React, {
     useContext,
     createContext,
     useCallback,
-    useEffect
+    useEffect,
+    useMemo
 } from "react";
 import {fetchBotInfo} from "../../api/data";
 import {useBotDomainContext} from "../config/BotDomainProvider";
@@ -51,6 +52,14 @@ export const useFetchBotInfo = () => {
     return logic;
 };
 
+export const useIsDemoMode = () => { 
+    const botInfo = useBotInfoContext()
+    return useMemo(() => {
+        const isDemo = botInfo?.is_owner === false
+        return isDemo
+    },[botInfo?.is_owner])
+}
+
 export const BotInfoProvider = ({children}) => {
     const [botInfo, setBotInfo] = useState();
     const [projectInfoOpen, setProjectInfoOpen] = useState(false);
@@ -64,6 +73,9 @@ export const BotInfoProvider = ({children}) => {
     }, [botDomain, isBotOnline]);
     useEffect(() => {
         if (botInfo?.trigger_time_frames || botInfo?.traded_time_frames) {
+            if (botInfo.is_owner === false) {
+                setProjectInfoOpen(true)
+            }
             setVisibleTimeframes(prevTimeframes => {
                 const availableTimeframes = (botInfo?.trigger_time_frames?.length && botInfo?.trigger_time_frames) || botInfo?.traded_time_frames;
                 if (availableTimeframes?.includes(prevTimeframes)) {

@@ -6,12 +6,14 @@ import {useSaveTentaclesConfig} from "../../../context/config/TentaclesConfigPro
 import {saveUserInputs, strategyFlowMakerName} from "../Configuration/TentaclesConfig";
 import {useIsBotOnlineContext} from "../../../context/data/IsBotOnlineProvider";
 import {useCurrentTradingConfig} from "../Configuration/TradingConfig";
+import {useIsDemoMode} from "../../../context/data/BotInfoProvider";
 
 export default function SaveTradingModeSettings() {
     const [isSaving, setIsSaving] = useState(false);
     const saveTentaclesConfig = useSaveTentaclesConfig()
     const isOnline = useIsBotOnlineContext()
     const currentTentaclesConfig = useCurrentTradingConfig()
+    const isDemo = useIsDemoMode()
     return useMemo(() => {
         function handleUserInputSave() {
             saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, true), setIsSaving, "tradingConfig")
@@ -31,7 +33,7 @@ export default function SaveTradingModeSettings() {
                     <div>
                         <AntButton onClick={handleUserInputSave}
                             disabled={
-                                isSaving || ! isOnline
+                                isSaving || ! isOnline || isDemo
                             }
                             // buttonVariant="text"
                             antIconComponent={SaveOutlined}
@@ -43,5 +45,5 @@ export default function SaveTradingModeSettings() {
                 </Tooltip>
             </div>
         )
-    }, [currentTentaclesConfig, isOnline, isSaving, saveTentaclesConfig])
+    }, [currentTentaclesConfig, isDemo, isOnline, isSaving, saveTentaclesConfig])
 }

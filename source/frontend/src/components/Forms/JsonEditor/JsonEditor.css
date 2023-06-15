@@ -157,10 +157,30 @@
 
 .dark .select2-container--default.select2-container--focus .select2-selection--multiple {
     border: var(--dark-border) 1px solid;
-    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
 }
 
 .light .select2-container--default.select2-container--focus .select2-selection--multiple {
     border: var(--light-border) 1px solid;
-    box-shadow: 0 0 0 0.25rem rgba(13,110,253,.25);
+    box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, .25);
+}
+
+.dark small.form-text {
+    color: var(--dark-font);
+}
+
+.light small.form-text {
+    color: var(--light-font);
+}
+
+.dark .json-editor-btn-collapse.json-editor-btntype-toggle {
+    color: var(--dark-font);
+    background: var(--dark-fontActive);
+    border-color: var(--dark-fontActive);
+}
+
+.light .json-editor-btn-collapse.json-editor-btntype-toggle {
+    color: var(--light-font);
+    background: var(--light-fontActive);
+    border-color: var(--light-fontActive);
 }

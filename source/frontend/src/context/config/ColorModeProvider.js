@@ -1,5 +1,6 @@
 import {ThemeProvider, createTheme} from "@mui/material/styles";
 import React, {createContext, useContext, useMemo, useState} from "react";
+import { useBotColorsContext } from "./BotColorsProvider";
 
 const ToggleColorModeContext = createContext({
     toggleColorMode: () => {}
@@ -26,16 +27,9 @@ export function ColorModeProvider({children}) {
             setMode((prevMode) => (prevMode === colorModes.light ? colorModes.dark : colorModes.light));
         }
     }), []);
-    const theme = useMemo(() => {
-        document.body.classList.remove(mode === colorModes.dark ? colorModes.light : colorModes.dark);
-        document.body.classList.add(mode);
-        return createTheme({palette: {
-                mode
-            }})
-    }, [mode]);
     return (<ToggleColorModeContext.Provider value={colorMode}>
         <ColorModeContext.Provider value={mode}>
-            <ThemeProvider theme={theme}> {children}</ThemeProvider>
+                {children}
         </ColorModeContext.Provider>
     </ToggleColorModeContext.Provider>);
 }
