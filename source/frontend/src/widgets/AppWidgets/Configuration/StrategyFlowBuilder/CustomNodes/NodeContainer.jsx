@@ -12,8 +12,10 @@ import {useBotColorsContext} from "../../../../../context/config/BotColorsProvid
 import {useCallback, useMemo} from "react";
 import {useSaveFlowBuilderSettings} from "../SaveStrategyFlowBuilder";
 import {strategyFlowMakerName} from "../../TentaclesConfig";
-import {tentacleConfigType, useTentaclesConfigContext} from "../../../../../context/config/TentaclesConfigProvider";
+import {tentacleConfigType, useTentaclesConfigContext, useUpdateIsSavingTentaclesConfigContext} from "../../../../../context/config/TentaclesConfigProvider";
 import JsonEditor from "../../../../../components/Forms/JsonEditor/jedit";
+import {useUiConfigContext} from "../../../../../context/config/UiConfigProvider";
+import {flowEditorSettingsName} from "../../UIConfig";
 
 export function NodeContainer({children, color, selected}) {
     const botColors = useBotColorsContext();
@@ -40,19 +42,23 @@ export function NodeEditor({schema, config, nodeId}) {
     const handleUserInputSave = useSaveFlowBuilderSettings()
     const store = useStoreApi();
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
+    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
+    const uiConfig = useUiConfigContext();
+    const setIsSaving = useUpdateIsSavingTentaclesConfigContext()
     const handleAutoSave = useCallback(() => {
-        const {nodeInternals, edges} = store.getState();
-        const nodes = Array.from(nodeInternals).map(([, node]) => node);
-        handleUserInputSave({
-            tradingModeKey: strategyFlowMakerName,
-            config: currentTentaclesTradingConfig,
-            nodes,
-            edges,
-            // setIsSaving
-        })
-
-    }, [currentTentaclesTradingConfig, handleUserInputSave, store])
+        const autoSave = uiConfig?.[flowEditorSettingsName]?.auto_save
+        if (autoSave) {
+            const {nodeInternals, edges} = store.getState();
+            const nodes = Array.from(nodeInternals).map(([, node]) => node);
+            handleUserInputSave({
+                tradingModeKey: strategyFlowMakerName,
+                config: currentTentaclesTradingConfig,
+                nodes,
+                edges,
+                setIsSaving
+            })
+        }
+    }, [currentTentaclesTradingConfig, handleUserInputSave, setIsSaving, store, uiConfig?.[flowEditorSettingsName]?.auto_save])
 
     return useMemo(() => {
         return schema && (
@@ -146,7 +152,7 @@ export function NodeHandle({
                         borderRadius: "5px",
                         background: "none",
                         zIndex: 2,
-                        ... handleStyle,
+                        ...handleStyle,
                         ...style,
                         border: "none"
                     }

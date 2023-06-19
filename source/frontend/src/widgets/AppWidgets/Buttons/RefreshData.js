@@ -6,7 +6,7 @@ import {sizes} from '../../../constants/frontendConstants';
 import {SyncOutlined} from '@ant-design/icons';
 import {AntIconByReactFunc} from '../../../components/Icons/AntIcon';
 import {Trans} from 'react-i18next';
-import AntButton from '../../../components/Buttons/AntButton';
+import AntButton, { buttonTypes } from '../../../components/Buttons/AntButton';
 
 
 export default function RefreshBotData() {
@@ -41,6 +41,7 @@ export default function RefreshBotData() {
                                 fetchBotInfo(true, setIsFinished);
                             })
                         }
+                        buttonType={buttonTypes.error}
                         buttonVariant="text">
                         <AntIconByReactFunc AntReactIcon={SyncOutlined}
                             size={

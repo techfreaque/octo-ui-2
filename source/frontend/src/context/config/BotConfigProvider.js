@@ -76,9 +76,9 @@ export const useFetchBotConfigs = () => {
 export const BotConfigProvider = ({ children }) => {
   const [botConfig, setBotConfig] = useState({});
   const botDomain = useBotDomainContext()
-  useEffect(() => {
-    fetchBotConfigs(setBotConfig, botDomain, ["profile", "test"])
-  }, [botDomain])
+  // useEffect(() => {
+  //   fetchBotConfigs(setBotConfig, botDomain, ["profile", "test"])
+  // }, [botDomain])
   return (
     <BotConfigContext.Provider value={botConfig}>
       <UpdateBotConfigContext.Provider value={setBotConfig}>

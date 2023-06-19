@@ -11,8 +11,16 @@ const TentaclesConfigContext = createContext();
 const UpdateTentaclesConfigContext = createContext();
 const HiddenBacktestingMetadataColumnsContext = createContext();
 const UpdateHiddenBacktestingMetadataColumnsContext = createContext();
+const IsSavingTentaclesConfigContext = createContext();
+const UpdateIsSavingTentaclesConfigContext = createContext();
 
 
+export const useIsSavingTentaclesConfigContext = () => {
+    return useContext(IsSavingTentaclesConfigContext);
+};
+export const useUpdateIsSavingTentaclesConfigContext = () => {
+    return useContext(UpdateIsSavingTentaclesConfigContext);
+};
 export const useTentaclesConfigContext = () => {
     return useContext(TentaclesConfigContext);
 };
@@ -36,21 +44,21 @@ export const useFetchTentaclesConfig = () => {
     const botDomain = useBotDomainContext()
     return useCallback((tentacles, successCallback = null, isTradingTentacle = false) => {
         const failure = (updated_data, update_url, result, msg, status) => {
-            createNotification("Failed to fetch tentacles config", "danger", msg?.message)
+            createNotification("Failed to fetch tentacles config", "danger", msg ?. message)
         }
         const success = (updated_data, update_url, result, msg, status) => {
-            if (msg?.success) {
+            if (msg ?. success) {
                 updateTentaclesConfig(prevConfig => {
                     const newConfig = {
                         ...prevConfig
                     }
                     if (isTradingTentacle) {
-                        newConfig[tentacleConfigType.tradingTentacles] = msg?.data
+                        newConfig[tentacleConfigType.tradingTentacles] = msg ?. data
                     } else {
                         const prevTentacles = newConfig[tentacleConfigType.tentacles] || {}
                         newConfig[tentacleConfigType.tentacles] = {
-                            ...prevTentacles,
-                            ...msg?.data
+                            ... prevTentacles,
+                            ...msg ?. data
                         }
                     }
                     return newConfig
@@ -68,9 +76,9 @@ export const useFetchTentaclesConfig = () => {
 
 export function getEnabledTradingTentaclesList(botInfo) {
     const tentacles = []
-    botInfo?.strategy_names && tentacles.push(...botInfo.strategy_names)
-    botInfo?.evaluator_names && tentacles.push(...botInfo.evaluator_names)
-    botInfo?.trading_mode_name && tentacles.push(botInfo.trading_mode_name)
+    botInfo ?. strategy_names && tentacles.push(... botInfo.strategy_names)
+    botInfo ?. evaluator_names && tentacles.push(... botInfo.evaluator_names)
+    botInfo ?. trading_mode_name && tentacles.push(botInfo.trading_mode_name)
     return [...new Set(tentacles)]
 }
 
@@ -138,10 +146,16 @@ export const useSaveTentaclesConfigAndSendAction = () => {
 
 export const TentaclesConfigProvider = ({children}) => {
     const [tentaclesConfig, setTentaclesConfig] = useState();
+    const [isSaving, setIsSaving] = useState(false);
     return (
         <TentaclesConfigContext.Provider value={tentaclesConfig}>
             <UpdateTentaclesConfigContext.Provider value={setTentaclesConfig}>
-                {children} </UpdateTentaclesConfigContext.Provider>
+                <IsSavingTentaclesConfigContext.Provider value={isSaving}>
+                    <UpdateIsSavingTentaclesConfigContext.Provider value={setIsSaving}>
+                        {children}
+                    </UpdateIsSavingTentaclesConfigContext.Provider>
+                </IsSavingTentaclesConfigContext.Provider>
+            </UpdateTentaclesConfigContext.Provider>
         </TentaclesConfigContext.Provider>
     )
 };

@@ -6,6 +6,8 @@ import {useBotInfoContext} from "../../../context/data/BotInfoProvider";
 import "./uiConfig.css"
 import JsonEditor from "../../../components/Forms/JsonEditor/jedit";
 
+export const flowEditorSettingsName = "flow_editor_settings"
+
 export const availableUIConfigKeys = [
     "backtesting_run_settings",
     "backtesting_analysis_settings",
@@ -13,7 +15,9 @@ export const availableUIConfigKeys = [
     "optimizer_campaigns_to_load",
     "optimizer_run_settings",
     "display_settings",
-    "optimization_campaign"
+    "optimization_campaign",
+    flowEditorSettingsName
+
 ]
 const storageName = "uiConfig"
 
@@ -21,15 +25,12 @@ export default function UIConfig({configKeys}) {
     const uiConfig = useUiConfigContext();
     const botInfo = useBotInfoContext();
     const saveUiConfig = useSaveUiConfig()
-    const dataFiles = botInfo?.data_files
-    const currentSymbols = botInfo?.symbols
-    const availableExchanges = botInfo?.exchange_names
     const handleEditorsAutosave = useCallback(() => {
         const newConfigs = {
-            ...uiConfig
+            ... uiConfig
         }
         configKeys.forEach(configKey => {
-            const newConfig = window[`$${storageName}`]?.[`${configKey}${configKeys}`].getValue()
+            const newConfig = window[`$${storageName}`] ?. [`${configKey}${configKeys}`].getValue()
             const finalNewConfig = convertTimestamps(newConfig, true)
             newConfigs[configKey] = finalNewConfig
         })
@@ -37,44 +38,45 @@ export default function UIConfig({configKeys}) {
             saveUiConfig(newConfigs)
         };
     }, [configKeys, saveUiConfig, uiConfig]);
-    return useMemo(() => (
-        <div> {
-            botInfo && configKeys.map(configKey => {
-                return <JsonEditor {...defaultJsonEditorSettings()}
-                    schema={
-                        getUiConfigSchema(configKey, dataFiles, currentSymbols, availableExchanges)
+    return useMemo(() => {
+
+        const dataFiles = botInfo ?. data_files
+        const currentSymbols = botInfo ?. symbols
+        const availableExchanges = botInfo ?. exchange_names
+        return (
+            <div> {
+                botInfo && configKeys.map(configKey => {
+                    const schema = getUiConfigSchema(configKey, dataFiles, currentSymbols, availableExchanges)
+                    const config = convertTimestamps(uiConfig[configKey])
+                    if (schema.properties ?. exchange_names ?. items ?. enum && config ?. exchange_names ?. some(_exchange => ! schema.properties.exchange_names.items.enum.includes(_exchange))) {
+                        config.exchange_names = schema.properties.exchange_names.items.enum
                     }
-                    startval={
-                        convertTimestamps(uiConfig[configKey])
-                    }
-                    storageName={storageName}
-                    editorName={
-                        `${configKey}${configKeys}`
-                    }
-                    onChange={handleEditorsAutosave}
-                    disable_collapse={true}
-                    key={configKey}
-                    // language="es"
-                    // languages={{
-                    //     es: {
-                    //         button_save: "Save",
-                    //         button_copy: "Copy",
-                    //         button_cancel: "Cancel",
-                    //         button_add: "Add",
-                    //     }
-                    // }}
-                />
-        })
-        } </div>
-    ), [
-        botInfo,
-        configKeys,
-        dataFiles,
-        currentSymbols,
-        availableExchanges,
-        uiConfig,
-        handleEditorsAutosave
-    ])
+                    return (
+                        <JsonEditor {...defaultJsonEditorSettings()}
+                            schema={schema}
+                            startval={config}
+                            storageName={storageName}
+                            editorName={
+                                `${configKey}${configKeys}`
+                            }
+                            onChange={handleEditorsAutosave}
+                            disable_collapse={true}
+                            key={configKey}
+                            // language="es"
+                            // languages={{
+                            //     es: {
+                            //         button_save: "Save",
+                            //         button_copy: "Copy",
+                            //         button_cancel: "Cancel",
+                            //         button_add: "Add",
+                            //     }
+                            // }}
+                        />
+                    )
+                })
+            } </div>
+        )
+    }, [botInfo, configKeys, uiConfig, handleEditorsAutosave])
 
 }
 

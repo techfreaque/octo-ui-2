@@ -224,6 +224,9 @@ const handleLabelStyles = {
 export default function StrategyBlockNode(props) {
     const {ioSchema, schema, config} = useCurrentNodeSchema({nodeId: props.id})
     return useMemo(() => {
+        if (props.id === "mode_node") {
+            console.log("reee")
+        }
         const ioNodes = {}
         ioSchema && Object.keys(ioSchema).forEach(nodeKey => {
             const node = ioSchema[nodeKey]

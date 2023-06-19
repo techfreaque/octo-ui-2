@@ -1,4 +1,10 @@
-import {useCallback, useEffect, useMemo, useRef, useState} from "react";
+import {
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState
+} from "react";
 import {
     Controls,
     ReactFlow,
@@ -11,14 +17,16 @@ import {
 import "reactflow/dist/style.css";
 import "./strategyFlowBuilder.css";
 import SaveStrategyFlowBuilderSettings, {useSaveFlowBuilderSettings} from "./SaveStrategyFlowBuilder";
-import {tentacleConfigType, useTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
+import {tentacleConfigType, useTentaclesConfigContext, useUpdateIsSavingTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
 import StrategyBlockNode from "./CustomNodes/StrategyBlockNode";
 import {strategyFlowMakerName} from "../TentaclesConfig";
+import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
+import { flowEditorSettingsName } from "../UIConfig";
 
 const getId = () => Date.now().toString(36) + Math.random().toString(36).substring(2)
 
 export default function StrategyFlowBuilder({tradingModeKey}) {
-    return useMemo(()=>    (
+    return useMemo(() => (
         <ReactFlowProvider>
             <StrategyFlowBuilderDrawingSpace tradingModeKey={tradingModeKey}/>
         </ReactFlowProvider>
@@ -28,17 +36,38 @@ export default function StrategyFlowBuilder({tradingModeKey}) {
 function StrategyFlowBuilderDrawingSpace({tradingModeKey}) {
 
     const reactFlowWrapper = useRef(null);
-    const [isSaving, setIsSaving] = useState(false);
+    const setIsSaving = useUpdateIsSavingTentaclesConfigContext()
     const currentTentaclesConfig = useTentaclesConfigContext()
-    const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
-    const nodesConfig = currentTentaclesTradingConfig?.[strategyFlowMakerName]?.config
-    const [nodes, setNodes, onNodesChange] = useNodesState((nodesConfig?.nodes && Object.values(nodesConfig?.nodes)) || []);
-    const [edges, setEdges, onEdgesChange] = useEdgesState(nodesConfig?.edges || []);
+    const currentTentaclesTradingConfig = currentTentaclesConfig ?. [tentacleConfigType.tradingTentacles]
+    const nodesConfig = currentTentaclesTradingConfig ?. [strategyFlowMakerName] ?. config
+    const [nodes, setNodes, onNodesChange] = useNodesState((nodesConfig ?. nodes && Object.values(nodesConfig ?. nodes)) || []);
+    const [edges, setEdges, onEdgesChange] = useEdgesState(nodesConfig ?. edges || []);
+    const uiConfig = useUiConfigContext();
+    const autoSave = uiConfig?.[flowEditorSettingsName]?.auto_save
+    useEffect(() => {
+        if (nodesConfig ?. nodes !== undefined && ! nodesConfig.nodes.mode_node) {
+            nodesConfig.nodes.mode_node = {
+                id: "mode_node",
+                type: "StrategyBlockNode",
+                data: {},
+                config_mode_node: {},
+                position: {
+                    x: 0,
+                    y: 0
+                },
+                positionAbsolute: {
+                    x: 0,
+                    y: 0
+                }
 
-useEffect(() => {
-    setNodes((nodesConfig?.nodes && Object.values(nodesConfig?.nodes)) || [])
-    setEdges(nodesConfig?.edges || [])
-}, [JSON.stringify(nodesConfig?.nodes), JSON.stringify(nodesConfig?.edges)])
+            }
+        }
+        setNodes((nodesConfig ?. nodes && Object.values(nodesConfig ?. nodes)) || [])
+        setEdges(nodesConfig ?. edges || [])
+    }, [
+        JSON.stringify(nodesConfig ?. nodes),
+        JSON.stringify(nodesConfig ?. edges)
+    ])
 
 
     const [reactFlowInstance, setReactFlowInstance] = useState(null);
@@ -53,20 +82,15 @@ useEffect(() => {
             uptoDateEdges = addEdge(params, eds)
             return uptoDateEdges
         })
-        handleUserInputSave({
+        autoSave && handleUserInputSave({
             tradingModeKey,
             config: currentTentaclesTradingConfig,
             nodes,
             edges: uptoDateEdges,
-            reloadPlots: false
+            reloadPlots: false, 
+            setIsSaving
         })
-    }, [
-        currentTentaclesTradingConfig,
-        handleUserInputSave,
-        nodes,
-        setEdges,
-        tradingModeKey
-    ]);
+    }, [autoSave, currentTentaclesTradingConfig, handleUserInputSave, nodes, setEdges, setIsSaving, tradingModeKey]);
 
     const onDragOver = useCallback((event) => {
         event.preventDefault();
@@ -104,16 +128,10 @@ useEffect(() => {
             config: currentTentaclesTradingConfig,
             nodes: uptoDateNodes,
             edges,
-            reloadPlots: false
+            reloadPlots: false, 
+            setIsSaving
         })
-    }, [
-        currentTentaclesTradingConfig,
-        edges,
-        handleUserInputSave,
-        reactFlowInstance,
-        setNodes,
-        tradingModeKey
-    ]);
+    }, [currentTentaclesTradingConfig, edges, handleUserInputSave, reactFlowInstance, setIsSaving, setNodes, tradingModeKey]);
 
     // // auto connect to closest node
     // const onNodeDragStop = useCallback((_, node) => {
@@ -141,7 +159,7 @@ useEffect(() => {
     //     });
     // }, [getClosestEdge, setEdges]);
 
-    return useMemo(()=> currentTentaclesTradingConfig && (
+    return useMemo(() => currentTentaclesTradingConfig && (
         <div className="dndflow"
             style={
                 {
@@ -152,8 +170,6 @@ useEffect(() => {
             <SaveStrategyFlowBuilderSettings tradingModeKey={tradingModeKey}
                 config={currentTentaclesTradingConfig}
                 nodes={nodes}
-                isSaving={isSaving}
-                setIsSaving={setIsSaving}
                 edges={edges}/>
             <div className="reactflow-wrapper"
                 style={
@@ -179,7 +195,7 @@ useEffect(() => {
             </div>
 
         </div>
-    ),[currentTentaclesTradingConfig, edges, isSaving, nodeTypes, nodes, onConnect, onDragOver, onDrop, onEdgesChange, onNodesChange, tradingModeKey]);
+    ), [currentTentaclesTradingConfig, edges, nodeTypes, nodes, onConnect, onDragOver, onDrop, onEdgesChange, onNodesChange, tradingModeKey]);
 }
 
 // function useGetClosestEdge() {

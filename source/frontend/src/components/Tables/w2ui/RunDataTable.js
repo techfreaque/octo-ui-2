@@ -27,13 +27,16 @@ export default function RunDataTableW2UI({
 }) {
     const setDisplayedRunIds = useUpdateDisplayedRunIdsContext()
     const displayedRunIds = useDisplayedRunIdsContext()
-
+    const runDataJson = JSON.stringify(runData)
     useEffect(() => {
-        if (runData.data) 
-            createMetadataTable(tableTitle, tableId, runData.data, false, currentCampaignName, reloadData, deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings);
+        const parsedRunData = JSON.parse(runDataJson)
+        if (parsedRunData.data) 
+            createMetadataTable(tableTitle, tableId, parsedRunData.data, false, currentCampaignName, reloadData, deleteRuns, hiddenMetadataColumns, setDisplayedRunIds, displayedRunIds, restoreSettings);
         
+
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(runData), currentCampaignName, hiddenMetadataColumns]);
+    }, [runDataJson, currentCampaignName, hiddenMetadataColumns]);
     return useMemo(() => (
         <div id={
                 `${tableId}-container`
@@ -147,8 +150,7 @@ function createMetadataTable(tableTitle, tableId, metadata, forceSelectLatest, c
                 splitKey[0].slice(0, MAX_SEARCH_LABEL_SIZE)
             } ...` : splitKey[0];
             return {
-                field: key,
-                label: `${label} (${
+                    field: key, label: `${label} (${
                     splitKey[1]
                 })`,
                 type: TIMESTAMP_DATA.includes(key) ? "datetime" : _getTableDataType(null, {
@@ -158,8 +160,13 @@ function createMetadataTable(tableTitle, tableId, metadata, forceSelectLatest, c
             }
         })
         let recordId = 0;
+        const recordsToSelect = [];
+        const _displayedRunIds = displayedRunIds ?. backtesting || []
         const records = sortedMetadata.map((row) => {
             recordId = _formatMetadataRow(row, recordId);
+            if (_displayedRunIds.includes(mergeRunIdentifiers(row.id, row["optimizer id"], row["optimization campaign"]))) {
+                recordsToSelect.push(recordId-1);
+            }
             return row
         });
         const runDataSearches = keys.map((key) => {
@@ -210,6 +217,7 @@ function createMetadataTable(tableTitle, tableId, metadata, forceSelectLatest, c
             if (forceSelectLatest) {
                 table.click(table.getFirst());
             }
+            table.select(recordsToSelect)
             return tableId;
         }
     }
@@ -223,14 +231,14 @@ function createMetadataTable(tableTitle, tableId, metadata, forceSelectLatest, c
 
 function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userInputColumns, forceSelectLatest, currentOptimizerCampaignName, reloadData, deleteBacktestingRuns, restoreSettings, records) { // tabs
     function showRunInfo() {
-        table.showColumn(...runDataHidableColumns.map((column) => column.field))
-        table.hideColumn(...userInputColumns.map((column) => column.field))
+        table.showColumn(... runDataHidableColumns.map((column) => column.field))
+        table.hideColumn(... userInputColumns.map((column) => column.field))
         table.toolbar.disable('show-run-info');
         table.toolbar.enable('show-user-inputs');
     }
     function showUserInputInfo() {
-        table.hideColumn(...runDataHidableColumns.map((column) => column.field))
-        table.showColumn(...userInputColumns.map((column) => column.field))
+        table.hideColumn(... runDataHidableColumns.map((column) => column.field))
+        table.showColumn(... userInputColumns.map((column) => column.field))
         table.toolbar.disable('show-user-inputs');
         table.toolbar.enable('show-run-info');
     }
@@ -260,7 +268,7 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
         event.force = true;
         event.onComplete = () => {
             const selectedIds = table.getSelection()
-            if (selectedIds?.length === 0) {
+            if (selectedIds ?. length === 0) {
                 return createNotification("Select a run to delete first", "danger")
             }
             _deleteRuns(selectedIds)
@@ -300,7 +308,7 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
         if (selectedRuns && selectedRuns.length === 1) {
             function removeSpacesOnlyFromKeys(inputs) {
                 inputs && Object.keys(inputs).forEach((inputKey) => {
-                    const newInputKey = inputKey?.replace(/ /g, "_")
+                    const newInputKey = inputKey ?. replace(/ /g, "_")
                     if (newInputKey && newInputKey !== inputKey) {
                         inputs[newInputKey] = inputs[inputKey]
                         delete inputs[inputKey]
@@ -308,6 +316,8 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
                     if (typeof inputs[newInputKey] === 'object') 
                         removeSpacesOnlyFromKeys(inputs[newInputKey]);
                     
+
+
                 })
                 return inputs
             }
@@ -318,13 +328,14 @@ function _addBacktestingMetadataTableButtons(table, runDataHidableColumns, userI
         }
         createNotification("Error restoring user iputs", "danger", "You must select one run");
     }
-    table.toolbar.add({
-        type: 'button',
-        id: 'restore-run',
-        text: 'Restore settings',
-        icon: 'fa fa-download',
-        onClick: _restoreSettings
-    })
+    // TODO fix restoring objects
+    // table.toolbar.add({
+    //     type: 'button',
+    //     id: 'restore-run',
+    //     text: 'Restore settings',
+    //     icon: 'fa fa-download',
+    //     onClick: _restoreSettings
+    // })
     table.toolbar.add({
         type: 'button',
         id: 'refresh-backtesting-runs',
@@ -392,7 +403,7 @@ export function userInputKey(userInput, tentacle) {
 function _getUserInputColumns(userInputColumns, inputTentacle, userInputKeys, userInputSampleValueByKey, inputPerTentacle, inputsByConfig, hiddenMetadataColumns) {
     Object.keys(inputsByConfig[inputTentacle]).forEach((userInput) => {
         const key = userInputKey(userInput, inputTentacle);
-        if (! userInputKeys.includes(key) && ! hiddenMetadataColumns?.includes(key.replaceAll("_", " "))) {
+        if (! userInputKeys.includes(key) && ! hiddenMetadataColumns ?. includes(key.replaceAll("_", " "))) {
             userInputSampleValueByKey[key] = inputsByConfig[inputTentacle][userInput]
             if (userInputSampleValueByKey[key] instanceof Object && !(userInputSampleValueByKey[key] instanceof Array)) {
                 _getUserInputColumns(userInputColumns, userInput, userInputKeys, userInputSampleValueByKey, inputPerTentacle, inputsByConfig[inputTentacle], hiddenMetadataColumns)

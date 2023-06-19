@@ -1,32 +1,89 @@
 import {ReloadOutlined} from "@ant-design/icons";
-import {useSaveTentaclesConfig} from "../../../../context/config/TentaclesConfigProvider";
+import {useIsSavingTentaclesConfigContext, useSaveTentaclesConfig, useUpdateIsSavingTentaclesConfigContext} from "../../../../context/config/TentaclesConfigProvider";
 import {useIsBotOnlineContext} from "../../../../context/data/IsBotOnlineProvider";
 import AntButton from "../../../../components/Buttons/AntButton";
 import {flowBuilderStorageKey, getNodeConfigKey} from "./CustomNodes/StrategyBlockNode";
-import {useCallback} from "react";
-import { useIsDemoMode } from "../../../../context/data/BotInfoProvider";
+import {useCallback, useMemo} from "react";
+import {useIsDemoMode} from "../../../../context/data/BotInfoProvider";
+import {useSaveUiConfig, useUiConfigContext} from "../../../../context/config/UiConfigProvider";
+import {Space, Switch} from "antd";
+import {flowEditorSettingsName} from "../UIConfig";
 
 export default function SaveStrategyFlowBuilderSettings({
     tradingModeKey,
     config,
     nodes,
     edges,
-    isSaving,
-    setIsSaving
 }) {
     const isOnline = useIsBotOnlineContext()
     const handleUserInputSave = useSaveFlowBuilderSettings()
     const isDemo = useIsDemoMode()
-    return (
-        <div style={
-            {
-                position: "absolute",
-                marginTop: "10px",
-                right: "10px",
-            }
-        }>
+    const uiConfig = useUiConfigContext();
+    const saveUiConfig = useSaveUiConfig()
+    const handleAutoSaveSettingChange = useCallback((checked) => {
+        const newConfigs = {
+            ... uiConfig
+        }
+        if (! newConfigs[flowEditorSettingsName]) {
+            newConfigs[flowEditorSettingsName] = {}
+        }
+        newConfigs[flowEditorSettingsName].auto_save = checked
+        if (newConfigs) {
+            saveUiConfig(newConfigs)
+        };
+    }, [saveUiConfig, uiConfig]);
+    const setIsSaving = useUpdateIsSavingTentaclesConfigContext()
+    const isSaving = useIsSavingTentaclesConfigContext()
+    return useMemo(() => {
+        const autoSave = uiConfig ?. [flowEditorSettingsName] ?. auto_save
+        return (
+            <div style={
+                {
+                    position: "absolute",
+                    marginTop: "10px",
+                    right: "10px",
+                    zIndex: 2
+                }
+            }>
 
-                <div>
+                <Space direction="horizontal">
+                    <Switch checked={autoSave}
+                        onChange={
+                            (checked => handleAutoSaveSettingChange(checked))
+                        }
+                        checkedChildren="auto save on"
+                        unCheckedChildren="auto save off"/> {
+                    !autoSave && (
+                        <AntButton onClick={
+                                () => handleUserInputSave({
+                                    tradingModeKey,
+                                    config,
+                                    nodes,
+                                    edges,
+                                    setIsSaving,
+                                    reloadPlots: false,
+                                    successNotification: true
+                                })
+                            }
+                            style={
+                                {zIndex: 2}
+                            }
+                            disabled={
+                                isSaving || ! isOnline || isDemo
+                            }
+                            icon={
+                                (
+                                    <span style={
+                                        {marginRight: "5px"}
+                                    }>
+                                        <ReloadOutlined spin={
+                                            isSaving || ! isOnline
+                                        }/>
+                                    </span>
+                                )
+                        }>Save</AntButton>
+                    )
+                }
                     <AntButton onClick={
                             () => handleUserInputSave({
                                 tradingModeKey,
@@ -38,21 +95,43 @@ export default function SaveStrategyFlowBuilderSettings({
                                 successNotification: true
                             })
                         }
-                    style={{zIndex: 2}}
+                        style={
+                            {zIndex: 2}
+                        }
                         disabled={
                             isSaving || ! isOnline || isDemo
                         }
-                        icon={(<span style={{marginRight: "5px"}}>
-                        <ReloadOutlined spin={isSaving || ! isOnline} />
-                        </span>
-                        )}>Reload Plots</AntButton>
-                </div>
-        </div>
-    )
+                        icon={
+                            (
+                                <span style={
+                                    {marginRight: "5px"}
+                                }>
+                                    <ReloadOutlined spin={
+                                        isSaving || ! isOnline
+                                    }/>
+                                </span>
+                            )
+                    }>Save & Reload Plots</AntButton>
+                </Space>
+            </div>
+        )
+    }, [
+        config,
+        edges,
+        handleAutoSaveSettingChange,
+        handleUserInputSave,
+        isDemo,
+        isOnline,
+        isSaving,
+        nodes,
+        setIsSaving,
+        tradingModeKey,
+        uiConfig
+    ])
 }
 
 export function getNodeEditor(nodeId) {
-    return window?.[`$${flowBuilderStorageKey}`]?.[nodeId]
+    return window ?. [`$${flowBuilderStorageKey}`] ?. [nodeId]
 }
 
 export function useSaveFlowBuilderSettings() {
@@ -66,14 +145,14 @@ export function useSaveFlowBuilderSettings() {
         reloadPlots,
         successNotification = false
     }) => {
-        setIsSaving?.(true)
+        setIsSaving ?. (true)
         const newConfigs = {}
         newConfigs[tradingModeKey] = {
             ...config[tradingModeKey].config
         }
         newConfigs[tradingModeKey].nodes = nodes.reduce((dict, node, index) => {
             const editor = getNodeEditor(node.id)
-            const settings = editor?.getValue() || {};
+            const settings = editor ?. getValue() || {};
             return(dict[node.id] = {
                 ...node,
                 [getNodeConfigKey(node.id)]: settings
