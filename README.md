@@ -14,7 +14,7 @@ Additionally, the UI includes features for backtesting and analyzing trading res
 # Roadmap
 The Octo UI2 project has an ambitious roadmap, including the following objectives:
 
-- ~~ Integrate all of OctoBot's frontend features into its web UI ~~
+- ~~Integrate all of OctoBot's frontend features into its web UI~~
 - Improve stability, usability and aesthetics of the platform for all screen sizes
 - Add 10-15 run analyzers for simulated, real and backtesting trading data
 - Add features to create/copy and edit tentacles with a code editor built in
