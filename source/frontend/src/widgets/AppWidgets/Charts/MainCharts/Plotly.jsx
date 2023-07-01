@@ -38,16 +38,25 @@ function relayout(ed, chartLocation, setLayouts) {
                     ...chartDiv.layout
                 }
                 const x = newLayout.xaxis
+                const x2 = newLayout.xaxis2
                 const y = newLayout.yaxis
                 const y2 = newLayout.yaxis2
                 const y3 = newLayout.yaxis3
                 const y4 = newLayout.yaxis4
 
                 if (ed[xAutorange] && ed[yAutorange]) {
-                    x.range = []
-                    x.range[0] = thisChartDiv.layout.xaxis.maxRange[0]
-                    x.range[1] = thisChartDiv.layout.xaxis.maxRange[1]
-                    x.autorange = false
+                    if (x) {   
+                        x.range = []
+                        x.range[0] = thisChartDiv.layout.xaxis.maxRange[0]
+                        x.range[1] = thisChartDiv.layout.xaxis.maxRange[1]
+                        x.autorange = false
+                    }
+                    if (x2) {   
+                        x2.range = []
+                        x2.range[0] = thisChartDiv.layout.xaxis.maxRange[0]
+                        x2.range[1] = thisChartDiv.layout.xaxis.maxRange[1]
+                        x2.autorange = false
+                    }
                     if (y) {
                         y.autorange = true
                         y.range[0] = undefined
@@ -71,10 +80,18 @@ function relayout(ed, chartLocation, setLayouts) {
 
                     setLayouts[otherChartLocation](newLayout)
                 } else if (ed[xRange0]) {
-                    x.autorange = false
-                    x.range = []
-                    x.range[0] = ed[xRange0];
-                    x.range[1] = ed[xRange1]
+                    if (x) {
+                        x.autorange = false
+                        x.range = []
+                        x.range[0] = ed[xRange0];
+                        x.range[1] = ed[xRange1]
+                    }
+                    if (x2) {
+                        x2.autorange = false
+                        x2.range = []
+                        x2.range[0] = ed[xRange0];
+                        x2.range[1] = ed[xRange1]
+                    }
                     if (y) {
                         y.autorange = true
                         y.range[0] = undefined

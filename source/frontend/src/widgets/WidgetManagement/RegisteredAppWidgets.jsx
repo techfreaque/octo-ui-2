@@ -60,6 +60,8 @@ import SaveTradingModeSettings from "../AppWidgets/Buttons/SaveTradingModeSettin
 import StopTrainingButton from "../AppWidgets/Buttons/StopTrainingButton";
 import ProjectHomePage, {ProjectHomePageModal} from "../AppWidgets/ProjectPage/Home";
 import DemoInfo from "../AppWidgets/ProjectPage/DemoInfo";
+import ServicesConfig from "../AppWidgets/Configuration/ServicesConfig";
+import {CloudDeployment} from "../AppWidgets/ProjectPage/CloudDeployment";
 // import your custom widgets here
 
 export const registeredComponents = {
@@ -131,5 +133,7 @@ export const registeredComponents = {
     ProjectHomePage,
     ProjectHomePageModal,
     OptimizerNotInstalled,
-    DemoInfo
+    DemoInfo,
+    ServicesConfig,
+    CloudDeployment
 };

@@ -311,6 +311,18 @@ export const defaultStrategyDesignerPageLayout = {
                                     "component": "StartOptimizerButton"
                                 }
                             ]
+                        }, {
+                            "antIcon": "CloudDownloadOutlined",
+                            "component": "Tab",
+                            "content": [
+                                {
+                                    "component": "ServicesConfig"
+                                }
+                            ],
+                            "dontScroll": true,
+                            "faIcon": "",
+                            "title": "Interfaces",
+                            "toolBarContent": []
                         }
                     ]
                 }

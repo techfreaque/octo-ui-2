@@ -2,9 +2,10 @@ import {useState} from "react";
 import AppWidgets from '../../WidgetManagement/RenderAppWidgets';
 import IconFromString from '../../../components/Icons/IconFromString';
 import {Tooltip, Modal, Avatar} from 'antd';
-import AntButton from '../../../components/Buttons/AntButton';
-import { CloseOutlined } from "@ant-design/icons";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import AntButton, {buttonSizes, buttonTypes, buttonVariants} from '../../../components/Buttons/AntButton';
+import {CloseOutlined} from "@ant-design/icons";
+import {useBotColorsContext} from "../../../context/config/BotColorsProvider";
+import {sizes} from "../../../constants/frontendConstants";
 
 export default function ButtonWithModal({
     title,
@@ -16,7 +17,11 @@ export default function ButtonWithModal({
     width,
     open,
     setOpen,
-    iconStyle
+    iconStyle,
+    buttonVariant = buttonVariants.text,
+    size = buttonSizes.small,
+    buttonType = buttonTypes.success,
+    buttonStyle
 }) {
     const [_open, _setOpen] = useState(false);
     const actualOpen = open || _open
@@ -36,7 +41,10 @@ export default function ButtonWithModal({
                 <div>
 
                     <AntButton onClick={handleOpen}
-                        buttonVariant="text">
+                        buttonType={buttonType}
+                        buttonVariant={buttonVariant}
+                        style={buttonStyle}
+                        size={size}>
                         {
                         displayAsAvatar ? (
                             <>
@@ -44,18 +52,22 @@ export default function ButtonWithModal({
                                     style={
                                         {margin: "auto"}
                                     }
-                                    size="small"
+                                    size={
+                                        sizes.small
+                                    }
                                     icon={
                                         (
                                             <IconFromString faIcon={faIcon}
-                                                antIcon={antIcon} style={iconStyle}
+                                                antIcon={antIcon}
+                                                style={iconStyle}
                                                 marginRight={"0px"}/>
                                         )
                                     }/> {
                                 !iconOnly && title
                             } </>
                         ) : (
-                            <IconFromString faIcon={faIcon}  style={iconStyle}
+                            <IconFromString faIcon={faIcon}
+                                style={iconStyle}
                                 antIcon={antIcon}
                                 marginRight={"0px"}/>
                         )
@@ -90,9 +102,17 @@ function ModalContent({
             centered
             footer={null}
             closable={true}
-            closeIcon={(<CloseOutlined  style={{ fontSize: "40px", height: "40px" ,color: botColors?.warning }} 
-                
-                />)}
+            closeIcon={
+                (
+                    <CloseOutlined style={
+                        {
+                            fontSize: "40px",
+                            height: "40px",
+                            color: botColors ?. warning
+                        }
+                    }/>
+                )
+            }
             // closable={false}
             keyboard
             zIndex={1000}>

@@ -1,4 +1,4 @@
-import { CURRENT_BOT_DATA } from "../../../constants/backendConstants";
+import {CURRENT_BOT_DATA} from "../../../constants/backendConstants";
 
 // const DISPLAYED_ELEMENTS_KEYS = ["main-chart", "sub-chart", "backtesting-run-overview", "backtesting-details", "list-of-trades-part"]
 // const DISPLAYED_ELEMENTS_TITLES = [
@@ -14,7 +14,17 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
     const dataFilesTitles = [`Currently traded time frame(s) & asset(s) on selected exchange(s): ${currentSymbols}`,]
     dataFiles?.forEach(dataFile => {
         dataFilevalues.push(dataFile[0])
-        dataFilesTitles.push(`${dataFile[1].exchange} - ${dataFile[1].symbols} - ${dataFile[1].time_frames} from ${dataFile[1].start_date} to from ${dataFile[1].end_date}`)
+        dataFilesTitles.push(`${
+            dataFile[1].exchange
+        } - ${
+            dataFile[1].symbols
+        } - ${
+            dataFile[1].time_frames
+        } from ${
+            dataFile[1].start_date
+        } to from ${
+            dataFile[1].end_date
+        }`)
     })
     function selectableChartlocation(name, title, order) {
         return {
@@ -22,21 +32,17 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                 type: "string",
                 title,
                 enum: [
-                    "main-chart",
-                    "sub-chart",
-                    "backtesting-run-overview",
+                    "main-chart", "sub-chart", "backtesting-run-overview",
                 ],
                 options: {
                     enum_titles: [
-                        "Main Chart",
-                        "Main Sub-Chart",
-                        "Secondary-Chart"
+                        "Main Chart", "Main Sub-Chart", "Secondary-Chart"
                     ],
-                    grid_columns: 6,
+                    grid_columns: 6
                 },
                 default: "sub-chart",
                 propertyOrder: order
-            },
+            }
         }
     }
     const uiConfigSchema = {
@@ -57,9 +63,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 1
+                                },
+                                propertyOrder: 1
                             },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value", 2),
                             "plot_unrealized_portfolio_value_for_each_asset": {
@@ -68,9 +75,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 3
+                                },
+                                propertyOrder: 3
                             },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_value_for_each_asset", "Chart location unrealized portfolio value", 4),
                             "plot_unrealized_portfolio_amount_in_btc": {
@@ -79,9 +87,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 5
+                                },
+                                propertyOrder: 5
                             },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_amount_in_btc", "Chart location unrealized portfolio value", 6),
                             "plot_unrealized_portfolio_amount_for_each_asset": {
@@ -90,9 +99,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 7
+                                },
+                                propertyOrder: 7
                             },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_amount_for_each_asset", "Chart location unrealized portfolio value", 8),
                             "plot_realized_portfolio": {
@@ -101,9 +111,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 9
+                                },
+                                propertyOrder: 9
                             },
                             ...selectableChartlocation("chart_location_realized_portfolio_value", "Chart location realized portfolio value", 10),
                             "plot_trade_gains": {
@@ -112,9 +123,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 11
+                                },
+                                propertyOrder: 11
                             },
                             ...selectableChartlocation("chart_location_trade_gains", "Chart location realized gains per trade", 12),
                             "plot_funding_fees": {
@@ -123,9 +135,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 13
+                                },
+                                propertyOrder: 13
                             },
                             ...selectableChartlocation("chart_location_funding_fees", "Chart location funding fees", 14),
                             "plot_best_case_growth": {
@@ -134,9 +147,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 15
+                                },
+                                propertyOrder: 15
                             },
                             ...selectableChartlocation("chart_location_best_case_growth", "Chart location best case portfolio value", 16),
                             "plot_win_rate": {
@@ -145,9 +159,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 17
+                                },
+                                propertyOrder: 17
                             },
                             ...selectableChartlocation("chart_location_win_rate", "Chart location win rate", 18),
                             "plot_wins_and_losses_count": {
@@ -156,9 +171,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 19
+                                },
+                                propertyOrder: 19
                             },
                             ...selectableChartlocation("chart_location_wins_and_losses_count", "Chart location wins and losses count", 20),
                             "plot_withdrawals": {
@@ -167,11 +183,12 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 21
+                                },
+                                propertyOrder: 21
                             },
-                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals", 22),
+                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals", 22)
                         }
                     },
                     backtesting_table_settings: {
@@ -189,7 +206,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 title: "Display withdrawals table",
                                 format: "checkbox",
                                 fieldType: "boolean"
-                            },
+                            }
                         }
                     },
                     backtesting_analysis_report_settings: {
@@ -226,7 +243,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 title: "Display Analysis Report Strategy Settings",
                                 fieldType: "boolean"
-                            },
+                            }
                         }
                     }
                 }
@@ -245,9 +262,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 1
+                                },
+                                propertyOrder: 1
                             },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_value", "Chart location unrealized portfolio value", 2),
                             "plot_unrealized_portfolio_value_for_each_asset": {
@@ -256,9 +274,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 3
+                                },
+                                propertyOrder: 3
                             },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_value_for_each_asset", "Chart location unrealized portfolio value", 4),
                             "plot_unrealized_portfolio_amount_in_btc": {
@@ -267,9 +286,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 5
+                                },
+                                propertyOrder: 5
                             },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_amount_in_btc", "Chart location unrealized portfolio value", 6),
                             "plot_unrealized_portfolio_amount_for_each_asset": {
@@ -278,9 +298,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 7
+                                },
+                                propertyOrder: 7
                             },
                             ...selectableChartlocation("chart_location_unrealized_portfolio_amount_for_each_asset", "Chart location unrealized portfolio value", 8),
                             "plot_realized_portfolio": {
@@ -289,9 +310,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 9
+                                },
+                                propertyOrder: 9
                             },
                             ...selectableChartlocation("chart_location_realized_portfolio_value", "Chart location realized portfolio value", 10),
                             "plot_trade_gains": {
@@ -300,9 +322,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 11
+                                },
+                                propertyOrder: 11
                             },
                             ...selectableChartlocation("chart_location_trade_gains", "Chart location realized gains per trade", 12),
                             "plot_funding_fees": {
@@ -311,9 +334,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 13
+                                },
+                                propertyOrder: 13
                             },
                             ...selectableChartlocation("chart_location_funding_fees", "Chart location funding fees", 14),
                             "plot_best_case_growth": {
@@ -322,9 +346,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 15
+                                },
+                                propertyOrder: 15
                             },
                             ...selectableChartlocation("chart_location_best_case_growth", "Chart location best case portfolio value", 16),
                             "plot_win_rate": {
@@ -333,9 +358,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 17
+                                },
+                                propertyOrder: 17
                             },
                             ...selectableChartlocation("chart_location_win_rate", "Chart location win rate", 18),
                             "plot_wins_and_losses_count": {
@@ -344,9 +370,10 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 19
+                                },
+                                propertyOrder: 19
                             },
                             ...selectableChartlocation("chart_location_wins_and_losses_count", "Chart location wins and losses count", 20),
                             "plot_withdrawals": {
@@ -355,11 +382,12 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 options: {
-                                    grid_columns: 6,
+                                    grid_columns: 6
 
-                                }, propertyOrder: 21
+                                },
+                                propertyOrder: 21
                             },
-                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals", 22),
+                            ...selectableChartlocation("chart_location_withdrawals", "Chart location withdrawals", 22)
                         }
                     },
                     live_table_settings: {
@@ -377,9 +405,9 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 title: "Display withdrawals table",
                                 format: "checkbox",
                                 fieldType: "boolean"
-                            },
+                            }
                         }
-                    },
+                    }
                 }
             },
             backtesting_run_settings: {
@@ -404,7 +432,9 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         items: {
                             type: "string",
                             enum: dataFilevalues,
-                            "options": { enum_titles: dataFilesTitles },
+                            "options": {
+                                enum_titles: dataFilesTitles
+                            }
                         }
                     },
                     exchange_names: {
@@ -426,7 +456,9 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         items: {
                             type: "string",
                             enum: availableExchanges,
-                            "options": { enum_titles: availableExchanges },
+                            "options": {
+                                enum_titles: availableExchanges
+                            }
                         }
                     },
                     exchange_type: {
@@ -469,7 +501,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                 type: "object",
                 title: "Display Settings",
                 "options": {
-                    "grid_columns": 12,
+                    "grid_columns": 12
                 },
                 properties: {
                     // displayed_elements: {
@@ -498,12 +530,12 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                             max_candles_before_line_display: {
                                 title: "Candles to display before line(s) ",
                                 "options": {
-                                    "grid_columns": 12,
+                                    "grid_columns": 12
                                 },
                                 type: "number",
                                 format: "number",
                                 minimum: 0,
-                                default: 10_000,
+                                default: 10000
                             },
                             max_candles_line_sources: {
                                 "type": "array",
@@ -513,18 +545,22 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                     "grid_columns": 12,
                                     "select2": {
                                         "tags": true
-                                    },
+                                    }
                                 },
                                 title: "Line(s) sources",
-                                default: ["high", "low"],
+                                default: [
+                                    "high", "low"
+                                ],
 
                                 items: {
-                                    enum: ["open", "high", "low", "close"],
+                                    enum: [
+                                        "open", "high", "low", "close"
+                                    ],
                                     type: "string",
                                     "options": {
-                                        enum_titles: ["Open", "High", "Low", "Close"],
-                                    },
-                                },
+                                        enum_titles: ["Open", "High", "Low", "Close"]
+                                    }
+                                }
                             },
                             display_unified_tooltip: {
                                 title: "Display tooltips: Display tooltips on graphs (slower)",
@@ -532,9 +568,9 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 "options": {
-                                    "grid_columns": 12,
+                                    "grid_columns": 12
                                 },
-                                default: true,
+                                default: true
                             },
                             display_use_log_scale: {
                                 title: "Use log scale: Displays all graphs with log scale except data with negative values",
@@ -542,11 +578,11 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                                 format: "checkbox",
                                 fieldType: "boolean",
                                 "options": {
-                                    "grid_columns": 12,
+                                    "grid_columns": 12
                                 }
-                            },
+                            }
                         }
-                    },
+                    }
                 }
             },
             optimizer_run_settings: {
@@ -558,22 +594,22 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         type: "number",
                         format: "number",
                         minimum: 0,
-                         propertyOrder: 1,
-                        default: 1,
+                        propertyOrder: 1,
+                        default: 1
                     },
                     optimizer_id: {
                         title: "Optimizer id :",
                         type: "number",
                         format: "number",
                         minimum: 1,
-                         propertyOrder: 2,
+                        propertyOrder: 2,
                         default: 1
                     },
                     queue_size: {
                         title: "Random runs queued:",
                         type: "number",
                         format: "number",
-                         propertyOrder: 3,
+                        propertyOrder: 3,
                         minimum: 1,
                         default: 1000
                     },
@@ -581,14 +617,14 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         title: "Notify when completed",
                         type: "boolean",
                         format: "checkbox",
-                         propertyOrder: 4,
+                        propertyOrder: 4,
                         fieldType: "boolean",
                         default: true
                     },
                     exchange_type: {
                         type: "string",
                         title: "Exchange type",
-                         propertyOrder: 5,
+                        propertyOrder: 5,
                         enum: [
                             "use_current_profile",
                             "spot",
@@ -610,7 +646,7 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         type: "array",
                         uniqueItems: true,
                         format: "select2",
-                         propertyOrder: 6,
+                        propertyOrder: 6,
                         minItems: 1,
                         options: {
                             grid_columns: 12,
@@ -624,14 +660,16 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         items: {
                             type: "string",
                             enum: dataFilevalues,
-                            "options": { enum_titles: dataFilesTitles },
+                            "options": {
+                                enum_titles: dataFilesTitles
+                            }
                         }
                     },
                     exchange_names: {
                         type: "array",
                         uniqueItems: true,
                         format: "select2",
-                         propertyOrder: 7,
+                        propertyOrder: 7,
                         minItems: 1,
                         options: {
                             grid_columns: 12,
@@ -646,21 +684,23 @@ export function getUiConfigSchema(configKey, dataFiles, currentSymbols, availabl
                         items: {
                             type: "string",
                             enum: availableExchanges,
-                            "options": { enum_titles: availableExchanges },
+                            "options": {
+                                enum_titles: availableExchanges
+                            }
                         }
                     },
                     start_timestamp: {
                         type: "integer",
                         format: "date",
                         title: "Start Date",
-                         propertyOrder: 10
+                        propertyOrder: 10
                     },
                     end_timestamp: {
                         type: "integer",
                         format: "date",
                         title: "End Date",
                         propertyOrder: 11
-                    },
+                    }
                 }
             },
             optimizer_inputs: {

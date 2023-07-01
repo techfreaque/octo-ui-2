@@ -93,7 +93,7 @@ export const useAddToOptimizerQueue = () => {
     const fetchOptimizerQueue = useFetchOptimizerQueue()
     const fetchProConfig = useFetchProConfig()
     const logic = useCallback(() => {
-        if (optimizerSettings && exchageId) {
+        if (exchageId) {
             if (! optimizerForm?.optimizer_inputs?.user_inputs) { // settings not loaded yet, use directly from settings storage
                 fetchProConfig((fetchedOptimizerForm) => {
                     if (fetchedOptimizerForm?.optimizer_inputs) {

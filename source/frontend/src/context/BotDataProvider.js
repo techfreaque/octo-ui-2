@@ -32,11 +32,11 @@ export default function BotDataProvider({children}) {
         <IoProvider>
             <IsBotOnlineProvider>
                 <NotificationsContextProvider>
-                    <UiConfigProvider>
-                        <VisibleTimeFramesProvider>
-                            <VisiblePairsProvider>
-                                <VisibleExchangesProvider>
-                                    <BotInfoProvider>
+                    <VisibleTimeFramesProvider>
+                        <VisiblePairsProvider>
+                            <VisibleExchangesProvider>
+                                <BotInfoProvider>
+                                    <UiConfigProvider>
                                         <BotLayoutProvider>
                                             <ColorModeProvider>
                                                 <BotColorsProvider>
@@ -70,11 +70,11 @@ export default function BotDataProvider({children}) {
                                                 </BotColorsProvider>
                                             </ColorModeProvider>
                                         </BotLayoutProvider>
-                                    </BotInfoProvider>
-                                </VisibleExchangesProvider>
-                            </VisiblePairsProvider>
-                        </VisibleTimeFramesProvider>
-                    </UiConfigProvider>
+                                    </UiConfigProvider>
+                                </BotInfoProvider>
+                            </VisibleExchangesProvider>
+                        </VisiblePairsProvider>
+                    </VisibleTimeFramesProvider>
                 </NotificationsContextProvider>
             </IsBotOnlineProvider>
         </IoProvider>

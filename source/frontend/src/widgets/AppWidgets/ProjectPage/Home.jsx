@@ -9,6 +9,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faDocker, faLinux, faWindows} from "@fortawesome/free-brands-svg-icons";
 import {RocketLaunchOutlined} from "@mui/icons-material";
 import logo from "../other/octane-logo.png"
+import CloudDeploymentModal from "./CloudDeployment";
 
 export function ProjectHomePageModal() {
     const projectInfoOpen = useProjectInfoOpenContext()
@@ -103,7 +104,7 @@ export default function ProjectHomePage() {
                     {marginBottom: "100px"}
                 }>
                     Say goodbye to manual execution and hello to streamlined efficiency.
-                                                                                                                                                                                                                                            Take the leap into the future of trading and unlock new possibilities for success.
+                                                                                                                                                                                                                                                                Take the leap into the future of trading and unlock new possibilities for success.
                 </Typography.Paragraph>
             </Grid>
             <Grid item
@@ -181,17 +182,7 @@ export default function ProjectHomePage() {
                     <Typography.Paragraph>
                         With hassle-free management, you can unleash the full potential of your trading strategy.
                     </Typography.Paragraph>
-                    <Tooltip title={"Cloud deployment will be available soon!"}>
-                        <div>
-                            <AntButton disabled={true}
-                                style={
-                                    {margin: "auto"}
-                                }
-                                block={true}>
-                                Deploy Your Bot in the Cloud Now!
-                            </AntButton>
-                        </div>
-                    </Tooltip>
+                    <CloudDeploymentModal/>
                 </Card>
             </Grid>
             <Grid item
@@ -364,23 +355,26 @@ export default function ProjectHomePage() {
 }
 
 
-function TitleSubTitleCombo({
+export function TitleSubTitleCombo({
     title,
     subTitle,
-    startLevel = 2
+    startLevel = 2, 
+    center=false,
 }) {
     return (
         <>
             <Typography.Title level={startLevel}
                 style={
-                    {marginBottom: "0px"}
+                    {marginBottom: "0px",
+                    textAlign: center? "center" : "unset"}
             }>
                 {title} </Typography.Title>
             <Typography.Title level={
                     startLevel + 1
                 }
                 style={
-                    {marginTop: "0px"}
+                    {marginTop: "0px",
+                    textAlign: center? "center" : "unset"}
             }>
                 {subTitle} </Typography.Title>
         </>

@@ -292,6 +292,9 @@ function _createPieChartElement({
         labels: chartDetails.labels,
         values: chartDetails.values,
         text: chartDetails.text,
+        hoverlabel: {
+            font: {color: "#fff"}
+        },
         name: `${
             chartDetails.title
         } (${chartIdentifier})`,
