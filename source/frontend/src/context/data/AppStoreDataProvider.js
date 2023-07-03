@@ -274,6 +274,31 @@ export const useUnpublishApp = () => {
     }, [appStoreDomain, appStoreUser?.token]);
 }
 
+export const useDeleteApp = () => {
+    const appStoreDomain = useAppStoreDomainContext()
+    const appStoreUser = useAppStoreUserContext()
+    return useCallback((package_id, setIsloading) => {
+        setIsloading(true)
+        function onFail(updated_data, update_url, result, msg, status) {
+            setIsloading(false)
+            createNotification("Failed to delete app", "danger")
+        }
+        function onSucces(updated_data, update_url, result, msg, status, request) {
+            if (msg.success) {
+                setIsloading(false)
+                createNotification("App deleted successfully")
+            } else {
+                onFail(updated_data, update_url, result, msg, status)
+            }
+        }
+        if (appStoreUser?.token) {
+            sendAndInterpretBotUpdate({package_id}, appStoreDomain + backendRoutes.appDeleteApp, onSucces, onFail, "POST", true, appStoreUser.token)
+        } else {
+            createNotification("You need to be signed in to delete an app", "warning")
+        }
+    }, [appStoreDomain, appStoreUser?.token]);
+}
+
 export const useAddToAppStoreCart = () => {
     const setAppStoreCart = useUpdateAppStoreCartContext()
     const cancelStorePayment = useCancelStorePayment()

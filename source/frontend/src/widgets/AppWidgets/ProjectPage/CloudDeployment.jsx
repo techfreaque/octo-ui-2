@@ -1,5 +1,5 @@
 import {Grid} from "@mui/material";
-import {Card, Typography} from "antd";
+import {Card, Tooltip, Typography} from "antd";
 import AntButton, {buttonSizes, buttonTypes, buttonVariants} from "../../../components/Buttons/AntButton";
 import {TitleSubTitleCombo} from "./Home";
 import {useState} from "react";
@@ -7,87 +7,94 @@ import ButtonWithModal from "../Modals/ButtonWithModal";
 
 export default function CloudDeploymentModal() {
     const [isOpen, setIsOpen] = useState(false)
-    return (
-        <ButtonWithModal title={"Deploy Your Bot in the Cloud Now!"}
-            content={
-                [{
-                        "component": "CloudDeployment"
-                    }]
-            }
-            iconOnly={false}
-            displayAsAvatar={false}
-            buttonVariant={
-                buttonVariants.outline
-            }
-            size={
-                buttonSizes.middle
-            }
-            buttonStyle={
-                {margin: "auto"}
-            }
-            buttonType={
-                buttonTypes.success
-            }
-            width={"1500"}
-            open={isOpen}
-            setOpen={setIsOpen}/>
-    )
+    // return (<Tooltip title={"Cloud Deployment will be available soon!"}>
+    //     <div>
+    //         <AntButton style={
+    //                 {margin: "auto"}
+    //             }
+    //             disabled={true}>
+    //             Deploy Your Bot in the Cloud Now!
+    //         </AntButton>
+    //     </div>
+    // </Tooltip>)
+    return (<ButtonWithModal title={"Deploy Your Bot in the Cloud Now!"}
+        content={
+            [{
+                    "component": "CloudDeployment"
+                }]
+        }
+        iconOnly={false}
+        displayAsAvatar={false}
+        buttonVariant={
+            buttonVariants.outline
+        }
+        size={
+            buttonSizes.middle
+        }
+        buttonStyle={
+            {margin: "auto"}
+        }
+        buttonType={
+            buttonTypes.success
+        }
+        width={"1500"}
+        open={isOpen}
+        setOpen={setIsOpen}/>)
 }
 
 export function CloudDeployment() {
-    return (
-        <Grid container
-            spacing={2}>
-            <Grid item
-                xs={12}>
-                <TitleSubTitleCombo center startLevel={1}
-                    title={"Cloud Trading Bot Servers"}
-                    subTitle={"Effortless and Fully Managed Solutions for Your Trading Strategies"}/>
-            </Grid>
-            {
-            cloudOptions.map(option => (
-                <CloudOption option={option}/>
-            ))
-        } </Grid>
-    )
+    return (<Grid container
+        spacing={2}>
+        <Grid item
+            xs={12}>
+            <TitleSubTitleCombo center
+                startLevel={1}
+                title={"Cloud Trading Bot Servers"}
+                subTitle={"Effortless and Fully Managed Solutions for Your Trading Strategies"}/>
+        </Grid>
+        {
+        cloudOptions.map(option => (<CloudOption option={option}/>))
+    } </Grid>)
 }
 
 function CloudOption({option}) {
-    return (
-        <Grid item
-            sm={12}
-            md={6}
-            lg={4}
-        >
-            <Card style={
-                {height: "100%"}
-            }>
-                <TitleSubTitleCombo title={
-                        option.title
-                    }
-                    subTitle={
-                        `${
-                            option.price
-                        }$ / month`
-                    }/>
-                <Typography.Paragraph>
-                    Octane Instances: {
-                    option.instances
-                } </Typography.Paragraph>
-                <Typography.Paragraph> {
-                    option.description
-                } </Typography.Paragraph>
-                <AntButton target="blank"
-                    style={
-                        {margin: "auto"}
-                    }
-                    size={buttonSizes.large}
-                  >
-                    Select and configure
-                </AntButton>
-            </Card>
-        </Grid>
-    )
+    return (<Grid item
+        sm={12}
+        md={6}
+        lg={4}>
+        <Card style={
+            {height: "100%"}
+        }>
+            <TitleSubTitleCombo title={
+                    option.title
+                }
+                subTitle={
+                    `${
+                        option.price
+                    }$ / month`
+                }/>
+            <Typography.Paragraph>
+                Octane Instances: {
+                option.instances
+            } </Typography.Paragraph>
+            <Typography.Paragraph> {
+                option.description
+            } </Typography.Paragraph>
+            <Tooltip title={"Cloud Deployment will be available soon!"}>
+                <div>
+                    <AntButton disabled target="blank"
+                        style={
+                            {margin: "auto"}
+                        }
+                        size={
+                            buttonSizes.large
+                    }>
+                        Select and configure
+                    </AntButton>
+                </div>
+            </Tooltip>
+        </Card>
+    </Grid>)
 }
 
 const cloudOptions = [

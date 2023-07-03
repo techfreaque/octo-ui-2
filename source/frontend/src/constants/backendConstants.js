@@ -21,6 +21,7 @@ export const backendRoutes = {
     appStoreUpload: `/upload_app`,
     appStoreRate: `/rate_app`,
     appUnpublishApp: `/unpublish_app`,
+    appDeleteApp: `/delete_app`,
     appPublishApp: `/publish_app`,
     appStoreCreatePayment: `/create-payment`,
     appStoreCheckPayment: `/check-payment`,

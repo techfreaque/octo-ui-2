@@ -9,11 +9,11 @@ export async function fetchBotConfigs(useSaveBotConfig, botDomain, configKeys) {
 export async function fetchUIConfig(botDomain, saveUIConfig, exchangeNames) {
     const success = (updated_data, update_url, result, msg, status) => {
         if (exchangeNames) {
-            msg.backtesting_run_settings.exchange_names = filterByEnabledExchanges(msg.backtesting_run_settings.exchange_names, exchangeNames)
+            msg.backtesting_run_settings.exchange_names = filterByEnabledExchanges(msg.backtesting_run_settings ?. exchange_names || [], exchangeNames)
             if (!msg.backtesting_run_settings.exchange_names.length) {
                 msg.backtesting_run_settings.exchange_names = exchangeNames
             }
-            msg.optimizer_run_settings.exchange_names = filterByEnabledExchanges(msg.optimizer_run_settings.exchange_names, exchangeNames)
+            msg.optimizer_run_settings.exchange_names = filterByEnabledExchanges(msg.optimizer_run_settings ?. exchange_names || [], exchangeNames)
             if (!msg.optimizer_run_settings.exchange_names.length) {
                 msg.optimizer_run_settings.exchange_names = exchangeNames
             }

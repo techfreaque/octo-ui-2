@@ -10,7 +10,7 @@ import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 import ExportApp from "./ExportApp";
 import {useState} from "react";
 import PublishApp from "./PublishApp";
-import UnpublishApp from "./UnpublishApp";
+import UnpublishApp, { DeleteApp } from "./UnpublishApp";
 
 
 export default function AppActions({
@@ -204,6 +204,7 @@ function OnHoverActions({
                 handleUninstall={handleUninstall} />
             <PublishApp app={app} />
             <UnpublishApp app={app} />
+            <DeleteApp app={app} />
         </>
     )
 }
