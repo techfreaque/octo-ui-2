@@ -49,7 +49,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.live = {
                     [botInfo.live_id]: {
                         [symbol]: {
-                            [timeFrame]: msg ?. data
+                            [timeFrame]: msg?.data
                         }
                     }
                 }
@@ -59,7 +59,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                         [optimizer_id]: {
                             [backtesting_id]: {
                                 [symbol]: {
-                                    [timeFrame]: msg ?. data
+                                    [timeFrame]: msg?.data
                                 }
                             }
                         }
@@ -70,7 +70,7 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                     [optimizer_id]: {
                         [backtesting_id]: {
                             [symbol]: {
-                                [timeFrame]: msg ?. data
+                                [timeFrame]: msg?.data
                             }
                         }
                     }
@@ -79,14 +79,14 @@ export async function fetchPlotlyPlotData(symbol, timeFrame, exchange_id, exchan
                 newData.backtesting[optimization_campaign][optimizer_id] = {
                     [backtesting_id]: {
                         [symbol]: {
-                            [timeFrame]: msg ?. data
+                            [timeFrame]: msg?.data
                         }
                     }
                 }
             } else {
                 newData.backtesting[optimization_campaign][optimizer_id][backtesting_id] = {
                     [symbol]: {
-                        [timeFrame]: msg ?. data
+                        [timeFrame]: msg?.data
                     }
                 }
             }
@@ -152,7 +152,7 @@ export async function loginToAppStore(updateAppStoreUser, storeDomain, loginData
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser ?. token)
+    sendAndInterpretBotUpdate(loginData, storeDomain + backendRoutes.appStoreLogin, onSucces, onFail, "POST", true, appStoreUser?.token)
 }
 
 export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStoreUser) {
@@ -168,7 +168,7 @@ export async function logoutFromAppStore(saveAppStoreData, storeDomain, appStore
             onFail(updated_data, update_url, result, msg, status)
         }
     }
-    if (appStoreUser ?. token) {
+    if (appStoreUser?.token) {
         sendAndInterpretBotUpdate({}, storeDomain + backendRoutes.appStoreLogout, onSucces, onFail, "POST", true, appStoreUser.token)
     } else {
         createNotification("You are already logged out", "warning")

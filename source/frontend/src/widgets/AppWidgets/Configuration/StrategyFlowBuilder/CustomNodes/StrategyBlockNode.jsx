@@ -18,7 +18,7 @@ const nodeDirectionKeysToHandleType = {
     out: "source"
 }
 
-const handleStyles = {
+const handleOuterStyles = {
     top: {
         0: {
             left: "50%",
@@ -33,6 +33,22 @@ const handleStyles = {
             left: "auto",
             marginRight: "-100px"
 
+        },
+        3: {
+            top: "25px",
+            bottom: "auto"
+        },
+        4: {
+            top: "25px",
+            bottom: "auto"
+        },
+        5: {
+            top: "130px",
+            bottom: "auto"
+        },
+        6: {
+            top: "130px",
+            bottom: "auto"
         }
     },
     bottom: {
@@ -127,6 +143,49 @@ const handleLabelBottomStyle = {
     bottom: "-20px"
 }
 
+const handleStyles = {
+    top: {
+        0: {},
+        1: {},
+        2: {},
+        3: handleLabelLeftStyle,
+        4: {
+            ...handleLabelRightStyle,
+            left: "90%"
+        },
+        5: handleLabelLeftStyle,
+        6: {
+            ...handleLabelRightStyle,
+            left: "90%"
+        }
+    },
+    bottom: {
+        0: {},
+        1: {},
+        2: {},
+        3: handleLabelLeftStyle,
+        4: {
+            ...handleLabelRightStyle,
+            left: "90%"
+        },
+        5: handleLabelLeftStyle,
+        6: {
+            ...handleLabelRightStyle,
+            left: "90%"
+        }
+    },
+    left: {
+        0: {},
+        1: {},
+        2: {}
+    },
+    right: {
+        0: {},
+        1: {},
+        2: {}
+    }
+}
+
 const handleLabelStyles = {
     top: {
         0: {
@@ -144,6 +203,26 @@ const handleLabelStyles = {
             left: "auto",
             ...handleLabelTopStyle,
             marginRight: "-50px"
+        },
+        3: {
+            top: "25px",
+            bottom: "auto",
+            ...handleLabelLeftStyle
+        },
+        4: {
+            top: "25px ",
+            bottom: "auto",
+            ...handleLabelRightStyle
+        },
+        5: {
+            top: "130px",
+            bottom: "auto",
+            ...handleLabelLeftStyle
+        },
+        6: {
+            top: "130px ",
+            bottom: "auto",
+            ...handleLabelRightStyle
         }
     },
     bottom: {
@@ -224,9 +303,6 @@ const handleLabelStyles = {
 export default function StrategyBlockNode(props) {
     const {ioSchema, schema, config} = useCurrentNodeSchema({nodeId: props.id})
     return useMemo(() => {
-        if (props.id === "mode_node") {
-            console.log("reee")
-        }
         const ioNodes = {}
         ioSchema && Object.keys(ioSchema).forEach(nodeKey => {
             const node = ioSchema[nodeKey]
@@ -252,6 +328,9 @@ export default function StrategyBlockNode(props) {
                         node.options.color
                     }
                     style={
+                        handleOuterStyles[node.options.side]?.[ioNodes[node.options.side]?.length]
+                    }
+                    handleStyle={
                         handleStyles[node.options.side]?.[ioNodes[node.options.side]?.length]
                     }
                     position={
@@ -271,7 +350,10 @@ export default function StrategyBlockNode(props) {
             )
         })
         return (
-            <NodeContainer color={
+            <NodeContainer nodeId={
+                    props.id
+                }
+                color={
                     schema?.options?.color
                 }
                 selected={
@@ -295,7 +377,12 @@ export default function StrategyBlockNode(props) {
             } </NodeContainer>
         )
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [JSON.stringify(config), JSON.stringify(ioSchema), props.id, props.selected, JSON.stringify(schema)
+    }, [
+        JSON.stringify(config),
+        JSON.stringify(ioSchema),
+        props.id,
+        props.selected,
+        JSON.stringify(schema)
     ])
 }
 

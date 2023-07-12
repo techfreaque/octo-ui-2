@@ -60,7 +60,11 @@ CATEGORY_KEY_TO_TITLE = {
     # "tentacles/Backtesting/collectors/exchanges": CATEGORY_BACKTESTING_COLLECTORS,
 }
 
-DISTRO_UPDATED_PACKAGES = ("OctoBot-Default-Tentacles", "Octane-Default-Tentacles")
+DISTRO_UPDATED_PACKAGES = (
+    "OctoBot-Default-Tentacles",
+    "Octane-Default-Tentacles",
+    "Octane-Pro-Tentacles-Keywords",
+)
 DISTRO_UPDATED_APPS = (
     "arbitrage_trading",
     "copy_trading",
@@ -73,6 +77,8 @@ DISTRO_UPDATED_APPS = (
     "simple_dca",
     "tradingview_trading",
     "staggered_orders_trading",
+    "basic_tentacles",
+    "LorentzianClassificationMode",
 )
 
 

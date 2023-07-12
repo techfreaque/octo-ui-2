@@ -1,6 +1,7 @@
 import {Button, Input, Space, Typography} from "antd";
 import {
     useAppStoreUserContext,
+    useGetStorePayments,
     useGetUsers,
     useLoginToAppStore,
     useLogoutFromAppStore,
@@ -30,18 +31,22 @@ export default function LoginManager() {
 function ManageAccount({logInInfo}) {
     const logoutFromAppStore = useLogoutFromAppStore()
     const [storeUsers, setStoreUsers] = useState()
+    const [storePayments, setStorePayments] = useState()
     const getStoreUsers = useGetUsers()
+    const getStorePayments = useGetStorePayments()
     function handleLogoutFromppStore() {
         logoutFromAppStore();
     }
     useEffect(() => {
         getStoreUsers(setStoreUsers)
-    }, [])
+        getStorePayments(setStorePayments)
+    }, [getStorePayments, getStoreUsers])
 
     return (<>
         <Typography.Title>
             Manage your O UI account
         </Typography.Title>
+        
         <Button onClick={handleLogoutFromppStore}>Logout</Button>
         {
         storeUsers?.users && (<ul>
@@ -50,8 +55,10 @@ function ManageAccount({logInInfo}) {
             storeUsers.users.map(user => {
                 return (<li> {
                     `${
+                        user.id
+                    } ${
                         user.email
-                    } (${
+                    } (ref id${
                         user.referral_user_id
                     })`
                 } </li>)
@@ -71,6 +78,64 @@ function ManageAccount({logInInfo}) {
                     } (${
                         visit.user_id
                     })`
+                } </li>)
+            })
+        } </ul>)
+    }
+        {
+        storePayments?.payments && (<ul>
+            <Typography.Title level={4}>Store Payments</Typography.Title>
+            {
+            storePayments.payments.map(payment => {
+                return (<li> {
+                    `${
+                        payment.id
+                    } ${
+                        payment.timestamp
+                    } ${
+                        payment.payment_status
+                    } ${
+                        payment.user_id
+                    } ${
+                        payment.payment_id
+                    } ${
+                        payment.origin_packages
+                    } ${
+                        payment.payment_timestamp
+                    } ${
+                        payment.price
+                    } ${
+                        payment.payment_success_secret
+                    } ${
+                        payment.payment_cancel_secret
+                    } ${
+                        payment.payment_url
+                    } ${
+                        payment.cancel_url
+                    } ${
+                        payment.subscription_months
+                    }`
+                } </li>)
+            })
+        } </ul>)
+    }
+        {
+        storePayments?.subscriptions && (<ul>
+            <Typography.Title level={4}>Store Payments</Typography.Title>
+            {
+            storePayments.subscriptions.map(payment => {
+                return (<li> {
+                    `${
+                        payment.id
+                    } ${
+                        payment.user_id
+                    } ${
+                        payment.start_timestamp
+                    } ${
+                        payment.end_timestamp
+                    } ${
+                        payment.origin_package
+                    }`
                 } </li>)
             })
         } </ul>)

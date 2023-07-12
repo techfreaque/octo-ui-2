@@ -1,6 +1,5 @@
 import React, { useState, useContext, createContext } from "react";
 import { useCallback } from "react";
-import { useEffect } from "react";
 import { fetchBotConfigs } from "../../api/configs";
 import { useBotDomainContext } from "./BotDomainProvider";
 
@@ -75,7 +74,7 @@ export const useFetchBotConfigs = () => {
 
 export const BotConfigProvider = ({ children }) => {
   const [botConfig, setBotConfig] = useState({});
-  const botDomain = useBotDomainContext()
+  // const botDomain = useBotDomainContext()
   // useEffect(() => {
   //   fetchBotConfigs(setBotConfig, botDomain, ["profile", "test"])
   // }, [botDomain])

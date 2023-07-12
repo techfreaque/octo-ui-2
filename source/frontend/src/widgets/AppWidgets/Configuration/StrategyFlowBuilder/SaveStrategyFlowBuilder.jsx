@@ -22,7 +22,7 @@ export default function SaveStrategyFlowBuilderSettings({
     const saveUiConfig = useSaveUiConfig()
     const handleAutoSaveSettingChange = useCallback((checked) => {
         const newConfigs = {
-            ... uiConfig
+            ...uiConfig
         }
         if (! newConfigs[flowEditorSettingsName]) {
             newConfigs[flowEditorSettingsName] = {}
@@ -35,7 +35,7 @@ export default function SaveStrategyFlowBuilderSettings({
     const setIsSaving = useUpdateIsSavingTentaclesConfigContext()
     const isSaving = useIsSavingTentaclesConfigContext()
     return useMemo(() => {
-        const autoSave = uiConfig ?. [flowEditorSettingsName] ?. auto_save
+        const autoSave = uiConfig?.[flowEditorSettingsName]?.auto_save
         return (
             <div style={
                 {
@@ -131,7 +131,7 @@ export default function SaveStrategyFlowBuilderSettings({
 }
 
 export function getNodeEditor(nodeId) {
-    return window ?. [`$${flowBuilderStorageKey}`] ?. [nodeId]
+    return window?.[`$${flowBuilderStorageKey}`]?.[nodeId]
 }
 
 export function useSaveFlowBuilderSettings() {
@@ -152,7 +152,7 @@ export function useSaveFlowBuilderSettings() {
         }
         newConfigs[tradingModeKey].nodes = nodes.reduce((dict, node, index) => {
             const editor = getNodeEditor(node.id)
-            const settings = editor ?. getValue() || {};
+            const settings = editor?.getValue() || {};
             return(dict[node.id] = {
                 ...node,
                 [getNodeConfigKey(node.id)]: settings

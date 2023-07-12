@@ -443,6 +443,25 @@ export const useGetUsers = () => {
     }, [appStoreDomain, appStoreUser?.token]);
 }
 
+export const useGetStorePayments = () => {
+    const appStoreDomain = useAppStoreDomainContext()
+    const appStoreUser = useAppStoreUserContext()
+    return useCallback((setStorePayments) => {
+        function onFail() {
+            // createNotification("Failed to load Users", "warning")
+        }
+        function onSuccess(updated_data, update_url, result, msg, status) {
+            if (msg.success) {   
+                setStorePayments(msg)
+                // createNotification("Successfully loaded users")
+            }
+        }
+        if (appStoreUser?.token){
+            sendAndInterpretBotUpdate({}, appStoreDomain + backendRoutes.appStorePayments, onSuccess, onFail, "POST", true, appStoreUser.token)
+        }
+    }, [appStoreDomain, appStoreUser?.token]);
+}
+
 export const useIsInAppStoreCart = () => {
     const appStoreCart = useAppStoreCartContext()
     return useCallback((app) => {

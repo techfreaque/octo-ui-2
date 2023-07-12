@@ -27,7 +27,7 @@ export default function ExchangeSelector() {
 
     const exchangesData = []
     const enabledExchanges = []
-    const configExchanges = servicesInfo ?. exchanges ? Object.keys(servicesInfo.exchanges) : []
+    const configExchanges = servicesInfo?.exchanges ? Object.keys(servicesInfo.exchanges) : []
 
     function addExchangeToTable({
         exchangeName,
@@ -50,7 +50,7 @@ export default function ExchangeSelector() {
             exchangeLabel: enabled ? (authSuccess ? (
                 <div style={
                     {
-                        color: botColors ?. success
+                        color: botColors?.success
                     }
                 }>
                     <Tooltip title={
@@ -66,7 +66,7 @@ export default function ExchangeSelector() {
             ) : (
                 <div style={
                     {
-                        color: botColors ?. error
+                        color: botColors?.error
                     }
                 }>
                     <Tooltip title={
@@ -84,12 +84,12 @@ export default function ExchangeSelector() {
             sandboxed,
             sandboxedLabel: (
                 <EnablerSwitch availableAfterRestart={
-                        !sandboxed && newConfigExchanges ?. [exchangeName] ?. sandboxed
+                        !sandboxed && newConfigExchanges?.[exchangeName]?.sandboxed
                     }
                     title={exchangeName}
                     isEnabled={sandboxed}
                     disabledAfterRestart={
-                        sandboxed && newConfigExchanges ?. [exchangeName] ?. sandboxed === false
+                        sandboxed && newConfigExchanges?.[exchangeName]?.sandboxed === false
                     }
                     onChange={
                         (value) => handleSettingChange(exchangeName, "sandboxed", value)
@@ -97,31 +97,31 @@ export default function ExchangeSelector() {
             ),
             enabledLabel: (
                 <EnablerSwitch availableAfterRestart={
-                        !enabled && newConfigExchanges ?. [exchangeName] ?. enabled
+                        !enabled && newConfigExchanges?.[exchangeName]?.enabled
                     }
                     title={exchangeName}
                     isEnabled={enabled}
                     disabledAfterRestart={
-                        enabled && newConfigExchanges ?. [exchangeName] ?. enabled === false
+                        enabled && newConfigExchanges?.[exchangeName]?.enabled === false
                     }
                     onChange={
                         (value) => handleSettingChange(exchangeName, "enabled", value)
                     }/>
             ),
             enabled,
-            apiKey: newConfigExchanges ?. [exchangeName] ?. ["api-key"] !== undefined ? newConfigExchanges[exchangeName]["api-key"] : apiKey,
-            apiSecret: newConfigExchanges ?. [exchangeName] ?. ["api-secret"] !== undefined ? newConfigExchanges[exchangeName]["api-secret"] : apiSecret,
-            apiPassword: newConfigExchanges ?. [exchangeName] ?. ["api-password"] !== undefined ? newConfigExchanges[exchangeName]["api-password"] : apiPassword,
+            apiKey: newConfigExchanges?.[exchangeName]?.["api-key"] !== undefined ? newConfigExchanges[exchangeName]["api-key"] : apiKey,
+            apiSecret: newConfigExchanges?.[exchangeName]?.["api-secret"] !== undefined ? newConfigExchanges[exchangeName]["api-secret"] : apiSecret,
+            apiPassword: newConfigExchanges?.[exchangeName]?.["api-password"] !== undefined ? newConfigExchanges[exchangeName]["api-password"] : apiPassword,
             exchangeType,
-            exchangeTypeLabel: supportedExchangeTypes ?. length > 1 ? (
+            exchangeTypeLabel: supportedExchangeTypes?.length > 1 ? (
                 <RadioButtonGroup selected={
-                        newConfigExchanges ?. [exchangeName] ?. ["exchange-type"] !== undefined ? newConfigExchanges[exchangeName]["exchange-type"] : exchangeType
+                        newConfigExchanges?.[exchangeName]?.["exchange-type"] !== undefined ? newConfigExchanges[exchangeName]["exchange-type"] : exchangeType
                     }
                     onChange={
                         (value) => handleSettingChange(exchangeName, "exchange-type", value)
                     }
                     menuItems={
-                        supportedExchangeTypes ?. map((exchangeType) => ({label: exchangeType, key: exchangeType}))
+                        supportedExchangeTypes?.map((exchangeType) => ({label: exchangeType, key: exchangeType}))
                     }/>
             ) : exchangeType,
             isTestedExchange: isTested || (isTestedSimulated && "simulation"),
@@ -176,7 +176,7 @@ export default function ExchangeSelector() {
     });
 
     // put enabled ones on top, then config existing ones and others at the bottom
-    exchangesData.sort((a, b) => ((+ b ?. enabled) - (+ a ?. enabled) || a ?. exchange ?. localeCompare(b ?. exchange)));
+    exchangesData.sort((a, b) => ((+ b?.enabled) - (+ a?.enabled) || a?.exchange?.localeCompare(b?.exchange)));
 
     return (
         <AntTable onFilterChange={filterData}
@@ -196,7 +196,7 @@ export default function ExchangeSelector() {
                                             (event) => handleSettingChange(record.exchange, "api-key", event.target.value)
                                         }
                                         value={
-                                            record ?. apiKey
+                                            record?.apiKey
                                         }
                                         // defaultValue="mysite"
                                     />
@@ -205,7 +205,7 @@ export default function ExchangeSelector() {
                                             (event) => handleSettingChange(record.exchange, "api-secret", event.target.value)
                                         }
                                         value={
-                                            record ?. apiSecret
+                                            record?.apiSecret
                                         }
                                         // defaultValue="mysite"
                                     />
@@ -214,7 +214,7 @@ export default function ExchangeSelector() {
                                             (event) => handleSettingChange(record.exchange, "api-password", event.target.value)
                                         }
                                         value={
-                                            record ?. apiPassword
+                                            record?.apiPassword
                                         }
                                         // defaultValue="mysite"
                                     />
@@ -248,7 +248,7 @@ const columns = [
         width: '20%',
         key: 'exchangeType',
         // ...getColumnSearchProps('exchange'),
-        sorter: (a, b) => a ?. exchangeType ?. localeCompare(b.exchangeType),
+        sorter: (a, b) => a?.exchangeType?.localeCompare(b.exchangeType),
         sortDirections: [
             'descend', 'ascend'
         ],
@@ -341,19 +341,19 @@ const columns = [
 ];
 function filterData(tableParams, data) {
     return data.filter((item) => {
-        if (tableParams ?. filters ?. exchange && tableParams ?. filters ?. exchange ?. every(exchange => (item.exchange !== exchange))) {
+        if (tableParams?.filters?.exchange && tableParams?.filters?.exchange?.every(exchange => (item.exchange !== exchange))) {
             return false;
         }
-        if (tableParams ?. filters ?. enabled && ! tableParams ?. filters ?. enabled ?. includes(item.enabled)) {
+        if (tableParams?.filters?.enabled && ! tableParams?.filters?.enabled?.includes(item.enabled)) {
             return false;
         }
-        if (tableParams ?. filters ?. isTestedSimulationExchange && ! tableParams ?. filters ?. isTestedSimulationExchange ?. includes(item.isTestedSimulationExchange)) {
+        if (tableParams?.filters?.isTestedSimulationExchange && ! tableParams?.filters?.isTestedSimulationExchange?.includes(item.isTestedSimulationExchange)) {
             return false;
         }
-        if (tableParams ?. filters ?. isTestedExchange && ! tableParams ?. filters ?. isTestedExchange ?. includes(item.isTestedExchange)) {
+        if (tableParams?.filters?.isTestedExchange && ! tableParams?.filters?.isTestedExchange?.includes(item.isTestedExchange)) {
             return false;
         }
-        if (tableParams ?. filters ?. hasWebsockets && ! tableParams ?. filters ?. hasWebsockets ?. includes(item.hasWebsockets)) {
+        if (tableParams?.filters?.hasWebsockets && ! tableParams?.filters?.hasWebsockets?.includes(item.hasWebsockets)) {
             return false;
         }
         return true;

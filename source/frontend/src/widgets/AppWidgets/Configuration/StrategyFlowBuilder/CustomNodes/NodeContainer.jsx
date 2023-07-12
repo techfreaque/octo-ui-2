@@ -5,6 +5,7 @@ import {
     Position,
     getConnectedEdges,
     useNodeId,
+    useReactFlow,
     useStore,
     useStoreApi
 } from "reactflow";
@@ -16,9 +17,20 @@ import {tentacleConfigType, useTentaclesConfigContext, useUpdateIsSavingTentacle
 import JsonEditor from "../../../../../components/Forms/JsonEditor/jedit";
 import {useUiConfigContext} from "../../../../../context/config/UiConfigProvider";
 import {flowEditorSettingsName} from "../../UIConfig";
+import AntButton, {buttonSizes, buttonTypes, buttonVariants} from "../../../../../components/Buttons/AntButton";
+import {CloseCircleOutlined} from "@ant-design/icons";
 
-export function NodeContainer({children, color, selected}) {
+export function NodeContainer({children, color, selected, nodeId}) {
     const botColors = useBotColorsContext();
+    const reactFlow = useReactFlow()
+    const onNodeDelete = useCallback((evt) => {
+        evt.stopPropagation()
+        reactFlow.setNodes((nodes) => {
+            return nodes.filter((node) => {
+                return node.id !== nodeId
+            })
+        })
+    }, [nodeId, reactFlow])
     return (
         <div style={
             {
@@ -34,6 +46,25 @@ export function NodeContainer({children, color, selected}) {
                 } : {})
             }
         }>
+            {
+            selected &&< AntButton onClick = {
+                onNodeDelete
+            }
+            size = {
+                buttonSizes.large
+            }
+            style = {{right: "15px", top: "15px", position: "absolute", zIndex: "3"}}
+            buttonVariant = {
+                buttonVariants.primary
+            }
+            buttonType = {
+                buttonTypes.warning
+            }
+            antIconComponent = {
+                CloseCircleOutlined
+            } />
+        }
+
             {children} </div>
     )
 }
@@ -45,8 +76,8 @@ export function NodeEditor({schema, config, nodeId}) {
     const currentTentaclesTradingConfig = currentTentaclesConfig?.[tentacleConfigType.tradingTentacles]
     const uiConfig = useUiConfigContext();
     const setIsSaving = useUpdateIsSavingTentaclesConfigContext()
+    const autoSave = uiConfig?.[flowEditorSettingsName]?.auto_save
     const handleAutoSave = useCallback(() => {
-        const autoSave = uiConfig?.[flowEditorSettingsName]?.auto_save
         if (autoSave) {
             const {nodeInternals, edges} = store.getState();
             const nodes = Array.from(nodeInternals).map(([, node]) => node);
@@ -58,7 +89,13 @@ export function NodeEditor({schema, config, nodeId}) {
                 setIsSaving
             })
         }
-    }, [currentTentaclesTradingConfig, handleUserInputSave, setIsSaving, store, uiConfig?.[flowEditorSettingsName]?.auto_save])
+    }, [
+        autoSave,
+        currentTentaclesTradingConfig,
+        handleUserInputSave,
+        setIsSaving,
+        store
+    ])
 
     return useMemo(() => {
         return schema && (
@@ -81,6 +118,7 @@ const selector = (s) => ({nodeInternals: s.nodeInternals, edges: s.edges});
 
 export function NodeHandle({
     style = {},
+    handleStyle = {},
     id,
     title,
     type,
@@ -96,7 +134,7 @@ export function NodeHandle({
         if (typeof isConnectable === 'number') {
             const node = nodeInternals.get(nodeId);
             const connectedEdges = getConnectedEdges([node], edges);
-            const connectedToThisHandle = connectedEdges.filter(edge => (edge.targetHandle === id || edge.sourceHandle === id))
+            const connectedToThisHandle = connectedEdges.filter(edge => ((edge.targetHandle === id && edge.target === nodeId) || (edge.sourceHandle === id && edge.source === nodeId)))
             return connectedToThisHandle.length < isConnectable;
         }
         return isConnectable;
@@ -107,7 +145,7 @@ export function NodeHandle({
         edges,
         id
     ]);
-    const handleStyle = (position === Position.Left ? {
+    const _handleStyle = (position === Position.Left ? {
         left: "-20px",
         height: "100px"
     } : (position === Position.Right ? {
@@ -152,6 +190,7 @@ export function NodeHandle({
                         borderRadius: "5px",
                         background: "none",
                         zIndex: 2,
+                        ..._handleStyle,
                         ...handleStyle,
                         ...style,
                         border: "none"
@@ -159,7 +198,7 @@ export function NodeHandle({
                 }
                 position={position}
                 id={id}
-                isConnectable={isHandleConnectable}></Handle>
+                isConnectable={isHandleConnectable}/>
         </>
     )
 }

@@ -14,6 +14,8 @@ export const buttonTypes = {
     error: "error",
     primary: "primary",
     white: "white",
+    font: "font",
+    fontActive: "fontActive",
     fontSecondary: "fontSecondary"
 }
 
@@ -31,6 +33,7 @@ export const buttonSizes = {
 
 export default function AntButton({
     buttonType = buttonTypes.success,
+    colorType = buttonTypes.font,
     onClick,
     text,
     style,
@@ -56,7 +59,8 @@ export default function AntButton({
     children,
     noIconMargin = false,
     spanStyle = {},
-    target
+    target,
+    className
 
 }) {
     const botColors = useBotColorsContext();
@@ -68,7 +72,8 @@ export default function AntButton({
     const theme = {
         token: {
             colorError: botColors[buttonType],
-            colorPrimary: botColors[buttonType]
+            colorPrimary: botColors[buttonType],
+            colorText: botColors[colorType]
         }
     };
     if (buttonVariant === buttonVariants.text) {
@@ -93,7 +98,7 @@ export default function AntButton({
     const iconMargin = (!noIconMargin && (text || children)) ? "5px" : "0px";
     return (
         <ConfigProvider theme={theme}>
-            <Button icon={
+            <Button className={className} icon={
                     (
                         <> {
                             (faIcon || antIcon) && (

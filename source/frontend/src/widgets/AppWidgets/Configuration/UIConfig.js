@@ -27,10 +27,10 @@ export default function UIConfig({configKeys}) {
     const saveUiConfig = useSaveUiConfig()
     const handleEditorsAutosave = useCallback(() => {
         const newConfigs = {
-            ... uiConfig
+            ...uiConfig
         }
         configKeys.forEach(configKey => {
-            const newConfig = window[`$${storageName}`] ?. [`${configKey}${configKeys}`].getValue()
+            const newConfig = window[`$${storageName}`]?.[`${configKey}${configKeys}`].getValue()
             const finalNewConfig = convertTimestamps(newConfig, true)
             newConfigs[configKey] = finalNewConfig
         })
@@ -40,15 +40,15 @@ export default function UIConfig({configKeys}) {
     }, [configKeys, saveUiConfig, uiConfig]);
     return useMemo(() => {
 
-        const dataFiles = botInfo ?. data_files
-        const currentSymbols = botInfo ?. symbols
-        const availableExchanges = botInfo ?. exchange_names
+        const dataFiles = botInfo?.data_files
+        const currentSymbols = botInfo?.symbols
+        const availableExchanges = botInfo?.exchange_names
         return (
             <div> {
                 botInfo && configKeys.map(configKey => {
                     const schema = getUiConfigSchema(configKey, dataFiles, currentSymbols, availableExchanges)
                     const config = convertTimestamps(uiConfig[configKey])
-                    if (schema.properties ?. exchange_names ?. items ?. enum && config ?. exchange_names ?. some(_exchange => ! schema.properties.exchange_names.items.enum.includes(_exchange))) {
+                    if (schema.properties?.exchange_names?.items?.enum && config?.exchange_names?.some(_exchange => ! schema.properties.exchange_names.items.enum.includes(_exchange))) {
                         config.exchange_names = schema.properties.exchange_names.items.enum
                     }
                     return (

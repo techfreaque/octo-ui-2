@@ -1,6 +1,5 @@
 import os
 import flask
-from numpy import cross
 
 import octobot_commons.authentication as authentication
 import octobot_commons.profiles as profiles
@@ -77,7 +76,7 @@ def register_appstore_routes(plugin):
         else:
 
             @plugin.blueprint.route(tentacles_package_route, methods=methods)
-            @login.active_login_required
+            @login.login_required_when_activated
             @cross_origin(origins="*")
             def tentacle_packages():
                 return _tentacle_packages()
@@ -85,7 +84,7 @@ def register_appstore_routes(plugin):
     else:
 
         @plugin.blueprint.route(tentacles_package_route, methods=methods)
-        @login.active_login_required
+        @login.login_required_when_activated
         def tentacle_packages():
             return _tentacle_packages()
 

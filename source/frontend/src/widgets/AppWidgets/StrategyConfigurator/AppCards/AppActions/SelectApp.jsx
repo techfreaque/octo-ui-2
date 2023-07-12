@@ -15,7 +15,7 @@ export default function SelectApp({app, handleSelect, isReadOnlyStrategy}) {
             setConfirmLoading(false);
         });
     };
-    if (!app.is_selected && handleSelect) {
+    if (!app.is_selected && app.is_installed && handleSelect) {
         const okButtonProps = {
             loading: confirmLoading,
             style: {

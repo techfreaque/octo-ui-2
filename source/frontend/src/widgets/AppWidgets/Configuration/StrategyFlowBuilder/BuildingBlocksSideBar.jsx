@@ -43,12 +43,12 @@ export default function BuildingBlocksSidebar() {
     ), [botColors.background, botColors.font, installedBlocksInfo, searchText]);
 }
 
-const blockTypeDescriptions = {
-    "StrategyBlock": "",
-    "EvaluatorBlock": "The Evaluator Blocks contains a range of evaluation criteria used to assess trading data.",
-    "IndicatorBlock": " The Indicator Blocks includes a comprehensive set of technical indicators that can be applied to trading data. These indicators encompass various aspects of market analysis",
-    "ActionBlock": "The Action Blocks consists of various actions that can be performed in a trading strategy",
-}
+// const blockTypeDescriptions = {
+//     "StrategyBlock": "",
+//     "EvaluatorBlock": "The Evaluator Blocks contains a range of evaluation criteria used to assess trading data.",
+//     "IndicatorBlock": " The Indicator Blocks includes a comprehensive set of technical indicators that can be applied to trading data. These indicators encompass various aspects of market analysis",
+//     "ActionBlock": "The Action Blocks consists of various actions that can be performed in a trading strategy",
+// }
 
 function BlockTemplates({installedBlocksInfo, searchText}) {
     return useMemo(() => {

@@ -108,7 +108,7 @@ function ModalContent({
                         {
                             fontSize: "40px",
                             height: "40px",
-                            color: botColors ?. warning
+                            color: botColors?.warning
                         }
                     }/>
                 )

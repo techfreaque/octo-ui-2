@@ -26,6 +26,7 @@ export const backendRoutes = {
     appStoreCreatePayment: `/create-payment`,
     appStoreCheckPayment: `/check-payment`,
     appStoreUsers: `/users`,
+    appStorePayments: `/get-payments`,
     packagesData: `${basePath}/tentacles-info`,
     appStorePremium: `/premium/repo`,
     daemons: `${basePath}/daemons`,

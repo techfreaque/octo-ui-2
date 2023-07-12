@@ -1,5 +1,5 @@
 import {Grid} from "@mui/material";
-import {Card, Tooltip, Typography} from "antd";
+import {Card, Typography} from "antd";
 import AntButton from "../../../components/Buttons/AntButton";
 import {CloudDownloadOutlined, CloudServerOutlined, RocketOutlined} from "@ant-design/icons";
 import {projectDownloadUrl, projectName, sizes} from "../../../constants/frontendConstants";

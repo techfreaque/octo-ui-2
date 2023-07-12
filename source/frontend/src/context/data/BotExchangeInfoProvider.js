@@ -106,7 +106,7 @@ export const useHandleProfileUpdate = () => {
     const currentCurrencyList = useCurrentCurrencyListContext()
     const unsavedCurrencyList = useUnsavedCurrencyListContext()
     const exchangeInfo = useExchangeInfoContext();
-    const currencySettings = botInfo ?. current_profile ?. config ?. ["crypto-currencies"]
+    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
     const exchangeConfigUpdate = useExchangeConfigUpdateContext()
 
     const logic = useCallback((restartAfterSave = false) => {
@@ -161,7 +161,7 @@ export const useHandleExchangeSettingChange = () => {
             const newExchanges = {
                 ...prevExchanges
             }
-            if (! newExchanges ?. [exchangeName]) {
+            if (! newExchanges?.[exchangeName]) {
                 newExchanges[exchangeName] = {}
             }
             newExchanges[exchangeName][inputName] = newSetting
@@ -183,7 +183,7 @@ export const BotExchangeInfoProvider = ({children}) => {
     const [servicesInfo, setServicesInfo] = useState();
     const [menuIsOpen, setMenuIsOpen] = useState({open: false, wantsClose: false});
     const botInfo = useBotInfoContext();
-    const currencySettings = botInfo ?. current_profile ?. config ?. ["crypto-currencies"]
+    const currencySettings = botInfo?.current_profile?.config?.["crypto-currencies"]
     const [toSaveCurrencySettings, setToSaveCurrencySettings] = useState();
     const [currentCurrencyList, setCurrentCurrencyList] = useState();
     const [unsavedCurrencyList, setUnsavedCurrencyList] = useState();
@@ -204,7 +204,7 @@ export const BotExchangeInfoProvider = ({children}) => {
         setCurrentCurrencyList(JSON.parse(currentCurrencyListJson))
     }, [currencySettings, exchangeInfo, toSaveCurrencySettings])
 
-    const configExchanges = servicesInfo ?. exchanges ? Object.keys(servicesInfo.exchanges) : []
+    const configExchanges = servicesInfo?.exchanges ? Object.keys(servicesInfo.exchanges) : []
     useEffect(() => {
         setExchangeConfigUpdate({global_config: {}, removed_elements: []})
         setNewConfigExchanges({})
@@ -287,15 +287,15 @@ export function getProfileCurrencyUpdate({
     ]).forEach(symbol => {
         if (currentCurrencyList.includes(symbol) && !unsavedCurrencyList.includes(symbol)) {
             let pairKey
-            if (currencySettings ?. [symbol]) {
+            if (currencySettings?.[symbol]) {
                 pairKey = symbol
             } else {
-                const currencyName = exchangeInfo ?. currency_name_info ?. [parseSymbol(symbol).base] ?. n
-                if (currencySettings[currencyName] ?. pairs ?. includes(symbol)) {
+                const currencyName = exchangeInfo?.currency_name_info?.[parseSymbol(symbol).base]?.n
+                if (currencySettings[currencyName]?.pairs?.includes(symbol)) {
                     pairKey = currencyName
                 } else {
                     for (const currency in currencySettings) {
-                        if (currencySettings[currency].pairs ?. includes(symbol)) {
+                        if (currencySettings[currency].pairs?.includes(symbol)) {
                             pairKey = currency
                             break
                         }
@@ -314,20 +314,20 @@ function convertSymbolSettingsToNewFormat(originalCurrencySettings, exchangeInfo
     const currencyList = []
     const currencySettings = {}
     originalCurrencySettings && Object.keys(originalCurrencySettings).forEach(currency => {
-        if (originalCurrencySettings[currency] ?. enabled !== false) {
-            originalCurrencySettings[currency] ?. pairs ?. forEach(pair => {
+        if (originalCurrencySettings[currency]?.enabled !== false) {
+            originalCurrencySettings[currency]?.pairs?.forEach(pair => {
                 currencyList.push(pair)
                 currencySettings[pair] = {
                     enabled: true,
                     pairs: [pair],
-                    currency: exchangeInfo ?. currency_name_info ?. [parseSymbol(pair).base] ?. n
+                    currency: exchangeInfo?.currency_name_info?.[parseSymbol(pair).base]?.n
                 }
             })
         }
     })
     return {
-        currencyList: currencyList ?. sort(
-            (a, b) => a ?. localeCompare(b)
+        currencyList: currencyList?.sort(
+            (a, b) => a?.localeCompare(b)
         ),
         currencySettings
     }
