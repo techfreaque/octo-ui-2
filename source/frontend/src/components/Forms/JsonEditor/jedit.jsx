@@ -72,7 +72,11 @@ export default function JsonEditor(props) {
                 const editorElement = document.getElementById(HtmlEditorId)
                 if (editorElement?.children?.length) {
                     window[storageName][props.editorName].didRunOnce = false
-                    window[storageName][props.editorName].setValue(props.startval)
+                    try {
+                        window[storageName][props.editorName].setValue(props.startval)
+                    } catch (e) {
+                        createEditor(props);
+                    }
                 } else {
                     createEditor(props);
                 }

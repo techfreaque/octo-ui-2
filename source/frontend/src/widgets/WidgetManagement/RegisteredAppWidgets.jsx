@@ -54,7 +54,7 @@ import CurrentPanelPosition from "../AppWidgets/Buttons/CurrentPanelPosition";
 import DataCollectorProgress from "../AppWidgets/Progress/DataCollectorProgress";
 import ClosePairSelector from "../AppWidgets/Buttons/ClosePairSelector";
 import SavePairSelector from "../AppWidgets/Buttons/SavePairSelector";
-import LoginManager from "../AppWidgets/StrategyConfigurator/Login";
+import LoginManager from "../AppWidgets/StrategyConfigurator/Dashboard/Login";
 import AppStoreCartModal, {AppStoreCart} from "../AppWidgets/StrategyConfigurator/Cart";
 import SaveTradingModeSettings from "../AppWidgets/Buttons/SaveTradingModeSettings";
 import StopTrainingButton from "../AppWidgets/Buttons/StopTrainingButton";

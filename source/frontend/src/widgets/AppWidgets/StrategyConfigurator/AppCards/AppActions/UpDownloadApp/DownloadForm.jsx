@@ -1,4 +1,4 @@
-import {ShoppingCartOutlined} from "@ant-design/icons"
+import {DownloadOutlined, ShoppingCartOutlined} from "@ant-design/icons"
 import {
     Alert,
     Card,
@@ -294,7 +294,8 @@ function RequiredPackages({
         app.package_id,
         ...(selectedVersion?.requirements ? selectedVersion.requirements : [])
     ]
-    requiredApps.forEach(requirement => {
+    let requirementsSatisfied = true
+    requiredApps.forEach((requirement, index) => {
         for (const potentialRequiredAppCategory in appStoreData) {
             for (const potentialRequiredAppName in appStoreData[potentialRequiredAppCategory]) {
                 const potentialRequiredApp = appStoreData[potentialRequiredAppCategory][potentialRequiredAppName]
@@ -305,6 +306,10 @@ function RequiredPackages({
                     if (potentialRequiredApp.origin_package) {
                         requiredAppsByTentaclePackage[potentialRequiredApp.origin_package].push(potentialRequiredApp)
                     }
+                    const packageInstalled = requiredAppsByTentaclePackage[potentialRequiredApp.origin_package].every(thisApp => {
+                        return thisApp?.is_installed
+                    })
+                    requirementsSatisfied = requirementsSatisfied && (index === 0 || packageInstalled)
                 }
             }
         }
@@ -321,6 +326,8 @@ function RequiredPackages({
                         }${index}`
                     }
                     app={app}
+                    requirementsSatisfied={requirementsSatisfied}
+                    isMainPackage={index === 0}
                     requiredAppsByTentaclePackage={requiredAppsByTentaclePackage}
                     requiredAppPackage={requiredAppPackage}
                     downloadInfo={downloadInfo}
@@ -337,7 +344,9 @@ function RequiredPackage({
     requiredAppPackage,
     downloadInfo,
     handleDownload,
-    setDownloadInfo
+    setDownloadInfo,
+    requirementsSatisfied,
+    isMainPackage
 }) {
     const botColors = useBotColorsContext()
     const mainPackageApp = requiredAppsByTentaclePackage[requiredAppPackage][0]
@@ -384,7 +393,7 @@ function RequiredPackage({
                     {marginBottom: "5px"}
                 }>
                     {
-                    ! packageInstalled && (mainPackageApp.price ? mainPackageApp.price + "$ / month" : "free")
+                    ! packageInstalled && (mainPackageApp.price ? `${mainPackageApp.price}$ / month` : "free")
                 } </Typography.Paragraph>
                 {/* <Alert type="info"
                     showIcon={true}
@@ -446,6 +455,8 @@ function RequiredPackage({
                     packageInstalled={packageInstalled}
                     setDownloadInfo={setDownloadInfo}
                     app={app}
+                    requirementsSatisfied={requirementsSatisfied}
+                    isMainPackage={isMainPackage}
                     downloadInfo={downloadInfo}/>
             </Card>
         </Grid>
@@ -486,7 +497,9 @@ function DownloadPackageButton({
     downloadInfo,
     mainPackageApp,
     packageInstalled,
-    app
+    app,
+    requirementsSatisfied,
+    isMainPackage
 }) {
     const addAppStoreCart = useAddToAppStoreCart()
     const checkIsInStoreCart = useIsInAppStoreCart()
@@ -500,7 +513,24 @@ function DownloadPackageButton({
             isDownloading
         })), (! isOriginPackage && mainPackageApp))
     }
-    if (packageInstalled && (!mainPackageApp.price || mainPackageApp.has_paid)) {
+    if (isMainPackage && !requirementsSatisfied) {
+        return (
+            <Tooltip title={"All requirements must be satisfied before you can download this app"}>
+                <div>
+                    <AntButton block={true}
+                        style={
+                            {marginTop: "10px"}
+                        }
+                        disabled={
+                            true
+                        }
+                        antIconComponent={DownloadOutlined}>
+                        Download Now
+                    </AntButton>
+                </div>
+            </Tooltip>
+        )
+    } else  if (packageInstalled && (!mainPackageApp.price || mainPackageApp.has_paid)) {
         return !mainPackageApp.updated_by_distro &&(
             <AntButton block={true}
                 style={
@@ -510,7 +540,7 @@ function DownloadPackageButton({
                     downloadInfo.isDownloading
                 }
                 onClick={thisHandleDownload}
-                antIconComponent={ShoppingCartOutlined}>
+                antIconComponent={DownloadOutlined}>
                 Update Now
             </AntButton>
         )
@@ -522,7 +552,7 @@ function DownloadPackageButton({
                         {marginTop: "10px"}
                     }
                     onClick={thisHandleDownload}
-                    antIconComponent={ShoppingCartOutlined}>
+                    antIconComponent={DownloadOutlined}>
                     Download Now
                 </AntButton>
             )
@@ -561,7 +591,7 @@ function DownloadPackageButton({
                 }
                 disabled={mainPackageInCart}
                 onClick={thisHandleDownload}
-                antIconComponent={ShoppingCartOutlined}>
+                antIconComponent={DownloadOutlined}>
                 Download for free
             </AntButton>
         )

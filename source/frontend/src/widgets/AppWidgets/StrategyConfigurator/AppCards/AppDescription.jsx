@@ -85,7 +85,7 @@ function NonHoverDescription({
 
 export function CleanDescription({description, endComponent}) {
     const lines = description?.replace(/<br>/g, "\n")?.split("\n")
-    return lines.map((paragraph, index) => (
+    return lines?.map((paragraph, index) => (
         <Typography.Paragraph key={index}>
             {paragraph}
             {
