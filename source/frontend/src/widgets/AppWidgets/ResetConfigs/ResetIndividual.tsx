@@ -1,6 +1,7 @@
 import React from "react";
 import { ConfigProvider, Switch, Tooltip } from "antd";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { CheckedListType, SorageResetKeyType } from "./ResetConfigs";
 
 export default function ResetIndividual({
   title,
@@ -8,6 +9,12 @@ export default function ResetIndividual({
   handleCheckboxClick,
   checkedList,
   titleKey,
+}: {
+  title: string;
+  description: JSX.Element | string;
+  handleCheckboxClick: (key: SorageResetKeyType) => void;
+  checkedList: CheckedListType | undefined;
+  titleKey: SorageResetKeyType;
 }) {
   const botColors = useBotColorsContext();
   return (
@@ -29,8 +36,8 @@ export default function ResetIndividual({
         }}
       >
         <Switch
-          checked={checkedList[titleKey]}
-          onChange={(state) => handleCheckboxClick(titleKey, state)}
+          checked={checkedList?.[titleKey]}
+          onChange={() => handleCheckboxClick(titleKey)}
           checkedChildren="Reset"
         />
       </ConfigProvider>

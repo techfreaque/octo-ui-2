@@ -76,7 +76,7 @@ export type PlottedElementNameType =
   | PlottedElementBacktestingNameType;
 
 export type PlottedElementsType<TPlottedElementNameType> = {
-  [liveOrBacktesting in PlottedElementNameType]?: TPlottedElementNameType extends PlottedElementLiveNameType
+  [liveOrBacktesting in PlottedElementNameType]: TPlottedElementNameType extends PlottedElementLiveNameType
     ? PlottedLiveElementType
     : PlottedBacktestingElementType;
 };

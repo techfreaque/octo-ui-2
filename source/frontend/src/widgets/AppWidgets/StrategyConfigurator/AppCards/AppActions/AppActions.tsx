@@ -1,4 +1,4 @@
-import { Popconfirm, Tooltip } from "antd";
+import { ButtonProps, Popconfirm, Tooltip } from "antd";
 import AntButton, {
   buttonTypes,
   buttonVariants,
@@ -11,9 +11,21 @@ import UninstallApp from "./UninstallApp";
 import AppUpDownload from "./UpDownloadApp/AppUpDownload";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 import ExportApp from "./ExportApp";
-import { CSSProperties, Dispatch, SetStateAction, useState } from "react";
+import {
+  CSSProperties,
+  Dispatch,
+  ForwardRefExoticComponent,
+  RefAttributes,
+  SetStateAction,
+  useState,
+} from "react";
 import PublishApp from "./PublishApp";
 import UnpublishApp, { DeleteApp } from "./UnpublishApp";
+import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
+import { DownloadInfo, UploadInfo } from "../AppCard";
+import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import { CloneAppInfoType } from "./CloneApp/CloneAppForm";
 
 export default function AppActions({
   app,
@@ -24,8 +36,6 @@ export default function AppActions({
   handleUpload,
   setCloneAppInfo,
   cloneAppInfo,
-  isLoading,
-  setSelectedCategories,
   setUploadInfo,
   uploadInfo,
   otherActions,
@@ -38,27 +48,28 @@ export default function AppActions({
   isReadOnlyStrategy,
   didHoverOnce,
 }: {
-  app;
-  handleSelect;
-  handleDuplication?;
-  handleUninstall;
-  isMouseHover;
-  handleUpload;
-  setCloneAppInfo?;
-  cloneAppInfo?;
-  isLoading?;
-  setSelectedCategories?;
-  setUploadInfo;
-  uploadInfo;
-  otherActions?;
-  infoContent;
-  onConfigure;
-  exportUrl?;
-  handleDownload;
-  setDownloadInfo;
-  downloadInfo;
-  isReadOnlyStrategy;
-  didHoverOnce;
+  app: AppStoreAppType;
+  handleSelect?: (setClosed: () => void) => void;
+  handleDuplication?: (setOpen: Dispatch<SetStateAction<boolean>>) => void;
+  handleUninstall: (setOpen: Dispatch<SetStateAction<boolean>>) => void;
+  isMouseHover: boolean;
+  handleUpload: (callback: (isOpen: boolean) => void) => void;
+  setCloneAppInfo?: Dispatch<SetStateAction<CloneAppInfoType | undefined>>;
+  cloneAppInfo?: CloneAppInfoType | undefined;
+  setUploadInfo: Dispatch<SetStateAction<UploadInfo>>;
+  uploadInfo: UploadInfo;
+  otherActions?: JSX.Element;
+  infoContent: string | JSX.Element | undefined;
+  onConfigure?: () => void;
+  exportUrl?: string;
+  handleDownload: (
+    setOpen: (isOpen: boolean) => void,
+    otherApp: AppStoreAppType | undefined
+  ) => void;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
+  downloadInfo: DownloadInfo;
+  isReadOnlyStrategy?: boolean;
+  didHoverOnce: boolean;
 }) {
   const buttonStyle: CSSProperties = {
     display: "flex",
@@ -113,7 +124,7 @@ export default function AppActions({
               handleUpload={handleUpload}
               otherActions={otherActions}
               infoContent={infoContent}
-              isReadOnlyStrategy={isReadOnlyStrategy}
+              isReadOnlyStrategy={isReadOnlyStrategy || false}
               exportUrl={exportUrl}
               app={app}
             />
@@ -141,7 +152,7 @@ export default function AppActions({
     </div>
   );
 }
-function NoHoverActions({ app }) {
+function NoHoverActions({ app }: { app: AppStoreAppType }) {
   let actionText;
   if (app.is_owner || !app.is_from_store) {
     if (app.price) {
@@ -197,6 +208,29 @@ function OnHoverActions({
   setDownloadInfo,
   downloadInfo,
   isReadOnlyStrategy,
+}: {
+  app: AppStoreAppType;
+  handleSelect?: (setClosed: () => void) => void;
+  handleDuplication?: (setOpen: Dispatch<SetStateAction<boolean>>) => void;
+  setCloneAppInfo:
+    | Dispatch<SetStateAction<CloneAppInfoType | undefined>>
+    | undefined;
+  cloneAppInfo: CloneAppInfoType | undefined;
+  handleUninstall: (setOpen: Dispatch<SetStateAction<boolean>>) => void;
+  handleUpload: (callback: (isOpen: boolean) => void) => void;
+  setUploadInfo: Dispatch<SetStateAction<UploadInfo>>;
+  uploadInfo: UploadInfo;
+  handleDownload: (
+    setOpen: (isOpen: boolean) => void,
+    otherApp: AppStoreAppType | undefined
+  ) => void;
+  otherActions: JSX.Element | undefined;
+  infoContent: string | JSX.Element | undefined;
+  onConfigure?: () => void;
+  exportUrl?: string;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
+  downloadInfo: DownloadInfo;
+  isReadOnlyStrategy: boolean;
 }) {
   return (
     <>
@@ -214,10 +248,10 @@ function OnHoverActions({
         isReadOnlyStrategy={isReadOnlyStrategy}
         handleSelect={handleSelect}
       />
-      <AppInfoModal app={app} infoContent={infoContent} />
+      {infoContent && <AppInfoModal app={app} infoContent={infoContent} />}
       {onConfigure && <ConfigureApp app={app} onConfigure={onConfigure} />}
       {otherActions}
-      {handleDuplication && (
+      {handleDuplication && setCloneAppInfo && (
         <CloneApp
           app={app}
           handleDuplication={handleDuplication}
@@ -251,15 +285,17 @@ export function ConfirmAction({
   open,
   setOpen,
 }: {
-  onConfirm;
+  onConfirm: (setOpen: Dispatch<SetStateAction<boolean>>) => void;
   confirmDescription?: JSX.Element;
-  confirmTitle;
-  confirmButtonText;
-  buttonTitle;
-  faIconComponent?;
-  antIconComponent?;
+  confirmTitle: string;
+  confirmButtonText: string;
+  buttonTitle: string;
+  faIconComponent?: IconDefinition;
+  antIconComponent?: ForwardRefExoticComponent<
+    Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
+  >;
   isSelected?: boolean;
-  okButtonProps?;
+  okButtonProps?: ButtonProps;
   disabled?: boolean;
   disabledTooltipTitle?: boolean;
   formIsValidated?: boolean;
@@ -312,7 +348,10 @@ export function ConfirmAction({
   );
 }
 
-export function handlePopConfirmOpen(setInfo, isOpen) {
+export function handlePopConfirmOpen(
+  setInfo: Dispatch<SetStateAction<UploadInfo | DownloadInfo>>,
+  isOpen: boolean
+): void {
   setInfo((prevIfo) => ({
     ...prevIfo,
     open: isOpen,

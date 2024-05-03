@@ -5,13 +5,19 @@ import createNotification from "../../../../components/Notifications/Notificatio
 import { useRestartBot } from "../../../../context/data/IsBotOnlineProvider";
 import OtherAppCard from "./OtherAppCard";
 import { strategyModeSettingsName } from "../storeConstants";
+import {
+  AppStoreAppType,
+  StoreCategoryType,
+  StrategyModeCategoryType,
+} from "../../../../context/data/AppStoreDataProvider";
+import { Dispatch, SetStateAction } from "react";
+import { DownloadInfo, UploadInfo } from "./AppCard";
 
 export default function TradingModeCard({
   app,
   setMouseHover,
   category,
   isMouseHover,
-  isLoading,
   setIsloading,
   setSelectedCategories,
   currentStrategy,
@@ -21,7 +27,23 @@ export default function TradingModeCard({
   setUploadInfo,
   downloadInfo,
   setDownloadInfo,
-}) {
+}: {
+  app: AppStoreAppType;
+  setMouseHover: Dispatch<SetStateAction<boolean>>;
+  category: StrategyModeCategoryType;
+  isMouseHover: boolean;
+  setIsloading: Dispatch<SetStateAction<boolean>>;
+  setSelectedCategories: Dispatch<
+    SetStateAction<StoreCategoryType | undefined>
+  >;
+  currentStrategy: AppStoreAppType | undefined;
+  apps: AppStoreAppType[];
+  didHoverOnce: boolean;
+  uploadInfo: UploadInfo;
+  setUploadInfo: Dispatch<SetStateAction<UploadInfo>>;
+  downloadInfo: DownloadInfo;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
+}): JSX.Element {
   const botInfo = useBotInfoContext();
   const restartBot = useRestartBot();
   const botDomain = useBotDomainContext();
@@ -29,7 +51,7 @@ export default function TradingModeCard({
   const selectedApps = apps.filter((app) => app.is_selected);
   const newlySelectedRequirements = app?.requirements;
 
-  async function handleSelectStrategyMode(setOpen) {
+  async function handleSelectStrategyMode(setClosed: () => void) {
     function onFail() {
       createNotification({
         title: "Failed to select trading mode",
@@ -37,14 +59,14 @@ export default function TradingModeCard({
         message: `Not able to select ${app.title}`,
       });
     }
-    function onSuccessSetRequirements(setOpen) {
+    function onSuccessSetRequirements() {
       createNotification({
         title: `Successfully selected ${app.title}`,
       });
-      setOpen(false);
+      setClosed();
       restartBot(true);
     }
-    function onSuccessSelection(setOpen) {
+    function onSuccessSelection() {
       updateProfileInfo(
         botDomain,
         {
@@ -55,7 +77,7 @@ export default function TradingModeCard({
           ],
         },
         onFail,
-        () => onSuccessSetRequirements(setOpen)
+        () => onSuccessSetRequirements()
       );
     }
     setIsloading(true);
@@ -87,20 +109,18 @@ export default function TradingModeCard({
       configUpdate,
       botInfo?.current_profile.profile.name,
       onFail,
-      () => onSuccessSelection(setOpen)
+      () => onSuccessSelection()
     );
     setIsloading(false);
-    setOpen(false);
+    setClosed();
   }
   return (
     <OtherAppCard
       app={app}
-      isLoading={isLoading}
       setIsloading={setIsloading}
       setMouseHover={setMouseHover}
       category={category}
       didHoverOnce={didHoverOnce}
-      setSelectedCategories={setSelectedCategories}
       isMouseHover={isMouseHover}
       onConfigure={() => setSelectedCategories(strategyModeSettingsName)}
       handleSelect={handleSelectStrategyMode}
@@ -112,37 +132,3 @@ export default function TradingModeCard({
     />
   );
 }
-
-// {/* <AppCardTemplate app={app}
-//     setMouseHover={setMouseHover}
-//     avatarUrl={"https://tradeciety.com/hubfs/Imported_Blog_Media/GBPUSDH45.png"}
-//     category={category}
-//     isMouseHover={isMouseHover}
-//     cardActions={
-//         (
-//             <AppActions isMouseHover={isMouseHover}
-//                 setSelectedCategories={setSelectedCategories}
-//                 infoContent={
-//                     app.description
-//                 }
-//                 isReadOnlyStrategy={
-//                     currentStrategy ?. is_from_store
-//                 }
-//                 onConfigure={
-//                     () => setSelectedCategories(strategyModeSettingsName)
-//                 }
-//                 downloadInfo={downloadInfo}
-//                 didHoverOnce={didHoverOnce}
-//                 setDownloadInfo={setDownloadInfo}
-
-//                 handleDownload={handleDownloadApp}
-
-//                 handleSelect={handleSelectStrategyMode}
-//                 handleUpload={
-//                     (setOpen) => uploadToAppStore(app, uploadInfo, profileDownloadUrl, setIsloading, setOpen)
-//                 }
-//                 setUploadInfo={setUploadInfo}
-//                 uploadInfo={uploadInfo}
-//                 app={app}/>
-//         )
-//     }/> */}

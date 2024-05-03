@@ -5,6 +5,7 @@ import {
   useCallback,
   SetStateAction,
   Dispatch,
+  useEffect,
 } from "react";
 import {
   errorResponseCallBackParams,
@@ -14,6 +15,7 @@ import {
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
+import { updateOptimizerQueueCount } from "../../widgets/AppWidgets/Tables/OptimizerQueue";
 
 interface OptimizerQueueType {}
 
@@ -72,6 +74,7 @@ export const useFetchOptimizerQueue = () => {
 
 export const useSaveOptimizerQueue = () => {
   const botDomain = useBotDomainContext();
+  const fetchOptimizerQueue = useFetchOptimizerQueue();
   return useCallback(
     (updatedQueue: OptimizerQueueType) => {
       const errorCallback = (payload: errorResponseCallBackParams) => {
@@ -85,6 +88,7 @@ export const useSaveOptimizerQueue = () => {
         if (!payload.data?.success) {
           return errorCallback(payload);
         }
+        fetchOptimizerQueue();
         createNotification({ title: "Optimizer queue updated" });
       };
       sendAndInterpretBotUpdate({
@@ -105,6 +109,9 @@ export const OptimizerQueueProvider = ({
 }) => {
   const [optimizerQueue, setOptimizerQueue] = useState<OptimizerQueueType>();
   const [optimizerQueueCounter, setOptimizerQueueCounter] = useState<number>(0);
+  useEffect(() => {
+    updateOptimizerQueueCount(optimizerQueue, setOptimizerQueueCounter);
+  }, [optimizerQueue]);
   return (
     <OptimizerQueueContext.Provider value={optimizerQueue}>
       <UpdateOptimizerQueueContext.Provider value={setOptimizerQueue}>

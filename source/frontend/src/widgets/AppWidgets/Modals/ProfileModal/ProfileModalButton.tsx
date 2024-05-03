@@ -206,3 +206,10 @@ export default function ProfileModalButton({ profile, isCurrentProfile }) {
     ]
   );
 }
+
+export interface ProfileInfoUpdateType {
+  id: string;
+  name: string;
+  description: string;
+  required_trading_tentacles?: string[];
+}

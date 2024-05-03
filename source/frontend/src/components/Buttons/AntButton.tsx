@@ -162,6 +162,11 @@ export default function AntButton({
     <ConfigProvider theme={theme}>
       <Button
         className={className}
+        styles={{
+          icon: {
+            margin: "auto",
+          },
+        }}
         icon={
           <>
             {(faIcon || antIcon) && (

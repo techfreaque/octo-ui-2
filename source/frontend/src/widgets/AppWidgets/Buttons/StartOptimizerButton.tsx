@@ -11,6 +11,7 @@ import {
   useIsDemoMode,
 } from "../../../context/data/BotInfoProvider";
 import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
+import { useOptimizerQueueCounterContext } from "../../../context/data/OptimizerQueueProvider";
 
 export default function StartOptimizerButton() {
   const isOptimizer = useBotIsOptimizingContext();
@@ -19,26 +20,25 @@ export default function StartOptimizerButton() {
   const isDataCollecting = useBotIsDataCollectingContext();
   const botInfo = useBotInfoContext();
   const isDemo = useIsDemoMode();
+  const optimizerQueueSize = useOptimizerQueueCounterContext();
+  const canNotStart =
+    !botInfo?.ui_pro_installed ||
+    !isOnline ||
+    isDataCollecting ||
+    isDemo ||
+    optimizerQueueSize === 0;
   return useMemo(() => {
-    const uiProInstalled = botInfo?.ui_pro_installed;
     return (
       !isOptimizer && (
         <AntButton
           onClick={startOptimizer}
           buttonType={buttonTypes.success}
           faIconComponent={faPlay}
-          disabled={!uiProInstalled || !isOnline || isDataCollecting || isDemo}
+          disabled={canNotStart}
         >
           Start Optimizer
         </AntButton>
       )
     );
-  }, [
-    botInfo?.ui_pro_installed,
-    isDataCollecting,
-    isDemo,
-    isOnline,
-    isOptimizer,
-    startOptimizer,
-  ]);
+  }, [canNotStart, isOptimizer, startOptimizer]);
 }

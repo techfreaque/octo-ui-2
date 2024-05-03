@@ -20,12 +20,13 @@ export async function sendAndInterpretBotUpdate({
 }): Promise<void> {
   const requestData: RequestInit = {
     method,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    credentials: withCredentials ? "include" : "same-origin",
+    // mode: "cors",
+    // credentials: withCredentials ? "include" : "same-origin",
   };
   if (method === "POST") {
+    requestData.headers = {
+      "Content-Type": "application/json",
+    };
     requestData.body = JSON.stringify(updatedData);
   }
   addAuthToRequest(requestData, withCredentials, token);
@@ -74,9 +75,10 @@ function addAuthToRequest(
   token?: string
 ): void {
   if (withCredentials && token) {
-    requestData.headers = {
-      Authorization: `Bearer ${token}`,
-    };
+    if (!requestData.headers) {
+      requestData.headers = {};
+    }
+    requestData.headers["Authorization"] = `Bearer ${token}`;
   }
 }
 

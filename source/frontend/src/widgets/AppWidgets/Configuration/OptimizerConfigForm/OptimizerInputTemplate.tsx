@@ -1,8 +1,14 @@
-import { CSSProperties, Dispatch, SetStateAction } from "react";
+import { CSSProperties, useMemo } from "react";
 import "./OptimizerInputTemplate.css";
 import { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
-import { Select } from "antd";
-import { OptimizerEditorType, SchemaOptionsValueType, SchemaValueType } from "../../../../context/config/OptimizerEditorProvider";
+import { InputNumber, Select, Switch } from "antd";
+import {
+  OptimizerEditorInputArrayType,
+  OptimizerEditorInputNumberType,
+  SchemaOptionsValueType,
+  SchemaValueType,
+} from "../../../../context/config/OptimizerEditorProvider";
+import { HandleOptimizerSettingsUpdateType } from "./OptimizerConfigForm";
 
 export default function OptimizerSettingsContainer({
   botColors,
@@ -38,8 +44,6 @@ export default function OptimizerSettingsContainer({
     </div>
   );
 }
-
-type ValueType = "number" | "options" | "multiple-options" | "boolean";
 
 function getBorderStyle(botColors: ColorsType): CSSProperties {
   return {
@@ -103,20 +107,22 @@ function OptimizerSettingContainer({
   tentacleName,
   children,
   isEnabled,
+  valueType,
+  value,
+  handleSettingsChange,
 }: {
   name: string;
   title: string;
   tentacleName: string;
   isEnabled: boolean;
   botColors: ColorsType;
+  valueType: SchemaValueType;
+  value: OptimizerEditorInputArrayType | OptimizerEditorInputNumberType;
   children: JSX.Element;
+  handleSettingsChange: HandleOptimizerSettingsUpdateType;
 }) {
   return (
-    <div
-      className="row w-100 mx-0 "
-      style={getBorderStyle(botColors)}
-      // id={`optimizer-settings-${valueType}-template`}
-    >
+    <div className="row w-100 mx-0 " style={getBorderStyle(botColors)}>
       <div className="col-3 setting-name p-2" id={`${name}Input-name`}>
         {title}
       </div>
@@ -125,18 +131,17 @@ function OptimizerSettingContainer({
       </div>
       <div className="col-1 setting-enabled p-2" id={`${name}Input-enabled`}>
         <div className="custom-control custom-switch">
-          <input
-            type="checkbox"
-            className="custom-control-input"
-            data-tentacle-name={tentacleName}
-            id={`${tentacleName}-${name}-Input-enabled-value`}
-            checked={isEnabled}
-          />
-          <label
-            className="custom-control-label text-capitalize"
-            htmlFor={`${tentacleName}-${name}-Input-enabled-value`}
-            data-toggle="tooltip"
-            title="Enabled"
+          <Switch
+            value={isEnabled}
+            onChange={(enabled) =>
+              handleSettingsChange(
+                enabled,
+                tentacleName,
+                valueType,
+                name,
+                value
+              )
+            }
           />
         </div>
       </div>
@@ -149,7 +154,7 @@ export function OptimizerSettingBoolean({
   title,
   tentacleName,
   value,
-  saveOptimizerEditor,
+  handleSettingsChange,
   botColors,
   isEnabled,
 }: {
@@ -158,7 +163,7 @@ export function OptimizerSettingBoolean({
   tentacleName: string;
   value: boolean[];
   botColors: ColorsType;
-  saveOptimizerEditor: Dispatch<SetStateAction<OptimizerEditorType | undefined>>
+  handleSettingsChange: HandleOptimizerSettingsUpdateType;
   isEnabled: boolean;
 }) {
   return (
@@ -174,31 +179,8 @@ export function OptimizerSettingBoolean({
         { label: "True", value: true },
         { label: "False", value: false },
       ]}
-      saveOptimizerEditor={saveOptimizerEditor}
+      handleSettingsChange={handleSettingsChange}
     />
-  );
-}
-
-function OptimizerSettingArrayTemplate({
-  name,
-  title,
-  botColors,
-}: {
-  name: string;
-  title: string;
-  botColors: ColorsType;
-}) {
-  return (
-    <div id="optimizer-settings-object-array-template">
-      <div
-        id={`optimizer-settings-${name}-object-array-template`}
-        className="w-100 px-4"
-        style={getBorderStyle(botColors)}
-      >
-        <div className="row">{title}</div>
-        <div className="row input-content w-100 mx-0" />
-      </div>
-    </div>
   );
 }
 
@@ -209,7 +191,7 @@ export function OptimizerSettingOptions({
   value,
   options,
   botColors,
-  saveOptimizerEditor,
+  handleSettingsChange,
   valueType,
   isEnabled,
 }: {
@@ -219,43 +201,59 @@ export function OptimizerSettingOptions({
   value: string[] | boolean[] | number[];
   options: { label: string; value: string | boolean | number }[];
   botColors: ColorsType;
-  saveOptimizerEditor: Dispatch<SetStateAction<OptimizerEditorType | undefined>>
+  handleSettingsChange: HandleOptimizerSettingsUpdateType;
   valueType: SchemaOptionsValueType;
   isEnabled: boolean;
 }) {
-  return (
-    <OptimizerSettingContainer
-      botColors={botColors}
-      name={name}
-      title={title}
-      tentacleName={tentacleName}
-      isEnabled={isEnabled}
-    >
-      <div className="col">
-        <label
-          className="text-capitalize"
-          htmlFor={`${tentacleName}-${name}-Input-setting`}
-        />
-        <Select
-          id={`${tentacleName}-${name}-Input-setting`}
-          // className="optimizer-input-setting"
-          mode="multiple"
-          allowClear
-          style={{ width: "99%" }}
-          placeholder="Select values to use"
-          // onChange={saveOptimizerEditor}
-          options={options}
-          value={value}
-        />
-      </div>
-    </OptimizerSettingContainer>
-  );
+  return useMemo(() => {
+    function onChange(_value: string[] | boolean[] | number[]) {
+      handleSettingsChange(isEnabled, tentacleName, valueType, name, _value);
+    }
+    return (
+      <OptimizerSettingContainer
+        botColors={botColors}
+        name={name}
+        title={title}
+        tentacleName={tentacleName}
+        isEnabled={isEnabled}
+        valueType={valueType}
+        value={value}
+        handleSettingsChange={handleSettingsChange}
+      >
+        <div className="col">
+          <label
+            className="text-capitalize"
+            htmlFor={`${tentacleName}-${name}-Input-setting`}
+          />
+          <Select
+            id={`${tentacleName}-${name}-Input-setting`}
+            mode="multiple"
+            allowClear
+            style={{ width: "99%" }}
+            placeholder="Select values to use"
+            onChange={(value) => onChange(value)}
+            options={options}
+            value={value}
+          />
+        </div>
+      </OptimizerSettingContainer>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    botColors,
+    isEnabled,
+    name,
+    options,
+    tentacleName,
+    title,
+    value,
+    valueType,
+  ]);
 }
 
 export function OptimizerNotHandledValueType({
   title,
   name,
-  tentacleName,
   botColors,
   valueType,
 }: {
@@ -266,17 +264,14 @@ export function OptimizerNotHandledValueType({
   valueType: SchemaValueType;
 }): JSX.Element {
   return (
-    <OptimizerSettingContainer
-      botColors={botColors}
-      name={name}
-      title={title}
-      tentacleName={tentacleName}
-      isEnabled={false}
-    >
-      <div>
+    <div className="row w-100 mx-0 " style={getBorderStyle(botColors)}>
+      <div className="col-3 setting-name p-2" id={`${name}Input-name`}>
+        {title}
+      </div>
+      <div className="col-8 setting-values row p-2" id={`${name}Input-values`}>
         <h2>{valueType} not handled yet</h2>
       </div>
-    </OptimizerSettingContainer>
+    </div>
   );
 }
 
@@ -289,7 +284,7 @@ export function OptimizerSettingNumber({
   currentMaxValue,
   currentStepValue,
   isEnabled,
-  saveOptimizerEditor,
+  handleSettingsChange,
 }: {
   name: string;
   title: string;
@@ -299,95 +294,77 @@ export function OptimizerSettingNumber({
   currentMaxValue: number;
   currentStepValue: number;
   isEnabled: boolean;
-  saveOptimizerEditor: Dispatch<SetStateAction<OptimizerEditorType | undefined>>
+  handleSettingsChange: HandleOptimizerSettingsUpdateType;
 }) {
-  return (
-    <OptimizerSettingContainer
-      botColors={botColors}
-      name={name}
-      title={title}
-      tentacleName={tentacleName}
-      isEnabled={isEnabled}
-    >
-      <>
-        <div className="col-4">
-          <div className="input-group input-group-sm">
-            <div className="input-group-prepend">
-              <label
-                className="input-group-text"
-                htmlFor={`${tentacleName}-${name}-Input-setting-number-min`}
-              >
-                Min
-              </label>
+  return useMemo(() => {
+    const value = {
+      min: currentMinValue,
+      max: currentMaxValue,
+      step: currentStepValue,
+    };
+    function onChange(_value: number, valueName: "min" | "max" | "step") {
+      handleSettingsChange(isEnabled, tentacleName, "number", name, {
+        ...value,
+        [valueName]: _value,
+      });
+    }
+    return (
+      <OptimizerSettingContainer
+        botColors={botColors}
+        name={name}
+        title={title}
+        valueType="number"
+        tentacleName={tentacleName}
+        value={value}
+        isEnabled={isEnabled}
+        handleSettingsChange={handleSettingsChange}
+      >
+        <>
+          <div className="col-4">
+            <div className="input-group input-group-sm">
+              <InputNumber
+                style={{ width: "100%" }}
+                prefix="Min"
+                min={0.000000000000000000001}
+                value={currentMinValue}
+                onChange={(value) => value && onChange(value, "min")}
+              />
             </div>
-            <input
-              type="number"
-              step="0.000001"
-              id={`${tentacleName}-${name}-Input-setting-number-min`}
-              className="form-control optimizer-input-setting"
-              data-tentacle-name={tentacleName}
-              data-input-setting-name={`${name}_min`}
-              data-input-setting-base-name={name}
-              data-type="number"
-              aria-label="Small"
-              aria-describedby={`${name}Input-setting-number-min`}
-              value={currentMinValue}
-            />
           </div>
-        </div>
-        <div className="col-4">
-          <div className="input-group input-group-sm">
-            <div className="input-group-prepend">
-              <label
-                className="input-group-text"
-                htmlFor={`${tentacleName}-${name}-Input-setting-number-max`}
-              >
-                Max
-              </label>
+          <div className="col-4">
+            <div className="input-group input-group-sm">
+              <InputNumber
+                prefix="Max"
+                style={{ width: "100%" }}
+                min={0.000000000000000000001}
+                value={currentMaxValue}
+                onChange={(value) => value && onChange(value, "max")}
+              />
             </div>
-            <input
-              type="number"
-              step="0.000001"
-              id={`${tentacleName}-${name}-Input-setting-number-max`}
-              className="form-control"
-              data-tentacle-name={tentacleName}
-              data-input-setting-name={`${name}_max`}
-              data-input-setting-base-name={name}
-              data-type="number"
-              aria-label="Small"
-              aria-describedby={`${name}Input-setting-number-max`}
-              value={currentMaxValue}
-            />
           </div>
-        </div>
-        <div className="col-4">
-          <div className="input-group input-group-sm">
-            <div className="input-group-prepend">
-              <label
-                className="input-group-text"
-                htmlFor={`${tentacleName}-${name}-Input-setting-number-step`}
-              >
-                Step
-              </label>
+          <div className="col-4">
+            <div className="input-group input-group-sm">
+              <InputNumber
+                style={{ width: "100%" }}
+                prefix="Step"
+                min={0.000000000000000000001}
+                value={currentStepValue}
+                onChange={(value) => value && onChange(value, "step")}
+              />
             </div>
-            <input
-              type="number"
-              step="1"
-              defaultValue="1"
-              min="0.000000000000000000001"
-              id={`${tentacleName}-${name}-Input-setting-number-step`}
-              className="form-control"
-              data-tentacle-name={tentacleName}
-              data-input-setting-name={`${name}_step`}
-              data-input-setting-base-name={name}
-              data-type="number"
-              aria-label="Small"
-              aria-describedby={`${name}Input-setting-number-step`}
-              value={currentStepValue}
-            />
           </div>
-        </div>
-      </>
-    </OptimizerSettingContainer>
-  );
+        </>
+      </OptimizerSettingContainer>
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    botColors,
+    currentMaxValue,
+    currentMinValue,
+    currentStepValue,
+    isEnabled,
+    name,
+    tentacleName,
+    title,
+  ]);
 }

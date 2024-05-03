@@ -1,17 +1,32 @@
 import { ShareAltOutlined } from "@ant-design/icons";
-import { usePublishApp } from "../../../../../context/data/AppStoreDataProvider";
+import {
+  AppStoreAppType,
+  usePublishApp,
+} from "../../../../../context/data/AppStoreDataProvider";
 import { ConfirmAction } from "./AppActions";
 import { AppPublishStatus } from "../../storeConstants";
+import { Dispatch, SetStateAction } from "react";
+import createNotification from "../../../../../components/Notifications/Notification";
 
-export default function PublishApp({ app }) {
+export default function PublishApp({ app }: { app: AppStoreAppType }) {
   const publishApp = usePublishApp();
-  // useUnpublishApp
-  return [AppPublishStatus.draft, AppPublishStatus.unpublished].includes(
-    app.publish_status
-  ) ? (
+  return app.publish_status &&
+    [AppPublishStatus.draft, AppPublishStatus.unpublished].includes(
+      app.publish_status
+    ) ? (
     <ConfirmAction
       antIconComponent={ShareAltOutlined}
-      onConfirm={(setLoading) => publishApp(app.package_id, setLoading)}
+      onConfirm={(setOpen: Dispatch<SetStateAction<boolean>>) => {
+        if (app.package_id) {
+          publishApp(app.package_id, setOpen);
+        } else {
+          createNotification({
+            title: "Failed to publish app.",
+            message: "App doesnt have a package id",
+            type: "danger",
+          });
+        }
+      }}
       isSelected={app.is_selected}
       confirmTitle={`Publish ${app.title}?`}
       confirmButtonText={"Publish now"}

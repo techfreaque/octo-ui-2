@@ -62,8 +62,8 @@ export const NotificationsContextProvider = ({
           type: notification.Level === "error" ? "danger" : notification.Level,
           message: (
             <>
-              {notification.Message?.split("<br>")?.map((row) => (
-                <div>{row}</div>
+              {notification.Message?.split("<br>")?.map((row, index) => (
+                <div key={index}>{row}</div>
               ))}
             </>
           ),
@@ -79,12 +79,12 @@ export const NotificationsContextProvider = ({
   useEffect(() => {
     if (socket?.active && connected) {
       onReconnect(setIsBotOnline);
-    } else if (socket?.active && !connected) {
+    } else if (socket?.active && !connected && socket?.recovered !== false) {
       onConnectionLost(setIsBotOnline);
     } else {
-      console.log("Websocket is starting");
+      // console.log("Websocket is starting");
     }
-  }, [connected, setIsBotOnline, socket?.active]);
+  }, [connected, setIsBotOnline, socket?.active, socket?.recovered]);
   const { lastMessage } = useSocketEvent(socket, "update");
   useEffect(() => {
     if (lastMessage) onNewMessage(lastMessage as WebsocketNotificationType);

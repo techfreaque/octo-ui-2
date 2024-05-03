@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import {
   useDeleteStoreUser,
   useGetStorePayments,
@@ -61,7 +61,9 @@ export default function BackendDashboard() {
               <li>
                 {`${user.id} ${user.email} (ref id${user.referral_user_id})`}
                 <ConfirmAction
-                  onConfirm={() => deleteUser(user.id)}
+                  onConfirm={(setOpen: Dispatch<SetStateAction<boolean>>) =>
+                    deleteUser(user.id)
+                  }
                   confirmTitle={`Delete ${user.email}`}
                   confirmButtonText={`Delete ${user.email}`}
                   buttonTitle={`Delete ${user.email}`}

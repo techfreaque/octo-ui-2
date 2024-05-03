@@ -52,12 +52,12 @@ type LoginSignupFieldType = "referral_user_id" | "email" | "password";
 
 const emptyForm = { email: "", password: "", referral_user_id: "" };
 
+export type LoginSignupFormType = {
+  [field in LoginSignupFieldType]: string;
+};
+
 function LoginSignup() {
-  const [logInInfo, setLogInInfo] = useState<
-    {
-      [field in LoginSignupFieldType]: string;
-    }
-  >(emptyForm);
+  const [logInInfo, setLogInInfo] = useState<LoginSignupFormType>(emptyForm);
   const [formType, setFormType] = useState("signUp");
   function handleCredentialInput(inputName: string, value: string) {
     setLogInInfo((prevInfo) => ({

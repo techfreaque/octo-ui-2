@@ -21,15 +21,12 @@ import { resetStorage, resetTentaclesConfig } from "../../../api/actions";
 import ResetIndividual from "./ResetIndividual";
 import { projectName } from "../../../constants/frontendConstants";
 import { Trans } from "react-i18next";
+import { objectKeys } from "../../../helpers/helpers";
 
 const { Title } = Typography;
 
 export default function ResetConfigs() {
-  const [checkedList, setCheckedList] = useState<
-    {
-      [key in SorageResetKeyType]?: boolean;
-    }
-  >();
+  const [checkedList, setCheckedList] = useState<CheckedListType>();
   const [isResetting, setIsResetting] = useState<boolean>(false);
   const botDomain = useBotDomainContext();
   const botInfo = useBotInfoContext();
@@ -53,12 +50,12 @@ export default function ResetConfigs() {
 
   function toggleSelectAll() {
     setCheckedList((prevCheckedList) => {
-      const isAllSelected = Object.keys(storages).every(
+      const isAllSelected = objectKeys(storages).every(
         (thisKey) => prevCheckedList?.[thisKey]
       );
-      const newSelected = {};
+      const newSelected: CheckedListType = {};
       if (!isAllSelected) {
-        Object.keys(storages).forEach((thisKey) => {
+        objectKeys(storages).forEach((thisKey) => {
           newSelected[thisKey] = true;
         });
       }
@@ -127,7 +124,7 @@ export default function ResetConfigs() {
       fetchCurrentTentaclesConfig
     );
   }
-  function handleResetStorage(storagekey) {
+  function handleResetStorage(storagekey: SorageResetKeyType) {
     setIsResetting(true);
     const storage = storages[storagekey];
     resetStorage(
@@ -179,7 +176,7 @@ export default function ResetConfigs() {
     console.log("Clicked cancel button");
     setOpen(false);
   };
-  const storages = getResetData(tentacles);
+  const storages: ResetDataType = getResetData(tentacles);
   return (
     <div
       style={{
@@ -191,7 +188,7 @@ export default function ResetConfigs() {
     >
       <Card>
         <Title>Reset data and configuration</Title>
-        {Object.keys(storages).map((storageKey) => (
+        {objectKeys(storages).map((storageKey) => (
           <ResetIndividual
             title={storages[storageKey].title}
             key={storages[storageKey].key}
@@ -244,9 +241,13 @@ export default function ResetConfigs() {
   );
 }
 
+export type CheckedListType = {
+  [key in SorageResetKeyType]?: boolean;
+};
+
 export type ClearOlottingCacheType = "clear_plotting_cache";
 
-type SorageResetKeyType =
+export type SorageResetKeyType =
   | "resetAllUIConfig"
   | "resetTradingModePlottingCache"
   | "resetTradingmodeSettings"
@@ -255,16 +256,18 @@ type SorageResetKeyType =
   | "resetTradesHistory"
   | "resetTransactionsHistory";
 
-function getResetData(
-  tentacles: string[]
-): {
-  [key in SorageResetKeyType]: {
-    key: SorageResetKeyType;
-    title: string;
-    description: JSX.Element | string;
-    api?: string;
-  };
-} {
+export interface ResetDataStorageInfoType {
+  key: SorageResetKeyType;
+  title: string;
+  description: JSX.Element | string;
+  api?: string;
+}
+
+type ResetDataType = {
+  [key in SorageResetKeyType]: ResetDataStorageInfoType;
+};
+
+function getResetData(tentacles: string[]): ResetDataType {
   return {
     resetAllUIConfig: {
       key: "resetAllUIConfig",

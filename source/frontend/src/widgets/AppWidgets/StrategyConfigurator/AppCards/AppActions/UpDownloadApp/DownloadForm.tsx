@@ -1,11 +1,16 @@
 import { DownloadOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Alert, Card, Tooltip, Typography } from "antd";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
 import { useBotColorsContext } from "../../../../../../context/config/BotColorsProvider";
-import AntTable from "../../../../../../components/Tables/AntTable";
+import AntTable, {
+  AntTableDataType,
+} from "../../../../../../components/Tables/AntTable";
 import {
+  AppStoreAppType,
+  AppStoreAppVersionType,
+  AppStoreVersionTagType,
   useAddToAppStoreCart,
   useAppStoreDataContext,
   useIsInAppStoreCart,
@@ -15,12 +20,22 @@ import { IsInstalledIcon, IsNotInstalledIcon } from "../../AppCover";
 import AntButton from "../../../../../../components/Buttons/AntButton";
 import { Grid } from "@mui/material";
 import { appPackagesName, strategyName } from "../../../storeConstants";
+import { DownloadInfo } from "../../AppCard";
+import { objectKeys } from "../../../../../../helpers/helpers";
 
 export default function AppDownloadForm({
   setDownloadInfo,
   downloadInfo,
   app,
   handleDownload,
+}: {
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
+  downloadInfo: DownloadInfo;
+  app: AppStoreAppType;
+  handleDownload: (
+    setOpen: (isOpen: boolean) => void,
+    otherApp: AppStoreAppType | undefined
+  ) => void;
 }) {
   return (
     <div style={{ marginRight: "20px" }}>
@@ -114,7 +129,12 @@ export default function AppDownloadForm({
 //     )
 // }
 
-const versionTypes = [
+const versionTypes: {
+  label: string;
+  icon: string;
+  toolTipText: string;
+  key: AppStoreVersionTagType;
+}[] = [
   {
     label: "Alpha Versions",
     icon: "α",
@@ -140,12 +160,34 @@ const versionTypes = [
     // disabled: true
   },
 ];
-function AppVersions({ app, setDownloadInfo, downloadInfo, handleDownload }) {
+
+interface VersionDataToDisplay extends AntTableDataType {
+  key: string;
+  major_version: number;
+  minor_version: number;
+  bug_fix_version: number;
+  title: JSX.Element;
+}
+
+function AppVersions({
+  app,
+  setDownloadInfo,
+  downloadInfo,
+  handleDownload,
+}: {
+  app: AppStoreAppType;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
+  downloadInfo: DownloadInfo;
+  handleDownload: (
+    setOpen: (isOpen: boolean) => void,
+    otherApp: AppStoreAppType | undefined
+  ) => void;
+}) {
   // const [versionType, setVersionType] = useState("stable_version")
   const botColors = useBotColorsContext();
 
   const reversedVersions = app.versions?.reverse();
-  const preSorteddata = reversedVersions
+  const preSorteddata: VersionDataToDisplay[] | undefined = reversedVersions
     ?.filter((version) =>
       downloadInfo?.visibleVersionTypes?.includes(version.version_tag)
     )
@@ -196,7 +238,7 @@ function AppVersions({ app, setDownloadInfo, downloadInfo, handleDownload }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reversedVersions]);
 
-  function handleVersionFilterChange(versionTypeKey) {
+  function handleVersionFilterChange(versionTypeKey: AppStoreVersionTagType) {
     setDownloadInfo((prevDownloadInfo) => ({
       ...prevDownloadInfo,
       visibleVersionTypes: downloadInfo?.visibleVersionTypes?.includes(
@@ -208,7 +250,7 @@ function AppVersions({ app, setDownloadInfo, downloadInfo, handleDownload }) {
         : [...(downloadInfo?.visibleVersionTypes || []), versionTypeKey],
     }));
   }
-  function handleAccordionChange(detailsOpen) {
+  function handleAccordionChange(detailsOpen: boolean) {
     setDownloadInfo((prevDownloadInfo) => ({
       ...prevDownloadInfo,
       versionDetailsOpen: detailsOpen,
@@ -276,50 +318,57 @@ function AppVersions({ app, setDownloadInfo, downloadInfo, handleDownload }) {
   );
 }
 
+type RequiredAppsByTentaclePackageType = {
+  [originPackageId: string]: AppStoreAppType[];
+};
+
 function RequiredPackages({
   app,
   selectedVersion,
   downloadInfo,
   handleDownload,
   setDownloadInfo,
+}: {
+  app: AppStoreAppType;
+  selectedVersion: AppStoreAppVersionType;
+  downloadInfo: DownloadInfo;
+  handleDownload: (
+    setOpen: (isOpen: boolean) => void,
+    otherApp: AppStoreAppType | undefined
+  ) => void;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
 }) {
   const appStoreData = useAppStoreDataContext();
-  const requiredAppsByTentaclePackage = {};
-  const requiredApps = [
-    app.package_id,
+  const requiredAppsByTentaclePackage: RequiredAppsByTentaclePackageType = {};
+  const requiredApps: string[] = [
+    `${app.package_id}`,
     ...(selectedVersion?.requirements ? selectedVersion.requirements : []),
   ];
   let requirementsSatisfied = true;
   requiredApps.forEach((requirement, index) => {
-    for (const potentialRequiredAppCategory in appStoreData) {
-      for (const potentialRequiredAppName in appStoreData[
-        potentialRequiredAppCategory
-      ]) {
-        const potentialRequiredApp =
-          appStoreData[potentialRequiredAppCategory][potentialRequiredAppName];
-        if (potentialRequiredApp.package_id === requirement) {
-          if (
-            !requiredAppsByTentaclePackage[potentialRequiredApp.origin_package]
-          ) {
-            requiredAppsByTentaclePackage[
-              potentialRequiredApp.origin_package
-            ] = [];
-          }
-          if (potentialRequiredApp.origin_package) {
-            requiredAppsByTentaclePackage[
-              potentialRequiredApp.origin_package
-            ].push(potentialRequiredApp);
-          }
-          const packageInstalled = requiredAppsByTentaclePackage[
-            potentialRequiredApp.origin_package
-          ].every((thisApp) => {
-            return thisApp?.is_installed;
-          });
-          requirementsSatisfied =
-            requirementsSatisfied && (index === 0 || packageInstalled);
+    Object.values(appStoreData).forEach((apps) => {
+      Object.values(apps).forEach((potentialRequiredApp) => {
+        if (potentialRequiredApp.package_id !== requirement) {
+          return;
         }
-      }
-    }
+        const potentialOriginPackage = potentialRequiredApp.origin_package;
+        if (!requiredAppsByTentaclePackage[potentialOriginPackage]) {
+          requiredAppsByTentaclePackage[potentialOriginPackage] = [];
+        }
+        if (potentialOriginPackage) {
+          requiredAppsByTentaclePackage[potentialOriginPackage].push(
+            potentialRequiredApp
+          );
+        }
+        const packageInstalled = requiredAppsByTentaclePackage[
+          potentialOriginPackage
+        ].every((thisApp) => {
+          return thisApp?.is_installed;
+        });
+        requirementsSatisfied =
+          requirementsSatisfied && (index === 0 || packageInstalled);
+      });
+    });
   });
   return (
     <Grid container spacing={2}>
@@ -352,6 +401,18 @@ function RequiredPackage({
   setDownloadInfo,
   requirementsSatisfied,
   isMainPackage,
+}: {
+  app: AppStoreAppType;
+  requiredAppsByTentaclePackage: RequiredAppsByTentaclePackageType;
+  requiredAppPackage: string;
+  downloadInfo: DownloadInfo;
+  handleDownload: (
+    setOpen: (isOpen: boolean) => void,
+    otherApp: AppStoreAppType | undefined
+  ) => void;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
+  requirementsSatisfied: boolean;
+  isMainPackage: boolean;
 }) {
   const botColors = useBotColorsContext();
   const mainPackageApp = requiredAppsByTentaclePackage[requiredAppPackage][0];
@@ -466,12 +527,16 @@ function RequiredPackage({
   );
 }
 
-function AllAppsInPackage({ requiredAppPackage }) {
+function AllAppsInPackage({
+  requiredAppPackage,
+}: {
+  requiredAppPackage: string;
+}) {
   const appStoreData = useAppStoreDataContext();
 
   return (
     <ul>
-      {Object.keys(appStoreData).map((category) => {
+      {objectKeys(appStoreData).map((category) => {
         return (
           category !== appPackagesName && (
             <div key={category}>
@@ -506,6 +571,18 @@ function DownloadPackageButton({
   app,
   requirementsSatisfied,
   isMainPackage,
+}: {
+  handleDownload: (
+    setOpen: (isOpen: boolean) => void,
+    otherApp: AppStoreAppType | undefined
+  ) => void;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
+  downloadInfo: DownloadInfo;
+  mainPackageApp: AppStoreAppType;
+  packageInstalled: boolean;
+  app: AppStoreAppType;
+  requirementsSatisfied: boolean;
+  isMainPackage: boolean;
 }) {
   const addAppStoreCart = useAddToAppStoreCart();
   const checkIsInStoreCart = useIsInAppStoreCart();
@@ -520,7 +597,7 @@ function DownloadPackageButton({
           ...prevInfo,
           isDownloading,
         })),
-      !isOriginPackage && mainPackageApp
+      isOriginPackage ? undefined : mainPackageApp
     );
   }
   if (isMainPackage && !requirementsSatisfied) {
@@ -546,7 +623,9 @@ function DownloadPackageButton({
     packageInstalled &&
     (!mainPackageApp.price || mainPackageApp.has_paid)
   ) {
-    return !mainPackageApp.updated_by_distro ? (
+    return mainPackageApp.updated_by_distro ? (
+      <></>
+    ) : (
       <AntButton
         block={true}
         style={{ marginTop: "10px" }}
@@ -556,8 +635,6 @@ function DownloadPackageButton({
       >
         Update Now
       </AntButton>
-    ) : (
-      <></>
     );
   } else if (mainPackageApp.price) {
     if (mainPackageApp.has_paid) {
@@ -615,6 +692,12 @@ function VersionSelector({
   handleVersionFilterChange,
   downloadInfo,
   preSorteddata,
+}: {
+  app: AppStoreAppType;
+  handleAccordionChange: (detailsOpen: boolean) => void;
+  handleVersionFilterChange: (versionTypeKey: AppStoreVersionTagType) => void;
+  downloadInfo: DownloadInfo;
+  preSorteddata: VersionDataToDisplay[] | undefined;
 }) {
   return (
     <div style={{ marginTop: "20px" }}>
@@ -659,11 +742,13 @@ function VersionSelector({
             : {}),
         }}
       >
-        <AntTable
-          maxWidth="100%"
-          columns={versionColumns}
-          data={preSorteddata}
-        />
+        {preSorteddata && (
+          <AntTable
+            maxWidth="100%"
+            columns={versionColumns}
+            data={preSorteddata}
+          />
+        )}
       </div>
     </div>
   );
@@ -689,7 +774,11 @@ const versionColumns = [
   },
 ];
 
-function handdleVersionSelect(setDownloadInfo, version, handleAccordionChange) {
+function handdleVersionSelect(
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>,
+  version: AppStoreAppVersionType,
+  handleAccordionChange: (detailsOpen: boolean) => void
+) {
   handleAccordionChange(true);
 
   setDownloadInfo((prevDownloadInfo) => ({

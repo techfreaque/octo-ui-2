@@ -1,24 +1,47 @@
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import TradingModeCard from "./TradingModeCard";
 import StrategyCard from "./StrategyCard";
 import { Grid } from "@mui/material";
 import OtherAppCard from "./OtherAppCard";
 import { strategyModeName, strategyName } from "../storeConstants";
+import {
+  AppStoreAppType,
+  AppStoreVersionTagType,
+  StoreCategoryType,
+} from "../../../../context/data/AppStoreDataProvider";
 
-interface UploadInfo {
+export interface UploadInfo {
   open?: boolean;
+  includePackage?: boolean;
+  version_type?: AppStoreVersionTagType;
+  version_tag?: string;
+  price?: number;
+  release_notes?: string;
 }
-interface DownloadInfo {
+export interface DownloadInfo {
   open?: boolean;
+  visibleVersionTypes?: AppStoreVersionTagType[];
+  major_version?: number;
+  minor_version?: number;
+  bug_fix_version?: number;
+  versionDetailsOpen?: boolean;
+  isDownloading?: boolean;
 }
 
 export default function AppCard({
   app,
   apps,
-  isLoading,
   setIsloading,
   setSelectedCategories,
   currentStrategy,
+}: {
+  app: AppStoreAppType;
+  apps: AppStoreAppType[];
+  setIsloading: Dispatch<SetStateAction<boolean>>;
+  setSelectedCategories: Dispatch<
+    SetStateAction<StoreCategoryType | undefined>
+  >;
+  currentStrategy: AppStoreAppType | undefined;
 }) {
   const [isMouseHover, setMouseHover] = useState(false);
   const [didHoverOnce, setDidHoverOnce] = useState(false);
@@ -30,7 +53,8 @@ export default function AppCard({
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isMouseHover]);
-  const _isMouseHover = isMouseHover || uploadInfo.open || downloadInfo.open;
+  const _isMouseHover =
+    isMouseHover || uploadInfo.open || downloadInfo.open || false;
   const category =
     app?.categories?.length > 1 ? "Package" : app?.categories?.[0];
   if (category === strategyModeName) {
@@ -44,7 +68,6 @@ export default function AppCard({
           category={category}
           didHoverOnce={didHoverOnce}
           setSelectedCategories={setSelectedCategories}
-          isLoading={isLoading}
           setIsloading={setIsloading}
           isMouseHover={_isMouseHover}
           uploadInfo={uploadInfo}
@@ -59,7 +82,6 @@ export default function AppCard({
       <SelectedCardContainer app={app}>
         <StrategyCard
           app={app}
-          isLoading={isLoading}
           setIsloading={setIsloading}
           setMouseHover={setMouseHover}
           category={category}
@@ -78,12 +100,10 @@ export default function AppCard({
       <SelectedCardContainer app={app}>
         <OtherAppCard
           app={app}
-          isLoading={isLoading}
           setIsloading={setIsloading}
           setMouseHover={setMouseHover}
           category={category}
           didHoverOnce={didHoverOnce}
-          setSelectedCategories={setSelectedCategories}
           isMouseHover={_isMouseHover}
           uploadInfo={uploadInfo}
           setUploadInfo={setUploadInfo}
@@ -99,7 +119,7 @@ function SelectedCardContainer({
   app,
   children,
 }: {
-  app;
+  app: AppStoreAppType;
   children: JSX.Element;
 }) {
   return app?.is_selected ? (

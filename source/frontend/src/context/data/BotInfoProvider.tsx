@@ -19,9 +19,7 @@ import {
 import { useIsBotOnlineContext } from "./IsBotOnlineProvider";
 import { BotExchangeInfoProvider } from "./BotExchangeInfoProvider";
 import { RealTimeStrategyCommandsType } from "../../widgets/AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
-import {
-  BlockInfoType,
-} from "../../widgets/AppWidgets/Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
+import { BlockInfoType } from "../../widgets/AppWidgets/Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
 import { ClearOlottingCacheType } from "../../widgets/AppWidgets/ResetConfigs/ResetConfigs";
 
 const ProjectInfoOpenContext = createContext<boolean>(false);
@@ -71,12 +69,14 @@ export type BotInfoType = {
   installed_blocks_info?: BlockInfoType;
   exchange_id?: string;
   available_api_actions: ApiActionsType;
-  ids_by_exchange_name: { [exchange: string]: string };
+  ids_by_exchange_name: IdsByExchangeType;
   ui_pro_installed?: boolean;
   any_neural_net_active?: boolean;
   should_stop_training?: boolean;
   real_time_strategies_active?: boolean;
 };
+
+export type IdsByExchangeType = { [exchange: string]: string };
 
 const BotInfoContext = createContext<BotInfoType | undefined>(undefined);
 const UpdateBotInfoContext = createContext<

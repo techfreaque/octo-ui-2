@@ -1,16 +1,35 @@
-export const hiddenCategories = ["Legacy Strategy"];
-export const strategyModeSettingsName = "Strategy Mode Settings";
-export const strategyName = "Strategy";
-export const strategyModeName = "Strategy Mode";
-export const appPackagesName = "App Packages";
+import {
+  AppStorePublishStatusType,
+  AppStoreVersionTagType,
+  AppStoreVersionTypeType,
+  StoreCategoryType,
+  StrategyCategoryType,
+  StrategyModeCategoryType,
+} from "../../../context/data/AppStoreDataProvider";
 
-export const AppPublishStatus = {
+export const hiddenCategories: StoreCategoryType[] = ["Legacy Strategy"];
+export const strategyModeSettingsName: StoreCategoryType =
+  "Strategy Mode Settings";
+export const strategyName: StrategyCategoryType = "Strategy";
+export const strategyModeName: StrategyModeCategoryType = "Strategy Mode";
+export const appPackagesName: StoreCategoryType = "App Packages";
+
+export const AppPublishStatus: {
+  [key in AppStorePublishStatusType]: AppStorePublishStatusType
+} = {
   draft: "draft",
   published: "published",
   unpublished: "unpublished",
 };
 
-export const appVersionTypes = {
+export interface AppVersionTypeInfoType {
+  title: string;
+  key: AppStoreVersionTypeType;
+}
+
+export const appVersionTypes: {
+  [key: string]: AppVersionTypeInfoType;
+} = {
   BUG_FIX_VERSION: {
     title: "Minor Bug Fix Update",
     key: "bug_fix_version",
@@ -25,7 +44,12 @@ export const appVersionTypes = {
   },
 };
 
-export const appVersionTags = {
+export const appVersionTags: {
+  [key: string]: {
+    title: string;
+    key: AppStoreVersionTagType;
+  }
+} = {
   BETA_VERSION: {
     title: "Beta Version",
     key: "beta_version",

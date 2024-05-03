@@ -1,5 +1,7 @@
 import AppActions from "./AppActions/AppActions";
 import {
+  AppStoreAppType,
+  StoreCategoryType,
   useInstallAnyAppPackage,
   useUnInstallAppPackage,
   useUploadToAppStore,
@@ -7,15 +9,15 @@ import {
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import { backendRoutes } from "../../../../constants/backendConstants";
 import AppCardTemplate from "./AppCardTemplate";
+import { Dispatch, SetStateAction } from "react";
+import { DownloadInfo, UploadInfo } from "./AppCard";
 
 export default function OtherAppCard({
   app,
   setMouseHover,
   category,
   isMouseHover,
-  isLoading,
   setIsloading,
-  setSelectedCategories,
   didHoverOnce,
   onConfigure,
   handleSelect,
@@ -25,27 +27,28 @@ export default function OtherAppCard({
   downloadInfo,
   setDownloadInfo,
 }: {
-  app;
-  setMouseHover;
-  category;
-  isMouseHover;
-  isLoading: boolean;
-  setIsloading;
-  setSelectedCategories;
-  didHoverOnce;
-  onConfigure?;
-  handleSelect?;
+  app: AppStoreAppType;
+  setMouseHover: Dispatch<SetStateAction<boolean>>;
+  category: StoreCategoryType;
+  isMouseHover: boolean;
+  setIsloading: Dispatch<SetStateAction<boolean>>;
+  didHoverOnce: boolean;
+  onConfigure?: () => void;
+  handleSelect?: (setClosed: () => void) => void;
   isReadOnlyStrategy?: boolean;
-  uploadInfo;
-  setUploadInfo;
-  downloadInfo;
-  setDownloadInfo;
+  uploadInfo: UploadInfo;
+  setUploadInfo: Dispatch<SetStateAction<UploadInfo>>;
+  downloadInfo: DownloadInfo;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
 }) {
   const botDomain = useBotDomainContext();
   const profileDownloadUrl =
     botDomain + backendRoutes.exportApp + app.origin_package;
   const installAnyAppPackage = useInstallAnyAppPackage();
-  async function handleDownloadApp(setOpen, otherApp) {
+  async function handleDownloadApp(
+    setOpen: (isOpen: boolean) => void,
+    otherApp: AppStoreAppType | undefined
+  ) {
     const theApp = otherApp
       ? {
           ...otherApp,
@@ -57,7 +60,9 @@ export default function OtherAppCard({
     installAnyAppPackage(downloadInfo, theApp, setIsloading, setOpen);
   }
   const uninstallAppPackage = useUnInstallAppPackage();
-  async function handleUninstallApp(setOpen) {
+  async function handleUninstallApp(
+    setOpen: Dispatch<SetStateAction<boolean>>
+  ) {
     uninstallAppPackage(app, setIsloading, setOpen);
   }
   const uploadToAppStore = useUploadToAppStore();
@@ -73,7 +78,6 @@ export default function OtherAppCard({
       cardActions={
         <AppActions
           isMouseHover={isMouseHover}
-          setSelectedCategories={setSelectedCategories}
           infoContent={app.description}
           handleUninstall={handleUninstallApp}
           isReadOnlyStrategy={isReadOnlyStrategy}

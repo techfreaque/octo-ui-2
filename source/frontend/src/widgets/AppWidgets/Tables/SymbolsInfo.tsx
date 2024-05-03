@@ -27,7 +27,7 @@ import Paper from "@mui/material/Paper";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
-interface SymbolsInfoType {
+export interface SymbolsInfoType {
   [exchange: string]: {
     leverage_tiers: {
       [symbol: string]: { tier; max_leverage; max_notional; min_notional }[];

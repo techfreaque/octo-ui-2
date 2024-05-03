@@ -4,6 +4,7 @@ import { useBotColorsContext } from "../../../../context/config/BotColorsProvide
 import AppRating from "./AppRating";
 import { CardDescription } from "./AppDescription";
 import { CSSProperties } from "react";
+import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
 
 export default function AppCardTemplate({
   app,
@@ -12,6 +13,13 @@ export default function AppCardTemplate({
   isMouseHover,
   avatarUrl,
   category,
+}: {
+  app: AppStoreAppType;
+  setMouseHover;
+  cardActions;
+  isMouseHover;
+  avatarUrl;
+  category;
 }) {
   const botColors = useBotColorsContext();
   const boxShadowColor =

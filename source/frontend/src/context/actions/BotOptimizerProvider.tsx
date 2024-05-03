@@ -16,13 +16,17 @@ import {
   backendRoutes,
 } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
-import { useBotInfoContext } from "../data/BotInfoProvider";
+import { IdsByExchangeType, useBotInfoContext } from "../data/BotInfoProvider";
 import { useFetchOptimizerQueue } from "../data/OptimizerQueueProvider";
 import {
+  OptimizerEditorInputsType,
   useFetchProConfig,
   useOptimizerEditorContext,
 } from "../config/OptimizerEditorProvider";
-import { useUiConfigContext } from "../config/UiConfigProvider";
+import {
+  OptimizerUiConfig,
+  useUiConfigContext,
+} from "../config/UiConfigProvider";
 import {
   AbstractWebsocketContext,
   WebsocketDataType,
@@ -98,6 +102,26 @@ export const useStopTraining = () => {
   }, [botDomain]);
 };
 
+export interface StartOptimizerSettingsType extends OptimizerUiConfig {
+  exchange_ids: string[];
+  config: OptimizerEditorInputsType;
+}
+
+function getOptimizerStartSettings(
+  optimizerSettings: OptimizerUiConfig,
+  idsByExchangeName: IdsByExchangeType,
+  optimizerInputs: OptimizerEditorInputsType,
+  exchangeNames: string[]
+): StartOptimizerSettingsType {
+  return {
+    ...optimizerSettings,
+    exchange_ids: exchangeNames.map(
+      (exchangeName) => idsByExchangeName[exchangeName]
+    ),
+    config: optimizerInputs,
+  };
+}
+
 export const useStartOptimizer = () => {
   const setBotIsOptimizing = useUpdateBotIsOptimizingContext();
   const uiConfig = useUiConfigContext();
@@ -105,53 +129,64 @@ export const useStartOptimizer = () => {
   const botDomain = useBotDomainContext();
   const botInfo = useBotInfoContext();
   const idsByExchangeName = botInfo?.ids_by_exchange_name;
+  const exchangeNames = optimizerSettings?.exchange_names;
   const optimizerForm = useOptimizerEditorContext();
   const fetchProConfig = useFetchProConfig();
-  const logic = useCallback(() => {
-    // TODO validate settings
-    if (optimizerSettings && idsByExchangeName) {
-      if (!optimizerForm?.optimizer_inputs?.user_inputs) {
+  return useCallback(() => {
+    if (exchangeNames && idsByExchangeName) {
+      if (optimizerForm?.optimizer_inputs?.user_inputs) {
+        startOptimizer(
+          botDomain,
+          getOptimizerStartSettings(
+            optimizerSettings,
+            idsByExchangeName,
+            optimizerForm.optimizer_inputs,
+            exchangeNames
+          ),
+          setBotIsOptimizing
+        );
+      } else {
         // settings not loaded yet, use directly from settings storage
         fetchProConfig((fetchedOptimizerForm) => {
-          if (fetchedOptimizerForm?.optimizer_inputs) {
+          if (fetchedOptimizerForm?.optimizer_inputs?.user_inputs) {
             startOptimizer(
               botDomain,
-              optimizerSettings,
-              fetchedOptimizerForm.optimizer_inputs,
-              idsByExchangeName,
+              getOptimizerStartSettings(
+                optimizerSettings,
+                idsByExchangeName,
+                fetchedOptimizerForm.optimizer_inputs,
+                exchangeNames
+              ),
               setBotIsOptimizing
             );
           } else {
             createNotification({
-              title: "Failed to add to optimizer queue",
+              title: "Failed to start the optimizer",
               type: "danger",
               message: "Check your optimizer run configuration",
             });
           }
         });
-      } else {
-        startOptimizer(
-          botDomain,
-          optimizerSettings,
-          optimizerForm?.optimizer_inputs,
-          idsByExchangeName,
-          setBotIsOptimizing
-        );
       }
+    } else {
+      createNotification({
+        title: "Failed to start optimizer",
+        type: "danger",
+        message: "Exchange name(s) are missing from the run config.",
+      });
     }
   }, [
-    optimizerSettings,
+    exchangeNames,
     idsByExchangeName,
     optimizerForm?.optimizer_inputs,
-    fetchProConfig,
     botDomain,
+    optimizerSettings,
     setBotIsOptimizing,
+    fetchProConfig,
   ]);
-  return logic;
 };
 
 export const useAddToOptimizerQueue = () => {
-  const setBotIsOptimizing = useUpdateBotIsOptimizingContext();
   const uiConfig = useUiConfigContext();
   const optimizerSettings = uiConfig?.[OPTIMIZER_RUN_SETTINGS_KEY];
   const botDomain = useBotDomainContext();
@@ -162,35 +197,39 @@ export const useAddToOptimizerQueue = () => {
   const fetchProConfig = useFetchProConfig();
   return useCallback(() => {
     if (exchageId) {
-      if (!optimizerForm?.optimizer_inputs?.user_inputs) {
-        // settings not loaded yet, use directly from settings storage
-        fetchProConfig((fetchedOptimizerForm) => {
-          if (fetchedOptimizerForm?.optimizer_inputs) {
-            addToOptimizerQueue(
-              botDomain,
-              optimizerSettings,
-              fetchedOptimizerForm.optimizer_inputs,
-              exchageId,
-              setBotIsOptimizing,
-              fetchOptimizerQueue
-            );
-          } else {
-            createNotification({
-              title: "Failed to add to optimizer queue",
-              type: "danger",
-              message: "Check your optimizer run configuration",
-            });
-          }
-        });
+      if (optimizerSettings) {
+        if (optimizerForm?.optimizer_inputs?.user_inputs) {
+          addToOptimizerQueue(
+            botDomain,
+            optimizerSettings,
+            optimizerForm?.optimizer_inputs,
+            fetchOptimizerQueue
+          );
+        } else {
+          // settings not loaded yet, use directly from settings storage
+          fetchProConfig((fetchedOptimizerForm) => {
+            if (fetchedOptimizerForm?.optimizer_inputs) {
+              addToOptimizerQueue(
+                botDomain,
+                optimizerSettings,
+                fetchedOptimizerForm.optimizer_inputs,
+                fetchOptimizerQueue
+              );
+            } else {
+              createNotification({
+                title: "Failed to add to optimizer queue",
+                type: "danger",
+                message: "Check your optimizer run configuration",
+              });
+            }
+          });
+        }
       } else {
-        addToOptimizerQueue(
-          botDomain,
-          optimizerSettings,
-          optimizerForm?.optimizer_inputs,
-          exchageId,
-          setBotIsOptimizing,
-          fetchOptimizerQueue
-        );
+        createNotification({
+          title: "Failed to add to the queue",
+          type: "danger",
+          message: "Optimizer settings arent initialized yet.",
+        });
       }
     } else {
       createNotification({
@@ -204,7 +243,6 @@ export const useAddToOptimizerQueue = () => {
     exchageId,
     optimizerForm,
     botDomain,
-    setBotIsOptimizing,
     fetchOptimizerQueue,
     fetchProConfig,
   ]);

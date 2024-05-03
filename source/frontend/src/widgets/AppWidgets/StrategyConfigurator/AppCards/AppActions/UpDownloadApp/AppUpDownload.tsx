@@ -8,6 +8,7 @@ import { handlePopConfirmOpen } from "../AppActions";
 import UploadAppForm from "./UploadAppForm";
 import AppDownloadForm from "./DownloadForm";
 import {
+  AppStoreAppType,
   useAppStoreUserContext,
   validateUploadInfo,
 } from "../../../../../../context/data/AppStoreDataProvider";
@@ -15,6 +16,14 @@ import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
 import AntButton from "../../../../../../components/Buttons/AntButton";
 import { Modal, Tooltip, Typography } from "antd";
 import { buttonTypes } from "../../../../../../components/Buttons/AntButton";
+import { DownloadInfo, UploadInfo } from "../../AppCard";
+import {
+  Dispatch,
+  ForwardRefExoticComponent,
+  RefAttributes,
+  SetStateAction,
+} from "react";
+import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 
 export default function AppUpDownload({
   app,
@@ -24,6 +33,17 @@ export default function AppUpDownload({
   handleDownload,
   downloadInfo,
   setDownloadInfo,
+}: {
+  app: AppStoreAppType;
+  handleUpload: (callback: (isOpen: boolean) => void) => void;
+  setUploadInfo: Dispatch<SetStateAction<UploadInfo>>;
+  uploadInfo: UploadInfo;
+  handleDownload: (
+    setOpen: (isOpen: boolean) => void,
+    otherApp: AppStoreAppType | undefined
+  ) => void;
+  downloadInfo: DownloadInfo;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
 }) {
   const appStoreUser = useAppStoreUserContext();
   const isSignedIn = Boolean(appStoreUser?.token);
@@ -35,9 +55,9 @@ export default function AppUpDownload({
           handleUpload && (
             <UpDownloadloadAppModal
               onConfirm={() =>
-                handleUpload((isopen) =>
-                  handlePopConfirmOpen(setUploadInfo, isopen)
-                )
+                handleUpload((isOpen: boolean) => {
+                  handlePopConfirmOpen(setUploadInfo, isOpen);
+                })
               }
               antIconComponent={CloudUploadOutlined}
               confirmButtonIcon={CloudUploadOutlined}
@@ -83,8 +103,8 @@ export default function AppUpDownload({
         handleUpload && (
           <UpDownloadloadAppModal
             onConfirm={() =>
-              handleUpload((isopen) =>
-                handlePopConfirmOpen(setUploadInfo, isopen)
+              handleUpload((isOpen: boolean) =>
+                handlePopConfirmOpen(setUploadInfo, isOpen)
               )
             }
             isSelected={app.is_selected}
@@ -125,7 +145,7 @@ export default function AppUpDownload({
             disabled={!isSignedIn || app.updated_by_distro}
             disabledTooltipTitle={
               app.updated_by_distro
-                ? "This app gets updated by your OctoBot distribution"
+                ? "This app gets updated with your OctoBot distribution"
                 : "You need to be signed in to download updates."
             }
             confirmDescription={
@@ -251,18 +271,22 @@ function UpDownloadloadAppModal({
   smallModal,
   formIsValidated,
 }: {
-  onConfirm?;
-  antIconComponent;
-  confirmTitle;
+  onConfirm?: () => void;
+  antIconComponent: ForwardRefExoticComponent<
+    Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
+  >;
+  confirmTitle: string;
   disabled?: boolean;
-  setInfo;
+  setInfo: Dispatch<SetStateAction<UploadInfo | DownloadInfo>>;
   isSelected?: boolean;
-  open;
+  open: boolean | undefined;
   disabledTooltipTitle?: string;
-  confirmDescription;
+  confirmDescription: JSX.Element;
   confirmButtonText?: string;
-  buttonTitle;
-  confirmButtonIcon?;
+  buttonTitle: string;
+  confirmButtonIcon?: ForwardRefExoticComponent<
+    Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
+  >;
   smallModal?: boolean;
   formIsValidated?: boolean;
 }) {

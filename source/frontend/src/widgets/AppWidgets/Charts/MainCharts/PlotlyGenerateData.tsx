@@ -25,7 +25,7 @@ import {
   PlottedBacktestingElementType,
   PlottedElementBacktestingNameType,
 } from "../../../../context/data/BotPlottedElementsProvider";
-import { ChartLocationType } from "./Plotly";
+import { ChartLocationType, allChartLocations } from "./Plotly";
 
 type ChartsInfoType = {
   maxRange: {
@@ -324,7 +324,10 @@ function formatSubData({
               : `live ${liveId}`;
             const thisData = subElements[pair][timeframe]?.data?.sub_elements;
             thisData?.forEach((sub_element) => {
-              if (sub_element.type !== "chart") {
+              if (
+                !allChartLocations.includes(sub_element.name) ||
+                sub_element.type !== "chart"
+              ) {
                 return;
               }
               const chartLocation: ChartLocationType = sub_element.name;
@@ -690,7 +693,10 @@ function getAxisKey<
   axisId: TAxisIdType,
   axisType: TAxisKeyType
 ): GetAxisKey<TAxisKeyType, TAxisIdType> {
-  return `${axisType}axis${axisId}` as GetAxisKey<TAxisKeyType, TAxisIdType>;
+  return `${axisType}axis${axisId === 1 ? "" : axisId}` as GetAxisKey<
+    TAxisKeyType,
+    TAxisIdType
+  >;
 }
 
 function createAxisIfNotExists(

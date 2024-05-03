@@ -1,5 +1,6 @@
 import { Rate, Tooltip } from "antd";
 import {
+  AppStoreAppType,
   useAppStoreUserContext,
   useRateAppStore,
 } from "../../../../context/data/AppStoreDataProvider";
@@ -12,9 +13,9 @@ export default function AppRating({
   votes,
   style,
 }: {
-  app;
-  rating: number;
-  votes: number;
+  app: AppStoreAppType;
+  rating?: number;
+  votes?: number;
   style?: CSSProperties;
 }) {
   const [isLoading, setIsloading] = useState(false);
@@ -76,7 +77,7 @@ export default function AppRating({
               lineHeight: "0px",
             }}
           >
-            {formatnumberToKMBT(votes)}
+            {formatnumberToKMBT(votes || 0)}
           </span>
         </div>
       </Tooltip>

@@ -13,7 +13,6 @@ import {
   useFetchOptimizerQueue,
   useOptimizerQueueContext,
   useSaveOptimizerQueue,
-  useUpdateOptimizerQueueCounterContext,
 } from "../../../context/data/OptimizerQueueProvider";
 import { OptimizerNotInstalled } from "../Configuration/OptimizerConfigForm/OptimizerConfigForm";
 import {
@@ -24,7 +23,6 @@ import {
 export default function OptimizerQueueTable() {
   const fetchOptimizerQueue = useFetchOptimizerQueue();
   const optimizerQueue = useOptimizerQueueContext();
-  const updateOptimizerQueueCounter = useUpdateOptimizerQueueCounterContext();
   const saveOptimizerQueue = useSaveOptimizerQueue();
   const containerId: QueueContainerId = "optimizer-queue-table";
   const botInfo = useBotInfoContext();
@@ -43,7 +41,6 @@ export default function OptimizerQueueTable() {
         saveOptimizerQueue,
         containerId
       );
-      updateOptimizerQueueCount(optimizerQueue, updateOptimizerQueueCounter);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [optimizerQueue]);
@@ -76,7 +73,7 @@ function updateOptimizerQueueEditor(
   createOptimizerQueueTables(optimizerQueue, containerId, saveOptimizerQueue);
 }
 
-function updateOptimizerQueueCount(
+export function updateOptimizerQueueCount(
   optimizerQueue,
   updateOptimizerQueueCounter
 ) {

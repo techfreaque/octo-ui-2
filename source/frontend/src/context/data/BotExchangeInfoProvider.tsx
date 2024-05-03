@@ -42,7 +42,7 @@ type ConfigSymbolsType = {
   };
 };
 
-type ExchangeInfoType = {
+export type ExchangeInfoType = {
   config_exchanges: ExchangesConfigType;
   config_symbols: ConfigSymbolsType;
   symbols_by_exchanges: {

@@ -7,10 +7,18 @@ import {
   successResponseCallBackParams,
 } from "./fetchAndStoreFromBot";
 import { MuiDataTableRowType } from "../components/Tables/MuiDataTable";
+import { StatBacktestingSettingsType } from "../context/actions/BotBacktestingProvider";
+import { OptimizerUiConfig } from "../context/config/UiConfigProvider";
+import { IdsByExchangeType } from "../context/data/BotInfoProvider";
+import { OptimizerEditorInputsType } from "../context/config/OptimizerEditorProvider";
+import { StartOptimizerSettingsType } from "../context/actions/BotOptimizerProvider";
+import { ProfileInfoUpdateType } from "../widgets/AppWidgets/Modals/ProfileModal/ProfileModalButton";
+import { ExchangeConfigUpdateType } from "../context/data/BotExchangeInfoProvider";
+import { ResetDataStorageInfoType } from "../widgets/AppWidgets/ResetConfigs/ResetConfigs";
 
 export async function startBacktesting(
   botDomain: string,
-  backtestingSettings,
+  backtestingSettings: StatBacktestingSettingsType,
   setBotIsBacktesting: Dispatch<SetStateAction<boolean>>
 ) {
   function successCallback({
@@ -178,9 +186,7 @@ export async function updateBot(
 
 export async function startOptimizer(
   botDomain: string,
-  optimizerRunSettings,
-  optimizerSettingsForm,
-  ids_by_exchange_name,
+  optimizerRunSettings: StartOptimizerSettingsType,
   setBotIsOptimizing: Dispatch<SetStateAction<boolean | "isStopping">>
 ) {
   function successCallback({
@@ -210,17 +216,7 @@ export async function startOptimizer(
     createNotification({ title: data.message, type: "danger" });
   }
   sendAndInterpretBotUpdate({
-    updatedData: {
-      ...optimizerRunSettings,
-      exchange_ids: optimizerRunSettings.exchange_names.map(
-        (exchangeName) => ids_by_exchange_name[exchangeName]
-      ),
-      config: optimizerSettingsForm,
-
-      // TODO remove when stock supports ids
-      data_source: optimizerRunSettings?.data_files?.[0] || "current_bot_data",
-      exchange_id: ids_by_exchange_name[optimizerRunSettings.exchange_names[0]],
-    },
+    updatedData: optimizerRunSettings,
     updateUrl: botDomain + backendRoutes.optimizerStart,
     successCallback,
     errorCallback,
@@ -229,11 +225,9 @@ export async function startOptimizer(
 
 export async function addToOptimizerQueue(
   botDomain: string,
-  optimizerRunSettings,
-  optimizerSettingsForm,
-  exchageId: string,
-  setBotIsOptimizing: Dispatch<SetStateAction<boolean | "isStopping">>,
-  fetchOptimizerQueue
+  optimizerRunSettings: OptimizerUiConfig,
+  optimizerSettingsForm: OptimizerEditorInputsType,
+  fetchOptimizerQueue: () => void
 ) {
   function successCallback({
     updatedData,
@@ -250,14 +244,22 @@ export async function addToOptimizerQueue(
     data,
     response,
   }: errorResponseCallBackParams) {
-    createNotification({ title: data?.message || data, type: "danger" });
+    createNotification({
+      title: "Failed to add to the queue",
+      type: "danger",
+      message: data?.message || data,
+    });
   }
+  const updatedData = {
+    ...optimizerRunSettings,
+    optimizer_config: optimizerSettingsForm,
+  };
+  if (!updatedData.optimizer_config.filters_settings) {
+    updatedData.optimizer_config.filters_settings = [];
+  }
+
   sendAndInterpretBotUpdate({
-    updatedData: {
-      ...optimizerRunSettings,
-      // exchange_id: exchageId,
-      optimizer_config: optimizerSettingsForm,
-    },
+    updatedData,
     updateUrl: botDomain + backendRoutes.optimizerAddToQueue,
     successCallback,
     errorCallback,
@@ -509,7 +511,7 @@ export async function cancelOrders(
 
 export async function updateProfileInfo(
   botDomain: string,
-  newProfileInfo,
+  newProfileInfo: ProfileInfoUpdateType,
   onFail?: (payload: errorResponseCallBackParams) => void,
   onSuccess?: (payload: successResponseCallBackParams) => void
 ) {
@@ -861,7 +863,7 @@ export async function realTradingSwitch(
 
 export async function updateConfig(
   botDomain: string,
-  newConfig,
+  newConfig: ExchangeConfigUpdateType,
   profileName: string,
   onFail: () => void,
   onSuccess?: (payload: successResponseCallBackParams) => void
@@ -874,7 +876,9 @@ export async function updateConfig(
   }: successResponseCallBackParams) {
     createNotification({
       title: `Successfully updated ${profileName} config`,
-      message: newConfig.restart_after_save && "OctoBot will restart now",
+      message: newConfig.restart_after_save
+        ? "OctoBot will restart now"
+        : undefined,
     });
   }
   function errorCallback({
@@ -953,7 +957,7 @@ export async function resetTentaclesConfig(
 }
 
 export async function resetStorage(
-  storage,
+  storage: ResetDataStorageInfoType,
   botDomain: string,
   setIsResetting: Dispatch<SetStateAction<boolean>>,
   reloadUiData: (

@@ -8,10 +8,13 @@ import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 import AppActions from "./AppActions/AppActions";
 import { backendRoutes } from "../../../../constants/backendConstants";
 import {
+  AppStoreAppType,
+  StoreCategoryType,
+  StrategyCategoryType,
   useInstallAnyAppPackage,
   useUploadToAppStore,
 } from "../../../../context/data/AppStoreDataProvider";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
 import AppCardTemplate from "./AppCardTemplate";
 import { useRestartBot } from "../../../../context/data/IsBotOnlineProvider";
@@ -22,13 +25,14 @@ import {
   errorResponseCallBackParams,
   successResponseCallBackParams,
 } from "../../../../api/fetchAndStoreFromBot";
+import { DownloadInfo, UploadInfo } from "./AppCard";
+import { CloneAppInfoType } from "./AppActions/CloneApp/CloneAppForm";
 
 export default function StrategyCard({
   app,
   setMouseHover,
   category,
   isMouseHover,
-  isLoading,
   setIsloading,
   setSelectedCategories,
   didHoverOnce,
@@ -36,22 +40,33 @@ export default function StrategyCard({
   setUploadInfo,
   downloadInfo,
   setDownloadInfo,
+}: {
+  app: AppStoreAppType;
+  setMouseHover: Dispatch<SetStateAction<boolean>>;
+  category: StrategyCategoryType;
+  isMouseHover: boolean;
+  setIsloading: Dispatch<SetStateAction<boolean>>;
+  setSelectedCategories: Dispatch<
+    SetStateAction<StoreCategoryType | undefined>
+  >;
+  didHoverOnce: boolean;
+  uploadInfo: UploadInfo;
+  setUploadInfo: Dispatch<SetStateAction<UploadInfo>>;
+  downloadInfo: DownloadInfo;
+  setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
 }) {
-  const [cloneAppInfo, setCloneAppInfo] = useState<{
-    newProfileName: string;
-    selectNewProfile: boolean;
-  }>();
+  const [cloneAppInfo, setCloneAppInfo] = useState<CloneAppInfoType>();
   const botDomain = useBotDomainContext();
   const botInfo = useBotInfoContext();
   const restartBot = useRestartBot();
 
-  async function handleSelectProfile(setOpen) {
+  async function handleSelectProfile(setOpen: () => void) {
     function onSuccess(payload: successResponseCallBackParams) {
       setIsloading(false);
       createNotification({
         title: `Successfully selected ${app.title}`,
       });
-      setOpen(false);
+      setOpen();
       restartBot(true);
     }
     const onFail = (payload: errorResponseCallBackParams) => {
@@ -70,7 +85,10 @@ export default function StrategyCard({
     );
   }
   const installAnyAppPackage = useInstallAnyAppPackage();
-  async function handleDownloadApp(setOpen, otherApp) {
+  function handleDownloadApp(
+    setOpen: (isOpen: boolean) => void,
+    otherApp?: AppStoreAppType
+  ) {
     const theApp = otherApp
       ? {
           ...otherApp,
@@ -81,7 +99,9 @@ export default function StrategyCard({
       : app;
     installAnyAppPackage(downloadInfo, theApp, setIsloading, setOpen);
   }
-  async function handleDeleteProfile(setOpen) {
+  async function handleDeleteProfile(
+    setOpen: Dispatch<SetStateAction<boolean>>
+  ) {
     setIsloading(true);
     await deleteProfile(
       botDomain,
@@ -92,7 +112,9 @@ export default function StrategyCard({
     );
     setOpen(false);
   }
-  async function handleProfileDuplication(setOpen) {
+  async function handleProfileDuplication(
+    setOpen: Dispatch<SetStateAction<boolean>>
+  ) {
     setIsloading(true);
     if (cloneAppInfo) {
       await duplicateProfile({
@@ -100,7 +122,7 @@ export default function StrategyCard({
         profileId: app.package_id,
         profileName: app.title,
         newProfileName: cloneAppInfo.newProfileName,
-        selectNewProfile: cloneAppInfo.selectNewProfile,
+        selectNewProfile: cloneAppInfo.selectNewProfile || false,
         onSuccess: () => setIsloading(false),
         onFail: () => setIsloading(false),
       });
@@ -140,7 +162,6 @@ export default function StrategyCard({
       cardActions={
         <AppActions
           isMouseHover={isMouseHover}
-          isLoading={isLoading}
           // configureDuplication={configureDuplication}
           onConfigure={() => setSelectedCategories(strategyModeName)}
           didHoverOnce={didHoverOnce}
@@ -176,7 +197,6 @@ export default function StrategyCard({
             />
           }
           app={app}
-          isReadOnlyStrategy={undefined}
         />
       }
     />

@@ -9,6 +9,7 @@ import {
   UiLayoutPageLayoutType,
   UiLayoutPageType,
 } from "../../context/config/BotLayoutProvider";
+import createNotification from "../../components/Notifications/Notification";
 
 export default function AppWidgets(props: {
   currentPage?: UiLayoutPageType;
@@ -37,7 +38,10 @@ export default function AppWidgets(props: {
               console.log(`widget is loading: ${element.component}`, element);
             try {
               return (
-                <ErrorBoundary key={`${index}-${element.component}`}>
+                <ErrorBoundary
+                  key={`${index}-${element.component}`}
+                  componentName={element.component}
+                >
                   {createElement(
                     registeredComponents[
                       element.component as AppWidgetNameType
@@ -69,7 +73,7 @@ export default function AppWidgets(props: {
 }
 
 export class ErrorBoundary extends Component {
-  props!: { children: JSX.Element };
+  props!: { children: JSX.Element; componentName: string };
   state: {
     error: Error | null;
     errorInfo: ErrorInfo | null;
@@ -82,6 +86,12 @@ export class ErrorBoundary extends Component {
   }
   render() {
     if (this.state.errorInfo) {
+      createNotification({
+        title: `Oh no! ${this.props.componentName} crashed!`,
+        type: "danger",
+        duration: 999999,
+        message: `Error: ${JSON.stringify(this.state.error?.message)}`,
+      });
       return (
         <div>
           <h2>Something went wrong. :(</h2>

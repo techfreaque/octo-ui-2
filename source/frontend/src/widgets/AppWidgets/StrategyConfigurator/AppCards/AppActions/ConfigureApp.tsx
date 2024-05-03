@@ -1,7 +1,14 @@
 import { BranchesOutlined } from "@ant-design/icons";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
+import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
 
-export default function ConfigureApp({ app, onConfigure }) {
+export default function ConfigureApp({
+  app,
+  onConfigure,
+}: {
+  app: AppStoreAppType;
+  onConfigure: () => void;
+}) {
   return (
     app.is_selected && (
       <AppIconButton

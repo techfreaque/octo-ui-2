@@ -38,11 +38,82 @@ import {
   StorePayments,
   StoreUsersType,
 } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Backend";
+import { LoginSignupFormType } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
+import { UploadInfo } from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppCard";
 
-export type StoreCategoryType = "Strategy Mode" | "Strategy" | "App Packages";
+export type StrategyModeCategoryType = "Strategy Mode";
+export type StrategyCategoryType = "Strategy";
+export type OtherCategoryType =
+  | "Strategy Block"
+  | "App Packages"
+  | "Service Notifier"
+  | "Interface"
+  | "Package";
 
+export type StoreCategoryType =
+  | StrategyModeCategoryType
+  | OtherCategoryType
+  | StrategyCategoryType;
+
+export type AppStoreVersionTagType =
+  | "stable_version"
+  | "beta_version"
+  | "alpha_version";
+
+export type AppStoreVersionTypeType =
+  | "bug_fix_version"
+  | "minor_version"
+  | "major_version";
+
+export type AppStorePublishStatusType = "draft" | "published" | "unpublished";
+export interface AppStoreAppVersionType {
+  bug_fix_version: number;
+  major_version: number;
+  minor_version: number;
+  origin_package: string;
+  release_notes: string;
+  requirements: string[];
+  timestamp: number;
+  version_tag: AppStoreVersionTagType;
+  version_type: AppStoreVersionTypeType;
+}
+
+export interface AppStoreAppType {
+  categories: StoreCategoryType[];
+  description?: string;
+  first_publish_timestamp?: number;
+  last_publish_timestamp?: number;
+  origin_package: string;
+  price?: number;
+  title: string;
+  is_installed?: boolean;
+  has_paid?: boolean;
+  is_owner?: boolean;
+  is_shared?: boolean;
+  package_id?: string;
+  requirements?: string[];
+  tentacle_name?: string;
+  updated_by_distro?: boolean;
+  app_users?: number;
+  can_delete?: boolean;
+  downloads?: number;
+  image_url?: string;
+  avatar_url?: string;
+  is_from_store?: boolean;
+  is_selected?: boolean;
+  publish_status?: AppStorePublishStatusType;
+  publish_user_name?: number;
+  rating?: number;
+  short_description?: string;
+  votes?: number;
+  versions?: AppStoreAppVersionType[];
+}
+
+export type AppStoreCategoryDataType = {
+  [packageId: string]: AppStoreAppType;
+};
 export type AppStoreDataType = {
-  [categry in StoreCategoryType]?;
+  [categry in StoreCategoryType]: AppStoreCategoryDataType;
 };
 
 const AppStoreDataContext = createContext<AppStoreDataType>({});
@@ -71,7 +142,11 @@ const UpdateAppStoreDomainContext = createContext<
   Dispatch<SetStateAction<string>>
 >((_value) => {});
 
-export interface AppStoreCartType {}
+export interface AppStoreCartType {
+  [originPackageId: string]: {
+    [packageId: string]: AppStoreAppType;
+  };
+}
 
 const AppStoreCartContext = createContext<AppStoreCartType>({});
 const UpdateAppStoreCartContext = createContext<
@@ -111,7 +186,7 @@ export const useUpdateAppStoreDomainContext = () => {
   return useContext(UpdateAppStoreDomainContext);
 };
 
-interface AppStoreUserType {
+export interface AppStoreUserType {
   token: string;
   download_token: string;
 }
@@ -140,11 +215,39 @@ export const useAppStoreDataContext = () => {
   return useContext(AppStoreDataContext);
 };
 
+export type InstalledTentaclesInfoType = {
+  [category: string]: {
+    [packageId: string]: {
+      categories: string[];
+      is_installed: boolean;
+      is_owner: boolean;
+      is_shared: boolean;
+      origin_package: string;
+      package_id: string;
+      requirements: string[];
+      "default-config"?: string[];
+      "requirements-min-count"?: number;
+      tentacle_name?: string;
+      title: string;
+      description?: string;
+      updated_by_distro: boolean;
+      avatar_url?: string;
+      is_from_store?: boolean;
+      is_selected?: boolean;
+      activation?: boolean;
+    };
+  };
+};
+
 const _useFetchAppStoreData = () => {
   const saveAppStoreData = useSaveAppStoreDataContext();
   const appStoreDomain = useAppStoreDomainContext();
   return useCallback(
-    (installedTentaclesInfo, notification, appStoreUser) => {
+    (
+      installedTentaclesInfo: InstalledTentaclesInfoType,
+      appStoreUser: AppStoreUserType | undefined,
+      notification?: boolean
+    ) => {
       if (!appStoreDomain) {
         return;
       }
@@ -180,9 +283,10 @@ export const useFetchAppStoreData = () => {
   const fetchAppStoreData = _useFetchAppStoreData();
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
-    (notification = false) => {
+    (notification?: boolean) => {
       fetchPackagesData(
-        (newData) => fetchAppStoreData(newData, notification, appStoreUser),
+        (newData: InstalledTentaclesInfoType) =>
+          fetchAppStoreData(newData, appStoreUser, notification),
         botDomain,
         notification
       );
@@ -196,7 +300,7 @@ export const useLoginToAppStore = () => {
   const updateAppStoreUser = useUpdateLoginToken();
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
-    (userData, onLoggedIn) => {
+    (userData: LoginSignupFormType, onLoggedIn: () => void) => {
       loginToAppStore(
         updateAppStoreUser,
         appStoreDomain,
@@ -218,9 +322,9 @@ export const useLogoutFromAppStore = () => {
   }, [updateAppStoreUser, appStoreDomain, appStoreUser]);
 };
 
-export function validateUploadInfo(uploadInfo) {
+export function validateUploadInfo(uploadInfo: UploadInfo) {
   return (
-    (uploadInfo?.[apiFields.releaseNotes]?.length || 0) >
+    (uploadInfo?.[apiFields.release_notes]?.length || 0) >
       minReleaseNotesLength || uploadInfo?.includePackage !== true
   );
 }
@@ -233,11 +337,11 @@ export const useUploadToAppStore = () => {
 
   return useCallback(
     (
-      app,
-      uploadInfo,
+      app: AppStoreAppType,
+      uploadInfo: UploadInfo,
       appDownloadUrl: string,
       setIsloading: Dispatch<SetStateAction<boolean>>,
-      setOpen: Dispatch<SetStateAction<boolean>>
+      setOpen: (isOpen: boolean) => void
     ) => {
       setIsloading(true);
       if (!botInfo) {
@@ -276,7 +380,7 @@ export const useUploadToAppStore = () => {
                 title: "You need to be signed in to upload",
                 type: "danger",
               });
-              updateAppStoreUser({});
+              updateAppStoreUser(undefined);
               return;
             }
             onFail(response);
@@ -342,7 +446,7 @@ export const useRateAppStore = () => {
       setIsloading(true);
       function errorCallback(payload: errorResponseCallBackParams) {
         setIsloading(false);
-        createNotification({ title: "Failed rate app", type: "danger" });
+        createNotification({ title: "Failed to rate app", type: "danger" });
       }
       function successCallback(payload: successResponseCallBackParams) {
         if (payload.data.success) {
@@ -414,7 +518,7 @@ export const useUnpublishApp = () => {
   const appStoreDomain = useAppStoreDomainContext();
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
-    (package_id, setIsloading: Dispatch<SetStateAction<boolean>>) => {
+    (package_id: string, setIsloading: Dispatch<SetStateAction<boolean>>) => {
       setIsloading(true);
       function errorCallback(payload: errorResponseCallBackParams) {
         setIsloading(false);
@@ -493,7 +597,7 @@ export const useAddToAppStoreCart = () => {
   const setAppStoreCart = useUpdateAppStoreCartContext();
   const cancelStorePayment = useCancelStorePayment();
   return useCallback(
-    (app) => {
+    (app: AppStoreAppType) => {
       if (app?.categories?.[0]) {
         setAppStoreCart((prevCart) => {
           const newCart = {
@@ -797,11 +901,15 @@ export const useDeleteStoreUser = () => {
   );
 };
 
-export const useIsInAppStoreCart = () => {
+export const useIsInAppStoreCart: () => (
+  app: AppStoreAppType
+) => boolean = () => {
   const appStoreCart = useAppStoreCartContext();
   return useCallback(
-    (app) => {
-      return Boolean(appStoreCart?.[app?.origin_package]);
+    (app: AppStoreAppType) => {
+      return app?.origin_package && appStoreCart?.[app.origin_package]
+        ? true
+        : false;
     },
     [appStoreCart]
   );
@@ -810,7 +918,7 @@ export const useIsInAppStoreCart = () => {
 export const useAppHasPremiumRequirement = () => {
   const appStoreCart = useAppStoreCartContext();
   return useCallback(
-    (app) => {
+    (app: AppStoreAppType) => {
       if (app.price) {
         return true;
       } else if (app.requirements) {
@@ -826,7 +934,7 @@ export const useSignupToAppStore = () => {
   const appStoreDomain = useAppStoreDomainContext();
   const updateAppStoreUser = useUpdateLoginToken();
   return useCallback(
-    (userData, onLoggedIn) => {
+    (userData: LoginSignupFormType, onLoggedIn: () => void) => {
       signupToAppStore(
         updateAppStoreUser,
         appStoreDomain,
@@ -842,7 +950,7 @@ export const useInstallAnyAppPackage = () => {
   const installProfile = useInstallProfile();
   const installApp = useInstallAppPackage();
   return useCallback(
-    (downloadInfo, app, setIsloading, setOpen) => {
+    (downloadInfo, app: AppStoreAppType, setIsloading, setOpen) => {
       if (app.categories?.[0] === strategyName) {
         installProfile(
           {
@@ -867,7 +975,7 @@ export const useInstallAppPackage = () => {
   return useCallback(
     (
       downloadInfo,
-      app,
+      app: AppStoreAppType,
       setIsloading: Dispatch<SetStateAction<boolean>>,
       setOpen: Dispatch<SetStateAction<boolean>>
     ) => {
@@ -920,7 +1028,7 @@ export const useUnInstallAppPackage = () => {
   const botDomain = useBotDomainContext();
   return useCallback(
     (
-      app,
+      app: AppStoreAppType,
       setIsloading: Dispatch<SetStateAction<boolean>>,
       setOpen: Dispatch<SetStateAction<boolean>>
     ) => {
@@ -1022,14 +1130,18 @@ export const useInstallProfile = () => {
   );
 };
 
-function getAppUrlFromDownloadInfo(downloadInfo, appStoreDomain, appStoreUser) {
+function getAppUrlFromDownloadInfo(
+  downloadInfo,
+  appStoreDomain: string,
+  appStoreUser: AppStoreUserType | undefined
+) {
   return `${appStoreDomain}/download_app/${appStoreUser?.download_token}/${downloadInfo.major_version}/${downloadInfo.minor_version}/${downloadInfo.bug_fix_version}/${downloadInfo.origin_package}.zip`;
 }
 
 function useUpdateLoginToken() {
   const updateAppStoreUser = useUpdateAppStoreUserContext();
   return useCallback(
-    (tokens) => {
+    (tokens: AppStoreUserType | undefined) => {
       localStorage.setItem("storeSession", JSON.stringify(tokens));
       updateAppStoreUser(tokens);
     },

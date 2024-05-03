@@ -16,6 +16,18 @@ import {
   OptimizerCampaignsToLoadUiConfig,
   UiConfigType,
 } from "../context/config/UiConfigProvider";
+import { ExchangeInfoType } from "../context/data/BotExchangeInfoProvider";
+import { PortfolioType } from "../context/data/BotPortfolioProvider";
+import { SymbolsInfoType } from "../widgets/AppWidgets/Tables/SymbolsInfo";
+import {
+  AppStoreUserType,
+  InstalledTentaclesInfoType,
+} from "../context/data/AppStoreDataProvider";
+import { LoginSignupFormType } from "../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
+import {
+  PlottedElementNameType,
+  PlottedElementsType,
+} from "../context/data/BotPlottedElementsProvider";
 
 export async function fetchBotInfo(
   botDomain: string,
@@ -36,7 +48,7 @@ export async function fetchBotInfo(
 
 export async function fetchExchangeInfo(
   botDomain: string,
-  setExchangeInfo,
+  setExchangeInfo: Dispatch<SetStateAction<ExchangeInfoType | undefined>>,
   successNotification: boolean = false,
   setIsFinished?: Dispatch<SetStateAction<boolean>>
 ) {
@@ -50,43 +62,16 @@ export async function fetchExchangeInfo(
   });
 }
 
-export async function getCurrencyLogos(
-  botDomain: string,
-  currencyIds,
-  setCurrencyLogos
-) {
-  await fetchAndStoreFromBot({
-    url: botDomain + backendRoutes.currencyLogos,
-    setBotDataFunction: setCurrencyLogos,
-    method: "POST",
-    dataToSend: { currency_ids: currencyIds },
-  });
-}
-
-export async function fetchPlotData(
-  setBotPlotData,
-  exchange_id: string,
-  symbol: string,
-  time_frame: string,
-  botDomain: string
-) {
-  await fetchAndStoreFromBot({
-    url: botDomain + backendRoutes.plottedData,
-    setBotDataFunction: setBotPlotData,
-    method: "POST",
-    dataToSend: { exchange_id, symbol, time_frame },
-  });
-}
-
 type FetchPlotlyPlotDataProps = {
   symbol: string;
   timeFrame: string;
   exchange_id: string;
   exchange_name: string;
   botDomain: string;
-  setBotPlottedElements;
+  setBotPlottedElements: Dispatch<
+    SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
+  >;
   botInfo: BotInfoType;
-  setHiddenMetadataFromInputs;
   isLive: boolean;
 } & (FetchPlotlyPlotDataBacktestingProps | FetchPlotlyPlotDataLiveProps);
 
@@ -112,7 +97,6 @@ export async function fetchPlotlyPlotData({
   botDomain,
   setBotPlottedElements,
   botInfo,
-  setHiddenMetadataFromInputs,
   isLive = true,
   optimization_campaign = undefined,
   backtesting_id = undefined,
@@ -255,35 +239,20 @@ export async function fetchBacktestingRunData(
   });
 }
 
-export async function fetchLiveRunData(
-  liveId: string,
-  setLiveRunData,
+export async function fetchBotPortfolio(
+  setBotPortfolio: Dispatch<SetStateAction<PortfolioType | undefined>>,
   botDomain: string
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
-    setLiveRunData(data.data);
-  }
-  sendAndInterpretBotUpdate({
-    updatedData: {
-      live_id: liveId,
-    },
-    updateUrl: botDomain + backendRoutes.liveRunData,
-    successCallback,
-  });
-}
-
-export async function fetchBotPortfolio(setBotPortfolio, botDomain: string) {
   await fetchAndStoreFromBot({
     url: botDomain + backendRoutes.botPortfolio,
     setBotDataFunction: setBotPortfolio,
   });
 }
-export async function fetchSymbolsInfo(setSymbolsInfo, botDomain: string) {
+
+export async function fetchSymbolsInfo(
+  setSymbolsInfo: Dispatch<SetStateAction<SymbolsInfoType | undefined>>,
+  botDomain: string
+) {
   return await fetchAndStoreFromBot({
     url: botDomain + backendRoutes.symbolsInfo,
     setBotDataFunction: setSymbolsInfo,
@@ -294,9 +263,9 @@ export async function fetchSymbolsInfo(setSymbolsInfo, botDomain: string) {
 }
 
 export async function fetchPackagesData(
-  saveAppStoreData,
+  saveAppStoreData: (newData: InstalledTentaclesInfoType) => void,
   botDomain: string,
-  notification: boolean
+  notification?: boolean
 ) {
   await fetchAndStoreFromBot({
     url: botDomain + backendRoutes.packagesData,
@@ -308,11 +277,11 @@ export async function fetchPackagesData(
 }
 
 export async function loginToAppStore(
-  updateAppStoreUser,
+  updateAppStoreUser: (tokens: AppStoreUserType | undefined) => void,
   storeDomain: string,
-  loginData,
-  appStoreUser,
-  onLoggedIn
+  loginData: LoginSignupFormType,
+  appStoreUser: AppStoreUserType | undefined,
+  onLoggedIn: () => void
 ) {
   function errorCallback({
     updatedData,
@@ -325,7 +294,7 @@ export async function loginToAppStore(
       type: "danger",
       message: "Check your password or email",
     });
-    updateAppStoreUser();
+    updateAppStoreUser(undefined);
   }
   function successCallback({
     updatedData,
@@ -335,7 +304,7 @@ export async function loginToAppStore(
   }: successResponseCallBackParams) {
     if (data.success) {
       createNotification({ title: "Successfully logged in to App Store" });
-      onLoggedIn(true);
+      onLoggedIn();
       updateAppStoreUser(data.access_tokens);
     } else {
       errorCallback({
@@ -357,9 +326,9 @@ export async function loginToAppStore(
 }
 
 export async function logoutFromAppStore(
-  saveAppStoreData,
+  saveAppStoreData: (tokens: AppStoreUserType | undefined) => void,
   storeDomain: string,
-  appStoreUser
+  appStoreUser: AppStoreUserType | undefined
 ) {
   function errorCallback({
     updatedData,
@@ -371,7 +340,7 @@ export async function logoutFromAppStore(
       title: "Failed to log out from App Store",
       type: "danger",
     });
-    saveAppStoreData({});
+    saveAppStoreData(undefined);
   }
   function successCallback({
     updatedData,
@@ -380,7 +349,7 @@ export async function logoutFromAppStore(
     response,
   }: successResponseCallBackParams) {
     if (data.success) {
-      saveAppStoreData({});
+      saveAppStoreData(undefined);
       createNotification({ title: "Successfully logged out from App Store" });
     } else {
       errorCallback({
@@ -405,15 +374,15 @@ export async function logoutFromAppStore(
       title: "You are already logged out",
       type: "warning",
     });
-    saveAppStoreData({});
+    saveAppStoreData(undefined);
   }
 }
 
 export async function signupToAppStore(
-  saveAppStoreData,
+  saveAppStoreData: (tokens: AppStoreUserType | undefined) => void,
   storeDomain: string,
-  loginData,
-  onLoggedIn
+  loginData: LoginSignupFormType,
+  onLoggedIn: () => void
 ) {
   function errorCallback({
     updatedData,
@@ -426,7 +395,7 @@ export async function signupToAppStore(
       type: "danger",
       message: "Check your password or email",
     });
-    onLoggedIn(true);
+    onLoggedIn();
     saveAppStoreData(data.data);
   }
   function successCallback({

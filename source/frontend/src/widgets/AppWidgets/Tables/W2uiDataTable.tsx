@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import {
+  PlottedBacktestingElementType,
   PlottedElementNameType,
+  PlottedLiveElementType,
   useBotPlottedElementsContext,
 } from "../../../context/data/BotPlottedElementsProvider";
 import AntSidebar, {
@@ -11,6 +13,7 @@ import { Typography } from "antd";
 import { createTable } from "../../../components/Tables/w2ui/W2UI";
 import { cancelOrders } from "../../../api/actions";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { objectKeys } from "../../../helpers/helpers";
 
 export default function W2uiDataTable() {
   const [menuItems, setMenuItems] = useState<AntSideBarMenutItemType[]>();
@@ -21,7 +24,7 @@ export default function W2uiDataTable() {
       [key: string]: AntSideBarMenutItemType;
     } = {};
     plottedElements &&
-      Object.keys(plottedElements).forEach((liveOrBacktest) => {
+      objectKeys(plottedElements).forEach((liveOrBacktest) => {
         if (liveOrBacktest === "live") {
           generateTablesAndSidebarItems({
             plottedElements: plottedElements[liveOrBacktest],
@@ -31,26 +34,22 @@ export default function W2uiDataTable() {
           });
         } else {
           plottedElements &&
-            Object.keys(plottedElements[liveOrBacktest]).forEach(
-              (campaignName) => {
-                plottedElements &&
-                  Object.keys(
-                    plottedElements[liveOrBacktest][campaignName]
-                  ).forEach((optimizerId) => {
-                    generateTablesAndSidebarItems({
-                      plottedElements:
-                        plottedElements[liveOrBacktest][campaignName][
-                          optimizerId
-                        ],
-                      liveOrBacktest,
-                      newMenuItems,
-                      campaignName,
-                      optimizerId,
-                      botDomain,
-                    });
+            Object.entries(
+              plottedElements[liveOrBacktest] as PlottedBacktestingElementType
+            ).forEach(([campaignName, campaignElements]) => {
+              Object.entries(campaignElements).forEach(
+                ([optimizerId, optimizerElements]) => {
+                  generateTablesAndSidebarItems({
+                    plottedElements: optimizerElements,
+                    liveOrBacktest,
+                    newMenuItems,
+                    campaignName,
+                    optimizerId,
+                    botDomain,
                   });
-              }
-            );
+                }
+              );
+            });
         }
       });
     setMenuItems(Object.values(newMenuItems));
@@ -90,9 +89,11 @@ function generateTablesAndSidebarItems({
   optimizerId,
   botDomain,
 }: {
-  plottedElements;
-  liveOrBacktest;
-  newMenuItems;
+  plottedElements: PlottedLiveElementType | PlottedBacktestingElementType;
+  liveOrBacktest: PlottedElementNameType;
+  newMenuItems: {
+    [key: string]: AntSideBarMenutItemType;
+  };
   campaignName?: string;
   optimizerId?: string;
   botDomain: string;

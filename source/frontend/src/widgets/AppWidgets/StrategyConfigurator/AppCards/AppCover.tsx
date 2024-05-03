@@ -2,16 +2,23 @@ import { Avatar, Tooltip, Typography } from "antd";
 import AppRating from "./AppRating";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
+import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
 
 export function AppTitle({ title }: { title: JSX.Element }) {
   return <div> {title}</div>;
 }
 
-export function AppAvatar({ avatarImage }) {
+export function AppAvatar({ avatarImage }: { avatarImage: string }) {
   return avatarImage && <Avatar src={avatarImage} />;
 }
 
-export function AppCover({ app, avatarImage }: { app; avatarImage?: string }) {
+export function AppCover({
+  app,
+  avatarImage,
+}: {
+  app: AppStoreAppType;
+  avatarImage?: string;
+}) {
   return app?.is_selected ? (
     <div style={{ display: "flex" }}>
       <Typography.Title
@@ -82,7 +89,7 @@ export function IsInstalledIndicator({
   topRight = true,
   tooltipText = "Installed",
 }: {
-  app;
+  app: AppStoreAppType;
   topRight?: boolean;
   tooltipText?: string;
 }) {

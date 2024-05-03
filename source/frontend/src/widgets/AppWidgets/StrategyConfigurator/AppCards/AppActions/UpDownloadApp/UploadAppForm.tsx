@@ -6,33 +6,57 @@ import {
   strategyName,
 } from "../../../storeConstants";
 import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
+import {
+  AppStoreAppType,
+  AppStoreVersionTagType,
+  AppStoreVersionTypeType,
+} from "../../../../../../context/data/AppStoreDataProvider";
+import { UploadInfo } from "../../AppCard";
+import { objectKeys } from "../../../../../../helpers/helpers";
 const { TextArea } = Input;
 
-export const apiFields = {
-  versionType: "version_type",
-  versionTag: "version_tag",
+type ApiFieldsType = "version_type" | "version_tag" | "price" | "release_notes";
+
+export const apiFields: {
+  [key in ApiFieldsType]: ApiFieldsType;
+} = {
+  version_type: "version_type",
+  version_tag: "version_tag",
   price: "price",
-  releaseNotes: "release_notes",
+  release_notes: "release_notes",
 };
 
 export const minReleaseNotesLength = 50;
 
-export default function UploadAppForm({ setUploadInfo, uploadInfo, app }) {
-  const versionTypeOptions = Object.keys(appVersionTypes).map((versionType) => {
+export default function UploadAppForm({
+  setUploadInfo,
+  uploadInfo,
+  app,
+}: {
+  setUploadInfo: Dispatch<SetStateAction<UploadInfo>>;
+  uploadInfo: UploadInfo;
+  app: AppStoreAppType;
+}) {
+  const versionTypeOptions = Object.values(appVersionTypes).map(
+    (versionType) => {
+      return {
+        label: versionType.title,
+        value: versionType.key,
+      };
+    }
+  );
+  const versionTagOptions = Object.values(appVersionTags).map((versionTag) => {
     return {
-      label: appVersionTypes[versionType].title,
-      value: appVersionTypes[versionType].key,
-    };
-  });
-  const versionTagOptions = Object.keys(appVersionTags).map((versionTag) => {
-    return {
-      label: appVersionTags[versionTag].title,
-      value: appVersionTags[versionTag].key,
+      label: versionTag.title,
+      value: versionTag.key,
     };
   });
   const isStrategy = app.categories?.[0] === strategyName;
-  function handleInputChange(key, value) {
+  function handleInputChange(
+    key: "includePackage" | ApiFieldsType,
+    value: boolean | string
+  ) {
     setUploadInfo((prevInfo) => ({
       ...prevInfo,
       [key]: value,
@@ -44,10 +68,10 @@ export default function UploadAppForm({ setUploadInfo, uploadInfo, app }) {
         ...prevInfo,
         includePackage: isStrategy ? true : prevInfo.includePackage,
         [apiFields.price]: prevInfo[apiFields.price] || app.price || 0,
-        [apiFields.versionType]:
-          prevInfo[apiFields.versionType] || versionTypeOptions[0].value,
-        [apiFields.versionTag]:
-          prevInfo[apiFields.versionTag] || versionTagOptions[0].value,
+        [apiFields.version_type]:
+          prevInfo[apiFields.version_type] || versionTypeOptions[0].value,
+        [apiFields.version_tag]:
+          prevInfo[apiFields.version_tag] || versionTagOptions[0].value,
       };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,6 +106,21 @@ function UploadPackage({
   versionTagOptions,
   uploadInfo,
   handleInputChange,
+}: {
+  versionTypeOptions: {
+    label: string;
+    value: AppStoreVersionTypeType;
+  }[];
+  app: AppStoreAppType;
+  versionTagOptions: {
+    label: string;
+    value: AppStoreVersionTagType;
+  }[];
+  uploadInfo: UploadInfo;
+  handleInputChange: (
+    key: "includePackage" | ApiFieldsType,
+    value: boolean | string
+  ) => void;
 }) {
   return (
     <>
@@ -90,7 +129,7 @@ function UploadPackage({
           <Select
             defaultValue={versionTypeOptions[0].value}
             onChange={(value) =>
-              handleInputChange(apiFields.versionType, value)
+              handleInputChange(apiFields.version_type, value)
             }
             style={{ width: "100%" }}
             options={versionTypeOptions}
@@ -100,15 +139,14 @@ function UploadPackage({
       <UserInputLabel title={`How stable is your ${app.categories[0]}`}>
         <Select
           defaultValue={versionTagOptions[0].value}
-          onChange={(value) => handleInputChange(apiFields.versionTag, value)}
+          onChange={(value) => handleInputChange(apiFields.version_tag, value)}
           style={{ width: "100%" }}
           options={versionTagOptions}
         />
       </UserInputLabel>
       <UserInputLabel title={"Share release notes"}>
         <>
-          {(uploadInfo?.[apiFields.releaseNotes]?.length || 0) <
-            minReleaseNotesLength && (
+          {(uploadInfo?.release_notes?.length || 0) < minReleaseNotesLength && (
             <Alert
               message={
                 <>
@@ -116,7 +154,7 @@ function UploadPackage({
                   <div>
                     {`Add at least ${
                       minReleaseNotesLength -
-                      (uploadInfo?.[apiFields.releaseNotes]?.length || 0)
+                      (uploadInfo?.release_notes?.length || 0)
                     } more characters`}
                   </div>
                 </>
@@ -127,7 +165,7 @@ function UploadPackage({
           )}
           <TextArea
             onChange={(event) =>
-              handleInputChange(apiFields.releaseNotes, event?.target?.value)
+              handleInputChange(apiFields.release_notes, event?.target?.value)
             }
             autoSize={{
               minRows: 2,
@@ -146,7 +184,7 @@ function UploadPackage({
               onChange={(event) =>
                 handleInputChange(apiFields.price, event?.target?.value)
               }
-              value={uploadInfo?.price || app.price}
+              value={uploadInfo?.[apiFields.price] || app.price}
               addonAfter={<DollarCircleOutlined />}
               defaultValue="0"
             />

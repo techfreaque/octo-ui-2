@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import {
+  AppStoreAppType,
   StoreCategoryType,
   useAppStoreDataContext,
   useAppStoreUserContext,
@@ -43,7 +44,9 @@ export default function AppStore() {
   const botInfo = useBotInfoContext();
   const appStoreUser = useAppStoreUserContext();
   const isLoggedIn = Boolean(appStoreUser?.token);
-  const [selectedCategories, setSelectedCategories] = useState();
+  const [selectedCategories, setSelectedCategories] = useState<
+    StoreCategoryType
+  >();
   const [tradingConfigTabs, setTradingConfigTabs] = useState<
     TentacleConfigTabsData[]
   >();
@@ -74,13 +77,16 @@ export default function AppStore() {
   }, [currentTentaclesTradingConfig, isFlowMode]);
 
   return useMemo(() => {
-    const currentStrategy = appStoreData?.Strategy
-      ? appStoreData.Strategy?.[
-          objectKeys(appStoreData.Strategy).filter(
-            (strategy) => appStoreData.Strategy[strategy].is_selected
-          )?.[0]
-        ]
-      : {};
+    const currentStrategyPackageId =
+      appStoreData?.Strategy &&
+      Object.keys(appStoreData.Strategy).find(
+        (strategy) => appStoreData.Strategy?.[strategy].is_selected
+      );
+    const currentStrategy:
+      | AppStoreAppType
+      | undefined = currentStrategyPackageId
+      ? appStoreData.Strategy?.[currentStrategyPackageId]
+      : undefined;
     const availableCategories: StoreCategoryType[] =
       appStoreData &&
       (objectKeys(appStoreData)?.filter(

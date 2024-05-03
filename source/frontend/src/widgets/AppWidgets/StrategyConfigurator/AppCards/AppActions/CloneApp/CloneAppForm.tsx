@@ -1,8 +1,22 @@
-import { useEffect } from "react";
+import { Dispatch, SetStateAction, useEffect } from "react";
 import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
 import { Input, Switch } from "antd";
+import { AppStoreAppType } from "../../../../../../context/data/AppStoreDataProvider";
 
-export default function CloneAppForm({ setCloneAppInfo, cloneAppInfo, app }) {
+export interface CloneAppInfoType {
+  newProfileName?: string;
+  selectNewProfile?: boolean;
+}
+
+export default function CloneAppForm({
+  setCloneAppInfo,
+  cloneAppInfo,
+  app,
+}: {
+  setCloneAppInfo: Dispatch<SetStateAction<CloneAppInfoType | undefined>>;
+  cloneAppInfo: CloneAppInfoType | undefined;
+  app: AppStoreAppType;
+}) {
   useEffect(() => {
     setCloneAppInfo({
       newProfileName: app.title + " Copy",
@@ -10,7 +24,10 @@ export default function CloneAppForm({ setCloneAppInfo, cloneAppInfo, app }) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  function handleInputChange(key, value) {
+  function handleInputChange(
+    key: "newProfileName" | "selectNewProfile",
+    value: string | boolean
+  ) {
     setCloneAppInfo((prevInfo) => ({
       ...prevInfo,
       [key]: value,

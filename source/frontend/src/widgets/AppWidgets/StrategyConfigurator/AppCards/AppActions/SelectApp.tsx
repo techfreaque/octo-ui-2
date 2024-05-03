@@ -3,19 +3,28 @@ import { ConfirmAction } from "./AppActions";
 import { Tooltip } from "antd";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 import { Trans } from "react-i18next";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
 
-export default function SelectApp({ app, handleSelect, isReadOnlyStrategy }) {
+export default function SelectApp({
+  app,
+  handleSelect,
+  isReadOnlyStrategy,
+}: {
+  app: AppStoreAppType;
+  handleSelect?: (setClosed: () => void) => void;
+  isReadOnlyStrategy: boolean;
+}) {
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  const handleOk = () => {
-    setConfirmLoading(true);
-    handleSelect(() => {
-      setOpen(false);
-      setConfirmLoading(false);
-    });
-  };
   if (!app.is_selected && app.is_installed && handleSelect) {
+    const handleOk = (_setOpen: Dispatch<SetStateAction<boolean>>) => {
+      setConfirmLoading(true);
+      handleSelect(() => {
+        setOpen(false);
+        setConfirmLoading(false);
+      });
+    };
     const okButtonProps = {
       loading: confirmLoading,
       style: {
@@ -55,8 +64,8 @@ export default function SelectApp({ app, handleSelect, isReadOnlyStrategy }) {
         confirmTitle={`Select ${app.title}?`}
         okButtonProps={okButtonProps}
         confirmButtonText={
-          app?.categoies?.[0]
-            ? `Select ${app.categoies[0]} & Restart Now`
+          app?.categories?.[0]
+            ? `Select ${app.categories[0]} & Restart Now`
             : "Select & Restart Now"
         }
         buttonTitle={buttonTitle}

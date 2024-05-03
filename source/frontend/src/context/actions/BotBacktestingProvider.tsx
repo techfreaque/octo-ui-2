@@ -13,7 +13,10 @@ import {
 } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useBotInfoContext } from "../data/BotInfoProvider";
-import { useUiConfigContext } from "../config/UiConfigProvider";
+import {
+  BacktestingUiConfig,
+  useUiConfigContext,
+} from "../config/UiConfigProvider";
 import {
   AbstractWebsocketContext,
   WebsocketDataType,
@@ -74,6 +77,12 @@ export const useStopBacktesting = () => {
   }, [setBotIsBacktesting, botDomain]);
 };
 
+export interface StatBacktestingSettingsType extends BacktestingUiConfig {
+  exchange_ids: string[];
+  data_source: string;
+  exchange_id: string;
+}
+
 export const useStartBacktesting = () => {
   const setBotIsBacktesting = useUpdateBotIsBacktestingContext();
   const uiSettigs = useUiConfigContext();
@@ -83,7 +92,7 @@ export const useStartBacktesting = () => {
   const ids_by_exchange_name = botInfo?.ids_by_exchange_name;
   return useCallback(() => {
     if (backtestingSettings && ids_by_exchange_name && botInfo) {
-      const _backtestingSettings = {
+      const _backtestingSettings: StatBacktestingSettingsType = {
         data_sources: [CURRENT_BOT_DATA],
         ...backtestingSettings,
         exchange_ids: backtestingSettings.exchange_names
@@ -105,7 +114,13 @@ export const useStartBacktesting = () => {
       };
       startBacktesting(botDomain, _backtestingSettings, setBotIsBacktesting);
     }
-  }, [backtestingSettings, ids_by_exchange_name, botInfo, botDomain, setBotIsBacktesting]);
+  }, [
+    backtestingSettings,
+    ids_by_exchange_name,
+    botInfo,
+    botDomain,
+    setBotIsBacktesting,
+  ]);
 };
 
 function DataCollectorProgressProvider({

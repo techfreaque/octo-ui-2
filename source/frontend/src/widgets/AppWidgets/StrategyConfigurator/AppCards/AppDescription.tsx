@@ -1,4 +1,5 @@
 import { Typography } from "antd";
+import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
 
 export function CardDescription({
   category,
@@ -7,7 +8,7 @@ export function CardDescription({
   cardActions,
 }: {
   category;
-  app;
+  app: AppStoreAppType;
   isMouseHover: boolean;
   cardActions;
 }) {
@@ -64,7 +65,7 @@ function NonHoverDescription({
   marginTop: number;
   lineHeight: number;
   totalLineHeight: number;
-  app;
+  app: AppStoreAppType;
 }) {
   return (
     <>

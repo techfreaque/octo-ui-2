@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useEffect, useMemo } from "react";
+import { useEffect, useMemo } from "react";
 import {
   OPTIMIZER_INPUTS_KEY,
   _INPUT_SEPARATOR,
@@ -40,9 +40,8 @@ export default function OptimizerConfigForm() {
   const optimizerEditor = useOptimizerEditorContext();
   const saveOptimizerEditor = useUpdateOptimizerEditorContext();
   const botColors = useBotColorsContext();
-  const optimizerConfig: OptimizerEditorInputsType | undefined =
-    optimizerEditor?.[OPTIMIZER_INPUTS_KEY];
-  const formIsBuilt = Boolean(optimizerConfig);
+  const optimizerConfig: OptimizerEditorInputsType =
+    optimizerEditor?.[OPTIMIZER_INPUTS_KEY] || {};
   const currentTentaclesConfig = useTentaclesConfigContext();
   const currentTentaclesTradingConfig =
     currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
@@ -56,6 +55,36 @@ export default function OptimizerConfigForm() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uiProInstalled]);
+  function handleSettingsChange(
+    enabled: boolean,
+    tentacleName: string,
+    type: SchemaValueType,
+    userInputName: string,
+    value: OptimizerEditorInputArrayType | OptimizerEditorInputNumberType
+  ) {
+    const identifier = optimizeUserInputIdentifier(tentacleName, userInputName);
+    saveOptimizerEditor((prevConfig) => {
+      const newConfig: OptimizerEditorType = { ...prevConfig };
+      if (!newConfig.optimizer_inputs) {
+        newConfig.optimizer_inputs = {};
+      }
+      if (!newConfig.optimizer_inputs.user_inputs) {
+        newConfig.optimizer_inputs.user_inputs = {};
+      }
+      if (!newConfig.optimizer_inputs.user_inputs[identifier]) {
+        newConfig.optimizer_inputs.user_inputs[identifier] = {
+          tentacle: tentacleName,
+          type,
+          user_input: userInputName,
+          value,
+          enabled,
+        };
+      }
+      newConfig.optimizer_inputs.user_inputs[identifier].enabled = enabled;
+      newConfig.optimizer_inputs.user_inputs[identifier].value = value;
+      return newConfig;
+    });
+  }
   return useMemo(() => {
     return (
       <>
@@ -70,10 +99,11 @@ export default function OptimizerConfigForm() {
             </div> */}
           <div id="strategy-optimizer-inputs">
             <OptimizerSettingsContainer botColors={botColors}>
-              {optimizerConfig && currentTentaclesTradingConfig ? (
+              {optimizerEditor !== undefined &&
+              currentTentaclesTradingConfig ? (
                 <OptimizerSettingsForm
                   botColors={botColors}
-                  saveOptimizerEditor={saveOptimizerEditor}
+                  handleSettingsChange={handleSettingsChange}
                   currentTentaclesTradingConfig={currentTentaclesTradingConfig}
                   optimizerConfig={optimizerConfig}
                 />
@@ -97,8 +127,21 @@ export default function OptimizerConfigForm() {
       </>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentTentaclesConfig, formIsBuilt]);
+  }, [
+    botColors,
+    currentTentaclesTradingConfig,
+    optimizerConfig,
+    saveOptimizerForm,
+  ]);
 }
+
+export type HandleOptimizerSettingsUpdateType = (
+  enabled: boolean,
+  tentacleName: string,
+  type: SchemaValueType,
+  userInputName: string,
+  value: OptimizerEditorInputArrayType | OptimizerEditorInputNumberType
+) => void;
 
 export function OptimizerNotInstalled() {
   const botInfo = useBotInfoContext();
@@ -124,18 +167,15 @@ function OptimizerSettingsForm({
   currentTentaclesTradingConfig,
   optimizerConfig,
   botColors,
-  saveOptimizerEditor,
+  handleSettingsChange,
 }: {
   currentTentaclesTradingConfig: TentaclesConfigsRootType;
   optimizerConfig: OptimizerEditorInputsType;
   botColors: ColorsType;
-  saveOptimizerEditor: Dispatch<
-    SetStateAction<OptimizerEditorType | undefined>
-  >;
+  handleSettingsChange: HandleOptimizerSettingsUpdateType;
 }): JSX.Element {
   return (
     <>
-      {" "}
       {Object.values(currentTentaclesTradingConfig).map((element) => {
         if (element.is_hidden) {
           return <></>;
@@ -152,7 +192,7 @@ function OptimizerSettingsForm({
           Object.values(element.schema.properties).map((inputDetail) => {
             const value = getOptimizerConfigElementSettingForm({
               botColors,
-              saveOptimizerEditor,
+              handleSettingsChange,
               inputDetails: inputDetail,
               configValues: configInputs,
               parentInputIdentifier: tentacleName,
@@ -168,6 +208,7 @@ function OptimizerSettingsForm({
             <OptimizerSettingTentacleGroup
               botColors={botColors}
               name={tentacleName}
+              key={tentacleName + tentacleName}
               title={tentacleName}
             >
               <>{groupInputs}</>
@@ -254,40 +295,32 @@ function UserInputConfigEntry({
   configValues,
   tentacleName,
   botColors,
-  saveOptimizerEditor,
+  handleSettingsChange,
 }: {
   valueType: SchemaValueType;
   inputDetail: TentaclesConfigsSchemaType;
   configValues: OptimizerEditorInputType;
   tentacleName: string;
   botColors: ColorsType;
-  saveOptimizerEditor: Dispatch<
-    SetStateAction<OptimizerEditorType | undefined>
-  >;
+  handleSettingsChange: HandleOptimizerSettingsUpdateType;
 }): JSX.Element {
   const inputName = inputDetail.options?.name || inputDetail.title;
   const currentSettingsState =
-    configValues[_optimizeUserInputIdentifier(tentacleName, inputName)];
+    configValues[optimizeUserInputIdentifier(tentacleName, inputName)];
   if (valueType === "number") {
+    const value = currentSettingsState?.value as
+      | OptimizerEditorInputNumberType
+      | undefined;
     return (
       <OptimizerSettingNumber
         name={inputName}
         title={inputDetail.title}
         tentacleName={tentacleName}
         botColors={botColors}
-        saveOptimizerEditor={saveOptimizerEditor}
-        currentMinValue={
-          (currentSettingsState?.value as OptimizerEditorInputNumberType).min ||
-          (inputDetail.default as number)
-        }
-        currentMaxValue={
-          (currentSettingsState?.value as OptimizerEditorInputNumberType).max ||
-          (inputDetail.default as number)
-        }
-        currentStepValue={
-          (currentSettingsState?.value as OptimizerEditorInputNumberType)
-            .step || 1
-        }
+        handleSettingsChange={handleSettingsChange}
+        currentMinValue={value?.min || (inputDetail.default as number)}
+        currentMaxValue={value?.max || (inputDetail.default as number)}
+        currentStepValue={value?.step || 1}
         isEnabled={currentSettingsState?.enabled || false}
       />
     );
@@ -305,7 +338,7 @@ function UserInputConfigEntry({
           })) || []
         }
         valueType={valueType}
-        saveOptimizerEditor={saveOptimizerEditor}
+        handleSettingsChange={handleSettingsChange}
         value={
           (currentSettingsState?.value as
             | undefined
@@ -328,7 +361,7 @@ function UserInputConfigEntry({
           })) || []
         }
         valueType={valueType}
-        saveOptimizerEditor={saveOptimizerEditor}
+        handleSettingsChange={handleSettingsChange}
         value={
           (currentSettingsState?.value as
             | undefined
@@ -344,7 +377,7 @@ function UserInputConfigEntry({
         title={inputDetail.title}
         tentacleName={tentacleName}
         botColors={botColors}
-        saveOptimizerEditor={saveOptimizerEditor}
+        handleSettingsChange={handleSettingsChange}
         value={(currentSettingsState?.value as undefined | boolean[]) || []}
         isEnabled={currentSettingsState?.enabled || false}
       />
@@ -367,16 +400,14 @@ function getOptimizerConfigElementSettingForm({
   parentInputIdentifier,
   inputIdentifier,
   botColors,
-  saveOptimizerEditor,
+  handleSettingsChange,
 }: {
   inputDetails: TentaclesConfigsSchemaType;
   configValues: OptimizerEditorInputType;
   parentInputIdentifier: string;
   inputIdentifier: string;
   botColors: ColorsType;
-  saveOptimizerEditor: Dispatch<
-    SetStateAction<OptimizerEditorType | undefined>
-  >;
+  handleSettingsChange: HandleOptimizerSettingsUpdateType;
 }): JSX.Element | undefined {
   if (inputDetails.options?.in_optimizer) {
     const valueType = _getValueType(inputDetails.type);
@@ -385,18 +416,19 @@ function getOptimizerConfigElementSettingForm({
         inputDetail: inputDetails,
         configValues,
         botColors,
-        saveOptimizerEditor,
+        handleSettingsChange,
         parentInputIdentifier: `${parentInputIdentifier}${_INPUT_SEPARATOR}${inputIdentifier}`,
       });
     }
     return (
       <UserInputConfigEntry
+        key={parentInputIdentifier + inputIdentifier}
         valueType={valueType}
         inputDetail={inputDetails}
         configValues={configValues}
         botColors={botColors}
         tentacleName={parentInputIdentifier}
-        saveOptimizerEditor={saveOptimizerEditor}
+        handleSettingsChange={handleSettingsChange}
       />
     );
   }
@@ -407,20 +439,18 @@ function getOptimizerNestedConfigSettingsForm({
   configValues,
   parentInputIdentifier,
   botColors,
-  saveOptimizerEditor,
+  handleSettingsChange,
 }: {
   inputDetail: TentaclesConfigsSchemaType;
   configValues: OptimizerEditorInputType;
   parentInputIdentifier: string;
   botColors: ColorsType;
-  saveOptimizerEditor: Dispatch<
-    SetStateAction<OptimizerEditorType | undefined>
-  >;
+  handleSettingsChange: HandleOptimizerSettingsUpdateType;
 }): JSX.Element | undefined {
   let atLeastOneUserInput = false;
   const inputs =
     inputDetail.properties &&
-    Object.entries(inputDetail.properties).forEach(
+    Object.entries(inputDetail.properties).map(
       ([nestedInput, nestedInputDetails]) => {
         const element = getOptimizerConfigElementSettingForm({
           inputDetails: nestedInputDetails,
@@ -428,7 +458,7 @@ function getOptimizerNestedConfigSettingsForm({
           parentInputIdentifier,
           inputIdentifier: nestedInput,
           botColors,
-          saveOptimizerEditor,
+          handleSettingsChange,
         });
         if (element) {
           atLeastOneUserInput = true;
@@ -441,6 +471,11 @@ function getOptimizerNestedConfigSettingsForm({
       <OptimizerSettingNestedTentacleConfig
         botColors={botColors}
         name={parentInputIdentifier}
+        key={
+          parentInputIdentifier + inputDetail.title ||
+          inputDetail.options?.name ||
+          "no input name"
+        }
         title={
           inputDetail.title || inputDetail.options?.name || "no input name"
         }
@@ -491,7 +526,7 @@ function _getValueType(schemaValueType: SchemaValueRawType): SchemaValueType {
   return schemaValueType;
 }
 
-function _optimizeUserInputIdentifier(
+export function optimizeUserInputIdentifier(
   tentacleValue: string,
   inputName: string
 ): string {

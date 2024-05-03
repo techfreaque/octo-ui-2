@@ -144,10 +144,10 @@ export const OptimizerEditorProvider = ({
 }) => {
   const [optimizerEditorCounter, setOptimizerEditorCounter] = useState(0);
   const [optimizerEditor, setOptimizerEditor] = useState<OptimizerEditorType>();
-  const inputs = optimizerEditor?.optimizer_inputs?.user_inputs;
   useEffect(() => {
+    const inputs = optimizerEditor?.optimizer_inputs?.user_inputs;
     inputs && setOptimizerEditorCounter(getOptimizerEditorCounter(inputs));
-  }, [inputs]);
+  }, [optimizerEditor]);
 
   return (
     <OptimizerEditorCounterContext.Provider value={optimizerEditorCounter}>

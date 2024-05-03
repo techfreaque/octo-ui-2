@@ -155,7 +155,8 @@ export default function ChartTablePieCombo({
         setLayouts
       );
     }
-  }, [plottedElements, setLayouts, uiConfig, visiblePairs, visibleTimeframes]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [plottedElements, uiConfig, visiblePairs, visibleTimeframes]);
 
   if (chartType === chartTypes.CHART) {
     return (
