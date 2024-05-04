@@ -70,7 +70,7 @@ export interface OptimizerUiConfig {
   start_timestamp?: number | null;
 }
 export interface OptimizerCampaignsToLoadUiConfig {}
-interface OptimizerInputsUiConfig {}
+export interface OptimizerInputsUiConfig {}
 export interface BacktestingUiConfig {
   data_sources?: string[];
   end_timestamp?: number | null;
@@ -78,12 +78,12 @@ export interface BacktestingUiConfig {
   exchange_type?: "use_current_profile";
   start_timestamp?: number | null;
 }
-interface BacktestingAnalysisUiConfig {}
-interface LiveAnalysisUiConfig {}
-interface FlowSettingsUiConfig {
+export interface BacktestingAnalysisUiConfig {}
+export interface LiveAnalysisUiConfig {}
+export interface FlowSettingsUiConfig {
   auto_save?: boolean;
 }
-interface DisplaySettingsUiConfig {
+export interface DisplaySettingsUiConfig {
   [GRAPHS_KEY]?: {
     display_use_log_scale?: boolean;
     display_unified_tooltip?: boolean;

@@ -64,7 +64,7 @@ export type PlottedLiveElementType = {
   [liveId: string]: PlottedSubElementType;
 };
 export type PlottedBacktestingElementType = {
-  [BacktestingId: string]: {
+  [backtestingId: string]: {
     [optimizerId: string]: PlottedLiveElementType;
   };
 };
@@ -76,7 +76,7 @@ export type PlottedElementNameType =
   | PlottedElementBacktestingNameType;
 
 export type PlottedElementsType<TPlottedElementNameType> = {
-  [liveOrBacktesting in PlottedElementNameType]: TPlottedElementNameType extends PlottedElementLiveNameType
+  [liveOrBacktesting in PlottedElementNameType]?: TPlottedElementNameType extends PlottedElementLiveNameType
     ? PlottedLiveElementType
     : PlottedBacktestingElementType;
 };

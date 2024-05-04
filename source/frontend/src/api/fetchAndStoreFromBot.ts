@@ -75,10 +75,10 @@ function addAuthToRequest(
   token?: string
 ): void {
   if (withCredentials && token) {
-    if (!requestData.headers) {
-      requestData.headers = {};
-    }
-    requestData.headers["Authorization"] = `Bearer ${token}`;
+    requestData.headers = {
+      ...requestData.headers,
+      Authorization: `Bearer ${token}`,
+    };
   }
 }
 

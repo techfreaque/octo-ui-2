@@ -2,7 +2,13 @@ import { useCallback, useMemo } from "react";
 import { getUiConfigSchema } from "./uiConfigSchema";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import {
+  BacktestingAnalysisUiConfig,
   BacktestingUiConfig,
+  DisplaySettingsUiConfig,
+  FlowSettingsUiConfig,
+  LiveAnalysisUiConfig,
+  OptimizerCampaignsToLoadUiConfig,
+  OptimizerInputsUiConfig,
   OptimizerUiConfig,
   UiConfigKeyType,
   UiConfigType,
@@ -12,12 +18,12 @@ import {
 } from "../../../context/config/UiConfigProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 import "./uiConfig.css";
-import JsonEditor from "../../../components/Forms/JsonEditor/jedit";
 import {
   errorResponseCallBackParams,
   successResponseCallBackParams,
 } from "../../../api/fetchAndStoreFromBot";
 import createNotification from "../../../components/Notifications/Notification";
+import JsonEditor from "@techfreaque/json-editor-react";
 
 export const flowEditorSettingsName = "flow_editor_settings";
 
@@ -41,28 +47,37 @@ export default function UIConfig({
   const uiConfig = useUiConfigContext();
   const botInfo = useBotInfoContext();
   const saveUiConfig = useSaveUiConfig();
-  const handleEditorsAutosave = useCallback(() => {
-    const newConfigs: UiConfigType = {
-      ...uiConfig,
-    };
-    configKeys.forEach((configKey) => {
-      const newConfig = window[`$${storageName}`]?.[
-        `${configKey}${configKeys}`
-      ].getValue();
-      const finalNewConfig = convertTimestamps(newConfig, true);
-      newConfigs[configKey] = finalNewConfig;
-    });
-    function successCallback(payload: successResponseCallBackParams) {}
-    function errorCallback(payload: errorResponseCallBackParams) {
-      createNotification({
-        title: "Failed to autosave UI config",
-        message: `Error: ${payload.data}`,
-      });
-    }
-    if (newConfigs) {
-      saveUiConfig(newConfigs, successCallback, errorCallback);
-    }
-  }, [configKeys, saveUiConfig, uiConfig]);
+  const handleEditorsAutosave = useCallback(
+    (
+      editor: JSONEditor<
+        | OptimizerUiConfig
+        | BacktestingUiConfig
+        | BacktestingAnalysisUiConfig
+        | LiveAnalysisUiConfig
+        | OptimizerCampaignsToLoadUiConfig
+        | OptimizerInputsUiConfig
+        | DisplaySettingsUiConfig
+        | FlowSettingsUiConfig
+      >,
+      configKey: string
+    ) => {
+      const newConfigs: UiConfigType = {
+        ...uiConfig,
+        [configKey]: convertTimestamps(editor.getValue(), true),
+      };
+      function successCallback(payload: successResponseCallBackParams) {}
+      function errorCallback(payload: errorResponseCallBackParams) {
+        createNotification({
+          title: "Failed to autosave UI config",
+          message: `Error: ${payload.data}`,
+        });
+      }
+      if (newConfigs) {
+        saveUiConfig(newConfigs, successCallback, errorCallback);
+      }
+    },
+    [saveUiConfig, uiConfig]
+  );
   return useMemo(() => {
     const dataFiles = botInfo?.data_files;
     const currentSymbols = botInfo?.symbols;
@@ -97,13 +112,19 @@ export default function UIConfig({
                 schema.properties.exchange_names.items.enum;
             }
             return (
+              // <ReactJsonEditor
+              //   schema={schema}
+              //   formData={config}
+              //   onChange
+              //   onSubmit
+              // />
               <JsonEditor
                 {...defaultJsonEditorSettings()}
                 schema={schema}
                 startval={config}
                 storageName={storageName}
                 editorName={`${configKey}${configKeys}`}
-                onChange={handleEditorsAutosave}
+                onChange={(editor) => handleEditorsAutosave(editor, configKey)}
                 disable_collapse={true}
                 key={configKey}
                 // language="es"

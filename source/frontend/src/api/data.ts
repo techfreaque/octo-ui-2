@@ -77,8 +77,8 @@ type FetchPlotlyPlotDataProps = {
 
 interface FetchPlotlyPlotDataBacktestingProps {
   optimization_campaign: string;
-  backtesting_id;
-  optimizer_id;
+  backtesting_id: number;
+  optimizer_id: number;
   isLive: false;
 }
 
@@ -98,107 +98,97 @@ export async function fetchPlotlyPlotData({
   setBotPlottedElements,
   botInfo,
   isLive = true,
-  optimization_campaign = undefined,
-  backtesting_id = undefined,
-  optimizer_id = undefined,
+  optimization_campaign,
+  backtesting_id,
+  optimizer_id,
 }: FetchPlotlyPlotDataProps) {
   const data: {
     exchange_id: string;
     symbol: string;
     time_frame: string;
     exchange: string;
-    live_id?;
+    live_id?: number;
     campaign_name?: string;
-    backtesting_id?;
-    optimizer_id?;
+    backtesting_id?: number;
+    optimizer_id?: number;
   } = {
     exchange_id,
     symbol,
     time_frame: timeFrame,
     exchange: exchange_name,
+    campaign_name: isLive
+      ? botInfo.optimization_campaign
+      : optimization_campaign,
   };
   if (isLive) {
     data.live_id = botInfo.live_id;
-    data.campaign_name = botInfo.optimization_campaign;
+    if (!data.live_id) {
+      createNotification({
+        title: "Failed to get live plot data",
+        message: "Live run id is not defined",
+      });
+      return;
+    }
   } else {
-    data.campaign_name = optimization_campaign;
     data.backtesting_id = backtesting_id;
     data.optimizer_id = optimizer_id;
   }
-  function successCallback({
+
+  const successCallback = ({
     updatedData,
     updateUrl,
     data,
     response,
-  }: successResponseCallBackParams) {
+  }: successResponseCallBackParams) => {
     setBotPlottedElements((prevData) => {
-      const newData = {
-        ...prevData,
-      };
       if (isLive) {
-        // msg?.data?.data?.sub_elements?.forEach(sub_data => {
-        // if (sub_data.type === "input") {
-        //     newData.inputs = sub_data.data.elements
-        //     setHiddenMetadataFromInputs(sub_data.data.elements)
-        // }
-        // })
-        newData.live = {
-          [botInfo.live_id]: {
-            [symbol]: {
-              [timeFrame]: data?.data,
-            },
-          },
-        };
-      } else if (optimization_campaign && backtesting_id && optimizer_id) {
-        if (!newData.backtesting) {
-          newData.backtesting = {
-            [optimization_campaign]: {
-              [optimizer_id]: {
-                [backtesting_id]: {
-                  [symbol]: {
-                    [timeFrame]: data?.data,
-                  },
-                },
-              },
-            },
-          };
-        } else if (!newData.backtesting[optimization_campaign]) {
-          newData.backtesting[optimization_campaign] = {
-            [optimizer_id]: {
-              [backtesting_id]: {
-                [symbol]: {
-                  [timeFrame]: data?.data,
-                },
-              },
-            },
-          };
-        } else if (!newData.backtesting[optimization_campaign][optimizer_id]) {
-          newData.backtesting[optimization_campaign][optimizer_id] = {
-            [backtesting_id]: {
+        return {
+          ...prevData,
+          live: {
+            [botInfo.live_id]: {
               [symbol]: {
                 [timeFrame]: data?.data,
               },
             },
-          };
-        } else {
-          newData.backtesting[optimization_campaign][optimizer_id][
-            backtesting_id
-          ] = {
-            [symbol]: {
-              [timeFrame]: data?.data,
-            },
-          };
-        }
+          },
+        };
       }
+      if (!optimization_campaign || optimizer_id) {
+        createNotification({
+          title: "Failed to get backtesting plot data",
+          message: `Campaign: ${optimization_campaign} or optimizer id: ${optimizer_id} is undefined`,
+        });
+        return;
+      }
+      const newData: PlottedElementsType<PlottedElementNameType> = {
+        ...prevData,
+      };
+      if (!newData.backtesting) {
+        newData.backtesting = {
+          [optimization_campaign]: {},
+        };
+      }
+      if (!newData.backtesting[optimization_campaign]) {
+        newData.backtesting[optimization_campaign] = {
+          [optimizer_id]: {},
+        };
+      }
+      if (!newData.backtesting[optimization_campaign][optimizer_id]) {
+        newData.backtesting[optimization_campaign][optimizer_id] = {
+          [backtesting_id]: {},
+        };
+      }
+      newData.backtesting[optimization_campaign][optimizer_id][
+        backtesting_id
+      ] = {
+        [symbol]: {
+          [timeFrame]: data?.data,
+        },
+      };
       return newData;
     });
-  }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  };
+  function errorCallback(payload: errorResponseCallBackParams) {
     createNotification({
       title: "Failed to load chart data",
       type: "danger",

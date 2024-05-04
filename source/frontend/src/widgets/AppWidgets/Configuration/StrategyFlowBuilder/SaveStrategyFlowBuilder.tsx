@@ -144,7 +144,15 @@ export default function SaveStrategyFlowBuilderSettings({
   ]);
 }
 
-export function getNodeEditor(nodeId) {
+type JsonEditorWindow = Window & {
+  [storageName: string]: {
+    [editorName: string]: JSONEditor<any>;
+  };
+};
+
+declare const window: JsonEditorWindow;
+
+export function getNodeEditor(nodeId: string) {
   return window?.[`$${flowBuilderStorageKey}`]?.[nodeId];
 }
 

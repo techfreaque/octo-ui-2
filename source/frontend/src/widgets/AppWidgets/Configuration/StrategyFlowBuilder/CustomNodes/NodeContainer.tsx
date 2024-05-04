@@ -20,7 +20,6 @@ import {
   useTentaclesConfigContext,
   useUpdateIsSavingTentaclesConfigContext,
 } from "../../../../../context/config/TentaclesConfigProvider";
-import JsonEditor from "../../../../../components/Forms/JsonEditor/jedit";
 import { useUiConfigContext } from "../../../../../context/config/UiConfigProvider";
 import { flowEditorSettingsName } from "../../UIConfig";
 import AntButton, {
@@ -29,6 +28,7 @@ import AntButton, {
   buttonVariants,
 } from "../../../../../components/Buttons/AntButton";
 import { CloseCircleOutlined } from "@ant-design/icons";
+import JsonEditor from "@techfreaque/json-editor-react";
 
 export function NodeContainer({
   children,

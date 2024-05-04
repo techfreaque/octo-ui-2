@@ -16,17 +16,19 @@ import {
 } from "../../WidgetManagement/RegisteredAppWidgets";
 import { Button, Space } from "antd";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
-import JsonEditor from "../../../components/Forms/JsonEditor/jedit";
 import {
   errorResponseCallBackParams,
   successResponseCallBackParams,
 } from "../../../api/fetchAndStoreFromBot";
+import JsonEditor from "@techfreaque/json-editor-react";
 
-interface SovWindow extends Window {
-  $JsonEditors;
-}
+type JsonEditorWindow = Window & {
+  [storageName: string]: {
+    [editorName: string]: JSONEditor<any>;
+  };
+};
 
-declare const window: SovWindow;
+declare const window: JsonEditorWindow;
 
 export default function PageBuilder() {
   const botLayout = useBotLayoutContext();

@@ -24,10 +24,10 @@ import { useFetchTentaclesConfig } from "../../../context/config/TentaclesConfig
 import { SaveOutlined } from "@ant-design/icons";
 import { sizes } from "../../../constants/frontendConstants";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
-import JsonEditor from "../../../components/Forms/JsonEditor/jedit";
 import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import { successResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
 import { AntSideBarMenutItemType } from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import JsonEditor from "@techfreaque/json-editor-react";
 
 export function useCurrentTentacleConfig(
   tentacleType = tentacleConfigTypes.tentacles
