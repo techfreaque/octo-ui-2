@@ -21,11 +21,10 @@
       "node_modules/@types",
       "src/types"
     ],
-    // "noImplicitAny": false,
-    // "noStrictGenericChecks": true,
-    // "suppressImplicitAnyIndexErrors":true,
-    // "exactOptionalPropertyTypes":false,
-    
+    "noImplicitAny": false,
+    "noStrictGenericChecks": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "exactOptionalPropertyTypes": false,
     // Strict Checks
     // "alwaysStrict": true,
     // "noImplicitAny": true,

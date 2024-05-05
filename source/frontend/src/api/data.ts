@@ -231,11 +231,15 @@ export async function fetchBacktestingRunData(
 
 export async function fetchBotPortfolio(
   setBotPortfolio: Dispatch<SetStateAction<PortfolioType | undefined>>,
-  botDomain: string
+  botDomain: string,
+  setIsFinished?: Dispatch<SetStateAction<boolean>>,
+  successNotification?: boolean
 ) {
   await fetchAndStoreFromBot({
     url: botDomain + backendRoutes.botPortfolio,
     setBotDataFunction: setBotPortfolio,
+    setIsFinished,
+    successNotification
   });
 }
 

@@ -6,10 +6,8 @@ import {
   sendAndInterpretBotUpdate,
   successResponseCallBackParams,
 } from "./fetchAndStoreFromBot";
-import { MuiDataTableRowType } from "../components/Tables/MuiDataTable";
 import { StatBacktestingSettingsType } from "../context/actions/BotBacktestingProvider";
 import { OptimizerUiConfig } from "../context/config/UiConfigProvider";
-import { IdsByExchangeType } from "../context/data/BotInfoProvider";
 import { OptimizerEditorInputsType } from "../context/config/OptimizerEditorProvider";
 import { StartOptimizerSettingsType } from "../context/actions/BotOptimizerProvider";
 import { ProfileInfoUpdateType } from "../widgets/AppWidgets/Modals/ProfileModal/ProfileModalButton";
@@ -652,7 +650,7 @@ export async function selectProfile(
 export async function getAllOrders(
   botDomain: string,
   setIsLoading: Dispatch<SetStateAction<boolean>>,
-  setOrders: Dispatch<SetStateAction<MuiDataTableRowType[] | undefined>>
+  setOrders
 ) {
   setIsLoading(true);
   function successCallback({
@@ -685,7 +683,7 @@ export async function getAllOrders(
 export async function getAllTrades(
   botDomain: string,
   setIsLoading: Dispatch<SetStateAction<boolean>>,
-  setTrades: Dispatch<SetStateAction<MuiDataTableRowType[] | undefined>>
+  setTrades
 ) {
   setIsLoading(true);
   function successCallback({
@@ -717,7 +715,7 @@ export async function getAllTrades(
 export async function getAllPositions(
   botDomain: string,
   setIsLoading: Dispatch<SetStateAction<boolean>>,
-  setPositions: Dispatch<SetStateAction<MuiDataTableRowType[] | undefined>>
+  setPositions
 ) {
   setIsLoading(true);
   function successCallback({

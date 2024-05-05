@@ -1,4 +1,4 @@
-import { w2ui, w2grid } from "w2ui/dist/w2ui.es6.js";
+import { w2grid } from "w2ui/dist/w2ui.es6.js";
 import "./W2UI.css";
 
 export function createTable({
@@ -34,7 +34,7 @@ export function createTable({
   onReorderRowCallback;
   onDeleteCallback;
 }) {
-  window.w2ui = window.w2ui ? window.w2ui : w2ui;
+  window.w2ui = window.w2ui ? window.w2ui : {};
   let table = window.w2ui[tableName];
   const tableExists = typeof table !== "undefined";
   if (tableExists && addToTable) {

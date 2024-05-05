@@ -14,6 +14,7 @@ import {
   TentaclesConfigsType,
   useSaveTentaclesConfig,
 } from "../../../context/config/TentaclesConfigProvider";
+import RunDataTableW2UI from "../../../components/Tables/w2ui/RunDataTable";
 
 export function BacktestingRunDataTable() {
   const runData = useBacktestingRunDataContext();
@@ -37,22 +38,21 @@ export function BacktestingRunDataTable() {
   return useMemo(
     () =>
       currentOptimizerCampaignName && runData ? (
-        // <RunDataTableW2UI
-        //   tableTitle="Select backtestings"
-        //   tableId="backtesting-runs"
-        //   runData={runData}
-        //   currentCampaignName={currentOptimizerCampaignName}
-        //   reloadData={fetchBacktestingRunData}
-        //   deleteRuns={deleteBacktestingRunData}
-        //   hiddenMetadataColumns={hiddenBacktestingMetadataColumns}
-        //   restoreSettings={restoreSettings}
-        //   noData={
-        //     <NoBacktestingData
-        //       fetchBacktestingRunData={fetchBacktestingRunData}
-        //     />
-        //   }
-        // />
-        <></>
+        <RunDataTableW2UI
+          tableTitle="Select backtestings"
+          tableId="backtesting-runs"
+          runData={runData}
+          currentCampaignName={currentOptimizerCampaignName}
+          reloadData={fetchBacktestingRunData}
+          deleteRuns={deleteBacktestingRunData}
+          hiddenMetadataColumns={hiddenBacktestingMetadataColumns}
+          restoreSettings={restoreSettings}
+          noData={
+            <NoBacktestingData
+              fetchBacktestingRunData={fetchBacktestingRunData}
+            />
+          }
+        />
       ) : (
         <></>
       ),

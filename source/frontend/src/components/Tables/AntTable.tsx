@@ -7,45 +7,13 @@ import {
   Table,
   TablePaginationConfig,
 } from "antd";
+import { SizeType } from "antd/es/config-provider/SizeContext";
 import {
   ExpandableConfig,
+  FilterDropdownProps,
   FilterValue,
-  SorterResult,
 } from "antd/es/table/interface";
-import { Dispatch, LegacyRef, SetStateAction, useRef, useState } from "react";
-
-export interface AntTableDataType {
-  key: string;
-  [column: string]: string | number | boolean | JSX.Element | undefined | null;
-}
-export interface AntTableExpandableConfig<T extends AntTableDataType>
-  extends ExpandableConfig<T> {
-  expandedRowRender: (
-    record: T,
-    index: number,
-    indent: number,
-    expanded: boolean
-  ) => JSX.Element;
-}
-export interface AntTableColumnType<T extends AntTableDataType> {
-  title: string;
-  dataIndex: string;
-  key: string;
-  width?: string;
-  sorter?: (a: T, b: T) => number;
-  filters?: {
-    text: string;
-    value: boolean | string | number;
-  }[];
-  sortDirections?: ["descend", "ascend"];
-  searchColumnKey?: string;
-}
-
-export type AntTableSorterType<TAntTableDataType extends AntTableDataType> =
-  | SorterResult<TAntTableDataType>[]
-  | SorterResult<TAntTableDataType>;
-
-export type AntTableFiltersType = Record<string, FilterValue | null>;
+import { LegacyRef, useRef, useState } from "react";
 
 export default function AntTable<
   TAntTableDataType extends AntTableDataType,
@@ -53,179 +21,280 @@ export default function AntTable<
 >({
   columns,
   data,
-  onFilterChange,
   maxWidth = "650px",
   expandable,
+  onSelectChange,
+  size,
+  header,
 }: {
   columns: TAntTableColumnType[];
   data: TAntTableDataType[];
-  onFilterChange?: (
-    tableParams:
-      | {
-          filters: AntTableFiltersType;
-          sorter: AntTableSorterType<TAntTableDataType>;
-        }
-      | undefined,
-    data: TAntTableDataType[]
-  ) => TAntTableDataType[];
   maxWidth?: string;
   expandable?: AntTableExpandableConfig<TAntTableDataType>;
+  onSelectChange?: (selectedRowKeys: string[]) => void;
+  size?: SizeType;
+  header?: JSX.Element;
 }) {
-  // eslint-disable-next-line no-unused-vars
-  const [searchText, setSearchText] = useState<string>("");
-  // eslint-disable-next-line no-unused-vars
-  const [searchedColumn, setSearchedColumn] = useState<string>("");
-  const getColumnSearchProps = (dataIndex) => ({
+  const getColumnSearchProps = (dataIndex: string, elementName: string) => ({
     filterDropdown: ({
       setSelectedKeys,
       selectedKeys,
       confirm,
       clearFilters,
       close,
-    }) => (
+      visible,
+      prefixCls,
+    }: FilterDropdownProps) => (
       <FilterDrowdown
+        close={close}
+        prefixCls={prefixCls}
+        visible={visible}
         selectedKeys={selectedKeys}
         confirm={confirm}
         clearFilters={clearFilters}
-        setSearchText={setSearchText}
-        setSearchedColumn={setSearchedColumn}
-        dataIndex={dataIndex}
+        elementName={elementName}
         searchInput={searchInput}
         setSelectedKeys={setSelectedKeys}
-        close={close}
       />
     ),
-    filterIcon: (filtered) => (
+    filterIcon: (filtered: boolean) => (
       <SearchOutlined
         style={{
           color: filtered ? "#1890ff" : undefined,
         }}
       />
     ),
-    onFilter: (value, record) =>
-      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
-    onFilterDropdownOpenChange: (visible) => {
+    onFilter: (value: React.Key | boolean, record: TAntTableDataType) => {
+      const _value = typeof value === "string" ? value.toLowerCase() : value;
+      const recordValue =
+        typeof (record as any)[dataIndex] === "string"
+          ? (record as any)[dataIndex].toLowerCase()
+          : (record as any)[dataIndex];
+      return recordValue.includes(_value);
+    },
+    onFilterDropdownOpenChange: (visible: boolean) => {
       if (visible) {
         setTimeout(() => (searchInput.current as any)?.select(), 100);
       }
     },
-    // render: (text) => searchedColumn === dataIndex ? (
-    //     <Highlighter highlightStyle={
-    //             {
-    //                 backgroundColor: '#ffc069',
-    //                 padding: 0
-    //             }
-    //         }
-    //         searchWords={
-    //             [searchText]
-    //         }
-    //         autoEscape
-    //         textToHighlight={
-    //             text ? text.toString() : ''
-    //         }/>
-    // ) : (text)
   });
-  const _columns = columns.map((column) =>
-    column.searchColumnKey
-      ? {
-          ...column,
-          ...getColumnSearchProps(column.searchColumnKey),
-        }
-      : column
-  );
+  const _columns: TAntTableColumnType[] = columns.map((column) => {
+    const dataIndex = column.key;
+    if (!column.disableSearch && !column.filters) {
+      return {
+        ...column,
+        sorter: getSorter<TAntTableDataType, TAntTableColumnType>(column),
+        ...getColumnSearchProps(dataIndex, column.title),
+      };
+    }
+    return {
+      ...column,
+      sorter: getSorter<TAntTableDataType, TAntTableColumnType>(column),
+    };
+  });
 
   const searchInput = useRef(null);
 
-  const [tableParams, setTableParams] = useState<{
-    filters: AntTableFiltersType;
-    sorter: AntTableSorterType<TAntTableDataType>;
-  }>();
+  const [filters, setFilters] = useState<AntTableFiltersType>();
+
   const handleTableChange = (
     pagination: TablePaginationConfig,
-    filters: AntTableFiltersType,
-    sorter: AntTableSorterType<TAntTableDataType>
+    filters: AntTableFiltersType
   ) => {
-    setTableParams({
-      // pagination,
-      filters,
-      sorter,
-    });
+    setFilters(filters);
   };
+  const _data = filterData(filters, data, columns);
 
-  const _data = onFilterChange ? onFilterChange(tableParams, data) : data;
+  const [selectedRowKeys, setSelectedRowKeys] = useState<string[]>([]);
   return (
     <div
       className="pairs-table"
       style={{
-        //     maxHeight: "calc(100vh - 80px)",
         overflowX: "auto",
         overflowY: "auto",
         maxWidth,
-        width: "100vw",
+        width: "100%",
         maxHeight: "calc(100vh - 200px)",
       }}
     >
       <Table
         columns={_columns}
-        scroll={{
-          // x: false,
-          // y: false,
-        }}
+        scroll={{}}
         expandable={expandable}
-        style={
-          {
-            // overflow: "hidden"
-            // maxWidth: "650px",
-            // maxHeight: "calc(100vh - 80px)",
-          }
-        }
+        style={{
+          width: "100%",
+        }}
         dataSource={_data}
         sticky={true}
         onChange={handleTableChange}
-        pagination={{ position: ["bottomLeft"] }}
-        // filters={tableParams?.filters}
+        title={header ? () => header : undefined}
+        size={size}
+        rowSelection={
+          onSelectChange
+            ? {
+                selectedRowKeys,
+                onChange: (newSelectedRowKeys: React.Key[]) => {
+                  // only strings allowed as keys
+                  setSelectedRowKeys(newSelectedRowKeys as string[]);
+                  onSelectChange(newSelectedRowKeys as string[]);
+                },
+                selections: [
+                  Table.SELECTION_ALL,
+                  Table.SELECTION_INVERT,
+                  Table.SELECTION_NONE,
+                ],
+              }
+            : undefined
+        }
+        pagination={_data.length > 10 ? { position: ["bottomLeft"] } : false}
       />
     </div>
   );
+}
+
+function getSorter<
+  TAntTableDataType extends AntTableDataType,
+  TAntTableColumnType extends AntTableColumnType<TAntTableDataType>
+>(
+  column: TAntTableColumnType
+): ((a: TAntTableDataType, b: TAntTableDataType) => any) | undefined {
+  if (column.dsorter === "boolean") {
+    return (a: TAntTableDataType, b: TAntTableDataType) =>
+      ((a as any)[column.key] === true ? 1 : 0) -
+      ((b as any)[column.key] === true ? 1 : 0);
+  }
+  if (column.dsorter === "string") {
+    return (a: TAntTableDataType, b: TAntTableDataType) =>
+      (b as any)[column.key] &&
+      (a as any)[column.key]?.localeCompare((b as any)[column.key]);
+  }
+  if (column.dsorter === "number") {
+    return (a: TAntTableDataType, b: TAntTableDataType) => {
+      // Get the values of the property for both items
+      const propA = (a as any)[column.key] as number | undefined;
+      const propB = (b as any)[column.key] as number | undefined;
+
+      // If either property is undefined, return 0
+      if (propA === undefined && propB === undefined) {
+        return 0;
+      }
+      if (propA === undefined) {
+        return 1;
+      }
+      if (propB === undefined) {
+        return -1;
+      }
+
+      // Compare the numbers directly
+      return propA - propB;
+    };
+  }
+  if (column.dsorter === "string[]") {
+    return (a: TAntTableDataType, b: TAntTableDataType) => {
+      // Get the values of the property for both items
+      const propA = (a as any)[column.key] as string[] | undefined;
+      const propB = (b as any)[column.key] as string[] | undefined;
+
+      // Check if both properties are arrays
+      if (Array.isArray(propA) && Array.isArray(propB)) {
+        // Sort arrays alphabetically and compare lexicographically
+        const sortedPropA = propA.slice().sort();
+        const sortedPropB = propB.slice().sort();
+
+        for (let i = 0; i < sortedPropA.length && i < sortedPropB.length; i++) {
+          const comparisonResult = sortedPropA[i].localeCompare(sortedPropB[i]);
+          if (comparisonResult !== 0) {
+            return comparisonResult;
+          }
+        }
+
+        // If all values are equal so far, the item with fewer values comes first
+        return sortedPropA.length - sortedPropB.length;
+      }
+
+      // Handle cases where one property is undefined
+      if (!propA && !propB) {
+        return 0;
+      }
+      if (!propA) {
+        return 1;
+      }
+      if (!propB) {
+        return -1;
+      }
+      return 0;
+    };
+  }
+  if (column.dsorter) {
+    return column.dsorter;
+  }
+}
+
+function filterData<
+  TAntTableDataType extends AntTableDataType,
+  TAntTableColumn extends AntTableColumnType<TAntTableDataType>
+>(
+  filters: AntTableFiltersType | undefined,
+  data: TAntTableDataType[],
+  columns: TAntTableColumn[]
+): TAntTableDataType[] {
+  const columnsByKey: {
+    [key: string]: TAntTableColumn;
+  } = {};
+  if (!filters) {
+    return data;
+  }
+  columns.forEach((column) => {
+    columnsByKey[column.key] = column;
+  });
+  return data.filter((item) => {
+    return Object.entries(filters).every(([columnId, filter]) => {
+      if (!filter) {
+        return true;
+      }
+      if (columnsByKey[columnId]?.dfilter) {
+        return columnsByKey[columnId].dfilter(item, filter);
+      }
+      if (columnsByKey[columnId]?.filters) {
+        return (
+          ["string", "number", "boolean"].includes(typeof item[columnId]) &&
+          filter.includes(item[columnId] as string | number | boolean)
+        );
+      }
+      if (typeof item[columnId] === "string") {
+        return (item[columnId] as string)
+          .toLowerCase()
+          .includes(String(filter[0]).toLowerCase());
+      }
+    });
+  });
 }
 
 function FilterDrowdown({
   selectedKeys,
   confirm,
   clearFilters,
-  setSearchText,
-  setSearchedColumn,
-  dataIndex,
+  elementName,
   searchInput,
   setSelectedKeys,
-  close,
-}: {
-  selectedKeys;
-  confirm;
-  clearFilters;
-  setSearchText: Dispatch<SetStateAction<string>>;
-  setSearchedColumn: Dispatch<SetStateAction<string>>;
-  dataIndex;
+}: FilterDropdownProps & {
+  elementName: string;
   searchInput: LegacyRef<InputRef>;
-  setSelectedKeys;
-  close: () => void;
 }) {
   const handleSearch = () => {
     confirm();
-    setSearchText(selectedKeys[0]);
-    setSearchedColumn(dataIndex);
   };
   const handleReset = () => {
     if (clearFilters) {
       clearFilters();
-      setSearchText("");
+      confirm();
     }
   };
   return (
     <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
       <Input
         ref={searchInput}
-        placeholder={`Search ${dataIndex}`}
+        placeholder={`Search ${elementName}`}
         value={selectedKeys[0]}
         onChange={(e) =>
           setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -253,27 +322,45 @@ function FilterDrowdown({
         >
           Reset
         </Button>
-        <Button
-          type="link"
-          size="small"
-          onClick={() => {
-            confirm({ closeDropdown: false });
-            setSearchText(selectedKeys[0]);
-            setSearchedColumn(dataIndex);
-          }}
-        >
-          Filter
-        </Button>
-        <Button
-          type="link"
-          size="small"
-          onClick={() => {
-            close();
-          }}
-        >
-          close
-        </Button>
       </Space>
     </div>
   );
 }
+
+export interface AntTableDataType {
+  id: string;
+}
+export interface AntTableExpandableConfig<T extends AntTableDataType>
+  extends ExpandableConfig<T> {
+  expandedRowRender: (
+    record: T,
+    index: number,
+    indent: number,
+    expanded: boolean
+  ) => JSX.Element;
+}
+export interface AntTableColumnType<
+  TAntTableDataType extends AntTableDataType
+> {
+  title: string;
+  key: string;
+  // optional dataIndex to use another column to display
+  dataIndex: string;
+  width?: string;
+  dsorter?:
+    | ((a: TAntTableDataType, b: TAntTableDataType) => number)
+    | "string"
+    | "boolean"
+    | "number"
+    | "string[]"
+    | undefined;
+  filters?: {
+    text: string;
+    value: boolean | string | number;
+  }[];
+  sortDirections?: ["descend", "ascend"];
+  disableSearch?: boolean;
+  dfilter?: (item: TAntTableDataType, symbolValueFilter: string[]) => boolean;
+}
+
+export type AntTableFiltersType = Record<string, FilterValue | null>;

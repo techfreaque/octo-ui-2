@@ -14,6 +14,11 @@ import { createTable } from "../../../components/Tables/w2ui/W2UI";
 import { cancelOrders } from "../../../api/actions";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { objectKeys } from "../../../helpers/helpers";
+import AntTable, {
+  AntTableColumnType,
+  AntTableDataType,
+} from "../../../components/Tables/AntTable";
+import { TagButton } from "../../../components/Buttons/AntButton";
 
 export default function W2uiDataTable() {
   const [menuItems, setMenuItems] = useState<AntSideBarMenutItemType[]>();
@@ -76,7 +81,6 @@ export default function W2uiDataTable() {
           In simulation mode wait until your strategy takes the first trade
         </li>
       </ul>
-      <Typography.Paragraph></Typography.Paragraph>
     </div>
   );
 }
@@ -138,6 +142,7 @@ export function createTradingOrBacktestingTab(
     } trading`,
     key: liveOrBacktest,
     antIcon: liveOrBacktest === "live" ? "DollarOutlined" : "RobotOutlined",
+    dontScroll: true,
     content: (
       <Typography.Title level={2}>
         Select a table from the sidebar
@@ -155,6 +160,16 @@ function _generateTablesAndSidebarItems({
   optimizerId,
   runId,
   botDomain,
+}: {
+  subElement;
+  liveOrBacktest;
+  newMenuItems: {
+    [key: string]: AntSideBarMenutItemType;
+  };
+  campaignName;
+  optimizerId;
+  runId;
+  botDomain;
 }) {
   subElement?.data?.elements?.forEach((element) => {
     if (!newMenuItems[liveOrBacktest]) {
@@ -192,7 +207,9 @@ function _generateTablesAndSidebarItems({
       label,
       antIcon: element.config?.antIcon,
       faIcon: element.config?.faIcon,
+      key: label,
       noPadding: true,
+      dontScroll: true,
       content: (
         <TableFromElement
           tableId={tableId}
@@ -205,43 +222,61 @@ function _generateTablesAndSidebarItems({
   });
 }
 
+interface DataTableDataType extends AntTableDataType {}
+interface DataTableColumnType extends AntTableColumnType<DataTableDataType> {}
+
 function TableFromElement({
   tableId,
   element,
   additionalToolbarButtons,
   cancelCallback,
 }) {
-  useEffect(() => {
-    const table = createTable({
-      elementID: tableId,
-      name: element.title,
-      tableName: tableId,
-      searches: element.searches,
-      columns: element.columns,
-      records: element.rows,
-      columnGroups: [],
-      searchData: [],
-      sortData: [],
-      selectable: true,
-      addToTable: false,
-      reorderRows: false,
-      onReorderRowCallback: null,
-      onDeleteCallback: cancelCallback,
-    });
-    Object.values(additionalToolbarButtons).forEach((additionalButton) => {
-      table.toolbar.add(additionalButton);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [tableId, element]);
   return (
-    <div
-      id={tableId}
-      style={{
-        width: "100%",
-        height: "100%",
-      }}
+    <AntTable<DataTableDataType, DataTableColumnType>
+      data={element.rows}
+      columns={element.columns}
+      maxWidth="100%"
+      size="small"
+      header={
+        <>
+          <TagButton canCLick>
+            fd
+          </TagButton>
+        </>
+      }
     />
   );
+  // useEffect(() => {
+  //   const table = createTable({
+  //     elementID: tableId,
+  //     name: element.title,
+  //     tableName: tableId,
+  //     searches: element.searches,
+  //     columns: element.columns,
+  //     records: element.rows,
+  //     columnGroups: [],
+  //     searchData: [],
+  //     sortData: [],
+  //     selectable: true,
+  //     addToTable: false,
+  //     reorderRows: false,
+  //     onReorderRowCallback: null,
+  //     onDeleteCallback: cancelCallback,
+  //   });
+  //   Object.values(additionalToolbarButtons).forEach((additionalButton) => {
+  //     table.toolbar.add(additionalButton);
+  //   });
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [tableId, element]);
+  // return (
+  //   <div
+  //     id={tableId}
+  //     style={{
+  //       width: "100%",
+  //       height: "100%",
+  //     }}
+  //   />
+  // );
 }
 
 function onOrderCancel(event, botDomain: string, tableId) {

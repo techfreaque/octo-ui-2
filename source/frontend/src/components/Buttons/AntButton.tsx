@@ -1,4 +1,4 @@
-import { Button, ConfigProvider } from "antd";
+import { Button, ConfigProvider, Tag } from "antd";
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 import IconFromString from "../Icons/IconFromString";
 import { SizeType, sizes } from "../../constants/frontendConstants";
@@ -237,5 +237,32 @@ export default function AntButton({
         </span>
       </Button>
     </ConfigProvider>
+  );
+}
+
+export function TagButton({
+  children,
+  canCLick,
+  onClick,
+}: {
+  children: JSX.Element | string;
+  canCLick?: boolean;
+  onClick?: () => void;
+}) {
+  const botColors = useBotColorsContext();
+
+  return (
+    <Tag
+      style={{
+        color: canCLick ? botColors.fontActive : botColors.font,
+        fontSize: "130%",
+        padding: "5px",
+        cursor: canCLick ? "pointer" : undefined,
+      }}
+      bordered={false}
+      onClick={onClick}
+    >
+      {children}
+    </Tag>
   );
 }

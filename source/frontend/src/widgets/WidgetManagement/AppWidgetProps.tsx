@@ -6,7 +6,6 @@ import {
   generateAppWidgetProp,
   generateSimpleProp,
 } from "../AppWidgets/PageBuilder/PageBuilder";
-import { dataTableSourcesList } from "../AppWidgets/Tables/DataTable";
 
 export default function appWidgetsProps() {
   return {
@@ -112,12 +111,6 @@ export default function appWidgetsProps() {
       dependentComponents: "PlotlyChart",
       type: "string",
       enumList: allChartLocations,
-    }),
-    ...generateSimpleProp({
-      propName: "dataSource",
-      dependentComponents: "DataTable",
-      type: "string",
-      enumList: dataTableSourcesList,
     }),
     ...generateSimpleProp({
       propName: "minHeights",

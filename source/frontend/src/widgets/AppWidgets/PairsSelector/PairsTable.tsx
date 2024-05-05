@@ -58,9 +58,9 @@ export default function PairsTable() {
     handleSettingChange,
   });
   return (
-    <AntTable
+    <AntTable<PairsTableDataType, PairsTableColumnType>
       onFilterChange={filterData}
-      columns={(columns as unknown) as AntTableColumnType<AntTableDataType>[]}
+      columns={columns}
       data={preSorteddata}
     />
   );
@@ -80,20 +80,23 @@ const columns: PairsTableColumnType[] = [
     dataIndex: "symbolLabel",
     key: "symbol",
     width: "40%",
-    sorter: (a: PairsTableDataType, b: PairsTableDataType) =>
-      a.symbol.localeCompare(b.symbol),
+    dsorter: "string",
     sortDirections: ["descend", "ascend"],
-    searchColumnKey: "symbol",
-
-    // (value: Key | boolean, record: RecordType) => boolean
+    dfilter: (item: PairsTableDataType, symbolValueFilter: string[]): boolean =>
+      item.symbol
+        .replace("/", "")
+        .replace(":", "")
+        .toLowerCase()
+        .includes(
+          symbolValueFilter[0].replace("/", "").replace(":", "").toLowerCase()
+        ),
   },
   {
     title: "Exchange",
     dataIndex: "exchange",
     width: "40%",
     key: "exchange",
-    // ...getColumnSearchProps('exchange'),
-    sorter: (a, b) => a.exchange.localeCompare(b.exchange),
+    dsorter: "string",
     sortDirections: ["descend", "ascend"],
 
     // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
@@ -113,10 +116,10 @@ const columns: PairsTableColumnType[] = [
         value: true,
       },
     ],
-    // ... getColumnSearchProps('enabledLabel'),
-    sorter: (a, b) =>
+    dsorter: (a, b) =>
       (a.enabled ? 1 : 0) - (b.enabled ? 1 : 0) ||
       (a.availableAfterRestart ? 1 : 0) - (b.availableAfterRestart ? 1 : 0),
+
     sortDirections: ["descend", "ascend"],
   },
 ];
@@ -152,7 +155,7 @@ function getData({
         unsavedCurrencyList.includes(symbol) && !isEnabled;
 
       preSorteddata.push({
-        key: `${symbol}${exchange}`,
+        id: `${symbol}${exchange}`,
         exchange,
         symbolLabel:
           isEnabled && !isSelected ? (

@@ -358,6 +358,19 @@ export const defaultStrategyDesignerPageLayout: UiLayoutPageType = {
               title: "Interfaces",
               toolBarContent: [],
             },
+            {
+              "antIcon": "DollarOutlined",
+              "component": "Tab",
+              "content": [
+                {
+                  "component": "CurrentPortfolioTable"
+                }
+              ],
+              "dontScroll": true,
+              "faIcon": "",
+              "title": "Portfolio",
+              "toolBarContent": []
+            }
           ],
         },
       ],

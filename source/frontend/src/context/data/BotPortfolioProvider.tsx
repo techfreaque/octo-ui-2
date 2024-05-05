@@ -1,9 +1,4 @@
-import {
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useState,
-} from "react";
+import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { createContext, useContext } from "react";
 import { fetchBotPortfolio } from "../../api/data";
 import { useBotDomainContext } from "../config/BotDomainProvider";
@@ -40,9 +35,20 @@ export const useBotPortfolioContext = () => {
 export const useFetchBotPortfolio = () => {
   const _saveBotPortfolio = useSaveBotPortfolioContext();
   const botDomain = useBotDomainContext();
-  return useCallback(() => {
-    fetchBotPortfolio(_saveBotPortfolio, botDomain);
-  }, [_saveBotPortfolio, botDomain]);
+  return useCallback(
+    (
+      setIsFinished?: Dispatch<SetStateAction<boolean>>,
+      successNotification?: boolean
+    ) => {
+      fetchBotPortfolio(
+        _saveBotPortfolio,
+        botDomain,
+        setIsFinished,
+        successNotification
+      );
+    },
+    [_saveBotPortfolio, botDomain]
+  );
 };
 
 export const BotPortfolioProvider = ({

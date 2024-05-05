@@ -113,7 +113,7 @@ export default function ExchangeSelector() {
       ) : (
         exchangeName
       ),
-      key: exchangeName,
+      id: exchangeName,
       sandboxed,
       sandboxedLabel: (
         <EnablerSwitch
@@ -149,7 +149,7 @@ export default function ExchangeSelector() {
       apiPassword: exchangeConfig?.["api-password"]
         ? exchangeConfig["api-password"]
         : apiPassword,
-      exchangeType,
+      supportedExchangeTypes,
       exchangeTypeLabel:
         supportedExchangeTypes?.length > 1 ? (
           <RadioButtonGroup
@@ -300,7 +300,7 @@ interface ExchangeDataType extends AntTableDataType {
   apiKey: string;
   apiSecret: string;
   apiPassword: string;
-  exchangeType: string;
+  supportedExchangeTypes: ("spot" | "future")[];
   exchangeTypeLabel: JSX.Element | string;
   isTestedExchange: boolean | "simulation";
   isTestedExchangeLabel: JSX.Element;
@@ -319,27 +319,23 @@ const columns: ExchangeColumnType[] = [
     dataIndex: "exchangeLabel",
     width: "22%",
     key: "exchange",
-    // ...getColumnSearchProps('exchange'),
-    sorter: (a, b) => a.exchange.localeCompare(b.exchange),
+    dsorter: "string",
     sortDirections: ["descend", "ascend"],
-    // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
   },
   {
     title: "Type",
     dataIndex: "exchangeTypeLabel",
     width: "20%",
-    key: "exchangeType",
-    // ...getColumnSearchProps('exchange'),
-    sorter: (a, b) => a?.exchangeType?.localeCompare(b.exchangeType),
+    key: "supportedExchangeTypes",
+    dsorter: "string[]",
     sortDirections: ["descend", "ascend"],
-    // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
+    disableSearch: true,
   },
 
   {
     title: "Enabled",
     dataIndex: "enabledLabel",
     key: "enabled",
-    // width: '15%',
     filters: [
       {
         text: "Disabled",
@@ -350,10 +346,7 @@ const columns: ExchangeColumnType[] = [
         value: true,
       },
     ],
-    // ... getColumnSearchProps('enabledLabel'),
-    sorter: (a, b) => {
-      return (a.enabled === true ? 1 : 0) - (b.enabled === true ? 1 : 0);
-    },
+    dsorter: "boolean",
     sortDirections: ["descend", "ascend"],
   },
   // {
@@ -379,7 +372,6 @@ const columns: ExchangeColumnType[] = [
     title: "Tested",
     dataIndex: "isTestedExchangeLabel",
     key: "isTestedExchange",
-    // width: '15%',
     filters: [
       {
         text: "Untested",
@@ -394,9 +386,8 @@ const columns: ExchangeColumnType[] = [
         value: "simulation",
       },
     ],
-    // ... getColumnSearchProps('enabledLabel'),
     // TODO sorter (also sort by "simulated")
-    sorter: (a, b) =>
+    dsorter: (a, b) =>
       (a.isTestedExchange === true ? 1 : 0) -
         (b.isTestedExchange === true ? 1 : 0) ||
       (a.isTestedExchange === "simulation" ? 1 : 0) -
@@ -407,7 +398,6 @@ const columns: ExchangeColumnType[] = [
     title: "Use Testnet",
     dataIndex: "sandboxedLabel",
     key: "sandboxed",
-    // width: '15%',
     filters: [
       {
         text: "Real Exchange",
@@ -418,9 +408,7 @@ const columns: ExchangeColumnType[] = [
         value: true,
       },
     ],
-    sorter: (a, b) => {
-      return (a.sandboxed === true ? 1 : 0) - (b.sandboxed === true ? 1 : 0);
-    },
+    dsorter: "boolean",
     sortDirections: ["descend", "ascend"],
   },
 ];
