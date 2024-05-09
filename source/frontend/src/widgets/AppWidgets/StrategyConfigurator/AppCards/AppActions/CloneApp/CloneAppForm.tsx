@@ -46,7 +46,7 @@ export default function CloneAppForm({
       <UserInputLabel title={`Do you want to select the new strategy?`}>
         <Switch
           onChange={(value) => handleInputChange("selectNewProfile", value)}
-          checked={cloneAppInfo?.selectNewProfile}
+          checked={cloneAppInfo?.selectNewProfile || false}
         />
       </UserInputLabel>
     </div>

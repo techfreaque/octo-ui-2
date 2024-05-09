@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 import PlotlyChart from "../MainCharts/Plotly";
-import { DataTableSideBarMainItemType, createTradingOrBacktestingTab } from "../../Tables/W2uiDataTable";
+import {
+  DataTableSideBarMainItemType,
+  createTradingOrBacktestingTab,
+} from "../../Tables/DataTable";
 import AntSidebar, {
   AntSideBarMenutItemType,
 } from "../../../../components/Sidebars/AntSidebar/AntSidebar";
@@ -50,7 +53,6 @@ export default function DualPieChart({
 type DualChartsSideBarItemsType = {
   [key in PlottedElementNameType]?: DataTableSideBarMainItemType;
 };
-
 
 function generateSidebarMenu(
   layout: PlotlyLayoutType,

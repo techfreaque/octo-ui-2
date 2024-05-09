@@ -1,4 +1,3 @@
-import { Chip } from "@mui/material";
 import { useEffect, useState } from "react";
 import {
   useBotPortfolioContext,
@@ -8,13 +7,14 @@ import AntTable, {
   AntTableColumnType,
   AntTableDataType,
 } from "../../../components/Tables/AntTable";
-import { Flex, Tag } from "antd";
+import { Tag } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
 import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { objectEntries } from "../../../helpers/helpers";
 
 export default function CurrentPortfolioTable() {
   const [isDoneLoading, setIsDoneLoading] = useState<boolean>(true);
@@ -27,16 +27,18 @@ export default function CurrentPortfolioTable() {
 
   if (botPortfolio?.displayed_portfolio_value) {
     const currentHoldings: PortfolioTableDataType[] = [];
-    Object.keys(botPortfolio.displayed_portfolio).forEach((symbol, id) => {
-      currentHoldings.push({
-        id: `${id}`,
-        asset: symbol,
-        total: botPortfolio.displayed_portfolio[symbol].total,
-        available: botPortfolio.displayed_portfolio[symbol].free,
-        lockedIn: botPortfolio.displayed_portfolio[symbol].locked,
-        valueIn: botPortfolio.symbols_values[symbol],
-      });
-    });
+    objectEntries(botPortfolio.displayed_portfolio).forEach(
+      ([symbol, symbolPortfolio]) => {
+        currentHoldings.push({
+          id: `${symbol}`,
+          asset: `${symbol}`,
+          total: symbolPortfolio.total,
+          available: symbolPortfolio.free,
+          lockedIn: symbolPortfolio.locked,
+          valueIn: botPortfolio.symbols_values[symbol],
+        });
+      }
+    );
 
     return (
       <div>
@@ -45,7 +47,7 @@ export default function CurrentPortfolioTable() {
           columns={getColumns(botPortfolio.reference_unit)}
           maxWidth="100%"
           header={
-            <Flex gap={10} justify={"flex-start"} align={"center"}>
+            <>
               <AntButton
                 antIconComponent={ReloadOutlined}
                 buttonType={
@@ -76,7 +78,7 @@ export default function CurrentPortfolioTable() {
                   botPortfolio.reference_unit
                 }`}
               </Tag>
-            </Flex>
+            </>
           }
         />
       </div>
@@ -129,7 +131,7 @@ interface PortfolioTableDataType extends AntTableDataType {
   total: number;
   available: number;
   lockedIn: number;
-  valueIn: number;
+  valueIn: number | undefined;
 }
 interface PortfolioTableColumnType
   extends AntTableColumnType<PortfolioTableDataType> {}

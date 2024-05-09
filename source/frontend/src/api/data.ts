@@ -18,7 +18,6 @@ import {
 } from "../context/config/UiConfigProvider";
 import { ExchangeInfoType } from "../context/data/BotExchangeInfoProvider";
 import { PortfolioType } from "../context/data/BotPortfolioProvider";
-import { SymbolsInfoType } from "../widgets/AppWidgets/Tables/SymbolsInfo";
 import {
   AppStoreUserType,
   InstalledTentaclesInfoType,
@@ -72,11 +71,11 @@ type FetchPlotlyPlotDataProps = {
     SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
   >;
   botInfo: BotInfoType;
+  optimizationCampaign: string;
   isLive: boolean;
 } & (FetchPlotlyPlotDataBacktestingProps | FetchPlotlyPlotDataLiveProps);
 
 interface FetchPlotlyPlotDataBacktestingProps {
-  optimization_campaign: string;
   backtesting_id: number;
   optimizer_id: number;
   isLive: false;
@@ -84,7 +83,6 @@ interface FetchPlotlyPlotDataBacktestingProps {
 
 interface FetchPlotlyPlotDataLiveProps {
   isLive: true;
-  optimization_campaign?: undefined;
   backtesting_id?: undefined;
   optimizer_id?: undefined;
 }
@@ -98,7 +96,7 @@ export async function fetchPlotlyPlotData({
   setBotPlottedElements,
   botInfo,
   isLive = true,
-  optimization_campaign,
+  optimizationCampaign,
   backtesting_id,
   optimizer_id,
 }: FetchPlotlyPlotDataProps) {
@@ -116,9 +114,7 @@ export async function fetchPlotlyPlotData({
     symbol,
     time_frame: timeFrame,
     exchange: exchange_name,
-    campaign_name: isLive
-      ? botInfo.optimization_campaign
-      : optimization_campaign,
+    campaign_name: optimizationCampaign,
   };
   if (isLive) {
     data.live_id = botInfo.live_id;
@@ -134,51 +130,44 @@ export async function fetchPlotlyPlotData({
     data.optimizer_id = optimizer_id;
   }
 
-  const successCallback = ({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) => {
+  const successCallback = ({ data }: successResponseCallBackParams) => {
     setBotPlottedElements((prevData) => {
+      const newData: PlottedElementsType<PlottedElementNameType> = JSON.parse(
+        JSON.stringify(prevData || {})
+      );
       if (isLive) {
-        return {
-          ...prevData,
-          live: {
-            [botInfo.live_id]: {
-              [symbol]: {
-                [timeFrame]: data?.data,
-              },
+        newData.live = {
+          [botInfo.live_id]: {
+            [symbol]: {
+              [timeFrame]: data?.data,
             },
           },
         };
+        return newData;
       }
-      if (!optimization_campaign || optimizer_id) {
+      if (!optimizationCampaign || optimizer_id) {
         createNotification({
           title: "Failed to get backtesting plot data",
-          message: `Campaign: ${optimization_campaign} or optimizer id: ${optimizer_id} is undefined`,
+          message: `Campaign: ${optimizationCampaign} or optimizer id: ${optimizer_id} is undefined`,
         });
-        return;
+        return newData;
       }
-      const newData: PlottedElementsType<PlottedElementNameType> = {
-        ...prevData,
-      };
       if (!newData.backtesting) {
         newData.backtesting = {
-          [optimization_campaign]: {},
+          [optimizationCampaign]: {},
         };
       }
-      if (!newData.backtesting[optimization_campaign]) {
-        newData.backtesting[optimization_campaign] = {
+      if (!newData.backtesting[optimizationCampaign]) {
+        newData.backtesting[optimizationCampaign] = {
           [optimizer_id]: {},
         };
       }
-      if (!newData.backtesting[optimization_campaign][optimizer_id]) {
-        newData.backtesting[optimization_campaign][optimizer_id] = {
+      if (!newData.backtesting[optimizationCampaign][optimizer_id]) {
+        newData.backtesting[optimizationCampaign][optimizer_id] = {
           [backtesting_id]: {},
         };
       }
-      newData.backtesting[optimization_campaign][optimizer_id][
+      newData.backtesting[optimizationCampaign][optimizer_id][
         backtesting_id
       ] = {
         [symbol]: {
@@ -188,7 +177,7 @@ export async function fetchPlotlyPlotData({
       return newData;
     });
   };
-  function errorCallback(payload: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: "Failed to load chart data",
       type: "danger",
@@ -239,20 +228,7 @@ export async function fetchBotPortfolio(
     url: botDomain + backendRoutes.botPortfolio,
     setBotDataFunction: setBotPortfolio,
     setIsFinished,
-    successNotification
-  });
-}
-
-export async function fetchSymbolsInfo(
-  setSymbolsInfo: Dispatch<SetStateAction<SymbolsInfoType | undefined>>,
-  botDomain: string
-) {
-  return await fetchAndStoreFromBot({
-    url: botDomain + backendRoutes.symbolsInfo,
-    setBotDataFunction: setSymbolsInfo,
-    successNotification: false,
-    keepPreviousValues: false,
-    failNotification: false,
+    successNotification,
   });
 }
 
@@ -277,12 +253,7 @@ export async function loginToAppStore(
   appStoreUser: AppStoreUserType | undefined,
   onLoggedIn: () => void
 ) {
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: "Failed to log in to App Store",
       type: "danger",
@@ -290,23 +261,13 @@ export async function loginToAppStore(
     });
     updateAppStoreUser(undefined);
   }
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback({ data }: successResponseCallBackParams) {
     if (data.success) {
       createNotification({ title: "Successfully logged in to App Store" });
       onLoggedIn();
       updateAppStoreUser(data.access_tokens);
     } else {
-      errorCallback({
-        updatedData,
-        updateUrl,
-        data,
-        response,
-      });
+      errorCallback();
     }
   }
   sendAndInterpretBotUpdate({
@@ -324,34 +285,19 @@ export async function logoutFromAppStore(
   storeDomain: string,
   appStoreUser: AppStoreUserType | undefined
 ) {
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: "Failed to log out from App Store",
       type: "danger",
     });
     saveAppStoreData(undefined);
   }
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback({ data }: successResponseCallBackParams) {
     if (data.success) {
       saveAppStoreData(undefined);
       createNotification({ title: "Successfully logged out from App Store" });
     } else {
-      errorCallback({
-        updatedData,
-        updateUrl,
-        data,
-        response,
-      });
+      errorCallback();
     }
   }
   if (appStoreUser?.token) {
@@ -378,12 +324,7 @@ export async function signupToAppStore(
   loginData: LoginSignupFormType,
   onLoggedIn: () => void
 ) {
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback({ data }: errorResponseCallBackParams) {
     createNotification({
       title: "Failed to sign up to the App Store",
       type: "danger",
@@ -392,25 +333,15 @@ export async function signupToAppStore(
     onLoggedIn();
     saveAppStoreData(data.data);
   }
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
-    if (data.success) {
+  function successCallback(payload: successResponseCallBackParams) {
+    if (payload.data.success) {
       createNotification({
         title: "Successfully signed up to App Store",
         message: "You can now log in to the App Store",
       });
-      saveAppStoreData(data.data);
+      saveAppStoreData(payload.data.data);
     } else {
-      errorCallback({
-        updatedData,
-        updateUrl,
-        data,
-        response,
-      });
+      errorCallback(payload);
     }
   }
   sendAndInterpretBotUpdate({

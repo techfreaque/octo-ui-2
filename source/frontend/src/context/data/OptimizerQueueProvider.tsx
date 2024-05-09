@@ -15,9 +15,34 @@ import {
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
-import { updateOptimizerQueueCount } from "../../widgets/AppWidgets/Tables/OptimizerQueue";
 
-interface OptimizerQueueType {}
+export interface RunInputType {
+  user_input: string;
+  tentacle: string[];
+  value: string | number | boolean;
+}
+
+export type RunType = RunInputType[];
+
+export interface OptimizerQueueElementType {
+  id: number;
+  runs: { [key: number]: RunType };
+}
+export type OptimizerQueueType = OptimizerQueueElementType[];
+
+export interface UpdatedRunInputType extends RunInputType {
+  deleted: boolean;
+}
+
+export type UpdatedRunType = UpdatedRunInputType[];
+
+export type OptimizerQueueUpdateType = {
+  updatedQueue: {
+    id: number;
+    delete_every_run: boolean;
+    runs: UpdatedRunType[];
+  };
+};
 
 const OptimizerQueueContext = createContext<OptimizerQueueType | undefined>(
   undefined
@@ -76,13 +101,18 @@ export const useSaveOptimizerQueue = () => {
   const botDomain = useBotDomainContext();
   const fetchOptimizerQueue = useFetchOptimizerQueue();
   return useCallback(
-    (updatedQueue: OptimizerQueueType) => {
+    (
+      updatedQueue: OptimizerQueueUpdateType,
+      setIsUpdating: Dispatch<SetStateAction<boolean>>
+    ) => {
+      setIsUpdating(true);
       const errorCallback = (payload: errorResponseCallBackParams) => {
         createNotification({
           title: "Failed to update Optimizer queue",
           type: "danger",
           message: payload.data?.message,
         });
+        setIsUpdating(false);
       };
       const successCallback = (payload: successResponseCallBackParams) => {
         if (!payload.data?.success) {
@@ -90,6 +120,7 @@ export const useSaveOptimizerQueue = () => {
         }
         fetchOptimizerQueue();
         createNotification({ title: "Optimizer queue updated" });
+        setIsUpdating(false);
       };
       sendAndInterpretBotUpdate({
         updatedData: updatedQueue,
@@ -101,6 +132,19 @@ export const useSaveOptimizerQueue = () => {
     [botDomain]
   );
 };
+
+export function updateOptimizerQueueCount(
+  optimizerQueue: OptimizerQueueType | undefined,
+  updateOptimizerQueueCounter: Dispatch<SetStateAction<number>>
+) {
+  let count = 0;
+  if (optimizerQueue?.length) {
+    optimizerQueue.forEach((optimizerRun) => {
+      count += Object.keys(optimizerRun.runs).length;
+    });
+  }
+  updateOptimizerQueueCounter(count);
+}
 
 export const OptimizerQueueProvider = ({
   children,

@@ -7,6 +7,8 @@ import { objectKeys } from "../../../../helpers/helpers";
 
 export type ChartLocationType = "main-chart" | "sub-chart" | "pie-chart" | "b";
 
+export type NonChartLocationTypes = "table";
+
 export const allChartLocations: ChartLocationType[] = [
   "main-chart",
   "sub-chart",

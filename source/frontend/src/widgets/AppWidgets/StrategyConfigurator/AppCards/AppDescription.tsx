@@ -103,7 +103,7 @@ export function CleanDescription({
   description,
   endComponent,
 }: {
-  description?: string;
+  description?: string | undefined;
   endComponent?: JSX.Element;
 }) {
   const lines = description?.replace(/<br>/g, "\n")?.split("\n");

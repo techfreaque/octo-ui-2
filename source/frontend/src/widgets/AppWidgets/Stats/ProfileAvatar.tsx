@@ -15,7 +15,6 @@ export default function ProfileAvatar({ size = "20px", marginRight = "0" }) {
           / /g,
           "_"
         )}/${currentAvatar}`;
-  // eslint-disable-next-line jsx-a11y/alt-text
   return (
     currentAvatar && (
       <img

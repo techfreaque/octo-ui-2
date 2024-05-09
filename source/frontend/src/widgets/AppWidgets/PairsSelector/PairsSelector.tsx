@@ -54,7 +54,7 @@ function PairConfiguratorDropdown({
   menuIsOpen,
   children,
 }: {
-  content?: UiLayoutPageLayoutType[];
+  content: UiLayoutPageLayoutType[] | undefined;
   setMenuIsOpen: Dispatch<SetStateAction<PairSelectorMenuOpenType>>;
   menuIsOpen: boolean;
   children: JSX.Element;
@@ -76,7 +76,11 @@ function PairConfiguratorDropdown({
   );
 }
 
-function PairConfigurator({ content }: { content?: UiLayoutPageLayoutType[] }) {
+function PairConfigurator({
+  content,
+}: {
+  content: UiLayoutPageLayoutType[] | undefined;
+}) {
   const botColors = useBotColorsContext();
   return (
     <div

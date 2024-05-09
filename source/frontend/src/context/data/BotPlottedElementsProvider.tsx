@@ -17,9 +17,16 @@ import { useVisiblePairsContext } from "../config/VisiblePairProvider";
 import { useVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
 import { useBotInfoContext } from "./BotInfoProvider";
 import { useCurrentTentacleConfig } from "../../widgets/AppWidgets/Configuration/TentaclesConfig";
-import { ChartLocationType } from "../../widgets/AppWidgets/Charts/MainCharts/Plotly";
+import {
+  ChartLocationType,
+  NonChartLocationTypes,
+} from "../../widgets/AppWidgets/Charts/MainCharts/Plotly";
 import { ChartType } from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
 import { MarkerAttributesType } from "../../widgets/AppWidgets/Charts/MainCharts/PlotlyGenerateData";
+import {
+  DataTableColumnType,
+  DataTableDataType,
+} from "../../widgets/AppWidgets/Tables/DataTable";
 
 export type ChartDetailsType = {
   own_yaxis?: boolean;
@@ -32,9 +39,15 @@ export type ChartDetailsType = {
   text?;
   values?;
   value?;
+  columns?: DataTableColumnType[];
+  rows?: DataTableDataType[];
   kind?: "candlestick" | "scattergl";
   mode?: "line";
   title: string;
+  config?: {
+    antIcon?: string;
+    faIcon?: string;
+  };
   hole?;
   line_shape;
   color?: string[];
@@ -45,17 +58,18 @@ export type ChartDetailsType = {
     [markerAtribute in MarkerAttributesType];
   };
 
+export type PlottedSubSubElementType = {
+  type: ChartType;
+  name: ChartLocationType | NonChartLocationTypes;
+  data?: {
+    elements: ChartDetailsType[];
+  };
+};
 export type PlottedSubElementType = {
   [pair: string]: {
     [timeframe: string]: {
       data?: {
-        sub_elements?: {
-          type: ChartType;
-          name: ChartLocationType;
-          data?: {
-            elements: ChartDetailsType[];
-          };
-        }[];
+        sub_elements?: PlottedSubSubElementType[];
       };
     };
   };
@@ -152,9 +166,10 @@ export const useFetchPlotData = () => {
           timeFrame: visibleTimeframes,
           exchange_id: botInfo.ids_by_exchange_name[visibleExchanges],
           exchange_name: visibleExchanges,
-          botDomain: botDomain,
-          setBotPlottedElements: setBotPlottedElements,
-          botInfo: botInfo,
+          botDomain,
+          optimizationCampaign: botInfo.optimization_campaign,
+          setBotPlottedElements,
+          botInfo,
           setHiddenMetadataFromInputs: (elements) =>
             setHiddenMetadataFromInputs(
               elements,
@@ -281,10 +296,10 @@ function loadMissingRuns(
       const [
         backtesting_id,
         optimizer_id,
-        optimization_campaign,
+        optimizationCampaign,
       ] = runIdentifier.split(ID_SEPARATOR);
       if (
-        !botPlottedElements?.backtesting?.[optimization_campaign]?.[
+        !botPlottedElements?.backtesting?.[optimizationCampaign]?.[
           optimizer_id
         ]?.[backtesting_id]?.[visiblePairs]?.[visibleTimeframes]
       ) {
@@ -298,7 +313,7 @@ function loadMissingRuns(
           botInfo,
           setHiddenMetadataFromInputs: undefined,
           isLive: false,
-          optimization_campaign,
+          optimizationCampaign,
           backtesting_id,
           optimizer_id,
         });
@@ -398,6 +413,7 @@ export const BotPlottedElementsProvider = ({
         timeFrame: visibleTimeframes,
         exchange_id: botInfo.ids_by_exchange_name[visibleExchanges],
         exchange_name: visibleExchanges,
+        optimizationCampaign: botInfo.optimization_campaign,
         botDomain,
         setBotPlottedElements,
         botInfo,

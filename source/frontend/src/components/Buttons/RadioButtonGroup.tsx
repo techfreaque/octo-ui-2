@@ -13,10 +13,10 @@ export default function RadioButtonGroup({
   onChange,
   selected,
 }: {
-  rightContent?: JSX.Element;
+  rightContent?: JSX.Element | undefined;
   menuItems: RadioButtonMenuItem[];
   onChange?: ((newValue: string) => void) | undefined;
-  selected?: string;
+  selected?: string | undefined;
 }) {
   return (
     <Radio.Group

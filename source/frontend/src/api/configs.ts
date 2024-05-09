@@ -14,12 +14,7 @@ export async function fetchUIConfig(
   saveUIConfig: Dispatch<SetStateAction<UiConfigType>>,
   exchangeNames?: string[]
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback({ data }: successResponseCallBackParams) {
     if (exchangeNames) {
       if (!data.backtesting_run_settings) {
         data.backtesting_run_settings = {};
@@ -69,7 +64,7 @@ export async function saveUIConfig({
   sendAndInterpretBotUpdate({
     updatedData: newConfig,
     updateUrl: botDomain + backendRoutes.uIConfig,
-    successCallback: successCallback ? successCallback : (payload) => {},
+    successCallback: successCallback ? successCallback : undefined,
     errorCallback,
   });
 }

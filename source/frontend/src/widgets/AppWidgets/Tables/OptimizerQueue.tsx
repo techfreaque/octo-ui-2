@@ -1,49 +1,52 @@
 import { Button } from "@mui/material";
-import { useEffect } from "react";
-import { createTable } from "../../../components/Tables/w2ui/W2UI";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import { userInputKey } from "../../../components/UserInputs/utils";
+import { TENTACLE_SEPARATOR } from "../../../constants/backendConstants";
 import {
-  hidden_class,
-  ID_DATA,
-  MAX_SEARCH_LABEL_SIZE,
-  TENTACLE_SEPARATOR,
-  TIMESTAMP_DATA,
-} from "../../../constants/backendConstants";
-import {
+  OptimizerQueueElementType,
+  OptimizerQueueType,
+  OptimizerQueueUpdateType,
+  RunInputType,
+  UpdatedRunType,
   useFetchOptimizerQueue,
   useOptimizerQueueContext,
   useSaveOptimizerQueue,
 } from "../../../context/data/OptimizerQueueProvider";
 import { OptimizerNotInstalled } from "../Configuration/OptimizerConfigForm/OptimizerConfigForm";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import AntTable, {
+  AntTableColumnType,
+  AntTableDataType,
+} from "../../../components/Tables/AntTable";
+import Title from "antd/es/typography/Title";
+import AntButton, {
+  buttonTypes,
+  buttonVariants,
+} from "../../../components/Buttons/AntButton";
+import { Tooltip } from "antd";
+import { faShuffle } from "@fortawesome/free-solid-svg-icons";
+import { DeleteFilled } from "@ant-design/icons";
 import {
-  useBotInfoContext,
-  useIsDemoMode,
-} from "../../../context/data/BotInfoProvider";
+  TentaclesConfigsRootType,
+  tentacleConfigTypes,
+  useTentaclesConfigContext,
+} from "../../../context/config/TentaclesConfigProvider";
 
 export default function OptimizerQueueTable() {
   const fetchOptimizerQueue = useFetchOptimizerQueue();
   const optimizerQueue = useOptimizerQueueContext();
   const saveOptimizerQueue = useSaveOptimizerQueue();
-  const containerId: QueueContainerId = "optimizer-queue-table";
   const botInfo = useBotInfoContext();
+  const currentTentaclesConfig = useTentaclesConfigContext();
+  const currentTentaclesTradingConfig =
+    currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
   const uiProInstalled = botInfo?.ui_pro_installed;
-  const isDemo = useIsDemoMode();
   useEffect(() => {
-    if (uiProInstalled && !isDemo) {
+    if (uiProInstalled) {
       fetchOptimizerQueue();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [uiProInstalled]);
-  useEffect(() => {
-    if (optimizerQueue) {
-      updateOptimizerQueueEditor(
-        optimizerQueue,
-        saveOptimizerQueue,
-        containerId
-      );
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [optimizerQueue]);
 
   return (
     <>
@@ -52,150 +55,243 @@ export default function OptimizerQueueTable() {
         <Button onClick={fetchOptimizerQueue}>Reload optimizer queue</Button>
       </div>
       <div id={"optimizer-queue-container"} style={{ height: "100%" }}>
-        <div
-          id={"optimizer-queue-no-message"}
-          className="text-center mx-4 my-4"
-        >
-          <h4>The optimizer queue is empty</h4>
-        </div>
-        <div id={containerId} style={{ height: "100%" }} />
+        <OptimizerQueueTables
+          currentTentaclesTradingConfig={currentTentaclesTradingConfig}
+          optimizerQueue={optimizerQueue}
+          saveOptimizerQueue={saveOptimizerQueue}
+        />
       </div>
     </>
   );
 }
 
-type QueueContainerId = "optimizer-queue-table";
-function updateOptimizerQueueEditor(
+function OptimizerQueueTables({
   optimizerQueue,
   saveOptimizerQueue,
-  containerId: QueueContainerId
-) {
-  createOptimizerQueueTables(optimizerQueue, containerId, saveOptimizerQueue);
-}
-
-export function updateOptimizerQueueCount(
-  optimizerQueue,
-  updateOptimizerQueueCounter
-) {
-  let count = 0;
+  currentTentaclesTradingConfig,
+}: {
+  optimizerQueue: OptimizerQueueType | undefined;
+  saveOptimizerQueue: (
+    updatedQueue: OptimizerQueueUpdateType,
+    setIsUpdating: Dispatch<SetStateAction<boolean>>
+  ) => void;
+  currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined;
+}): JSX.Element {
   if (optimizerQueue?.length) {
-    optimizerQueue.forEach((optimizerRun) => {
-      count += Object.keys(optimizerRun.runs).length;
-    });
+    return (
+      <>
+        {optimizerQueue.map((optimizerRun) => {
+          if (optimizerRun.runs) {
+            return (
+              <OptimizerRunQueueTable
+                optimizerRun={optimizerRun}
+                currentTentaclesTradingConfig={currentTentaclesTradingConfig}
+                saveOptimizerQueue={saveOptimizerQueue}
+              />
+            );
+          }
+          return <></>;
+        })}
+      </>
+    );
   }
-  updateOptimizerQueueCounter(count);
+  return (
+    <div id={"optimizer-queue-no-message"} className="text-center mx-4 my-4">
+      <h4>The optimizer queue is empty</h4>
+    </div>
+  );
 }
 
-function createOptimizerQueueTables(
-  optimizerQueue: OptimizerRunQueueType[],
-  containerId: QueueContainerId,
-  saveOptimizerQueue
-) {
-  const mainContainer = document.getElementById(containerId);
-  const noRunMessage = document.getElementById("optimizer-queue-no-message");
-  if (mainContainer && noRunMessage) {
-    mainContainer.innerHTML = "";
-    if (optimizerQueue.length) {
-      noRunMessage.classList.add(hidden_class);
-      optimizerQueue.forEach((optimizerRun) => {
-        if (optimizerRun.runs) {
-          _createOptimizerRunQueueTable(
-            optimizerRun,
-            mainContainer,
-            saveOptimizerQueue
-          );
-        }
-      });
-    } else {
-      noRunMessage.classList.remove(hidden_class);
-    }
-  }
-}
-
-interface OptimizerRunQueueType {
-  id;
-  runs: {
-    [key: string]: {
-      user_input: {}[];
-      tentacle;
-      value;
-    }[];
-  };
-}
-
-interface QueueInfoType {
-  id: any;
-  deletedRows: {}[];
-  deleteEveryRun: boolean;
-}
-
-function _createOptimizerRunQueueTable(
-  optimizerRun: OptimizerRunQueueType,
-  mainContainer: HTMLElement,
-  saveOptimizerQueue
-) {
+function OptimizerRunQueueTable({
+  optimizerRun,
+  saveOptimizerQueue,
+  currentTentaclesTradingConfig,
+}: {
+  optimizerRun: OptimizerQueueElementType;
+  saveOptimizerQueue: (
+    updatedQueue: OptimizerQueueUpdateType,
+    setIsUpdating: Dispatch<SetStateAction<boolean>>
+  ) => void;
+  currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined;
+}): JSX.Element {
   const optimizerId = optimizerRun.id;
-  const divID = `optimizer-queue-${optimizerId}`;
-  const queueParentDiv = document.createElement("div");
-  const header = document.createElement("h4");
-  const tableTitle = `Runs for optimizer ${optimizerId}`;
-  header.textContent = tableTitle;
-  queueParentDiv.prepend(header);
-  mainContainer.append(queueParentDiv);
 
-  const queueDiv = document.createElement("div");
-  queueDiv.id = divID;
-  queueDiv.style.height = "500px";
-  const queueInfo: QueueInfoType = {
-    id: optimizerId,
-    deletedRows: [],
-    deleteEveryRun: false,
-  };
-  queueParentDiv.append(queueDiv);
+  const { data, columns } = generateTableData(
+    optimizerRun,
+    currentTentaclesTradingConfig
+  );
+  const [selectedRecordIds, setSelectedRecordIds] = useState<string[]>();
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+  const somethingSelected = !!selectedRecordIds?.length;
 
-  const keys: { text; field }[] = [];
-  const addedLabels: string[] = [];
-  const tentaclesInputsCounts = {};
-  Object.values(optimizerRun.runs).forEach((run) => {
-    Object.values(run).forEach((inputDetail) => {
-      const label =
-        inputDetail.user_input.length > MAX_SEARCH_LABEL_SIZE
-          ? `${inputDetail.user_input.slice(0, MAX_SEARCH_LABEL_SIZE)} ...`
-          : inputDetail.user_input;
-      const addedLabel = `${label} (${inputDetail.tentacle})`;
-      if (addedLabels.includes(addedLabel)) {
-        return;
-      }
-      keys.push({
-        text: addedLabel,
-        field: userInputKey(inputDetail.user_input, inputDetail.tentacle),
-      });
-      if (typeof tentaclesInputsCounts[inputDetail.tentacle] === "undefined") {
-        tentaclesInputsCounts[inputDetail.tentacle] = 1;
-      } else {
-        tentaclesInputsCounts[inputDetail.tentacle]++;
-      }
-      addedLabels.push(addedLabel);
-    });
-  });
-  const columns = keys.map((key) => {
-    return {
-      field: key.field,
-      text: key.text,
-      size: `${(1 / keys.length) * 100}%`,
-      sortable: true,
+  function updateOptimizerQueue({
+    updatedRunData,
+    deletedRunIds,
+    deleteEveryRun,
+  }: {
+    updatedRunData?: RunDataTableElementType[];
+    deletedRunIds?: string[] | undefined;
+    deleteEveryRun?: boolean | undefined;
+  }) {
+    let UpdatedRuns: UpdatedRunType[] = [];
+    if (!deleteEveryRun && deletedRunIds) {
+      UpdatedRuns = data.map((record) =>
+        createUpdatedRunDataFromTableRow(
+          record,
+          deletedRunIds.includes(record.id)
+        )
+      );
+    } else if (updatedRunData) {
+      UpdatedRuns = updatedRunData.map((record) =>
+        createUpdatedRunDataFromTableRow(record, false)
+      );
+    }
+    const updatedQueue: OptimizerQueueUpdateType = {
+      updatedQueue: {
+        id: optimizerId,
+        delete_every_run: !!deleteEveryRun,
+        runs: UpdatedRuns,
+      },
     };
-  });
-  const columnGroups = Object.keys(tentaclesInputsCounts).map((key) => ({
-    text: key,
-    span: tentaclesInputsCounts[key],
-  }));
-  const records: RecordType[] = [];
-  let recId = 0;
-  const userInputSamples = {};
-  Object.values(optimizerRun.runs).forEach((run) => {
-    const row: RecordType = {
-      recid: recId++,
+    saveOptimizerQueue(updatedQueue, setIsUpdating);
+  }
+
+  function onReorderRow(reorderedData: RunDataTableElementType[]) {
+    updateOptimizerQueue({ updatedRunData: reorderedData });
+  }
+
+  function onDelete(deleteEveryRun: boolean = false) {
+    updateOptimizerQueue({
+      deletedRunIds: selectedRecordIds,
+      deleteEveryRun:
+        deleteEveryRun || selectedRecordIds?.length === data.length,
+    });
+    setSelectedRecordIds(undefined);
+  }
+
+  function randomizeRecords() {
+    const randomizedData = randomizeArray(data);
+    updateOptimizerQueue({ updatedRunData: randomizedData });
+  }
+  return (
+    <>
+      <Title
+        style={{ marginTop: "30px" }}
+        level={3}
+      >{`Runs for optimizer ${optimizerId}`}</Title>
+      <AntTable<RunDataTableElementType, RunDataTableColumnType>
+        data={data}
+        columns={columns}
+        maxWidth="100%"
+        size="small"
+        paginationSize={100}
+        setSelectedRowKeys={setSelectedRecordIds}
+        selectedRowKeys={selectedRecordIds}
+        onChange={onReorderRow}
+        header={
+          <>
+            <Tooltip title={"Deletes the selected runs from the queue"}>
+              <AntButton
+                antIconComponent={DeleteFilled}
+                buttonType={
+                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
+                }
+                disabled={!somethingSelected || isUpdating}
+                buttonVariant={buttonVariants.text}
+                onClick={somethingSelected ? onDelete : undefined}
+              >
+                Delete selected
+              </AntButton>
+            </Tooltip>
+            <Tooltip title={"This will delete all runs in this optimizer id"}>
+              <AntButton
+                antIconComponent={DeleteFilled}
+                buttonType={
+                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
+                }
+                disabled={isUpdating}
+                buttonVariant={buttonVariants.text}
+                onClick={() => onDelete(true)}
+              >
+                Delete all
+              </AntButton>
+            </Tooltip>
+            <Tooltip
+              title={"This will randomize all records in this optimizer id"}
+            >
+              <AntButton
+                faIconComponent={faShuffle}
+                buttonType={
+                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
+                }
+                disabled={isUpdating}
+                buttonVariant={buttonVariants.text}
+                onClick={randomizeRecords}
+              >
+                Randomize
+              </AntButton>
+            </Tooltip>
+          </>
+        }
+      />
+    </>
+  );
+}
+
+type RunDataTableElementType = AntTableDataType & {
+  [inputKey: string]: number | boolean | string;
+};
+
+interface RunDataTableColumnType
+  extends AntTableColumnType<RunDataTableElementType> {}
+
+function generateTableData(
+  optimizerRun: OptimizerQueueElementType,
+  currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined
+): {
+  data: RunDataTableElementType[];
+  columns: RunDataTableColumnType[];
+} {
+  const columnsObj: {
+    [tentacleKey: string]: {
+      title: string;
+      children: {
+        [inputKey: string]: RunDataTableColumnType;
+      };
+    };
+  } = {};
+
+  function addColumn(inputDetail: RunInputType) {
+    const tentacleNameStr = `${inputDetail.tentacle}`;
+    const key = userInputKey(inputDetail.user_input, inputDetail.tentacle);
+    if (columnsObj[tentacleNameStr]?.children[key]) {
+      return;
+    }
+    const { userInputLabel, tentacleLabel } = findUserInputAndTentacleLabel(
+      currentTentaclesTradingConfig,
+      inputDetail.user_input,
+      inputDetail.tentacle
+    );
+    const columnGroup = columnsObj[tentacleNameStr] || {
+      title: tentacleLabel,
+      children: {},
+    };
+    columnGroup.children[key] = {
+      key,
+      dataIndex: key,
+      title: userInputLabel,
+      disableSearch: true,
+      dsorter: typeof inputDetail.value as "string" | "number" | "boolean",
+    };
+    columnsObj[tentacleNameStr] = columnGroup;
+  }
+
+  const records: RunDataTableElementType[] = Object.values(
+    optimizerRun.runs
+  ).map((run, index) => {
+    const row: RunDataTableElementType = {
+      id: `${index}`,
+      key: `${index}`,
     };
     run.forEach((runUserInputDetails) => {
       const field = userInputKey(
@@ -203,158 +299,98 @@ function _createOptimizerRunQueueTable(
         runUserInputDetails.tentacle
       );
       row[field] = runUserInputDetails.value;
-      userInputSamples[field] = runUserInputDetails.value;
+      addColumn(runUserInputDetails);
     });
-    records.push(row);
+    return row;
   });
-  const searches = keys.map((key) => {
-    const sampleValue = userInputSamples[key.field];
+
+  const columns: RunDataTableColumnType[] = Object.entries(columnsObj).map(
+    ([tentacleKey, columnGroup]) => {
+      return {
+        key: tentacleKey,
+        title: columnGroup.title,
+        disableSearch: true,
+        children: Object.values(columnGroup.children),
+      };
+    }
+  );
+
+  return {
+    columns,
+    data: records,
+  };
+}
+
+function findUserInputAndTentacleLabel(
+  currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined,
+  userInputName: string,
+  tentacleNames: string[]
+) {
+  try {
+    const rootTentacleName = tentacleNames[0];
+    if (!rootTentacleName) {
+      throw new Error();
+    }
+    let nestedObject: any =
+      currentTentaclesTradingConfig?.[rootTentacleName]?.schema.properties;
+    let tentacleLabel = rootTentacleName;
+    const nestedTentacleName = tentacleNames.slice(1);
+    for (const key of nestedTentacleName) {
+      if (nestedObject?.[key]) {
+        const nestedTitle = `${
+          nestedObject[key].title || nestedObject[key].options?.name
+        }`;
+        if (!tentacleLabel.endsWith(nestedTitle)) {
+          tentacleLabel += ` > ${nestedTitle}`;
+        }
+        nestedObject = nestedObject[key].properties; // Access the nested object using each key
+      } else {
+        throw new Error();
+      }
+    }
+    let userInputLabel: string;
+    try {
+      userInputLabel =
+        nestedObject[userInputName].title ||
+        nestedObject[userInputName].options?.name ||
+        userInputName;
+    } catch (e) {
+      userInputLabel = userInputName;
+    }
     return {
-      field: key.field,
-      label: key.text,
-      type: TIMESTAMP_DATA.includes(key.field)
-        ? "datetime"
-        : _getTableDataType(
-            null,
-            {
-              type: null,
-              field: key,
-            },
-            "text",
-            sampleValue
-          ),
+      userInputLabel,
+      tentacleLabel,
     };
-  });
-  function _onReorderRow(event) {
-    event.onComplete = _updateOptimizerQueue;
+  } catch (e) {
+    return {
+      userInputLabel: userInputName,
+      tentacleLabel: `${tentacleNames}`,
+    };
   }
-  function _onDelete(event) {
-    event.force = true;
-    const table = window.w2ui[event.target];
-    const recsToDelete = table.getSelection();
-    if (recsToDelete.length === table.records.length) {
-      table.selectNone();
-      queueInfo.deleteEveryRun = true;
-      _updateOptimizerQueue();
-      table.destroy();
+}
+
+function createUpdatedRunDataFromTableRow(
+  record: RunDataTableElementType,
+  deleted: boolean
+) {
+  const run: UpdatedRunType = [];
+  Object.entries(record).forEach(([inputKey, value]) => {
+    if (["id", "key"].includes(inputKey)) {
       return;
     }
-    const rawsToDelete = recsToDelete.map((recId) => table.get(recId));
-    queueInfo.deletedRows = rawsToDelete;
-    event.onComplete = _updateOptimizerQueue;
-  }
-  const tableName = `${divID}-table`;
-  const table = createTable({
-    elementID: divID,
-    name: tableTitle,
-    tableName,
-    searches,
-    columns,
-    records,
-    columnGroups,
-    searchData: [],
-    sortData: [],
-    selectable: true,
-    addToTable: false,
-    reorderRows: true,
-    deleteRows: true,
-    onReorderRowCallback: _onReorderRow,
-    onDeleteCallback: _onDelete,
+    const splitKey = inputKey.split(TENTACLE_SEPARATOR);
+    const inputName = `${splitKey[0]}`;
+    const tentacleStr = `${splitKey[1]}`;
+    run.push({
+      user_input: inputName,
+      tentacle: tentacleStr.split(","),
+      value,
+      deleted,
+    });
   });
-
-  function randomizeRecords() {
-    randomizeArray(table.records);
-    table.refresh();
-    _updateOptimizerQueue();
-  }
-  _addOptimizerQueueTableButtons();
-
-  function _createRunData(record, deleted: boolean) {
-    const run: RunInputType[] = [];
-    Object.keys(record).forEach((key) => {
-      if (key === "recid") {
-        return;
-      }
-      const splitKey = key.split(TENTACLE_SEPARATOR);
-      const inputName = splitKey[0];
-      run.push({
-        user_input: inputName,
-        tentacle: splitKey[1].split(","),
-        value: record[key],
-        deleted,
-      });
-    });
-    return run;
-  }
-  function _updateOptimizerQueue() {
-    let UpdatedRuns: RunInputType[][] = [];
-    if (!queueInfo.deleteEveryRun) {
-      UpdatedRuns = table.records.map((record) =>
-        _createRunData(record, false)
-      );
-      UpdatedRuns.concat(
-        queueInfo.deletedRows.map((record) => _createRunData(record, true))
-      );
-    }
-    const updatedQueue = {
-      updatedQueue: {
-        id: parseInt(queueInfo.id),
-        delete_every_run: Boolean(queueInfo.deleteEveryRun),
-        runs: UpdatedRuns,
-      },
-    };
-    saveOptimizerQueue(updatedQueue);
-    queueInfo.deletedRows = [];
-    queueInfo.deleteEveryRun = false;
-  }
-
-  function _addOptimizerQueueTableButtons() {
-    table.toolbar.add({
-      type: "button",
-      id: "show-run-info",
-      text: "Randomize",
-      img: "fas fa-random",
-      onClick: randomizeRecords,
-    });
-  }
+  return run;
 }
 
-type RecordType = {
-  recid: number;
-  [field: string]: number | string | boolean;
-};
-
-interface RunInputType {
-  user_input;
-  tentacle;
-  value: string | number | boolean;
-  deleted: boolean;
-}
-
-function _getTableDataType(records, search, defaultValue, sampleValue) {
-  if (ID_DATA.includes(search.field)) {
-    return "float";
-  }
-  if (search.type !== null) {
-    return search.type;
-  }
-  const _sampleValue =
-    sampleValue === null ? records[0][search.field] : sampleValue;
-  if (typeof _sampleValue === "undefined") {
-    return defaultValue;
-  }
-  if (typeof _sampleValue === "number") {
-    return "float";
-  }
-  if (typeof _sampleValue === "string") {
-    return "text";
-  }
-  if (typeof _sampleValue === "object") {
-    return "list";
-  }
-  return defaultValue;
-}
-
-function randomizeArray(array: any[]) {
-  array.sort(() => Math.random() - 0.5);
+function randomizeArray(array: string[]) {
+  return array.toSorted(() => Math.random() - 0.5);
 }

@@ -12,8 +12,8 @@ export default function SplitMainContent({
   upperContent,
   lowerContent,
 }: {
-  upperContent?: UiLayoutPageLayoutType[];
-  lowerContent?: UiLayoutPageLayoutType[];
+  upperContent?: UiLayoutPageLayoutType[] | undefined;
+  lowerContent?: UiLayoutPageLayoutType[] | undefined;
 }) {
   const currentPanel = useCurrentPanelContext();
   const botColorMode = useColorModeContext();
@@ -32,16 +32,14 @@ export default function SplitMainContent({
       gutterClassName={gutterClassName}
     >
       <div style={{ height: "100%" }}>
-        {useMemo(
-          () => upperContent && <AppWidgets layout={upperContent} />,
-          [upperContent],
-        )}
+        {useMemo(() => upperContent && <AppWidgets layout={upperContent} />, [
+          upperContent,
+        ])}
       </div>
       <div style={{ height: "100%" }}>
-        {useMemo(
-          () => lowerContent && <AppWidgets layout={lowerContent} />,
-          [lowerContent],
-        )}
+        {useMemo(() => lowerContent && <AppWidgets layout={lowerContent} />, [
+          lowerContent,
+        ])}
       </div>
     </Splitter>
   );
@@ -50,13 +48,16 @@ export default function SplitMainContent({
 function handleResize(
   gutterClassName: string,
   setPanelPercent: (percent: number) => void,
-  newSizes: number[],
+  newSizes: number[]
 ) {
   const gutter = document.getElementsByClassName(gutterClassName)[0];
   gutter?.classList?.remove("is-resizing");
-  const newPercent =
-    newSizes[0] < 100 ? (newSizes[0] > 0 ? newSizes[0] : 0) : 100;
-  setPanelPercent(newPercent);
+  const panelSize = newSizes[0];
+  if (panelSize) {
+    const newPercent: number =
+      panelSize < 100 ? (panelSize > 0 ? panelSize : 0) : 100;
+    setPanelPercent(newPercent);
+  }
 }
 
 export function getSplitterClasses(botColorMode: ColorModeType) {

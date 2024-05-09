@@ -276,9 +276,9 @@ function UpDownloadloadAppModal({
     Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
   >;
   confirmTitle: string;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
   setInfo: Dispatch<SetStateAction<UploadInfo | DownloadInfo>>;
-  isSelected?: boolean;
+  isSelected?: boolean | undefined;
   open: boolean | undefined;
   disabledTooltipTitle?: string;
   confirmDescription: JSX.Element;
@@ -304,7 +304,7 @@ function UpDownloadloadAppModal({
         </div>
       </Tooltip>
       <Modal
-        open={open}
+        open={open || false}
         onCancel={() => handlePopConfirmOpen(setInfo, false)}
         title={<Typography.Title level={1}> {confirmTitle} </Typography.Title>}
         centered

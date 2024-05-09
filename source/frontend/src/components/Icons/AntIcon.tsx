@@ -57,7 +57,7 @@ export function AntIconByReactFunc({
     Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
   >;
   size?: SizeType;
-  spin?: boolean;
+  spin?: boolean | undefined;
   marginRight?: string;
 }) {
   return (
@@ -70,7 +70,7 @@ export function AntIconByReactFunc({
         marginRight,
         marginLeft: "unset",
       },
-      spin,
+      ...(spin ? { spin } : {}),
     })
   );
 }
@@ -84,22 +84,22 @@ export function AntIconByString({
 }: {
   iconString: string;
   size?: SizeType;
-  spin?: boolean;
+  spin?: boolean | undefined;
   marginRight?: string;
   style?: CSSProperties | undefined;
 }) {
-  return iconString && iconStringNoIcon !== iconString ? (
-    createElement(iconStringToComponent[iconString], {
-      style: {
-        ...iconStyles[size],
-        marginTop: "auto",
-        marginBottom: "auto",
-        marginRight,
-        ...style,
-      },
-      spin,
-    })
-  ) : (
-    <></>
-  );
+  const iconComponent = iconStringToComponent[iconString];
+  if (!iconComponent || typeof iconComponent === "string") {
+    return <></>;
+  }
+  return createElement(iconComponent, {
+    style: {
+      ...iconStyles[size],
+      marginTop: "auto",
+      marginBottom: "auto",
+      marginRight,
+      ...style,
+    },
+    ...(spin ? { spin } : {}),
+  });
 }

@@ -1,5 +1,5 @@
 import { Collapse, Button } from "antd";
-import { useMemo } from "react";
+import { CSSProperties, Dispatch, SetStateAction, useMemo } from "react";
 import { useState } from "react";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { useColorModeContext } from "../../../context/config/ColorModeProvider";
@@ -9,20 +9,24 @@ import "./antSidebar.css";
 import { useEffect } from "react";
 import { useMediaQuery } from "@mui/material";
 import AppIconButton from "../../Buttons/AppIconButton";
+import {
+  ColorModeType,
+  ColorsType,
+} from "../../../constants/uiTemplate/defaultColors";
 const { Panel } = Collapse;
 
 export interface AntSideBarMenutItemType {
   label: string | JSX.Element;
   key: string;
-  antIcon?: string;
+  antIcon?: string | undefined;
   content: JSX.Element;
-  noPadding?: boolean;
+  noPadding?: boolean | undefined;
   children?: AntSideBarMenutItemType[];
-  onClick?;
+  onClick?: (item: AntSideBarMenutItemType) => void;
   disabled?: boolean;
   dontScroll?: boolean;
-  icon?;
-  faIcon?: string;
+  icon?: JSX.Element;
+  faIcon?: string | undefined;
   order?: number; // TODO handle
 }
 
@@ -33,22 +37,28 @@ export default function AntSidebar({
   defaultSelected,
 }: {
   menuItems?: AntSideBarMenutItemType[];
-  currentlySelectedMenu?;
-  setCurrentlySelectedMenu?;
-  defaultSelected?;
+  currentlySelectedMenu?: string;
+  setCurrentlySelectedMenu?: Dispatch<SetStateAction<string | undefined>>;
+  defaultSelected?: string;
 }) {
   const botColors = useBotColorsContext();
   const hasContent = menuItems && Boolean(menuItems?.length);
-  const _defaultSelected =
-    hasContent && (defaultSelected ? defaultSelected : menuItems[0].key);
-  const [_currentlySelectedMenu, _setCurrentlySelectedMenu] = useState();
+  const _defaultSelected: string | undefined = hasContent
+    ? defaultSelected
+      ? defaultSelected
+      : menuItems?.[0]?.key
+    : undefined;
+  const [_currentlySelectedMenu, _setCurrentlySelectedMenu] = useState<
+    string | undefined
+  >(_defaultSelected);
   const [hideText, setHideText] = useState(false);
   const iSmallScreen = useMediaQuery("(max-width:800px)");
 
   const actualCurrentlySelectedMenu =
     currentlySelectedMenu || _currentlySelectedMenu;
-  const actualSetCurrentlySelectedMenu =
-    setCurrentlySelectedMenu || _setCurrentlySelectedMenu;
+  const actualSetCurrentlySelectedMenu: Dispatch<SetStateAction<
+    string | undefined
+  >> = setCurrentlySelectedMenu || _setCurrentlySelectedMenu;
 
   useEffect(() => {
     if (iSmallScreen) {
@@ -125,31 +135,43 @@ function DisplayCurrentContent({
   menuItemsData,
   currentlySelectedMenu,
   setActiveMenus,
+}: {
+  menuItemsData: AntSideBarMenutItemType[];
+  currentlySelectedMenu: string | undefined;
+  setActiveMenus: Dispatch<SetStateAction<string[]>>;
 }) {
   // const [content, setContent] = useState()
 
   useEffect(() => {
-    const newActiveMenus = [];
+    const newActiveMenus: string[] = [];
     // const newContent = []
     findCurrentContent(menuItemsData, currentlySelectedMenu, newActiveMenus);
     setActiveMenus(newActiveMenus);
     // setContent(newContent)
   }, [currentlySelectedMenu, menuItemsData, setActiveMenus]);
 
-  return menuItemsData?.map((menuItemData) => {
-    const key = menuItemData.key;
-    return (
-      <Content
-        menuItemData={menuItemData}
-        key={key}
-        visible={currentlySelectedMenu === key}
-        currentlySelectedMenu={currentlySelectedMenu}
-      />
-    );
-  });
+  return (
+    <>
+      {menuItemsData?.map((menuItemData) => {
+        const key = menuItemData.key;
+        return (
+          <Content
+            menuItemData={menuItemData}
+            key={key}
+            visible={currentlySelectedMenu === key}
+            currentlySelectedMenu={currentlySelectedMenu}
+          />
+        );
+      })}
+    </>
+  );
 }
 
-function findCurrentContent(menuItemsData, currentlySelectedMenu, activeMenus) {
+function findCurrentContent(
+  menuItemsData: AntSideBarMenutItemType[],
+  currentlySelectedMenu: string | undefined,
+  activeMenus: string[]
+) {
   let anyChildrenHasContent = false;
   for (const menuItemData of menuItemsData) {
     if (menuItemData.key === currentlySelectedMenu) {
@@ -179,8 +201,8 @@ function Content({
   currentlySelectedMenu,
 }: {
   menuItemData: AntSideBarMenutItemType;
-  visible;
-  currentlySelectedMenu;
+  visible: boolean;
+  currentlySelectedMenu: string | undefined;
 }) {
   return (
     <>
@@ -229,11 +251,11 @@ function MenuItems({
   hideText,
 }: {
   menuItems: AntSideBarMenutItemType[];
-  currentlySelectedMenu;
-  setCurrentlySelectedMenu;
+  currentlySelectedMenu: string | undefined;
+  setCurrentlySelectedMenu: Dispatch<SetStateAction<string | undefined>>;
   activeMenus: string[];
   isSubMenu?: boolean;
-  hideText;
+  hideText: boolean;
 }) {
   const botColors = useBotColorsContext();
   return (
@@ -280,12 +302,12 @@ function MenuItem({
   botColors,
 }: {
   menuItem: AntSideBarMenutItemType;
-  currentlySelectedMenu: string;
-  setCurrentlySelectedMenu;
+  currentlySelectedMenu: string | undefined;
+  setCurrentlySelectedMenu: Dispatch<SetStateAction<string | undefined>>;
   activeMenus: string[];
-  isSubMenu;
-  hideText;
-  botColors;
+  isSubMenu: boolean | undefined;
+  hideText: boolean;
+  botColors: ColorsType;
 }) {
   function handleCurentChange() {
     setCurrentlySelectedMenu(menuItem.key);
@@ -293,11 +315,11 @@ function MenuItem({
   }
   const colorMode = useColorModeContext();
   const colors = useBotColorsContext();
-  const buttonStyle =
+  const buttonStyle: CSSProperties =
     menuItem.key === currentlySelectedMenu
       ? {
           // backgroundColor: colors ?. backgroundActive,
-          color: colors?.fontActive,
+          color: colors.fontActive,
         }
       : {};
 
@@ -347,14 +369,14 @@ function NestedSideBarMenuItem({
   hideText,
   botColors,
 }: {
-  colorMode;
+  colorMode: ColorModeType;
   activeMenus: string[];
-  currentlySelectedMenu;
-  setCurrentlySelectedMenu;
-  handleCurentChange;
+  currentlySelectedMenu: string | undefined;
+  setCurrentlySelectedMenu: Dispatch<SetStateAction<string | undefined>>;
+  handleCurentChange: () => void;
   menuItem: AntSideBarMenutItemType;
-  hideText;
-  botColors;
+  hideText: boolean;
+  botColors: ColorsType;
 }) {
   return (
     <Collapse
@@ -390,7 +412,11 @@ function NestedSideBarMenuItem({
                 isResponsive={false}
                 antIconString={menuItem.antIcon}
                 faIconString={menuItem.faIcon}
-                onClick={menuItem.onClick || handleCurentChange}
+                onClick={
+                  menuItem.onClick
+                    ? () => menuItem.onClick?.(menuItem)
+                    : handleCurentChange
+                }
                 disabled={menuItem.disabled}
               />
             </div>
@@ -439,13 +465,13 @@ function SideBarButton({
   activeMenus,
   botColors,
 }: {
-  buttonStyle;
-  handleCurentChange;
+  buttonStyle: CSSProperties;
+  handleCurentChange: () => void;
   menuItem: AntSideBarMenutItemType;
-  isSubMenu;
-  hideText;
+  isSubMenu: boolean | undefined;
+  hideText: boolean;
   activeMenus: string[];
-  botColors;
+  botColors: ColorsType;
 }) {
   const buttonContainerStyle = isSubMenu
     ? {}
@@ -485,7 +511,11 @@ function SideBarButton({
           antIconString={menuItem.antIcon}
           icon={menuItem?.icon}
           faIconString={menuItem.faIcon}
-          onClick={menuItem.onClick || handleCurentChange}
+          onClick={
+            menuItem.onClick
+              ? () => menuItem.onClick?.(menuItem)
+              : handleCurentChange
+          }
           disabled={menuItem.disabled}
         />
       ) : (
@@ -497,7 +527,11 @@ function SideBarButton({
           }}
           size={"large"}
           type="text"
-          onClick={menuItem.onClick || handleCurentChange}
+          onClick={
+            menuItem.onClick
+              ? () => menuItem.onClick?.(menuItem)
+              : handleCurentChange
+          }
           disabled={menuItem.disabled}
           block
         >

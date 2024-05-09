@@ -8,12 +8,12 @@ export default function createNotification({
   title,
   type = "success",
   message,
-  duration = 5000,
+  duration = 10_000,
   dismiss = true,
 }: {
   title: string;
   type?: NOTIFICATION_TYPE;
-  message?: string | JSX.Element;
+  message?: string | JSX.Element | undefined;
   duration?: number;
   dismiss?: boolean;
 }) {
@@ -25,11 +25,9 @@ export default function createNotification({
     container: "bottom-left",
     animationIn: ["animate__animated", "animate__fadeIn"],
     animationOut: ["animate__animated", "animate__fadeOut"],
-  };
-  if (!dismiss) {
-    newNotification.dismiss = {
+    dismiss: {
       duration,
-    };
-  }
+    },
+  };
   Store.addNotification(newNotification);
 }

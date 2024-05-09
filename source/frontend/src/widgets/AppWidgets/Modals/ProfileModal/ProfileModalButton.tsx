@@ -1,7 +1,10 @@
 import { BankOutlined } from "@ant-design/icons";
 import AppIconButton from "../../../../components/Buttons/AppIconButton";
 import { useEffect, useMemo, useState } from "react";
-import { useFetchBotInfo } from "../../../../context/data/BotInfoProvider";
+import {
+  ProfileType,
+  useFetchBotInfo,
+} from "../../../../context/data/BotInfoProvider";
 import {
   useIsBotOnlineContext,
   useRestartBot,
@@ -19,7 +22,13 @@ import {
 } from "../../../../context/data/BotExchangeInfoProvider";
 import createNotification from "../../../../components/Notifications/Notification";
 
-export default function ProfileModalButton({ profile, isCurrentProfile }) {
+export default function ProfileModalButton({
+  profile,
+  isCurrentProfile,
+}: {
+  profile: ProfileType | undefined;
+  isCurrentProfile: boolean | undefined;
+}) {
   const [open, setOpen] = useState(false);
   const fetchBotInfo = useFetchBotInfo();
   const [loading, setIsloading] = useState(false);
@@ -28,10 +37,10 @@ export default function ProfileModalButton({ profile, isCurrentProfile }) {
   const isOnline = useIsBotOnlineContext();
   const restartBot = useRestartBot();
   const botDomain = useBotDomainContext();
-  const currentProfileTitle = (profile || {})?.profile?.name;
-  const [newProfileSettings, setNewProfileSettings] = useState(
-    JSON.parse(JSON.stringify(profile || {}))
-  );
+  const currentProfileTitle = profile?.profile?.name;
+  const [newProfileSettings, setNewProfileSettings] = useState<
+    ProfileType | undefined
+  >(profile ? JSON.parse(JSON.stringify(profile)) : undefined);
   const currentCurrencyList = useCurrentCurrencyListContext();
   const unsavedCurrencyList = useUnsavedCurrencyListContext();
   const currencyListChanged =
@@ -58,14 +67,14 @@ export default function ProfileModalButton({ profile, isCurrentProfile }) {
     currencyListChanged && setRequiresInstantRestart(true);
   }, [currencyListChanged]);
 
-  async function saveProfile(event, restart = false) {
+  async function saveProfile(restart = false) {
     setIsloading(true);
     const infoHasChanged =
-      JSON.stringify((profile || {}).profile) !==
-      JSON.stringify(newProfileSettings.profile);
+      JSON.stringify(profile?.profile) !==
+      JSON.stringify(newProfileSettings?.profile);
     const configHasChanged =
-      JSON.stringify((profile || {}).config) !==
-      JSON.stringify(newProfileSettings.config);
+      JSON.stringify(profile?.config) !==
+      JSON.stringify(newProfileSettings?.config);
     function onFail() {
       createNotification({ title: "Successfully updated profile info" });
       setIsloading(false);
@@ -74,7 +83,7 @@ export default function ProfileModalButton({ profile, isCurrentProfile }) {
       ...exchangeConfigUpdate,
       restart_after_save: true,
     };
-    if (currencyListChanged) {
+    if (currencyListChanged && currencySettings) {
       getProfileCurrencyUpdate({
         configUpdate,
         currentCurrencyList,
@@ -83,7 +92,7 @@ export default function ProfileModalButton({ profile, isCurrentProfile }) {
         exchangeInfo,
       });
     }
-    if (configHasChanged) {
+    if (configHasChanged && newProfileSettings) {
       configUpdate.global_config["trading_reference-market"] =
         newProfileSettings.config.trading["reference-market"];
       configUpdate.global_config["trader_enabled"] =
@@ -103,7 +112,7 @@ export default function ProfileModalButton({ profile, isCurrentProfile }) {
           newProfileSettings.config["trader-simulator"]["starting-portfolio"]
         ),
         ...Object.keys(
-          (profile || {}).config["trader-simulator"]["starting-portfolio"]
+          profile?.config["trader-simulator"]["starting-portfolio"]
         ),
       ]);
       portfolioCoins.forEach((coin) => {
@@ -147,7 +156,7 @@ export default function ProfileModalButton({ profile, isCurrentProfile }) {
     handleClose();
   }
   function saveProfileAndRestart() {
-    saveProfile(undefined, true);
+    saveProfile(true);
   }
   function resetUnsavedConfig() {
     setNewProfileSettings(JSON.parse(JSON.stringify(profile)));
@@ -178,8 +187,6 @@ export default function ProfileModalButton({ profile, isCurrentProfile }) {
         />
         {open && (
           <ProfileModal
-            open={open}
-            setIsloading={setIsloading}
             handleClose={handleClose}
             isCurrentProfile={isCurrentProfile}
             newProfileSettings={newProfileSettings}

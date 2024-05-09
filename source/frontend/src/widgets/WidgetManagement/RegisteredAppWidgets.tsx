@@ -37,7 +37,6 @@ import SendActionCommandToTradingMode from "../AppWidgets/Buttons/SendActionComm
 import RefreshBotData from "../AppWidgets/Buttons/RefreshData";
 import OptimizerQueueSize from "../AppWidgets/Stats/OptimizerQueueSize";
 import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
-import SymbolsInfoTable from "../AppWidgets/Tables/SymbolsInfo";
 import LogoutButton from "../AppWidgets/Buttons/LogoutButton";
 import Sidebar, { SidebarMenuItem } from "../LayoutWidgets/Sidebar/Sidebar";
 import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
@@ -108,7 +107,6 @@ export type AppWidgetNameType =
   | "PowerMenu"
   | "SendActionCommandToTradingMode"
   | "ToggleActivateRealTimeStrategy"
-  | "SymbolsInfoTable"
   | "LogoutButton"
   | "Sidebar"
   | "SidebarMenuItem"
@@ -177,7 +175,6 @@ export const registeredComponents: { [key in AppWidgetNameType]: any } = {
   SendActionCommandToTradingMode,
   // OptimizerConfigForm2,
   ToggleActivateRealTimeStrategy,
-  SymbolsInfoTable,
   LogoutButton,
   Sidebar,
   SidebarMenuItem,

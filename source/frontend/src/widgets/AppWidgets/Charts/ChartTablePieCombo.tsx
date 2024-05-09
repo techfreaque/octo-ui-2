@@ -1,4 +1,4 @@
-import W2uiDataTable from "../Tables/W2uiDataTable";
+import W2uiDataTable from "../Tables/DataTable";
 import PlotlyDualCharts from "./MainCharts/PlotlyDualCharts";
 import { sizes } from "../../../constants/frontendConstants";
 import {
@@ -155,7 +155,7 @@ export default function ChartTablePieCombo({
         setLayouts
       );
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [plottedElements, uiConfig, visiblePairs, visibleTimeframes]);
 
   if (chartType === chartTypes.CHART) {

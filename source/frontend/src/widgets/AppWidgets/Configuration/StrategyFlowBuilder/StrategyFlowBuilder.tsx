@@ -1,6 +1,8 @@
 import {
+  Dispatch,
   DragEventHandler,
-  LegacyRef,
+  RefObject,
+  SetStateAction,
   useCallback,
   useEffect,
   useMemo,
@@ -29,12 +31,16 @@ import SaveStrategyFlowBuilderSettings, {
 import {
   FlowEdgeConfigType,
   TentaclesConfigValuesType,
+  TentaclesConfigsRootType,
   tentacleConfigTypes,
   useTentaclesConfigContext,
   useUpdateIsSavingTentaclesConfigContext,
 } from "../../../../context/config/TentaclesConfigProvider";
 import StrategyBlockNode from "./CustomNodes/StrategyBlockNode";
-import { strategyFlowMakerName } from "../TentaclesConfig";
+import {
+  StrategyFlowMakerNameType,
+  strategyFlowMakerName,
+} from "../TentaclesConfig";
 import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
 import { flowEditorSettingsName } from "../UIConfig";
 import { CustomEdge } from "./CustomNodes/ConnectionLine";
@@ -42,7 +48,11 @@ import { CustomEdge } from "./CustomNodes/ConnectionLine";
 const getId = () =>
   Date.now().toString(36) + Math.random().toString(36).substring(2);
 
-export default function StrategyFlowBuilder({ tradingModeKey }) {
+export default function StrategyFlowBuilder({
+  tradingModeKey,
+}: {
+  tradingModeKey: StrategyFlowMakerNameType;
+}) {
   return useMemo(
     () => (
       <ReactFlowProvider>
@@ -53,10 +63,14 @@ export default function StrategyFlowBuilder({ tradingModeKey }) {
   );
 }
 
-interface NodeData {}
-interface EdgeData {}
+export interface NodeData {}
+export interface EdgeData {}
 
-function StrategyFlowBuilderDrawingSpace({ tradingModeKey }) {
+function StrategyFlowBuilderDrawingSpace({
+  tradingModeKey,
+}: {
+  tradingModeKey: StrategyFlowMakerNameType;
+}) {
   const reactFlowWrapper = useRef<HTMLDivElement>(null);
   const setIsSaving = useUpdateIsSavingTentaclesConfigContext();
   const currentTentaclesConfig = useTentaclesConfigContext();
@@ -64,10 +78,10 @@ function StrategyFlowBuilderDrawingSpace({ tradingModeKey }) {
     currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
   const nodesConfig =
     currentTentaclesTradingConfig?.[strategyFlowMakerName]?.config;
-  const [nodes, setNodes, onNodesChange] = useNodesState(
+  const [nodes, setNodes, onNodesChange] = useNodesState<NodeData>(
     (nodesConfig?.nodes && Object.values(nodesConfig?.nodes)) || []
   );
-  const [edges, setEdges, onEdgesChange] = useEdgesState(
+  const [edges, setEdges, onEdgesChange] = useEdgesState<EdgeData>(
     (nodesConfig?.edges as FlowEdgeConfigType[]) || []
   );
   const uiConfig = useUiConfigContext();
@@ -254,10 +268,38 @@ function useGetFlowCallbacks({
   autoSave,
   nodes,
   reactFlowWrapper,
+}: {
+  currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined;
+  edges: Edge<EdgeData>[];
+  handleUserInputSave: ({
+    tradingModeKey,
+    config,
+    nodes,
+    edges,
+    setIsSaving,
+    reloadPlots,
+    successNotification,
+  }: {
+    tradingModeKey: StrategyFlowMakerNameType;
+    config;
+    nodes: Node<NodeData>[];
+    edges: Edge<EdgeData>[];
+    setIsSaving;
+    reloadPlots?: boolean | undefined;
+    successNotification?: boolean | undefined;
+  }) => void;
+  reactFlowInstance: ReactFlowInstance<NodeData, EdgeData> | undefined;
+  setIsSaving: Dispatch<SetStateAction<boolean>>;
+  setEdges: (value: SetStateAction<Edge<EdgeData>[]>) => void;
+  tradingModeKey: StrategyFlowMakerNameType;
+  setNodes: (value: SetStateAction<Node<NodeData>[]>) => void;
+  autoSave: boolean | undefined;
+  nodes: Node<NodeData>[];
+  reactFlowWrapper: RefObject<HTMLDivElement>;
 }) {
   const onConnect = useCallback(
     (connection: Connection) => {
-      let uptoDateEdges;
+      let uptoDateEdges: Edge<EdgeData>[] | undefined;
       setEdges((eds) => {
         uptoDateEdges = addEdge(connection, eds);
         return uptoDateEdges;
@@ -312,7 +354,7 @@ function useGetFlowCallbacks({
           type,
         },
       };
-      let uptoDateNodes;
+      let uptoDateNodes: Node<NodeData>[] | undefined;
       setNodes((_nodes) => {
         uptoDateNodes = _nodes.concat(newNode);
         return uptoDateNodes;

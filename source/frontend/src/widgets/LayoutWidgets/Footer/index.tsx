@@ -93,7 +93,7 @@ function UnsupportedWarning({
   octobotProject,
   isSmallScreen,
 }: {
-  octobotProject?: string;
+  octobotProject: string | undefined;
   isSmallScreen: boolean;
 }) {
   const [open, setOpen] = useState(false);

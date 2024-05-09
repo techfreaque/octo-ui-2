@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
 import {
   ExchangeConfigType,
-  SericesExchangeInfoType,
   useFetchExchangesList,
   useHandleExchangeSettingChange,
   useNewConfigExchangesContext,
@@ -200,9 +199,17 @@ export default function ExchangeSelector() {
       hasWebsockets,
       authSuccess,
       hasWebsocketsLabel: hasWebsockets ? (
-        <CheckCircleOutlined />
+        <Tooltip
+          title={<Trans i18nKey="exchangeSelector.hasWebsocketTooltip" />}
+        >
+          <CheckCircleOutlined />
+        </Tooltip>
       ) : (
-        <WarningOutlined />
+        <Tooltip
+          title={<Trans i18nKey="exchangeSelector.noWebsocketTooltip" />}
+        >
+          <WarningOutlined />
+        </Tooltip>
       ),
     });
   }
@@ -277,11 +284,10 @@ export default function ExchangeSelector() {
         </Space>
       </div>
     ),
-    rowExpandable: (record) => true,
+    rowExpandable: () => true,
   };
   return (
     <AntTable
-      onFilterChange={filterData}
       columns={columns}
       // maxWidth="950px"
       expandable={expandable}
@@ -317,7 +323,7 @@ const columns: ExchangeColumnType[] = [
   {
     title: "Exchange",
     dataIndex: "exchangeLabel",
-    width: "22%",
+    width: "18%",
     key: "exchange",
     dsorter: "string",
     sortDirections: ["descend", "ascend"],
@@ -325,7 +331,7 @@ const columns: ExchangeColumnType[] = [
   {
     title: "Type",
     dataIndex: "exchangeTypeLabel",
-    width: "20%",
+    width: "18%",
     key: "supportedExchangeTypes",
     dsorter: "string[]",
     sortDirections: ["descend", "ascend"],
@@ -349,25 +355,24 @@ const columns: ExchangeColumnType[] = [
     dsorter: "boolean",
     sortDirections: ["descend", "ascend"],
   },
-  // {
-  //     title: 'Has Websockets',
-  //     dataIndex: 'hasWebsocketsLabel',
-  //     key: "hasWebsockets",
-  //     width: '15%',
-  //     filters: [
-  //         {
-  //             text: "Rest API only",
-  //             value: false
-  //         }, {
-  //             text: "Has Websockets",
-  //             value: true
-  //         },
-  //     ],
-  //     // ... getColumnSearchProps('enabledLabel'),
-  //     sorter: (a, b) => (a.hasWebsockets ? 1 : 0) - (b.hasWebsockets ? 1 : 0),
-  //     sortDirections: ['descend', 'ascend']
-  //     // filters: enabledExchanges?.map(exchange => ({text: exchange, value: exchange}))
-  // },
+  {
+    title: "Has Websocket",
+    dataIndex: "hasWebsocketsLabel",
+    key: "hasWebsockets",
+    width: "15%",
+    filters: [
+      {
+        text: "Rest API only",
+        value: false,
+      },
+      {
+        text: "Has Websockets",
+        value: true,
+      },
+    ],
+    dsorter: "boolean",
+    sortDirections: ["descend", "ascend"],
+  },
   {
     title: "Tested",
     dataIndex: "isTestedExchangeLabel",
@@ -412,42 +417,3 @@ const columns: ExchangeColumnType[] = [
     sortDirections: ["descend", "ascend"],
   },
 ];
-function filterData(tableParams, data) {
-  return data.filter((item) => {
-    if (
-      tableParams?.filters?.exchange &&
-      tableParams?.filters?.exchange?.every(
-        (exchange) => item.exchange !== exchange
-      )
-    ) {
-      return false;
-    }
-    if (
-      tableParams?.filters?.enabled &&
-      !tableParams?.filters?.enabled?.includes(item.enabled)
-    ) {
-      return false;
-    }
-    if (
-      tableParams?.filters?.isTestedSimulationExchange &&
-      !tableParams?.filters?.isTestedSimulationExchange?.includes(
-        item.isTestedSimulationExchange
-      )
-    ) {
-      return false;
-    }
-    if (
-      tableParams?.filters?.isTestedExchange &&
-      !tableParams?.filters?.isTestedExchange?.includes(item.isTestedExchange)
-    ) {
-      return false;
-    }
-    if (
-      tableParams?.filters?.hasWebsockets &&
-      !tableParams?.filters?.hasWebsockets?.includes(item.hasWebsockets)
-    ) {
-      return false;
-    }
-    return true;
-  });
-}

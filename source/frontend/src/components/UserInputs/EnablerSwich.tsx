@@ -8,10 +8,10 @@ export default function EnablerSwitch({
   disabledAfterRestart,
   onChange,
 }: {
-  availableAfterRestart: boolean;
+  availableAfterRestart: boolean | undefined;
   title: string;
-  isEnabled: boolean;
-  disabledAfterRestart: boolean;
+  isEnabled: boolean | undefined;
+  disabledAfterRestart: boolean | undefined;
   onChange: SwitchChangeEventHandler;
 }) {
   const switchTheme: ThemeConfig =

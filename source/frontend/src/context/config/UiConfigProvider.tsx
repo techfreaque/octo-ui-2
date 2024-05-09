@@ -93,7 +93,7 @@ export interface DisplaySettingsUiConfig {
 }
 
 export interface UiConfigType {
-  [botLayoutKey]?: BotLayoutType;
+  [botLayoutKey]?: BotLayoutType | undefined;
   [OPTIMIZER_RUN_SETTINGS_KEY]?: OptimizerUiConfig;
   [BACKTESTING_RUN_SETTINGS_KEY]?: BacktestingUiConfig;
   [BACKTESTING_ANALYSIS_SETTINGS]?: BacktestingAnalysisUiConfig;

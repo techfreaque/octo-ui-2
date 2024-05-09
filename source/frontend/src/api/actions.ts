@@ -19,22 +19,12 @@ export async function startBacktesting(
   backtestingSettings: StatBacktestingSettingsType,
   setBotIsBacktesting: Dispatch<SetStateAction<boolean>>
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback(payload: successResponseCallBackParams) {
     setBotIsBacktesting(true);
-    createNotification({ title: data });
+    createNotification({ title: payload.data });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
-    createNotification({ title: data.responseText, type: "danger" });
+  function errorCallback(payload: errorResponseCallBackParams) {
+    createNotification({ title: payload.data.responseText, type: "danger" });
     // todo check if running
     setBotIsBacktesting(true);
   }
@@ -51,21 +41,11 @@ export async function restartBot(
   updateIsOnline: Dispatch<SetStateAction<boolean>>,
   notification: boolean
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     updateIsOnline(false);
     if (notification) createNotification({ title: "The bot is restarting..." });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     if (notification)
       createNotification({ title: "Failed to restart bot", type: "danger" });
   }
@@ -85,23 +65,13 @@ export async function logOutBot(
   onLoggedOut: () => void
 ) {
   setIsloading(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     updateIsOnline(false);
     createNotification({ title: "Logged out successfully" });
     setIsloading(false);
     onLoggedOut();
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     setIsloading(false);
     createNotification({ title: "Failed to log out from bot", type: "danger" });
   }
@@ -120,22 +90,12 @@ export async function stopBot(
   setIsloading: Dispatch<SetStateAction<boolean>>
 ) {
   setIsloading(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     updateIsOnline(false);
     createNotification({ title: "The bot is stopping..." });
     setIsloading(false);
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     setIsloading(false);
     createNotification({ title: "Failed to restart bot", type: "danger" });
   }
@@ -154,22 +114,12 @@ export async function updateBot(
   setIsloading: Dispatch<SetStateAction<boolean>>
 ) {
   setIsloading(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     updateIsOnline(false);
     createNotification({ title: "The bot is updating..." });
     setIsloading(false);
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     setIsloading(false);
     createNotification({ title: "Failed to update bot", type: "danger" });
   }
@@ -205,13 +155,8 @@ export async function startOptimizer(
       });
     }
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
-    createNotification({ title: data.message, type: "danger" });
+  function errorCallback(payload: errorResponseCallBackParams) {
+    createNotification({ title: payload.data.message, type: "danger" });
   }
   sendAndInterpretBotUpdate({
     updatedData: optimizerRunSettings,
@@ -227,25 +172,15 @@ export async function addToOptimizerQueue(
   optimizerSettingsForm: OptimizerEditorInputsType,
   fetchOptimizerQueue: () => void
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback(payload: successResponseCallBackParams) {
     fetchOptimizerQueue();
-    createNotification({ title: data?.message || data });
+    createNotification({ title: payload.data?.message || payload.data });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback(payload: errorResponseCallBackParams) {
     createNotification({
       title: "Failed to add to the queue",
       type: "danger",
-      message: data?.message || data,
+      message: payload.data?.message || payload.data,
     });
   }
   const updatedData = {
@@ -268,14 +203,9 @@ export async function stopBacktesting(
   botDomain: string,
   setBotIsBacktesting: Dispatch<SetStateAction<boolean>>
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback(payload: successResponseCallBackParams) {
     setBotIsBacktesting(false);
-    createNotification({ title: data });
+    createNotification({ title: payload.data });
   }
   sendAndInterpretBotUpdate({
     updatedData: {},
@@ -288,23 +218,16 @@ export async function stopOptimizer(
   botDomain: string,
   setBotIsOptimizing: Dispatch<SetStateAction<boolean | "isStopping">>
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback(payload: successResponseCallBackParams) {
     // TODO check why streing
     setBotIsOptimizing("isStopping");
-    createNotification({ title: data });
+    createNotification({ title: payload.data });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
-    createNotification({ title: data.responseText || data, type: "danger" });
+  function errorCallback(payload: errorResponseCallBackParams) {
+    createNotification({
+      title: payload.data.responseText || payload.data,
+      type: "danger",
+    });
     // todo check if running
     setBotIsOptimizing(false);
   }
@@ -317,20 +240,10 @@ export async function stopOptimizer(
 }
 
 export async function resetPingPongStorage(botDomain: string) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({ title: "Successfully cleared daemons storage" });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: "Failed to reset daemons storage",
       type: "danger",
@@ -348,22 +261,12 @@ export async function deleteCurrentCache(
   botDomain: string,
   exchangeId: string
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({
       title: "Successfully deleted current trading mode cache",
     });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: "Failed to delete current trading mode cache",
       type: "danger",
@@ -379,20 +282,10 @@ export async function deleteCurrentCache(
   });
 }
 export async function deleteAllCache(botDomain: string, exchangeId: string) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({ title: "Successfully deleted all cached values" });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: "Failed to delete all cached values",
       type: "danger",
@@ -413,21 +306,11 @@ export async function cancelAllOrders(
   setIsCancelling: Dispatch<SetStateAction<boolean>>
 ) {
   setIsCancelling(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({ title: "Successfully canceled all orders" });
     setIsCancelling(false);
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: "Failed to cancel all orders",
       type: "danger",
@@ -449,21 +332,11 @@ export async function cancelOrder(
   setIsCancelling: Dispatch<SetStateAction<boolean>>
 ) {
   setIsCancelling(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({ title: "Successfully canceled order" });
     setIsCancelling(false);
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({ title: "Failed to cancel order", type: "danger" });
     setIsCancelling(false);
   }
@@ -478,24 +351,19 @@ export async function cancelOrder(
 export async function cancelOrders(
   botDomain: string,
   orderIdsArray: string[],
-  setIsCancelling?: Dispatch<SetStateAction<boolean>>
+  setIsCancelling: Dispatch<SetStateAction<boolean>>,
+  upDateOrders: (isLive?: boolean) => void
 ) {
   setIsCancelling?.(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback(payload: successResponseCallBackParams) {
+    if (payload.data === "0 orders cancelled") {
+      return errorCallback();
+    }
     createNotification({ title: "Successfully canceled orders" });
+    upDateOrders(true);
     setIsCancelling?.(false);
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({ title: "Failed to cancel orders", type: "danger" });
     setIsCancelling?.(false);
   }
@@ -513,20 +381,10 @@ export async function updateProfileInfo(
   onFail?: (payload: errorResponseCallBackParams) => void,
   onSuccess?: (payload: successResponseCallBackParams) => void
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({ title: "Successfully updated profile info" });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: "Failed to updated profile info",
       type: "danger",
@@ -557,23 +415,13 @@ export async function duplicateProfile({
   onFail?: () => void;
   onSuccess?: () => void;
 }) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     onSuccess?.();
     createNotification({
       title: `Successfully created ${newProfileName} strategy`,
     });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     onFail?.();
     createNotification({
       title: `Failed to duplicate ${profileName} profile`,
@@ -598,23 +446,13 @@ export async function deleteProfile(
   onSuccess?: () => void,
   onFail?: () => void
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     onSuccess?.();
     createNotification({
       title: `Successfully deleted ${profileName} profile`,
     });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     onFail?.();
     createNotification({
       title: `Failed to delete ${profileName} profile`,
@@ -647,124 +485,84 @@ export async function selectProfile(
   });
 }
 
-export async function getAllOrders(
-  botDomain: string,
-  setIsLoading: Dispatch<SetStateAction<boolean>>,
-  setOrders
-) {
-  setIsLoading(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
-    setOrders(data);
-    setIsLoading(false);
-  }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
-    createNotification({ title: "Failed to load all orders", type: "danger" });
-    setIsLoading(false);
-  }
-  sendAndInterpretBotUpdate({
-    updatedData: {},
-    updateUrl: botDomain + backendRoutes.getAllOrders,
-    successCallback,
-    errorCallback,
-    method: "GET",
-  });
-}
+// export async function getAllOrders(
+//   botDomain: string,
+//   setIsLoading: Dispatch<SetStateAction<boolean>>,
+//   setOrders
+// ) {
+//   setIsLoading(true);
+//   function successCallback(payload: successResponseCallBackParams) {
+//     setOrders(payload.data);
+//     setIsLoading(false);
+//   }
+//   function errorCallback() {
+//     createNotification({ title: "Failed to load all orders", type: "danger" });
+//     setIsLoading(false);
+//   }
+//   sendAndInterpretBotUpdate({
+//     updatedData: {},
+//     updateUrl: botDomain + backendRoutes.getAllOrders,
+//     successCallback,
+//     errorCallback,
+//     method: "GET",
+//   });
+// }
 
-export async function getAllTrades(
-  botDomain: string,
-  setIsLoading: Dispatch<SetStateAction<boolean>>,
-  setTrades
-) {
-  setIsLoading(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
-    setTrades(data);
-    setIsLoading(false);
-  }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
-    createNotification({ title: "Failed to load all trades", type: "danger" });
-    setIsLoading(false);
-  }
-  sendAndInterpretBotUpdate({
-    updatedData: {},
-    updateUrl: botDomain + backendRoutes.getAllTrades,
-    successCallback,
-    errorCallback,
-    method: "GET",
-  });
-}
-export async function getAllPositions(
-  botDomain: string,
-  setIsLoading: Dispatch<SetStateAction<boolean>>,
-  setPositions
-) {
-  setIsLoading(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
-    setPositions(data);
-    setIsLoading(false);
-  }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
-    createNotification({ title: "Failed to load positions", type: "danger" });
-    setIsLoading(false);
-  }
-  sendAndInterpretBotUpdate({
-    updatedData: {},
-    updateUrl: botDomain + backendRoutes.getAllPositions,
-    successCallback,
-    errorCallback,
-    method: "GET",
-  });
-}
+// export async function getAllTrades(
+//   botDomain: string,
+//   setIsLoading: Dispatch<SetStateAction<boolean>>,
+//   setTrades
+// ) {
+//   setIsLoading(true);
+//   function successCallback(payload: successResponseCallBackParams) {
+//     setTrades(payload.data);
+//     setIsLoading(false);
+//   }
+//   function errorCallback() {
+//     createNotification({ title: "Failed to load all trades", type: "danger" });
+//     setIsLoading(false);
+//   }
+//   sendAndInterpretBotUpdate({
+//     updatedData: {},
+//     updateUrl: botDomain + backendRoutes.getAllTrades,
+//     successCallback,
+//     errorCallback,
+//     method: "GET",
+//   });
+// }
+// export async function getAllPositions(
+//   botDomain: string,
+//   setIsLoading: Dispatch<SetStateAction<boolean>>,
+//   setPositions
+// ) {
+//   setIsLoading(true);
+//   function successCallback(payload: successResponseCallBackParams) {
+//     setPositions(payload.data);
+//     setIsLoading(false);
+//   }
+//   function errorCallback() {
+//     createNotification({ title: "Failed to load positions", type: "danger" });
+//     setIsLoading(false);
+//   }
+//   sendAndInterpretBotUpdate({
+//     updatedData: {},
+//     updateUrl: botDomain + backendRoutes.getAllPositions,
+//     successCallback,
+//     errorCallback,
+//     method: "GET",
+//   });
+// }
 
 export async function closeAllPositions(
   botDomain: string,
   setIsClosing: Dispatch<SetStateAction<boolean>>
 ) {
   setIsClosing(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({ title: "Successfully closed all positions" });
     setIsClosing(false);
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: "Failed to close all positions",
       type: "danger",
@@ -787,21 +585,11 @@ export async function closePosition(
   setIsClosing: Dispatch<SetStateAction<boolean>>
 ) {
   setIsClosing(true);
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({ title: "Successfully closed position" });
     setIsClosing(false);
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({ title: "Failed to close position", type: "danger" });
     setIsClosing(false);
   }
@@ -821,23 +609,13 @@ export async function realTradingSwitch(
   isRealTrading: boolean
 ) {
   const title = isRealTrading ? "real" : "simulated";
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({
       title: `Successfully switched to ${title} trading`,
       message: "OctoBot will restart now",
     });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     createNotification({
       title: `Failed to switch to ${title} trading`,
       type: "danger",
@@ -866,12 +644,7 @@ export async function updateConfig(
   onFail: () => void,
   onSuccess?: (payload: successResponseCallBackParams) => void
 ) {
-  function successCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: successResponseCallBackParams) {
+  function successCallback() {
     createNotification({
       title: `Successfully updated ${profileName} config`,
       message: newConfig.restart_after_save
@@ -879,12 +652,7 @@ export async function updateConfig(
         : undefined,
     });
   }
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback() {
     onFail?.();
     createNotification({
       title: `Failed to update ${profileName} config`,
@@ -909,16 +677,11 @@ export async function resetTentaclesConfig(
 ) {
   await Promise.all(
     tentacles.map(async (tentacle) => {
-      function errorCallback({
-        updatedData,
-        updateUrl,
-        data,
-        response,
-      }: errorResponseCallBackParams) {
+      function errorCallback(payload: errorResponseCallBackParams) {
         createNotification({
           title: `Failed to reset ${tentacle} config`,
           type: "danger",
-          message: data?.message || data,
+          message: payload.data?.message || payload.data,
         });
       }
       function successCallback({
@@ -962,16 +725,11 @@ export async function resetStorage(
     successCallBack: (payload: successResponseCallBackParams) => void
   ) => void
 ) {
-  function errorCallback({
-    updatedData,
-    updateUrl,
-    data,
-    response,
-  }: errorResponseCallBackParams) {
+  function errorCallback(payload: errorResponseCallBackParams) {
     createNotification({
       title: `Failed to clear ${storage.title} storage`,
       type: "danger",
-      message: data?.message || data,
+      message: payload.data?.message || payload.data,
     });
   }
   function successCallback({

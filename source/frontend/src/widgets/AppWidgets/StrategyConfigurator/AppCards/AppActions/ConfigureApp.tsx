@@ -8,15 +8,15 @@ export default function ConfigureApp({
 }: {
   app: AppStoreAppType;
   onConfigure: () => void;
-}) {
-  return (
-    app.is_selected && (
-      <AppIconButton
-        isSelected={app.is_selected}
-        buttonTitle={`Configure ${app.categories[0]}`}
-        antIconComponent={BranchesOutlined}
-        onClick={onConfigure}
-      />
-    )
+}): JSX.Element {
+  return app.is_selected ? (
+    <AppIconButton
+      isSelected={app.is_selected}
+      buttonTitle={`Configure ${app.categories[0]}`}
+      antIconComponent={BranchesOutlined}
+      onClick={onConfigure}
+    />
+  ) : (
+    <></>
   );
 }

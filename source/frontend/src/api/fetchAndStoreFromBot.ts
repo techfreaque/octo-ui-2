@@ -12,11 +12,13 @@ export async function sendAndInterpretBotUpdate({
 }: {
   updatedData?: any;
   updateUrl: string;
-  successCallback?: (payload: successResponseCallBackParams) => void;
-  errorCallback?: (payload: errorResponseCallBackParams) => void;
+  successCallback?:
+    | ((payload: successResponseCallBackParams) => void)
+    | undefined;
+  errorCallback?: ((payload: errorResponseCallBackParams) => void) | undefined;
   method?: "POST" | "GET";
   withCredentials?: boolean;
-  token?: string;
+  token?: string | undefined;
 }): Promise<void> {
   const requestData: RequestInit = {
     method,
@@ -115,7 +117,7 @@ export async function sendFile({
     headers:
       withCredentials && token
         ? { Authorization: `Bearer ${token}` }
-        : undefined,
+        : {},
   };
   addAuthToRequest(requestData, withCredentials, token);
   try {
@@ -167,10 +169,10 @@ export default async function fetchAndStoreFromBot({
   setBotDataFunction: Dispatch<SetStateAction<any>>;
   method?: "GET" | "POST";
   dataToSend?: any;
-  successNotification?: boolean;
-  keepPreviousValues?: boolean;
-  setIsFinished?: Dispatch<SetStateAction<boolean>>;
-  failNotification?: boolean;
+  successNotification?: boolean | undefined;
+  keepPreviousValues?: boolean | undefined;
+  setIsFinished?: Dispatch<SetStateAction<boolean>> | undefined;
+  failNotification?: boolean | undefined;
 }) {
   function errorCallback({
     updatedData,
@@ -243,10 +245,8 @@ export interface errorResponseCallBackParams {
 }
 
 function genericRequestSuccessCallback({
-  updatedData,
   updateUrl,
   data,
-  response,
 }: successResponseCallBackParams) {
   defaultSuccessNotification(data, updateUrl);
 }
@@ -264,10 +264,8 @@ export function defaultSuccessNotification(data: any, updateUrl: string) {
 }
 
 function genericRequestFailureCallback({
-  updatedData,
   updateUrl,
   data,
-  response,
 }: errorResponseCallBackParams) {
   console.error(
     `Unknown API connect error: Update url: ${updateUrl}, error: ${data}`

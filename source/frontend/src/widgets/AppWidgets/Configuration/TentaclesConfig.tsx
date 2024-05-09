@@ -1,6 +1,6 @@
 import { Tab } from "@mui/material";
 import MuiTabs, { MuiTabType } from "../../../components/Tabs/MuiTabs";
-import { useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import {
   userInputKey,
@@ -28,6 +28,10 @@ import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvide
 import { successResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
 import { AntSideBarMenutItemType } from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import JsonEditor from "@techfreaque/json-editor-react";
+import {
+  JsonEditorType,
+  JsonEditorWindow,
+} from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 
 export function useCurrentTentacleConfig(
   tentacleType = tentacleConfigTypes.tentacles
@@ -245,6 +249,8 @@ export const displayStyles = {
   sidebar: "sidebar",
 };
 
+export type StrategyFlowMakerNameType = "StrategyFlowMakerMode";
+
 export const strategyFlowMakerName = "StrategyFlowMakerMode";
 
 export interface TentacleConfigTabsData
@@ -388,16 +394,18 @@ function _handleHiddenUserInputs(
   setHiddenMetadataColumns?.(hiddenMetadataColumns);
 }
 
+declare const window: JsonEditorWindow;
+
 export function saveUserInputs(
   saveTentaclesConfig,
-  setIsLoading,
+  setIsLoading: Dispatch<SetStateAction<boolean>>,
   storageName = "tradingConfig"
 ) {
   setIsLoading?.(true);
   const tentaclesConfigByTentacle = {};
   let save = true;
   Object.keys(window[`$${storageName}`]).forEach((editorKey) => {
-    const editor = window[`$${storageName}`][editorKey];
+    const editor: JsonEditorType<any> = window[`$${storageName}`][editorKey];
     if (!editor) {
       return;
     }

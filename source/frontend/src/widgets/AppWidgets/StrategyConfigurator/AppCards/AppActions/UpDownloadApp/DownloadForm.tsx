@@ -200,6 +200,7 @@ function AppVersions({
         version.minor_version === downloadInfo?.minor_version &&
         version.bug_fix_version === downloadInfo?.bug_fix_version;
       return {
+        id: title,
         key: title,
         major_version: version.major_version,
         minor_version: version.minor_version,
@@ -346,29 +347,30 @@ function RequiredPackages({
   ];
   let requirementsSatisfied = true;
   requiredApps.forEach((requirement, index) => {
-    Object.values(appStoreData).forEach((apps) => {
-      Object.values(apps).forEach((potentialRequiredApp) => {
-        if (potentialRequiredApp.package_id !== requirement) {
-          return;
-        }
-        const potentialOriginPackage = potentialRequiredApp.origin_package;
-        if (!requiredAppsByTentaclePackage[potentialOriginPackage]) {
-          requiredAppsByTentaclePackage[potentialOriginPackage] = [];
-        }
-        if (potentialOriginPackage) {
-          requiredAppsByTentaclePackage[potentialOriginPackage].push(
-            potentialRequiredApp
-          );
-        }
-        const packageInstalled = requiredAppsByTentaclePackage[
-          potentialOriginPackage
-        ].every((thisApp) => {
-          return thisApp?.is_installed;
+    appStoreData &&
+      Object.values(appStoreData).forEach((apps) => {
+        Object.values(apps).forEach((potentialRequiredApp) => {
+          if (potentialRequiredApp.package_id !== requirement) {
+            return;
+          }
+          const potentialOriginPackage = potentialRequiredApp.origin_package;
+          if (!requiredAppsByTentaclePackage[potentialOriginPackage]) {
+            requiredAppsByTentaclePackage[potentialOriginPackage] = [];
+          }
+          if (potentialOriginPackage) {
+            requiredAppsByTentaclePackage[potentialOriginPackage].push(
+              potentialRequiredApp
+            );
+          }
+          const packageInstalled = requiredAppsByTentaclePackage[
+            potentialOriginPackage
+          ].every((thisApp) => {
+            return thisApp?.is_installed;
+          });
+          requirementsSatisfied =
+            requirementsSatisfied && (index === 0 || packageInstalled);
         });
-        requirementsSatisfied =
-          requirementsSatisfied && (index === 0 || packageInstalled);
       });
-    });
   });
   return (
     <Grid container spacing={2}>
@@ -536,28 +538,29 @@ function AllAppsInPackage({
 
   return (
     <ul>
-      {objectKeys(appStoreData).map((category) => {
-        return (
-          category !== appPackagesName && (
-            <div key={category}>
-              {Object.keys(appStoreData[category]).map((app_id) => {
-                if (
-                  appStoreData[category][app_id].origin_package ===
-                  requiredAppPackage
-                ) {
-                  return (
-                    <div key={`${category}${app_id}`}>
-                      {appStoreData[category][app_id].title}
-                    </div>
-                  );
-                } else {
-                  return <span key={`${category}${app_id}`}></span>;
-                }
-              })}
-            </div>
-          )
-        );
-      })}
+      {appStoreData &&
+        objectKeys(appStoreData).map((category) => {
+          return (
+            category !== appPackagesName && (
+              <div key={category}>
+                {Object.keys(appStoreData[category]).map((app_id) => {
+                  if (
+                    appStoreData[category][app_id].origin_package ===
+                    requiredAppPackage
+                  ) {
+                    return (
+                      <div key={`${category}${app_id}`}>
+                        {appStoreData[category][app_id].title}
+                      </div>
+                    );
+                  } else {
+                    return <span key={`${category}${app_id}`}></span>;
+                  }
+                })}
+              </div>
+            )
+          );
+        })}
     </ul>
   );
 }

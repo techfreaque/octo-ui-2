@@ -33,7 +33,7 @@ export default function ButtonWithModal({
   buttonStyle,
 }: {
   title: JSX.Element | string;
-  content?: UiLayoutPageLayoutType[];
+  content?: UiLayoutPageLayoutType[] | undefined;
   antIcon?: string;
   faIcon?: string;
   iconOnly?: boolean;
@@ -119,8 +119,8 @@ function ModalContent({
 }: {
   open: boolean;
   handleClose: () => void;
-  content?: UiLayoutPageLayoutType[];
-  width?: number | string;
+  content: UiLayoutPageLayoutType[] | undefined;
+  width: number | string | undefined;
 }) {
   const botColors = useBotColorsContext();
   return (

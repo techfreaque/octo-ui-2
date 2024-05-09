@@ -15,7 +15,7 @@ export default function ResizableTabs({
 }) {
   const tabsData: MuiTabType[] = [];
   tabs?.forEach((tab, index) => {
-    tabsData[index] =
+    tabsData.push(
       tab.component === "Tab"
         ? {
             tabId: index,
@@ -35,8 +35,10 @@ export default function ResizableTabs({
               />
             ),
             content: tab.content ? <AppWidgets layout={tab.content} /> : <></>,
-            toolBarContent: tab.toolBarContent?.[0] && (
+            toolBarContent: tab.toolBarContent?.[0] ? (
               <AppWidgets layout={tab.toolBarContent} />
+            ) : (
+              <></>
             ),
             dontScroll: tab.dontScroll,
           }
@@ -46,7 +48,8 @@ export default function ResizableTabs({
               <AppWidgets key={tab.title?.replace(/ /g, "_")} layout={[tab]} />
             ),
             content: tab.content ? <AppWidgets layout={tab.content} /> : <></>,
-          };
+          }
+    );
   });
   return (
     <MuiTabs
@@ -68,8 +71,8 @@ export function TabLabel({
   antIcon,
 }: {
   tabTitle: string;
-  faIcon?: string;
-  antIcon?: string;
+  faIcon?: string | undefined;
+  antIcon?: string | undefined;
 }): JSX.Element {
   return (
     <>

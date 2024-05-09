@@ -11,7 +11,7 @@ import { fetchExchangeInfo } from "../../api/data";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useBotInfoContext } from "./BotInfoProvider";
 import { updateConfig } from "../../api/actions";
-import { parseSymbol } from "../../components/SymbolsUtil/SymbolsUtil";
+import { parseSymbol } from "../../helpers/SymbolsUtil";
 import { backendRoutes } from "../../constants/backendConstants";
 import fetchAndStoreFromBot from "../../api/fetchAndStoreFromBot";
 
@@ -35,7 +35,7 @@ type ExchangesConfigType = {
   [exchange: string]: ExchangeConfigType;
 };
 
-type ConfigSymbolsType = {
+export type ConfigSymbolsType = {
   [currency: string]: {
     enabled: boolean;
     pairs: string[];
@@ -64,7 +64,7 @@ const UpdateExchangeInfoContext = createContext<
   Dispatch<SetStateAction<ExchangeInfoType | undefined>>
 >((_value) => {});
 
-type CurrencyListType = string[];
+export type CurrencyListType = string[];
 
 const UpdateToSaveCurrencySettingsContext = createContext<
   Dispatch<SetStateAction<ConfigSymbolsType | undefined>>
@@ -177,7 +177,7 @@ const initialExchangeConfigUpdate: ExchangeConfigUpdateType = {
 
 export type ExchangeConfigUpdateType = {
   global_config: {
-    [configKey: string]: boolean | string[] | string;
+    [configKey: string]: boolean | string[] | string | number;
   };
   removed_elements: string[];
   restart_after_save?: boolean;
@@ -562,13 +562,13 @@ function convertSymbolSettingsToNewFormat(
       if (originalCurrencySettings[currency]?.enabled !== false) {
         originalCurrencySettings[currency]?.pairs?.forEach((pair) => {
           currencyList.push(pair);
-          currencySettings[
-            exchangeInfo?.currency_name_info?.[parseSymbol(pair).base]?.n ||
-              pair
-          ] = {
-            enabled: true,
-            pairs: [pair],
-          };
+          if (!currencySettings[pair]) {
+            currencySettings[pair] = {
+              enabled: true,
+              pairs: [],
+            };
+          }
+          currencySettings[pair].pairs.push(pair);
         });
       }
     });

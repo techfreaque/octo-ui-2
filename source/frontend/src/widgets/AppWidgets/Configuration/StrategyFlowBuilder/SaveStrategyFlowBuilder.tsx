@@ -1,5 +1,6 @@
 import { ReloadOutlined } from "@ant-design/icons";
 import {
+  TentaclesConfigsRootType,
   useIsSavingTentaclesConfigContext,
   useSaveTentaclesConfig,
   useUpdateIsSavingTentaclesConfigContext,
@@ -23,12 +24,20 @@ import {
   errorResponseCallBackParams,
   successResponseCallBackParams,
 } from "../../../../api/fetchAndStoreFromBot";
+import { Edge, Node } from "reactflow";
+import { EdgeData, NodeData } from "./StrategyFlowBuilder";
+import { StrategyFlowMakerNameType } from "../TentaclesConfig";
 
 export default function SaveStrategyFlowBuilderSettings({
   tradingModeKey,
   config,
   nodes,
   edges,
+}: {
+  tradingModeKey: StrategyFlowMakerNameType;
+  config: TentaclesConfigsRootType;
+  nodes: Node<NodeData>[];
+  edges: Edge<EdgeData>[];
 }) {
   const isOnline = useIsBotOnlineContext();
   const handleUserInputSave = useSaveFlowBuilderSettings();
@@ -168,10 +177,10 @@ export function useSaveFlowBuilderSettings() {
       reloadPlots = false,
       successNotification = false,
     }: {
-      tradingModeKey: string;
+      tradingModeKey: StrategyFlowMakerNameType;
       config;
-      nodes;
-      edges;
+      nodes: Node<NodeData>[];
+      edges: Edge<EdgeData>[];
       setIsSaving;
       reloadPlots?: boolean;
       successNotification?: boolean;

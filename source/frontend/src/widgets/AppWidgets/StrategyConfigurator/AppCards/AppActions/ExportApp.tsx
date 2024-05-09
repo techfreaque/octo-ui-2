@@ -11,16 +11,14 @@ export default function ExportApp({
   exportUrl: string;
 }) {
   const botDomain = useBotDomainContext();
-  return (
-    app.is_installed && (
-      <AppIconButton
-        isSelected={app.is_selected}
-        buttonTitle={
-          app.categories[0] ? `Export ${app.categories[0]}` : "Export"
-        }
-        antIconComponent={ExportOutlined}
-        href={botDomain + exportUrl}
-      />
-    )
+  return app.is_installed ? (
+    <AppIconButton
+      isSelected={app.is_selected}
+      buttonTitle={app.categories[0] ? `Export ${app.categories[0]}` : "Export"}
+      antIconComponent={ExportOutlined}
+      href={botDomain + exportUrl}
+    />
+  ) : (
+    <></>
   );
 }

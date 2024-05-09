@@ -19,7 +19,6 @@ export default function AppWidgets(props: {
     if (props.layout?.[0]) {
       return (
         <>
-          {" "}
           {props.layout.map((element, index) => {
             if (
               typeof registeredComponents[
@@ -73,18 +72,18 @@ export default function AppWidgets(props: {
 }
 
 export class ErrorBoundary extends Component {
-  props!: { children: JSX.Element; componentName: string };
-  state: {
+  override props!: { children: JSX.Element; componentName: string };
+  override state: {
     error: Error | null;
     errorInfo: ErrorInfo | null;
   } = {
     error: null,
     errorInfo: null,
   };
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  override componentDidCatch(error: Error, errorInfo: ErrorInfo) {
     this.setState({ error, errorInfo });
   }
-  render() {
+  override render() {
     if (this.state.errorInfo) {
       createNotification({
         title: `Oh no! ${this.props.componentName} crashed!`,

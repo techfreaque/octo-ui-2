@@ -32,7 +32,7 @@ export default function OptimizerProgress() {
                 <div>
                   {`Optimizer is ${Math.round(overallProgress * 10) / 10}% completed.`}
                 </div>
-                <div>{`${remainingTime}`}</div>
+                <div>{remainingTime}</div>
               </>
             }
           >

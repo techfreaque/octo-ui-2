@@ -20,6 +20,7 @@ import {
 import {
   AbstractWebsocketContext,
   WebsocketDataType,
+  WebsocketOnConnectionUpdateType,
 } from "../websockets/AbstractWebsocketContext";
 import createNotification from "../../components/Notifications/Notification";
 
@@ -127,13 +128,18 @@ function DataCollectorProgressProvider({
   setDataCollectorProgress,
   children,
 }: {
-  setDataCollectorProgress;
+  setDataCollectorProgress: Dispatch<
+    SetStateAction<DataCollectingProgressType>
+  >;
   children: JSX.Element;
 }) {
   const botDomain = useBotDomainContext();
   const setBotIsCollectingData = useUpdateBotIsDataCollectingContext();
-  const socketUrl = botDomain + "/data_collector";
-  function onConnectionUpdate(data, socket) {
+  const socketUrl = `${botDomain}/data_collector`;
+  const onConnectionUpdate: WebsocketOnConnectionUpdateType = (
+    data,
+    socket
+  ) => {
     if (data) {
       setDataCollectorProgress(data);
     }
@@ -150,7 +156,7 @@ function DataCollectorProgressProvider({
         return false;
       });
     }
-  }
+  };
   function onConnectionLost() {
     setBotIsCollectingData(false);
   }
@@ -170,13 +176,16 @@ function BacktestingProgressProvider({
   setBacktestingProgress,
   children,
 }: {
-  setBacktestingProgress;
+  setBacktestingProgress: Dispatch<SetStateAction<BacktestingProgressType>>;
   children: JSX.Element;
 }) {
   const botDomain = useBotDomainContext();
   const setBotIsBacktesting = useUpdateBotIsBacktestingContext();
   const socketUrl = `${botDomain}/backtesting`;
-  function onConnectionUpdate(data, socket) {
+  const onConnectionUpdate: WebsocketOnConnectionUpdateType = (
+    data,
+    socket
+  ) => {
     if (data) {
       setBacktestingProgress(data);
     }
@@ -193,7 +202,7 @@ function BacktestingProgressProvider({
         return false;
       });
     }
-  }
+  };
   function onConnectionLost() {
     setBotIsBacktesting(false);
   }

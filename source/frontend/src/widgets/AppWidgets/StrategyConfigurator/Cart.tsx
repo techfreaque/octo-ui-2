@@ -1,5 +1,6 @@
 import { Space, Typography } from "antd";
 import {
+  AppStoreCartType,
   AppStorePaymentUrlType,
   useAppStoreCartContext,
   useAppStoreCartIsOpenContext,
@@ -59,7 +60,7 @@ export default function AppStoreCartModal({ content }: UiLayoutPageLayoutType) {
 }
 
 export function AppStoreCart() {
-  const appStoreCart = useAppStoreCartContext();
+  const appStoreCart: AppStoreCartType = useAppStoreCartContext();
   const removeFromCart = useRemoveFromAppStoreCart();
   const createPaymentFromAppStoreCart = useCreatePaymentFromAppStoreCart();
   const cancelStorePayment = useCancelStorePayment();
@@ -67,15 +68,21 @@ export function AppStoreCart() {
   const appStorePaymentUrl = useAppStorePaymentUrlContext();
   let totalPrice = 0;
   const cartList: AntTableDataType[] = appStoreCart
-    ? Object.keys(appStoreCart).map((originPackage) => {
-        const firstAppInPackage =
-          appStoreCart[originPackage][
-            Object.keys(appStoreCart[originPackage])[0]
-          ];
+    ? Object.entries(appStoreCart).map(([originPackageName, originPackage]) => {
+        const firstAppKeyInPackage = Object.keys(originPackage)[0];
+        const firstAppInPackage = firstAppKeyInPackage
+          ? originPackage[firstAppKeyInPackage]
+          : undefined;
+        if (!firstAppInPackage) {
+          throw new Error(`No app in package ${originPackageName}`);
+        }
+        if (!firstAppInPackage.price) {
+          throw new Error(`No price for ${firstAppInPackage.package_id}`);
+        }
         totalPrice += firstAppInPackage.price * 12;
         return {
           ...firstAppInPackage,
-          key: originPackage,
+          id: originPackageName,
           price: `${firstAppInPackage.price}$ / month`,
           months: 12,
           total: `${12 * firstAppInPackage.price}$`,
@@ -83,7 +90,7 @@ export function AppStoreCart() {
             <AntButton
               antIconComponent={CloseCircleOutlined}
               buttonType={buttonTypes.warning}
-              onClick={() => removeFromCart(originPackage)}
+              onClick={() => removeFromCart(originPackageName)}
             >
               Remove from Basket
             </AntButton>

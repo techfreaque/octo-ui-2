@@ -69,7 +69,9 @@ export default function NotificationCenter() {
               description={item.Message?.split("<br>").map((row) => (
                 <div key={row}> {row}</div>
               ))}
-              type={item.Level === "danger" ? "error" : item.Level}
+              type={
+                (item.Level === "danger" ? "error" : item.Level) || "warning"
+              }
               showIcon
               style={{ marginBottom: "10px" }}
             />
@@ -98,12 +100,11 @@ export default function NotificationCenter() {
                 <div key={row}> {row}</div>
               ))}
               type={
-                item.Level?.toLowerCase() as
+                (item.Level?.toLowerCase() as
                   | "info"
                   | "success"
                   | "warning"
-                  | "error"
-                  | undefined
+                  | "error") || "warning"
               }
               showIcon
               style={{ marginBottom: "10px" }}

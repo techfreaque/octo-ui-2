@@ -36,7 +36,7 @@ export default function ResetIndividual({
         }}
       >
         <Switch
-          checked={checkedList?.[titleKey]}
+          checked={checkedList?.[titleKey] || false}
           onChange={() => handleCheckboxClick(titleKey)}
           checkedChildren="Reset"
         />

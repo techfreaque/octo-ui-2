@@ -12,7 +12,7 @@ export default function SelectApp({
   isReadOnlyStrategy,
 }: {
   app: AppStoreAppType;
-  handleSelect?: (setClosed: () => void) => void;
+  handleSelect?: ((setClosed: () => void) => void) | undefined;
   isReadOnlyStrategy: boolean;
 }) {
   const [open, setOpen] = useState(false);

@@ -70,7 +70,16 @@ export default function SendActionCommandToTradingMode({
 
 export function sendActionCommandToTradingMode(
   command: ApiActionsType,
-  saveTentaclesConfigAndSendAction,
+  saveTentaclesConfigAndSendAction: (
+    newConfigs,
+    actionType: ApiActionsType,
+    setIsLoading: Dispatch<SetStateAction<boolean>>,
+    reloadPlots?: boolean,
+    successCallback?:
+      | ((payload: successResponseCallBackParams) => void)
+      | undefined,
+    errorCallback?: ((payload: errorResponseCallBackParams) => void) | undefined
+  ) => void,
   setIsExecuting: Dispatch<SetStateAction<boolean>>,
   successCallback?: (payload: successResponseCallBackParams) => void,
   errorCallback?: (payload: errorResponseCallBackParams) => void

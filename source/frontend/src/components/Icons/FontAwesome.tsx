@@ -22,13 +22,14 @@ export function FaIconByReactFunc({
 }: {
   icon: IconProp;
   size?: SizeType;
-  spin?: boolean;
+  spin?: boolean | undefined;
   marginRight?: string;
 }) {
+  const sizeProp = iconStyles[size];
   return (
     icon &&
     createElement(FontAwesomeIcon, {
-      ...(iconStyles[size] && { size: iconStyles[size] }),
+      ...(sizeProp ? { size: sizeProp } : {}),
       icon,
       spin,
       style: {
@@ -49,7 +50,7 @@ export function MuiIconByReactFunc({
     muiName: string;
   };
   size?: SizeType;
-  spin?: boolean;
+  spin?: boolean | undefined;
   marginRight?: string;
 }) {
   return createElement(icon, {
@@ -72,7 +73,7 @@ export default function FontAwesomeIconByString({
   faIcon: string;
   size?: SizeType;
   marginRight?: string;
-  spin?: boolean;
+  spin?: boolean | undefined;
   style?: CSSProperties | undefined;
 }) {
   const className = spin

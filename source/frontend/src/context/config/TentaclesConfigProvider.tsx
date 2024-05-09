@@ -13,7 +13,11 @@ import {
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
-import { ApiActionsType, useBotInfoContext } from "../data/BotInfoProvider";
+import {
+  ApiActionsType,
+  BotInfoType,
+  useBotInfoContext,
+} from "../data/BotInfoProvider";
 import { useFetchPlotData } from "../data/BotPlottedElementsProvider";
 import { useBotDomainContext } from "./BotDomainProvider";
 
@@ -255,7 +259,9 @@ export const useFetchTentaclesConfig = () => {
   );
 };
 
-export function getEnabledTradingTentaclesList(botInfo): string[] {
+export function getEnabledTradingTentaclesList(
+  botInfo: BotInfoType | undefined
+): string[] {
   const tentacles: string[] = [];
   botInfo?.strategy_names && tentacles.push(...botInfo.strategy_names);
   botInfo?.evaluator_names && tentacles.push(...botInfo.evaluator_names);

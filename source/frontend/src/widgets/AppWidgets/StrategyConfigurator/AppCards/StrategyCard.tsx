@@ -89,7 +89,7 @@ export default function StrategyCard({
     setOpen: (isOpen: boolean) => void,
     otherApp?: AppStoreAppType
   ) {
-    const theApp = otherApp
+    const theApp: AppStoreAppType = otherApp
       ? {
           ...otherApp,
           bug_fix_version: 0,
@@ -139,7 +139,9 @@ export default function StrategyCard({
     botDomain + backendRoutes.exportProfile + app.package_id;
   const uploadToAppStore = useUploadToAppStore();
 
-  const additionalProfileInfo = botInfo?.profiles?.[app.package_id];
+  const additionalProfileInfo = app.package_id
+    ? botInfo?.profiles?.[app.package_id]
+    : undefined;
 
   const currentAvatar = additionalProfileInfo?.profile?.avatar;
   const avatarUrl =

@@ -21,19 +21,21 @@ export default function AppIconButton({
   style,
   spanStyle,
 }: {
-  isSelected?: boolean;
-  active?: boolean;
+  isSelected?: boolean | undefined;
+  active?: boolean | undefined;
   buttonTitle: string;
-  faIconComponent?: IconDefinition;
-  antIconComponent?: ForwardRefExoticComponent<
-    Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
-  >;
-  icon?: JSX.Element;
-  antIconString?: string;
-  faIconString?: string;
+  faIconComponent?: IconDefinition | undefined;
+  antIconComponent?:
+    | ForwardRefExoticComponent<
+        Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
+      >
+    | undefined;
+  icon?: JSX.Element | undefined;
+  antIconString?: string | undefined;
+  faIconString?: string | undefined;
   onClick?: () => void;
-  disabled?: boolean;
-  href?: string;
+  disabled?: boolean | undefined;
+  href?: string | undefined;
   isResponsive?: boolean;
   style?: CSSProperties;
   spanStyle?: CSSProperties;

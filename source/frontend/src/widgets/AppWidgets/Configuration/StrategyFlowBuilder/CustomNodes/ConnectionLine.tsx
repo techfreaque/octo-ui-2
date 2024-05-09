@@ -1,4 +1,4 @@
-import { CSSProperties, FunctionComponent, useCallback } from "react";
+import { CSSProperties, useCallback } from "react";
 import {
   getBezierPath,
   EdgeLabelRenderer,
@@ -25,8 +25,7 @@ export const CustomEdge = ({
 }: EdgeProps) => {
   const reactFlow = useReactFlow();
   const onEdgeDelete = useCallback(
-    (evt) => {
-      evt.stopPropagation();
+    () => {
       reactFlow.setEdges((edges) => {
         return edges.filter((edge) => {
           return edge.id !== id;

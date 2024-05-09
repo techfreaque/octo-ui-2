@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useEffect } from "react";
 import {
+  CurrencyListType,
+  ExchangeInfoType,
   useCurrentCurrencyListContext,
   useExchangeInfoContext,
   useFetchExchangeInfo,
@@ -19,10 +21,9 @@ import "./pairsTable.css";
 import AntTable, {
   AntTableColumnType,
   AntTableDataType,
-  AntTableFiltersType,
-  AntTableSorterType,
 } from "../../../components/Tables/AntTable";
 import EnablerSwitch from "../../../components/UserInputs/EnablerSwich";
+import { FilterValue } from "antd/es/table/interface";
 
 export default function PairsTable() {
   const isOnline = useIsBotOnlineContext();
@@ -59,7 +60,6 @@ export default function PairsTable() {
   });
   return (
     <AntTable<PairsTableDataType, PairsTableColumnType>
-      onFilterChange={filterData}
       columns={columns}
       data={preSorteddata}
     />
@@ -68,8 +68,11 @@ export default function PairsTable() {
 
 interface PairsTableDataType extends AntTableDataType {
   symbol: string;
-  enabled: boolean;
-  availableAfterRestart: boolean;
+  symbolLabel: string | JSX.Element;
+  enabled: boolean | undefined;
+  enabledLabel: JSX.Element;
+  selected: boolean | undefined;
+  availableAfterRestart: boolean | undefined;
   exchange: string;
 }
 interface PairsTableColumnType extends AntTableColumnType<PairsTableDataType> {}
@@ -82,14 +85,21 @@ const columns: PairsTableColumnType[] = [
     width: "40%",
     dsorter: "string",
     sortDirections: ["descend", "ascend"],
-    dfilter: (item: PairsTableDataType, symbolValueFilter: string[]): boolean =>
-      item.symbol
+    dfilter: (
+      item: PairsTableDataType,
+      symbolValueFilter: FilterValue
+    ): boolean => {
+      return item.symbol
         .replace("/", "")
         .replace(":", "")
         .toLowerCase()
         .includes(
-          symbolValueFilter[0].replace("/", "").replace(":", "").toLowerCase()
-        ),
+          (symbolValueFilter[0] as string)
+            .replace("/", "")
+            .replace(":", "")
+            .toLowerCase()
+        );
+    },
   },
   {
     title: "Exchange",
@@ -133,13 +143,17 @@ function getData({
   handlePairSelection,
   handleSettingChange,
 }: {
-  exchangeInfo;
-  currentCurrencyList;
-  unsavedCurrencyList;
-  visibleExchanges;
-  visiblePairs;
-  handlePairSelection;
-  handleSettingChange;
+  exchangeInfo: ExchangeInfoType | undefined;
+  currentCurrencyList: CurrencyListType | undefined;
+  unsavedCurrencyList: CurrencyListType | undefined;
+  visibleExchanges: string | undefined;
+  visiblePairs: string | undefined;
+  handlePairSelection: (symbol: string, exchange: string) => void;
+  handleSettingChange: (
+    enabled: boolean,
+    exchange: string,
+    symbol: string
+  ) => void;
 }): PairsTableDataType[] {
   const preSorteddata: PairsTableDataType[] = [];
   const enabledExchanges =
@@ -147,12 +161,12 @@ function getData({
     Object.keys(exchangeInfo.symbols_by_exchanges);
   enabledExchanges?.forEach((exchange) => {
     exchangeInfo?.symbols_by_exchanges?.[exchange]?.forEach((symbol) => {
-      const isEnabled = currentCurrencyList.includes(symbol);
+      const isEnabled = currentCurrencyList?.includes(symbol);
       const isSelected =
         visibleExchanges === exchange &&
         visiblePairs === symbol.replace("/", "|");
       const availableAfterRestart =
-        unsavedCurrencyList.includes(symbol) && !isEnabled;
+        unsavedCurrencyList?.includes(symbol) && !isEnabled;
 
       preSorteddata.push({
         id: `${symbol}${exchange}`,
@@ -200,15 +214,19 @@ function SymbolEnabler({
   isEnabled,
   handleSettingChange,
 }: {
-  availableAfterRestart;
-  unsavedCurrencyList;
+  availableAfterRestart: boolean | undefined;
+  unsavedCurrencyList: CurrencyListType | undefined;
   exchange: string;
   symbol: string;
-  isEnabled: boolean;
-  handleSettingChange;
+  isEnabled: boolean | undefined;
+  handleSettingChange: (
+    enabled: boolean,
+    exchange: string,
+    symbol: string
+  ) => void;
 }) {
   const disabledAfterRestart =
-    !unsavedCurrencyList.includes(symbol) && isEnabled;
+    !unsavedCurrencyList?.includes(symbol) && isEnabled;
   return (
     <EnablerSwitch
       availableAfterRestart={availableAfterRestart}
@@ -218,44 +236,4 @@ function SymbolEnabler({
       onChange={(event) => handleSettingChange(event, exchange, symbol)}
     />
   );
-}
-
-function filterData(
-  tableParams:
-    | {
-        filters: AntTableFiltersType;
-        sorter: AntTableSorterType<PairsTableDataType>;
-      }
-    | undefined,
-  data: PairsTableDataType[]
-): PairsTableDataType[] {
-  return (data as PairsTableDataType[]).filter((item) => {
-    if (
-      tableParams?.filters?.symbol?.every((symbol) => {
-        return !item.symbol
-          .replace("/", "")
-          .replace(":", "")
-          .toLowerCase()
-          .includes(
-            (symbol as string).replace("/", "").replace(":", "").toLowerCase()
-          );
-      })
-    ) {
-      return false;
-    }
-    if (
-      tableParams?.filters?.exchange?.every(
-        (exchange) => item.exchange !== exchange
-      )
-    ) {
-      return false;
-    }
-    if (
-      tableParams?.filters?.enabled &&
-      !tableParams?.filters?.enabled?.includes(item.enabled)
-    ) {
-      return false;
-    }
-    return true;
-  });
 }

@@ -39,7 +39,10 @@ import {
   StoreUsersType,
 } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Backend";
 import { LoginSignupFormType } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
-import { UploadInfo } from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppCard";
+import {
+  DownloadInfo,
+  UploadInfo,
+} from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppCard";
 
 export type StrategyModeCategoryType = "Strategy Mode";
 export type StrategyCategoryType = "Strategy";
@@ -116,9 +119,11 @@ export type AppStoreDataType = {
   [categry in StoreCategoryType]: AppStoreCategoryDataType;
 };
 
-const AppStoreDataContext = createContext<AppStoreDataType>({});
+const AppStoreDataContext = createContext<AppStoreDataType | undefined>(
+  undefined
+);
 const UpdateAppStoreDataContext = createContext<
-  Dispatch<SetStateAction<AppStoreDataType>>
+  Dispatch<SetStateAction<AppStoreDataType | undefined>>
 >((_value) => {});
 
 export interface AppStorePaymentUrlType {
@@ -142,11 +147,11 @@ const UpdateAppStoreDomainContext = createContext<
   Dispatch<SetStateAction<string>>
 >((_value) => {});
 
-export interface AppStoreCartType {
+export type AppStoreCartType = {
   [originPackageId: string]: {
     [packageId: string]: AppStoreAppType;
   };
-}
+};
 
 const AppStoreCartContext = createContext<AppStoreCartType>({});
 const UpdateAppStoreCartContext = createContext<
@@ -359,7 +364,7 @@ export const useUploadToAppStore = () => {
             octobot_version: botInfo.octobot_version,
             ...(uploadInfo || {}),
           };
-          const onFail = (response) => {
+          const onFail = () => {
             setIsloading(false);
             createNotification({
               title: "Failed to upload the app",
@@ -383,7 +388,7 @@ export const useUploadToAppStore = () => {
               updateAppStoreUser(undefined);
               return;
             }
-            onFail(response);
+            onFail();
           };
           const uploadUrl =
             appStoreDomain +
@@ -413,8 +418,7 @@ export const useUploadToAppStore = () => {
               updateUrl: uploadUrl,
               successCallback: (payload: successResponseCallBackParams) =>
                 onSucces(payload.data),
-              errorCallback: (payload: errorResponseCallBackParams) =>
-                onFail(payload.data),
+              errorCallback: (payload: errorResponseCallBackParams) => onFail(),
               withCredentials: true,
               token: appStoreUser.token,
             });
@@ -442,7 +446,13 @@ export const useRateAppStore = () => {
   const appStoreDomain = useAppStoreDomainContext();
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
-    (ratingInfo, setIsloading: Dispatch<SetStateAction<boolean>>) => {
+    (
+      ratingInfo: {
+        rating: number;
+        package_id: string;
+      },
+      setIsloading: Dispatch<SetStateAction<boolean>>
+    ) => {
       setIsloading(true);
       function errorCallback(payload: errorResponseCallBackParams) {
         setIsloading(false);
@@ -559,7 +569,7 @@ export const useDeleteApp = () => {
   const appStoreDomain = useAppStoreDomainContext();
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
-    (package_id: string, setIsloading) => {
+    (package_id: string, setIsloading: Dispatch<SetStateAction<boolean>>) => {
       setIsloading(true);
       function errorCallback(payload: errorResponseCallBackParams) {
         setIsloading(false);
@@ -629,7 +639,7 @@ export const useAddToAppStoreCart = () => {
 export const useRemoveFromAppStoreCart = () => {
   const setAppStoreCart = useUpdateAppStoreCartContext();
   return useCallback(
-    (origin_package) => {
+    (origin_package: string) => {
       setAppStoreCart((prevCart) => {
         const newCart = {
           ...prevCart,
@@ -652,7 +662,7 @@ export const useCreatePaymentFromAppStoreCart = () => {
   const appStoreUser = useAppStoreUserContext();
   const updateAppStoreUser = useUpdateLoginToken();
   return useCallback(
-    (setIsloading, origin_packages) => {
+    (setIsloading?, origin_packages) => {
       setIsloading?.(true);
       function errorCallback(payload: errorResponseCallBackParams) {
         setIsloading?.(false);
@@ -950,7 +960,12 @@ export const useInstallAnyAppPackage = () => {
   const installProfile = useInstallProfile();
   const installApp = useInstallAppPackage();
   return useCallback(
-    (downloadInfo, app: AppStoreAppType, setIsloading, setOpen) => {
+    (
+      downloadInfo: DownloadInfo,
+      app: AppStoreAppType,
+      setIsloading: Dispatch<SetStateAction<boolean>>,
+      setOpen: (isOpen: boolean) => void
+    ) => {
       if (app.categories?.[0] === strategyName) {
         installProfile(
           {
@@ -1065,9 +1080,9 @@ export const useInstallProfile = () => {
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
     (
-      downloadInfo,
+      downloadInfo: DownloadInfo,
       setIsloading: Dispatch<SetStateAction<boolean>>,
-      setOpen: Dispatch<SetStateAction<boolean>>
+      setOpen: (isOpen: boolean) => void
     ) => {
       setIsloading(true);
       const onFailInstall = (payload: errorResponseCallBackParams) => {
@@ -1131,7 +1146,7 @@ export const useInstallProfile = () => {
 };
 
 function getAppUrlFromDownloadInfo(
-  downloadInfo,
+  downloadInfo: DownloadInfo,
   appStoreDomain: string,
   appStoreUser: AppStoreUserType | undefined
 ) {
@@ -1154,7 +1169,7 @@ export const AppStoreDataProvider = ({
 }: {
   children: JSX.Element;
 }) => {
-  const [appStoreData, setAppStoreData] = useState<AppStoreDataType>({});
+  const [appStoreData, setAppStoreData] = useState<AppStoreDataType>();
   const [appStoreCart, setAppStoreCart] = useState<AppStoreCartType>({});
   const [appStoreCartIsOpen, setAppStoreCartIsOpen] = useState<boolean>(false);
   const [appStorePaymentUrl, setAppStorePaymentUrl] = useState<

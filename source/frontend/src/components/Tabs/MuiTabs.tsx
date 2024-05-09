@@ -8,13 +8,13 @@ export interface MuiTabType {
   title: JSX.Element;
   toolBarContent?: JSX.Element;
   tabId: number | string;
-  dontScroll?: boolean;
+  dontScroll?: boolean | undefined;
   content: JSX.Element;
   order?: number; // TODO handle
 }
 export interface MuiTabsProps {
   tabs: MuiTabType[];
-  rightContent?: JSX.Element;
+  rightContent?: JSX.Element | undefined;
   defaultTabId?: number | string;
 }
 

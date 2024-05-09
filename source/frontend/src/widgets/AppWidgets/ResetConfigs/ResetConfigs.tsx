@@ -173,7 +173,6 @@ export default function ResetConfigs() {
     }, 2000);
   };
   const handleCancel = () => {
-    console.log("Clicked cancel button");
     setOpen(false);
   };
   const storages: ResetDataType = getResetData(tentacles);
@@ -224,7 +223,7 @@ export default function ResetConfigs() {
               disabled={
                 isDemo ||
                 isResetting ||
-                (checkedList &&
+                !(checkedList &&
                   Object.values(checkedList).find((value) => value))
               }
               onClick={showPopconfirm}

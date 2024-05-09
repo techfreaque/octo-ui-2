@@ -21,12 +21,7 @@ import {
   successResponseCallBackParams,
 } from "../../../api/fetchAndStoreFromBot";
 import JsonEditor from "@techfreaque/json-editor-react";
-
-type JsonEditorWindow = Window & {
-  [storageName: string]: {
-    [editorName: string]: JSONEditor<any>;
-  };
-};
+import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 
 declare const window: JsonEditorWindow;
 
@@ -45,17 +40,11 @@ export default function PageBuilder() {
         message: `Error: ${payload.data}`,
       });
     }
-    const success = (payload: successResponseCallBackParams) =>
+    const success = () =>
       createNotification({ title: "Successfully restored default UI layout" });
     saveUiConfig(newConfig, success, errorCallback);
   }
   function handlePageLayoutSaving() {
-    const newConfig = {
-      [botLayoutKey]: {
-        isCustom: true,
-        layouts: window.$JsonEditors[editorName].getValue(),
-      },
-    };
     function errorCallback(payload: errorResponseCallBackParams) {
       createNotification({
         title: "Failed to save new UI layout",
@@ -63,6 +52,20 @@ export default function PageBuilder() {
         message: `Error: ${payload.data}`,
       });
     }
+    if (!window["$JsonEditors"]?.[editorName]) {
+      createNotification({
+        title: "Failed to restored default UI layout",
+        type: "danger",
+        message: `Failed to read the config from the editor`,
+      });
+      return;
+    }
+    const newConfig = {
+      [botLayoutKey]: {
+        isCustom: true,
+        layouts: window["$JsonEditors"][editorName].getValue(),
+      },
+    };
     const success = () =>
       createNotification({ title: "Successfully saved new UI layout" });
     saveUiConfig(newConfig, success, errorCallback);

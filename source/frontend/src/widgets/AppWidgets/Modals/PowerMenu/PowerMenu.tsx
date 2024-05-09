@@ -2,7 +2,7 @@ import RestartBotButton from "../../Buttons/RestartBotButton";
 import UpdateBotButton from "../../Buttons/UpdateBotButton";
 import StopBotButton from "../../Buttons/StopBotButton";
 import LogoutButton from "../../Buttons/LogoutButton";
-import { Dropdown, Tooltip, Button } from "antd";
+import { Dropdown, Tooltip } from "antd";
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import { useState } from "react";
 import {

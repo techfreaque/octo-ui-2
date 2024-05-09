@@ -90,8 +90,7 @@ function TimeFrameEnabler({
         dismiss: false,
       });
     }
-    hasChanged &&
-      botInfo?.strategy_names &&
+    if (hasChanged && botInfo?.strategy_names?.[0]) {
       saveTentaclesConfig(
         {
           [botInfo.strategy_names[0]]: {
@@ -102,6 +101,7 @@ function TimeFrameEnabler({
         false,
         true
       );
+    }
   }
   const items = botInfo?.time_frames?.map((time_frame) => {
     return {
@@ -115,10 +115,9 @@ function TimeFrameEnabler({
     <Dropdown
       onOpenChange={(open) => !open && saveTimeFrameSettings()}
       menu={{
-        // triggerSubMenuAction: "hover",
         items,
       }}
-      dropdownRender={(event) => {
+      dropdownRender={() => {
         return (
           <div>
             <List

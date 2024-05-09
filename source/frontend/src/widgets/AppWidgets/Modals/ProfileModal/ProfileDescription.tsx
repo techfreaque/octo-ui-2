@@ -7,16 +7,20 @@ import AntButton, {
 } from "../../../../components/Buttons/AntButton";
 import { EditOutlined } from "@ant-design/icons";
 import { sizes } from "../../../../constants/frontendConstants";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import TextArea from "antd/es/input/TextArea";
 
 export function ProfileDescription({
   newProfileSettings,
   setNewProfileSettings,
   isCurrentProfile,
+}: {
+  newProfileSettings;
+  setNewProfileSettings;
+  isCurrentProfile: boolean | undefined;
 }) {
   const [changeStarted, setChangeStarted] = useState(false);
-  function handleDescriptionChange(event) {
+  function handleDescriptionChange(event: ChangeEvent<HTMLTextAreaElement>) {
     setNewProfileSettings((prevSettings) => {
       const newSettings = {
         ...prevSettings,

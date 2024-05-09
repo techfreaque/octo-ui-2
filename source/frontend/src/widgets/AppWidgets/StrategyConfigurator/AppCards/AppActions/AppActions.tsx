@@ -210,8 +210,10 @@ function OnHoverActions({
   isReadOnlyStrategy,
 }: {
   app: AppStoreAppType;
-  handleSelect?: (setClosed: () => void) => void;
-  handleDuplication?: (setOpen: Dispatch<SetStateAction<boolean>>) => void;
+  handleSelect?: ((setClosed: () => void) => void) | undefined;
+  handleDuplication?:
+    | ((setOpen: Dispatch<SetStateAction<boolean>>) => void)
+    | undefined;
   setCloneAppInfo:
     | Dispatch<SetStateAction<CloneAppInfoType | undefined>>
     | undefined;
@@ -226,8 +228,8 @@ function OnHoverActions({
   ) => void;
   otherActions: JSX.Element | undefined;
   infoContent: string | JSX.Element | undefined;
-  onConfigure?: () => void;
-  exportUrl?: string;
+  onConfigure?: (() => void) | undefined;
+  exportUrl?: string | undefined;
   setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
   downloadInfo: DownloadInfo;
   isReadOnlyStrategy: boolean;
@@ -294,7 +296,7 @@ export function ConfirmAction({
   antIconComponent?: ForwardRefExoticComponent<
     Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
   >;
-  isSelected?: boolean;
+  isSelected?: boolean | undefined;
   okButtonProps?: ButtonProps;
   disabled?: boolean;
   disabledTooltipTitle?: boolean;
@@ -330,7 +332,7 @@ export function ConfirmAction({
       open={actualOpen}
       onConfirm={() => onConfirm(actualSetOpen)}
       okButtonProps={{
-        loading: confirmLoading,
+        loading: !!confirmLoading,
         ...okButtonProps,
         disabled: !formIsValidated,
       }}

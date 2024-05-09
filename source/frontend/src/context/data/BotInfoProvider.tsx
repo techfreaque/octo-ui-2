@@ -17,7 +17,10 @@ import {
   useVisibleExchangesContext,
 } from "../config/VisibleExchangesProvider";
 import { useIsBotOnlineContext } from "./IsBotOnlineProvider";
-import { BotExchangeInfoProvider } from "./BotExchangeInfoProvider";
+import {
+  BotExchangeInfoProvider,
+  ConfigSymbolsType,
+} from "./BotExchangeInfoProvider";
 import { RealTimeStrategyCommandsType } from "../../widgets/AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
 import { BlockInfoType } from "../../widgets/AppWidgets/Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
 import { ClearOlottingCacheType } from "../../widgets/AppWidgets/ResetConfigs/ResetConfigs";
@@ -40,10 +43,36 @@ export type ApiActionsType =
   | RealTimeStrategyCommandsType
   | ClearOlottingCacheType;
 
+export type ProfileType = {
+  profile: {
+    avatar;
+    name: string;
+  };
+  config: {
+    "crypto-currencies": ConfigSymbolsType;
+    "trader-simulator": {
+      "starting-portfolio";
+      enabled: boolean;
+      fees: {
+        maker: number;
+        taker: number;
+      };
+    };
+    trading: {
+      "reference-market": string;
+    };
+    trader: {
+      enabled: boolean;
+      "load-trade-history": boolean;
+    };
+  };
+};
+
 export type BotInfoType = {
   octobot_project: string;
   octobot_version: string;
   strategy_names: string[];
+  evaluator_names: string[];
   strategy_name: string;
   trading_mode_name: string;
   time_frames: string[];
@@ -54,17 +83,12 @@ export type BotInfoType = {
   symbols: string[];
   exchange_names: string[];
   exchange_name: string;
-  current_profile;
+  current_profile?: ProfileType;
   profiles?: {
-    [profileName: string]: {
-      profile: {
-        avatar;
-        name: string;
-      };
-    };
+    [profileName: string]: ProfileType;
   };
   optimization_campaign: string;
-  live_id;
+  live_id: number;
   data_files;
   installed_blocks_info?: BlockInfoType;
   exchange_id?: string;

@@ -13,9 +13,9 @@ export default function IconFromString({
 }: {
   style?: CSSProperties | undefined;
   size?: SizeType;
-  faIcon?: string;
-  antIcon?: string;
-  spin?: boolean;
+  faIcon?: string | undefined;
+  antIcon?: string | undefined;
+  spin?: boolean | undefined;
   marginRight?: string;
 }): JSX.Element {
   if (antIcon && antIcon !== iconStringNoIcon) {

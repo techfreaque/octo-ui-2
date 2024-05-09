@@ -16,15 +16,13 @@ import {
 } from "./ProfileTradingSettings";
 import { ProfileRealSettings } from "./ProfileRealTradingSettings";
 import { ProfileSimulatedSettings } from "./ProfileSimulatedTradingSettings";
-import { sizes } from "../../../../constants/frontendConstants";
 import { buttonTypes } from "../../../../components/Buttons/AntButton";
 import { CancelOutlined } from "@mui/icons-material";
 import { buttonVariants } from "../../../../components/Buttons/AntButton";
+import { Dispatch, SetStateAction } from "react";
 
 export default function ProfileModal({
-  open,
   isCurrentProfile,
-  setIsloading,
   handleClose,
   newProfileSettings,
   setNewProfileSettings,
@@ -35,6 +33,18 @@ export default function ProfileModal({
   saveProfile,
   hasChanged,
   saveProfileAndRestart,
+}: {
+  isCurrentProfile: boolean | undefined;
+  handleClose: () => void;
+  newProfileSettings;
+  setNewProfileSettings;
+  profile;
+  setRequiresInstantRestart: Dispatch<SetStateAction<boolean>>;
+  requiresInstantRestart: boolean;
+  loading: boolean;
+  saveProfile: (restart?: boolean) => Promise<void>;
+  hasChanged: boolean;
+  saveProfileAndRestart: () => void;
 }) {
   const tabsData = [
     {
@@ -156,7 +166,7 @@ export default function ProfileModal({
     );
   return (
     <Modal
-      open={open}
+      open={true}
       onCancel={handleClose}
       title={
         <ProfileTitle
@@ -169,7 +179,7 @@ export default function ProfileModal({
       }
       centered
       width="700px"
-      bodyStyle={{ display: "flex" }}
+      styles={{ body: { display: "flex" } }}
       footer={[
         <div key={"profile"} style={{ display: "flex" }}>
           <div>

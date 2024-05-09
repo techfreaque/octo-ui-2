@@ -90,32 +90,36 @@ export default function AntButton({
 }: {
   buttonType?: ButtonType;
   colorType?: ButtonType;
-  onClick?: () => void;
+  onClick?: (() => void) | undefined;
   style?: CSSProperties | undefined;
   buttonVariant?: ButtonVariantType;
   size?: ButtonSizeType;
   block?: boolean;
-  disabled?: boolean;
+  disabled?: boolean | undefined;
   iconSize?: SizeType;
   // icon components
-  faIconComponent?: IconDefinition;
-  muiIconComponent?: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
-    muiName: string;
-  };
-  antIconComponent?: ForwardRefExoticComponent<
-    Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
-  >;
+  faIconComponent?: IconDefinition | undefined;
+  muiIconComponent?:
+    | (OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
+        muiName: string;
+      })
+    | undefined;
+  antIconComponent?:
+    | ForwardRefExoticComponent<
+        Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
+      >
+    | undefined;
   // string icons
-  faIcon?: string;
-  antIcon?: string;
-  icon?: JSX.Element;
-  selected?: boolean;
+  faIcon?: string | undefined;
+  antIcon?: string | undefined;
+  icon?: JSX.Element | undefined;
+  selected?: boolean | undefined;
 
   spin?: boolean;
 
   marginRight?: string;
 
-  href?: string;
+  href?: string | undefined;
   children?: JSX.Element | string;
   noIconMargin?: boolean;
   spanStyle?: CSSProperties | undefined;
@@ -161,7 +165,7 @@ export default function AntButton({
   return (
     <ConfigProvider theme={theme}>
       <Button
-        className={className}
+        {...(className ? { className } : {})}
         styles={{
           icon: {
             margin: "auto",
@@ -213,8 +217,8 @@ export default function AntButton({
         }
         block={block}
         disabled={disabled}
-        onClick={onClick}
-        href={href}
+        onClick={() => onClick?.()}
+        {...(href ? { href } : {})}
         size={size}
         target={target}
         style={{
