@@ -14,8 +14,8 @@ export default function AppRating({
   style,
 }: {
   app: AppStoreAppType;
-  rating?: number;
-  votes?: number;
+  rating: number | undefined;
+  votes: number | undefined;
   style?: CSSProperties;
 }) {
   const [isLoading, setIsloading] = useState(false);
@@ -57,7 +57,7 @@ export default function AppRating({
           <Rate
             allowHalf
             defaultValue={0}
-            value={rating}
+            {...(rating ? { value: rating } : {})}
             disabled={
               !app.is_installed ||
               !app.is_from_store ||
@@ -101,7 +101,6 @@ function formatnumberToKMBT(number: number) {
   if (number >= 1e9 && number < 1e12) {
     return `${+(number / 1e9).toFixed(2)}B`;
   }
-  if (number >= 1e12) {
-    return `${+(number / 1e12).toFixed(2)}T`;
-  }
+
+  return `${+(number / 1e12).toFixed(2)}T`;
 }

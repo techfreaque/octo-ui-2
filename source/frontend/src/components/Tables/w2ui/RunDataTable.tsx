@@ -76,7 +76,7 @@ export default function RunDataTableW2UI({
       </div>
       // eslint-disable-next-line react-hooks/exhaustive-deps
     ),
-    []
+    [noData, tableId]
   );
 }
 
@@ -239,7 +239,7 @@ function createMetadataTable({
     });
     let recordId = 0;
     const recordsToSelect = [];
-    const _displayedRunIds = displayedRunIds?.backtesting || [];
+    const _displayedRunIds: string[] = displayedRunIds.backtesting || [];
     const records = sortedMetadata.map((row) => {
       recordId = _formatMetadataRow(row, recordId);
       if (
@@ -483,7 +483,7 @@ function _addBacktestingMetadataTableButtons(
   });
 }
 
-function mergeRunIdentifiers(backtestingId, optimizerId, campaignName) {
+function mergeRunIdentifiers(backtestingId, optimizerId, campaignName): string {
   return `${backtestingId}${ID_SEPARATOR}${optimizerId}${ID_SEPARATOR}${campaignName}`;
 }
 

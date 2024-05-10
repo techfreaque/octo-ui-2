@@ -69,19 +69,18 @@ export default function PowerMenu() {
   }
   return (
     <Dropdown
-      onOpenChange={(state) => setOpen(state)}
+      onOpenChange={(state) => {
+        setOpen(state);
+      }}
       open={open}
+      destroyPopupOnHide={true}
       menu={{
         items,
       }}
       overlayStyle={{
-        // minWidth: "150px",
-        // width: "150px",
-
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        // backgroundColor: botColors?.background
       }}
       trigger={["click"]}
       placement="topRight"

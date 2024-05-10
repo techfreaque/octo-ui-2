@@ -56,7 +56,7 @@ export default function W2uiDataTable() {
         </ul>
       </div>
     );
-  }, [botDomain, plottedElements?.backtesting, plottedElements?.live]);
+  }, [botDomain, plottedElements]);
 }
 
 function generateTables(
@@ -64,7 +64,7 @@ function generateTables(
   botDomain: string
 ): AntSideBarMenutItemType[] {
   const newMenuItems: {
-    [key: string]: AntSideBarMenutItemType;
+    [key: string]: DataTableSideBarMainItemType;
   } = {};
   plottedElements &&
     objectEntries(plottedElements).forEach(([liveOrBacktest, subElements]) => {
@@ -109,7 +109,7 @@ function generateTablesAndSidebarItems({
   plottedElements: PlottedLiveElementType | undefined;
   liveOrBacktest: PlottedElementNameType;
   newMenuItems: {
-    [key: string]: AntSideBarMenutItemType;
+    [key: string]: DataTableSideBarMainItemType;
   };
   campaignName?: string;
   optimizerId?: string;
@@ -119,11 +119,10 @@ function generateTablesAndSidebarItems({
     Object.keys(plottedElements).forEach((runId) => {
       const thisRun = plottedElements[runId];
       thisRun &&
-        Object.keys(thisRun).forEach((symbol) => {
-          thisRun[symbol] &&
-            Object.keys(thisRun[symbol]).forEach((timeframe) => {
-              const subElements =
-                thisRun[symbol][timeframe]?.data?.sub_elements;
+        Object.values(thisRun).forEach((symbolElements) => {
+          symbolElements &&
+            Object.keys(symbolElements).forEach((timeframe) => {
+              const subElements = symbolElements[timeframe]?.data?.sub_elements;
               subElements?.forEach((subElement) => {
                 if (subElement.name === "table") {
                   _generateTablesAndSidebarItems({
@@ -177,10 +176,10 @@ function _generateTablesAndSidebarItems({
   subElement: PlottedSubSubElementType;
   liveOrBacktest: PlottedElementNameType;
   newMenuItems: {
-    [key: string]: AntSideBarMenutItemType;
+    [key: string]: DataTableSideBarMainItemType;
   };
-  campaignName?: string;
-  optimizerId?: string;
+  campaignName: string | undefined;
+  optimizerId: string | undefined;
   runId: string;
   botDomain: string;
 }) {
@@ -188,11 +187,9 @@ function _generateTablesAndSidebarItems({
     if (!(element.rows && element.columns)) {
       return;
     }
-    if (!newMenuItems[liveOrBacktest]) {
-      newMenuItems[liveOrBacktest] = createTradingOrBacktestingTab(
-        liveOrBacktest
-      );
-    }
+    const liveOrBacktestingItems: DataTableSideBarMainItemType =
+      newMenuItems[liveOrBacktest] ||
+      createTradingOrBacktestingTab(liveOrBacktest);
     let label;
     let cancelOrdersDetails: CancelOrderDetailsType | undefined = undefined;
     if (liveOrBacktest === "live") {
@@ -218,8 +215,7 @@ function _generateTablesAndSidebarItems({
     } else {
       label = `${element.title} ${campaignName} ${optimizerId} ${runId}`;
     }
-
-    newMenuItems[liveOrBacktest].children?.push({
+    liveOrBacktestingItems.children.push({
       label,
       antIcon: element.config?.antIcon,
       faIcon: element.config?.faIcon,
@@ -234,6 +230,7 @@ function _generateTablesAndSidebarItems({
         />
       ),
     });
+    newMenuItems[liveOrBacktest] = liveOrBacktestingItems;
   });
 }
 
@@ -273,7 +270,10 @@ function TableFromElement({
       columns={columns}
       maxWidth="100%"
       size="small"
-      onSelectChange={cancelOrdersDetails ? setSelectedRecordIds : undefined}
+      selectedRowKeys={cancelOrdersDetails ? selectedRecordIds : undefined}
+      setSelectedRowKeys={
+        cancelOrdersDetails ? setSelectedRecordIds : undefined
+      }
       header={
         cancelOrdersDetails ? (
           <Tooltip title={cancelOrdersDetails.tooltip}>

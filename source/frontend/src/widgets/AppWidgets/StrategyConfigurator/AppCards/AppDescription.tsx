@@ -2,15 +2,13 @@ import { Typography } from "antd";
 import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
 
 export function CardDescription({
-  category,
   app,
   isMouseHover,
   cardActions,
 }: {
-  category;
   app: AppStoreAppType;
   isMouseHover: boolean;
-  cardActions;
+  cardActions: JSX.Element;
 }) {
   if (app?.is_selected) {
     return (
@@ -60,7 +58,7 @@ function NonHoverDescription({
   totalLineHeight,
   app,
 }: {
-  cardActions;
+  cardActions: JSX.Element;
   marginBottom: number;
   marginTop: number;
   lineHeight: number;
@@ -123,7 +121,7 @@ function OnHoverDescription({
   cardActions,
   lineHeightWithMargin,
 }: {
-  cardActions;
+  cardActions: JSX.Element;
   lineHeightWithMargin: number;
 }) {
   return (

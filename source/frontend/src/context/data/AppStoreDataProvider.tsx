@@ -30,7 +30,6 @@ import {
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
 import {
-  apiFields,
   minReleaseNotesLength,
 } from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppActions/UpDownloadApp/UploadAppForm";
 import { strategyName } from "../../widgets/AppWidgets/StrategyConfigurator/storeConstants";
@@ -40,8 +39,9 @@ import {
 } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Backend";
 import { LoginSignupFormType } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
 import {
-  DownloadInfo,
   UploadInfo,
+  VerifiedDownloadInfo,
+  VerifiedUploadInfo,
 } from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppCard";
 
 export type StrategyModeCategoryType = "Strategy Mode";
@@ -49,6 +49,7 @@ export type StrategyCategoryType = "Strategy";
 export type OtherCategoryType =
   | "Strategy Block"
   | "App Packages"
+  | "Legacy Strategy"
   | "Service Notifier"
   | "Interface"
   | "Package";
@@ -82,7 +83,7 @@ export interface AppStoreAppVersionType {
 }
 
 export interface AppStoreAppType {
-  categories: StoreCategoryType[];
+  categories: [StoreCategoryType];
   description?: string;
   first_publish_timestamp?: number;
   last_publish_timestamp?: number;
@@ -93,7 +94,7 @@ export interface AppStoreAppType {
   has_paid?: boolean;
   is_owner?: boolean;
   is_shared?: boolean;
-  package_id?: string;
+  package_id: string;
   requirements?: string[];
   tentacle_name?: string;
   updated_by_distro?: boolean;
@@ -329,8 +330,8 @@ export const useLogoutFromAppStore = () => {
 
 export function validateUploadInfo(uploadInfo: UploadInfo) {
   return (
-    (uploadInfo?.[apiFields.release_notes]?.length || 0) >
-      minReleaseNotesLength || uploadInfo?.includePackage !== true
+    (uploadInfo?.release_notes?.length || 0) > minReleaseNotesLength ||
+    uploadInfo?.includePackage !== true
   );
 }
 
@@ -662,12 +663,12 @@ export const useCreatePaymentFromAppStoreCart = () => {
   const appStoreUser = useAppStoreUserContext();
   const updateAppStoreUser = useUpdateLoginToken();
   return useCallback(
-    (setIsloading?, origin_packages) => {
+    (origin_packages, setIsloading?) => {
       setIsloading?.(true);
       function errorCallback(payload: errorResponseCallBackParams) {
         setIsloading?.(false);
         if (payload.data.message === "appstore.errors.notLoggedIn") {
-          updateAppStoreUser({});
+          updateAppStoreUser(undefined);
           createNotification({
             title: "You need to be signed in to complete your purchase",
             type: "danger",
@@ -887,13 +888,14 @@ export const useDeleteStoreUser = () => {
   const appStoreDomain = useAppStoreDomainContext();
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
-    (userId: string) => {
+    (userId: number, onSuccess: () => void) => {
       function errorCallback() {
         createNotification({ title: "Failed to delete User", type: "warning" });
       }
       function successCallback(payload: successResponseCallBackParams) {
         if (payload.data.success) {
           createNotification({ title: "Successfully deleted user" });
+          onSuccess();
         }
       }
       if (appStoreUser?.token) {
@@ -961,22 +963,15 @@ export const useInstallAnyAppPackage = () => {
   const installApp = useInstallAppPackage();
   return useCallback(
     (
-      downloadInfo: DownloadInfo,
+      downloadInfo: VerifiedDownloadInfo,
       app: AppStoreAppType,
       setIsloading: Dispatch<SetStateAction<boolean>>,
       setOpen: (isOpen: boolean) => void
     ) => {
       if (app.categories?.[0] === strategyName) {
-        installProfile(
-          {
-            ...downloadInfo,
-            ...app,
-          },
-          setIsloading,
-          setOpen
-        );
+        installProfile(downloadInfo, setIsloading, setOpen);
       } else {
-        installApp(downloadInfo, app, setIsloading, setOpen);
+        installApp(downloadInfo, setIsloading, setOpen);
       }
     },
     [installApp, installProfile]
@@ -989,44 +984,32 @@ export const useInstallAppPackage = () => {
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
     (
-      downloadInfo,
-      app: AppStoreAppType,
+      downloadInfo: VerifiedDownloadInfo,
       setIsloading: Dispatch<SetStateAction<boolean>>,
       setOpen: Dispatch<SetStateAction<boolean>>
     ) => {
-      const _downloadInfo = {
-        ...downloadInfo,
-        ...app,
-      };
       setIsloading(true);
 
       const successCallback = (payload: successResponseCallBackParams) => {
         createNotification({
-          title: `Successfully installed ${_downloadInfo.title}`,
+          title: `Successfully installed ${downloadInfo.appTitle}`,
         });
         setIsloading(false);
         setOpen(false);
       };
       const errorCallback = (payload: errorResponseCallBackParams) => {
         createNotification({
-          title: `Failed to install ${_downloadInfo.title}`,
+          title: `Failed to install ${downloadInfo.appTitle}`,
           type: "danger",
         });
         setIsloading(false);
       };
       const requestData = {
         url: getAppUrlFromDownloadInfo(
-          _downloadInfo,
+          downloadInfo,
           appStoreDomain,
           appStoreUser
         ),
-        // version: `${
-        //     downloadInfo.major_version
-        // }.${
-        //     downloadInfo.minor_version
-        // }.${
-        //     downloadInfo.bug_fix_version
-        // }`
       };
       sendAndInterpretBotUpdate({
         updatedData: requestData,
@@ -1080,7 +1063,7 @@ export const useInstallProfile = () => {
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
     (
-      downloadInfo: DownloadInfo,
+      downloadInfo: VerifiedDownloadInfo,
       setIsloading: Dispatch<SetStateAction<boolean>>,
       setOpen: (isOpen: boolean) => void
     ) => {
@@ -1088,26 +1071,26 @@ export const useInstallProfile = () => {
       const onFailInstall = (payload: errorResponseCallBackParams) => {
         setIsloading(false);
         createNotification({
-          title: `Failed to install ${downloadInfo.title}`,
+          title: `Failed to install ${downloadInfo.appTitle}`,
           type: "danger",
         });
       };
       const onSuccessInstall = (payload: successResponseCallBackParams) => {
         if (payload.data.success) {
           createNotification({
-            title: `Successfully installed ${downloadInfo.title}`,
+            title: `Successfully installed ${downloadInfo.appTitle}`,
           });
           if (downloadInfo.should_select_profile) {
             const onSelectSuccess = () => {
               setIsloading(false);
               createNotification({
-                title: `Successfully selected ${downloadInfo.title}`,
+                title: `Successfully selected ${downloadInfo.appTitle}`,
               });
               setOpen(false);
             };
             const onSelectFail = () => {
               createNotification({
-                title: `Failed to select ${downloadInfo.title}`,
+                title: `Failed to select ${downloadInfo.appTitle}`,
                 type: "danger",
               });
               setOpen(false);
@@ -1115,7 +1098,7 @@ export const useInstallProfile = () => {
             selectProfile(
               botDomain,
               downloadInfo.package_id,
-              downloadInfo.title,
+              downloadInfo.appTitle,
               onSelectSuccess,
               onSelectFail
             );
@@ -1134,7 +1117,7 @@ export const useInstallProfile = () => {
             appStoreDomain,
             appStoreUser
           ),
-          name: downloadInfo.title,
+          name: downloadInfo.appTitle,
         },
         updateUrl: botDomain + backendRoutes.importProfileFromUrl,
         successCallback: onSuccessInstall,
@@ -1146,7 +1129,7 @@ export const useInstallProfile = () => {
 };
 
 function getAppUrlFromDownloadInfo(
-  downloadInfo: DownloadInfo,
+  downloadInfo: VerifiedDownloadInfo,
   appStoreDomain: string,
   appStoreUser: AppStoreUserType | undefined
 ) {

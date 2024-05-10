@@ -4,8 +4,8 @@ import { Input, Switch } from "antd";
 import { AppStoreAppType } from "../../../../../../context/data/AppStoreDataProvider";
 
 export interface CloneAppInfoType {
-  newProfileName?: string;
-  selectNewProfile?: boolean;
+  newProfileName: string;
+  selectNewProfile: boolean;
 }
 
 export default function CloneAppForm({
@@ -19,7 +19,7 @@ export default function CloneAppForm({
 }) {
   useEffect(() => {
     setCloneAppInfo({
-      newProfileName: app.title + " Copy",
+      newProfileName: `${app.title} Copy`,
       selectNewProfile: true,
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps

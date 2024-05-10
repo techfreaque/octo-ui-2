@@ -10,7 +10,7 @@ import { useBotDomainContext } from "../../../../context/config/BotDomainProvide
 import { backendRoutes } from "../../../../constants/backendConstants";
 import AppCardTemplate from "./AppCardTemplate";
 import { Dispatch, SetStateAction } from "react";
-import { DownloadInfo, UploadInfo } from "./AppCard";
+import { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
 
 export default function OtherAppCard({
   app,
@@ -35,7 +35,7 @@ export default function OtherAppCard({
   didHoverOnce: boolean;
   onConfigure?: () => void;
   handleSelect?: (setClosed: () => void) => void;
-  isReadOnlyStrategy?: boolean;
+  isReadOnlyStrategy?: boolean | undefined;
   uploadInfo: UploadInfo;
   setUploadInfo: Dispatch<SetStateAction<UploadInfo>>;
   downloadInfo: DownloadInfo;
@@ -49,15 +49,18 @@ export default function OtherAppCard({
     setOpen: (isOpen: boolean) => void,
     otherApp: AppStoreAppType | undefined
   ) {
-    const theApp = otherApp
-      ? {
-          ...otherApp,
-          bug_fix_version: 0,
-          major_version: 0,
-          minor_version: 0,
-        }
-      : app;
-    installAnyAppPackage(downloadInfo, theApp, setIsloading, setOpen);
+    const theApp = otherApp ? otherApp : app;
+    const verifiedDownloadInfo: VerifiedDownloadInfo = {
+      appCategory: theApp.categories[0],
+      major_version: downloadInfo.major_version || 0,
+      minor_version: downloadInfo.minor_version || 0,
+      bug_fix_version: downloadInfo.bug_fix_version || 0,
+      origin_package: theApp.origin_package,
+      appTitle: theApp.title,
+      should_select_profile: downloadInfo.should_select_profile || false,
+      package_id: theApp.package_id,
+    };
+    installAnyAppPackage(verifiedDownloadInfo, theApp, setIsloading, setOpen);
   }
   const uninstallAppPackage = useUnInstallAppPackage();
   async function handleUninstallApp(

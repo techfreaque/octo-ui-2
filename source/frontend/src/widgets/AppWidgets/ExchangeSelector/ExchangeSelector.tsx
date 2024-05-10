@@ -112,6 +112,7 @@ export default function ExchangeSelector() {
       ) : (
         exchangeName
       ),
+      key: exchangeName,
       id: exchangeName,
       sandboxed,
       sandboxedLabel: (

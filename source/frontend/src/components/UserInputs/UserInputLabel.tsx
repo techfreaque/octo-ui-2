@@ -6,7 +6,7 @@ export default function UserInputLabel({
 }: {
   children: JSX.Element;
   title: string;
-}) {
+}): JSX.Element {
   return (
     <div style={{ marginBottom: "20px" }}>
       <Typography.Paragraph

@@ -198,7 +198,7 @@ function OptimizerRunQueueTable({
                 }
                 disabled={!somethingSelected || isUpdating}
                 buttonVariant={buttonVariants.text}
-                onClick={somethingSelected ? onDelete : undefined}
+                onClick={somethingSelected ? () => onDelete() : undefined}
               >
                 Delete selected
               </AntButton>
@@ -391,6 +391,6 @@ function createUpdatedRunDataFromTableRow(
   return run;
 }
 
-function randomizeArray(array: string[]) {
+function randomizeArray(array: RunDataTableElementType[]) {
   return array.toSorted(() => Math.random() - 0.5);
 }

@@ -13,6 +13,7 @@ import {
   CSSProperties,
   ForwardRefExoticComponent,
   HTMLAttributeAnchorTarget,
+  MouseEvent,
   RefAttributes,
 } from "react";
 
@@ -90,7 +91,7 @@ export default function AntButton({
 }: {
   buttonType?: ButtonType;
   colorType?: ButtonType;
-  onClick?: (() => void) | undefined;
+  onClick?: ((event: MouseEvent) => void) | undefined;
   style?: CSSProperties | undefined;
   buttonVariant?: ButtonVariantType;
   size?: ButtonSizeType;
@@ -217,7 +218,7 @@ export default function AntButton({
         }
         block={block}
         disabled={disabled}
-        onClick={() => onClick?.()}
+        onClick={onClick}
         {...(href ? { href } : {})}
         size={size}
         target={target}

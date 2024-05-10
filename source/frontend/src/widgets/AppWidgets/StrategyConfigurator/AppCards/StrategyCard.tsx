@@ -19,13 +19,12 @@ import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
 import AppCardTemplate from "./AppCardTemplate";
 import { useRestartBot } from "../../../../context/data/IsBotOnlineProvider";
 import createNotification from "../../../../components/Notifications/Notification";
-import { strategyModeName } from "../storeConstants";
-import { CleanDescription } from "./AppDescription";
 import {
-  errorResponseCallBackParams,
-  successResponseCallBackParams,
-} from "../../../../api/fetchAndStoreFromBot";
-import { DownloadInfo, UploadInfo } from "./AppCard";
+  StrategyModeSettingsNameType,
+  strategyModeName,
+} from "../storeConstants";
+import { CleanDescription } from "./AppDescription";
+import { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
 import { CloneAppInfoType } from "./AppActions/CloneApp/CloneAppForm";
 
 export default function StrategyCard({
@@ -47,7 +46,7 @@ export default function StrategyCard({
   isMouseHover: boolean;
   setIsloading: Dispatch<SetStateAction<boolean>>;
   setSelectedCategories: Dispatch<
-    SetStateAction<StoreCategoryType | undefined>
+    SetStateAction<StoreCategoryType | StrategyModeSettingsNameType | undefined>
   >;
   didHoverOnce: boolean;
   uploadInfo: UploadInfo;
@@ -61,7 +60,7 @@ export default function StrategyCard({
   const restartBot = useRestartBot();
 
   async function handleSelectProfile(setOpen: () => void) {
-    function onSuccess(payload: successResponseCallBackParams) {
+    function onSuccess() {
       setIsloading(false);
       createNotification({
         title: `Successfully selected ${app.title}`,
@@ -69,7 +68,7 @@ export default function StrategyCard({
       setOpen();
       restartBot(true);
     }
-    const onFail = (payload: errorResponseCallBackParams) => {
+    const onFail = () => {
       createNotification({
         title: `Failed to select ${app.title}`,
         type: "danger",
@@ -89,15 +88,18 @@ export default function StrategyCard({
     setOpen: (isOpen: boolean) => void,
     otherApp?: AppStoreAppType
   ) {
-    const theApp: AppStoreAppType = otherApp
-      ? {
-          ...otherApp,
-          bug_fix_version: 0,
-          major_version: 0,
-          minor_version: 0,
-        }
-      : app;
-    installAnyAppPackage(downloadInfo, theApp, setIsloading, setOpen);
+    const theApp: AppStoreAppType = otherApp ? otherApp : app;
+    const verifiedDownloadInfo: VerifiedDownloadInfo = {
+      appCategory: theApp.categories[0],
+      major_version: downloadInfo.major_version || 0,
+      minor_version: downloadInfo.minor_version || 0,
+      bug_fix_version: downloadInfo.bug_fix_version || 0,
+      origin_package: theApp.origin_package,
+      appTitle: theApp.title,
+      should_select_profile: downloadInfo.should_select_profile || false,
+      package_id: theApp.package_id,
+    };
+    installAnyAppPackage(verifiedDownloadInfo, theApp, setIsloading, setOpen);
   }
   async function handleDeleteProfile(
     setOpen: Dispatch<SetStateAction<boolean>>
@@ -193,10 +195,14 @@ export default function StrategyCard({
           }
           handleDuplication={handleProfileDuplication}
           otherActions={
-            <ProfileModalButton
-              profile={additionalProfileInfo}
-              isCurrentProfile={app.is_selected}
-            />
+            additionalProfileInfo ? (
+              <ProfileModalButton
+                profile={additionalProfileInfo}
+                isCurrentProfile={app.is_selected}
+              />
+            ) : (
+              <></>
+            )
           }
           app={app}
         />

@@ -3,8 +3,11 @@ import { AppAvatar, AppCover, AppTitle } from "./AppCover";
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
 import AppRating from "./AppRating";
 import { CardDescription } from "./AppDescription";
-import { CSSProperties } from "react";
-import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
+import { CSSProperties, Dispatch, SetStateAction } from "react";
+import {
+  AppStoreAppType,
+  StoreCategoryType,
+} from "../../../../context/data/AppStoreDataProvider";
 
 export default function AppCardTemplate({
   app,
@@ -15,11 +18,11 @@ export default function AppCardTemplate({
   category,
 }: {
   app: AppStoreAppType;
-  setMouseHover;
-  cardActions;
-  isMouseHover;
-  avatarUrl;
-  category;
+  setMouseHover: Dispatch<SetStateAction<boolean>>;
+  cardActions: JSX.Element;
+  isMouseHover: boolean;
+  avatarUrl: string;
+  category: StoreCategoryType;
 }) {
   const botColors = useBotColorsContext();
   const boxShadowColor =
@@ -71,7 +74,6 @@ export default function AppCardTemplate({
             </>
           )}
           <CardDescription
-            category={category}
             cardActions={cardActions}
             isMouseHover={isMouseHover}
             app={app}

@@ -3,7 +3,11 @@ import TradingModeCard from "./TradingModeCard";
 import StrategyCard from "./StrategyCard";
 import { Grid } from "@mui/material";
 import OtherAppCard from "./OtherAppCard";
-import { strategyModeName, strategyName } from "../storeConstants";
+import {
+  StrategyModeSettingsNameType,
+  strategyModeName,
+  strategyName,
+} from "../storeConstants";
 import {
   AppStoreAppType,
   AppStoreVersionTagType,
@@ -14,18 +18,38 @@ export interface UploadInfo {
   open?: boolean;
   includePackage?: boolean;
   version_type?: AppStoreVersionTagType;
-  version_tag?: string;
+  version_tag?: AppStoreVersionTagType;
   price?: number;
   release_notes?: string;
+}
+
+export interface VerifiedUploadInfo {
+  includePackage: boolean;
+  version_type: AppStoreVersionTagType;
+  version_tag: AppStoreVersionTagType;
+  price: number;
+  release_notes: string;
 }
 export interface DownloadInfo {
   open?: boolean;
   visibleVersionTypes?: AppStoreVersionTagType[];
-  major_version?: number;
-  minor_version?: number;
-  bug_fix_version?: number;
+  major_version?: number | undefined;
+  minor_version?: number | undefined;
+  bug_fix_version?: number | undefined;
   versionDetailsOpen?: boolean;
   isDownloading?: boolean;
+  origin_package?: string;
+  should_select_profile?: boolean;
+}
+export interface VerifiedDownloadInfo extends DownloadInfo {
+  major_version: number;
+  minor_version: number;
+  bug_fix_version: number;
+  origin_package: string;
+  appTitle: string;
+  appCategory: string;
+  should_select_profile: boolean;
+  package_id: string;
 }
 
 export default function AppCard({
@@ -39,7 +63,7 @@ export default function AppCard({
   apps: AppStoreAppType[];
   setIsloading: Dispatch<SetStateAction<boolean>>;
   setSelectedCategories: Dispatch<
-    SetStateAction<StoreCategoryType | undefined>
+    SetStateAction<StoreCategoryType | StrategyModeSettingsNameType | undefined>
   >;
   currentStrategy: AppStoreAppType | undefined;
 }) {

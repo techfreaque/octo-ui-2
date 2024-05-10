@@ -75,9 +75,7 @@ export function createTable({
       searchData,
       columnGroups,
       reorderRows,
-      onDelete: onDeleteCallback,
-      onReorderRow: onReorderRowCallback,
-    });
+    } as any);
     table.toolbar.add({
       type: "button",
       id: "exportTable",

@@ -418,6 +418,7 @@ declare module "w2ui/dist/w2ui.es6.js" {
 
     declare const w2popup: W2UI.W2Popup;
     declare const w2ui: W2UI.W2UI;
+    declare const w2confirm: any;
     declare class w2grid extends W2UI.W2Grid {
         constructor(options: W2UI.W2Grid);
     }

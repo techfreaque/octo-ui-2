@@ -45,8 +45,10 @@ export type ApiActionsType =
 
 export type ProfileType = {
   profile: {
-    avatar;
+    id: string;
+    avatar: string;
     name: string;
+    description: string;
   };
   config: {
     "crypto-currencies": ConfigSymbolsType;
@@ -83,7 +85,7 @@ export type BotInfoType = {
   symbols: string[];
   exchange_names: string[];
   exchange_name: string;
-  current_profile?: ProfileType;
+  current_profile: ProfileType;
   profiles?: {
     [profileName: string]: ProfileType;
   };

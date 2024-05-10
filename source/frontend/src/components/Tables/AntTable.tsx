@@ -46,7 +46,9 @@ export default function AntTable<
   paginationSize?: number;
   expandable?: AntTableExpandableConfig<TAntTableDataType>;
   selectedRowKeys?: string[] | undefined;
-  setSelectedRowKeys?: Dispatch<SetStateAction<string[] | undefined>>;
+  setSelectedRowKeys?:
+    | Dispatch<SetStateAction<string[] | undefined>>
+    | undefined;
   onChange?: (currentData: TAntTableDataType[]) => void;
   size?: SizeType;
   header?: JSX.Element | undefined;
@@ -311,6 +313,7 @@ function filterData<
           .toLowerCase()
           .includes(String(filter[0]).toLowerCase());
       }
+      return true;
     });
   });
 }

@@ -14,18 +14,18 @@ import {
   List,
   Typography,
 } from "antd";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { ProfileType } from "../../../../context/data/BotInfoProvider";
+import { onProfileSettingChange } from "./ProfileTradingSettings";
 
 export function ProfileSimulatedSettings({
   newProfileSettings,
-  onChange,
   setNewProfileSettings,
   isCurrentProfile,
 }: {
-  newProfileSettings;
-  onChange?;
-  setNewProfileSettings;
-  isCurrentProfile: boolean;
+  newProfileSettings: ProfileType;
+  setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
+  isCurrentProfile: boolean | undefined;
 }) {
   return (
     <Grid container spacing={2} style={{ marginTop: "15px" }}>
@@ -35,17 +35,25 @@ export function ProfileSimulatedSettings({
         </Typography.Title>
         <InputNumber
           style={{ width: "100%" }}
-          value={newProfileSettings?.config?.["trader-simulator"]?.fees?.maker}
+          value={
+            newProfileSettings?.config?.["trader-simulator"]?.fees?.maker ||
+            null
+          }
           disabled={!isCurrentProfile}
           addonAfter="%"
-          defaultValue="0.1"
-          min="-1"
-          max="5"
-          step="0.001"
+          defaultValue={0.1}
+          min={-1}
+          max={5}
+          step={0.001}
           onChange={(newValue) =>
-            onChange(Number(newValue), "trader-simulator", "fees", "maker")
+            onProfileSettingChange(
+              setNewProfileSettings,
+              Number(newValue),
+              "trader-simulator",
+              "fees",
+              "maker"
+            )
           }
-          stringMode
         />
       </Grid>
       <Grid item xs={12} sm={6}>
@@ -54,23 +62,30 @@ export function ProfileSimulatedSettings({
         </Typography.Title>
         <InputNumber
           style={{ width: "100%" }}
-          value={newProfileSettings?.config?.["trader-simulator"]?.fees?.taker}
+          value={
+            newProfileSettings?.config?.["trader-simulator"]?.fees?.taker ||
+            null
+          }
           disabled={!isCurrentProfile}
           addonAfter="%"
-          defaultValue="0.1"
-          min="-1"
-          max="5"
-          step="0.001"
+          defaultValue={0.1}
+          min={-1}
+          max={5}
+          step={0.001}
           onChange={(newValue) =>
-            onChange(Number(newValue), "trader-simulator", "fees", "taker")
+            onProfileSettingChange(
+              setNewProfileSettings,
+              Number(newValue),
+              "trader-simulator",
+              "fees",
+              "taker"
+            )
           }
-          stringMode
         />
       </Grid>
       <ProfilePortfolioSettings
         newProfileSettings={newProfileSettings}
         isCurrentProfile={isCurrentProfile}
-        onChange={onChange}
         setNewProfileSettings={setNewProfileSettings}
       />
     </Grid>
@@ -79,9 +94,12 @@ export function ProfileSimulatedSettings({
 const addKey = "add";
 export function ProfilePortfolioSettings({
   newProfileSettings,
-  onChange,
   setNewProfileSettings,
   isCurrentProfile,
+}: {
+  newProfileSettings: ProfileType;
+  setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
+  isCurrentProfile: boolean | undefined;
 }) {
   const data = [
     ...Object.keys(
@@ -142,7 +160,6 @@ export function ProfilePortfolioSettings({
               newProfileSettings={newProfileSettings}
               setNewProfileSettings={setNewProfileSettings}
               isCurrentProfile={isCurrentProfile}
-              onChange={onChange}
             />
           );
         }}
@@ -150,10 +167,14 @@ export function ProfilePortfolioSettings({
     </Grid>
   );
 }
-export function ProfileAddCoinSettings({ setNewProfileSettings }) {
+export function ProfileAddCoinSettings({
+  setNewProfileSettings,
+}: {
+  setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
+}) {
   const [coinToSet, setCoinToSet] = useState<{
-    coin?;
-    value?;
+    coin?: string;
+    value?: number;
   }>({});
   function handleCoinToAdd(key, newValue) {
     setCoinToSet((prevValues) => ({
@@ -192,10 +213,10 @@ export function ProfileAddCoinSettings({ setNewProfileSettings }) {
             width: "100%",
             marginTop: "10px",
           }}
-          value={coinToSet.value}
-          addonAfter={coinToSet.coin && coinToSet.coin}
-          min="0"
-          step="0.0000001"
+          value={coinToSet.value || null}
+          addonAfter={coinToSet.coin ? coinToSet.coin : <></>}
+          min={0}
+          step={0.0000001}
           placeholder="Asset amount"
           onChange={(newValue) => handleCoinToAdd("value", Number(newValue))}
           stringMode
@@ -219,9 +240,13 @@ export function ProfileAddCoinSettings({ setNewProfileSettings }) {
 export function ProfilePortfolioCoinSettings({
   item,
   newProfileSettings,
-  onChange,
   setNewProfileSettings,
   isCurrentProfile,
+}: {
+  item;
+  newProfileSettings: ProfileType;
+  setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
+  isCurrentProfile: boolean | undefined;
 }) {
   function handleRemoveCoin() {
     setNewProfileSettings((prevSettings) => {
@@ -234,7 +259,7 @@ export function ProfilePortfolioCoinSettings({
       return newSettings;
     });
   }
-  function handleCoinNameChange(value) {
+  function handleCoinNameChange(value: string) {
     setNewProfileSettings((prevSettings) => {
       const newSettings = {
         ...prevSettings,
@@ -256,11 +281,13 @@ export function ProfilePortfolioCoinSettings({
           level={5}
           style={{ width: "100%" }}
           editable={
-            isCurrentProfile && {
-              tooltip: "click to edit the asset",
-              onChange: handleCoinNameChange,
-              text: item.coin,
-            }
+            isCurrentProfile
+              ? {
+                  tooltip: "click to edit the asset",
+                  onChange: handleCoinNameChange,
+                  text: item.coin,
+                }
+              : false
           }
         >
           {item.coin}
@@ -275,17 +302,17 @@ export function ProfilePortfolioCoinSettings({
           }
           disabled={!isCurrentProfile}
           addonAfter={item.coin}
-          min="0"
-          step="0.00000001"
+          min={0}
+          step={0.00000001}
           onChange={(newValue) =>
-            onChange(
+            onProfileSettingChange(
+              setNewProfileSettings,
               Number(newValue),
               "trader-simulator",
               "starting-portfolio",
               item.coin
             )
           }
-          stringMode
         />
         {isCurrentProfile && (
           <Button

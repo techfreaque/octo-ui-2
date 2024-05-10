@@ -129,7 +129,7 @@ export const useSaveOptimizerQueue = () => {
         errorCallback,
       });
     },
-    [botDomain]
+    [botDomain, fetchOptimizerQueue]
   );
 };
 

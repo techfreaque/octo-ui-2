@@ -8,7 +8,6 @@ import {
   Dispatch,
 } from "react";
 import { fetchPlotlyPlotData } from "../../api/data";
-import { userInputKey } from "../../components/Tables/w2ui/RunDataTable";
 import { ID_SEPARATOR, PlotSourceType } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useUiConfigContext } from "../config/UiConfigProvider";
@@ -111,8 +110,8 @@ const UpdateHiddenBacktestingMetadataColumnsContext = createContext<
 >((_value) => {});
 
 export interface DisplayedRunIdsType {
-  live: never[];
-  backtesting: never[];
+  live: string[];
+  backtesting: string[];
 }
 
 const defaultDisplayedRunIds: DisplayedRunIdsType = {
@@ -152,7 +151,6 @@ export const useFetchPlotData = () => {
   const visiblePairs = useVisiblePairsContext();
   const visibleTimeframes = useVisibleTimeFramesContext();
   const setBotPlottedElements = useUpdateBotPlottedElementsContext();
-  const setHiddenBacktestingMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext();
   const visibleExchanges = useVisibleExchangesContext();
 
   const logic = useCallback(
@@ -170,11 +168,6 @@ export const useFetchPlotData = () => {
           optimizationCampaign: botInfo.optimization_campaign,
           setBotPlottedElements,
           botInfo,
-          setHiddenMetadataFromInputs: (elements) =>
-            setHiddenMetadataFromInputs(
-              elements,
-              setHiddenBacktestingMetadataColumns
-            ),
           isLive: true,
         });
     },
@@ -184,7 +177,6 @@ export const useFetchPlotData = () => {
       botDomain,
       setBotPlottedElements,
       botInfo,
-      setHiddenBacktestingMetadataColumns,
       visibleExchanges,
     ]
   );
@@ -311,7 +303,6 @@ function loadMissingRuns(
           botDomain,
           setBotPlottedElements,
           botInfo,
-          setHiddenMetadataFromInputs: undefined,
           isLive: false,
           optimizationCampaign,
           backtesting_id,
@@ -319,29 +310,6 @@ function loadMissingRuns(
         });
       }
     });
-}
-
-function setHiddenMetadataFromInputs(
-  elements,
-  setHiddenBacktestingMetadataColumns
-) {
-  const hiddenBacktestingMetadataColumns: string[] = [];
-  function addIfHidden(properties, tentacle) {
-    Object.keys(properties).forEach((input) => {
-      if (properties[input]?.options?.in_summary === false) {
-        hiddenBacktestingMetadataColumns.push(
-          userInputKey(input.replaceAll("_", " "), tentacle)
-        );
-      }
-      if (properties[input].properties) {
-        addIfHidden(properties[input].properties, tentacle);
-      }
-    });
-  }
-  elements.forEach((element) => {
-    addIfHidden(element.schema.properties, element.tentacle);
-  });
-  setHiddenBacktestingMetadataColumns(hiddenBacktestingMetadataColumns);
 }
 
 export const BotPlottedElementsProvider = ({
@@ -417,11 +385,6 @@ export const BotPlottedElementsProvider = ({
         botDomain,
         setBotPlottedElements,
         botInfo,
-        setHiddenMetadataFromInputs: (elements) =>
-          setHiddenMetadataFromInputs(
-            elements,
-            setHiddenBacktestingMetadataColumns
-          ),
         isLive: true,
       });
     }

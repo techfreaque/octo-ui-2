@@ -179,6 +179,12 @@ export type ExchangeConfigUpdateType = {
   global_config: {
     [configKey: string]: boolean | string[] | string | number;
   };
+  trading_config?: {
+    [key: string]: "false" | "true";
+  };
+  evaluator_config?: {
+    [key: string]: boolean;
+  };
   removed_elements: string[];
   restart_after_save?: boolean;
 };

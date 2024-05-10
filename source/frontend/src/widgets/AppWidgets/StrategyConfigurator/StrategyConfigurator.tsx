@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import {
   AppStoreAppType,
   StoreCategoryType,
@@ -28,6 +28,7 @@ import {
   strategyFlowMakerName,
 } from "../Configuration/TentaclesConfig";
 import {
+  StrategyModeSettingsNameType,
   appPackagesName,
   hiddenCategories,
   strategyModeName,
@@ -45,7 +46,7 @@ export default function AppStore() {
   const appStoreUser = useAppStoreUserContext();
   const isLoggedIn = Boolean(appStoreUser?.token);
   const [selectedCategories, setSelectedCategories] = useState<
-    StoreCategoryType
+    StoreCategoryType | StrategyModeSettingsNameType
   >();
   const [tradingConfigTabs, setTradingConfigTabs] = useState<
     TentacleConfigTabsData[]
@@ -80,19 +81,18 @@ export default function AppStore() {
     const currentStrategyPackageId =
       appStoreData?.Strategy &&
       Object.keys(appStoreData.Strategy).find(
-        (strategy) => appStoreData.Strategy?.[strategy].is_selected
+        (strategy) => appStoreData.Strategy?.[strategy]?.is_selected
       );
     const currentStrategy:
       | AppStoreAppType
       | undefined = currentStrategyPackageId
       ? appStoreData.Strategy?.[currentStrategyPackageId]
       : undefined;
-    const availableCategories: StoreCategoryType[] =
-      appStoreData &&
-      (objectKeys(appStoreData)?.filter(
-        (category) => !hiddenCategories.includes(category)
-      ) ||
-        []);
+    const availableCategories: StoreCategoryType[] = appStoreData
+      ? objectKeys(appStoreData)?.filter(
+          (category) => !hiddenCategories.includes(category)
+        )
+      : [];
     const content = (
       <AppList
         selectedCategories={selectedCategories}
@@ -110,7 +110,7 @@ export default function AppStore() {
         ?.map((categoryName) => {
           if (categoryName === strategyName) {
             return {
-              label: botInfo?.current_profile?.profile?.name,
+              label: `${botInfo?.current_profile?.profile?.name}`,
               key: categoryName,
               content,
               icon: <ProfileAvatar marginRight="5px" />,
@@ -189,14 +189,16 @@ export default function AppStore() {
     return (
       <AntSidebar
         menuItems={menuItems}
-        currentlySelectedMenu={selectedCategories}
+        currentlySelectedMenu={selectedCategories as string | undefined}
         defaultSelected={
           (botInfo?.trading_mode_name &&
           currentTentaclesTradingConfig?.[botInfo.trading_mode_name]
             ? botInfo.trading_mode_name
             : botInfo?.trading_mode_name) || strategyModeSettingsName
         }
-        setCurrentlySelectedMenu={setSelectedCategories}
+        setCurrentlySelectedMenu={
+          setSelectedCategories as Dispatch<SetStateAction<string | undefined>>
+        }
       />
     );
   }, [

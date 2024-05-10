@@ -4,7 +4,7 @@ import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
 import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
 
-export function AppTitle({ title }: { title: JSX.Element }) {
+export function AppTitle({ title }: { title: string }) {
   return <div> {title}</div>;
 }
 

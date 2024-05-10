@@ -86,6 +86,8 @@ function StrategyFlowBuilderDrawingSpace({
   );
   const uiConfig = useUiConfigContext();
   const autoSave = uiConfig?.[flowEditorSettingsName]?.auto_save;
+  const jsonNodes = JSON.stringify(nodesConfig?.nodes);
+  const jsonEdges = JSON.stringify(nodesConfig?.edges);
   useEffect(() => {
     if (
       typeof nodesConfig?.nodes === "object" &&
@@ -108,7 +110,8 @@ function StrategyFlowBuilderDrawingSpace({
     }
     setNodes((nodesConfig?.nodes && Object.values(nodesConfig?.nodes)) || []);
     setEdges((nodesConfig?.edges as FlowEdgeConfigType[]) || []);
-  }, [JSON.stringify(nodesConfig?.nodes), JSON.stringify(nodesConfig?.edges)]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jsonNodes, jsonEdges]);
 
   const [reactFlowInstance, setReactFlowInstance] = useState<
     ReactFlowInstance<NodeData, EdgeData>
@@ -373,6 +376,7 @@ function useGetFlowCallbacks({
       edges,
       handleUserInputSave,
       reactFlowInstance,
+      reactFlowWrapper,
       setIsSaving,
       setNodes,
       tradingModeKey,

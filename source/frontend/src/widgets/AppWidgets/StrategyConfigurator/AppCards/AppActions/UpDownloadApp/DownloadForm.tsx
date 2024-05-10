@@ -21,7 +21,6 @@ import AntButton from "../../../../../../components/Buttons/AntButton";
 import { Grid } from "@mui/material";
 import { appPackagesName, strategyName } from "../../../storeConstants";
 import { DownloadInfo } from "../../AppCard";
-import { objectKeys } from "../../../../../../helpers/helpers";
 
 export default function AppDownloadForm({
   setDownloadInfo,
@@ -228,12 +227,13 @@ function AppVersions({
       };
     });
   useEffect(() => {
+    const firtVersion = reversedVersions?.[0];
     setDownloadInfo((prevDownloadInfo) => ({
       ...prevDownloadInfo,
       visibleVersionTypes: ["stable_version", "alpha_version", "beta_version"],
-      major_version: reversedVersions?.[0]?.major_version,
-      minor_version: reversedVersions?.[0]?.minor_version,
-      bug_fix_version: reversedVersions?.[0]?.bug_fix_version,
+      major_version: firtVersion?.major_version,
+      minor_version: firtVersion?.minor_version,
+      bug_fix_version: firtVersion?.bug_fix_version,
       versionDetailsOpen: reversedVersions?.length ? true : false,
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -357,34 +357,34 @@ function RequiredPackages({
           if (!requiredAppsByTentaclePackage[potentialOriginPackage]) {
             requiredAppsByTentaclePackage[potentialOriginPackage] = [];
           }
-          if (potentialOriginPackage) {
-            requiredAppsByTentaclePackage[potentialOriginPackage].push(
-              potentialRequiredApp
-            );
-          }
+          requiredAppsByTentaclePackage[potentialOriginPackage]?.push(
+            potentialRequiredApp
+          );
+
           const packageInstalled = requiredAppsByTentaclePackage[
             potentialOriginPackage
-          ].every((thisApp) => {
+          ]?.every((thisApp) => {
             return thisApp?.is_installed;
           });
           requirementsSatisfied =
-            requirementsSatisfied && (index === 0 || packageInstalled);
+            (requirementsSatisfied && (index === 0 || packageInstalled)) ||
+            false;
         });
       });
   });
   return (
     <Grid container spacing={2}>
       {requiredAppsByTentaclePackage &&
-        Object.keys(
+        Object.entries(
           requiredAppsByTentaclePackage
-        ).map((requiredAppPackage, index) => (
+        ).map(([requiredAppPackageName, requiredAppsInPackage], index) => (
           <RequiredPackage
             key={`${app.package_id}${index}`}
             app={app}
             requirementsSatisfied={requirementsSatisfied}
             isMainPackage={index === 0}
-            requiredAppsByTentaclePackage={requiredAppsByTentaclePackage}
-            requiredAppPackage={requiredAppPackage}
+            requiredAppsInPackage={requiredAppsInPackage}
+            requiredAppPackageName={requiredAppPackageName}
             downloadInfo={downloadInfo}
             handleDownload={handleDownload}
             setDownloadInfo={setDownloadInfo}
@@ -396,8 +396,8 @@ function RequiredPackages({
 
 function RequiredPackage({
   app,
-  requiredAppsByTentaclePackage,
-  requiredAppPackage,
+  requiredAppPackageName,
+  requiredAppsInPackage,
   downloadInfo,
   handleDownload,
   setDownloadInfo,
@@ -405,8 +405,8 @@ function RequiredPackage({
   isMainPackage,
 }: {
   app: AppStoreAppType;
-  requiredAppsByTentaclePackage: RequiredAppsByTentaclePackageType;
-  requiredAppPackage: string;
+  requiredAppPackageName: string;
+  requiredAppsInPackage: AppStoreAppType[];
   downloadInfo: DownloadInfo;
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
@@ -417,17 +417,15 @@ function RequiredPackage({
   isMainPackage: boolean;
 }) {
   const botColors = useBotColorsContext();
-  const mainPackageApp = requiredAppsByTentaclePackage[requiredAppPackage][0];
-  const packageInstalled = requiredAppsByTentaclePackage[
-    requiredAppPackage
-  ].every((thisApp) => {
+  const mainPackageApp = requiredAppsInPackage[0] as AppStoreAppType;
+  const packageInstalled = requiredAppsInPackage.every((thisApp) => {
     return thisApp?.is_installed;
   });
   const [showAllAppsInpackage, setShowAllAppsInpackage] = useState(false);
   return (
     <Grid item xs={12} md={6} lg={4} style={{ height: "100%" }}>
       <Card
-        key={requiredAppPackage}
+        key={requiredAppPackageName}
         style={{
           marginBottom: "5px",
           height: "100%",
@@ -449,7 +447,7 @@ function RequiredPackage({
             <span>
               {mainPackageApp.categories?.[0] === strategyName
                 ? mainPackageApp.title
-                : requiredAppPackage}
+                : requiredAppPackageName}
             </span>
           </Typography.Title>
         </Tooltip>
@@ -478,29 +476,27 @@ function RequiredPackage({
                     /> */}
         Required Apps:
         <ul>
-          {requiredAppsByTentaclePackage[requiredAppPackage].map(
-            (requiredApp, index) => (
-              <Tooltip
-                title={
-                  requiredApp?.is_installed
-                    ? "The App is already installed"
-                    : "The App isn't installed yet"
-                }
-                key={`${requiredApp?.package_id}${index}`}
-              >
-                <div style={{ display: "flex" }}>
-                  {requiredApp.is_installed ? (
-                    <IsInstalledIcon topRight={false} />
-                  ) : (
-                    <IsNotInstalledIcon topRight={false} />
-                  )}
-                  <span style={{ marginLeft: "5px" }}>
-                    {`${requiredApp?.title}`}
-                  </span>
-                </div>
-              </Tooltip>
-            )
-          )}
+          {requiredAppsInPackage.map((requiredApp, index) => (
+            <Tooltip
+              title={
+                requiredApp?.is_installed
+                  ? "The App is already installed"
+                  : "The App isn't installed yet"
+              }
+              key={`${requiredApp?.package_id}${index}`}
+            >
+              <div style={{ display: "flex" }}>
+                {requiredApp.is_installed ? (
+                  <IsInstalledIcon topRight={false} />
+                ) : (
+                  <IsNotInstalledIcon topRight={false} />
+                )}
+                <span style={{ marginLeft: "5px" }}>
+                  {`${requiredApp?.title}`}
+                </span>
+              </div>
+            </Tooltip>
+          ))}
         </ul>
         <div
           onClick={() => setShowAllAppsInpackage((prevState) => !prevState)}
@@ -512,7 +508,7 @@ function RequiredPackage({
           All included apps in package:
         </div>
         {showAllAppsInpackage && (
-          <AllAppsInPackage requiredAppPackage={requiredAppPackage} />
+          <AllAppsInPackage requiredAppPackage={requiredAppPackageName} />
         )}
         <DownloadPackageButton
           handleDownload={handleDownload}
@@ -539,23 +535,22 @@ function AllAppsInPackage({
   return (
     <ul>
       {appStoreData &&
-        objectKeys(appStoreData).map((category) => {
+        Object.entries(appStoreData).map(([category, categoryApps]) => {
           return (
             category !== appPackagesName && (
               <div key={category}>
-                {Object.keys(appStoreData[category]).map((app_id) => {
+                {Object.keys(categoryApps).map((app_id) => {
+                  const potentialAppInPackage = categoryApps[app_id];
                   if (
-                    appStoreData[category][app_id].origin_package ===
-                    requiredAppPackage
+                    potentialAppInPackage?.origin_package === requiredAppPackage
                   ) {
                     return (
                       <div key={`${category}${app_id}`}>
-                        {appStoreData[category][app_id].title}
+                        {potentialAppInPackage.title}
                       </div>
                     );
-                  } else {
-                    return <span key={`${category}${app_id}`}></span>;
                   }
+                  return <></>;
                 })}
               </div>
             )

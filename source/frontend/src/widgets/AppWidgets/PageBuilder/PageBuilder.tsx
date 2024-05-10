@@ -18,7 +18,6 @@ import { Button, Space } from "antd";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import {
   errorResponseCallBackParams,
-  successResponseCallBackParams,
 } from "../../../api/fetchAndStoreFromBot";
 import JsonEditor from "@techfreaque/json-editor-react";
 import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";

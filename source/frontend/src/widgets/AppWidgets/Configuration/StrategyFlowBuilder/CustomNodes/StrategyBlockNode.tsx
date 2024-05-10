@@ -306,6 +306,9 @@ export default function StrategyBlockNode({
   const { ioSchema, schema, config } = useCurrentNodeSchema({
     nodeId: id,
   });
+  const jsonConfig = JSON.stringify(config);
+  const jsonIoSchema = JSON.stringify(ioSchema);
+  const jsonSchema = JSON.stringify(schema);
   return useMemo(() => {
     const ioNodes: {
       top?: JSX.Element;
@@ -369,13 +372,7 @@ export default function StrategyBlockNode({
       </NodeContainer>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [
-    JSON.stringify(config),
-    JSON.stringify(ioSchema),
-    id,
-    selected,
-    JSON.stringify(schema),
-  ]);
+  }, [jsonConfig, jsonIoSchema, jsonSchema, id, selected]);
 }
 
 export function useCurrentNodeSchema({

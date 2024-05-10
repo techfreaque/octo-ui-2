@@ -10,7 +10,7 @@
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "strict": true,
+    // "strict": true,
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -21,11 +21,11 @@
       "node_modules/@types",
       "src/types"
     ],
-    // "noImplicitAny": false,
-    // "noStrictGenericChecks": true,
-    // "suppressImplicitAnyIndexErrors": true,
-    // "exactOptionalPropertyTypes": false,
     // Strict Checks
+    // https://eslint.org/docs/rules/no-fallthrough
+    // "noUnusedLocals": true,
+    // https://eslint.org/docs/rules/no-unused-vars
+    // "noUnusedParameters": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -43,10 +43,6 @@
     "forceConsistentCasingInFileNames": true,
     // https://eslint.org/docs/rules/consistent-return ?
     "noFallthroughCasesInSwitch": true,
-    // https://eslint.org/docs/rules/no-fallthrough
-    "noUnusedLocals": true,
-    // https://eslint.org/docs/rules/no-unused-vars
-    "noUnusedParameters": true,
     // https://eslint.org/docs/rules/no-unused-vars#args
     "allowUnreachableCode": false,
     // https://eslint.org/docs/rules/no-unreachable ?

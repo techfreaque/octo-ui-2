@@ -31,6 +31,7 @@ export default function CurrentPortfolioTable() {
       ([symbol, symbolPortfolio]) => {
         currentHoldings.push({
           id: `${symbol}`,
+          key: `${symbol}`,
           asset: `${symbol}`,
           total: symbolPortfolio.total,
           available: symbolPortfolio.free,

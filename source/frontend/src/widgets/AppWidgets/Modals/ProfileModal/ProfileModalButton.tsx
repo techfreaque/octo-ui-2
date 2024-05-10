@@ -26,21 +26,20 @@ export default function ProfileModalButton({
   profile,
   isCurrentProfile,
 }: {
-  profile: ProfileType | undefined;
+  profile: ProfileType;
   isCurrentProfile: boolean | undefined;
 }) {
   const [open, setOpen] = useState(false);
   const fetchBotInfo = useFetchBotInfo();
   const [loading, setIsloading] = useState(false);
   const [requiresInstantRestart, setRequiresInstantRestart] = useState(true);
-  // const botInfo = useBotInfoContext()
   const isOnline = useIsBotOnlineContext();
   const restartBot = useRestartBot();
   const botDomain = useBotDomainContext();
   const currentProfileTitle = profile?.profile?.name;
-  const [newProfileSettings, setNewProfileSettings] = useState<
-    ProfileType | undefined
-  >(profile ? JSON.parse(JSON.stringify(profile)) : undefined);
+  const [newProfileSettings, setNewProfileSettings] = useState<ProfileType>(
+    JSON.parse(JSON.stringify(profile))
+  );
   const currentCurrencyList = useCurrentCurrencyListContext();
   const unsavedCurrencyList = useUnsavedCurrencyListContext();
   const currencyListChanged =
@@ -216,7 +215,7 @@ export default function ProfileModalButton({
 
 export interface ProfileInfoUpdateType {
   id: string;
-  name: string;
-  description: string;
+  name?: string;
+  description?: string;
   required_trading_tentacles?: string[];
 }

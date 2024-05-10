@@ -169,6 +169,7 @@ function getData({
         unsavedCurrencyList?.includes(symbol) && !isEnabled;
 
       preSorteddata.push({
+        key: `${symbol}${exchange}`,
         id: `${symbol}${exchange}`,
         exchange,
         symbolLabel:

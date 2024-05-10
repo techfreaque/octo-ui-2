@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import { AutoComplete, Radio, Typography } from "antd";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
+import { ProfileType } from "../../../../context/data/BotInfoProvider";
 
 const tradingTypes = {
   realTrading: {
@@ -19,8 +20,8 @@ const tradingTypes = {
 const tradingTypeStr = "tradingType";
 
 export function onProfileSettingChange(
-  setNewProfileSettings,
-  value,
+  setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>,
+  value: number | string,
   rootPath: string,
   subPath?: string,
   subSubPath?: string,
@@ -122,6 +123,10 @@ export function ProfileReferenceMarketSettings({
   newProfileSettings,
   setNewProfileSettings,
   isCurrentProfile,
+}: {
+  newProfileSettings;
+  setNewProfileSettings;
+  isCurrentProfile;
 }) {
   const refMarket = newProfileSettings?.config?.trading?.["reference-market"];
   // TODO replace with all available
@@ -131,7 +136,7 @@ export function ProfileReferenceMarketSettings({
 
   const defaultOptions = convertStringArrayToOptions(quoteAssets);
   const [options, setOptions] = useState(defaultOptions);
-  function setAutoCompleteOptions(searchText) {
+  function setAutoCompleteOptions(searchText: string) {
     const searchTextU = searchText?.toUpperCase();
     const newOptions = searchTextU
       ? convertStringArrayToOptions(
@@ -170,7 +175,12 @@ export function ProfileReferenceMarketSettings({
   );
 }
 
-function convertStringArrayToOptions(stringArray) {
+function convertStringArrayToOptions(
+  stringArray: string[]
+): {
+  label: string;
+  value: string;
+}[] {
   return stringArray
     ? stringArray.map((quoteAsset) => ({
         label: quoteAsset,

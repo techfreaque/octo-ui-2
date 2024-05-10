@@ -37,7 +37,7 @@ export default function AntSidebar({
   defaultSelected,
 }: {
   menuItems?: AntSideBarMenutItemType[];
-  currentlySelectedMenu?: string;
+  currentlySelectedMenu?: string | undefined;
   setCurrentlySelectedMenu?: Dispatch<SetStateAction<string | undefined>>;
   defaultSelected?: string;
 }) {

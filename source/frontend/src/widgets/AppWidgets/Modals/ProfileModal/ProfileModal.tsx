@@ -20,6 +20,7 @@ import { buttonTypes } from "../../../../components/Buttons/AntButton";
 import { CancelOutlined } from "@mui/icons-material";
 import { buttonVariants } from "../../../../components/Buttons/AntButton";
 import { Dispatch, SetStateAction } from "react";
+import { ProfileType } from "../../../../context/data/BotInfoProvider";
 
 export default function ProfileModal({
   isCurrentProfile,
@@ -36,9 +37,9 @@ export default function ProfileModal({
 }: {
   isCurrentProfile: boolean | undefined;
   handleClose: () => void;
-  newProfileSettings;
-  setNewProfileSettings;
-  profile;
+  newProfileSettings: ProfileType;
+  setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
+  profile: ProfileType | undefined;
   setRequiresInstantRestart: Dispatch<SetStateAction<boolean>>;
   requiresInstantRestart: boolean;
   loading: boolean;
@@ -206,7 +207,7 @@ export default function ProfileModal({
                 buttonVariant={buttonVariants.primary}
                 buttonType={buttonTypes.warning}
                 size={buttonSizes.large}
-                onClick={saveProfile}
+                onClick={() => saveProfile()}
               >
                 Save And Restart Later
               </AntButton>

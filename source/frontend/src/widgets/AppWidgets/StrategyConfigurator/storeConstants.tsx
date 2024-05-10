@@ -8,14 +8,15 @@ import {
 } from "../../../context/data/AppStoreDataProvider";
 
 export const hiddenCategories: StoreCategoryType[] = ["Legacy Strategy"];
-export const strategyModeSettingsName: StoreCategoryType =
+export type StrategyModeSettingsNameType = "Strategy Mode Settings";
+export const strategyModeSettingsName: StrategyModeSettingsNameType =
   "Strategy Mode Settings";
 export const strategyName: StrategyCategoryType = "Strategy";
 export const strategyModeName: StrategyModeCategoryType = "Strategy Mode";
 export const appPackagesName: StoreCategoryType = "App Packages";
 
 export const AppPublishStatus: {
-  [key in AppStorePublishStatusType]: AppStorePublishStatusType
+  [key in AppStorePublishStatusType]: AppStorePublishStatusType;
 } = {
   draft: "draft",
   published: "published",
@@ -48,7 +49,7 @@ export const appVersionTags: {
   [key: string]: {
     title: string;
     key: AppStoreVersionTagType;
-  }
+  };
 } = {
   BETA_VERSION: {
     title: "Beta Version",

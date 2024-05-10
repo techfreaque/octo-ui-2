@@ -324,13 +324,15 @@ function formatSubData({
               : `live ${liveId}`;
             const thisData = subElements[pair][timeframe]?.data?.sub_elements;
             thisData?.forEach((sub_element) => {
+              const chartLocation: ChartLocationType | "table" =
+                sub_element.name;
               if (
-                !allChartLocations.includes(sub_element.name) ||
+                chartLocation === "table" ||
+                !allChartLocations.includes(chartLocation) ||
                 sub_element.type !== "chart"
               ) {
                 return;
               }
-              const chartLocation: ChartLocationType = sub_element.name;
               if (!plotData[chartLocation]) {
                 plotData[chartLocation] = [];
               }

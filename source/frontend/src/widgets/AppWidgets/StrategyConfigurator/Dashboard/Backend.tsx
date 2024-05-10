@@ -7,40 +7,6 @@ import {
 import { Typography } from "antd";
 import { ConfirmAction } from "../AppCards/AppActions/AppActions";
 
-export interface StoreUsersType {
-  users?: { id: string; email: string; referral_user_id?: string }[];
-  visits?: {
-    visit_counter;
-    origin;
-    user_id;
-  }[];
-}
-
-export interface StorePayments {
-  payments?: {
-    id;
-    timestamp;
-    payment_status;
-    user_id;
-    payment_id;
-    origin_packages;
-    payment_timestamp;
-    price;
-    payment_success_secret;
-    payment_cancel_secret;
-    payment_url;
-    cancel_url;
-    subscription_months;
-  }[];
-  subscriptions?: {
-    id;
-    user_id;
-    start_timestamp;
-    end_timestamp;
-    origin_package;
-  }[];
-}
-
 export default function BackendDashboard() {
   const [storeUsers, setStoreUsers] = useState<StoreUsersType>();
   const [storePayments, setStorePayments] = useState<StorePayments>();
@@ -62,7 +28,7 @@ export default function BackendDashboard() {
                 {`${user.id} ${user.email} (ref id${user.referral_user_id})`}
                 <ConfirmAction
                   onConfirm={(setOpen: Dispatch<SetStateAction<boolean>>) =>
-                    deleteUser(user.id)
+                    deleteUser(user.id, () => setOpen(false))
                   }
                   confirmTitle={`Delete ${user.email}`}
                   confirmButtonText={`Delete ${user.email}`}
@@ -111,4 +77,51 @@ export default function BackendDashboard() {
       )}
     </>
   );
+}
+
+export interface StoreUsersType {
+  success: boolean;
+  users: {
+    about_me: null;
+    address: null;
+    city: null;
+    country: null;
+    email: string;
+    id: number;
+    lastname: null;
+    name: null;
+    referral_user_id: null;
+    zip: null;
+  }[];
+  visits: {
+    origin: string;
+    user_id: number;
+    visit_counter: number;
+  }[];
+}
+
+export interface StorePayments {
+  success: boolean;
+  payments: {
+    cancel_url: string;
+    id: number;
+    origin_packages: string;
+    payment_cancel_secret: string;
+    payment_id: null;
+    payment_status: string;
+    payment_success_secret: string;
+    payment_timestamp: number | null;
+    payment_url: string;
+    price: number;
+    subscription_months: number;
+    timestamp: number;
+    user_id: number;
+  }[];
+  subscriptions?: {
+    end_timestamp: number;
+    id: number;
+    origin_package: string;
+    start_timestamp: number;
+    user_id: number;
+  }[];
 }

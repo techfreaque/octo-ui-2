@@ -83,6 +83,7 @@ export function AppStoreCart() {
         return {
           ...firstAppInPackage,
           id: originPackageName,
+          key: originPackageName,
           price: `${firstAppInPackage.price}$ / month`,
           months: 12,
           total: `${12 * firstAppInPackage.price}$`,
@@ -132,7 +133,7 @@ export function AppStoreCart() {
               <AntButton
                 buttonType={buttonTypes.warning}
                 size={buttonSizes.large}
-                onClick={cancelStorePayment}
+                onClick={() => cancelStorePayment()}
                 antIconComponent={CloseCircleOutlined}
               >
                 Cancel Purchase
@@ -154,8 +155,8 @@ export function AppStoreCart() {
               size={buttonSizes.large}
               onClick={() =>
                 createPaymentFromAppStoreCart(
-                  undefined,
-                  appStoreCart && Object.keys(appStoreCart)
+                  appStoreCart && Object.keys(appStoreCart),
+                  undefined
                 )
               }
             >

@@ -49,7 +49,7 @@ export default function AppActions({
   didHoverOnce,
 }: {
   app: AppStoreAppType;
-  handleSelect?: (setClosed: () => void) => void;
+  handleSelect?: ((setClosed: () => void) => void) | undefined;
   handleDuplication?: (setOpen: Dispatch<SetStateAction<boolean>>) => void;
   handleUninstall: (setOpen: Dispatch<SetStateAction<boolean>>) => void;
   isMouseHover: boolean;
@@ -60,7 +60,7 @@ export default function AppActions({
   uploadInfo: UploadInfo;
   otherActions?: JSX.Element;
   infoContent: string | JSX.Element | undefined;
-  onConfigure?: () => void;
+  onConfigure?: (() => void) | undefined;
   exportUrl?: string;
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
@@ -68,7 +68,7 @@ export default function AppActions({
   ) => void;
   setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
   downloadInfo: DownloadInfo;
-  isReadOnlyStrategy?: boolean;
+  isReadOnlyStrategy?: boolean | undefined;
   didHoverOnce: boolean;
 }) {
   const buttonStyle: CSSProperties = {

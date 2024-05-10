@@ -7,6 +7,10 @@ import {
   AppStoreDataType,
   StoreCategoryType,
 } from "../../../context/data/AppStoreDataProvider";
+import {
+  StrategyModeSettingsNameType,
+  strategyModeSettingsName,
+} from "./storeConstants";
 
 export default function AppList({
   selectedCategories,
@@ -14,17 +18,21 @@ export default function AppList({
   setSelectedCategories,
   currentStrategy,
 }: {
-  selectedCategories: StoreCategoryType | undefined;
-  appStoreData: AppStoreDataType;
+  selectedCategories:
+    | StoreCategoryType
+    | StrategyModeSettingsNameType
+    | undefined;
+  appStoreData: AppStoreDataType | undefined;
   setSelectedCategories: Dispatch<
-    SetStateAction<StoreCategoryType | undefined>
+    SetStateAction<StoreCategoryType | StrategyModeSettingsNameType | undefined>
   >;
   currentStrategy: AppStoreAppType | undefined;
 }) {
   const [isLoading, setIsloading] = useState(false);
   const thisCategoryAppStoreData: AppStoreAppType[] =
     selectedCategories &&
-    typeof appStoreData?.[selectedCategories] !== "undefined"
+    selectedCategories !== strategyModeSettingsName &&
+    appStoreData?.[selectedCategories]
       ? Object.values(appStoreData[selectedCategories])
       : [];
   const preSortedAppStoreData = thisCategoryAppStoreData?.sort(

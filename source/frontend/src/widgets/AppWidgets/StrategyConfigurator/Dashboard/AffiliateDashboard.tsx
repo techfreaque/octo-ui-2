@@ -7,7 +7,7 @@ export default function AffiliateDashboard() {
   const getAffiliateDashboard = useGetAffiliateDashboard();
   useEffect(() => {
     getAffiliateDashboard(setDashboardData);
-  }, []);
+  }, [getAffiliateDashboard]);
 
   return (
     <div style={{ margin: "20px 0" }}>
