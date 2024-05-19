@@ -60,9 +60,9 @@ export default function MuiTabs({
                   //  style={{ marginRight: "auto"}}
                   value={currentTabId}
                   onChange={handleTabChange}
-                  variant="scrollable"
+                  // variant="scrollable"
                   // scrollButtons
-                  allowScrollButtonsMobile
+                  // allowScrollButtonsMobile
                   aria-label="Tabs"
                   className="mx-auto"
                 >

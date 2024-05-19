@@ -12,10 +12,10 @@
     "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@mui/icons-material": "^5.15.17",
-    "@mui/material": "^5.15.17",
+    "@mui/icons-material": "^6.0.0-alpha.7",
+    "@mui/material": "^6.0.0-alpha.7",
     "@techfreaque/json-editor-react": "^1.4.8",
-    "antd": "^5.17.0",
+    "antd": "^5.17.2",
     "bootstrap": "^5.3.3",
     "d3-format": "^3.1.0",
     "d3-time-format": "^4.1.0",
@@ -24,9 +24,10 @@
     "i18next-browser-languagedetector": "^7.2.1",
     "i18next-http-backend": "^2.5.1",
     "plotly.js": "^2.32.0",
-    "react": "^18.3.1",
+    "rc-menu": "^9.14.0",
+    "react": "^19.0.0-beta-26f2496093-20240514",
     "react-bootstrap": "^2.10.2",
-    "react-dom": "^18.3.1",
+    "react-dom": "^19.0.0-beta-26f2496093-20240514",
     "react-helmet": "^6.1.0",
     "react-highlight-words": "^0.20.0",
     "react-i18next": "^14.1.1",
@@ -40,9 +41,9 @@
     "w2ui": "github:vitmalina/w2ui"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "prettier:check": "npmx prettier --check \"**/*.{ts,tsx}\"",
     "prettier:write": "npmx prettier --write \"**/*.{ts,tsx}\""
@@ -67,16 +68,25 @@
   "devDependencies": {
     "@babel/plugin-transform-private-property-in-object": "^7.24.5",
     "@types/node": "^20.12.11",
-    "@types/react": "^18.3.1",
-    "@types/react-dom": "^18.3.0",
+    "@types/react": "npm:types-react@beta",
+    "@types/react-dom": "npm:types-react-dom@beta",
     "@types/react-helmet": "^6.1.11",
     "@types/react-jsonschema-form": "^1.7.13",
     "@types/react-plotly.js": "^2.6.3",
     "@types/w2ui": "^1.4.37",
+    "babel-plugin-react-compiler": "^0.0.0-experimental-592953e-20240517",
+    "customize-cra": "^1.0.0",
+    "eslint-plugin-react-compiler": "^0.0.0-experimental-c8b3f72-20240517",
+    "react-app-rewired": "^2.2.1",
     "react-scripts": "5.0.1",
     "typescript": "^5.4.5"
   },
   "overrides": {
-    "typescript": "^5.4.5"
+    "typescript": "^5.4.5",
+    "react": "^19.0.0-beta-26f2496093-20240514",
+    "react-dom": "^19.0.0-beta-26f2496093-20240514",
+    "@types/react": "npm:types-react@beta",
+    "@types/react-dom": "npm:types-react-dom@beta",
+    "rc-menu": "^9.14.0"
   }
 }
