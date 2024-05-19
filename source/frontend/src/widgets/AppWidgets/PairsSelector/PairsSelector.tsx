@@ -30,16 +30,18 @@ export default function PairsSelector({ content }: UiLayoutPageLayoutType) {
             key={visiblePairs}
             title={<Trans i18nKey="pairExchangeSettings.currentPairTooltip" />}
           >
-            <AntButton
-              selected={true}
-              onClick={() => setMenuIsOpen({ open: true, wantsClose: false })}
-              buttonVariant="text"
-            >
-              <div>
-                <div style={{ lineHeight: "16px" }}> {visiblePairs} </div>
-                <div style={{ lineHeight: "15px" }}> {visibleExchanges} </div>
-              </div>
-            </AntButton>
+            <div>
+              <AntButton
+                selected={true}
+                onClick={() => setMenuIsOpen({ open: true, wantsClose: false })}
+                buttonVariant="text"
+              >
+                <div>
+                  <div style={{ lineHeight: "16px" }}> {visiblePairs} </div>
+                  <div style={{ lineHeight: "15px" }}> {visibleExchanges} </div>
+                </div>
+              </AntButton>
+            </div>
           </Tooltip>
         </PairConfiguratorDropdown>
       </div>

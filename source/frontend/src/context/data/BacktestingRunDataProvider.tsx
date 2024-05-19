@@ -7,7 +7,10 @@ import {
   SetStateAction,
 } from "react";
 import { fetchBacktestingRunData } from "../../api/data";
-import { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
+import {
+  errorResponseCallBackParams,
+  sendAndInterpretBotUpdate,
+} from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
@@ -15,12 +18,13 @@ import {
   useUiConfigContext,
   useUpdateUiConfigContext,
 } from "../config/UiConfigProvider";
-import { TentaclesConfigsType } from "../config/TentaclesConfigProvider";
+import { TentaclesConfigValuesType } from "../config/TentaclesConfigProvider";
+import { useUpdateDisplayedRunIdsContext } from "./BotPlottedElementsProvider";
 
 export interface BacktestingRunData {
   id: number;
   "optimization campaign": string;
-  "user inputs": TentaclesConfigsType;
+  "user inputs": TentaclesConfigValuesType;
   timestamp: number;
   name: null;
   leverage: number;
@@ -78,43 +82,77 @@ export const useFetchBacktestingRunData = () => {
   const botDomain = useBotDomainContext();
   const uiConfig = useUiConfigContext();
   const setUiConfig = useUpdateUiConfigContext();
-  return useCallback(() => {
-    if (uiConfig?.optimization_campaign)
-      fetchBacktestingRunData(
-        setBacktestingRunData,
-        setUiConfig,
-        botDomain,
-        false,
-        {
-          ...uiConfig.optimizer_campaigns_to_load,
-        }
-      );
-  }, [setBacktestingRunData, botDomain, uiConfig, setUiConfig]);
+  return useCallback(
+    (onDone?: () => void) => {
+      if (uiConfig?.optimization_campaign)
+        fetchBacktestingRunData(
+          setBacktestingRunData,
+          setUiConfig,
+          botDomain,
+          false,
+          {
+            ...uiConfig.optimizer_campaigns_to_load,
+          },
+          onDone
+        );
+    },
+    [setBacktestingRunData, botDomain, uiConfig, setUiConfig]
+  );
 };
+
+export type RunsToDeleteDataType = {
+  backtesting_id: number;
+  optimizer_id: number;
+  campaign_name: string;
+}[];
 
 export const useDeleteBacktestingRunData = () => {
   const botDomain = useBotDomainContext();
   const reloadData = useFetchBacktestingRunData();
+  const setDisplayedRunIds = useUpdateDisplayedRunIdsContext();
   return useCallback(
-    (runsToDelete) => {
+    (
+      runsToDelete: RunsToDeleteDataType,
+      isDeleting: Dispatch<SetStateAction<boolean>>
+    ) => {
+      isDeleting(true);
       const data = {
         runs: runsToDelete,
       };
       const successCallback = () => {
         reloadData();
         createNotification({ title: "Runs successfully deleted" });
+        setDisplayedRunIds((prevState) => ({
+          ...prevState,
+          backtesting: [],
+        }));
+        isDeleting(false);
+      };
+      const errorCallback = (payload: errorResponseCallBackParams) => {
+        reloadData();
+        createNotification({
+          title: "Failed to delete selcted runs",
+          message: `Error: ${payload.data}`,
+          type: "danger",
+        });
+        isDeleting(false);
       };
       sendAndInterpretBotUpdate({
         updatedData: data,
         updateUrl: botDomain + backendRoutes.deleteRunData,
         successCallback,
+        errorCallback,
       });
     },
-    [botDomain, reloadData]
+    [botDomain, reloadData, setDisplayedRunIds]
   );
 };
 
-export const BacktestingRunDataProvider = ({ children }) => {
+export const BacktestingRunDataProvider = ({
+  children,
+}: {
+  children: JSX.Element;
+}) => {
   const [backtestingRunData, setBacktestingRunData] = useState<
     BacktestingRunsData
   >();

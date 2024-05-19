@@ -3,9 +3,10 @@ import Box from "@mui/material/Box";
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { CSSProperties, SyntheticEvent, useState } from "react";
+import { Tab } from "@mui/material";
 
 export interface MuiTabType {
-  title: JSX.Element;
+  title: JSX.Element | string;
   toolBarContent?: JSX.Element;
   tabId: number | string;
   dontScroll?: boolean | undefined;
@@ -65,7 +66,18 @@ export default function MuiTabs({
                   aria-label="Tabs"
                   className="mx-auto"
                 >
-                  {tabs.map((tab) => tab.title)}
+                  {tabs.map((tab, index) =>
+                    typeof tab.title === "string" ? (
+                      <Tab
+                        key={tab.tabId}
+                        label={tab.title.replace(/_/g, " ")}
+                        value={tab.tabId}
+                        sx={{ textTransform: "none" }}
+                      />
+                    ) : (
+                      tab.title
+                    )
+                  )}
                 </Tabs>
               </TabsElement>
               <TabsElement isBigScreen={isBigScreen}>

@@ -35,69 +35,80 @@ export type FlowEdgeConfigType = {
   target: string;
   targetHandle: string;
 };
-// export type FlowNodeConfigType = {
-//   [nodeKey: string]: {
-//     [nodeSetting: string]: boolean | boolean[]|string|string[] |number|number[];
-//   };
-// };
 
-// const t = {
-//   config_ljh27onbqv6rp3pr0g: {
-//     enable_plots_config_ljh27onbqv6rp3pr0g: false,
-//     trigger_pairs_config_ljh27onbqv6rp3pr0g: ["BTC/USDT"],
-//     trigger_time_frames_config_ljh27onbqv6rp3pr0g: [],
-//   },
-//   data: {
-//     blockId: "candle_strategy",
-//     color: "purple",
-//     description:
-//       "The candle based strategy can be used to trade based on candle closes",
-//     nodeType: "StrategyBlock",
-//     title: "Candle Based Strategy",
-//     title_short: "Candle Strategy",
-//   },
-//   dragging: false,
-//   height: 452,
-//   id: "ljh27onbqv6rp3pr0g",
-//   position: {
-//     x: 688.291470530264,
-//     y: 42.47334908334665,
-//   },
-//   positionAbsolute: {
-//     x: 688.291470530264,
-//     y: 42.47334908334665,
-//   },
-//   selected: true,
-//   type: "StrategyBlockNode",
-//   width: 500,
-// };
+export type NodeConfigKeyType = `config_${string}`
 
-export type TentaclesConfigValuesType = {
-  [key: string]:
-    | null
-    | boolean
-    | string
-    | number
-    | TentaclesConfigValuesType[]
-    | FlowEdgeConfigType[]
-    | TentaclesConfigValuesType
-    | number[]
-    | string[];
+export type FlowNodeConfigType = {
+  [nodeConfigKey: NodeConfigKeyType]: {
+    [nodeConfigPropertyKey:string]: TentaclesConfigValueType
+  }
+  data: {
+    blockId: string;
+    color: string;
+    description: string;
+    nodeType: "StrategyBlock";
+    title: string;
+    title_short: string;
+  };
+  dragging: boolean;
+  height: number;
+  id: string;
+  position: {
+    x: number;
+    y: number;
+  };
+  positionAbsolute: {
+    x: number;
+    y: number;
+  };
+  selected: boolean;
+  type: "StrategyBlockNode";
+  width: number;
 };
 
+export type FlowNodeConfigsType = {
+  [nodeKey: string]: FlowNodeConfigType
+};
+
+export type TentaclesConfigValueType =
+  | null
+  | boolean
+  | string
+  | number
+  | TentaclesConfigValuesType[]
+  | TentaclesConfigValuesType
+  | number[]
+  | string[];
+
+export type TentaclesConfigValuesType = {
+  [key: string]: TentaclesConfigValueType;
+}
+
+export type TentaclesConfigByTentacleType = {
+  [tentacleName: string]: TentaclesConfigValuesType & {
+    nodes?: FlowNodeConfigsType;
+    edges?: FlowEdgeConfigType[]
+  };
+};
+
+export type TentaclesConfigsSchemaPropertiesType = {
+  [key: string]: TentaclesConfigsSchemaType;
+};
 export type TentaclesConfigsSchemaType = {
   type: SchemaValueRawType;
   title: string;
+  grid_columns?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
   options?: {
-    name: string;
-    in_optimizer: boolean;
-    in_summary: boolean;
-    custom_path: string | null;
+    name?: string;
+    in_optimizer?: boolean;
+    in_summary?: boolean;
+    custom_path?: string | null;
     grid_columns?: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
     collapsed?: boolean;
     disable_collapse?: boolean;
     color?: string;
-    side?: "right" | "left";
+    side?: "right" | "left" | "top"| "bottom";
+    antIcon?: string;
 
     io_node_type?: "strategy_start_output" | "evaluator_signals_input";
     io_node_id?: number;
@@ -105,9 +116,7 @@ export type TentaclesConfigsSchemaType = {
     title?: string;
     is_connectable?: boolean;
   };
-  properties?: {
-    [key: string]: TentaclesConfigsSchemaType;
-  };
+  properties?: TentaclesConfigsSchemaPropertiesType;
   propertyOrder?: number;
   default?:
     | null
@@ -120,13 +129,15 @@ export type TentaclesConfigsSchemaType = {
     | TentaclesConfigValuesType[]
     | TentaclesConfigValuesType;
   description?: string;
-  format?: "select2" | "checkbox" | "select";
+  format?: "select2" | "checkbox" | "select" | "grid";
   enum?: string[] | number[];
   minItems?: number;
   minimum?: number;
   minLength?: number;
   uniqueItems?: boolean;
   multipleOf?: number;
+  order?: number;
+  display_as_tab?: boolean | undefined;
   items?: {
     title?: string;
     type: "string" | "object";
@@ -137,16 +148,24 @@ export type TentaclesConfigsSchemaType = {
     };
   };
 };
+
 export type TentaclesConfigsRootType = {
-  [key: string]: {
-    title: string;
-    tentacle: string;
-    schema: TentaclesConfigsSchemaType;
-    config: TentaclesConfigValuesType;
-    tentacle_type: "evaluator" | "trading_mode";
-    type: "input";
-    is_hidden: boolean;
+  [key: string]: TentaclesConfigRootType;
+};
+
+export type TentacleType = "evaluator" | "trading_mode";
+
+export type TentaclesConfigRootType = {
+  title: string;
+  tentacle: string;
+  schema: TentaclesConfigsSchemaType;
+  config: TentaclesConfigValuesType & {
+    nodes?: FlowNodeConfigsType;
+    edges?: FlowEdgeConfigType[]
   };
+  tentacle_type: TentacleType;
+  type: "input";
+  is_hidden: boolean;
 };
 
 export type TentaclesConfigsType = {
@@ -282,7 +301,7 @@ export const useFetchCurrentTradingTentaclesConfig = () => {
 };
 
 export type SaveTentaclesConfigType = (
-  newConfigs: TentaclesConfigsType,
+  newConfigs: TentaclesConfigByTentacleType,
   setIsSaving?: Dispatch<SetStateAction<boolean>> | undefined,
   reloadPlots?: boolean,
   isTradingConfig?: boolean,
@@ -297,7 +316,7 @@ export const useSaveTentaclesConfig: () => SaveTentaclesConfigType = () => {
   const botDomain = useBotDomainContext();
   return useCallback(
     (
-      newConfigs: TentaclesConfigsType,
+      newConfigs: TentaclesConfigByTentacleType,
       setIsSaving?: Dispatch<SetStateAction<boolean>>,
       reloadPlots: boolean = false,
       isTradingConfig: boolean = true,
@@ -354,7 +373,7 @@ export const useSaveTentaclesConfigAndSendAction = () => {
   const botDomain = useBotDomainContext();
   return useCallback(
     (
-      newConfigs,
+      newConfigs: TentaclesConfigByTentacleType,
       actionType: ApiActionsType,
       setIsLoading: Dispatch<SetStateAction<boolean>>,
       reloadPlots: boolean = false,

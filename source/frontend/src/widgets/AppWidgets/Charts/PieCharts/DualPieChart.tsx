@@ -69,7 +69,7 @@ function generateSidebarMenu(
       );
     }
     newMenuItems[liveOrBacktest]?.children.push({
-      label: chart.name,
+      title: chart.name,
       key: chart.name,
       // antIcon: element.config ?. antIcon,
       // faIcon: element.config ?. faIcon,

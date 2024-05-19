@@ -154,8 +154,9 @@ export function AppStoreCart() {
               antIconComponent={DollarCircleOutlined}
               size={buttonSizes.large}
               onClick={() =>
+                appStoreCart &&
                 createPaymentFromAppStoreCart(
-                  appStoreCart && Object.keys(appStoreCart),
+                  Object.keys(appStoreCart),
                   undefined
                 )
               }

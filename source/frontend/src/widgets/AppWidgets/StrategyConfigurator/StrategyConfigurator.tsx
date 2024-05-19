@@ -110,24 +110,24 @@ export default function AppStore() {
         ?.map((categoryName) => {
           if (categoryName === strategyName) {
             return {
-              label: `${botInfo?.current_profile?.profile?.name}`,
+              title: `${botInfo?.current_profile?.profile?.name}`,
               key: categoryName,
               content,
               icon: <ProfileAvatar marginRight="5px" />,
             };
           } else if (categoryName === strategyModeName) {
             return {
-              label: categoryName,
+              title: categoryName,
               key: categoryName,
               content,
               icon: <BranchesOutlined style={{ fontSize: "21px" }} />,
             };
           } else {
-            return { label: categoryName, content, key: categoryName };
+            return { title: categoryName, content, key: categoryName };
           }
         }) || []),
       {
-        label: isFlowMode
+        title: isFlowMode
           ? replaceUppercaseWithSpace(botInfo.trading_mode_name)
           : strategyModeSettingsName,
         key: isFlowMode ? botInfo.trading_mode_name : strategyModeSettingsName,
@@ -149,7 +149,7 @@ export default function AppStore() {
         children: isFlowMode
           ? [
               {
-                label: <BuildingBlocksSidebar />,
+                title: <BuildingBlocksSidebar />,
                 key: "flowModeSidebar",
                 content: <></>,
               },
@@ -157,7 +157,7 @@ export default function AppStore() {
           : [...(tradingConfigTabs || [])],
       },
       {
-        label: "Other Apps",
+        title: "Other Apps",
         key: "other_apps",
         antIcon: "AppstoreAddOutlined",
         dontScroll: true,
@@ -180,7 +180,7 @@ export default function AppStore() {
               category !== appPackagesName
           )
           ?.map((categoryName) => ({
-            label: categoryName,
+            title: categoryName,
             content,
             key: categoryName,
           })),

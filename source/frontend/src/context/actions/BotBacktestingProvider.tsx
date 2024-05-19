@@ -80,8 +80,6 @@ export const useStopBacktesting = () => {
 
 export interface StatBacktestingSettingsType extends BacktestingUiConfig {
   exchange_ids: string[];
-  data_source: string;
-  exchange_id: string;
 }
 
 export const useStartBacktesting = () => {
@@ -97,21 +95,9 @@ export const useStartBacktesting = () => {
         data_sources: [CURRENT_BOT_DATA],
         ...backtestingSettings,
         exchange_ids: backtestingSettings.exchange_names
-          ? backtestingSettings.exchange_names.map(
-              (exchangeName) => ids_by_exchange_name[exchangeName]
-            )
-          : Object.values(ids_by_exchange_name).map((exchangeId) => exchangeId),
-
-        // TODO remove when stock supports ids sources
-        data_source: backtestingSettings.data_sources
-          ? backtestingSettings.data_sources[0]
-          : CURRENT_BOT_DATA,
-        exchange_id:
-          ids_by_exchange_name[
-            backtestingSettings.exchange_names
-              ? backtestingSettings.exchange_names[0]
-              : botInfo?.exchange_name
-          ],
+          ? backtestingSettings.exchange_names
+              .map((exchangeName) => String(ids_by_exchange_name[exchangeName]))
+          : Object.values(ids_by_exchange_name),
       };
       startBacktesting(botDomain, _backtestingSettings, setBotIsBacktesting);
     }

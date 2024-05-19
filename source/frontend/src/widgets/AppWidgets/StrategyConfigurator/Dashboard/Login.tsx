@@ -37,7 +37,7 @@ function ManageAccount() {
     <>
       <Typography.Title>Manage your Octane account</Typography.Title>
       <Button onClick={handleLogoutFromppStore}>Logout</Button>
-      <AffiliateDashboard />
+      {/* <AffiliateDashboard /> */}
       <BackendDashboard />
     </>
   );

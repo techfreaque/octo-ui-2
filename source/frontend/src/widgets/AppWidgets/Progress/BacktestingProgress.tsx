@@ -25,10 +25,16 @@ export default function BacktestingProgress() {
               progressPercent: Math.round(progress * 10) / 10,
             })}
           >
-            <Progress type="circle" percent={Math.round(progress)} size={25} />
+            <div>
+              <Progress
+                type="circle"
+                percent={Math.round(progress)}
+                size={25}
+              />
+            </div>
           </Tooltip>
         </div>
       ),
-    [inProgress, progress, t],
+    [inProgress, progress, t]
   );
 }

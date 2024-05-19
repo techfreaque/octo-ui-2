@@ -23,7 +23,13 @@ export default function DataCollectorProgress() {
               Math.round(progress * 10) / 10
             }% completed`}
           >
-            <Progress type="circle" percent={Math.round(progress)} size={25} />
+            <div>
+              <Progress
+                type="circle"
+                percent={Math.round(progress)}
+                size={25}
+              />
+            </div>
           </Tooltip>
         </div>
       ),

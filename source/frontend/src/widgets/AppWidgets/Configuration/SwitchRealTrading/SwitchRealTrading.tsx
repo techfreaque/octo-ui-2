@@ -24,7 +24,8 @@ export default function RealTradingSwitch() {
   const handleClose = () => setOpen(false);
   const botDomain = useBotDomainContext();
   const botInfo = useBotInfoContext();
-  const isRealTrading = botInfo?.current_profile?.config.trader.enabled;
+  const isRealTrading =
+    botInfo?.current_profile?.config.trader.enabled || false;
   const isSimulatedTrading =
     botInfo?.current_profile?.config["trader-simulator"].enabled;
   const title = isRealTrading

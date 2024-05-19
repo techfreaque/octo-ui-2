@@ -13,7 +13,7 @@ import createNotification from "../../components/Notifications/Notification";
 
 export default function AppWidgets(props: {
   currentPage?: UiLayoutPageType;
-  layout: UiLayoutPageLayoutType[];
+  layout: UiLayoutPageLayoutType[]| undefined;
 }): JSX.Element {
   return useMemo(() => {
     if (props.layout?.[0]) {

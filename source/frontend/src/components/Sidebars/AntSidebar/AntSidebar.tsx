@@ -16,7 +16,7 @@ import {
 const { Panel } = Collapse;
 
 export interface AntSideBarMenutItemType {
-  label: string | JSX.Element;
+  title: string | JSX.Element;
   key: string;
   antIcon?: string | undefined;
   content: JSX.Element;
@@ -404,8 +404,8 @@ function NestedSideBarMenuItem({
                     : {}),
                 }}
                 buttonTitle={
-                  typeof menuItem.label === "string"
-                    ? menuItem.label
+                  typeof menuItem.title === "string"
+                    ? menuItem.title
                     : "Cant use Component"
                 }
                 icon={menuItem?.icon}
@@ -436,7 +436,7 @@ function NestedSideBarMenuItem({
                     : {}
                 }
               >
-                {menuItem.label}
+                {menuItem.title}
               </span>
             </div>
           )
@@ -485,8 +485,8 @@ function SideBarButton({
         }
       : {};
 
-  if (typeof menuItem.label !== "string") {
-    return <div style={{ width: "100%" }}>{menuItem.label} </div>;
+  if (typeof menuItem.title !== "string") {
+    return <div style={{ width: "100%" }}>{menuItem.title} </div>;
   }
   return (
     <div
@@ -506,7 +506,7 @@ function SideBarButton({
                 }
               : {}),
           }}
-          buttonTitle={menuItem.label}
+          buttonTitle={menuItem.title}
           isResponsive={false}
           antIconString={menuItem.antIcon}
           icon={menuItem?.icon}
@@ -539,7 +539,7 @@ function SideBarButton({
             <span style={{ marginRight: "7px" }}>{menuItem.icon} </span>
           )}
           <IconFromString faIcon={menuItem.faIcon} antIcon={menuItem.antIcon} />
-          {!hideText && menuItem.label}
+          {!hideText && menuItem.title}
         </Button>
       )}
     </div>

@@ -438,18 +438,20 @@ function RequiredPackage({
               : "The App Package isn't installed yet"
           }
         >
-          <Typography.Title level={5} style={{ marginBottom: "5px" }}>
-            {packageInstalled ? (
-              <IsInstalledIcon topRight={false} />
-            ) : (
-              <IsNotInstalledIcon topRight={false} />
-            )}
-            <span>
-              {mainPackageApp.categories?.[0] === strategyName
-                ? mainPackageApp.title
-                : requiredAppPackageName}
-            </span>
-          </Typography.Title>
+          <div>
+            <Typography.Title level={5} style={{ marginBottom: "5px" }}>
+              {packageInstalled ? (
+                <IsInstalledIcon topRight={false} />
+              ) : (
+                <IsNotInstalledIcon topRight={false} />
+              )}
+              <span>
+                {mainPackageApp.categories?.[0] === strategyName
+                  ? mainPackageApp.title
+                  : requiredAppPackageName}
+              </span>
+            </Typography.Title>
+          </div>
         </Tooltip>
         <Typography.Paragraph style={{ marginBottom: "5px" }}>
           {!packageInstalled &&

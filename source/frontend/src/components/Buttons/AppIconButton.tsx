@@ -97,7 +97,10 @@ const splitText = (text: string) => {
   const result = words.reduce(
     (lines, word) => {
       const lastLine = lines[lines.length - 1];
-      if (word.length < 3 || lastLine.length + word.length + 1 > limit) {
+      if (
+        word.length < 3 ||
+        (lastLine?.length || 0) + word.length + 1 > limit
+      ) {
         lines.push(word);
       } else {
         lines[lines.length - 1] += ` ${word}`;

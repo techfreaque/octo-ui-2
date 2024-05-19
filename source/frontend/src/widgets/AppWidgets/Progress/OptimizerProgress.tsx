@@ -15,7 +15,9 @@ export default function OptimizerProgress() {
       : backtestingProgress?.overall_progress || 0;
   return useMemo(() => {
     const remainingTime = backtestingProgress?.remaining_time
-      ? `Approximate completion date ${new Date(backtestingProgress?.remaining_time * 1000 + Date.now())}`
+      ? `Approximate completion date ${new Date(
+          backtestingProgress?.remaining_time * 1000 + Date.now()
+        )}`
       : "Remaining time computing";
     return (
       inProgress && (
@@ -30,17 +32,21 @@ export default function OptimizerProgress() {
             title={
               <>
                 <div>
-                  {`Optimizer is ${Math.round(overallProgress * 10) / 10}% completed.`}
+                  {`Optimizer is ${
+                    Math.round(overallProgress * 10) / 10
+                  }% completed.`}
                 </div>
                 <div>{remainingTime}</div>
               </>
             }
           >
-            <Progress
-              type="circle"
-              percent={Math.round(overallProgress)}
-              size={25}
-            />
+            <div>
+              <Progress
+                type="circle"
+                percent={Math.round(overallProgress)}
+                size={25}
+              />
+            </div>
           </Tooltip>
         </div>
       )

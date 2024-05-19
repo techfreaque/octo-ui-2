@@ -15,6 +15,7 @@ import AntButton, {
 } from "../../../components/Buttons/AntButton";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { objectEntries } from "../../../helpers/helpers";
+import { BacktestingRunDataTable } from "./RunDataTable/BacktestingRunDataTable";
 
 export default function CurrentPortfolioTable() {
   const [isDoneLoading, setIsDoneLoading] = useState<boolean>(true);
@@ -43,6 +44,7 @@ export default function CurrentPortfolioTable() {
 
     return (
       <div>
+        <BacktestingRunDataTable />
         <AntTable<PortfolioTableDataType, PortfolioTableColumnType>
           data={currentHoldings}
           columns={getColumns(botPortfolio.reference_unit)}
@@ -51,8 +53,8 @@ export default function CurrentPortfolioTable() {
             <>
               <AntButton
                 antIconComponent={ReloadOutlined}
-                buttonType={
-                  isDoneLoading ? buttonTypes.font : buttonTypes.fontActive
+                colorType={
+                  isDoneLoading ? buttonTypes.fontActive : buttonTypes.font
                 }
                 buttonVariant={buttonVariants.text}
                 onClick={() => {

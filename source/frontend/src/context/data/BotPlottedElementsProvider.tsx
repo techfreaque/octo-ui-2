@@ -7,14 +7,17 @@ import {
   SetStateAction,
   Dispatch,
 } from "react";
-import { fetchPlotlyPlotData } from "../../api/data";
+import {
+  fetchPlotlyBacktestingPlotData,
+  fetchPlotlyLivePlotData,
+} from "../../api/data";
 import { ID_SEPARATOR, PlotSourceType } from "../../constants/backendConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useUiConfigContext } from "../config/UiConfigProvider";
 import { useVisibleExchangesContext } from "../config/VisibleExchangesProvider";
 import { useVisiblePairsContext } from "../config/VisiblePairProvider";
 import { useVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
-import { useBotInfoContext } from "./BotInfoProvider";
+import { BotInfoType, useBotInfoContext } from "./BotInfoProvider";
 import { useCurrentTentacleConfig } from "../../widgets/AppWidgets/Configuration/TentaclesConfig";
 import {
   ChartLocationType,
@@ -26,35 +29,36 @@ import {
   DataTableColumnType,
   DataTableDataType,
 } from "../../widgets/AppWidgets/Tables/DataTable";
+import {
+  mergeRunIdentifiers,
+  splitRunIdentifiers,
+} from "../../components/Tables/w2ui/RunDataTable";
 
 export type ChartDetailsType = {
   own_yaxis?: boolean;
   own_xaxis?: boolean;
-  x?;
-  x_type?;
+  x_type?: "date";
   y_type?: "date" | null;
-  y?;
-  labels?;
-  text?;
-  values?;
-  value?;
+  labels?: null;
+  text?: null;
+  values?: null;
+  value?: null;
   columns?: DataTableColumnType[];
   rows?: DataTableDataType[];
   kind?: "candlestick" | "scattergl";
-  mode?: "line";
+  mode?: "lines";
   title: string;
   config?: {
     antIcon?: string;
     faIcon?: string;
   };
-  hole?;
-  line_shape;
-  color?: string[];
+  hole?: null;
+  line_shape?: "linear";
 } & {
-  [candleSource in PlotSourceType];
+  [candleSource in PlotSourceType]: number[] | null;
 } &
   {
-    [markerAtribute in MarkerAttributesType];
+    [markerAtribute in MarkerAttributesType]: null | string[];
   };
 
 export type PlottedSubSubElementType = {
@@ -152,43 +156,44 @@ export const useFetchPlotData = () => {
   const visibleTimeframes = useVisibleTimeFramesContext();
   const setBotPlottedElements = useUpdateBotPlottedElementsContext();
   const visibleExchanges = useVisibleExchangesContext();
-
-  const logic = useCallback(
-    (isLive = true) => {
-      visiblePairs &&
-        visibleTimeframes &&
-        visibleExchanges &&
-        botInfo &&
-        fetchPlotlyPlotData({
-          symbol: visiblePairs,
-          timeFrame: visibleTimeframes,
-          exchange_id: botInfo.ids_by_exchange_name[visibleExchanges],
-          exchange_name: visibleExchanges,
-          botDomain,
-          optimizationCampaign: botInfo.optimization_campaign,
-          setBotPlottedElements,
-          botInfo,
-          isLive: true,
-        });
-    },
-    [
-      visiblePairs,
-      visibleTimeframes,
-      botDomain,
-      setBotPlottedElements,
-      botInfo,
-      visibleExchanges,
-    ]
-  );
-  return logic;
+  const visibleExchangeIds =
+    botInfo &&
+    visibleExchanges &&
+    botInfo.ids_by_exchange_name[visibleExchanges];
+  return useCallback(() => {
+    if (visiblePairs && visibleTimeframes && visibleExchangeIds) {
+      fetchPlotlyLivePlotData({
+        symbol: visiblePairs,
+        timeFrame: visibleTimeframes,
+        exchangeId: visibleExchangeIds,
+        exchangeName: visibleExchanges,
+        botDomain,
+        optimizationCampaign: botInfo.optimization_campaign,
+        setBotPlottedElements,
+        liveId: botInfo.live_id,
+      });
+    }
+  }, [
+    visiblePairs,
+    visibleTimeframes,
+    visibleExchangeIds,
+    visibleExchanges,
+    botDomain,
+    botInfo,
+    setBotPlottedElements,
+  ]);
 };
 
 function clearUnselectedRuns(
-  displayedRunIds,
-  botPlottedElements,
-  setBotPlottedElements,
-  visiblePairs,
-  visibleTimeframes
+  displayedRunIds: DisplayedRunIdsType,
+  botPlottedElements:
+    | PlottedElementsType<PlottedElementBacktestingNameType>
+    | undefined,
+  setBotPlottedElements: Dispatch<
+    SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
+  >,
+  visiblePairs: string,
+  visibleTimeframes: string
 ) {
   // clear not selected runs
   const newPlottedElements = {
@@ -220,11 +225,11 @@ function clearUnselectedRuns(
                         displayedRunIds.backtesting.some(
                           (runId) =>
                             runId ===
-                            thisBacktestingId +
-                              ID_SEPARATOR +
-                              thisOptimizerId +
-                              ID_SEPARATOR +
+                            mergeRunIdentifiers(
+                              thisBacktestingId,
+                              thisOptimizerId,
                               thisCampaign
+                            )
                         )
                       ) {
                         const thisBacktestingData =
@@ -272,44 +277,42 @@ function clearUnselectedRuns(
 }
 
 function loadMissingRuns(
-  displayedRunIds,
-  botPlottedElements,
-  visiblePairs,
-  visibleTimeframes,
-  visibleExchangeIds,
-  visibleExchanges,
-  botDomain,
-  setBotPlottedElements,
-  botInfo
+  displayedRunIds: DisplayedRunIdsType,
+  botPlottedElements:
+    | PlottedElementsType<PlottedElementBacktestingNameType>
+    | undefined,
+  visiblePairs: string,
+  visibleTimeframes: string,
+  visibleExchangeIds: string,
+  visibleExchanges: string,
+  botDomain: string,
+  setBotPlottedElements: Dispatch<
+    SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
+  >,
 ) {
   // load missing runs
-  displayedRunIds?.backtesting &&
-    displayedRunIds.backtesting.forEach((runIdentifier) => {
-      const [
-        backtesting_id,
-        optimizer_id,
-        optimizationCampaign,
-      ] = runIdentifier.split(ID_SEPARATOR);
-      if (
-        !botPlottedElements?.backtesting?.[optimizationCampaign]?.[
-          optimizer_id
-        ]?.[backtesting_id]?.[visiblePairs]?.[visibleTimeframes]
-      ) {
-        fetchPlotlyPlotData({
-          symbol: visiblePairs,
-          timeFrame: visibleTimeframes,
-          exchange_id: visibleExchangeIds,
-          exchange_name: visibleExchanges,
-          botDomain,
-          setBotPlottedElements,
-          botInfo,
-          isLive: false,
-          optimizationCampaign,
-          backtesting_id,
-          optimizer_id,
-        });
-      }
-    });
+  displayedRunIds?.backtesting?.forEach((runIdentifier) => {
+    const { backtestingId, optimizerId, campaignName } = splitRunIdentifiers(
+      runIdentifier
+    );
+    if (
+      !botPlottedElements?.backtesting?.[campaignName]?.[optimizerId]?.[
+        backtestingId
+      ]?.[visiblePairs]?.[visibleTimeframes]
+    ) {
+      fetchPlotlyBacktestingPlotData({
+        symbol: visiblePairs,
+        timeFrame: visibleTimeframes,
+        exchangeId: visibleExchangeIds,
+        exchangeName: visibleExchanges,
+        botDomain,
+        setBotPlottedElements,
+        optimizationCampaign: campaignName,
+        backtestingId,
+        optimizerId,
+      });
+    }
+  });
 }
 
 export const BotPlottedElementsProvider = ({
@@ -335,14 +338,17 @@ export const BotPlottedElementsProvider = ({
   const visibleTimeframes = useVisibleTimeFramesContext();
   const visibleExchanges = useVisibleExchangesContext();
   const uiConfig = useUiConfigContext();
+  const visibleExchangeIds =
+    botInfo &&
+    visibleExchanges &&
+    botInfo.ids_by_exchange_name[visibleExchanges];
   useEffect(() => {
-    // backtestings
+    // backtesting
     if (
       displayedRunIds &&
-      botInfo &&
       visibleTimeframes &&
       visiblePairs &&
-      visibleExchanges
+      visibleExchangeIds
     ) {
       clearUnselectedRuns(
         displayedRunIds,
@@ -356,11 +362,10 @@ export const BotPlottedElementsProvider = ({
         botPlottedElements,
         visiblePairs,
         visibleTimeframes,
-        botInfo.ids_by_exchange_name[visibleExchanges],
+        visibleExchangeIds,
         visibleExchanges,
         botDomain,
         setBotPlottedElements,
-        botInfo
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -375,17 +380,21 @@ export const BotPlottedElementsProvider = ({
 
   useEffect(() => {
     // live
-    if (botInfo && visibleTimeframes && visiblePairs && visibleExchanges) {
-      fetchPlotlyPlotData({
+    if (
+      visibleExchangeIds &&
+      visibleTimeframes &&
+      visiblePairs &&
+      visibleExchanges
+    ) {
+      fetchPlotlyLivePlotData({
         symbol: visiblePairs,
         timeFrame: visibleTimeframes,
-        exchange_id: botInfo.ids_by_exchange_name[visibleExchanges],
-        exchange_name: visibleExchanges,
+        exchangeId: visibleExchangeIds,
+        exchangeName: visibleExchanges,
         optimizationCampaign: botInfo.optimization_campaign,
         botDomain,
         setBotPlottedElements,
-        botInfo,
-        isLive: true,
+        liveId: botInfo.live_id,
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

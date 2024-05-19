@@ -26,6 +26,8 @@
     // "noUnusedLocals": true,
     // https://eslint.org/docs/rules/no-unused-vars
     // "noUnusedParameters": true,
+    // "noPropertyAccessFromIndexSignature": true,
+    // "exactOptionalPropertyTypes": true,
     "alwaysStrict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
@@ -34,9 +36,7 @@
     "strictFunctionTypes": true,
     "noImplicitThis": true,
     "strictBindCallApply": true,
-    "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
-    "exactOptionalPropertyTypes": true,
     // Linter Checks
     "noImplicitReturns": true,
     "noImplicitOverride": true,

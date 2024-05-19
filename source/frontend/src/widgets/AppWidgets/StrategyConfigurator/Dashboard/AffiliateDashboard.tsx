@@ -3,7 +3,7 @@ import { useGetAffiliateDashboard } from "../../../../context/data/AppStoreDataP
 import { Typography } from "antd";
 
 export default function AffiliateDashboard() {
-  const [dashboardData, setDashboardData] = useState();
+  const [dashboardData, setDashboardData] = useState<AffiliateDashboardData>();
   const getAffiliateDashboard = useGetAffiliateDashboard();
   useEffect(() => {
     getAffiliateDashboard(setDashboardData);
@@ -23,3 +23,5 @@ export default function AffiliateDashboard() {
     </div>
   );
 }
+
+export interface AffiliateDashboardData {}

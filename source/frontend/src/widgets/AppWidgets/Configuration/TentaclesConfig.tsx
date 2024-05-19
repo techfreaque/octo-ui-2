@@ -15,7 +15,12 @@ import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 import {
   SaveTentaclesConfigType,
+  TentacleType,
+  TentaclesConfigByTentacleType,
+  TentaclesConfigRootType,
+  TentaclesConfigValueType,
   TentaclesConfigsRootType,
+  TentaclesConfigsSchemaType,
   tentacleConfigTypes,
   useSaveTentaclesConfig,
   useTentaclesConfigContext,
@@ -28,10 +33,7 @@ import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvide
 import { successResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
 import { AntSideBarMenutItemType } from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import JsonEditor from "@techfreaque/json-editor-react";
-import {
-  JsonEditorType,
-  JsonEditorWindow,
-} from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 
 export function useCurrentTentacleConfig(
   tentacleType = tentacleConfigTypes.tentacles
@@ -44,6 +46,10 @@ export default function TentaclesConfig({
   content,
   tentacleNames = "RunAnalysisModePlugin",
   additionalTabs = [],
+}: {
+  content: UiLayoutPageLayoutType[] | undefined;
+  tentacleNames: StorageNameType;
+  additionalTabs: UiLayoutPageLayoutType[] | undefined;
 }) {
   const botInfo = useBotInfoContext();
   const fetchTentaclesConfig = useFetchTentaclesConfig();
@@ -64,9 +70,12 @@ export default function TentaclesConfig({
     function handleTentaclesUpdate() {
       fetchTentaclesConfig(tentacleNames.split(","));
     }
-    const configs = {};
+    const configs: TentaclesConfigsRootType = {};
     tentacles?.forEach((tentacle) => {
-      configs[tentacle] = currentTentaclesNonTradingConfig?.[tentacle] || {};
+      const _config = currentTentaclesNonTradingConfig?.[tentacle];
+      if (_config) {
+        configs[tentacle] = _config;
+      }
     });
     return (
       <AbstractTentaclesConfig
@@ -89,13 +98,19 @@ export default function TentaclesConfig({
   ]);
 }
 
-function useGetAdditionalTabs(additionalTabs) {
+function useGetAdditionalTabs(
+  additionalTabs: UiLayoutPageLayoutType[] | undefined
+): TentacleConfigTabsData[] | undefined {
   return useMemo(
     () =>
       additionalTabs?.map((tab) => {
-        const tabId = tab.title.replace(/ /g, "_");
+        const tabId = (tab.title || tab.component).replace(/ /g, "_");
         return {
-          ...tab,
+          antIcon: tab.antIcon,
+          dontScroll: tab.dontScroll || false,
+          faIcon: tab.faIcon,
+          toolBarContent: <AppWidgets layout={tab.toolBarContent} />,
+          key: tabId,
           tabId,
           title: (
             <Tab
@@ -116,10 +131,8 @@ export function AbstractTentaclesConfig({
   fetchCurrentTentaclesConfig,
   currentTentaclesTradingConfig,
   saveTentaclesConfig,
-  setHiddenMetadataColumns,
   content,
   storageName = "tradingConfig",
-  additionalTabs,
   additionalTabsAfter,
 }: {
   fetchCurrentTentaclesConfig: (
@@ -129,11 +142,9 @@ export function AbstractTentaclesConfig({
   ) => void;
   currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined;
   saveTentaclesConfig: SaveTentaclesConfigType;
-  setHiddenMetadataColumns?;
   content: UiLayoutPageLayoutType[] | undefined;
-  storageName?;
-  additionalTabs?;
-  additionalTabsAfter?;
+  storageName: StorageNameType;
+  additionalTabsAfter: TentacleConfigTabsData[] | undefined;
 }) {
   const botInfo = useBotInfoContext();
   const botDomain = useBotDomainContext();
@@ -146,9 +157,7 @@ export function AbstractTentaclesConfig({
         generateTradingConfigTabs({
           displayStyle: displayStyles.tabs,
           userInputs: currentTentaclesTradingConfig,
-          setHiddenMetadataColumns,
           storageName,
-          additionalTabs,
           additionalTabsAfter,
         })
       );
@@ -167,7 +176,7 @@ export function AbstractTentaclesConfig({
       : 0;
   function handleUserInputSave() {
     saveUserInputs(
-      (newConfigs) =>
+      (newConfigs: TentaclesConfigByTentacleType) =>
         saveTentaclesConfig(
           newConfigs,
           setIsSaving,
@@ -204,47 +213,12 @@ export function AbstractTentaclesConfig({
   }, [tabs, defaultTabId, content, isSaving]);
 }
 
-// export function useSidebarTentaclesConfig({
-//     fetchCurrentTentaclesConfig,
-//     currentTentaclesTradingConfig,
-//     saveTentaclesConfig,
-//     setHiddenMetadataColumns,
-//     content,
-//     storageName = "tradingConfig",
-//     additionalTabs,
-//     additionalTabsAfter
-// }) {
-//     const botInfo = useBotInfoContext()
-//     const botDomain = useBotDomainContext()
-//     const exchangeId = botInfo ?. exchange_id
-//     const [tabs, setTabs] = useState()
-//     useEffect(() => {
-//         if (currentTentaclesTradingConfig) {
-//             setTabs(tradingConfigTabs({
-//                 displayStyle: displayStyles.sidebar,
-//                 userInputs: currentTentaclesTradingConfig,
-//                 setHiddenMetadataColumns,
-//                 exchangeId,
-//                 botDomain,
-//                 storageName,
-//                 additionalTabs,
-//                 additionalTabsAfter
-//             }));
-//         }
-//         // eslint-disable-next-line react-hooks/exhaustive-deps
-//     }, [currentTentaclesTradingConfig]);
-//     useEffect(() => {
-//         fetchCurrentTentaclesConfig()
-//         // eslint-disable-next-line react-hooks/exhaustive-deps
-//     }, [exchangeId, botDomain, botInfo]);
-//     const defaultTabId = storageName === "tradingConfig" ? botInfo ?. trading_mode_name || botInfo ?. strategy_name : (tabs ? tabs ?. [0] ?. tabId : "")
-//     function handleUserInputSave() {
-//         saveUserInputs((newConfigs) => saveTentaclesConfig(newConfigs, setIsSaving, true, storageName === "tradingConfig"), setIsSaving, storageName)
-//     }
-//     return tabs
-// }
+type DisplayStyleType = "tabs" | "sidebar";
 
-export const displayStyles = {
+export const displayStyles: {
+  tabs: DisplayStyleType;
+  sidebar: DisplayStyleType;
+} = {
   tabs: "tabs",
   sidebar: "sidebar",
 };
@@ -257,54 +231,56 @@ export interface TentacleConfigTabsData
   extends AntSideBarMenutItemType,
     MuiTabType {}
 
+type StorageNameType = "tradingConfig" | "RunAnalysisModePlugin";
+
 export function generateTradingConfigTabs({
   userInputs,
   setHiddenMetadataColumns,
   storageName = "tradingConfig",
-  additionalTabs = [],
-  additionalTabsAfter = [],
+  additionalTabsAfter,
   displayStyle,
 }: {
   userInputs: TentaclesConfigsRootType;
-  setHiddenMetadataColumns?;
-  storageName;
-  additionalTabs?;
-  additionalTabsAfter?;
-  displayStyle?;
+  setHiddenMetadataColumns?: Dispatch<SetStateAction<string[] | undefined>>;
+  storageName: StorageNameType;
+  additionalTabsAfter?: TentacleConfigTabsData[] | undefined;
+  displayStyle: DisplayStyleType;
 }): TentacleConfigTabsData[] {
   const tabsData: TentacleConfigTabsData[] = [];
   // window.trading_mode_objects = {}
   destroyAllEditors(storageName);
   // avoid working on original elements as they will be edited for custom user inputs
-  createCustomDisplayAsTabInputsStorage(storageName);
-  const tentacleNames = Object.keys(userInputs);
+  const tentaclesInfoStorage: TentacleInfoStorageType = createCustomDisplayAsTabInputsStorage(
+    storageName
+  );
   const editedUserInputs: TentaclesConfigsRootType = JSON.parse(
     JSON.stringify(userInputs)
   );
-  tentacleNames.forEach((tentacleName) => {
+  Object.values(editedUserInputs).forEach((tentacleInputs) => {
     // _applyCustomPathUserInputs(editedUserInputs, tradingModeName);
     create_custom_tabs({
-      tentacleInputs: editedUserInputs[tentacleName],
+      tentacleInputs,
       tabsData,
       storageName,
       displayStyle,
+      tentaclesInfoStorage,
     });
     if (setHiddenMetadataColumns) {
-      _handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns);
+      handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns);
     }
     _createTentacleConfigTab({
       configTitle:
         storageName === "tradingConfig"
-          ? replaceUppercaseWithSpace(editedUserInputs[tentacleName].tentacle)
-          : editedUserInputs[tentacleName].tentacle,
-      configName: editedUserInputs[tentacleName].tentacle,
-      config: editedUserInputs[tentacleName].config,
-      schema: editedUserInputs[tentacleName].schema,
-      editorKey: editedUserInputs[tentacleName].tentacle_type,
+          ? replaceUppercaseWithSpace(tentacleInputs.tentacle)
+          : tentacleInputs.tentacle,
+      configName: tentacleInputs.tentacle,
+      config: tentacleInputs.config,
+      schema: tentacleInputs.schema,
+      editorKey: tentacleInputs.tentacle_type,
       antIcon:
-        editedUserInputs[tentacleName].tentacle_type === "trading_mode"
+        tentacleInputs.tentacle_type === "trading_mode"
           ? "BranchesOutlined"
-          : editedUserInputs[tentacleName].tentacle_type === "evaluator"
+          : tentacleInputs.tentacle_type === "evaluator"
           ? "ControlOutlined"
           : undefined,
       tabsData,
@@ -321,7 +297,7 @@ export function generateTradingConfigTabs({
     }
     return 0;
   });
-  return [...additionalTabs, ...tabsData, ...additionalTabsAfter];
+  return additionalTabsAfter ? [...tabsData, ...additionalTabsAfter] : tabsData;
 }
 
 export function replaceUppercaseWithSpace(string: string) {
@@ -335,7 +311,9 @@ function getCustomDisplayAsTabInputsStorage(storageName: string) {
   return window.customDisplayAsTabInputs[storageName];
 }
 
-function createCustomDisplayAsTabInputsStorage(storageName: string) {
+function createCustomDisplayAsTabInputsStorage(
+  storageName: string
+): TentacleInfoStorageType {
   if (!window.customDisplayAsTabInputs) {
     window.customDisplayAsTabInputs = {};
   }
@@ -343,6 +321,9 @@ function createCustomDisplayAsTabInputsStorage(storageName: string) {
     ...window.customDisplayAsTabInputs,
     [storageName]: {},
   };
+  return window.customDisplayAsTabInputs[
+    storageName
+  ] as TentacleInfoStorageType;
 }
 
 function create_custom_tabs({
@@ -350,49 +331,53 @@ function create_custom_tabs({
   tabsData,
   storageName,
   displayStyle,
+  tentaclesInfoStorage,
 }: {
-  tentacleInputs;
-  tabsData;
-  storageName;
-  displayStyle;
+  tentacleInputs: TentaclesConfigRootType | undefined;
+  tabsData: TentacleConfigTabsData[];
+  storageName: StorageNameType;
+  displayStyle: DisplayStyleType;
+  tentaclesInfoStorage: TentacleInfoStorageType;
 }) {
-  const tentaclesInfoStorage = getCustomDisplayAsTabInputsStorage(storageName);
-  tentaclesInfoStorage[tentacleInputs.tentacle] = [];
+  const infoStorage: string[] = [];
   // gather custom user inputs
-  tentacleInputs?.schema?.properties &&
-    Object.keys(tentacleInputs.schema.properties).forEach((key) => {
-      const property = tentacleInputs.schema.properties[key];
+  const schemaProperties = tentacleInputs?.schema?.properties;
+  if (schemaProperties) {
+    Object.entries(schemaProperties).forEach(([propertyKey, property]) => {
       if (!property.display_as_tab) {
         return;
       }
-      tentaclesInfoStorage[tentacleInputs.tentacle].push(key);
+      infoStorage.push(propertyKey);
       _createTentacleConfigTab({
-        configTitle: tentacleInputs.schema.properties[key].title,
-        configName: key,
-        config: tentacleInputs.config[key],
-        schema: tentacleInputs.schema.properties[key],
+        configTitle: property.title,
+        configName: propertyKey,
+        config: tentacleInputs.config[propertyKey],
+        schema: property,
         editorKey: tentacleInputs.tentacle,
         tabsData,
         storageName,
-        antIcon: tentacleInputs.schema.properties[key]?.options?.antIcon,
+        antIcon: property?.options?.antIcon,
         displayStyle,
       });
-      delete tentacleInputs.config[key];
-      delete tentacleInputs.schema.properties[key];
+      delete tentacleInputs.config[propertyKey];
+      delete schemaProperties[propertyKey];
+    });
+    tentaclesInfoStorage[tentacleInputs.tentacle] = infoStorage;
+  }
+}
+
+function destroyAllEditors(storageName: StorageNameType) {
+  const storage = window[`$${storageName}`];
+  storage &&
+    Object.entries(storage).forEach(([editorKey, editor]) => {
+      editor.destroy();
+      delete storage[editorKey];
     });
 }
 
-function destroyAllEditors(storageName) {
-  window[`$${storageName}`] &&
-    Object.keys(window[`$${storageName}`]).forEach((editorKey) => {
-      window[`$${storageName}`][editorKey].destroy();
-      delete window[`$${storageName}`][editorKey];
-    });
-}
-
-function _handleHiddenUserInputs(
+export function handleHiddenUserInputs(
   elements: TentaclesConfigsRootType,
-  setHiddenMetadataColumns
+  setHiddenMetadataColumns: Dispatch<SetStateAction<string[] | undefined>>
 ) {
   let hiddenMetadataColumns: string[] = [];
   Object.values(elements).forEach((inputDetails) => {
@@ -407,43 +392,48 @@ function _handleHiddenUserInputs(
   setHiddenMetadataColumns(hiddenMetadataColumns);
 }
 
+type CustomDisplayAsTabInputsType = {
+  [editorName: string]: TentacleInfoStorageType;
+};
+
+type TentacleInfoStorageType = {
+  [tentacleName: string]: string[];
+};
+
 export type TentacleConfigWindow = JsonEditorWindow & {
-  customDisplayAsTabInputs: {
-    [editorName: string]: {
-      [tentacleName: string]: string[];
-    };
-  };
+  customDisplayAsTabInputs: CustomDisplayAsTabInputsType;
 };
 
 declare const window: TentacleConfigWindow;
 
 export function saveUserInputs(
-  saveTentaclesConfig,
+  saveTentaclesConfig: (currentConfig: TentaclesConfigByTentacleType) => void,
   setIsLoading: Dispatch<SetStateAction<boolean>>,
   storageName = "tradingConfig"
 ) {
   setIsLoading?.(true);
-  const tentaclesConfigByTentacle = {};
+  const tentaclesConfigByTentacle: TentaclesConfigByTentacleType = {};
   let save = true;
-  Object.keys(window[`$${storageName}`]).forEach((editorKey) => {
-    const editor: JsonEditorType<any> = window[`$${storageName}`][editorKey];
-    if (!editor) {
-      return;
-    }
-    const tentacle = editorKey.split("##")[1];
-    const errorsDesc = validateJSONEditor(editor);
-    if (errorsDesc) {
-      save = false;
-      setIsLoading(false);
-      createNotification({
-        title: `Error when saving ${editorKey} configuration`,
-        type: "danger",
-        message: `${errorsDesc}`,
-      });
-      return;
-    }
-    tentaclesConfigByTentacle[tentacle] = editor.getValue();
-  });
+  const storage = window[`$${storageName}`];
+  storage &&
+    Object.entries(storage).forEach(([editorKey, editor]) => {
+      if (!editor) {
+        return;
+      }
+      const tentacle = `${editorKey.split("##")[1]}`;
+      const errorsDesc = validateJSONEditor(editor);
+      if (errorsDesc) {
+        save = false;
+        setIsLoading(false);
+        createNotification({
+          title: `Error when saving ${editorKey} configuration`,
+          type: "danger",
+          message: `${errorsDesc}`,
+        });
+        return;
+      }
+      tentaclesConfigByTentacle[tentacle] = editor.getValue();
+    });
   if (save) {
     // _restoreCustomUserInputs(tentaclesConfigByTentacle);
     _restoreCustomDisplayAsTabInputs(tentaclesConfigByTentacle, storageName);
@@ -452,19 +442,21 @@ export function saveUserInputs(
 }
 
 function _restoreCustomDisplayAsTabInputs(
-  tentaclesConfigByTentacle,
+  tentaclesConfigByTentacle: TentaclesConfigByTentacleType,
   storageName: string
 ) {
   const storage = getCustomDisplayAsTabInputsStorage(storageName);
   storage &&
     Object.entries(storage).forEach(([tentacleName, editors]) => {
       editors?.forEach((configKey) => {
-        if (!tentaclesConfigByTentacle[tentacleName]) {
-          tentaclesConfigByTentacle[tentacleName] = {};
+        const configToMove = tentaclesConfigByTentacle[configKey];
+        if (configToMove) {
+          tentaclesConfigByTentacle[tentacleName] = {
+            ...tentaclesConfigByTentacle[tentacleName],
+            [configKey]: configToMove,
+          };
+          delete tentaclesConfigByTentacle[configKey];
         }
-        tentaclesConfigByTentacle[tentacleName][configKey] =
-          tentaclesConfigByTentacle[configKey];
-        delete tentaclesConfigByTentacle[configKey];
       });
     });
 }
@@ -480,25 +472,25 @@ function _createTentacleConfigTab({
   displayStyle,
   antIcon,
 }: {
-  configTitle;
-  configName;
-  config;
-  schema;
-  editorKey;
-  tabsData;
-  storageName;
-  displayStyle;
-  antIcon;
+  configTitle: string;
+  configName: string;
+  config: TentaclesConfigValueType | undefined;
+  schema: TentaclesConfigsSchemaType;
+  editorKey: TentacleType | string;
+  tabsData: TentacleConfigTabsData[];
+  storageName: StorageNameType;
+  displayStyle: DisplayStyleType;
+  antIcon: string | undefined;
 }) {
   if (schema) {
-    _addGridDisplayOptions(schema, editorKey);
+    _addGridDisplayOptions(schema);
   }
   if (schema?.properties) {
     try {
       Object.values(schema?.properties).forEach(
-        (property) => property && _addGridDisplayOptions(property, null)
+        (property) => property && _addGridDisplayOptions(property)
       );
-      schema.options.disable_collapse = true;
+      schema.options = { ...schema.options, disable_collapse: true };
       Object.keys(schema?.properties).length !== 0 &&
         tabsData.push(
           displayStyle === displayStyles.tabs
@@ -522,7 +514,7 @@ function _createTentacleConfigTab({
               })
         );
     } catch (error) {
-      window.console && console.error(error);
+      console.error(error);
     }
   }
 }
@@ -535,10 +527,19 @@ function createSidebarItem({
   editorKey,
   storageName,
   antIcon,
-}) {
+}: {
+  configName: string;
+  config: TentaclesConfigValueType | undefined;
+  schema: TentaclesConfigsSchemaType;
+  configTitle: string;
+  editorKey: TentacleType | string;
+  storageName: StorageNameType;
+  antIcon: string | undefined;
+}): TentacleConfigTabsData {
   return {
-    label: configTitle.replace(/_/g, " "),
+    title: configTitle.replace(/_/g, " "),
     key: configName,
+    tabId: configName,
     antIcon,
     order: schema?.order || 0,
     content: (
@@ -563,14 +564,14 @@ function createTab({
   storageName,
   antIcon,
 }: {
-  configName;
-  schema;
-  config;
-  configTitle;
-  editorKey;
-  storageName;
-  antIcon;
-}) {
+  configName: string;
+  config: TentaclesConfigValueType | undefined;
+  schema: TentaclesConfigsSchemaType;
+  configTitle: string;
+  editorKey: TentacleType | string;
+  storageName: StorageNameType;
+  antIcon: string | undefined;
+}): TentacleConfigTabsData {
   return {
     title: (
       <Tab
@@ -580,6 +581,7 @@ function createTab({
         sx={{ textTransform: "none" }}
       />
     ),
+    key: configName,
     tabId: configName,
     order: schema?.order || 0,
     content: (
@@ -595,7 +597,7 @@ function createTab({
   };
 }
 
-function _addGridDisplayOptions(schema, editorKey) {
+function _addGridDisplayOptions(schema: TentaclesConfigsSchemaType) {
   if (typeof schema.format === "undefined") {
     // display user inputs as grid
     schema.format = "grid";
@@ -613,20 +615,22 @@ function _addGridDisplayOptions(schema, editorKey) {
 
 function _hideNotShownUserInputs(
   tentacle: string,
-  schema,
+  schema: TentaclesConfigsSchemaType,
   is_hidden: boolean
 ): string[] {
   let hiddenColumns: string[] = [];
   schema?.properties &&
-    Object.keys(schema.properties).forEach((key) => {
-      const value = schema.properties[key];
-      if (typeof value.properties === "object") {
-        hiddenColumns = hiddenColumns.concat(
-          _hideNotShownUserInputs(key, value, false)
-        );
-      } else if (is_hidden || !value.options.in_summary) {
-        hiddenColumns.push(userInputKey(key, tentacle).replaceAll("_", " "));
+    Object.entries(schema.properties).forEach(
+      ([propertyKey, propertyValue]) => {
+        if (typeof propertyValue.properties === "object") {
+          hiddenColumns = hiddenColumns.concat(
+            _hideNotShownUserInputs(propertyKey, propertyValue, false)
+          );
+        }
+        if (is_hidden || !propertyValue.options?.in_summary) {
+          hiddenColumns.push(userInputKey(propertyKey, tentacle));
+        }
       }
-    });
+    );
   return hiddenColumns;
 }

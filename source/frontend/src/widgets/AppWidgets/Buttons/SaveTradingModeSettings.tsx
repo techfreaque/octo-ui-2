@@ -2,7 +2,7 @@ import { Tooltip } from "antd";
 import AntButton from "../../../components/Buttons/AntButton";
 import { SaveOutlined } from "@ant-design/icons";
 import { useMemo, useState } from "react";
-import { useSaveTentaclesConfig } from "../../../context/config/TentaclesConfigProvider";
+import { TentaclesConfigByTentacleType, useSaveTentaclesConfig } from "../../../context/config/TentaclesConfigProvider";
 import {
   saveUserInputs,
   strategyFlowMakerName,
@@ -20,10 +20,10 @@ export default function SaveTradingModeSettings() {
   return useMemo(() => {
     function handleUserInputSave() {
       saveUserInputs(
-        (newConfigs) =>
+        (newConfigs: TentaclesConfigByTentacleType) =>
           saveTentaclesConfig(newConfigs, setIsSaving, true, true),
         setIsSaving,
-        "tradingConfig",
+        "tradingConfig"
       );
     }
     const tentacleNames =

@@ -19,7 +19,7 @@ function hydrateSideBarContent(
   const hydratedContent: AntSideBarMenutItemType[] = [];
   sideBarContent.forEach((menuItem, index) => {
     const hydratedItem: AntSideBarMenutItemType = {
-      label: menuItem.label || `No Label for ${menuItem.component}`,
+      title: menuItem.label || `No Label for ${menuItem.component}`,
       key: `${menuItem.label}${index}`,
       antIcon: menuItem.antIcon,
       noPadding: menuItem.noPadding,

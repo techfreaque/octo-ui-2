@@ -11,7 +11,7 @@ import { useUiConfigContext } from "../../../context/config/UiConfigProvider";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
 import {
-  TentaclesConfigsType,
+  TentaclesConfigByTentacleType,
   useSaveTentaclesConfig,
 } from "../../../context/config/TentaclesConfigProvider";
 import RunDataTableW2UI from "../../../components/Tables/w2ui/RunDataTable";
@@ -26,7 +26,7 @@ export function BacktestingRunDataTable() {
   const hiddenBacktestingMetadataColumns = useHiddenBacktestingMetadataColumnsContext();
   const saveTentaclesConfig = useSaveTentaclesConfig();
 
-  function restoreSettings(settings: TentaclesConfigsType) {
+  function restoreSettings(settings: TentaclesConfigByTentacleType) {
     saveTentaclesConfig(settings, undefined, true, true);
   }
 

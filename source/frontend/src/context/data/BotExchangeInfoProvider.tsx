@@ -258,7 +258,7 @@ export const useHandleProfileUpdate = () => {
   const currentCurrencyList = useCurrentCurrencyListContext();
   const unsavedCurrencyList = useUnsavedCurrencyListContext();
   const exchangeInfo = useExchangeInfoContext();
-  const currencySettings: ConfigSymbolsType =
+  const currencySettings: ConfigSymbolsType | undefined =
     botInfo?.current_profile?.config?.["crypto-currencies"];
   const exchangeConfigUpdate = useExchangeConfigUpdateContext();
 
@@ -322,10 +322,10 @@ export const useHandleExchangeSettingChange = () => {
         const newExchanges = {
           ...prevExchanges,
         };
-        if (!newExchanges?.[exchangeName]) {
-          newExchanges[exchangeName] = {};
-        }
-        (newExchanges[exchangeName][inputName] as any) = newSetting;
+        newExchanges[exchangeName] = {
+          ...newExchanges[exchangeName],
+          [inputName]: newSetting,
+        };
         return newExchanges;
       });
       setExchangeConfigUpdate((prevSettings) => {
@@ -351,7 +351,7 @@ export const BotExchangeInfoProvider = ({
   const [servicesInfo, setServicesInfo] = useState<SericesInfoType>();
   const [menuIsOpen, setMenuIsOpen] = useState(defaultMenuIsOpenState);
   const botInfo = useBotInfoContext();
-  const currencySettings: ConfigSymbolsType =
+  const currencySettings: ConfigSymbolsType | undefined =
     botInfo?.current_profile?.config?.["crypto-currencies"];
   const [toSaveCurrencySettings, setToSaveCurrencySettings] = useState<
     ConfigSymbolsType
@@ -460,7 +460,7 @@ function handleProfileUpdate({
   unsavedCurrencyList: CurrencyListType | undefined;
   exchangeInfo: ExchangeInfoType | undefined;
   botDomain: string;
-  currencySettings: ConfigSymbolsType;
+  currencySettings: ConfigSymbolsType | undefined;
   restartAfterSave?: boolean;
   exchangeConfigUpdate: ExchangeConfigUpdateType;
 }) {
@@ -502,7 +502,7 @@ export function getProfileCurrencyUpdate({
 }: {
   configUpdate: ExchangeConfigUpdateType;
   currentCurrencyList: CurrencyListType;
-  currencySettings: ConfigSymbolsType;
+  currencySettings: ConfigSymbolsType | undefined;
   unsavedCurrencyList: CurrencyListType;
   exchangeInfo: ExchangeInfoType | undefined;
 }) {
@@ -520,12 +520,12 @@ export function getProfileCurrencyUpdate({
             exchangeInfo?.currency_name_info?.[parseSymbol(symbol).base]?.n;
           if (
             currencyName &&
-            currencySettings[currencyName]?.pairs?.includes(symbol)
+            currencySettings?.[currencyName]?.pairs?.includes(symbol)
           ) {
             pairKey = currencyName;
           } else {
             for (const currency in currencySettings) {
-              if (currencySettings[currency].pairs?.includes(symbol)) {
+              if (currencySettings[currency]?.pairs?.includes(symbol)) {
                 pairKey = currency;
                 break;
               }
@@ -568,13 +568,10 @@ function convertSymbolSettingsToNewFormat(
       if (originalCurrencySettings[currency]?.enabled !== false) {
         originalCurrencySettings[currency]?.pairs?.forEach((pair) => {
           currencyList.push(pair);
-          if (!currencySettings[pair]) {
-            currencySettings[pair] = {
-              enabled: true,
-              pairs: [],
-            };
-          }
-          currencySettings[pair].pairs.push(pair);
+          currencySettings[pair] = {
+            enabled: true,
+            pairs: [...(currencySettings[pair]?.pairs || []), pair],
+          };
         });
       }
     });

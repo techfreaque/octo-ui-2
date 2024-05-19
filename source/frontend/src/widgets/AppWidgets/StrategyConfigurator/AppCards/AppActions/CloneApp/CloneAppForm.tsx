@@ -4,8 +4,8 @@ import { Input, Switch } from "antd";
 import { AppStoreAppType } from "../../../../../../context/data/AppStoreDataProvider";
 
 export interface CloneAppInfoType {
-  newProfileName: string;
-  selectNewProfile: boolean;
+  newProfileName?: string;
+  selectNewProfile?: boolean;
 }
 
 export default function CloneAppForm({

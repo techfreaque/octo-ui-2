@@ -118,7 +118,7 @@ export default function StrategyCard({
     setOpen: Dispatch<SetStateAction<boolean>>
   ) {
     setIsloading(true);
-    if (cloneAppInfo) {
+    if (cloneAppInfo?.newProfileName) {
       await duplicateProfile({
         botDomain,
         profileId: app.package_id,

@@ -42,6 +42,14 @@ export default function UploadAppForm({
       value: versionTag.key,
     };
   });
+  const defaultVersionType = versionTypeOptions[0] as {
+    label: string;
+    value: AppStoreVersionTypeType;
+  };
+  const defaultVersionTag = versionTagOptions[0] as {
+    label: string;
+    value: AppStoreVersionTagType;
+  };
   const isStrategy = app.categories?.[0] === strategyName;
   function handleInputChange(
     key: "includePackage" | ApiFieldsType,
@@ -58,8 +66,8 @@ export default function UploadAppForm({
         ...prevInfo,
         includePackage: isStrategy ? true : prevInfo.includePackage || false,
         price: prevInfo.price || app.price || 0,
-        version_type: prevInfo.version_type || versionTypeOptions[0].value,
-        version_tag: prevInfo.version_tag || versionTagOptions[0].value,
+        version_type: prevInfo.version_type || defaultVersionType.value,
+        version_tag: prevInfo.version_tag || defaultVersionTag.value,
       };
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -82,6 +90,8 @@ export default function UploadAppForm({
           versionTagOptions={versionTagOptions}
           uploadInfo={uploadInfo}
           handleInputChange={handleInputChange}
+          defaultVersionType={defaultVersionType}
+          defaultVersionTag={defaultVersionTag}
         />
       )}
     </div>
@@ -94,7 +104,17 @@ function UploadPackage({
   versionTagOptions,
   uploadInfo,
   handleInputChange,
+  defaultVersionType,
+  defaultVersionTag,
 }: {
+  defaultVersionType: {
+    label: string;
+    value: AppStoreVersionTypeType;
+  };
+  defaultVersionTag: {
+    label: string;
+    value: AppStoreVersionTagType;
+  };
   versionTypeOptions: {
     label: string;
     value: AppStoreVersionTypeType;
@@ -115,7 +135,7 @@ function UploadPackage({
       {app.is_from_store && (
         <UserInputLabel title={`Select the type of your update`}>
           <Select
-            defaultValue={versionTypeOptions[0].value}
+            defaultValue={defaultVersionType.value}
             onChange={(value) => handleInputChange("version_type", value)}
             style={{ width: "100%" }}
             options={versionTypeOptions}
@@ -124,7 +144,7 @@ function UploadPackage({
       )}
       <UserInputLabel title={`How stable is your ${app.categories[0]}`}>
         <Select
-          defaultValue={versionTagOptions[0].value}
+          defaultValue={defaultVersionTag.value}
           onChange={(value) => handleInputChange("version_tag", value)}
           style={{ width: "100%" }}
           options={versionTagOptions}

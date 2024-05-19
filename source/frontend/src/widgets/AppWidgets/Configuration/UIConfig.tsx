@@ -59,7 +59,7 @@ export default function UIConfig({
         | DisplaySettingsUiConfig
         | FlowSettingsUiConfig
       >,
-      configKey: string
+      configKey: UiConfigKeyType
     ) => {
       const newConfigs: UiConfigType = {
         ...uiConfig,
@@ -95,13 +95,13 @@ export default function UIConfig({
             );
             const config = convertTimestamps(uiConfig[configKey]);
             if (
-              schema.properties?.exchange_names?.items?.enum &&
+              schema?.properties?.["exchange_names"]?.items?.enum &&
               (config as
                 | BacktestingUiConfig
                 | OptimizerUiConfig
                 | undefined)?.exchange_names?.some(
                 (_exchange) =>
-                  !schema.properties?.exchange_names.items?.enum.includes(
+                  !schema?.properties?.["exchange_names"]?.items?.enum.includes(
                     _exchange
                   )
               )
@@ -109,15 +109,9 @@ export default function UIConfig({
               (config as
                 | BacktestingUiConfig
                 | OptimizerUiConfig).exchange_names =
-                schema.properties.exchange_names.items.enum;
+                schema.properties["exchange_names"].items.enum;
             }
             return (
-              // <ReactJsonEditor
-              //   schema={schema}
-              //   formData={config}
-              //   onChange
-              //   onSubmit
-              // />
               <JsonEditor
                 {...defaultJsonEditorSettings()}
                 schema={schema}
@@ -148,15 +142,15 @@ function convertTimestamps(
   config: UiSubConfigsType,
   convertBack: boolean = false
 ): UiSubConfigsType {
-  const newValues = {};
+  const newValues: any = {};
   config &&
-    Object.keys(config).forEach((configOptionKey) => {
+    Object.entries(config).forEach(([configOptionKey, configOption]) => {
       if (configOptionKey.includes("timestamp")) {
         newValues[configOptionKey] = convertBack
-          ? config[configOptionKey] * 1000
-          : config[configOptionKey] / 1000;
+          ? configOption * 1000
+          : configOption / 1000;
       } else {
-        newValues[configOptionKey] = config[configOptionKey];
+        newValues[configOptionKey] = configOption;
       }
     });
   return newValues;

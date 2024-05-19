@@ -46,7 +46,7 @@ const UpdateBotIsOptimizingContext = createContext<
 >((_value) => {});
 
 interface OptimizerProgressType extends WebsocketDataType {
-  remaining_time?;
+  remaining_time?: number;
   overall_progress?: number;
 }
 
@@ -115,8 +115,8 @@ function getOptimizerStartSettings(
 ): StartOptimizerSettingsType {
   return {
     ...optimizerSettings,
-    exchange_ids: exchangeNames.map(
-      (exchangeName) => idsByExchangeName[exchangeName]
+    exchange_ids: exchangeNames.map((exchangeName) =>
+      String(idsByExchangeName[exchangeName])
     ),
     config: optimizerInputs,
   };

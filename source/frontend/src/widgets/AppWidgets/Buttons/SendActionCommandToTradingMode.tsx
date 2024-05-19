@@ -5,7 +5,10 @@ import {
   useBotInfoContext,
   useIsDemoMode,
 } from "../../../context/data/BotInfoProvider";
-import { useSaveTentaclesConfigAndSendAction } from "../../../context/config/TentaclesConfigProvider";
+import {
+  TentaclesConfigByTentacleType,
+  useSaveTentaclesConfigAndSendAction,
+} from "../../../context/config/TentaclesConfigProvider";
 import { saveUserInputs } from "../Configuration/TentaclesConfig";
 import AntButton, {
   buttonTypes,
@@ -71,7 +74,7 @@ export default function SendActionCommandToTradingMode({
 export function sendActionCommandToTradingMode(
   command: ApiActionsType,
   saveTentaclesConfigAndSendAction: (
-    newConfigs,
+    newConfigs: TentaclesConfigByTentacleType,
     actionType: ApiActionsType,
     setIsLoading: Dispatch<SetStateAction<boolean>>,
     reloadPlots?: boolean,
@@ -85,7 +88,7 @@ export function sendActionCommandToTradingMode(
   errorCallback?: (payload: errorResponseCallBackParams) => void
 ) {
   saveUserInputs(
-    (currentConfig) =>
+    (currentConfig: TentaclesConfigByTentacleType) =>
       saveTentaclesConfigAndSendAction(
         currentConfig,
         command,

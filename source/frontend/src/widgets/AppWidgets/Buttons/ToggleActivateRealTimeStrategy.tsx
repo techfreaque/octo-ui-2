@@ -5,7 +5,7 @@ import {
   useFetchBotInfo,
   useIsDemoMode,
 } from "../../../context/data/BotInfoProvider";
-import { useSaveTentaclesConfigAndSendAction } from "../../../context/config/TentaclesConfigProvider";
+import { TentaclesConfigByTentacleType, useSaveTentaclesConfigAndSendAction } from "../../../context/config/TentaclesConfigProvider";
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import createNotification from "../../../components/Notifications/Notification";
 import { saveUserInputs } from "../Configuration/TentaclesConfig";
@@ -61,7 +61,7 @@ export default function ToggleActivateRealTimeStrategy() {
           disabled={!isOnline || isExecuting || isDemo}
           onClick={() =>
             saveUserInputs(
-              (currentConfig) =>
+              (currentConfig: TentaclesConfigByTentacleType) =>
                 saveTentaclesConfigAndSendAction(
                   currentConfig,
                   command,
@@ -83,7 +83,7 @@ export default function ToggleActivateRealTimeStrategy() {
           disabled={!isOnline || isExecuting || isDemo}
           onClick={() =>
             saveUserInputs(
-              (currentConfig) =>
+              (currentConfig: TentaclesConfigByTentacleType) =>
                 saveTentaclesConfigAndSendAction(
                   currentConfig,
                   command,

@@ -35,18 +35,20 @@ export default function PlotlyDualCharts({
   useEffect(() => {
     enableAxisSelect();
   }, [charts]);
-
-  const mainLayout = layouts[chartLocations[0]];
-  const mainChart = charts[chartLocations[0]];
-  const subLayout = layouts[chartLocations[1]];
-  const subChart = charts[chartLocations[1]];
+  const mainChartLocation = chartLocations[0];
+  const mainLayout = mainChartLocation && layouts[mainChartLocation];
+  const mainChart = mainChartLocation && charts[mainChartLocation];
+  const subChartLocation = chartLocations[1];
+  const subLayout = subChartLocation && layouts[subChartLocation];
+  const subChart = subChartLocation && charts[subChartLocation];
   return useMemo(() => {
     return mainLayout && mainChart ? (
       <>
         {!window.matchMedia("(pointer: coarse)").matches && <Crosshair />}
         {subLayout && subChart ? (
           <DualChart
-            chartLocations={chartLocations}
+            mainChartLocation={mainChartLocation}
+            subChartLocation={subChartLocation}
             setLayouts={setLayouts}
             subLayout={subLayout}
             subChart={subChart}
@@ -69,7 +71,7 @@ export default function PlotlyDualCharts({
               onMouseLeave={handleCrosshairOnMouseLeave}
             >
               <Chart
-                chartLocation={chartLocations[0]}
+                chartLocation={mainChartLocation}
                 setLayouts={setLayouts}
                 layout={mainLayout}
                 chart={mainChart}
@@ -81,18 +83,28 @@ export default function PlotlyDualCharts({
     ) : (
       <></>
     );
-  }, [mainLayout, mainChart, subLayout, subChart, chartLocations, setLayouts]);
+  }, [
+    mainLayout,
+    mainChart,
+    subLayout,
+    subChart,
+    mainChartLocation,
+    subChartLocation,
+    setLayouts,
+  ]);
 }
 
 function DualChart({
-  chartLocations,
+  mainChartLocation,
+  subChartLocation,
   setLayouts,
   subLayout,
   subChart,
   mainLayout,
   mainChart,
 }: {
-  chartLocations: ChartLocationType[];
+  mainChartLocation: ChartLocationType;
+  subChartLocation: ChartLocationType;
   setLayouts: UpdatePlotlyLayoutsType;
   subLayout: PlotlyLayoutType;
   subChart: ChartDataType[];
@@ -119,7 +131,7 @@ function DualChart({
           onMouseLeave={handleCrosshairOnMouseLeave}
         >
           <Chart
-            chartLocation={chartLocations[0]}
+            chartLocation={mainChartLocation}
             setLayouts={setLayouts}
             layout={mainLayout}
             chart={mainChart}
@@ -134,7 +146,7 @@ function DualChart({
           onMouseLeave={handleCrosshairOnMouseLeave}
         >
           <Chart
-            chartLocation={chartLocations[1]}
+            chartLocation={subChartLocation}
             setLayouts={setLayouts}
             layout={subLayout}
             chart={subChart}
@@ -144,12 +156,13 @@ function DualChart({
     );
   }, [
     botColorMode,
-    chartLocations,
-    mainChart,
-    mainLayout,
+    mainChartLocation,
     setLayouts,
-    subChart,
+    mainLayout,
+    mainChart,
+    subChartLocation,
     subLayout,
+    subChart,
   ]);
 }
 

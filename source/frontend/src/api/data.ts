@@ -24,6 +24,7 @@ import {
 } from "../context/data/AppStoreDataProvider";
 import { LoginSignupFormType } from "../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
 import {
+  PlottedElementBacktestingNameType,
   PlottedElementNameType,
   PlottedElementsType,
 } from "../context/data/BotPlottedElementsProvider";
@@ -64,114 +65,59 @@ export async function fetchExchangeInfo(
 type FetchPlotlyPlotDataProps = {
   symbol: string;
   timeFrame: string;
-  exchange_id: string;
-  exchange_name: string;
+  exchangeId: string;
+  exchangeName: string;
   botDomain: string;
   setBotPlottedElements: Dispatch<
     SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
   >;
-  botInfo: BotInfoType;
   optimizationCampaign: string;
-  isLive: boolean;
-} & (FetchPlotlyPlotDataBacktestingProps | FetchPlotlyPlotDataLiveProps);
+};
 
 interface FetchPlotlyPlotDataBacktestingProps {
-  backtesting_id: number;
-  optimizer_id: number;
-  isLive: false;
+  backtestingId: string;
+  optimizerId: string;
 }
 
 interface FetchPlotlyPlotDataLiveProps {
-  isLive: true;
-  backtesting_id?: undefined;
-  optimizer_id?: undefined;
+  liveId: number;
 }
 
-export async function fetchPlotlyPlotData({
+export async function fetchPlotlyLivePlotData({
   symbol,
   timeFrame,
-  exchange_id,
-  exchange_name,
+  exchangeId,
+  exchangeName,
   botDomain,
   setBotPlottedElements,
-  botInfo,
-  isLive = true,
   optimizationCampaign,
-  backtesting_id,
-  optimizer_id,
-}: FetchPlotlyPlotDataProps) {
+  liveId,
+}: FetchPlotlyPlotDataProps & FetchPlotlyPlotDataLiveProps) {
   const data: {
     exchange_id: string;
     symbol: string;
     time_frame: string;
     exchange: string;
-    live_id?: number;
-    campaign_name?: string;
-    backtesting_id?: number;
-    optimizer_id?: number;
+    live_id: number;
+    campaign_name: string;
   } = {
-    exchange_id,
+    exchange_id: exchangeId,
     symbol,
     time_frame: timeFrame,
-    exchange: exchange_name,
+    exchange: exchangeName,
     campaign_name: optimizationCampaign,
+    live_id: liveId,
   };
-  if (isLive) {
-    data.live_id = botInfo.live_id;
-    if (!data.live_id) {
-      createNotification({
-        title: "Failed to get live plot data",
-        message: "Live run id is not defined",
-      });
-      return;
-    }
-  } else {
-    data.backtesting_id = backtesting_id;
-    data.optimizer_id = optimizer_id;
-  }
-
   const successCallback = ({ data }: successResponseCallBackParams) => {
     setBotPlottedElements((prevData) => {
       const newData: PlottedElementsType<PlottedElementNameType> = JSON.parse(
         JSON.stringify(prevData || {})
       );
-      if (isLive) {
-        newData.live = {
-          [botInfo.live_id]: {
-            [symbol]: {
-              [timeFrame]: data?.data,
-            },
+      newData.live = {
+        [liveId]: {
+          [symbol]: {
+            [timeFrame]: data?.data,
           },
-        };
-        return newData;
-      }
-      if (!optimizationCampaign || optimizer_id) {
-        createNotification({
-          title: "Failed to get backtesting plot data",
-          message: `Campaign: ${optimizationCampaign} or optimizer id: ${optimizer_id} is undefined`,
-        });
-        return newData;
-      }
-      if (!newData.backtesting) {
-        newData.backtesting = {
-          [optimizationCampaign]: {},
-        };
-      }
-      if (!newData.backtesting[optimizationCampaign]) {
-        newData.backtesting[optimizationCampaign] = {
-          [optimizer_id]: {},
-        };
-      }
-      if (!newData.backtesting[optimizationCampaign][optimizer_id]) {
-        newData.backtesting[optimizationCampaign][optimizer_id] = {
-          [backtesting_id]: {},
-        };
-      }
-      newData.backtesting[optimizationCampaign][optimizer_id][
-        backtesting_id
-      ] = {
-        [symbol]: {
-          [timeFrame]: data?.data,
         },
       };
       return newData;
@@ -179,9 +125,80 @@ export async function fetchPlotlyPlotData({
   };
   function errorCallback() {
     createNotification({
-      title: "Failed to load chart data",
+      title: "Failed to load live chart data",
       type: "danger",
-      message: `The data for ${exchange_name} - ${symbol} - ${timeFrame} is not available`,
+      message: `The data for ${exchangeName} - ${symbol} - ${timeFrame} is not available`,
+    });
+  }
+  sendAndInterpretBotUpdate({
+    updatedData: data,
+    updateUrl: botDomain + backendRoutes.plottedRunData,
+    successCallback,
+    errorCallback,
+  });
+}
+
+export async function fetchPlotlyBacktestingPlotData({
+  symbol,
+  timeFrame,
+  exchangeId,
+  exchangeName,
+  botDomain,
+  setBotPlottedElements,
+  optimizationCampaign,
+  backtestingId,
+  optimizerId,
+}: FetchPlotlyPlotDataProps & FetchPlotlyPlotDataBacktestingProps) {
+  const data: {
+    exchange_id: string;
+    symbol: string;
+    time_frame: string;
+    exchange: string;
+    campaign_name: string;
+    backtesting_id: string;
+    optimizer_id: string;
+  } = {
+    exchange_id: exchangeId,
+    symbol,
+    time_frame: timeFrame,
+    exchange: exchangeName,
+    campaign_name: optimizationCampaign,
+    backtesting_id: backtestingId,
+    optimizer_id: optimizerId,
+  };
+  const successCallback = ({ data }: successResponseCallBackParams) => {
+    setBotPlottedElements((prevData) => {
+      const newData: PlottedElementsType<PlottedElementBacktestingNameType> = JSON.parse(
+        JSON.stringify(prevData || {})
+      );
+      newData.backtesting = {
+        ...newData.backtesting,
+        [optimizationCampaign]: {
+          ...newData.backtesting?.[optimizationCampaign],
+          [optimizerId]: {
+            ...newData.backtesting?.[optimizationCampaign]?.[optimizerId],
+            [backtestingId]: {
+              ...newData.backtesting?.[optimizationCampaign]?.[optimizerId]?.[
+                backtestingId
+              ],
+              [symbol]: {
+                ...newData.backtesting?.[optimizationCampaign]?.[optimizerId]?.[
+                  backtestingId
+                ]?.[symbol],
+                [timeFrame]: data?.data,
+              },
+            },
+          },
+        },
+      };
+      return newData;
+    });
+  };
+  function errorCallback() {
+    createNotification({
+      title: "Failed to load backtesting chart data",
+      type: "danger",
+      message: `The data for ${exchangeName} - ${symbol} - ${timeFrame} is not available`,
     });
   }
   sendAndInterpretBotUpdate({
@@ -197,7 +214,8 @@ export async function fetchBacktestingRunData(
   setUiConfig: Dispatch<SetStateAction<UiConfigType>>,
   botDomain: string,
   forceSelectLatestBacktesting: boolean,
-  campaigns: OptimizerCampaignsToLoadUiConfig
+  campaigns: OptimizerCampaignsToLoadUiConfig,
+  onDone?: () => void
 ) {
   function successCallback(payload: successResponseCallBackParams) {
     saveBotConfig(payload.data.data);
@@ -207,6 +225,15 @@ export async function fetchBacktestingRunData(
         [OPTIMIZER_CAMPAIGNS_TO_LOAD_KEY]: payload.data.data.campaigns,
       };
     });
+    onDone?.();
+  }
+  function errorCallback(payload: errorResponseCallBackParams) {
+    createNotification({
+      title: "Failed to load backtesting runs",
+      message: `Error: ${payload.data}`,
+      type: "danger",
+    });
+    onDone?.();
   }
   sendAndInterpretBotUpdate({
     updatedData: {
@@ -215,6 +242,7 @@ export async function fetchBacktestingRunData(
     },
     updateUrl: botDomain + backendRoutes.backtestingRunData,
     successCallback,
+    errorCallback,
   });
 }
 

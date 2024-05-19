@@ -1,7 +1,10 @@
 import { Button } from "@mui/material";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import { userInputKey } from "../../../components/UserInputs/utils";
-import { TENTACLE_SEPARATOR } from "../../../constants/backendConstants";
+import {
+  findUserInputAndTentacleLabel,
+  splitUserInputKey,
+  userInputKey,
+} from "../../../components/UserInputs/utils";
 import {
   OptimizerQueueElementType,
   OptimizerQueueType,
@@ -191,45 +194,51 @@ function OptimizerRunQueueTable({
         header={
           <>
             <Tooltip title={"Deletes the selected runs from the queue"}>
-              <AntButton
-                antIconComponent={DeleteFilled}
-                buttonType={
-                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
-                }
-                disabled={!somethingSelected || isUpdating}
-                buttonVariant={buttonVariants.text}
-                onClick={somethingSelected ? () => onDelete() : undefined}
-              >
-                Delete selected
-              </AntButton>
+              <div>
+                <AntButton
+                  antIconComponent={DeleteFilled}
+                  colorType={
+                    isUpdating ? buttonTypes.font : buttonTypes.fontActive
+                  }
+                  disabled={!somethingSelected || isUpdating}
+                  buttonVariant={buttonVariants.text}
+                  onClick={somethingSelected ? () => onDelete() : undefined}
+                >
+                  Delete selected
+                </AntButton>
+              </div>
             </Tooltip>
             <Tooltip title={"This will delete all runs in this optimizer id"}>
-              <AntButton
-                antIconComponent={DeleteFilled}
-                buttonType={
-                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
-                }
-                disabled={isUpdating}
-                buttonVariant={buttonVariants.text}
-                onClick={() => onDelete(true)}
-              >
-                Delete all
-              </AntButton>
+              <div>
+                <AntButton
+                  antIconComponent={DeleteFilled}
+                  colorType={
+                    isUpdating ? buttonTypes.font : buttonTypes.fontActive
+                  }
+                  disabled={isUpdating}
+                  buttonVariant={buttonVariants.text}
+                  onClick={() => onDelete(true)}
+                >
+                  Delete all
+                </AntButton>
+              </div>
             </Tooltip>
             <Tooltip
               title={"This will randomize all records in this optimizer id"}
             >
-              <AntButton
-                faIconComponent={faShuffle}
-                buttonType={
-                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
-                }
-                disabled={isUpdating}
-                buttonVariant={buttonVariants.text}
-                onClick={randomizeRecords}
-              >
-                Randomize
-              </AntButton>
+              <div>
+                <AntButton
+                  faIconComponent={faShuffle}
+                  colorType={
+                    isUpdating ? buttonTypes.font : buttonTypes.fontActive
+                  }
+                  disabled={isUpdating}
+                  buttonVariant={buttonVariants.text}
+                  onClick={randomizeRecords}
+                >
+                  Randomize
+                </AntButton>
+              </div>
             </Tooltip>
           </>
         }
@@ -321,54 +330,6 @@ function generateTableData(
   };
 }
 
-function findUserInputAndTentacleLabel(
-  currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined,
-  userInputName: string,
-  tentacleNames: string[]
-) {
-  try {
-    const rootTentacleName = tentacleNames[0];
-    if (!rootTentacleName) {
-      throw new Error();
-    }
-    let nestedObject: any =
-      currentTentaclesTradingConfig?.[rootTentacleName]?.schema.properties;
-    let tentacleLabel = rootTentacleName;
-    const nestedTentacleName = tentacleNames.slice(1);
-    for (const key of nestedTentacleName) {
-      if (nestedObject?.[key]) {
-        const nestedTitle = `${
-          nestedObject[key].title || nestedObject[key].options?.name
-        }`;
-        if (!tentacleLabel.endsWith(nestedTitle)) {
-          tentacleLabel += ` > ${nestedTitle}`;
-        }
-        nestedObject = nestedObject[key].properties; // Access the nested object using each key
-      } else {
-        throw new Error();
-      }
-    }
-    let userInputLabel: string;
-    try {
-      userInputLabel =
-        nestedObject[userInputName].title ||
-        nestedObject[userInputName].options?.name ||
-        userInputName;
-    } catch (e) {
-      userInputLabel = userInputName;
-    }
-    return {
-      userInputLabel,
-      tentacleLabel,
-    };
-  } catch (e) {
-    return {
-      userInputLabel: userInputName,
-      tentacleLabel: `${tentacleNames}`,
-    };
-  }
-}
-
 function createUpdatedRunDataFromTableRow(
   record: RunDataTableElementType,
   deleted: boolean
@@ -378,12 +339,10 @@ function createUpdatedRunDataFromTableRow(
     if (["id", "key"].includes(inputKey)) {
       return;
     }
-    const splitKey = inputKey.split(TENTACLE_SEPARATOR);
-    const inputName = `${splitKey[0]}`;
-    const tentacleStr = `${splitKey[1]}`;
+    const { userInput, tetacles } = splitUserInputKey(inputKey);
     run.push({
-      user_input: inputName,
-      tentacle: tentacleStr.split(","),
+      user_input: userInput,
+      tentacle: tetacles,
       value,
       deleted,
     });

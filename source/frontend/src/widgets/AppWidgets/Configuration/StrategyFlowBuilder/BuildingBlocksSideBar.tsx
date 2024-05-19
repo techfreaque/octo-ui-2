@@ -133,8 +133,7 @@ function BlockTemplate({
     const _searchText = searchText?.toLowerCase();
     return blocks ? (
       <>
-        {Object.keys(blocks).map((blockName) => {
-          const block = blocks[blockName];
+        {Object.entries(blocks).map(([blockName, block]) => {
           if (
             !searchText ||
             searchText === "" ||

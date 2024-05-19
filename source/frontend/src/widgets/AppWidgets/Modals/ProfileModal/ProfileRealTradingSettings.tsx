@@ -1,11 +1,17 @@
 import { Grid } from "@mui/material";
 import { Switch, Typography } from "antd";
 import { onProfileSettingChange } from "./ProfileTradingSettings";
+import { ProfileType } from "../../../../context/data/BotInfoProvider";
+import { Dispatch, SetStateAction } from "react";
 
 export function ProfileRealSettings({
   newProfileSettings,
   setNewProfileSettings,
   isCurrentProfile,
+}: {
+  newProfileSettings: ProfileType;
+  setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
+  isCurrentProfile: boolean;
 }) {
   return (
     <>
@@ -20,7 +26,7 @@ export function ProfileRealSettings({
               setNewProfileSettings,
               value,
               "trader",
-              "load-trade-history",
+              "load-trade-history"
             )
           }
           checked={newProfileSettings?.config?.trader?.["load-trade-history"]}

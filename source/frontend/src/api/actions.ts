@@ -352,7 +352,7 @@ export async function cancelOrders(
   botDomain: string,
   orderIdsArray: string[],
   setIsCancelling: Dispatch<SetStateAction<boolean>>,
-  upDateOrders: (isLive?: boolean) => void
+  upDateOrders: () => void
 ) {
   setIsCancelling?.(true);
   function successCallback(payload: successResponseCallBackParams) {
@@ -360,7 +360,7 @@ export async function cancelOrders(
       return errorCallback();
     }
     createNotification({ title: "Successfully canceled orders" });
-    upDateOrders(true);
+    upDateOrders();
     setIsCancelling?.(false);
   }
   function errorCallback() {

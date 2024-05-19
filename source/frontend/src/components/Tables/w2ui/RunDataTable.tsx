@@ -9,7 +9,7 @@ import {
   TENTACLE_SEPARATOR,
   TIMESTAMP_DATA,
 } from "../../../constants/backendConstants";
-import { Dispatch, SetStateAction, useEffect, useMemo } from "react";
+import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
 import { createTable } from "./W2UI";
 import {
   DisplayedRunIdsType,
@@ -21,7 +21,7 @@ import {
   BacktestingRunData,
   BacktestingRunsData,
 } from "../../../context/data/BacktestingRunDataProvider";
-import { TentaclesConfigsType } from "../../../context/config/TentaclesConfigProvider";
+import { TentaclesConfigByTentacleType } from "../../../context/config/TentaclesConfigProvider";
 
 export default function RunDataTableW2UI({
   tableTitle,
@@ -42,7 +42,7 @@ export default function RunDataTableW2UI({
   reloadData: () => void;
   deleteRuns;
   hiddenMetadataColumns: string[] | undefined;
-  restoreSettings: (settings: TentaclesConfigsType) => void;
+  restoreSettings: (settings: TentaclesConfigByTentacleType) => void;
 }) {
   const setDisplayedRunIds = useUpdateDisplayedRunIdsContext();
   const displayedRunIds = useDisplayedRunIdsContext();
@@ -103,7 +103,7 @@ function createMetadataTable({
   hiddenMetadataColumns: string[] | undefined;
   setDisplayedRunIds: Dispatch<SetStateAction<DisplayedRunIdsType>>;
   displayedRunIds: DisplayedRunIdsType;
-  restoreSettings: (settings: TentaclesConfigsType) => void;
+  restoreSettings: (settings: TentaclesConfigByTentacleType) => void;
 }) {
   if (metadata !== null && metadata.length) {
     const handleSelection = (tableName, event) => {
@@ -483,8 +483,29 @@ function _addBacktestingMetadataTableButtons(
   });
 }
 
-function mergeRunIdentifiers(backtestingId, optimizerId, campaignName): string {
+export function mergeRunIdentifiers(
+  backtestingId: string,
+  optimizerId: string,
+  campaignName: string
+): string {
   return `${backtestingId}${ID_SEPARATOR}${optimizerId}${ID_SEPARATOR}${campaignName}`;
+}
+
+export function splitRunIdentifiers(
+  runIdentifier: string
+): {
+  backtestingId: string;
+  optimizerId: string;
+  campaignName: string;
+} {
+  const [backtestingId, optimizerId, campaignName] = runIdentifier.split(
+    ID_SEPARATOR
+  );
+  return {
+    backtestingId: String(backtestingId),
+    optimizerId: String(optimizerId),
+    campaignName: String(campaignName),
+  };
 }
 
 function getIdFromTableRow(row) {

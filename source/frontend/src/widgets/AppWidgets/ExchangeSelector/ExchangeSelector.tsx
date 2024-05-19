@@ -89,8 +89,10 @@ export default function ExchangeSelector() {
                 <Trans i18nKey="exchangeSelector.exchangeAuthenticatedTooltip" />
               }
             >
-              {`${exchangeName} `}
-              <CheckCircleOutlined />
+              <div>
+                {`${exchangeName} `}
+                <CheckCircleOutlined />
+              </div>
             </Tooltip>
           </div>
         ) : (
@@ -104,8 +106,10 @@ export default function ExchangeSelector() {
                 <Trans i18nKey="exchangeSelector.exchangeNotAuthenticatedTooltip" />
               }
             >
-              {`${exchangeName} `}
-              <ExclamationCircleOutlined />
+              <div>
+                {`${exchangeName} `}
+                <ExclamationCircleOutlined />
+              </div>
             </Tooltip>
           </div>
         )
@@ -186,13 +190,17 @@ export default function ExchangeSelector() {
             <Trans i18nKey="exchangeSelector.isTestedExchangeSimulatedTooltip" />
           }
         >
-          <ExclamationCircleOutlined />
+          <div>
+            <ExclamationCircleOutlined />
+          </div>
         </Tooltip>
       ) : (
         <Tooltip
           title={<Trans i18nKey="exchangeSelector.isUntestedExchangeTooltip" />}
         >
-          <QuestionCircleOutlined />
+          <div>
+            <QuestionCircleOutlined />
+          </div>
         </Tooltip>
       ),
       selected: visibleExchanges === exchangeName,
@@ -203,13 +211,17 @@ export default function ExchangeSelector() {
         <Tooltip
           title={<Trans i18nKey="exchangeSelector.hasWebsocketTooltip" />}
         >
-          <CheckCircleOutlined />
+          <div>
+            <CheckCircleOutlined />
+          </div>
         </Tooltip>
       ) : (
         <Tooltip
           title={<Trans i18nKey="exchangeSelector.noWebsocketTooltip" />}
         >
-          <WarningOutlined />
+          <div>
+            <WarningOutlined />
+          </div>
         </Tooltip>
       ),
     });

@@ -39,7 +39,7 @@ export default function ProfileModal({
   handleClose: () => void;
   newProfileSettings: ProfileType;
   setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
-  profile: ProfileType | undefined;
+  profile: ProfileType;
   setRequiresInstantRestart: Dispatch<SetStateAction<boolean>>;
   requiresInstantRestart: boolean;
   loading: boolean;
@@ -69,7 +69,6 @@ export default function ProfileModal({
         <>
           <ProfileDescription
             newProfileSettings={newProfileSettings}
-            isCurrentProfile={isCurrentProfile}
             setNewProfileSettings={setNewProfileSettings}
           />
           <ProfileTradingTypeSettings
@@ -174,7 +173,7 @@ export default function ProfileModal({
           newProfileSettings={newProfileSettings}
           isCurrentProfile={isCurrentProfile}
           setNewProfileSettings={setNewProfileSettings}
-          currentProfile={profile || {}}
+          currentProfile={profile}
           setRequiresInstantRestart={setRequiresInstantRestart}
         />
       }

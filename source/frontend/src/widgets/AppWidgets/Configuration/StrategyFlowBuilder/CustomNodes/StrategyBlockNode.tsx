@@ -1,12 +1,15 @@
-import { NodeProps, Position } from "reactflow";
+import { HandleType, NodeProps, Position } from "reactflow";
 import { NodeContainer, NodeEditor, NodeHandle } from "./NodeContainer";
 import {
+  NodeConfigKeyType,
+  TentaclesConfigValuesType,
+  TentaclesConfigsSchemaPropertiesType,
+  TentaclesConfigsSchemaType,
   tentacleConfigTypes,
   useTentaclesConfigContext,
 } from "../../../../../context/config/TentaclesConfigProvider";
 import { strategyFlowMakerName } from "../../TentaclesConfig";
 import { useMemo } from "react";
-import { objectKeys } from "../../../../../helpers/helpers";
 
 export const flowBuilderStorageKey = "flow-builder-storage";
 
@@ -16,7 +19,10 @@ const nodeSideKeysToClass = {
   left: Position.Left,
   right: Position.Right,
 };
-const nodeDirectionKeysToHandleType = {
+const nodeDirectionKeysToHandleType: {
+  in: HandleType;
+  out: HandleType;
+} = {
   in: "target",
   out: "source",
 };
@@ -97,6 +103,22 @@ const handleOuterStyles = {
       bottom: "20%",
       top: "auto",
     },
+    3: {
+      bottom: "20%",
+      top: "auto",
+    },
+    4: {
+      bottom: "20%",
+      top: "auto",
+    },
+    5: {
+      bottom: "20%",
+      top: "auto",
+    },
+    6: {
+      bottom: "20%",
+      top: "auto",
+    },
   },
   right: {
     0: {
@@ -108,6 +130,22 @@ const handleOuterStyles = {
       bottom: "auto",
     },
     2: {
+      bottom: "20%",
+      top: "auto",
+    },
+    3: {
+      bottom: "20%",
+      top: "auto",
+    },
+    4: {
+      bottom: "20%",
+      top: "auto",
+    },
+    5: {
+      bottom: "20%",
+      top: "auto",
+    },
+    6: {
       bottom: "20%",
       top: "auto",
     },
@@ -178,13 +216,23 @@ const handleStyles = {
     0: {},
     1: {},
     2: {},
+    3: {},
+    4: {},
+    5: {},
+    6: {},
   },
   right: {
     0: {},
     1: {},
     2: {},
+    3: {},
+    4: {},
+    5: {},
+    6: {},
   },
 };
+
+type StyleIndexType = 1 | 2 | 3 | 4 | 5 | 6;
 
 const handleLabelStyles = {
   top: {
@@ -279,6 +327,26 @@ const handleLabelStyles = {
       top: "auto",
       ...handleLabelLeftStyle,
     },
+    3: {
+      bottom: "20%",
+      top: "auto",
+      ...handleLabelLeftStyle,
+    },
+    4: {
+      bottom: "20%",
+      top: "auto",
+      ...handleLabelLeftStyle,
+    },
+    5: {
+      bottom: "20%",
+      top: "auto",
+      ...handleLabelLeftStyle,
+    },
+    6: {
+      bottom: "20%",
+      top: "auto",
+      ...handleLabelLeftStyle,
+    },
   },
   right: {
     0: {
@@ -292,6 +360,26 @@ const handleLabelStyles = {
       ...handleLabelRightStyle,
     },
     2: {
+      bottom: "20%",
+      top: "auto",
+      ...handleLabelRightStyle,
+    },
+    3: {
+      bottom: "20%",
+      top: "auto",
+      ...handleLabelRightStyle,
+    },
+    4: {
+      bottom: "20%",
+      top: "auto",
+      ...handleLabelRightStyle,
+    },
+    5: {
+      bottom: "20%",
+      top: "auto",
+      ...handleLabelRightStyle,
+    },
+    6: {
       bottom: "20%",
       top: "auto",
       ...handleLabelRightStyle,
@@ -311,51 +399,44 @@ export default function StrategyBlockNode({
   const jsonSchema = JSON.stringify(schema);
   return useMemo(() => {
     const ioNodes: {
-      top?: JSX.Element;
-      left?: JSX.Element;
-      right?: JSX.Element;
-      bottom?: JSX.Element;
+      top?: JSX.Element[];
+      left?: JSX.Element[];
+      right?: JSX.Element[];
+      bottom?: JSX.Element[];
     } = {};
-    ioSchema ? (
-      objectKeys(ioSchema).forEach((nodeKey) => {
-        const node = ioSchema[nodeKey];
-        if (!node?.options) {
+    if (ioSchema) {
+      Object.values(ioSchema).forEach((node) => {
+        const nodeOptions = node.options;
+        const nodeSide = nodeOptions?.side;
+        const nodeDirection = nodeOptions?.direction;
+        if (!nodeOptions || !nodeSide || !nodeDirection) {
           return;
         }
-        if (!ioNodes[node?.options?.side]) {
-          ioNodes[node?.options?.side] = [];
-        }
+        const ioNodeData = ioNodes[nodeSide] || [];
         const id = `${node?.options?.io_node_type}${node?.options?.io_node_id}`;
-        ioNodes[node.options.side].push(
+        ioNodeData.push(
           <NodeHandle
-            direction={nodeDirectionKeysToHandleType[node.options.direction]}
+            direction={nodeDirectionKeysToHandleType[nodeDirection]}
             handleDescriptionStyle={
-              handleLabelStyles[node.options.side]?.[
-                ioNodes[node.options.side]?.length
-              ]
+              handleLabelStyles[nodeSide]?.[ioNodeData.length as StyleIndexType]
             }
-            color={node.options.color}
+            color={nodeOptions.color || "white"}
             style={
-              handleOuterStyles[node.options.side]?.[
-                ioNodes[node.options.side]?.length
-              ]
+              handleOuterStyles[nodeSide]?.[ioNodeData.length as StyleIndexType]
             }
             handleStyle={
-              handleStyles[node.options.side]?.[
-                ioNodes[node.options.side]?.length
-              ]
+              handleStyles[nodeSide]?.[ioNodeData.length as StyleIndexType]
             }
-            position={nodeSideKeysToClass[node.options.side]}
-            title={node.options.title}
+            position={nodeSideKeysToClass[nodeSide]}
+            title={`${nodeOptions.title}`}
             key={id}
             id={id}
-            isConnectable={node.options.is_connectable}
+            isConnectable={nodeOptions.is_connectable}
           />
         );
-      })
-    ) : (
-      <></>
-    );
+        ioNodes[nodeSide] = ioNodeData;
+      });
+    }
     return (
       <NodeContainer
         nodeId={id}
@@ -380,9 +461,9 @@ export function useCurrentNodeSchema({
 }: {
   nodeId: string;
 }): {
-  ioSchema;
-  schema;
-  config;
+  ioSchema: TentaclesConfigsSchemaPropertiesType | undefined;
+  schema: TentaclesConfigsSchemaType | undefined;
+  config: TentaclesConfigValuesType | undefined;
 } {
   const currentTentaclesConfig = useTentaclesConfigContext();
   const currentTentaclesTradingConfig =
@@ -404,7 +485,7 @@ export function useCurrentNodeSchema({
   };
 }
 
-export function getNodeConfigKey(nodeId: string) {
+export function getNodeConfigKey(nodeId: string): NodeConfigKeyType {
   return `config_${nodeId}`;
 }
 

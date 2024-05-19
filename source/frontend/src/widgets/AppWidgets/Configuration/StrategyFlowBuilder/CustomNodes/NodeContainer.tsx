@@ -13,11 +13,14 @@ import {
 } from "reactflow";
 import { useBotColorsContext } from "../../../../../context/config/BotColorsProvider";
 import { CSSProperties, useCallback, useMemo } from "react";
-import { useSaveFlowBuilderSettings } from "../SaveStrategyFlowBuilder";
+import {
+  useGetFlowConfig,
+  useSaveFlowBuilderSettings,
+} from "../SaveStrategyFlowBuilder";
 import { strategyFlowMakerName } from "../../TentaclesConfig";
 import {
-  tentacleConfigTypes,
-  useTentaclesConfigContext,
+  TentaclesConfigValuesType,
+  TentaclesConfigsSchemaType,
   useUpdateIsSavingTentaclesConfigContext,
 } from "../../../../../context/config/TentaclesConfigProvider";
 import { useUiConfigContext } from "../../../../../context/config/UiConfigProvider";
@@ -90,37 +93,29 @@ export function NodeEditor({
   config,
   nodeId,
 }: {
-  schema;
-  config;
+  schema: TentaclesConfigsSchemaType | undefined;
+  config: TentaclesConfigValuesType | undefined;
   nodeId: string;
 }) {
   const handleUserInputSave = useSaveFlowBuilderSettings();
   const store = useStoreApi();
-  const currentTentaclesConfig = useTentaclesConfigContext();
-  const currentTentaclesTradingConfig =
-    currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
+  const flowConfig = useGetFlowConfig();
   const uiConfig = useUiConfigContext();
   const setIsSaving = useUpdateIsSavingTentaclesConfigContext();
   const autoSave = uiConfig?.[flowEditorSettingsName]?.auto_save;
   const handleAutoSave = useCallback(() => {
-    if (autoSave) {
+    if (autoSave && flowConfig) {
       const { nodeInternals, edges } = store.getState();
       const nodes = Array.from(nodeInternals).map(([, node]) => node);
       handleUserInputSave({
         tradingModeKey: strategyFlowMakerName,
-        config: currentTentaclesTradingConfig,
+        flowConfig,
         nodes,
         edges,
         setIsSaving,
       });
     }
-  }, [
-    autoSave,
-    currentTentaclesTradingConfig,
-    handleUserInputSave,
-    setIsSaving,
-    store,
-  ]);
+  }, [autoSave, flowConfig, handleUserInputSave, setIsSaving, store]);
 
   return useMemo(() => {
     return (
@@ -164,7 +159,7 @@ export function NodeHandle({
   title: string;
   color: string;
   position: Position;
-  isConnectable: number | boolean;
+  isConnectable: number | boolean | undefined;
   direction: HandleType;
   handleDescriptionStyle?: CSSProperties;
 }) {

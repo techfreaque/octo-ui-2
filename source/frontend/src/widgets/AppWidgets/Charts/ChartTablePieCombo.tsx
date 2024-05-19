@@ -30,7 +30,8 @@ import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvide
 import { ChartLocationType } from "./MainCharts/Plotly";
 
 export type ChartDataType = Plotly.Data & {
-  backtesting_id?;
+  backtesting_id?: string;
+  optimizer_id?: string;
   name: string;
 };
 
@@ -46,7 +47,13 @@ export type ChartType =
   | "runAnalysis"
   | "dictionary";
 
-export const chartTypes: { [key: string]: ChartType } = {
+export const chartTypes: {
+  CHART: ChartType;
+  TABLE: ChartType;
+  PIE: ChartType;
+  STATS: ChartType;
+  RUN_ANALYSIS: ChartType;
+} = {
   CHART: "chart",
   TABLE: "table",
   PIE: "pie",
@@ -58,7 +65,11 @@ export function ChartTypeSelector() {
   const updateChartType = useUpdateChartTypeContext();
   const chartType = useChartTypeContext();
 
-  const _chartTypes = [
+  const _chartTypes: {
+    label: JSX.Element;
+    toolTipText: JSX.Element;
+    key: ChartType;
+  }[] = [
     {
       label: (
         <AntIconByReactFunc
@@ -184,5 +195,5 @@ export default function ChartTablePieCombo({
         />
       )
     );
-  }
+  } else return <></>;
 }

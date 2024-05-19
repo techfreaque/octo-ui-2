@@ -39,19 +39,26 @@ export default function AntTable<
   size,
   header,
   onChange,
+  hiddenColumns,
+  scrollWidth,
+  bordered,
 }: {
   columns: TAntTableColumnType[];
   data: TAntTableDataType[];
   maxWidth?: string;
   paginationSize?: number;
+  scrollWidth?: string;
   expandable?: AntTableExpandableConfig<TAntTableDataType>;
   selectedRowKeys?: string[] | undefined;
+  bordered?: boolean;
   setSelectedRowKeys?:
     | Dispatch<SetStateAction<string[] | undefined>>
-    | undefined;
+    | undefined
+    | ((selectedRowKeys: string[]) => void);
   onChange?: (currentData: TAntTableDataType[]) => void;
   size?: SizeType;
   header?: JSX.Element | undefined;
+  hiddenColumns?: string[];
 }) {
   const searchInput = useRef<InputRef>(null);
   function formatColumns(
@@ -64,6 +71,9 @@ export default function AntTable<
           ...column,
           sorter: getSorter<TAntTableDataType, TAntTableColumnType>(column),
           ...getColumnSearchProps(column.title, searchInput),
+          hidden: hiddenColumns
+            ? hiddenColumns.includes(column.key)
+            : undefined,
         };
       }
       return {
@@ -76,6 +86,7 @@ export default function AntTable<
               ),
             }
           : {}),
+        hidden: hiddenColumns ? hiddenColumns.includes(column.key) : undefined,
         sorter: getSorter<TAntTableDataType, TAntTableColumnType>(column),
       };
     });
@@ -107,11 +118,18 @@ export default function AntTable<
     >
       <Table
         columns={_columns}
-        scroll={{}}
+        scroll={
+          scrollWidth
+            ? {
+                x: scrollWidth,
+              }
+            : undefined
+        }
         {...(expandable ? { expandable } : {})}
         style={{
-          width: "100%",
+          width: "auto",
         }}
+        bordered={bordered}
         dataSource={_data}
         sticky={true}
         onChange={handleTableChange}
@@ -142,7 +160,9 @@ export default function AntTable<
             }
           : {})}
         pagination={
-          _data.length > paginationSize ? { position: ["bottomLeft"] } : false
+          _data.length > paginationSize
+            ? { position: ["bottomLeft"], pageSize: paginationSize }
+            : false
         }
       />
     </div>
@@ -246,7 +266,9 @@ function getSorter<
         const sortedPropB = propB.slice().sort();
 
         for (let i = 0; i < sortedPropA.length && i < sortedPropB.length; i++) {
-          const comparisonResult = sortedPropA[i].localeCompare(sortedPropB[i]);
+          const comparisonResult = sortedPropB[i]
+            ? sortedPropA?.[i]?.localeCompare(sortedPropB[i] as string)
+            : 0;
           if (comparisonResult !== 0) {
             return comparisonResult;
           }
@@ -297,8 +319,9 @@ function filterData<
       if (!filter) {
         return true;
       }
-      if (columnsByKey[columnId]?.dfilter) {
-        return columnsByKey[columnId].dfilter?.(item, filter);
+      const dfilter = columnsByKey[columnId]?.dfilter;
+      if (dfilter) {
+        return dfilter?.(item, filter);
       }
       if (columnsByKey[columnId]?.filters) {
         return (
@@ -395,7 +418,7 @@ export interface AntTableColumnType<
   key: string;
   // dataIndex to use another column to sort / filter
   dataIndex?: string;
-  width?: string;
+  width?: number;
   dsorter?:
     | ((a: TAntTableDataType, b: TAntTableDataType) => number)
     | "string"
@@ -410,6 +433,9 @@ export interface AntTableColumnType<
   children?: AntTableColumnType<TAntTableDataType>[];
   sortDirections?: ["descend", "ascend"];
   disableSearch?: boolean;
+  render?:
+    | ((value: any, record: TAntTableDataType, index: number) => JSX.Element)
+    | undefined;
   dfilter?: (
     item: TAntTableDataType,
     symbolValueFilter: FilterValue

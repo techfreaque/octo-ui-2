@@ -49,11 +49,14 @@ export type ProfileType = {
     avatar: string;
     name: string;
     description: string;
+    read_only?: boolean;
   };
   config: {
     "crypto-currencies": ConfigSymbolsType;
     "trader-simulator": {
-      "starting-portfolio";
+      "starting-portfolio": {
+        [currency: string]: number;
+      };
       enabled: boolean;
       fees: {
         maker: number;
@@ -69,6 +72,12 @@ export type ProfileType = {
     };
   };
 };
+
+export type ProfileRootPathType =
+  | "crypto-currencies"
+  | "trader-simulator"
+  | "trading"
+  | "trader";
 
 export type BotInfoType = {
   octobot_project: string;
@@ -91,7 +100,7 @@ export type BotInfoType = {
   };
   optimization_campaign: string;
   live_id: number;
-  data_files;
+  data_files: DataFilesType;
   installed_blocks_info?: BlockInfoType;
   exchange_id?: string;
   available_api_actions: ApiActionsType;
@@ -101,6 +110,23 @@ export type BotInfoType = {
   should_stop_training?: boolean;
   real_time_strategies_active?: boolean;
 };
+
+export type DataFilesType = [
+  string,
+  {
+    candles_length: number;
+    date: string;
+    end_date: string;
+    end_timestamp: number;
+    exchange: string;
+    start_date: string;
+    start_timestamp: number;
+    symbols: string[];
+    time_frames: string[];
+    timestamp: number;
+    type: string;
+  }
+][];
 
 export type IdsByExchangeType = { [exchange: string]: string };
 

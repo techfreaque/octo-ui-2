@@ -117,7 +117,7 @@ export default function ProfileModalButton({
       portfolioCoins.forEach((coin) => {
         const coinKey = `trader-simulator_starting-portfolio_${coin}`;
         if (newPortfolio[coin]) {
-          configUpdate.global_config[coinKey] = newPortfolio[coin];
+          configUpdate.global_config[coinKey] = newPortfolio[coin] || 0;
         } else {
           configUpdate.removed_elements.push(coinKey);
         }

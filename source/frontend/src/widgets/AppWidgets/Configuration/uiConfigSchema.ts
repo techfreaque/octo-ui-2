@@ -1,9 +1,10 @@
 import { CURRENT_BOT_DATA } from "../../../constants/backendConstants";
 import { UiConfigKeyType } from "../../../context/config/UiConfigProvider";
+import { DataFilesType } from "../../../context/data/BotInfoProvider";
 
 export function getUiConfigSchema(
   configKey: UiConfigKeyType,
-  dataFiles,
+  dataFiles: DataFilesType | undefined,
   currentSymbols: string[] | undefined,
   availableExchanges: string[] | undefined
 ) {
@@ -58,7 +59,7 @@ interface UiConfigSubSchemaType {
     uniqueItems?: boolean;
     minItems?: number;
     minimum?: number;
-    default?: string | number | boolean | string[];
+    default?: string | number | boolean | string[] | undefined;
     patternProperties?: {
       [pattern: string]: {
         type: "boolean";
@@ -540,7 +541,7 @@ function _getUiConfigSchema(
                 tags: true,
               },
             },
-            default: [dataFilevalues[0]],
+            default: dataFilevalues[0] ? [dataFilevalues[0]] : undefined,
             title: "Backtest data file(s)",
             description:
               "Currently traded time frame(s) & asset(s) cant be combined with other data files! When using data files, make sure to select all pairs and timeframes that the strategy requires!",
@@ -766,7 +767,7 @@ function _getUiConfigSchema(
                 tags: true,
               },
             },
-            default: [dataFilevalues[0]],
+            default: dataFilevalues[0] ? [dataFilevalues[0]] : undefined,
             title: "Backtest data file(s)",
             description:
               "Currently traded time frame(s) & asset(s) cant be combined with other data files! When using data files, make sure to select all pairs and timeframes that the strategy requires!",

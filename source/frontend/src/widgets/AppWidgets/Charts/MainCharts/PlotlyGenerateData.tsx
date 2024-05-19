@@ -8,7 +8,7 @@ import {
   PlotSourceType,
 } from "../../../../constants/backendConstants";
 import { UiConfigType } from "../../../../context/config/UiConfigProvider";
-import { ChartsDataType } from "../ChartTablePieCombo";
+import { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
 import {
   PlotlyAxisLayout,
   PlotlyLayoutsType,
@@ -26,6 +26,7 @@ import {
   PlottedElementBacktestingNameType,
 } from "../../../../context/data/BotPlottedElementsProvider";
 import { ChartLocationType, allChartLocations } from "./Plotly";
+import { objectEntries } from "../../../../helpers/helpers";
 
 type ChartsInfoType = {
   maxRange: {
@@ -74,7 +75,7 @@ export function setPlotData(
     chartsInfo.maxRange.start && formatAsRangeTime(chartsInfo.maxRange.start);
   const end =
     chartsInfo.maxRange.end && formatAsRangeTime(chartsInfo.maxRange.end);
-  Object.entries(layouts).forEach(([thisChartLocation, layout]) => {
+  objectEntries(layouts).forEach(([thisChartLocation, layout]) => {
     if (chartsInfo.chartsWithData?.[thisChartLocation]) {
       if (start && end) {
         const xaxis = layout?.xaxis;
@@ -84,12 +85,15 @@ export function setPlotData(
         }
       }
       setLayouts[thisChartLocation](layout);
-      plotDataToStore[thisChartLocation] = plotData[thisChartLocation];
+      plotDataToStore[thisChartLocation] = plotData[
+        thisChartLocation
+      ] as ChartDataType[];
       hasCharts = true;
       return;
     } else if (
       thisChartLocation === "pie-chart" &&
-      plotData[thisChartLocation]
+      plotData[thisChartLocation] &&
+      layout
     ) {
       setLayouts[thisChartLocation]({
         ...layout,
@@ -98,7 +102,9 @@ export function setPlotData(
           columns: 2,
         },
       });
-      plotDataToStore[thisChartLocation] = plotData[thisChartLocation];
+      plotDataToStore[thisChartLocation] = plotData[
+        thisChartLocation
+      ] as ChartDataType[];
       hasCharts = true;
     } else {
       setLayouts[thisChartLocation](undefined);
@@ -176,35 +182,37 @@ function formatPlottedData(
   const plotData: PlottedDataType = {};
   const layouts: PlotlyLayoutsType = {};
   plottedElements &&
-    Object.keys(plottedElements).forEach((liveOrBacktest) => {
-      if (plottedElements?.[liveOrBacktest]) {
-        if (liveOrBacktest === "backtesting") {
-          formatPlottedBacktestingData({
-            plottedBacktestingElements: plottedElements[
-              liveOrBacktest
-            ] as PlottedElementsType<PlottedElementBacktestingNameType>,
-            uiConfig,
-            visibleTimeframes,
-            visiblePairs,
-            chartsInfo,
-            layouts,
-            plotData,
-          });
-        } else if (liveOrBacktest === "live") {
-          formatPlottedLiveData({
-            plottedLiveElements: plottedElements[
-              liveOrBacktest
-            ] as PlottedElementsType<PlottedElementLiveNameType>,
-            uiConfig,
-            visibleTimeframes,
-            visiblePairs,
-            chartsInfo,
-            layouts,
-            plotData,
-          });
+    Object.entries(plottedElements).forEach(
+      ([liveOrBacktest, plottedLiveOrBacktestingElements]) => {
+        if (plottedLiveOrBacktestingElements) {
+          if (liveOrBacktest === "backtesting") {
+            formatPlottedBacktestingData({
+              plottedBacktestingElements: plottedLiveOrBacktestingElements as PlottedElementsType<
+                PlottedElementBacktestingNameType
+              >,
+              uiConfig,
+              visibleTimeframes,
+              visiblePairs,
+              chartsInfo,
+              layouts,
+              plotData,
+            });
+          } else if (liveOrBacktest === "live") {
+            formatPlottedLiveData({
+              plottedLiveElements: plottedLiveOrBacktestingElements as PlottedElementsType<
+                PlottedElementLiveNameType
+              >,
+              uiConfig,
+              visibleTimeframes,
+              visiblePairs,
+              chartsInfo,
+              layouts,
+              plotData,
+            });
+          }
         }
       }
-    });
+    );
   return { plotData, layouts };
 }
 
@@ -310,77 +318,79 @@ function formatSubData({
   chartsInfo: ChartsInfoType;
 }) {
   subElements &&
-    Object.keys(subElements).forEach((pair) => {
+    Object.entries(subElements).forEach(([pair, pairElements]) => {
       if (pair === visiblePairs) {
-        subElements[pair] &&
-          Object.keys(subElements[pair]).forEach((timeframe) => {
-            if (timeframe !== visibleTimeframes) {
-              return;
-            }
-            const chartIdentifier = backtestingId
-              ? optimizerId
-                ? `${backtestingId}:${optimizerId} - ${optimizerCampaign}`
-                : `${backtestingId} - ${optimizerCampaign}`
-              : `live ${liveId}`;
-            const thisData = subElements[pair][timeframe]?.data?.sub_elements;
-            thisData?.forEach((sub_element) => {
-              const chartLocation: ChartLocationType | "table" =
-                sub_element.name;
-              if (
-                chartLocation === "table" ||
-                !allChartLocations.includes(chartLocation) ||
-                sub_element.type !== "chart"
-              ) {
+        pairElements &&
+          Object.entries(pairElements).forEach(
+            ([timeframe, timeframeElements]) => {
+              if (timeframe !== visibleTimeframes) {
                 return;
               }
-              if (!plotData[chartLocation]) {
-                plotData[chartLocation] = [];
-              }
-              const layout = getOrGenerateLayout(
-                layouts,
-                uiConfig,
-                chartLocation
-              );
-              let yAxisId: XAxisIdType = 1;
-              let xAxisId: AxisIdType = 1;
-              sub_element?.data?.elements?.forEach((chartDetails) => {
-                if (chartDetails.own_yaxis && yAxisId < 4) {
-                  yAxisId++;
+              const chartIdentifier = backtestingId
+                ? optimizerId
+                  ? `${backtestingId}:${optimizerId} - ${optimizerCampaign}`
+                  : `${backtestingId} - ${optimizerCampaign}`
+                : `live ${liveId}`;
+              const thisData = timeframeElements?.data?.sub_elements;
+              thisData?.forEach((sub_element) => {
+                const chartLocation: ChartLocationType | "table" =
+                  sub_element.name;
+                if (
+                  chartLocation === "table" ||
+                  !allChartLocations.includes(chartLocation) ||
+                  sub_element.type !== "chart"
+                ) {
+                  return;
                 }
-                if (chartDetails.own_xaxis && xAxisId < 2) {
-                  xAxisId++;
+                if (!plotData[chartLocation]) {
+                  plotData[chartLocation] = [];
                 }
-                createAxisIfNotExists(
-                  "y",
-                  yAxisId,
-                  layout,
+                const layout = getOrGenerateLayout(
+                  layouts,
                   uiConfig,
-                  chartDetails
+                  chartLocation
                 );
-                createAxisIfNotExists(
-                  "x",
-                  xAxisId,
-                  layout,
-                  uiConfig,
-                  chartDetails
-                );
-                _createCharts({
-                  chartDetails,
-                  plotData,
-                  yAxisId,
-                  xAxisId,
-                  backtestingId,
-                  optimizerId,
-                  optimizerCampaign,
-                  chartIdentifier,
-                  uiConfig,
-                  chartsInfo,
-                  chartLocation,
+                let yAxisId: XAxisIdType = 1;
+                let xAxisId: AxisIdType = 1;
+                sub_element?.data?.elements?.forEach((chartDetails) => {
+                  if (chartDetails.own_yaxis && yAxisId < 4) {
+                    yAxisId++;
+                  }
+                  if (chartDetails.own_xaxis && xAxisId < 2) {
+                    xAxisId++;
+                  }
+                  createAxisIfNotExists(
+                    "y",
+                    yAxisId,
+                    layout,
+                    uiConfig,
+                    chartDetails
+                  );
+                  createAxisIfNotExists(
+                    "x",
+                    xAxisId,
+                    layout,
+                    uiConfig,
+                    chartDetails
+                  );
+                  _createCharts({
+                    chartDetails,
+                    plotData,
+                    yAxisId,
+                    xAxisId,
+                    backtestingId,
+                    optimizerId,
+                    optimizerCampaign,
+                    chartIdentifier,
+                    uiConfig,
+                    chartsInfo,
+                    chartLocation,
+                  });
                 });
+                setLayout(layouts, layout, chartLocation);
               });
-              setLayout(layouts, layout, chartLocation);
-            });
-          });
+            }
+          );
       }
     });
 }
@@ -429,7 +439,7 @@ function _createCharts({
     displayCandlesAsLines(chartDetails.x.length, uiConfig)
   ) {
     chartDetails.kind = "scattergl";
-    chartDetails.mode = "line";
+    chartDetails.mode = "lines";
     const originTitle = chartDetails.title;
     const displayedCandlesSources = getDisplayedCandlesLinesSources(uiConfig);
     CANDLES_PLOT_SOURCES.forEach((plotSource) => {
@@ -550,8 +560,8 @@ type ChartedElementType = {
     };
   };
   line?: {
-    shape: string;
-    color: string;
+    shape: string | undefined;
+    color: string | undefined;
   };
   xaxis?: string;
   yaxis?: string;
@@ -559,7 +569,7 @@ type ChartedElementType = {
     [attribute in MarkerAttributesType]?: any;
   };
 } & {
-  [sourceType in PlotSourceType]?: any;
+  [sourceType in PlotSourceType]?: null | number[];
 };
 
 function _createChartedElement({

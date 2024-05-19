@@ -1,9 +1,30 @@
 import { Grid } from "@mui/material";
 import { AutoComplete, Radio, Typography } from "antd";
 import { Dispatch, SetStateAction, useState } from "react";
-import { ProfileType } from "../../../../context/data/BotInfoProvider";
+import {
+  ProfileRootPathType,
+  ProfileType,
+} from "../../../../context/data/BotInfoProvider";
 
-const tradingTypes = {
+type TradingTypeValueType =
+  | "realTrading"
+  | "simulatedTrading"
+  | "tradingDisabled";
+
+const tradingTypes: {
+  realTrading: {
+    label: string;
+    value: TradingTypeValueType;
+  };
+  simulatedTrading: {
+    label: string;
+    value: TradingTypeValueType;
+  };
+  tradingDisabled: {
+    label: string;
+    value: TradingTypeValueType;
+  };
+} = {
   realTrading: {
     label: "Real Trading",
     value: "realTrading",
@@ -17,22 +38,70 @@ const tradingTypes = {
     value: "tradingDisabled",
   },
 };
-const tradingTypeStr = "tradingType";
 
 export function onProfileSettingChange(
   setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>,
-  value: number | string,
-  rootPath: string,
-  subPath?: string,
-  subSubPath?: string,
-  subSubSubPath?: string
+  value: number | string | boolean,
+  rootPath: ProfileRootPathType,
+  subPath: string,
+  subSubPath?: string
 ) {
   setNewProfileSettings((prevSettings) => {
     const newSettings = {
       ...prevSettings,
     };
 
-    if (tradingTypeStr === rootPath) {
+    if (newSettings.config[rootPath]) {
+      if (subSubPath) {
+        if ((newSettings.config[rootPath] as any)[subPath]) {
+          (newSettings.config[rootPath] as any)[subPath][subSubPath] = value;
+        } else {
+          (newSettings.config[rootPath] as any)[subPath] = {
+            [subSubPath]: value,
+          };
+        }
+      } else {
+        (newSettings.config[rootPath] as any)[subPath] = value;
+      }
+    } else if (subSubPath) {
+      newSettings.config[rootPath] = {
+        [subPath]: {
+          [subSubPath]: value,
+        },
+      } as any;
+    } else {
+      newSettings.config[rootPath] = {
+        [subPath]: value,
+      } as any;
+    }
+
+    return newSettings;
+  });
+}
+
+export function ProfileTradingTypeSettings({
+  setNewProfileSettings,
+  newProfileSettings,
+  isCurrentProfile,
+}: {
+  setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
+  newProfileSettings: ProfileType;
+  isCurrentProfile: boolean | undefined;
+}) {
+  const isRealTrading = newProfileSettings?.config?.trader?.enabled;
+  const isSimulatedTrading =
+    newProfileSettings?.config?.["trader-simulator"].enabled;
+  const currentTradingType = isRealTrading
+    ? tradingTypes.realTrading.value
+    : isSimulatedTrading
+    ? tradingTypes.simulatedTrading.value
+    : tradingTypes.tradingDisabled.value;
+
+  function handleTradingTypeChange(value: TradingTypeValueType) {
+    setNewProfileSettings((prevSettings) => {
+      const newSettings = {
+        ...prevSettings,
+      };
       if (tradingTypes.realTrading.value === value) {
         newSettings.config.trader.enabled = true;
         newSettings.config["trader-simulator"].enabled = false;
@@ -43,57 +112,9 @@ export function onProfileSettingChange(
         newSettings.config.trader.enabled = false;
         newSettings.config["trader-simulator"].enabled = false;
       }
-    } else {
-      if (!subPath) {
-        throw new Error("subPath isrequired to save profile settings");
-      }
-      if (newSettings.config[rootPath]) {
-        if (subSubSubPath && subSubPath) {
-          newSettings.config[rootPath][subPath][subSubPath][
-            subSubSubPath
-          ] = value;
-        } else if (subSubPath) {
-          newSettings.config[rootPath][subPath][subSubPath] = value;
-        } else {
-          newSettings.config[rootPath][subPath] = value;
-        }
-      } else if (subSubSubPath && subSubPath) {
-        newSettings.config[rootPath] = {
-          [subPath]: {
-            [subSubPath]: {
-              [subSubSubPath]: value,
-            },
-          },
-        };
-      } else if (subSubPath) {
-        newSettings.config[rootPath] = {
-          [subPath]: {
-            [subSubPath]: value,
-          },
-        };
-      } else {
-        newSettings.config[rootPath] = {
-          [subPath]: value,
-        };
-      }
-    }
-    return newSettings;
-  });
-}
-
-export function ProfileTradingTypeSettings({
-  setNewProfileSettings,
-  newProfileSettings,
-  isCurrentProfile,
-}) {
-  const isRealTrading = newProfileSettings?.config?.trader?.enabled;
-  const isSimulatedTrading =
-    newProfileSettings?.config?.["trader-simulator"].enabled;
-  const currentTradingType = isRealTrading
-    ? tradingTypes.realTrading.value
-    : isSimulatedTrading
-    ? tradingTypes.simulatedTrading.value
-    : tradingTypes.tradingDisabled.value;
+      return newSettings;
+    });
+  }
 
   return (
     <Grid item xs={12}>
@@ -105,13 +126,7 @@ export function ProfileTradingTypeSettings({
           tradingTypes.simulatedTrading,
           tradingTypes.tradingDisabled,
         ]}
-        onChange={(event) =>
-          onProfileSettingChange(
-            setNewProfileSettings,
-            event.target.value,
-            tradingTypeStr
-          )
-        }
+        onChange={(event) => handleTradingTypeChange(event.target.value)}
         value={currentTradingType}
         optionType="button"
       />
@@ -124,9 +139,9 @@ export function ProfileReferenceMarketSettings({
   setNewProfileSettings,
   isCurrentProfile,
 }: {
-  newProfileSettings;
-  setNewProfileSettings;
-  isCurrentProfile;
+  newProfileSettings: ProfileType;
+  setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
+  isCurrentProfile: boolean;
 }) {
   const refMarket = newProfileSettings?.config?.trading?.["reference-market"];
   // TODO replace with all available

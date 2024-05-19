@@ -71,17 +71,13 @@ export default function OptimizerConfigForm() {
       if (!newConfig.optimizer_inputs.user_inputs) {
         newConfig.optimizer_inputs.user_inputs = {};
       }
-      if (!newConfig.optimizer_inputs.user_inputs[identifier]) {
-        newConfig.optimizer_inputs.user_inputs[identifier] = {
-          tentacle: tentacleName,
-          type,
-          user_input: userInputName,
-          value,
-          enabled,
-        };
-      }
-      newConfig.optimizer_inputs.user_inputs[identifier].enabled = enabled;
-      newConfig.optimizer_inputs.user_inputs[identifier].value = value;
+      newConfig.optimizer_inputs.user_inputs[identifier] = {
+        tentacle: tentacleName,
+        type,
+        user_input: userInputName,
+        value,
+        enabled,
+      };
       return newConfig;
     });
   }

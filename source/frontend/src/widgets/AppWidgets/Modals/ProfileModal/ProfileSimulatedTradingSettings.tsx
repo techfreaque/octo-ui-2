@@ -101,7 +101,11 @@ export function ProfilePortfolioSettings({
   setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
   isCurrentProfile: boolean | undefined;
 }) {
-  const data = [
+  const data: {
+    key: string;
+    coin: string;
+    value: number | undefined;
+  }[] = [
     ...Object.keys(
       newProfileSettings.config["trader-simulator"]["starting-portfolio"]
     ).map((coin) => {
@@ -116,6 +120,8 @@ export function ProfilePortfolioSettings({
     }),
     {
       key: addKey,
+      coin: "",
+      value: undefined,
     },
   ];
   return (
@@ -176,7 +182,7 @@ export function ProfileAddCoinSettings({
     coin?: string;
     value?: number;
   }>({});
-  function handleCoinToAdd(key, newValue) {
+  function handleCoinToAdd(key: "coin" | "value", newValue: string | number) {
     setCoinToSet((prevValues) => ({
       ...prevValues,
       [key]: newValue,
@@ -188,7 +194,7 @@ export function ProfileAddCoinSettings({
         ...prevSettings,
       };
       newSettings.config["trader-simulator"]["starting-portfolio"][
-        coinToSet.coin
+        `${coinToSet.coin}`
       ] = coinToSet.value || 0;
       return newSettings;
     });
@@ -218,8 +224,7 @@ export function ProfileAddCoinSettings({
           min={0}
           step={0.0000001}
           placeholder="Asset amount"
-          onChange={(newValue) => handleCoinToAdd("value", Number(newValue))}
-          stringMode
+          onChange={(newValue) => handleCoinToAdd("value", newValue || 0)}
         />
         <Button
           type="primary"
@@ -243,7 +248,11 @@ export function ProfilePortfolioCoinSettings({
   setNewProfileSettings,
   isCurrentProfile,
 }: {
-  item;
+  item: {
+    key: string;
+    coin: string;
+    value: number | undefined;
+  };
   newProfileSettings: ProfileType;
   setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>;
   isCurrentProfile: boolean | undefined;
@@ -267,7 +276,9 @@ export function ProfilePortfolioCoinSettings({
       newSettings.config["trader-simulator"]["starting-portfolio"][
         value.toUpperCase()
       ] =
-        newSettings.config["trader-simulator"]["starting-portfolio"][item.coin];
+        newSettings.config["trader-simulator"]["starting-portfolio"][
+          item.coin
+        ] || 0;
       delete newSettings.config["trader-simulator"]["starting-portfolio"][
         item.coin
       ];
@@ -298,7 +309,7 @@ export function ProfilePortfolioCoinSettings({
           value={
             newProfileSettings.config["trader-simulator"]["starting-portfolio"][
               item.coin
-            ]
+            ] || null
           }
           disabled={!isCurrentProfile}
           addonAfter={item.coin}

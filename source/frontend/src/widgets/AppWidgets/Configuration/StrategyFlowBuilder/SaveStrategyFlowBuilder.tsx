@@ -1,8 +1,12 @@
 import { ReloadOutlined } from "@ant-design/icons";
 import {
-  TentaclesConfigsRootType,
+  FlowEdgeConfigType,
+  TentaclesConfigByTentacleType,
+  TentaclesConfigValuesType,
+  tentacleConfigTypes,
   useIsSavingTentaclesConfigContext,
   useSaveTentaclesConfig,
+  useTentaclesConfigContext,
   useUpdateIsSavingTentaclesConfigContext,
 } from "../../../../context/config/TentaclesConfigProvider";
 import { useIsBotOnlineContext } from "../../../../context/data/IsBotOnlineProvider";
@@ -11,7 +15,7 @@ import {
   flowBuilderStorageKey,
   getNodeConfigKey,
 } from "./CustomNodes/StrategyBlockNode";
-import { useCallback, useMemo } from "react";
+import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
 import { useIsDemoMode } from "../../../../context/data/BotInfoProvider";
 import {
   useSaveUiConfig,
@@ -26,16 +30,21 @@ import {
 } from "../../../../api/fetchAndStoreFromBot";
 import { Edge, Node } from "reactflow";
 import { EdgeData, NodeData } from "./StrategyFlowBuilder";
-import { StrategyFlowMakerNameType } from "../TentaclesConfig";
+import {
+  StrategyFlowMakerNameType,
+  handleHiddenUserInputs,
+  strategyFlowMakerName,
+} from "../TentaclesConfig";
+import { useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../../context/data/BotPlottedElementsProvider";
 
 export default function SaveStrategyFlowBuilderSettings({
   tradingModeKey,
-  config,
+  flowConfig,
   nodes,
   edges,
 }: {
   tradingModeKey: StrategyFlowMakerNameType;
-  config: TentaclesConfigsRootType;
+  flowConfig: TentaclesConfigValuesType;
   nodes: Node<NodeData>[];
   edges: Edge<EdgeData>[];
 }) {
@@ -94,7 +103,7 @@ export default function SaveStrategyFlowBuilderSettings({
               onClick={() =>
                 handleUserInputSave({
                   tradingModeKey,
-                  config,
+                  flowConfig,
                   nodes,
                   edges,
                   setIsSaving,
@@ -117,7 +126,7 @@ export default function SaveStrategyFlowBuilderSettings({
             onClick={() =>
               handleUserInputSave({
                 tradingModeKey,
-                config,
+                flowConfig,
                 nodes,
                 edges,
                 setIsSaving,
@@ -139,8 +148,8 @@ export default function SaveStrategyFlowBuilderSettings({
       </div>
     );
   }, [
-    config,
     edges,
+    flowConfig,
     handleAutoSaveSettingChange,
     handleUserInputSave,
     isDemo,
@@ -161,6 +170,23 @@ type JsonEditorWindow = Window & {
 
 declare const window: JsonEditorWindow;
 
+export function useGetFlowConfig(): TentaclesConfigValuesType | undefined {
+  const currentTentaclesConfig = useTentaclesConfigContext();
+  const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext();
+  return useMemo(() => {
+    const currentTentaclesTradingConfig =
+      currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
+    const flowConfig =
+      currentTentaclesTradingConfig?.[strategyFlowMakerName]?.config;
+    currentTentaclesTradingConfig &&
+      handleHiddenUserInputs(
+        currentTentaclesTradingConfig,
+        setHiddenMetadataColumns
+      );
+    return flowConfig;
+  }, [currentTentaclesConfig, setHiddenMetadataColumns]);
+}
+
 export function getNodeEditor(nodeId: string) {
   return window?.[`$${flowBuilderStorageKey}`]?.[nodeId];
 }
@@ -170,7 +196,7 @@ export function useSaveFlowBuilderSettings() {
   return useCallback(
     ({
       tradingModeKey,
-      config,
+      flowConfig,
       nodes,
       edges,
       setIsSaving,
@@ -178,30 +204,31 @@ export function useSaveFlowBuilderSettings() {
       successNotification = false,
     }: {
       tradingModeKey: StrategyFlowMakerNameType;
-      config;
+      flowConfig: TentaclesConfigValuesType;
       nodes: Node<NodeData>[];
       edges: Edge<EdgeData>[];
-      setIsSaving;
+      setIsSaving: Dispatch<SetStateAction<boolean>>;
       reloadPlots?: boolean;
       successNotification?: boolean;
     }) => {
       setIsSaving?.(true);
-      const newConfigs = {};
-      newConfigs[tradingModeKey] = {
-        ...config[tradingModeKey].config,
-      };
-      newConfigs[tradingModeKey].nodes = nodes.reduce((dict, node, index) => {
+      const newConfigs: TentaclesConfigByTentacleType = {};
+      newConfigs[tradingModeKey] = flowConfig;
+      const newConfig = { ...flowConfig };
+      const _nodes: {
+        [nodeId: string]: {};
+      } = {};
+      for (const node of nodes) {
         const editor = getNodeEditor(node.id);
         const settings = editor?.getValue() || {};
-        return (
-          (dict[node.id] = {
-            ...node,
-            [getNodeConfigKey(node.id)]: settings,
-          }),
-          dict
-        );
-      }, {});
-      newConfigs[tradingModeKey].edges = edges;
+        _nodes[node.id] = {
+          ...node,
+          [getNodeConfigKey(node.id)]: settings,
+        };
+      }
+      newConfig.nodes = _nodes;
+      newConfig.edges = edges as FlowEdgeConfigType[];
+      newConfigs[tradingModeKey] = newConfig;
       saveTentaclesConfig(
         newConfigs,
         setIsSaving,

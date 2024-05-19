@@ -29,9 +29,7 @@ import {
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
-import {
-  minReleaseNotesLength,
-} from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppActions/UpDownloadApp/UploadAppForm";
+import { minReleaseNotesLength } from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppActions/UpDownloadApp/UploadAppForm";
 import { strategyName } from "../../widgets/AppWidgets/StrategyConfigurator/storeConstants";
 import {
   StorePayments,
@@ -43,6 +41,7 @@ import {
   VerifiedDownloadInfo,
   VerifiedUploadInfo,
 } from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppCard";
+import { AffiliateDashboardData } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/AffiliateDashboard";
 
 export type StrategyModeCategoryType = "Strategy Mode";
 export type StrategyCategoryType = "Strategy";
@@ -373,7 +372,10 @@ export const useUploadToAppStore = () => {
             });
             // saveAppStoreData(msg.data);
           };
-          const onSucces = (response) => {
+          const onSucces = (response: {
+            success: boolean;
+            message: string;
+          }) => {
             if (response.success) {
               setIsloading(false);
               setOpen(false);
@@ -396,7 +398,7 @@ export const useUploadToAppStore = () => {
             backendRoutes.appStoreUpload +
             `/${appDetails.categories[0]}/${appDetails.package_id}`;
           if (uploadInfo.includePackage) {
-            const handleAppUpload = (appFile) => {
+            const handleAppUpload = (appFile: Blob) => {
               sendFile({
                 url: uploadUrl,
                 file: appFile,
@@ -614,13 +616,10 @@ export const useAddToAppStoreCart = () => {
           const newCart = {
             ...prevCart,
           };
-          if (newCart?.[app.origin_package]) {
-            newCart[app.origin_package][app.package_id] = app;
-          } else {
-            newCart[app.origin_package] = {
-              [app.package_id]: app,
-            };
-          }
+          newCart[app.origin_package] = {
+            ...newCart[app.origin_package],
+            [app.package_id]: app,
+          };
           localStorage.setItem("cart", JSON.stringify(newCart));
           return newCart;
         });
@@ -663,7 +662,10 @@ export const useCreatePaymentFromAppStoreCart = () => {
   const appStoreUser = useAppStoreUserContext();
   const updateAppStoreUser = useUpdateLoginToken();
   return useCallback(
-    (origin_packages, setIsloading?) => {
+    (
+      origin_packages: string[],
+      setIsloading?: Dispatch<SetStateAction<boolean>>
+    ) => {
       setIsloading?.(true);
       function errorCallback(payload: errorResponseCallBackParams) {
         setIsloading?.(false);
@@ -832,7 +834,11 @@ export const useGetAffiliateDashboard = () => {
   const appStoreDomain = useAppStoreDomainContext();
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
-    (setAppStoreDashboardData) => {
+    (
+      setAppStoreDashboardData: Dispatch<
+        SetStateAction<AffiliateDashboardData | undefined>
+      >
+    ) => {
       function errorCallback() {
         // createNotification({title: "Failed to load Users", "warning"})
       }
@@ -986,7 +992,7 @@ export const useInstallAppPackage = () => {
     (
       downloadInfo: VerifiedDownloadInfo,
       setIsloading: Dispatch<SetStateAction<boolean>>,
-      setOpen: Dispatch<SetStateAction<boolean>>
+      setOpen: (isOpen: boolean) => void
     ) => {
       setIsloading(true);
 

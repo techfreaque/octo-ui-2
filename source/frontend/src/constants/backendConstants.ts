@@ -125,8 +125,13 @@ export const METADATA_HIDDEN_FIELDS = [
   "future_contracts",
   "start_time",
   "end_time",
+  "ref_market",
+  "exchanges",
+  "trading_type",
+  "timestamp",
 ];
-export const METADATA_UNDISPLAYED_FIELDS = ["children"];
+export const METADATA_ADVANCED_HIDDEN_FIELDS = ["user inputs"];
+export const METADATA_UNDISPLAYED_FIELDS = ["user inputs"];
 export const CUSTOM_USER_INPUT_PATH_SEPARATOR = "/";
 export const _INPUT_SEPARATOR = "_------_";
 
@@ -146,7 +151,7 @@ export const DISPLAYED_ELEMENTS_KEY = "displayed_elements";
 export const GRAPHS_KEY = "graphs";
 
 export type CanldesPlotSourceType = "open" | "high" | "low" | "close";
-export type PlotSourceType = "y" | "z" | "volume" | CanldesPlotSourceType;
+export type PlotSourceType = "x" | "y" | "z" | "volume" | CanldesPlotSourceType;
 
 export const CANDLES_PLOT_SOURCES: CanldesPlotSourceType[] = [
   "open",

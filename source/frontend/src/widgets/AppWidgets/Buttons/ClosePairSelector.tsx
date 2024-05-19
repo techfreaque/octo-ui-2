@@ -46,7 +46,7 @@ export default function ClosePairSelector() {
           </Tooltip>
         </span>
       );
-    } else <></>;
+    } else return <></>;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairSelectorMenuOpen?.open]);
 }

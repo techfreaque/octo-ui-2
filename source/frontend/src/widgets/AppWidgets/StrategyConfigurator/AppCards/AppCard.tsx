@@ -11,13 +11,14 @@ import {
 import {
   AppStoreAppType,
   AppStoreVersionTagType,
+  AppStoreVersionTypeType,
   StoreCategoryType,
 } from "../../../../context/data/AppStoreDataProvider";
 
 export interface UploadInfo {
   open?: boolean;
   includePackage?: boolean;
-  version_type?: AppStoreVersionTagType;
+  version_type?: AppStoreVersionTypeType;
   version_tag?: AppStoreVersionTagType;
   price?: number;
   release_notes?: string;
@@ -25,7 +26,7 @@ export interface UploadInfo {
 
 export interface VerifiedUploadInfo {
   includePackage: boolean;
-  version_type: AppStoreVersionTagType;
+  version_type: AppStoreVersionTypeType;
   version_tag: AppStoreVersionTagType;
   price: number;
   release_notes: string;

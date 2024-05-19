@@ -149,7 +149,7 @@ export function createTradingOrBacktestingTab(
   liveOrBacktest: PlottedElementNameType
 ): DataTableSideBarMainItemType {
   return {
-    label: `${
+    title: `${
       liveOrBacktest.charAt(0).toUpperCase() + liveOrBacktest.slice(1)
     } trading`,
     key: liveOrBacktest,
@@ -216,7 +216,7 @@ function _generateTablesAndSidebarItems({
       label = `${element.title} ${campaignName} ${optimizerId} ${runId}`;
     }
     liveOrBacktestingItems.children.push({
-      label,
+      title: label,
       antIcon: element.config?.antIcon,
       faIcon: element.config?.faIcon,
       key: label,
@@ -243,7 +243,7 @@ interface CancelOrderDetailsType {
   cancelCallback: (
     orderIdsToCancel: string[],
     setIsCancelling: Dispatch<SetStateAction<boolean>>,
-    upDateOrders: (isLive?: boolean) => void
+    upDateOrders: () => void
   ) => void;
 }
 
@@ -277,27 +277,29 @@ function TableFromElement({
       header={
         cancelOrdersDetails ? (
           <Tooltip title={cancelOrdersDetails.tooltip}>
-            <AntButton
-              antIconComponent={cancelOrdersDetails.icon}
-              buttonType={
-                isCancelling ? buttonTypes.font : buttonTypes.fontActive
-              }
-              disabled={!somethingSelected}
-              buttonVariant={buttonVariants.text}
-              onClick={
-                somethingSelected
-                  ? () =>
-                      cancelOrdersDetails.cancelCallback(
-                        selectedRecordIds,
-                        setIsCancelling,
-                        updateTable
-                      )
-                  : undefined
-              }
-              spin={isCancelling}
-            >
-              {cancelOrdersDetails.text}
-            </AntButton>
+            <div>
+              <AntButton
+                antIconComponent={cancelOrdersDetails.icon}
+                colorType={
+                  isCancelling ? buttonTypes.font : buttonTypes.fontActive
+                }
+                disabled={!somethingSelected}
+                buttonVariant={buttonVariants.text}
+                onClick={
+                  somethingSelected
+                    ? () =>
+                        cancelOrdersDetails.cancelCallback(
+                          selectedRecordIds,
+                          setIsCancelling,
+                          updateTable
+                        )
+                    : undefined
+                }
+                spin={isCancelling}
+              >
+                {cancelOrdersDetails.text}
+              </AntButton>
+            </div>
           </Tooltip>
         ) : undefined
       }
