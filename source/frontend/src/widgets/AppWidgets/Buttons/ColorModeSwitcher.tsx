@@ -1,12 +1,13 @@
+import { useMemo } from "react";
+import { Trans } from "react-i18next";
+
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import Moon from "../../../components/Icons/Moon";
 import {
   colorModes,
   useToggleColorModeContext,
 } from "../../../context/config/ColorModeProvider";
-import Moon from "../../../components/Icons/Moon";
-import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
-import { Trans } from "react-i18next";
 import { useColorModeContext } from "../../../context/config/ColorModeProvider";
-import { useMemo } from "react";
 
 export default function ColorModeSwitch({ onClick }: { onClick?: () => void }) {
   const colorMode = useColorModeContext();

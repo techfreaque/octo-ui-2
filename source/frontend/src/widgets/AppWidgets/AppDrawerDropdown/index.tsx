@@ -1,7 +1,9 @@
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Menu, MenuItem } from "@mui/material";
+import Link from "antd/es/typography/Link";
 import { useMemo, useState } from "react";
+
 import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider";
@@ -9,7 +11,6 @@ import {
   colorModes,
   useColorModeContext,
 } from "../../../context/config/ColorModeProvider";
-import Link from "antd/es/typography/Link";
 
 export default function AppDrawerDropdown() {
   const botLayout = useBotLayoutContext();
@@ -24,7 +25,7 @@ export default function AppDrawerDropdown() {
   };
   return useMemo(() => {
     return (
-      <div className="my-auto">
+      <div style={{ marginTop: "auto", marginBottom: "auto" }}>
         <Button
           id="appdrawer-button"
           aria-controls={open ? "appdrawer-menu" : undefined}

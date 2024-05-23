@@ -1,12 +1,13 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useEffect,
   Dispatch,
   SetStateAction,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
 import { useCallback } from "react";
+
 import { selectProfile } from "../../api/actions";
 import {
   fetchPackagesData,
@@ -14,12 +15,6 @@ import {
   logoutFromAppStore,
   signupToAppStore,
 } from "../../api/data";
-import { useBotDomainContext } from "../config/BotDomainProvider";
-import {
-  appStoreDomainProduction,
-  isProduction,
-} from "../../constants/frontendConstants";
-import { useBotInfoContext } from "./BotInfoProvider";
 import {
   errorResponseCallBackParams,
   getFile,
@@ -29,19 +24,25 @@ import {
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
+import {
+  appStoreDomainProduction,
+  isProduction,
+} from "../../constants/frontendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { minReleaseNotesLength } from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppActions/UpDownloadApp/UploadAppForm";
-import { strategyName } from "../../widgets/AppWidgets/StrategyConfigurator/storeConstants";
+import {
+  UploadInfo,
+  VerifiedDownloadInfo,
+} from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppCard";
+import { AffiliateDashboardData } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/AffiliateDashboard";
 import {
   StorePayments,
   StoreUsersType,
 } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Backend";
 import { LoginSignupFormType } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
-import {
-  UploadInfo,
-  VerifiedDownloadInfo,
-  VerifiedUploadInfo,
-} from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppCard";
-import { AffiliateDashboardData } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/AffiliateDashboard";
+import { strategyName } from "../../widgets/AppWidgets/StrategyConfigurator/storeConstants";
+import { useBotDomainContext } from "../config/BotDomainProvider";
+import { useBotInfoContext } from "./BotInfoProvider";
 
 export type StrategyModeCategoryType = "Strategy Mode";
 export type StrategyCategoryType = "Strategy";
@@ -124,7 +125,7 @@ const AppStoreDataContext = createContext<AppStoreDataType | undefined>(
 );
 const UpdateAppStoreDataContext = createContext<
   Dispatch<SetStateAction<AppStoreDataType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 export interface AppStorePaymentUrlType {
   paymentUrl: string;
@@ -136,7 +137,7 @@ const AppStorePaymentUrlContext = createContext<
 >(undefined);
 const UpdateAppStorePaymentUrlContext = createContext<
   Dispatch<SetStateAction<AppStorePaymentUrlType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 const defaultDomain = isProduction
   ? appStoreDomainProduction
@@ -145,7 +146,7 @@ const defaultDomain = isProduction
 const AppStoreDomainContext = createContext<string>(defaultDomain);
 const UpdateAppStoreDomainContext = createContext<
   Dispatch<SetStateAction<string>>
->((_value) => {});
+>(emptyValueFunction);
 
 export type AppStoreCartType = {
   [originPackageId: string]: {
@@ -156,11 +157,11 @@ export type AppStoreCartType = {
 const AppStoreCartContext = createContext<AppStoreCartType>({});
 const UpdateAppStoreCartContext = createContext<
   Dispatch<SetStateAction<AppStoreCartType>>
->((_value) => {});
+>(emptyValueFunction);
 const AppStoreCartIsOpenContext = createContext<boolean>(false);
 const UpdateAppStoreCartIsOpenContext = createContext<
   Dispatch<SetStateAction<boolean>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useAppStorePaymentUrlContext = () => {
   return useContext(AppStorePaymentUrlContext);
@@ -202,7 +203,7 @@ const AppStoreUserContext = createContext<AppStoreUserType | undefined>(
 
 const UpdateAppStoreUserContext = createContext<
   Dispatch<SetStateAction<AppStoreUserType | undefined>>
->((_) => {});
+>(emptyValueFunction);
 
 export const useAppStoreUserContext = () => {
   return useContext(AppStoreUserContext);
@@ -258,16 +259,18 @@ const _useFetchAppStoreData = () => {
       }
       function successCallback(payload: successResponseCallBackParams) {
         saveAppStoreData(payload.data?.data);
-        if (notification)
+        if (notification) {
           createNotification({
             title: "Successfully fetched package manager repositories",
           });
+        }
       }
-      function errorCallback(payload: errorResponseCallBackParams) {
-        if (notification)
+      function errorCallback() {
+        if (notification) {
           createNotification({
             title: "Failed to fetch package manager repositories",
           });
+        }
         // TODO add fallback
       }
       sendAndInterpretBotUpdate({
@@ -359,10 +362,32 @@ export const useUploadToAppStore = () => {
       }
       if (validateUploadInfo(uploadInfo)) {
         if (appStoreUser?.token) {
-          const appDetails = {
-            ...app,
+          const appDetails: {
+            package_id: string;
+            title: string;
+            short_description: string | undefined;
+            description: string | undefined;
+            image_url: string | undefined;
+            origin_package: string;
+            requirements: string[] | undefined;
+            price: number | undefined;
+            version_tag: string | undefined;
+            version_type: string | undefined;
+            release_notes: string | undefined;
+            octobot_version: string;
+          } = {
+            package_id: app.package_id,
+            title: app.title,
+            short_description: app.short_description,
+            description: app.description,
+            image_url: app.image_url,
+            origin_package: app.origin_package,
+            requirements: app.requirements,
             octobot_version: botInfo.octobot_version,
-            ...(uploadInfo || {}),
+            version_type: uploadInfo.version_type,
+            version_tag: uploadInfo.version_tag,
+            price: uploadInfo.price,
+            release_notes: uploadInfo.release_notes,
           };
           const onFail = () => {
             setIsloading(false);
@@ -376,13 +401,13 @@ export const useUploadToAppStore = () => {
             success: boolean;
             message: string;
           }) => {
-            if (response.success) {
+            if (response?.success) {
               setIsloading(false);
               setOpen(false);
               createNotification({ title: "Your app is now published" });
               return;
             }
-            if (response.message === "appstore.errors.notLoggedIn") {
+            if (response?.message === "appstore.errors.notLoggedIn") {
               setIsloading(false);
               createNotification({
                 title: "You need to be signed in to upload",
@@ -396,7 +421,7 @@ export const useUploadToAppStore = () => {
           const uploadUrl =
             appStoreDomain +
             backendRoutes.appStoreUpload +
-            `/${appDetails.categories[0]}/${appDetails.package_id}`;
+            `/${app.categories[0]}/${appDetails.package_id}`;
           if (uploadInfo.includePackage) {
             const handleAppUpload = (appFile: Blob) => {
               sendFile({
@@ -404,7 +429,7 @@ export const useUploadToAppStore = () => {
                 file: appFile,
                 fileName: `${appDetails.package_id}.zip`,
                 data: appDetails,
-                onSuccess: onSucces,
+                onSuccess: onSucces as (response: unknown) => void,
                 onError: onFail,
                 withCredentials: true,
                 token: appStoreUser.token,
@@ -421,7 +446,7 @@ export const useUploadToAppStore = () => {
               updateUrl: uploadUrl,
               successCallback: (payload: successResponseCallBackParams) =>
                 onSucces(payload.data),
-              errorCallback: (payload: errorResponseCallBackParams) => onFail(),
+              errorCallback: () => onFail(),
               withCredentials: true,
               token: appStoreUser.token,
             });
@@ -457,7 +482,7 @@ export const useRateAppStore = () => {
       setIsloading: Dispatch<SetStateAction<boolean>>
     ) => {
       setIsloading(true);
-      function errorCallback(payload: errorResponseCallBackParams) {
+      function errorCallback() {
         setIsloading(false);
         createNotification({ title: "Failed to rate app", type: "danger" });
       }
@@ -466,7 +491,7 @@ export const useRateAppStore = () => {
           setIsloading(false);
           createNotification({ title: "App rated successfully" });
         } else {
-          errorCallback(payload);
+          errorCallback();
         }
       }
       if (appStoreUser?.token) {
@@ -495,7 +520,7 @@ export const usePublishApp = () => {
   return useCallback(
     (package_id: string, setIsloading: Dispatch<SetStateAction<boolean>>) => {
       setIsloading(true);
-      function errorCallback(payload: errorResponseCallBackParams) {
+      function errorCallback() {
         setIsloading(false);
         createNotification({ title: "Failed to publish app", type: "danger" });
       }
@@ -504,7 +529,7 @@ export const usePublishApp = () => {
           setIsloading(false);
           createNotification({ title: "App published successfully" });
         } else {
-          errorCallback(payload);
+          errorCallback();
         }
       }
       if (appStoreUser?.token) {
@@ -533,7 +558,7 @@ export const useUnpublishApp = () => {
   return useCallback(
     (package_id: string, setIsloading: Dispatch<SetStateAction<boolean>>) => {
       setIsloading(true);
-      function errorCallback(payload: errorResponseCallBackParams) {
+      function errorCallback() {
         setIsloading(false);
         createNotification({
           title: "Failed to unpublish app",
@@ -545,7 +570,7 @@ export const useUnpublishApp = () => {
           setIsloading(false);
           createNotification({ title: "App unpublished successfully" });
         } else {
-          errorCallback(payload);
+          errorCallback();
         }
       }
       if (appStoreUser?.token) {
@@ -574,7 +599,7 @@ export const useDeleteApp = () => {
   return useCallback(
     (package_id: string, setIsloading: Dispatch<SetStateAction<boolean>>) => {
       setIsloading(true);
-      function errorCallback(payload: errorResponseCallBackParams) {
+      function errorCallback() {
         setIsloading(false);
         createNotification({ title: "Failed to delete app", type: "danger" });
       }
@@ -583,7 +608,7 @@ export const useDeleteApp = () => {
           setIsloading(false);
           createNotification({ title: "App deleted successfully" });
         } else {
-          errorCallback(payload);
+          errorCallback();
         }
       }
       if (appStoreUser?.token) {
@@ -733,7 +758,9 @@ export const useCancelStorePayment = () => {
         fetch(appStorePaymentUrl?.cancelUrl);
         setAppStorePaymentUrl(undefined);
         localStorage.setItem("payment", JSON.stringify({}));
-        if (notification) createNotification({ title: "Payment canceled" });
+        if (notification) {
+          createNotification({ title: "Payment canceled" });
+        }
         return;
       }
       setAppStorePaymentUrl(undefined);
@@ -807,7 +834,7 @@ export const useGetUsers = () => {
     (
       setAppStoreUsers: Dispatch<SetStateAction<StoreUsersType | undefined>>
     ) => {
-      function errorCallback(payload: errorResponseCallBackParams) {
+      function errorCallback() {
         // createNotification({title: "Failed to load Users", "warning"})
       }
       function successCallback(payload: successResponseCallBackParams) {
@@ -925,9 +952,7 @@ export const useIsInAppStoreCart: () => (
   const appStoreCart = useAppStoreCartContext();
   return useCallback(
     (app: AppStoreAppType) => {
-      return app?.origin_package && appStoreCart?.[app.origin_package]
-        ? true
-        : false;
+      return !!(app?.origin_package && appStoreCart?.[app.origin_package]);
     },
     [appStoreCart]
   );
@@ -939,9 +964,10 @@ export const useAppHasPremiumRequirement = () => {
     (app: AppStoreAppType) => {
       if (app.price) {
         return true;
-      } else if (app.requirements) {
-        app.requirements?.forEach((requirement) => {});
       }
+      // else if (app.requirements) {
+      //   app.requirements?.forEach((requirement) => {});
+      // }
       return Boolean(appStoreCart?.[app.origin_package]);
     },
     [appStoreCart]
@@ -996,14 +1022,14 @@ export const useInstallAppPackage = () => {
     ) => {
       setIsloading(true);
 
-      const successCallback = (payload: successResponseCallBackParams) => {
+      const successCallback = () => {
         createNotification({
           title: `Successfully installed ${downloadInfo.appTitle}`,
         });
         setIsloading(false);
         setOpen(false);
       };
-      const errorCallback = (payload: errorResponseCallBackParams) => {
+      const errorCallback = () => {
         createNotification({
           title: `Failed to install ${downloadInfo.appTitle}`,
           type: "danger",
@@ -1037,14 +1063,14 @@ export const useUnInstallAppPackage = () => {
       setOpen: Dispatch<SetStateAction<boolean>>
     ) => {
       setIsloading(true);
-      const successCallback = (payload: successResponseCallBackParams) => {
+      const successCallback = () => {
         createNotification({
           title: `Successfully uninstalled ${app.title}`,
         });
         setIsloading(false);
         setOpen(false);
       };
-      const errorCallback = (payload: errorResponseCallBackParams) => {
+      const errorCallback = () => {
         createNotification({
           title: `Failed to uninstall ${app.title}`,
           type: "danger",
@@ -1074,7 +1100,7 @@ export const useInstallProfile = () => {
       setOpen: (isOpen: boolean) => void
     ) => {
       setIsloading(true);
-      const onFailInstall = (payload: errorResponseCallBackParams) => {
+      const onFailInstall = () => {
         setIsloading(false);
         createNotification({
           title: `Failed to install ${downloadInfo.appTitle}`,
@@ -1104,7 +1130,6 @@ export const useInstallProfile = () => {
             selectProfile(
               botDomain,
               downloadInfo.package_id,
-              downloadInfo.appTitle,
               onSelectSuccess,
               onSelectFail
             );
@@ -1113,7 +1138,7 @@ export const useInstallProfile = () => {
             setOpen(false);
           }
         } else {
-          onFailInstall(payload);
+          onFailInstall();
         }
       };
       sendAndInterpretBotUpdate({

@@ -6,9 +6,10 @@ import {
   useRef,
   useState,
 } from "react";
+
+import { UiLayoutPageLayoutType } from "../../../../context/config/BotLayoutProvider";
 import AppWidgets from "../../../WidgetManagement/RenderAppWidgets";
 import SplitMainContent from "../../SplitMainContent";
-import { UiLayoutPageLayoutType } from "../../../../context/config/BotLayoutProvider";
 
 export default function DefaultLayout({
   headerContent,

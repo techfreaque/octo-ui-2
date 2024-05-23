@@ -1,11 +1,13 @@
+import "./header.css";
+
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
+
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
-import Logo from "../../AppWidgets/other/Logo";
-import "./header.css";
 import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import Logo from "../../AppWidgets/other/Logo";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 export default function Header({
   leftContent,
@@ -31,7 +33,7 @@ export default function Header({
             whiteSpace: "nowrap",
           }}
         >
-          <Nav className="me-auto">
+          <Nav style={{ marginRight: "auto" }}>
             {leftContent && <AppWidgets layout={leftContent} />}
           </Nav>
           <Nav> {rightContent && <AppWidgets layout={rightContent} />} </Nav>

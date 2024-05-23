@@ -1,30 +1,28 @@
 import { Button, Input, Radio, Space, Typography } from "antd";
+import { useState } from "react";
+
 import {
   useAppStoreUserContext,
   useLoginToAppStore,
   useLogoutFromAppStore,
   useSignupToAppStore,
 } from "../../../../context/data/AppStoreDataProvider";
-import { useState } from "react";
 import BackendDashboard from "./Backend";
-import AffiliateDashboard from "./AffiliateDashboard";
 
 export default function LoginManager() {
   const appStoreUser = useAppStoreUserContext();
   const isLoggedIn = Boolean(appStoreUser?.token);
   return (
-    <>
-      <Space
-        direction="vertical"
-        style={{
-          marginBottom: "20px",
-          margin: "auto",
-          maxWidth: "500px",
-        }}
-      >
-        {isLoggedIn ? <ManageAccount /> : <LoginSignup />}
-      </Space>
-    </>
+    <Space
+      direction="vertical"
+      style={{
+        marginBottom: "20px",
+        margin: "auto",
+        maxWidth: "500px",
+      }}
+    >
+      {isLoggedIn ? <ManageAccount /> : <LoginSignup />}
+    </Space>
   );
 }
 

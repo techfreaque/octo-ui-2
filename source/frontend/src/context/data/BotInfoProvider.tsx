@@ -1,34 +1,36 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useCallback,
-  useEffect,
-  useMemo,
   Dispatch,
   SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
 } from "react";
+
 import { fetchBotInfo } from "../../api/data";
+import { emptyValueFunction } from "../../helpers/helpers";
+import { RealTimeStrategyCommandsType } from "../../widgets/AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
+import { BlockInfoType } from "../../widgets/AppWidgets/Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
+import { ClearOlottingCacheType } from "../../widgets/AppWidgets/ResetConfigs/ResetConfigs";
 import { useBotDomainContext } from "../config/BotDomainProvider";
-import { useUpdateVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
-import { useUpdateVisiblePairsContext } from "../config/VisiblePairProvider";
 import {
   useUpdateVisibleExchangesContext,
   useVisibleExchangesContext,
 } from "../config/VisibleExchangesProvider";
-import { useIsBotOnlineContext } from "./IsBotOnlineProvider";
+import { useUpdateVisiblePairsContext } from "../config/VisiblePairProvider";
+import { useUpdateVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
 import {
   BotExchangeInfoProvider,
   ConfigSymbolsType,
 } from "./BotExchangeInfoProvider";
-import { RealTimeStrategyCommandsType } from "../../widgets/AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
-import { BlockInfoType } from "../../widgets/AppWidgets/Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
-import { ClearOlottingCacheType } from "../../widgets/AppWidgets/ResetConfigs/ResetConfigs";
+import { useIsBotOnlineContext } from "./IsBotOnlineProvider";
 
 const ProjectInfoOpenContext = createContext<boolean>(false);
 const UpdateProjectInfoOpenContext = createContext<
   Dispatch<SetStateAction<boolean>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useProjectInfoOpenContext = () => {
   return useContext(ProjectInfoOpenContext);
@@ -133,7 +135,7 @@ export type IdsByExchangeType = { [exchange: string]: string };
 const BotInfoContext = createContext<BotInfoType | undefined>(undefined);
 const UpdateBotInfoContext = createContext<
   Dispatch<SetStateAction<BotInfoType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 export const useBotInfoContext = () => {
   return useContext(BotInfoContext);
 };

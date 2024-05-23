@@ -1,9 +1,10 @@
 import { PlotRelayoutEvent } from "plotly.js";
 import { useMemo } from "react";
 import Plot from "react-plotly.js";
-import { PlotlyLayoutType, UpdatePlotlyLayoutsType } from "./PlotlyContext";
-import { ChartDataType } from "../ChartTablePieCombo";
+
 import { objectKeys } from "../../../../helpers/helpers";
+import { ChartDataType } from "../ChartTablePieCombo";
+import { PlotlyLayoutType, UpdatePlotlyLayoutsType } from "./PlotlyContext";
 
 export type ChartLocationType = "main-chart" | "sub-chart" | "pie-chart" | "b";
 
@@ -12,6 +13,7 @@ export type NonChartLocationTypes = "table";
 export const allChartLocations: ChartLocationType[] = [
   "main-chart",
   "sub-chart",
+  "pie-chart",
 ];
 
 export default function PlotlyChart({
@@ -196,7 +198,7 @@ export function enableAxisSelect() {
   if (yaxis_resize_layers) {
     Array.from(yaxis_resize_layers).forEach((yaxis_drag_layer) => {
       if (yaxis_drag_layer.getAttribute("listener") !== "true") {
-        yaxis_drag_layer.addEventListener("click", (e) => {
+        yaxis_drag_layer.addEventListener("click", () => {
           yaxis_drag_layer.parentElement?.parentElement?.append(
             yaxis_drag_layer.parentElement
           );

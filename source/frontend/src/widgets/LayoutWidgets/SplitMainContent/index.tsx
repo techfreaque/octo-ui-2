@@ -1,12 +1,14 @@
-import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
+import "./index.css";
+
 import Splitter, { SplitDirection } from "@devbookhq/splitter";
-import { useColorModeContext } from "../../../context/config/ColorModeProvider";
 import { useMemo } from "react";
+
+import { ColorModeType } from "../../../constants/uiTemplate/defaultColors";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import { useColorModeContext } from "../../../context/config/ColorModeProvider";
 import { useSetCurrentPanelPercent } from "../../../context/config/MainPanelContext";
 import { useCurrentPanelContext } from "../../../context/config/MainPanelContext";
-import "./index.css";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
-import { ColorModeType } from "../../../constants/uiTemplate/defaultColors";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 export default function SplitMainContent({
   upperContent,

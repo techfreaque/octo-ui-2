@@ -1,21 +1,21 @@
-import { useEffect, useState } from "react";
-import {
-  useBotPortfolioContext,
-  useFetchBotPortfolio,
-} from "../../../context/data/BotPortfolioProvider";
-import AntTable, {
-  AntTableColumnType,
-  AntTableDataType,
-} from "../../../components/Tables/AntTable";
-import { Tag } from "antd";
 import { ReloadOutlined } from "@ant-design/icons";
+import { Tag } from "antd";
+import { useEffect, useState } from "react";
+
 import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
+import AntTable, {
+  AntTableColumnType,
+  AntTableDataType,
+} from "../../../components/Tables/AntTable";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import {
+  useBotPortfolioContext,
+  useFetchBotPortfolio,
+} from "../../../context/data/BotPortfolioProvider";
 import { objectEntries } from "../../../helpers/helpers";
-import { BacktestingRunDataTable } from "./RunDataTable/BacktestingRunDataTable";
 
 export default function CurrentPortfolioTable() {
   const [isDoneLoading, setIsDoneLoading] = useState<boolean>(true);
@@ -44,7 +44,6 @@ export default function CurrentPortfolioTable() {
 
     return (
       <div>
-        <BacktestingRunDataTable />
         <AntTable<PortfolioTableDataType, PortfolioTableColumnType>
           data={currentHoldings}
           columns={getColumns(botPortfolio.reference_unit)}
@@ -71,7 +70,6 @@ export default function CurrentPortfolioTable() {
                   cursor: "pointer",
                 }}
                 bordered={false}
-                onClick={() => {}}
               >
                 {`${
                   botPortfolio.has_real_trader
@@ -136,5 +134,4 @@ interface PortfolioTableDataType extends AntTableDataType {
   lockedIn: number;
   valueIn: number | undefined;
 }
-interface PortfolioTableColumnType
-  extends AntTableColumnType<PortfolioTableDataType> {}
+type PortfolioTableColumnType = AntTableColumnType<PortfolioTableDataType>;

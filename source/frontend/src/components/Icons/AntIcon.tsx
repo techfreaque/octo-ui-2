@@ -1,12 +1,13 @@
 import * as icons from "@ant-design/icons";
+import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import {
+  createElement,
   CSSProperties,
   ForwardRefExoticComponent,
   RefAttributes,
-  createElement,
 } from "react";
-import { SizeType, sizes } from "../../constants/frontendConstants";
-import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
+
+import { sizes,SizeType } from "../../constants/frontendConstants";
 
 export const iconStringNoIcon = "noIcon";
 export const iconStringToComponent: {

@@ -1,8 +1,9 @@
 import { Tab } from "@mui/material";
-import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
-import MuiTabs, { MuiTabType } from "../../../components/Tabs/MuiTabs";
+
 import IconFromString from "../../../components/Icons/IconFromString";
+import MuiTabs, { MuiTabType } from "../../../components/Tabs/MuiTabs";
 import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 export default function ResizableTabs({
   tabs,

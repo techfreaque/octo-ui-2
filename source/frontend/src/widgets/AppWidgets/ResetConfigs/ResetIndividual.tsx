@@ -1,5 +1,5 @@
-import React from "react";
 import { ConfigProvider, Switch, Tooltip } from "antd";
+
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { CheckedListType, SorageResetKeyType } from "./ResetConfigs";
 

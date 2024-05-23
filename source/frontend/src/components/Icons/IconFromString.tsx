@@ -1,5 +1,6 @@
 import { CSSProperties } from "react";
-import { SizeType, sizes } from "../../constants/frontendConstants";
+
+import { sizes,SizeType } from "../../constants/frontendConstants";
 import { AntIconByString, iconStringNoIcon } from "./AntIcon";
 import FontAwesomeIconByString from "./FontAwesome";
 
@@ -37,5 +38,7 @@ export default function IconFromString({
         spin={spin}
       />
     );
-  } else return <></>;
+  } else {
+    return <></>;
+  }
 }

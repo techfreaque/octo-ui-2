@@ -1,11 +1,12 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useCallback,
   Dispatch,
   SetStateAction,
+  useCallback,
+  useContext,
+  useState,
 } from "react";
+
 import {
   errorResponseCallBackParams,
   sendAndInterpretBotUpdate,
@@ -13,6 +14,7 @@ import {
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
 import {
   ApiActionsType,
   BotInfoType,
@@ -186,12 +188,12 @@ const TentaclesConfigContext = createContext<TentaclesConfigsType | undefined>(
 );
 const UpdateTentaclesConfigContext = createContext<
   Dispatch<SetStateAction<TentaclesConfigsType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 const IsSavingTentaclesConfigContext = createContext<boolean>(false);
 const UpdateIsSavingTentaclesConfigContext = createContext<
   Dispatch<SetStateAction<boolean>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useIsSavingTentaclesConfigContext = () => {
   return useContext(IsSavingTentaclesConfigContext);
@@ -213,13 +215,11 @@ export const useFetchTentaclesConfig = () => {
     (
       tentacles: string[],
       successCallback?: (payload: successResponseCallBackParams) => void,
-      isTradingTentacle: boolean = false
+      isTradingTentacle = false
     ) => {
       function errorCallback({
-        updatedData,
-        updateUrl,
+ 
         data,
-        response,
       }: errorResponseCallBackParams) {
         createNotification({
           title: "Failed to fetch tentacles config",
@@ -318,16 +318,16 @@ export const useSaveTentaclesConfig: () => SaveTentaclesConfigType = () => {
     (
       newConfigs: TentaclesConfigByTentacleType,
       setIsSaving?: Dispatch<SetStateAction<boolean>>,
-      reloadPlots: boolean = false,
-      isTradingConfig: boolean = true,
-      keepExisting: boolean = true,
-      successNotification: boolean = true
+      reloadPlots = false,
+      isTradingConfig = true,
+      keepExisting = true,
+      successNotification = true
     ) => {
       function errorCallback(payload: errorResponseCallBackParams) {
         setIsSaving?.(false);
         createNotification({ title: payload.data });
       }
-      function onFinish(payload: successResponseCallBackParams) {
+      function onFinish() {
         setIsSaving?.(false);
         if (successNotification) {
           createNotification({ title: "Successfully save tentacles config" });
@@ -336,7 +336,7 @@ export const useSaveTentaclesConfig: () => SaveTentaclesConfigType = () => {
           fetchPlotData();
         }
       }
-      function successCallback(payload: successResponseCallBackParams) {
+      function successCallback() {
         if (isTradingConfig) {
           loadCurrentTradingTentaclesConfig(onFinish);
         } else {
@@ -376,18 +376,18 @@ export const useSaveTentaclesConfigAndSendAction = () => {
       newConfigs: TentaclesConfigByTentacleType,
       actionType: ApiActionsType,
       setIsLoading: Dispatch<SetStateAction<boolean>>,
-      reloadPlots: boolean = false,
+      reloadPlots = false,
       successCallback?: (payload: successResponseCallBackParams) => void,
       errorCallback?: (payload: errorResponseCallBackParams) => void
     ) => {
-      function _errorCallback(payload: errorResponseCallBackParams) {
+      function _errorCallback() {
         setIsLoading(false);
         createNotification({
           title: "Failed to executed trading mode",
           type: "danger",
         });
       }
-      function _successCallback(payload: successResponseCallBackParams) {
+      function _successCallback() {
         if (reloadPlots) {
           fetchPlotData();
         }

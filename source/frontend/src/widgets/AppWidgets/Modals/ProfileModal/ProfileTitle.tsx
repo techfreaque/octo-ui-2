@@ -1,7 +1,8 @@
-import { Dispatch, SetStateAction } from "react";
-import ProfileAvatar from "../../Stats/ProfileAvatar";
 import { Typography } from "antd";
+import { Dispatch, SetStateAction } from "react";
+
 import { ProfileType } from "../../../../context/data/BotInfoProvider";
+import ProfileAvatar from "../../Stats/ProfileAvatar";
 
 export function ProfileTitle({
   newProfileSettings,

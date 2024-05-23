@@ -1,39 +1,40 @@
+import { SaveOutlined } from "@ant-design/icons";
 import { Tab } from "@mui/material";
-import MuiTabs, { MuiTabType } from "../../../components/Tabs/MuiTabs";
+import JsonEditor from "@techfreaque/json-editor-react";
+import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+
+import { successResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
+import createNotification from "../../../components/Notifications/Notification";
+import { AntSideBarMenutItemType } from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import MuiTabs, { MuiTabType } from "../../../components/Tabs/MuiTabs";
 import {
   userInputKey,
   validateJSONEditor,
 } from "../../../components/UserInputs/utils";
-import createNotification from "../../../components/Notifications/Notification";
-import {
-  useBotInfoContext,
-  useIsDemoMode,
-} from "../../../context/data/BotInfoProvider";
+import { sizes } from "../../../constants/frontendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   SaveTentaclesConfigType,
-  TentacleType,
+  tentacleConfigTypes,
   TentaclesConfigByTentacleType,
   TentaclesConfigRootType,
-  TentaclesConfigValueType,
   TentaclesConfigsRootType,
   TentaclesConfigsSchemaType,
-  tentacleConfigTypes,
+  TentaclesConfigValueType,
+  TentacleType,
   useSaveTentaclesConfig,
   useTentaclesConfigContext,
 } from "../../../context/config/TentaclesConfigProvider";
 import { useFetchTentaclesConfig } from "../../../context/config/TentaclesConfigProvider";
-import { SaveOutlined } from "@ant-design/icons";
-import { sizes } from "../../../constants/frontendConstants";
-import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
-import { successResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
-import { AntSideBarMenutItemType } from "../../../components/Sidebars/AntSidebar/AntSidebar";
-import JsonEditor from "@techfreaque/json-editor-react";
-import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import {
+  useBotInfoContext,
+  useIsDemoMode,
+} from "../../../context/data/BotInfoProvider";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 export function useCurrentTentacleConfig(
   tentacleType = tentacleConfigTypes.tentacles
@@ -65,7 +66,7 @@ export default function TentaclesConfig({
   const _additionalTabs = useGetAdditionalTabs(additionalTabs);
   return useMemo(() => {
     if (!currentTentaclesNonTradingConfig) {
-      return;
+      return null;
     }
     function handleTentaclesUpdate() {
       fetchTentaclesConfig(tentacleNames.split(","));
@@ -583,6 +584,7 @@ function createTab({
     ),
     key: configName,
     tabId: configName,
+    antIcon,
     order: schema?.order || 0,
     content: (
       <JsonEditor

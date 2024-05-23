@@ -1,11 +1,12 @@
 import { Rate, Tooltip } from "antd";
+import { CSSProperties, useState } from "react";
+
+import { projectName } from "../../../../constants/frontendConstants";
 import {
   AppStoreAppType,
   useAppStoreUserContext,
   useRateAppStore,
 } from "../../../../context/data/AppStoreDataProvider";
-import { CSSProperties, useState } from "react";
-import { projectName } from "../../../../constants/frontendConstants";
 
 export default function AppRating({
   app,

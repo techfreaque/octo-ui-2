@@ -1,24 +1,25 @@
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
 import {
-  TentaclesConfigByTentacleType,
-  TentaclesConfigValueType,
-  TentaclesConfigValuesType,
-  TentaclesConfigsRootType,
-  tentacleConfigTypes,
-  useSaveTentaclesConfig,
-  useTentaclesConfigContext,
-} from "../../../../context/config/TentaclesConfigProvider";
+  DeleteFilled,
+  DownloadOutlined,
+  ReloadOutlined,
+  UnorderedListOutlined,
+} from "@ant-design/icons";
+import { Radio, Switch, Tooltip } from "antd";
+import { useMemo, useState } from "react";
+
+import AntButton, {
+  buttonTypes,
+  buttonVariants,
+} from "../../../../components/Buttons/AntButton";
+import createNotification from "../../../../components/Notifications/Notification";
+import AntTable, {
+  AntTableColumnType,
+  AntTableDataType,
+} from "../../../../components/Tables/AntTable";
 import {
-  BacktestingRunData,
-  RunsToDeleteDataType,
-  useDeleteBacktestingRunData,
-} from "../../../../context/data/BacktestingRunDataProvider";
-import {
-  DisplayedRunIdsType,
-  useDisplayedRunIdsContext,
-  useHiddenBacktestingMetadataColumnsContext,
-  useUpdateDisplayedRunIdsContext,
-} from "../../../../context/data/BotPlottedElementsProvider";
+  findUserInputAndTentacleLabel,
+  userInputKey,
+} from "../../../../components/UserInputs/utils";
 import {
   ID_DATA,
   ID_SEPARATOR,
@@ -27,25 +28,27 @@ import {
   METADATA_UNDISPLAYED_FIELDS,
   TIMESTAMP_DATA,
 } from "../../../../constants/backendConstants";
-import AntTable, {
-  AntTableColumnType,
-  AntTableDataType,
-} from "../../../../components/Tables/AntTable";
-import { Radio, Tooltip } from "antd";
-import AntButton, {
-  buttonTypes,
-  buttonVariants,
-} from "../../../../components/Buttons/AntButton";
 import {
-  DeleteFilled,
-  DownloadOutlined,
-  ReloadOutlined,
-  UnorderedListOutlined,
-} from "@ant-design/icons";
+  tentacleConfigTypes,
+  TentaclesConfigByTentacleType,
+  TentaclesConfigsRootType,
+  TentaclesConfigValuesType,
+  TentaclesConfigValueType,
+  useSaveTentaclesConfig,
+  useTentaclesConfigContext,
+} from "../../../../context/config/TentaclesConfigProvider";
 import {
-  findUserInputAndTentacleLabel,
-  userInputKey,
-} from "../../../../components/UserInputs/utils";
+  BacktestingRunData,
+  BacktestingRunDataWithoutID,
+  useDeleteBacktestingRunData,
+} from "../../../../context/data/BacktestingRunDataProvider";
+import {
+  defaultDisplayedRunIds,
+  DisplayedRunIdsType,
+  useDisplayedRunIdsContext,
+  useHiddenBacktestingMetadataColumnsContext,
+  useUpdateDisplayedRunIdsContext,
+} from "../../../../context/data/BotPlottedElementsProvider";
 import { isObjectEmpty } from "../../../../helpers/helpers";
 
 export default function AntRunDataTable({
@@ -57,79 +60,317 @@ export default function AntRunDataTable({
   currentCampaignName: string;
   reloadData: (onDone: () => void) => void;
 }) {
-  const setDisplayedRunIds = useUpdateDisplayedRunIdsContext();
-  const displayedRunIds = useDisplayedRunIdsContext();
-  const deleteRuns = useDeleteBacktestingRunData();
-  const hiddenMetadataColumns = useHiddenBacktestingMetadataColumnsContext();
-  const saveTentaclesConfig = useSaveTentaclesConfig();
-
   return useMemo(() => {
-    function restoreSettings(settings: TentaclesConfigByTentacleType) {
-      saveTentaclesConfig(settings, undefined, true, true);
-    }
     return (
       <MetaDataTable
         metadata={runData}
-        forceSelectLatest={false}
         currentCampaignName={currentCampaignName}
         reloadData={reloadData}
-        deleteBacktestingRuns={deleteRuns}
-        hiddenMetadataColumns={hiddenMetadataColumns}
-        setDisplayedRunIds={setDisplayedRunIds}
-        displayedRunIds={displayedRunIds}
-        restoreSettings={restoreSettings}
       />
     );
-  }, [
-    currentCampaignName,
-    deleteRuns,
-    displayedRunIds,
-    hiddenMetadataColumns,
-    reloadData,
-    runData,
-    saveTentaclesConfig,
-    setDisplayedRunIds,
-  ]);
+  }, [currentCampaignName, reloadData, runData]);
 }
 
 function MetaDataTable({
   metadata,
-  forceSelectLatest,
   currentCampaignName,
   reloadData,
-  deleteBacktestingRuns,
-  hiddenMetadataColumns,
-  setDisplayedRunIds,
-  displayedRunIds,
-  restoreSettings,
 }: {
   metadata: BacktestingRunData[];
-  forceSelectLatest: boolean;
   currentCampaignName: string;
   reloadData: (onDone: () => void) => void;
-  deleteBacktestingRuns: (
-    runsToDelete: RunsToDeleteDataType,
-    isDeleting: Dispatch<SetStateAction<boolean>>
-  ) => void;
-  hiddenMetadataColumns: string[] | undefined;
-  setDisplayedRunIds: Dispatch<SetStateAction<DisplayedRunIdsType>>;
-  displayedRunIds: DisplayedRunIdsType;
-  restoreSettings: (settings: TentaclesConfigByTentacleType) => void;
 }) {
+  const setDisplayedRunIds = useUpdateDisplayedRunIdsContext();
+  const displayedRunIds = useDisplayedRunIdsContext();
+  const deleteBacktestingRuns = useDeleteBacktestingRunData();
+  const hiddenMetadataColumns = useHiddenBacktestingMetadataColumnsContext();
+  const saveTentaclesConfig = useSaveTentaclesConfig();
   const currentTentaclesConfig = useTentaclesConfigContext();
   const currentTentaclesTradingConfig =
     currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
-  const sortedMetadata = (JSON.parse(
-    JSON.stringify(metadata)
-  ) as BacktestingRunData[]).toSorted((a, b) => b.timestamp - a.timestamp);
-  const firstRow = sortedMetadata[0] as BacktestingRunData;
-
-  const filteredFirstRow = Object.entries(firstRow).filter(
-    ([key]) => !METADATA_UNDISPLAYED_FIELDS.includes(key)
+  const [visibleColumns, setVisibleColumns] = useState<
+    "info" | "settings" | "allInfo"
+  >("info");
+  const [showCurrentCampaign, setShowCurrentCampaign] = useState<boolean>(true);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
+  const [loadSelectedRuns, setLoadSelectedRuns] = useState<boolean>(true);
+  const [_selectedRunIds, _setSelectedRunIds] = useState<DisplayedRunIdsType>(
+    defaultDisplayedRunIds
   );
-  const runDataColumnKeys: string[] = ["runInformation"];
-  const runDataColumns: RunDataTableColumnType[] = filteredFirstRow.map(
-    ([key, rowValue]) => {
+  const selectedRunIds = loadSelectedRuns ? displayedRunIds : _selectedRunIds;
+  const setSelectedRunIds = loadSelectedRuns
+    ? setDisplayedRunIds
+    : _setSelectedRunIds;
+  const somethingSelected = !!selectedRunIds.backtesting?.length;
+  const onlyOneIsSelected = selectedRunIds.backtesting?.length === 1;
+
+  const {
+    columns,
+    records,
+    runDataColumnKeys,
+    userInputKeys,
+  } = useFormatTableData(
+    metadata,
+    hiddenMetadataColumns,
+    currentTentaclesTradingConfig,
+    showCurrentCampaign,
+    currentCampaignName
+  );
+  return useMemo(() => {
+    function setSelectedRecordIds(selectedRecordIds: string[]) {
+      setSelectedRunIds((prev_selection) => {
+        return {
+          ...prev_selection,
+          backtesting: selectedRecordIds,
+        };
+      });
+    }
+
+    function handleDeleteSelected() {
+      setIsUpdating(true);
+      deleteBacktestingRuns(
+        selectedRunIds.backtesting.map((runId) => {
+          const {
+            backtestingId,
+            optimizerId,
+            campaignName,
+          } = splitRunIdentifiers(runId);
+          return {
+            backtesting_id: backtestingId,
+            optimizer_id: optimizerId,
+            campaign_name: campaignName,
+          };
+        }),
+        setIsUpdating,
+        () => setSelectedRecordIds([])
+      );
+    }
+    function restoreSettings(settings: TentaclesConfigValuesType | undefined) {
+      if (settings) {
+        saveTentaclesConfig(
+          settings as TentaclesConfigByTentacleType,
+          setIsUpdating,
+          true,
+          true
+        );
+      } else {
+        createNotification({
+          title: "Failed to restore settings",
+          message: "No settings found for this run",
+          type: "danger",
+        });
+      }
+    }
+    return (
+      <AntTable<RunDataTableDataType, RunDataTableColumnType>
+        data={records}
+        columns={columns}
+        maxWidth="100%"
+        height="100%"
+        size="small"
+        bordered
+        scrollWidth={"100%"}
+        selectedRowKeys={selectedRunIds.backtesting}
+        setSelectedRowKeys={setSelectedRecordIds}
+        hiddenColumns={
+          visibleColumns === "info"
+            ? [
+                ...METADATA_HIDDEN_FIELDS,
+                ...userInputKeys,
+                ...(showCurrentCampaign ? ["optimization campaign"] : []),
+              ]
+            : visibleColumns === "allInfo"
+            ? [
+                ...METADATA_ADVANCED_HIDDEN_FIELDS,
+                ...userInputKeys,
+                ...(showCurrentCampaign ? ["optimization campaign"] : []),
+              ]
+            : [
+                ...METADATA_HIDDEN_FIELDS,
+                ...(showCurrentCampaign ? ["optimization campaign"] : []),
+                ...runDataColumnKeys.filter(
+                  (key) =>
+                    ![
+                      "runId",
+                      "optimizer id",
+                      "optimization campaign",
+                      "runInformation",
+                    ].includes(key)
+                ),
+              ]
+        }
+        paginationSize={500}
+        header={
+          <>
+            <Tooltip title={"Refreshes the run data table"}>
+              <div>
+                <AntButton
+                  antIconComponent={ReloadOutlined}
+                  colorType={
+                    isUpdating ? buttonTypes.font : buttonTypes.fontActive
+                  }
+                  buttonVariant={buttonVariants.text}
+                  onClick={() => {
+                    setIsUpdating(true);
+                    reloadData(() => setIsUpdating(false));
+                  }}
+                  spin={isUpdating}
+                />
+              </div>
+            </Tooltip>
+            <Tooltip
+              title={
+                "Toggle displaying data only from the current campaign or from all activated ones"
+              }
+            >
+              <div>
+                <AntButton
+                  antIconComponent={UnorderedListOutlined}
+                  colorType={
+                    showCurrentCampaign
+                      ? buttonTypes.fontActive
+                      : buttonTypes.font
+                  }
+                  buttonVariant={buttonVariants.text}
+                  onClick={() => {
+                    setShowCurrentCampaign((prevSelection) => {
+                      return !prevSelection;
+                    });
+                  }}
+                >
+                  <>Current campaign: {currentCampaignName}</>
+                </AntButton>
+              </div>
+            </Tooltip>
+            <Radio.Group
+              defaultValue="info"
+              style={{ display: "flex" }}
+              onChange={(event) => setVisibleColumns(event.target.value)}
+            >
+              <Tooltip title="Display Run Information">
+                <Radio.Button value="info">Info</Radio.Button>
+              </Tooltip>
+              <Tooltip title="Display All Run Information">
+                <Radio.Button value="allInfo">All Info</Radio.Button>
+              </Tooltip>
+              <Tooltip title="Display Run Settings">
+                <Radio.Button value="settings">Settings</Radio.Button>
+              </Tooltip>
+            </Radio.Group>
+            <Tooltip title="Load plots for selected runs or just select them. Helpful when you want to select runs to delete.">
+              <Switch
+                checkedChildren={"plot"}
+                unCheckedChildren={"select"}
+                onChange={() =>
+                  setLoadSelectedRuns((prevSelection) => {
+                    setDisplayedRunIds((prevState) => ({
+                      ...prevState,
+                      backtesting: prevSelection
+                        ? []
+                        : selectedRunIds.backtesting,
+                    }));
+
+                    return !prevSelection;
+                  })
+                }
+                defaultChecked
+              />
+            </Tooltip>
+            <div style={{ margin: "auto" }} />
+            <Tooltip
+              title={
+                onlyOneIsSelected
+                  ? "Restores all settings from this run"
+                  : "Select only one run to be able to restore the settings"
+              }
+            >
+              <div>
+                <AntButton
+                  antIconComponent={DownloadOutlined}
+                  colorType={
+                    isUpdating ? buttonTypes.font : buttonTypes.fontActive
+                  }
+                  disabled={!onlyOneIsSelected || isUpdating}
+                  buttonVariant={buttonVariants.text}
+                  onClick={
+                    onlyOneIsSelected
+                      ? () => {
+                          const selectedRow = records.find(
+                            (record) =>
+                              record.id === selectedRunIds.backtesting[0]
+                          );
+                          restoreSettings(selectedRow?.["user inputs"]);
+                        }
+                      : undefined
+                  }
+                >
+                  Restore Settings
+                </AntButton>
+              </div>
+            </Tooltip>
+            <Tooltip title={"Deletes the selected runs"}>
+              <div>
+                <AntButton
+                  antIconComponent={DeleteFilled}
+                  colorType={
+                    isUpdating ? buttonTypes.font : buttonTypes.fontActive
+                  }
+                  disabled={!somethingSelected || isUpdating}
+                  buttonVariant={buttonVariants.text}
+                  onClick={
+                    somethingSelected ? () => handleDeleteSelected() : undefined
+                  }
+                >
+                  Delete selected
+                </AntButton>
+              </div>
+            </Tooltip>
+          </>
+        }
+      />
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    records,
+    columns,
+    selectedRunIds.backtesting,
+    visibleColumns,
+    userInputKeys,
+    showCurrentCampaign,
+    runDataColumnKeys,
+    isUpdating,
+    currentCampaignName,
+    onlyOneIsSelected,
+    somethingSelected,
+    setSelectedRunIds,
+  ]);
+}
+
+function useFormatTableData(
+  metadata: BacktestingRunData[],
+  hiddenMetadataColumns: string[] | undefined,
+  currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined,
+  showCurrentCampaign: boolean,
+  currentCampaignName: string
+) {
+  return useMemo(() => {
+    const preFilteredMetadata = showCurrentCampaign
+      ? (JSON.parse(JSON.stringify(metadata)) as BacktestingRunData[]).filter(
+          (row) => row["optimization campaign"] === currentCampaignName
+        )
+      : (JSON.parse(JSON.stringify(metadata)) as BacktestingRunData[]);
+    preFilteredMetadata.sort((a, b) => b.timestamp - a.timestamp);
+    const firstRow = preFilteredMetadata[0] as BacktestingRunData | undefined;
+
+    const filteredFirstRow =
+      firstRow &&
+      Object.entries(firstRow).filter(
+        ([key]) => !METADATA_UNDISPLAYED_FIELDS.includes(key)
+      );
+    const runDataColumnKeys: string[] = ["runInformation"];
+    const runDataColumns:
+      | RunDataTableColumnType[]
+      | undefined = filteredFirstRow?.map(([key, rowValue]) => {
       const _key = key === "id" ? "runId" : key;
       runDataColumnKeys.push(_key);
       return {
@@ -137,527 +378,223 @@ function MetaDataTable({
         dataIndex: _key,
         title: key,
         width: 100,
+        textWrap: "word-break",
+        ellipsis: true,
         dsorter: ["string", "number", "boolean"].includes(typeof rowValue)
           ? (typeof rowValue as "string" | "number" | "boolean")
           : undefined,
         render: TIMESTAMP_DATA.includes(key)
-          ? (value: any, record: any, index: number) => {
+          ? (value: any) => {
               return <>{new Date(value).toISOString()}</>;
             }
           : ID_DATA.includes(key)
-          ? (value: any, record: any, index: number) => {
+          ? (value: any) => {
               return <>{Number(value)}</>;
             }
           : undefined,
       };
-    }
-  );
-  ensureBacktestingMetadataColumnsOrder(runDataColumns);
+    });
+    runDataColumns && ensureBacktestingMetadataColumnsOrder(runDataColumns);
 
-  // Build user inputs columns. They are hidden by default
-  const userInputColumns: UserInpuntColumnsType = {};
-  const userInputKeys: string[] = [];
+    // Build user inputs columns. They are hidden by default
+    const userInputColumns: UserInpuntColumnsType = {};
+    const userInputKeys: string[] = [];
 
-  sortedMetadata.forEach((run_metadata) => {
-    if (run_metadata["user inputs"]) {
-      Object.entries(run_metadata["user inputs"]).forEach(
-        ([inputTentacle, inputConfigs]) => {
-          //   const hasTentacle = !addedTentacles.includes(inputTentacle);
-          getUserInputColumns({
-            userInputColumns,
-            inputTentacle,
-            tentacleNames: [inputTentacle],
-            inputTentacleLabel: inputTentacle,
-            userInputKeys,
-            inputsByConfig: inputConfigs,
-            hiddenMetadataColumns,
-            currentTentaclesTradingConfig,
-          });
-          //   if (!hasTentacle) {
-          //     addedTentacles.push(inputTentacle);
-          //   }
-        }
+    preFilteredMetadata.forEach((run_metadata) => {
+      if (run_metadata["user inputs"]) {
+        Object.entries(run_metadata["user inputs"]).forEach(
+          ([inputTentacle, inputConfigs]) => {
+            //   const hasTentacle = !addedTentacles.includes(inputTentacle);
+            getUserInputColumns({
+              userInputColumns,
+              inputTentacle,
+              tentacleNames: [inputTentacle],
+              userInputKeys,
+              inputsByConfig: inputConfigs,
+              hiddenMetadataColumns,
+              currentTentaclesTradingConfig,
+            });
+            //   if (!hasTentacle) {
+            //     addedTentacles.push(inputTentacle);
+            //   }
+          }
+        );
+      }
+    });
+    //   Object.keys(inputPerTentacle).forEach((key) => {
+    //     columnGroups.push({ text: key, span: inputPerTentacle[key] });
+    //   });
+    //   userInputColumns.sort((a, b) => {
+    //     const aField = a.field.split(TENTACLE_SEPARATOR).reverse().join("");
+    //     const bField = b.field.split(TENTACLE_SEPARATOR).reverse().join("");
+    //     if (aField > bField) {
+    //       return 1;
+    //     } else if (aField < bField) {
+    //       return -1;
+    //     }
+    //     return 0;
+    //   });
+    //   const userInputKeySize = `${
+    //     (1 /
+    //       (userInputColumns.length +
+    //         runDataColumns.length -
+    //         runDataHidableColumns.length)) *
+    //     100
+    //   }%`;
+    //   userInputColumns.forEach((column) => {
+    //     column.size = userInputKeySize;
+    //   });
+    //   const columns = runDataColumns.concat(userInputColumns);
+    const columns: RunDataTableColumnType[] = [
+      {
+        title: "Run Information",
+        key: "runInformation",
+        disableSearch: true,
+        children: runDataColumns || [],
+      },
+      ...userInpuntColumnToArray(userInputColumns),
+    ];
+
+    // init searches before formatting rows to access user_inputs objects
+    //   const userInputSearches = userInputKeys.map((key) => {
+    //     const splitKey = key.split(TENTACLE_SEPARATOR);
+    //     let sampleValue = userInputSampleValueByKey[key];
+    //     if (sampleValue === null) {
+    //       console.error(
+    //         `Impossible to guess type of ${key} user input (no sample value). Using text as search type`
+    //       );
+    //       sampleValue = "";
+    //     }
+    //     const label =
+    //       splitKey[0].length > MAX_SEARCH_LABEL_SIZE
+    //         ? `${splitKey[0].slice(0, MAX_SEARCH_LABEL_SIZE)} ...`
+    //         : splitKey[0];
+    //     return {
+    //       field: key,
+    //       label: `${label} (${splitKey[1]})`,
+    //       type: TIMESTAMP_DATA.includes(key)
+    //         ? "datetime"
+    //         : _getTableDataType(
+    //             null,
+    //             {
+    //               type: null,
+    //               field: key,
+    //             },
+    //             "text",
+    //             sampleValue
+    //           ),
+    //     };
+    //   });
+    //   const recordsToSelect = [];
+
+    const records: RunDataTableDataType[] = preFilteredMetadata.map((row) => {
+      _formatMetadataRow(row);
+      const id = mergeRunIdentifiers(
+        row.id,
+        row["optimizer id"],
+        row["optimization campaign"]
       );
-    }
-  });
-  //   Object.keys(inputPerTentacle).forEach((key) => {
-  //     columnGroups.push({ text: key, span: inputPerTentacle[key] });
-  //   });
-  //   userInputColumns.sort((a, b) => {
-  //     const aField = a.field.split(TENTACLE_SEPARATOR).reverse().join("");
-  //     const bField = b.field.split(TENTACLE_SEPARATOR).reverse().join("");
-  //     if (aField > bField) {
-  //       return 1;
-  //     } else if (aField < bField) {
-  //       return -1;
-  //     }
-  //     return 0;
-  //   });
-  //   const userInputKeySize = `${
-  //     (1 /
-  //       (userInputColumns.length +
-  //         runDataColumns.length -
-  //         runDataHidableColumns.length)) *
-  //     100
-  //   }%`;
-  //   userInputColumns.forEach((column) => {
-  //     column.size = userInputKeySize;
-  //   });
-  //   const columns = runDataColumns.concat(userInputColumns);
-  const columns: RunDataTableColumnType[] = [
-    {
-      title: "Run Information",
-      key: "runInformation",
-      disableSearch: true,
-      children: runDataColumns,
-    },
-    ...userInpuntColumnToArray(userInputColumns),
-  ];
-
-  // init searches before formatting rows to access user_inputs objects
-  //   const userInputSearches = userInputKeys.map((key) => {
-  //     const splitKey = key.split(TENTACLE_SEPARATOR);
-  //     let sampleValue = userInputSampleValueByKey[key];
-  //     if (sampleValue === null) {
-  //       console.error(
-  //         `Impossible to guess type of ${key} user input (no sample value). Using text as search type`
-  //       );
-  //       sampleValue = "";
-  //     }
-  //     const label =
-  //       splitKey[0].length > MAX_SEARCH_LABEL_SIZE
-  //         ? `${splitKey[0].slice(0, MAX_SEARCH_LABEL_SIZE)} ...`
-  //         : splitKey[0];
-  //     return {
-  //       field: key,
-  //       label: `${label} (${splitKey[1]})`,
-  //       type: TIMESTAMP_DATA.includes(key)
-  //         ? "datetime"
-  //         : _getTableDataType(
-  //             null,
-  //             {
-  //               type: null,
-  //               field: key,
-  //             },
-  //             "text",
-  //             sampleValue
-  //           ),
-  //     };
-  //   });
-  //   const recordsToSelect = [];
-
-  const records: RunDataTableDataType[] = sortedMetadata.map((row) => {
-    _formatMetadataRow(row);
-    const id = mergeRunIdentifiers(
-      row.id,
-      row["optimizer id"],
-      row["optimization campaign"]
-    );
-    return {
-      ...row,
-      key: id,
-      id,
-      runId: row.id,
-    };
-  });
-
-  const runDataSearches = filteredFirstRow.map(([key]) => {
-    return {
-      field: key,
-      label: key,
-      type: TIMESTAMP_DATA.includes(key)
-        ? "datetime"
-        : _getTableDataType(
-            records,
-            {
-              type: null,
-              field: key,
-            },
-            "text",
-            null
-          ),
-    };
-  });
-  //   ensureBacktestingMetadataColumnsOrder(runDataSearches);
-  //   const searches = runDataSearches.concat(userInputSearches);
-  //   const searchData = [
-  //     {
-  //       field: "optimization campaign",
-  //       value: currentCampaignName,
-  //       operator: "is",
-  //       type: "text",
-  //     },
-  //   ];
-  //   const sortData = [
-  //     {
-  //       field: "timestamp",
-  //       direction: "asc",
-  //     },
-  //   ];
-  //   const table = createTable({
-  //     elementID: `${tableId}-table`,
-  //     name: tableTitle,
-  //     tableName: tableId,
-  //     searches,
-  //     columns,
-  //     records,
-  //     columnGroups,
-  //     searchData,
-  //     sortData,
-  //     selectable: true,
-  //     addToTable: false,
-  //     reorderRows: false,
-  //     deleteRows: false,
-  //     onReorderRowCallback: null,
-  //     onDeleteCallback: null,
-  //   });
-  //   _addBacktestingMetadataTableButtons(
-  //     table,
-  //     runDataHidableColumns,
-  //     userInputColumns,
-  //     forceSelectLatest,
-  //     currentCampaignName,
-  //     reloadData,
-  //     deleteBacktestingRuns,
-  //     restoreSettings,
-  //     records
-  //   );
-  //   table.on("select", (event) => handleSelection(tableId, event));
-  //   table.on("unselect", (event) => handleSelection(tableId, event));
-  //   if (records.length) {
-  //     _filterOptimizationCampaign(table, currentCampaignName);
-  //     table.toolbar.check("show-current-optimization-campaign");
-  //     if (forceSelectLatest) {
-  //       table.click(table.getFirst());
-  //     }
-  //     table.select(recordsToSelect);
-  //   }
-
-  const [visibleColumns, setVisibleColumns] = useState<
-    "info" | "settings" | "allInfo"
-  >("info");
-  const [showCurrentCampaign, setShowCurrentCampaign] = useState<boolean>(true);
-  const [isUpdating, setIsUpdating] = useState<boolean>(false);
-  const somethingSelected = !!displayedRunIds.backtesting?.length;
-  function setSelectedRecordIds(selectedRecordIds: string[]) {
-    setDisplayedRunIds((prev_selection) => {
       return {
-        ...prev_selection,
-        backtesting: selectedRecordIds,
+        ...row,
+        key: id,
+        id,
+        runId: row.id,
       };
     });
-  }
 
-  function handleDeleteSelected() {
-    setIsUpdating(true);
-    deleteBacktestingRuns(
-      displayedRunIds.backtesting.map((runId) => {
-        const {
-          backtestingId,
-          optimizerId,
-          campaignName,
-        } = splitRunIdentifiers(runId);
-        return {
-          backtesting_id: backtestingId,
-          optimizer_id: optimizerId,
-          campaign_name: campaignName,
-        };
-      }),
-      setIsUpdating
-    );
-  }
-
-  return (
-    <AntTable<RunDataTableDataType, RunDataTableColumnType>
-      data={records}
-      columns={columns}
-      maxWidth="100%"
-      size="small"
-      bordered
-      scrollWidth={"100%"}
-      selectedRowKeys={displayedRunIds.backtesting}
-      setSelectedRowKeys={setSelectedRecordIds}
-      hiddenColumns={
-        visibleColumns === "info"
-          ? [...METADATA_HIDDEN_FIELDS, ...userInputKeys]
-          : visibleColumns === "allInfo"
-          ? [...METADATA_ADVANCED_HIDDEN_FIELDS, ...userInputKeys]
-          : [
-              ...METADATA_HIDDEN_FIELDS,
-              ...runDataColumnKeys.filter(
-                (key) =>
-                  ![
-                    "runId",
-                    "optimizer id",
-                    "optimization campaign",
-                    "runInformation",
-                  ].includes(key)
-              ),
-            ]
-      }
-      paginationSize={10_000}
-      header={
-        <>
-          <Tooltip title={"Refreshes the run data table"}>
-            <div>
-              <AntButton
-                antIconComponent={ReloadOutlined}
-                colorType={
-                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
-                }
-                buttonVariant={buttonVariants.text}
-                onClick={() => {
-                  setIsUpdating(true);
-                  reloadData(() => setIsUpdating(false));
-                }}
-                spin={isUpdating}
-              />
-            </div>
-          </Tooltip>
-          <Tooltip
-            title={
-              "Toggle displaying data only from the current campaign or from all activated ones"
-            }
-          >
-            <div>
-              <AntButton
-                antIconComponent={UnorderedListOutlined}
-                colorType={
-                  showCurrentCampaign
-                    ? buttonTypes.fontActive
-                    : buttonTypes.font
-                }
-                buttonVariant={buttonVariants.text}
-                onClick={() => {
-                  setShowCurrentCampaign((prevSelection) => !!prevSelection);
-                }}
-              >
-                <>Current optimization campaign: {currentCampaignName}</>
-              </AntButton>
-            </div>
-          </Tooltip>
-          <Radio.Group
-            defaultValue="info"
-            style={{ display: "flex" }}
-            onChange={(event) => setVisibleColumns(event.target.value)}
-          >
-            <Tooltip title="Display Run Information">
-              <Radio.Button value="info">Info</Radio.Button>
-            </Tooltip>
-            <Tooltip title="Display All Run Information">
-              <Radio.Button value="allInfo">All Info</Radio.Button>
-            </Tooltip>
-            <Tooltip title="Display Run Settings">
-              <Radio.Button value="settings">Settings</Radio.Button>
-            </Tooltip>
-          </Radio.Group>
-          <div style={{ margin: "auto" }} />
-          <Tooltip title={"Restores all settings from this run"}>
-            <div>
-              <AntButton
-                antIconComponent={DownloadOutlined}
-                colorType={
-                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
-                }
-                disabled={!somethingSelected || isUpdating}
-                buttonVariant={buttonVariants.text}
-                onClick={somethingSelected ? () => onDelete() : undefined}
-              >
-                Restore Settings
-              </AntButton>
-            </div>
-          </Tooltip>
-          <Tooltip title={"Deletes the selected runs"}>
-            <div>
-              <AntButton
-                antIconComponent={DeleteFilled}
-                colorType={
-                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
-                }
-                disabled={!somethingSelected || isUpdating}
-                buttonVariant={buttonVariants.text}
-                onClick={
-                  somethingSelected ? () => handleDeleteSelected() : undefined
-                }
-              >
-                Delete selected
-              </AntButton>
-            </div>
-          </Tooltip>
-          <Tooltip title={"This will delete all visible"}>
-            <div>
-              <AntButton
-                antIconComponent={DeleteFilled}
-                colorType={
-                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
-                }
-                disabled={isUpdating}
-                buttonVariant={buttonVariants.text}
-                onClick={() => onDelete(true)}
-              >
-                Delete visible
-              </AntButton>
-            </div>
-          </Tooltip>
-        </>
-      }
-    />
-  );
-}
-
-export interface RunDataTableDataType extends AntTableDataType {}
-export interface RunDataTableColumnType
-  extends AntTableColumnType<RunDataTableDataType> {}
-
-function _addBacktestingMetadataTableButtons(
-  table,
-  runDataHidableColumns,
-  userInputColumns,
-  forceSelectLatest,
-  currentOptimizerCampaignName,
-  reloadData,
-  deleteBacktestingRuns,
-  restoreSettings,
-  records
-) {
-  // tabs
-  function showRunInfo() {
-    table.showColumn(...runDataHidableColumns.map((column) => column.field));
-    table.hideColumn(...userInputColumns.map((column) => column.field));
-    table.toolbar.disable("show-run-info");
-    table.toolbar.enable("show-user-inputs");
-  }
-  function showUserInputInfo() {
-    table.hideColumn(...runDataHidableColumns.map((column) => column.field));
-    table.showColumn(...userInputColumns.map((column) => column.field));
-    table.toolbar.disable("show-user-inputs");
-    table.toolbar.enable("show-run-info");
-  }
-  function showCurrentOptimizationCampaignOnly(currentOptimizerCampaignName) {
-    const buttonId = "show-current-optimization-campaign";
-    const button = table.toolbar.get(buttonId);
-    if (button.checked) {
-      table.searchReset();
-      table.toolbar.uncheck(buttonId);
-    } else {
-      _filterOptimizationCampaign(table, currentOptimizerCampaignName);
-      table.toolbar.check(buttonId);
-    }
-  }
-
-  function _deleteRuns(selectedIds) {
-    const toDeleteRuns = selectedIds.map((recId) => table.get(recId));
-    w2confirm(`Delete these ${toDeleteRuns.length} runs ?`).yes(() => {
-      deleteBacktestingRuns(
-        toDeleteRuns.map((run) => {
-          return {
-            backtesting_id: getIdFromTableRow(run),
-            optimizer_id: getOptimizerIdFromTableRow(run),
-            campaign_name: getCampaignNameFromTableRow(run),
-          };
-        })
-      );
-    });
-  }
-  function deleteSelectedRuns(event) {
-    event.force = true;
-    event.onComplete = () => {
-      const selectedIds = table.getSelection();
-      if (selectedIds?.length === 0) {
-        return createNotification({
-          title: "Select a run to delete first",
-          type: "danger",
-        });
-      }
-      _deleteRuns(selectedIds);
+    // const runDataSearches = filteredFirstRow.map(([key]) => {
+    //   return {
+    //     field: key,
+    //     label: key,
+    //     type: TIMESTAMP_DATA.includes(key)
+    //       ? "datetime"
+    //       : _getTableDataType(
+    //           records,
+    //           {
+    //             type: null,
+    //             field: key,
+    //           },
+    //           "text",
+    //           null
+    //         ),
+    //   };
+    // });
+    //   ensureBacktestingMetadataColumnsOrder(runDataSearches);
+    //   const searches = runDataSearches.concat(userInputSearches);
+    //   const searchData = [
+    //     {
+    //       field: "optimization campaign",
+    //       value: currentCampaignName,
+    //       operator: "is",
+    //       type: "text",
+    //     },
+    //   ];
+    //   const sortData = [
+    //     {
+    //       field: "timestamp",
+    //       direction: "asc",
+    //     },
+    //   ];
+    //   const table = createTable({
+    //     elementID: `${tableId}-table`,
+    //     name: tableTitle,
+    //     tableName: tableId,
+    //     searches,
+    //     columns,
+    //     records,
+    //     columnGroups,
+    //     searchData,
+    //     sortData,
+    //     selectable: true,
+    //     addToTable: false,
+    //     reorderRows: false,
+    //     deleteRows: false,
+    //     onReorderRowCallback: null,
+    //     onDeleteCallback: null,
+    //   });
+    //   _addBacktestingMetadataTableButtons(
+    //     table,
+    //     runDataHidableColumns,
+    //     userInputColumns,
+    //     forceSelectLatest,
+    //     currentCampaignName,
+    //     reloadData,
+    //     deleteBacktestingRuns,
+    //     restoreSettings,
+    //     records
+    //   );
+    //   table.on("select", (event) => handleSelection(tableId, event));
+    //   table.on("unselect", (event) => handleSelection(tableId, event));
+    //   if (records.length) {
+    //     _filterOptimizationCampaign(table, currentCampaignName);
+    //     table.toolbar.check("show-current-optimization-campaign");
+    //     if (forceSelectLatest) {
+    //       table.click(table.getFirst());
+    //     }
+    //     table.select(recordsToSelect);
+    //   }
+    return {
+      columns,
+      records,
+      runDataColumnKeys,
+      userInputKeys,
     };
-  }
-  function deleteShownRuns(event) {
-    event.force = true;
-    event.onComplete = () => _deleteRuns(table.last.searchIds);
-  }
-  table.toolbar.add({
-    type: "button",
-    id: "show-run-info",
-    text: "Run info",
-    icon: "fa fa-bolt",
-    disabled: true,
-    onClick: showRunInfo,
-  });
-  table.toolbar.add({
-    type: "button",
-    id: "show-user-inputs",
-    text: "User inputs",
-    icon: "fa fa-user-cog",
-    onClick: showUserInputInfo,
-  });
-  table.toolbar.add({
-    type: "button",
-    id: "show-current-optimization-campaign",
-    text: `Current optimization campaign: ${currentOptimizerCampaignName}`,
-    icon: "fas fa-list",
-    onClick: () =>
-      showCurrentOptimizationCampaignOnly(currentOptimizerCampaignName),
-  });
-  table.toolbar.add({ type: "spacer" });
-
-  // function _restoreSettings() {
-  //     const selectedRuns = table.getSelection()
-  //     if (selectedRuns && selectedRuns.length === 1) {
-  //         function removeSpacesOnlyFromKeys(inputs) {
-  //             inputs && Object.keys(inputs).forEach((inputKey) => {
-  //                 const newInputKey = inputKey?.replace(/ /g, "_")
-  //                 if (newInputKey && newInputKey !== inputKey) {
-  //                     inputs[newInputKey] = inputs[inputKey]
-  //                     delete inputs[inputKey]
-  //                 }
-  //                 if (typeof inputs[newInputKey] === 'object')
-  //                     removeSpacesOnlyFromKeys(inputs[newInputKey]);
-
-  //             })
-  //             return inputs
-  //         }
-  //         const run = selectedRuns[0];
-  //         const userInputs = removeSpacesOnlyFromKeys(JSON.parse(records[run]["user inputs"]))
-  //         restoreSettings(userInputs)
-  //         return;
-  //     }
-  //     createNotification({title: "Error restoring user iputs", "danger", "You must select one run");
-  // }
-  // TODO fix restoring objects
-  // table.toolbar.add({
-  //     type: 'button',
-  //     id: 'restore-run',
-  //     text: 'Restore settings',
-  //     icon: 'fa fa-download',
-  //     onClick: _restoreSettings
-  // })
-  table.toolbar.add({
-    type: "button",
-    id: "refresh-backtesting-runs",
-    text: "Refresh",
-    icon: "w2ui-icon-reload",
-    onClick: reloadData,
-  });
-  table.toolbar.add({
-    type: "button",
-    id: "delete_selected_runs",
-    text: "Delete",
-    icon: "fa fa-trash",
-    onClick: deleteSelectedRuns,
-  });
-  table.toolbar.add({
-    type: "button",
-    id: "delete_visible_runs",
-    text: "Delete visible",
-    icon: "fa fa-trash",
-    onClick: deleteShownRuns,
-  });
+  }, [
+    currentCampaignName,
+    currentTentaclesTradingConfig,
+    hiddenMetadataColumns,
+    metadata,
+    showCurrentCampaign,
+  ]);
 }
+
+export type RunDataTableDataType = BacktestingRunDataWithoutID &
+  AntTableDataType & { [key: string]: any };
+export type RunDataTableColumnType = AntTableColumnType<RunDataTableDataType>;
 
 export function mergeRunIdentifiers(
-  backtestingId: number,
-  optimizerId: number,
+  backtestingId: number | string,
+  optimizerId: number | string,
   campaignName: string
 ): string {
   return `${backtestingId}${ID_SEPARATOR}${optimizerId}${ID_SEPARATOR}${campaignName}`;
@@ -678,33 +615,6 @@ export function splitRunIdentifiers(
     optimizerId: Number(optimizerId),
     campaignName: String(campaignName),
   };
-}
-
-function getIdFromTableRow(row) {
-  return Number(row.id);
-}
-
-function getOptimizerIdFromTableRow(row) {
-  return Number(row["optimizer id"]);
-}
-
-function getCampaignNameFromTableRow(row) {
-  return row["optimization campaign"];
-}
-
-function getSelectedBacktestingRunIdentifiers(tableName) {
-  const table = w2ui[tableName];
-  if (typeof table !== "undefined") {
-    return table.getSelection().map((recid) => {
-      const row = table.get(recid);
-      return mergeRunIdentifiers(
-        getIdFromTableRow(row),
-        getOptimizerIdFromTableRow(row),
-        getCampaignNameFromTableRow(row)
-      );
-    });
-  }
-  return [];
 }
 
 function ensureBacktestingMetadataColumnsOrder(
@@ -752,8 +662,10 @@ const backtestingRunDataColumnOrder: { [key: string]: number } = {
 type UserInpuntColumnsType = {
   [propertyKey: string]: {
     title: string;
+    width: number;
     key?: string;
     dataIndex?: string;
+    ellipsis?: boolean;
     disableSearch?: boolean;
     dsorter?: "string" | "number" | "boolean" | undefined;
     children: UserInpuntColumnsType;
@@ -766,6 +678,7 @@ function userInpuntColumnToArray(
   return Object.entries(userInputColumns).map(([tentacleKey, columnGroup]) => {
     return {
       key: tentacleKey,
+      dataIndex: tentacleKey,
       title: columnGroup.title,
       disableSearch: true,
       // width,
@@ -780,7 +693,6 @@ function userInpuntColumnToArray(
 function getUserInputColumns({
   userInputColumns,
   inputTentacle,
-  inputTentacleLabel,
   tentacleNames,
   userInputKeys,
   inputsByConfig,
@@ -789,7 +701,6 @@ function getUserInputColumns({
 }: {
   userInputColumns: UserInpuntColumnsType;
   inputTentacle: string;
-  inputTentacleLabel: string;
   tentacleNames: string[];
   userInputKeys: string[];
   inputsByConfig: TentaclesConfigValueType;
@@ -817,23 +728,15 @@ function getUserInputColumns({
             width: 0,
             ellipsis: true,
             textWrap: "word-break",
-            children: {},
+            children: {} as UserInpuntColumnsType,
           };
-          const columnParent: UserInpuntColumnsType =
-            inputTentacleLabel === lastTentacleTitle
-              ? userInputColumns
-              : columnGroup.children;
           if (
             propertyValue instanceof Object &&
             !(propertyValue instanceof Array)
           ) {
-            if (inputTentacleLabel === lastTentacleTitle) {
-              console.log("");
-            }
             getUserInputColumns({
               userInputColumns: columnGroup.children,
               tentacleNames: [...tentacleNames, propertyKey],
-              inputTentacleLabel: lastTentacleTitle,
               inputTentacle: propertyKey,
               userInputKeys,
               inputsByConfig: propertyValue,
@@ -849,9 +752,9 @@ function getUserInputColumns({
               dataIndex: inputKey,
               title: userInputLabel,
               width: 150,
-              textWrap: "word-break",
               ellipsis: true,
               disableSearch: true,
+              children: {},
               dsorter: typeof propertyValue as "string" | "number" | "boolean",
             };
           }
@@ -864,31 +767,35 @@ function getUserInputColumns({
   return userInputColumns;
 }
 
-function _getTableDataType(records, search, defaultValue, sampleValue) {
-  if (ID_DATA.includes(search.field)) {
-    return "int";
-  }
-  if (search.type !== null) {
-    return search.type;
-  }
-  const _sampleValue =
-    sampleValue === null ? records[0][search.field] : sampleValue;
-  if (typeof _sampleValue === "undefined") {
-    return defaultValue;
-  }
-  if (typeof _sampleValue === "number") {
-    return "float";
-  }
-  if (typeof _sampleValue === "string") {
-    return "text";
-  }
-  if (typeof _sampleValue === "object") {
-    return "list";
-  }
-  return defaultValue;
-}
+// function _getTableDataType(records, search, defaultValue, sampleValue) {
+//   if (ID_DATA.includes(search.field)) {
+//     return "int";
+//   }
+//   if (search.type !== null) {
+//     return search.type;
+//   }
+//   const _sampleValue =
+//     sampleValue === null ? records[0][search.field] : sampleValue;
+//   if (typeof _sampleValue === "undefined") {
+//     return defaultValue;
+//   }
+//   if (typeof _sampleValue === "number") {
+//     return "float";
+//   }
+//   if (typeof _sampleValue === "string") {
+//     return "text";
+//   }
+//   if (typeof _sampleValue === "object") {
+//     return "list";
+//   }
+//   return defaultValue;
+// }
 
-function _formatUserInputRow(row, userInputData, parentIdentifiers: string) {
+function _formatUserInputRow(
+  row: BacktestingRunData,
+  userInputData: TentaclesConfigValuesType,
+  parentIdentifiers: string
+) {
   Object.entries(userInputData).forEach(
     ([userInputIdentifier, userInputValue]) => {
       if (
@@ -897,9 +804,9 @@ function _formatUserInputRow(row, userInputData, parentIdentifiers: string) {
       ) {
         _formatUserInputRow(row, userInputValue, userInputIdentifier);
       } else {
-        row[
+        (row as any)[
           userInputKey(userInputIdentifier, parentIdentifiers)
-        ] = userInputValue;
+        ] = String(userInputValue);
       }
     }
   );
@@ -907,32 +814,11 @@ function _formatUserInputRow(row, userInputData, parentIdentifiers: string) {
 
 function _formatMetadataRow(row: BacktestingRunData) {
   if (row["user inputs"]) {
-    _formatUserInputRow(row, row["user inputs"], null);
+    _formatUserInputRow(row, row["user inputs"], "");
   }
-  Object.entries(row).forEach(([key, rowValue]) => {
+  Object.values(row).forEach((rowValue) => {
     if (typeof rowValue === "object") {
       rowValue = JSON.stringify(rowValue);
     }
   });
-}
-
-function _filterOptimizationCampaign(
-  table,
-  currentOptimizerCampaignName: string
-) {
-  // default search and sort
-  table.search(
-    [
-      {
-        field: "optimization campaign",
-        value: currentOptimizerCampaignName,
-        operator: "is",
-      },
-    ],
-    "AND"
-  );
-  // force "is" operator as it is not used in text searches by default
-  table.searchData[0].operator = "is";
-  table.localSearch();
-  table.refresh();
 }

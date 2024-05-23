@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { useMemo, useState } from "react";
+
 import { closeAllPositions } from "../../../api/actions";
-import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
+import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 
 export default function CloseAllPositionsButton() {
   const [isClosing, setIsClosing] = useState(false);

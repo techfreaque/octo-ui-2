@@ -1,23 +1,24 @@
 import { Dispatch, SetStateAction, useMemo, useState } from "react";
-import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
+
 import {
-  ApiActionsType,
-  useBotInfoContext,
-  useIsDemoMode,
-} from "../../../context/data/BotInfoProvider";
-import {
-  TentaclesConfigByTentacleType,
-  useSaveTentaclesConfigAndSendAction,
-} from "../../../context/config/TentaclesConfigProvider";
-import { saveUserInputs } from "../Configuration/TentaclesConfig";
+  errorResponseCallBackParams,
+  successResponseCallBackParams,
+} from "../../../api/fetchAndStoreFromBot";
 import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
 import {
-  errorResponseCallBackParams,
-  successResponseCallBackParams,
-} from "../../../api/fetchAndStoreFromBot";
+  TentaclesConfigByTentacleType,
+  useSaveTentaclesConfigAndSendAction,
+} from "../../../context/config/TentaclesConfigProvider";
+import {
+  ApiActionsType,
+  useBotInfoContext,
+  useIsDemoMode,
+} from "../../../context/data/BotInfoProvider";
+import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
+import { saveUserInputs } from "../Configuration/TentaclesConfig";
 
 export default function SendActionCommandToTradingMode({
   command,

@@ -1,9 +1,10 @@
-import { useMediaQuery } from "@mui/material";
-import AntButton, { buttonSizes } from "./AntButton";
-import { useBotColorsContext } from "../../context/config/BotColorsProvider";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { useMediaQuery } from "@mui/material";
 import { CSSProperties, ForwardRefExoticComponent, RefAttributes } from "react";
+
+import { useBotColorsContext } from "../../context/config/BotColorsProvider";
+import AntButton, { buttonSizes } from "./AntButton";
 
 export default function AppIconButton({
   isSelected,

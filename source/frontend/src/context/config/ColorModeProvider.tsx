@@ -1,9 +1,11 @@
 import { createContext, useContext, useMemo, useState } from "react";
+
 import { ColorModeType } from "../../constants/uiTemplate/defaultColors";
 
 const defaultColorMode: ColorModeType = "dark";
 
 const ToggleColorModeContext = createContext({
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   toggleColorMode: () => {},
 });
 const ColorModeContext = createContext<ColorModeType>(defaultColorMode);

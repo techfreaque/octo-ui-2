@@ -1,8 +1,9 @@
-import { Avatar, Tooltip, Typography } from "antd";
-import AppRating from "./AppRating";
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
+import { Avatar, Tooltip, Typography } from "antd";
+
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
 import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
+import AppRating from "./AppRating";
 
 export function AppTitle({ title }: { title: string }) {
   return <div> {title}</div>;

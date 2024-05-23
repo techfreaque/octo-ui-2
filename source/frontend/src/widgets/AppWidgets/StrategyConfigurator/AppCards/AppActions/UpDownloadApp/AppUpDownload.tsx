@@ -4,26 +4,27 @@ import {
   DollarOutlined,
   LeftOutlined,
 } from "@ant-design/icons";
-import { handlePopConfirmOpen } from "../AppActions";
-import UploadAppForm from "./UploadAppForm";
-import AppDownloadForm from "./DownloadForm";
-import {
-  AppStoreAppType,
-  useAppStoreUserContext,
-  validateUploadInfo,
-} from "../../../../../../context/data/AppStoreDataProvider";
-import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
-import AntButton from "../../../../../../components/Buttons/AntButton";
+import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import { Modal, Tooltip, Typography } from "antd";
-import { buttonTypes } from "../../../../../../components/Buttons/AntButton";
-import { DownloadInfo, UploadInfo } from "../../AppCard";
 import {
   Dispatch,
   ForwardRefExoticComponent,
   RefAttributes,
   SetStateAction,
 } from "react";
-import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
+
+import AntButton from "../../../../../../components/Buttons/AntButton";
+import { buttonTypes } from "../../../../../../components/Buttons/AntButton";
+import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
+import {
+  AppStoreAppType,
+  useAppStoreUserContext,
+  validateUploadInfo,
+} from "../../../../../../context/data/AppStoreDataProvider";
+import { DownloadInfo, UploadInfo } from "../../AppCard";
+import { handlePopConfirmOpen } from "../AppActions";
+import AppDownloadForm from "./DownloadForm";
+import UploadAppForm from "./UploadAppForm";
 
 export default function AppUpDownload({
   app,

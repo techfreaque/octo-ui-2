@@ -1,15 +1,16 @@
 import { useMemo, useState } from "react";
+import { Trans } from "react-i18next";
+import { useNavigate } from "react-router-dom";
+
+import { logOutBot } from "../../../api/actions";
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 import {
   useIsBotOnlineContext,
   useUpdateIsBotOnlineContext,
 } from "../../../context/data/IsBotOnlineProvider";
-import { useNavigate } from "react-router-dom";
-import { backendRoutes } from "../../../constants/backendConstants";
-import { logOutBot } from "../../../api/actions";
-import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
-import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
-import { Trans } from "react-i18next";
 
 export default function LogoutButton({ onClick }: { onClick?: () => void }) {
   const [isLoading, setIsloading] = useState(false);

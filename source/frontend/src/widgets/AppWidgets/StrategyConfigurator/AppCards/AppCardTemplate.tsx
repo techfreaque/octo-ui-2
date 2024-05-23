@@ -1,13 +1,14 @@
 import { Card } from "antd";
-import { AppAvatar, AppCover, AppTitle } from "./AppCover";
-import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
-import AppRating from "./AppRating";
-import { CardDescription } from "./AppDescription";
 import { CSSProperties, Dispatch, SetStateAction } from "react";
+
+import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
 import {
   AppStoreAppType,
   StoreCategoryType,
 } from "../../../../context/data/AppStoreDataProvider";
+import { AppAvatar, AppCover, AppTitle } from "./AppCover";
+import { CardDescription } from "./AppDescription";
+import AppRating from "./AppRating";
 
 export default function AppCardTemplate({
   app,

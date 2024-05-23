@@ -1,19 +1,20 @@
+import { CaretDownOutlined } from "@ant-design/icons";
+import { Button, Dropdown, List, Switch, Typography } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
+import { buttonTypes } from "../../../components/Buttons/AntButton";
+import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
+import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
+import createNotification from "../../../components/Notifications/Notification";
+import { sizes } from "../../../constants/frontendConstants";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { useSaveTentaclesConfig } from "../../../context/config/TentaclesConfigProvider";
 import {
   useUpdateVisibleTimeFramesContext,
   useVisibleTimeFramesContext,
 } from "../../../context/config/VisibleTimeFrameProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
-import { Button, Dropdown, List, Switch, Typography } from "antd";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
-import { CaretDownOutlined } from "@ant-design/icons";
-import { sizes } from "../../../constants/frontendConstants";
-import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
-import createNotification from "../../../components/Notifications/Notification";
 import RestartBotButton from "../Buttons/RestartBotButton";
-import { buttonTypes } from "../../../components/Buttons/AntButton";
 
 export default function TimeFrameSelector() {
   const botInfo = useBotInfoContext();
@@ -87,7 +88,7 @@ function TimeFrameEnabler({
           </>
         ),
         duration: 9_999_999_999_999,
-        dismiss: false,
+        // dismiss: false,
       });
     }
     if (hasChanged && botInfo?.strategy_names?.[0]) {

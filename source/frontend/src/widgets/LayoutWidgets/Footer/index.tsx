@@ -1,11 +1,15 @@
-import { useMemo, useState } from "react";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { RocketOutlined } from "@ant-design/icons";
 import {
-  useBotInfoContext,
-  useUpdateProjectInfoOpenContext,
-} from "../../../context/data/BotInfoProvider";
-import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
+  faDiscord,
+  faGithub,
+  faYoutube,
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useMediaQuery } from "@mui/material";
 import { Alert, Modal, Typography } from "antd";
+import { useMemo, useState } from "react";
+
+import AntButton, { buttonSizes } from "../../../components/Buttons/AntButton";
 import {
   projectDiscord,
   projectGithubUrl,
@@ -13,16 +17,13 @@ import {
   projectYouTube,
   supportedOctoBotDistributions,
 } from "../../../constants/frontendConstants";
-import AntButton, { buttonSizes } from "../../../components/Buttons/AntButton";
-import { RocketLaunchOutlined } from "@mui/icons-material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faDiscord,
-  faGithub,
-  faYoutube,
-} from "@fortawesome/free-brands-svg-icons";
-import { useMediaQuery } from "@mui/material";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import {
+  useBotInfoContext,
+  useUpdateProjectInfoOpenContext,
+} from "../../../context/data/BotInfoProvider";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 export default function Footer({ rightContent }: UiLayoutPageLayoutType) {
   const botColors = useBotColorsContext();
@@ -144,7 +145,7 @@ function UnsupportedWarning({
                 size={buttonSizes.large}
                 style={{ margin: "auto" }}
                 onClick={() => setProjectInfoOpen(true)}
-                muiIconComponent={RocketLaunchOutlined}
+                antIconComponent={RocketOutlined}
               >
                 Switch To Octane For Free
               </AntButton>

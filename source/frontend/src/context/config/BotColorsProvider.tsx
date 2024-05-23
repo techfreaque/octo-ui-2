@@ -1,23 +1,25 @@
+import { createTheme, ThemeProvider } from "@mui/material";
 import {
-  useState,
-  useContext,
   createContext,
+  Dispatch,
+  SetStateAction,
+  useContext,
   useEffect,
   useMemo,
-  SetStateAction,
-  Dispatch,
+  useState,
 } from "react";
+
 import {
   ColorsType,
   defaultColors,
 } from "../../constants/uiTemplate/defaultColors";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { colorModes, useColorModeContext } from "./ColorModeProvider";
-import { ThemeProvider, createTheme } from "@mui/material";
 
 const BotColorsContext = createContext<ColorsType>(defaultColors.dark);
 const UpdateBotColorsContext = createContext<
   Dispatch<SetStateAction<ColorsType>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useBotColorsContext = () => {
   return useContext(BotColorsContext);

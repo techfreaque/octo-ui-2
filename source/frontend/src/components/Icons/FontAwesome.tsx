@@ -1,9 +1,8 @@
-import { CSSProperties, createElement } from "react";
-import { SizeType, sizes } from "../../constants/frontendConstants";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconProp, SizeProp } from "@fortawesome/fontawesome-svg-core";
-import { OverridableComponent } from "@mui/material/OverridableComponent";
-import { SvgIconTypeMap } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { createElement, CSSProperties } from "react";
+
+import { sizes, SizeType } from "../../constants/frontendConstants";
 
 const iconStyles: {
   [key in SizeType]: SizeProp | undefined;
@@ -39,28 +38,6 @@ export function FaIconByReactFunc({
       },
     })
   );
-}
-export function MuiIconByReactFunc({
-  icon,
-  size = sizes.medium,
-  spin = false,
-  marginRight = "0px",
-}: {
-  icon: OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
-    muiName: string;
-  };
-  size?: SizeType;
-  spin?: boolean | undefined;
-  marginRight?: string;
-}) {
-  return createElement(icon, {
-    ...(iconStyles[size] && { size: iconStyles[size] }),
-    style: {
-      marginRight,
-      marginTop: "auto",
-      marginBottom: "auto",
-    },
-  });
 }
 
 export default function FontAwesomeIconByString({

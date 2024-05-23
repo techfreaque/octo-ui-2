@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction, useCallback, useState } from "react";
 import { createContext, useContext } from "react";
+
 import { fetchBotPortfolio } from "../../api/data";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 
 export interface PortfolioType {
@@ -22,7 +24,7 @@ export interface PortfolioType {
 const BotPortfolioContext = createContext<PortfolioType | undefined>(undefined);
 const UpdateBotPortfolioContext = createContext<
   Dispatch<SetStateAction<PortfolioType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useSaveBotPortfolioContext = () => {
   return useContext(UpdateBotPortfolioContext);

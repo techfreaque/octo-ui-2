@@ -1,6 +1,7 @@
-import { Dispatch, SetStateAction, useEffect } from "react";
-import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
 import { Input, Switch } from "antd";
+import { Dispatch, SetStateAction, useEffect } from "react";
+
+import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
 import { AppStoreAppType } from "../../../../../../context/data/AppStoreDataProvider";
 
 export interface CloneAppInfoType {
@@ -35,7 +36,7 @@ export default function CloneAppForm({
   }
   return (
     <div style={{ marginRight: "20px" }}>
-      <UserInputLabel title={`Define a new title for your strategy`}>
+      <UserInputLabel title={"Define a new title for your strategy"}>
         <Input
           onChange={(event) =>
             handleInputChange("newProfileName", event?.target?.value)
@@ -43,7 +44,7 @@ export default function CloneAppForm({
           value={cloneAppInfo?.newProfileName}
         />
       </UserInputLabel>
-      <UserInputLabel title={`Do you want to select the new strategy?`}>
+      <UserInputLabel title={"Do you want to select the new strategy?"}>
         <Switch
           onChange={(value) => handleInputChange("selectNewProfile", value)}
           checked={cloneAppInfo?.selectNewProfile || false}

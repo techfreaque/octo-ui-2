@@ -1,6 +1,7 @@
 import { Progress, Tooltip } from "antd";
-import { useDataCollectingProgressContext } from "../../../context/actions/BotBacktestingProvider";
 import { useMemo } from "react";
+
+import { useDataCollectingProgressContext } from "../../../context/actions/BotBacktestingProvider";
 
 export default function DataCollectorProgress() {
   const collectorProgress = useDataCollectingProgressContext();

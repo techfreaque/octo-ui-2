@@ -1,4 +1,17 @@
+import "./AppCards/appRatingStyle.css";
+
+import { BranchesOutlined } from "@ant-design/icons";
+import { Typography } from "antd";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+
+import AntSidebar, {
+  AntSideBarMenutItemType,
+} from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import {
+  tentacleConfigTypes,
+  useFetchCurrentTradingTentaclesConfig,
+  useTentaclesConfigContext,
+} from "../../../context/config/TentaclesConfigProvider";
 import {
   AppStoreAppType,
   StoreCategoryType,
@@ -6,39 +19,28 @@ import {
   useAppStoreUserContext,
   useFetchAppStoreData,
 } from "../../../context/data/AppStoreDataProvider";
-import AppList from "./AppList";
-import AntSidebar, {
-  AntSideBarMenutItemType,
-} from "../../../components/Sidebars/AntSidebar/AntSidebar";
-import ProfileAvatar from "../Stats/ProfileAvatar";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
-import "./AppCards/appRatingStyle.css";
-import { Typography } from "antd";
-import {
-  tentacleConfigTypes,
-  useFetchCurrentTradingTentaclesConfig,
-  useTentaclesConfigContext,
-} from "../../../context/config/TentaclesConfigProvider";
 import { useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../context/data/BotPlottedElementsProvider";
+import { objectKeys } from "../../../helpers/helpers";
+import BuildingBlocksSidebar from "../Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
+import StrategyFlowBuilder from "../Configuration/StrategyFlowBuilder/StrategyFlowBuilder";
 import {
-  TentacleConfigTabsData,
   displayStyles,
   generateTradingConfigTabs,
   replaceUppercaseWithSpace,
   strategyFlowMakerName,
+  TentacleConfigTabsData,
 } from "../Configuration/TentaclesConfig";
+import ProfileAvatar from "../Stats/ProfileAvatar";
+import AppList from "./AppList";
 import {
-  StrategyModeSettingsNameType,
   appPackagesName,
   hiddenCategories,
   strategyModeName,
   strategyModeSettingsName,
+  StrategyModeSettingsNameType,
   strategyName,
 } from "./storeConstants";
-import { BranchesOutlined } from "@ant-design/icons";
-import StrategyFlowBuilder from "../Configuration/StrategyFlowBuilder/StrategyFlowBuilder";
-import BuildingBlocksSidebar from "../Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
-import { objectKeys } from "../../../helpers/helpers";
 
 export default function AppStore() {
   const appStoreData = useAppStoreDataContext();
@@ -146,7 +148,7 @@ export default function AppStore() {
             Select a setting category from the sidebar
           </Typography.Title>
         ),
-        children: isFlowMode
+        items: isFlowMode
           ? [
               {
                 title: <BuildingBlocksSidebar />,
@@ -172,7 +174,7 @@ export default function AppStore() {
             Select a app category from the sidebar
           </Typography.Title>
         ),
-        children: availableCategories
+        items: availableCategories
           ?.filter(
             (category) =>
               category !== strategyName &&

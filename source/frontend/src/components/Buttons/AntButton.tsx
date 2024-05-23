@@ -1,14 +1,6 @@
-import { Button, ConfigProvider, Tag } from "antd";
-import { useBotColorsContext } from "../../context/config/BotColorsProvider";
-import IconFromString from "../Icons/IconFromString";
-import { SizeType, sizes } from "../../constants/frontendConstants";
-import { AntIconByReactFunc } from "../Icons/AntIcon";
-import { FaIconByReactFunc, MuiIconByReactFunc } from "../Icons/FontAwesome";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
-
-import { OverridableComponent } from "@mui/material/OverridableComponent";
-import { SvgIconTypeMap } from "@mui/material";
+import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { Button, ConfigProvider, Tag } from "antd";
 import {
   CSSProperties,
   ForwardRefExoticComponent,
@@ -16,6 +8,12 @@ import {
   MouseEvent,
   RefAttributes,
 } from "react";
+
+import { sizes, SizeType } from "../../constants/frontendConstants";
+import { useBotColorsContext } from "../../context/config/BotColorsProvider";
+import { AntIconByReactFunc } from "../Icons/AntIcon";
+import { FaIconByReactFunc } from "../Icons/FontAwesome";
+import IconFromString from "../Icons/IconFromString";
 
 export type ButtonType =
   | "success"
@@ -71,7 +69,6 @@ export default function AntButton({
   // icon components
   faIconComponent,
   antIconComponent,
-  muiIconComponent,
   // string icons
   faIcon,
   antIcon,
@@ -100,11 +97,6 @@ export default function AntButton({
   iconSize?: SizeType;
   // icon components
   faIconComponent?: IconDefinition | undefined;
-  muiIconComponent?:
-    | (OverridableComponent<SvgIconTypeMap<{}, "svg">> & {
-        muiName: string;
-      })
-    | undefined;
   antIconComponent?:
     | ForwardRefExoticComponent<
         Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
@@ -194,14 +186,6 @@ export default function AntButton({
             {faIconComponent && (
               <FaIconByReactFunc
                 icon={faIconComponent}
-                size={iconSize}
-                marginRight={iconMargin}
-                spin={spin}
-              />
-            )}
-            {muiIconComponent && (
-              <MuiIconByReactFunc
-                icon={muiIconComponent}
                 size={iconSize}
                 marginRight={iconMargin}
                 spin={spin}

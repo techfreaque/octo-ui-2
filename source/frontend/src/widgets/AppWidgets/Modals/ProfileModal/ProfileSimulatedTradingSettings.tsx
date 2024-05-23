@@ -15,6 +15,7 @@ import {
   Typography,
 } from "antd";
 import { Dispatch, SetStateAction, useState } from "react";
+
 import { ProfileType } from "../../../../context/data/BotInfoProvider";
 import { onProfileSettingChange } from "./ProfileTradingSettings";
 

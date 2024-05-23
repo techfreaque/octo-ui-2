@@ -1,70 +1,70 @@
-import DefaultLayout from "../LayoutWidgets/PageLayouts/DefaultLayout";
-import SimpleLayout from "../LayoutWidgets/PageLayouts/SimpleLayout/SimpleLayout";
 import AppDrawerDropdown from "../AppWidgets/AppDrawerDropdown";
-import ScrollableTabs from "../LayoutWidgets/Tabs/ScrollableTabs";
-import Footer from "../LayoutWidgets/Footer";
-import SplitMainContent from "../LayoutWidgets/SplitMainContent";
-import TimeFrameSelector from "../AppWidgets/TimeFrameSelector/TimeFrameSelector";
-import Header from "../LayoutWidgets/Header";
-import ColorModeSwitch from "../AppWidgets/Buttons/ColorModeSwitcher";
-import AppStore from "../AppWidgets/StrategyConfigurator/StrategyConfigurator";
-import CurrentPortfolioTable from "../AppWidgets/Tables/CurrentPortfolio";
-import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
-import PairsSelector from "../AppWidgets/PairsSelector/PairsSelector";
-import PairsTable from "../AppWidgets/PairsSelector/PairsTable";
-import { BacktestingRunDataTable } from "../AppWidgets/Tables/RunDataTableW2UI";
-import UIConfig from "../AppWidgets/Configuration/UIConfig";
-import StartBacktestingButton from "../AppWidgets/Buttons/StartBacktestingButton";
-import StopBacktestingButton from "../AppWidgets/Buttons/StopBacktestingButton";
-import OptimizerQueueTable from "../AppWidgets/Tables/OptimizerQueue";
-import OptimizerConfigForm, {
-  OptimizerNotInstalled,
-} from "../AppWidgets/Configuration/OptimizerConfigForm/OptimizerConfigForm";
-import OptimizerRunsToBeAdded from "../AppWidgets/Stats/OptimizerRunsToBeAdded";
-import StartOptimizerButton from "../AppWidgets/Buttons/StartOptimizerButton";
-import StopOptimizerButton from "../AppWidgets/Buttons/StopOptimizerButton";
 import AddToOptimizerQueueButton from "../AppWidgets/Buttons/AddToOptimizerQueueButton";
-import PageBuilder from "../AppWidgets/PageBuilder/PageBuilder";
-import ButtonWithModal from "../AppWidgets/Modals/ButtonWithModal";
-import RealTradingSwitch from "../AppWidgets/Configuration/SwitchRealTrading/SwitchRealTrading";
-import StopBotButton from "../AppWidgets/Buttons/StopBotButton";
-import RestartBotButton from "../AppWidgets/Buttons/RestartBotButton";
-import UpdateBotButton from "../AppWidgets/Buttons/UpdateBotButton";
-import CloseAllPositionsButton from "../AppWidgets/Buttons/CloseAllPositionsButton";
 import CancelAllOrdersButton from "../AppWidgets/Buttons/CancelAllOrdersButton";
-import PowerMenu from "../AppWidgets/Modals/PowerMenu/PowerMenu";
-import SendActionCommandToTradingMode from "../AppWidgets/Buttons/SendActionCommandToTradingMode";
-import RefreshBotData from "../AppWidgets/Buttons/RefreshData";
-import OptimizerQueueSize from "../AppWidgets/Stats/OptimizerQueueSize";
-import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
+import CloseAllPositionsButton from "../AppWidgets/Buttons/CloseAllPositionsButton";
+import ClosePairSelector from "../AppWidgets/Buttons/ClosePairSelector";
+import ColorModeSwitch from "../AppWidgets/Buttons/ColorModeSwitcher";
+import CurrentPanelPosition from "../AppWidgets/Buttons/CurrentPanelPosition";
+import LanguageSwitch from "../AppWidgets/Buttons/LanguageSwitch";
 import LogoutButton from "../AppWidgets/Buttons/LogoutButton";
-import Sidebar, { SidebarMenuItem } from "../LayoutWidgets/Sidebar/Sidebar";
-import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
-import Logo from "../AppWidgets/other/Logo";
+import RefreshBotData from "../AppWidgets/Buttons/RefreshData";
+import RestartBotButton from "../AppWidgets/Buttons/RestartBotButton";
+import SavePairSelector from "../AppWidgets/Buttons/SavePairSelector";
+import SaveTradingModeSettings from "../AppWidgets/Buttons/SaveTradingModeSettings";
+import SendActionCommandToTradingMode from "../AppWidgets/Buttons/SendActionCommandToTradingMode";
+import StartBacktestingButton from "../AppWidgets/Buttons/StartBacktestingButton";
+import StartOptimizerButton from "../AppWidgets/Buttons/StartOptimizerButton";
+import StopBacktestingButton from "../AppWidgets/Buttons/StopBacktestingButton";
+import StopBotButton from "../AppWidgets/Buttons/StopBotButton";
+import StopOptimizerButton from "../AppWidgets/Buttons/StopOptimizerButton";
+import StopTrainingButton from "../AppWidgets/Buttons/StopTrainingButton";
+import ToggleActivateRealTimeStrategy from "../AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
+import UpdateBotButton from "../AppWidgets/Buttons/UpdateBotButton";
 import ChartTablePieCombo, {
   ChartTypeSelector,
 } from "../AppWidgets/Charts/ChartTablePieCombo";
-import LanguageSwitch from "../AppWidgets/Buttons/LanguageSwitch";
-import ResetConfigs from "../AppWidgets/ResetConfigs/ResetConfigs";
+import OptimizerConfigForm, {
+  OptimizerNotInstalled,
+} from "../AppWidgets/Configuration/OptimizerConfigForm/OptimizerConfigForm";
+import ServicesConfig from "../AppWidgets/Configuration/ServicesConfig";
+import RealTradingSwitch from "../AppWidgets/Configuration/SwitchRealTrading/SwitchRealTrading";
+import TentaclesConfig from "../AppWidgets/Configuration/TentaclesConfig";
+import UIConfig from "../AppWidgets/Configuration/UIConfig";
+import ExchangeSelector from "../AppWidgets/ExchangeSelector/ExchangeSelector";
+import ButtonWithModal from "../AppWidgets/Modals/ButtonWithModal";
+import PowerMenu from "../AppWidgets/Modals/PowerMenu/PowerMenu";
 import NotificationCenter from "../AppWidgets/NotificationCenter/NotificationCenter";
+import Logo from "../AppWidgets/other/Logo";
+import PageBuilder from "../AppWidgets/PageBuilder/PageBuilder";
+import PairsSelector from "../AppWidgets/PairsSelector/PairsSelector";
+import PairsTable from "../AppWidgets/PairsSelector/PairsTable";
 import BacktestingProgress from "../AppWidgets/Progress/BacktestingProgress";
-import OptimizerProgress from "../AppWidgets/Progress/OptimizerProgress";
-import CurrentPanelPosition from "../AppWidgets/Buttons/CurrentPanelPosition";
 import DataCollectorProgress from "../AppWidgets/Progress/DataCollectorProgress";
-import ClosePairSelector from "../AppWidgets/Buttons/ClosePairSelector";
-import SavePairSelector from "../AppWidgets/Buttons/SavePairSelector";
-import LoginManager from "../AppWidgets/StrategyConfigurator/Dashboard/Login";
-import AppStoreCartModal, {
-  AppStoreCart,
-} from "../AppWidgets/StrategyConfigurator/Cart";
-import SaveTradingModeSettings from "../AppWidgets/Buttons/SaveTradingModeSettings";
-import StopTrainingButton from "../AppWidgets/Buttons/StopTrainingButton";
+import OptimizerProgress from "../AppWidgets/Progress/OptimizerProgress";
+import { CloudDeployment } from "../AppWidgets/ProjectPage/CloudDeployment";
+import DemoInfo from "../AppWidgets/ProjectPage/DemoInfo";
 import ProjectHomePage, {
   ProjectHomePageModal,
 } from "../AppWidgets/ProjectPage/Home";
-import DemoInfo from "../AppWidgets/ProjectPage/DemoInfo";
-import ServicesConfig from "../AppWidgets/Configuration/ServicesConfig";
-import { CloudDeployment } from "../AppWidgets/ProjectPage/CloudDeployment";
+import ResetConfigs from "../AppWidgets/ResetConfigs/ResetConfigs";
+import OptimizerQueueSize from "../AppWidgets/Stats/OptimizerQueueSize";
+import OptimizerRunsToBeAdded from "../AppWidgets/Stats/OptimizerRunsToBeAdded";
+import AppStoreCartModal, {
+  AppStoreCart,
+} from "../AppWidgets/StrategyConfigurator/Cart";
+import LoginManager from "../AppWidgets/StrategyConfigurator/Dashboard/Login";
+import AppStore from "../AppWidgets/StrategyConfigurator/StrategyConfigurator";
+import CurrentPortfolioTable from "../AppWidgets/Tables/CurrentPortfolio";
+import OptimizerQueueTable from "../AppWidgets/Tables/OptimizerQueue";
+import { BacktestingRunDataTable } from "../AppWidgets/Tables/RunDataTable/BacktestingRunDataTable";
+import TimeFrameSelector from "../AppWidgets/TimeFrameSelector/TimeFrameSelector";
+import Footer from "../LayoutWidgets/Footer";
+import Header from "../LayoutWidgets/Header";
+import DefaultLayout from "../LayoutWidgets/PageLayouts/DefaultLayout";
+import SimpleLayout from "../LayoutWidgets/PageLayouts/SimpleLayout/SimpleLayout";
+import Sidebar, { SidebarMenuItem } from "../LayoutWidgets/Sidebar/Sidebar";
+import SplitMainContent from "../LayoutWidgets/SplitMainContent";
+import ScrollableTabs from "../LayoutWidgets/Tabs/ScrollableTabs";
 // import your custom widgets here
 
 export type NonAppWidgetNameType =

@@ -41,11 +41,15 @@ export default function AntTable<
   onChange,
   hiddenColumns,
   scrollWidth,
+  height,
+  maxHeight,
   bordered,
 }: {
   columns: TAntTableColumnType[];
   data: TAntTableDataType[];
   maxWidth?: string;
+  height?: string;
+  maxHeight?: string;
   paginationSize?: number;
   scrollWidth?: string;
   expandable?: AntTableExpandableConfig<TAntTableDataType>;
@@ -113,7 +117,8 @@ export default function AntTable<
         overflowY: "auto",
         maxWidth,
         width: "100%",
-        maxHeight: "calc(100vh - 200px)",
+        ...(height ? { height } : {}),
+        ...(maxHeight ? { maxHeight } : {}),
       }}
     >
       <Table
@@ -418,7 +423,7 @@ export interface AntTableColumnType<
   key: string;
   // dataIndex to use another column to sort / filter
   dataIndex?: string;
-  width?: number;
+  width?: number | string;
   dsorter?:
     | ((a: TAntTableDataType, b: TAntTableDataType) => number)
     | "string"

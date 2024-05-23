@@ -1,19 +1,21 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useCallback,
-  useEffect,
   Dispatch,
   SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
+
+import { updateConfig } from "../../api/actions";
 import { fetchExchangeInfo } from "../../api/data";
+import fetchAndStoreFromBot from "../../api/fetchAndStoreFromBot";
+import { backendRoutes } from "../../constants/backendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
+import { parseSymbol } from "../../helpers/SymbolsUtil";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useBotInfoContext } from "./BotInfoProvider";
-import { updateConfig } from "../../api/actions";
-import { parseSymbol } from "../../helpers/SymbolsUtil";
-import { backendRoutes } from "../../constants/backendConstants";
-import fetchAndStoreFromBot from "../../api/fetchAndStoreFromBot";
 
 export type ExchangeConfigSettingNameType =
   | "api-key"
@@ -62,13 +64,13 @@ const ExchangeInfoContext = createContext<ExchangeInfoType | undefined>(
 );
 const UpdateExchangeInfoContext = createContext<
   Dispatch<SetStateAction<ExchangeInfoType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 export type CurrencyListType = string[];
 
 const UpdateToSaveCurrencySettingsContext = createContext<
   Dispatch<SetStateAction<ConfigSymbolsType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 const CurrentCurrencyListContext = createContext<CurrencyListType | undefined>(
   undefined
 );
@@ -91,13 +93,13 @@ const PairSelectorMenuOpenContext = createContext<PairSelectorMenuOpenType>(
 );
 const UpdatePairSelectorMenuOpenContext = createContext<
   Dispatch<SetStateAction<PairSelectorMenuOpenType>>
->((_value) => {});
+>(emptyValueFunction);
 const NewConfigExchangesContext = createContext<
   ExchangesConfigType | undefined
 >(undefined);
 const UpdateNewConfigExchangesContext = createContext<
   Dispatch<SetStateAction<ExchangesConfigType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useExchangeInfoContext = () => {
   return useContext(ExchangeInfoContext);
@@ -168,7 +170,7 @@ const ServicesInfoContext = createContext<SericesInfoType | undefined>(
 );
 const UpdateServicesInfoContext = createContext<
   Dispatch<SetStateAction<SericesInfoType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 const initialExchangeConfigUpdate: ExchangeConfigUpdateType = {
   global_config: {},
@@ -194,7 +196,7 @@ const ExchangeConfigUpdateContext = createContext<ExchangeConfigUpdateType>(
 );
 const UpdateExchangeConfigUpdateContext = createContext<
   Dispatch<SetStateAction<ExchangeConfigUpdateType>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useServicesInfoContext = () => {
   return useContext(ServicesInfoContext);
@@ -288,7 +290,7 @@ export const useHandleProfileUpdate = () => {
 export const useHandleSettingChange = () => {
   const setToSaveCurrencySettings = useUpdateToSaveCurrencySettings();
   return useCallback(
-    (enabled: boolean, exchange: string, symbol: string) => {
+    (enabled: boolean, symbol: string) => {
       setToSaveCurrencySettings((prevSettings) => {
         const newSettings = {
           ...prevSettings,
@@ -372,7 +374,7 @@ export const BotExchangeInfoProvider = ({
   useEffect(() => {
     const {
       currencySettings: currentCurrencySettings,
-    } = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo);
+    } = convertSymbolSettingsToNewFormat(currencySettings);
     const currentCurrencySettingsJson: string = JSON.stringify(
       currentCurrencySettings
     );
@@ -381,10 +383,10 @@ export const BotExchangeInfoProvider = ({
   useEffect(() => {
     const {
       currencyList: _currentCurrencyList,
-    } = convertSymbolSettingsToNewFormat(currencySettings, exchangeInfo);
+    } = convertSymbolSettingsToNewFormat(currencySettings);
     const {
       currencyList: _unsavedCurrencyList,
-    } = convertSymbolSettingsToNewFormat(toSaveCurrencySettings, exchangeInfo);
+    } = convertSymbolSettingsToNewFormat(toSaveCurrencySettings);
     const currentCurrencyListJson: string = JSON.stringify(
       _currentCurrencyList
     );
@@ -555,8 +557,7 @@ export function getProfileCurrencyUpdate({
 }
 
 function convertSymbolSettingsToNewFormat(
-  originalCurrencySettings: ConfigSymbolsType | undefined,
-  exchangeInfo: ExchangeInfoType | undefined
+  originalCurrencySettings: ConfigSymbolsType | undefined
 ): {
   currencyList: CurrencyListType;
   currencySettings: ConfigSymbolsType;

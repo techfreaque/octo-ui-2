@@ -1,4 +1,7 @@
-import AppActions from "./AppActions/AppActions";
+import { Dispatch, SetStateAction } from "react";
+
+import { backendRoutes } from "../../../../constants/backendConstants";
+import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import {
   AppStoreAppType,
   StoreCategoryType,
@@ -6,11 +9,9 @@ import {
   useUnInstallAppPackage,
   useUploadToAppStore,
 } from "../../../../context/data/AppStoreDataProvider";
-import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
-import { backendRoutes } from "../../../../constants/backendConstants";
-import AppCardTemplate from "./AppCardTemplate";
-import { Dispatch, SetStateAction } from "react";
+import AppActions from "./AppActions/AppActions";
 import { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
+import AppCardTemplate from "./AppCardTemplate";
 
 export default function OtherAppCard({
   app,

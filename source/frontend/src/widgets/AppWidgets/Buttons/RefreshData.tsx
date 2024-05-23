@@ -1,25 +1,28 @@
-import { Tooltip } from "antd";
-import { useMemo, useState, useEffect } from "react";
-import { useFetchBotInfo } from "../../../context/data/BotInfoProvider";
-import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
-import { sizes } from "../../../constants/frontendConstants";
 import { SyncOutlined } from "@ant-design/icons";
-import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
+import { Tooltip } from "antd";
+import { useEffect,useMemo, useState } from "react";
 import { Trans } from "react-i18next";
+
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
+import { sizes } from "../../../constants/frontendConstants";
+import { useFetchBotInfo } from "../../../context/data/BotInfoProvider";
+import { useFetchPlotData } from "../../../context/data/BotPlottedElementsProvider";
+import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 
 export default function RefreshBotData() {
   const fetchBotInfo = useFetchBotInfo();
+  const fetchPlotData = useFetchPlotData();
   const botIsOnline = useIsBotOnlineContext();
   const [isFinished, setIsFinished] = useState(true);
   const [didJustStartFetching, setDidJustStartFetching] = useState(false);
-  const isFetching = !isFinished || !botIsOnline || didJustStartFetching;
+  const isFetching = !isFinished || !botIsOnline;
   useEffect(() => {
     let timer: NodeJS.Timeout;
     if (didJustStartFetching) {
       timer = setTimeout(() => {
         setDidJustStartFetching(false);
-      }, 1500);
+      }, 1000);
     }
 
     return () => clearTimeout(timer);
@@ -36,7 +39,9 @@ export default function RefreshBotData() {
             disabled={isFetching}
             onClick={() => {
               setDidJustStartFetching(true);
-              fetchBotInfo(true, setIsFinished);
+              fetchBotInfo(true, () => {
+                fetchPlotData(() => setIsFinished(true));
+              });
             }}
             buttonType={buttonTypes.error}
             buttonVariant="text"
@@ -44,11 +49,11 @@ export default function RefreshBotData() {
             <AntIconByReactFunc
               AntReactIcon={SyncOutlined}
               size={sizes.medium}
-              spin={isFetching}
+              spin={isFetching || didJustStartFetching}
             />
           </AntButton>
         </div>
       </Tooltip>
     );
-  }, [isFetching, fetchBotInfo]);
+  }, [isFetching, didJustStartFetching, fetchBotInfo, fetchPlotData]);
 }

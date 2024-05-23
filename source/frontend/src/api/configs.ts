@@ -1,13 +1,14 @@
 import { Dispatch, SetStateAction } from "react";
+
 import { backendRoutes, botLayoutKey } from "../constants/backendConstants";
 import { defaultBotTemplate } from "../constants/uiTemplate/defaultPages/allPages";
+import { OptimizerEditorType } from "../context/config/OptimizerEditorProvider";
 import { UiConfigType } from "../context/config/UiConfigProvider";
 import {
   errorResponseCallBackParams,
   sendAndInterpretBotUpdate,
   successResponseCallBackParams,
 } from "./fetchAndStoreFromBot";
-import { OptimizerEditorType } from "../context/config/OptimizerEditorProvider";
 
 export async function fetchUIConfig(
   botDomain: string,
@@ -72,7 +73,9 @@ export async function saveUIConfig({
 export async function saveProConfig(
   botDomain: string,
   newConfig: OptimizerEditorType,
-  successCallback: (payload: successResponseCallBackParams) => void,
+  successCallback:
+    | ((payload: successResponseCallBackParams) => void)
+    | undefined,
   errorCallback: (payload: errorResponseCallBackParams) => void
 ) {
   sendAndInterpretBotUpdate({

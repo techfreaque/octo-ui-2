@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
-import PlotlyChart from "../MainCharts/Plotly";
-import {
-  DataTableSideBarMainItemType,
-  createTradingOrBacktestingTab,
-} from "../../Tables/DataTable";
+import useMeasure from "react-use-measure";
+
 import AntSidebar, {
   AntSideBarMenutItemType,
 } from "../../../../components/Sidebars/AntSidebar/AntSidebar";
-import useMeasure from "react-use-measure";
+import { PlottedElementNameType } from "../../../../context/data/BotPlottedElementsProvider";
+import {
+  createTradingOrBacktestingTab,
+  DataTableSideBarMainItemType,
+} from "../../Tables/DataTable";
 import { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
+import PlotlyChart from "../MainCharts/Plotly";
 import {
   PlotlyLayoutType,
   UpdatePlotlyLayoutsType,
 } from "../MainCharts/PlotlyContext";
-import { PlottedElementNameType } from "../../../../context/data/BotPlottedElementsProvider";
 export const pieChartName = "pie-chart";
 export default function DualPieChart({
   setLayouts,

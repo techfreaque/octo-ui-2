@@ -1,15 +1,16 @@
-import { Dispatch, SetStateAction, useState } from "react";
-import AppCard from "./AppCards/AppCard";
 import { Grid } from "@mui/material";
-import { ErrorBoundary } from "../../WidgetManagement/RenderAppWidgets";
+import { Dispatch, SetStateAction, useState } from "react";
+
 import {
   AppStoreAppType,
   AppStoreDataType,
   StoreCategoryType,
 } from "../../../context/data/AppStoreDataProvider";
+import { ErrorBoundary } from "../../WidgetManagement/RenderAppWidgets";
+import AppCard from "./AppCards/AppCard";
 import {
-  StrategyModeSettingsNameType,
   strategyModeSettingsName,
+  StrategyModeSettingsNameType,
 } from "./storeConstants";
 
 export default function AppList({
@@ -28,6 +29,7 @@ export default function AppList({
   >;
   currentStrategy: AppStoreAppType | undefined;
 }) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [isLoading, setIsloading] = useState(false);
   const thisCategoryAppStoreData: AppStoreAppType[] =
     selectedCategories &&

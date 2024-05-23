@@ -1,15 +1,16 @@
+import { useMemo } from "react";
 import { HandleType, NodeProps, Position } from "reactflow";
-import { NodeContainer, NodeEditor, NodeHandle } from "./NodeContainer";
+
 import {
   NodeConfigKeyType,
-  TentaclesConfigValuesType,
+  tentacleConfigTypes,
   TentaclesConfigsSchemaPropertiesType,
   TentaclesConfigsSchemaType,
-  tentacleConfigTypes,
+  TentaclesConfigValuesType,
   useTentaclesConfigContext,
 } from "../../../../../context/config/TentaclesConfigProvider";
 import { strategyFlowMakerName } from "../../TentaclesConfig";
-import { useMemo } from "react";
+import { NodeContainer, NodeEditor, NodeHandle } from "./NodeContainer";
 
 export const flowBuilderStorageKey = "flow-builder-storage";
 

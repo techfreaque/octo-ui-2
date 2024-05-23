@@ -51,7 +51,9 @@
     "exchangeNotAuthenticatedTooltip": "无法验证您的 API 密钥。\n真实交易需要有效的 API 密钥。",
     "isTestedExchangeTooltip": "该交易所得到全面支持和测试",
     "isTestedExchangeSimulatedTooltip": "此交换仅在模拟模式下经过测试和支持。",
-    "isUntestedExchangeTooltip": "此交换尚未经过测试，未得到官方支持。"
+    "isUntestedExchangeTooltip": "此交换尚未经过测试，未得到官方支持。",
+    "hasWebsocketTooltip": "这个交换支持websocket，可以支持很多对。",
+    "noWebsocketTooltip": "该交易所不支持 websocket，只能使用有限数量的对。"
   },
   "progress": {
     "backtestingProgressTooltip": "回测已完成 {{progressPercent}}%"

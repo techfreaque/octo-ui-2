@@ -1,13 +1,14 @@
 import { Grid } from "@mui/material";
 import { Card, Tooltip, Typography } from "antd";
+import { useState } from "react";
+
 import AntButton, {
   buttonSizes,
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
-import { TitleSubTitleCombo } from "./Home";
-import { useState } from "react";
 import ButtonWithModal from "../Modals/ButtonWithModal";
+import { TitleSubTitleCombo } from "./Home";
 
 export default function CloudDeploymentModal() {
   const [isOpen, setIsOpen] = useState(false);
@@ -57,7 +58,7 @@ export function CloudDeployment() {
         />
       </Grid>
       {cloudOptions.map((option) => (
-        <CloudOption option={option} />
+        <CloudOption option={option} key={option.key} />
       ))}
     </Grid>
   );

@@ -1,4 +1,12 @@
 import { Alert } from "@mui/material";
+import JsonEditor from "@techfreaque/json-editor-react";
+import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import { Button, Space } from "antd";
+
+import {
+  errorResponseCallBackParams,
+} from "../../../api/fetchAndStoreFromBot";
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import createNotification from "../../../components/Notifications/Notification";
 import { botLayoutKey } from "../../../constants/backendConstants";
@@ -14,13 +22,6 @@ import {
   NonAppWidgetNameType,
   registeredComponents,
 } from "../../WidgetManagement/RegisteredAppWidgets";
-import { Button, Space } from "antd";
-import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
-import {
-  errorResponseCallBackParams,
-} from "../../../api/fetchAndStoreFromBot";
-import JsonEditor from "@techfreaque/json-editor-react";
-import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 
 declare const window: JsonEditorWindow;
 
@@ -51,11 +52,11 @@ export default function PageBuilder() {
         message: `Error: ${payload.data}`,
       });
     }
-    if (!window["$JsonEditors"]?.[editorName]) {
+    if (!window.$JsonEditors?.[editorName]) {
       createNotification({
         title: "Failed to restored default UI layout",
         type: "danger",
-        message: `Failed to read the config from the editor`,
+        message: "Failed to read the config from the editor",
       });
       return;
     }
@@ -75,7 +76,7 @@ export default function PageBuilder() {
       <Alert severity="info" style={{ backgroundColor: "transparent" }}>
         Once you have saved the page layout, it wont get overridded by a updated
         default layout in the future. You should reset your config after each
-        update to make sure you'll get the latest futures. You can copy the
+        update to make sure you&apos;ll get the latest futures. You can copy the
         config of your custom config with the help of the editor, and then past
         it after resetting.
       </Alert>

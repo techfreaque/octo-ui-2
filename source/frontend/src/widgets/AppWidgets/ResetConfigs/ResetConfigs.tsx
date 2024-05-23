@@ -1,27 +1,28 @@
 import { Button, Card, Popconfirm, Typography } from "antd";
 import { useState } from "react";
+import { Trans } from "react-i18next";
+
+import { resetStorage, resetTentaclesConfig } from "../../../api/actions";
+import createNotification from "../../../components/Notifications/Notification";
+import { backendRoutes } from "../../../constants/backendConstants";
+import { projectName } from "../../../constants/frontendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import {
-  useBotInfoContext,
-  useIsDemoMode,
-} from "../../../context/data/BotInfoProvider";
-import {
-  useFetchUiConfig,
-  useSaveUiConfig,
-} from "../../../context/config/UiConfigProvider";
 import {
   getEnabledTradingTentaclesList,
   useFetchCurrentTradingTentaclesConfig,
   useSaveTentaclesConfigAndSendAction,
 } from "../../../context/config/TentaclesConfigProvider";
-import { backendRoutes } from "../../../constants/backendConstants";
-import createNotification from "../../../components/Notifications/Notification";
-import { sendActionCommandToTradingMode } from "../Buttons/SendActionCommandToTradingMode";
-import { resetStorage, resetTentaclesConfig } from "../../../api/actions";
-import ResetIndividual from "./ResetIndividual";
-import { projectName } from "../../../constants/frontendConstants";
-import { Trans } from "react-i18next";
+import {
+  useFetchUiConfig,
+  useSaveUiConfig,
+} from "../../../context/config/UiConfigProvider";
+import {
+  useBotInfoContext,
+  useIsDemoMode,
+} from "../../../context/data/BotInfoProvider";
 import { objectKeys } from "../../../helpers/helpers";
+import { sendActionCommandToTradingMode } from "../Buttons/SendActionCommandToTradingMode";
+import ResetIndividual from "./ResetIndividual";
 
 const { Title } = Typography;
 

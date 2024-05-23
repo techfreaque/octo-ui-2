@@ -1,15 +1,17 @@
 import {
-  useState,
-  useContext,
   createContext,
-  SetStateAction,
   Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
 } from "react";
+
+import { emptyValueFunction } from "../../helpers/helpers";
 
 const VisiblePairsContext = createContext<string | undefined>(undefined);
 const UpdateVisiblePairsContext = createContext<
   Dispatch<SetStateAction<string | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useVisiblePairsContext = () => {
   return useContext(VisiblePairsContext);

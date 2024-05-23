@@ -1,8 +1,9 @@
+import { useMemo } from "react";
+
 import {
   tentacleConfigTypes,
   useTentaclesConfigContext,
 } from "../../../context/config/TentaclesConfigProvider";
-import { useMemo } from "react";
 
 // export default function TradingConfigTabs({ content }: UiLayoutPageLayoutType) {
 //   const fetchCurrentTentaclesConfig = useFetchCurrentTradingTentaclesConfig();

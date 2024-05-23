@@ -1,7 +1,8 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { ConfirmAction } from "./AppActions";
-import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
 import { Dispatch, SetStateAction } from "react";
+
+import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
+import { ConfirmAction } from "./AppActions";
 
 export default function UninstallApp({
   app,

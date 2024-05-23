@@ -1,10 +1,11 @@
+import { SaveOutlined } from "@ant-design/icons";
 import { useMemo } from "react";
+import { Trans } from "react-i18next";
+
 import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
-import { SaveOutlined } from "@ant-design/icons";
-import { Trans } from "react-i18next";
 import {
   useCurrentCurrencyListContext,
   useExchangeConfigUpdateContext,

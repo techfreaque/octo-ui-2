@@ -1,9 +1,10 @@
 import { InfoCircleOutlined } from "@ant-design/icons";
-import AntButton from "../../../../../components/Buttons/AntButton";
-import { useState } from "react";
-import { Modal } from "antd";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Modal } from "antd";
+import { useState } from "react";
+
+import AntButton from "../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
 

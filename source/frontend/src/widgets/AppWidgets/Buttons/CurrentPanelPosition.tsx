@@ -1,10 +1,11 @@
+import { Tooltip } from "antd";
 import { useMemo } from "react";
+
+import AntButton from "../../../components/Buttons/AntButton";
 import {
   useCurrentPanelContext,
   useSetCurrentPanelPercent,
 } from "../../../context/config/MainPanelContext";
-import { Tooltip } from "antd";
-import AntButton from "../../../components/Buttons/AntButton";
 
 export type PanelPositionType =
   | "maximized"

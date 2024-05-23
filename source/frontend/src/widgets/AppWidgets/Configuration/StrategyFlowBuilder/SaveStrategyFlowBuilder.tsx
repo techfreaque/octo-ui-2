@@ -1,41 +1,40 @@
 import { ReloadOutlined } from "@ant-design/icons";
+import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import { Space, Switch } from "antd";
+import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
+import { Edge, Node } from "reactflow";
+
+import { errorResponseCallBackParams } from "../../../../api/fetchAndStoreFromBot";
+import AntButton from "../../../../components/Buttons/AntButton";
+import createNotification from "../../../../components/Notifications/Notification";
 import {
   FlowEdgeConfigType,
+  tentacleConfigTypes,
   TentaclesConfigByTentacleType,
   TentaclesConfigValuesType,
-  tentacleConfigTypes,
   useIsSavingTentaclesConfigContext,
   useSaveTentaclesConfig,
   useTentaclesConfigContext,
   useUpdateIsSavingTentaclesConfigContext,
 } from "../../../../context/config/TentaclesConfigProvider";
-import { useIsBotOnlineContext } from "../../../../context/data/IsBotOnlineProvider";
-import AntButton from "../../../../components/Buttons/AntButton";
-import {
-  flowBuilderStorageKey,
-  getNodeConfigKey,
-} from "./CustomNodes/StrategyBlockNode";
-import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
-import { useIsDemoMode } from "../../../../context/data/BotInfoProvider";
 import {
   useSaveUiConfig,
   useUiConfigContext,
 } from "../../../../context/config/UiConfigProvider";
-import { Space, Switch } from "antd";
-import { flowEditorSettingsName } from "../UIConfig";
-import createNotification from "../../../../components/Notifications/Notification";
+import { useIsDemoMode } from "../../../../context/data/BotInfoProvider";
+import { useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../../context/data/BotPlottedElementsProvider";
+import { useIsBotOnlineContext } from "../../../../context/data/IsBotOnlineProvider";
 import {
-  errorResponseCallBackParams,
-  successResponseCallBackParams,
-} from "../../../../api/fetchAndStoreFromBot";
-import { Edge, Node } from "reactflow";
-import { EdgeData, NodeData } from "./StrategyFlowBuilder";
-import {
-  StrategyFlowMakerNameType,
   handleHiddenUserInputs,
   strategyFlowMakerName,
+  StrategyFlowMakerNameType,
 } from "../TentaclesConfig";
-import { useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../../context/data/BotPlottedElementsProvider";
+import { flowEditorSettingsName } from "../UIConfig";
+import {
+  flowBuilderStorageKey,
+  getNodeConfigKey,
+} from "./CustomNodes/StrategyBlockNode";
+import { EdgeData, NodeData } from "./StrategyFlowBuilder";
 
 export default function SaveStrategyFlowBuilderSettings({
   tradingModeKey,
@@ -62,7 +61,7 @@ export default function SaveStrategyFlowBuilderSettings({
         newConfigs[flowEditorSettingsName] = {};
       }
       newConfigs[flowEditorSettingsName].auto_save = checked;
-      const successCallback = (payload: successResponseCallBackParams) => {
+      const successCallback = () => {
         createNotification({
           title: "Successfully changed autosave setting",
         });
@@ -162,12 +161,6 @@ export default function SaveStrategyFlowBuilderSettings({
   ]);
 }
 
-type JsonEditorWindow = Window & {
-  [storageName: string]: {
-    [editorName: string]: JSONEditor<any>;
-  };
-};
-
 declare const window: JsonEditorWindow;
 
 export function useGetFlowConfig(): TentaclesConfigValuesType | undefined {
@@ -216,7 +209,7 @@ export function useSaveFlowBuilderSettings() {
       newConfigs[tradingModeKey] = flowConfig;
       const newConfig = { ...flowConfig };
       const _nodes: {
-        [nodeId: string]: {};
+        [nodeId: string]: any;
       } = {};
       for (const node of nodes) {
         const editor = getNodeEditor(node.id);

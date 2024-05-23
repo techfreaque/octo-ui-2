@@ -1,17 +1,18 @@
-import { useVisiblePairsContext } from "../../../context/config/VisiblePairProvider";
-import { Dispatch, SetStateAction, useMemo } from "react";
 import { Dropdown, Tooltip } from "antd";
+import { Dispatch, SetStateAction, useMemo } from "react";
 import { Trans } from "react-i18next";
-import { useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+
 import AntButton from "../../../components/Buttons/AntButton";
-import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import { useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
+import { useVisiblePairsContext } from "../../../context/config/VisiblePairProvider";
 import {
   PairSelectorMenuOpenType,
   usePairSelectorMenuOpenContext,
   useUpdatePairSelectorMenuOpenContext,
 } from "../../../context/data/BotExchangeInfoProvider";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 export default function PairsSelector({ content }: UiLayoutPageLayoutType) {
   const visiblePairs = useVisiblePairsContext();

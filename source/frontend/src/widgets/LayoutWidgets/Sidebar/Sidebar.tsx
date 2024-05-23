@@ -29,7 +29,7 @@ function hydrateSideBarContent(
     if (menuItem.content) {
       hydratedItem.content = <AppWidgets layout={menuItem.content} />;
       if (menuItem.children) {
-        hydratedItem.children = hydrateSideBarContent(menuItem.children);
+        hydratedItem.items = hydrateSideBarContent(menuItem.children);
       }
     }
     hydratedContent.push(hydratedItem);

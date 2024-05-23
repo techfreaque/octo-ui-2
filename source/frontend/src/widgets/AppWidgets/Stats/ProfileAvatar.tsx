@@ -2,7 +2,13 @@ import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useCurrentProfile } from "../../../context/data/BotInfoProvider";
 
-export default function ProfileAvatar({ size = "20px", marginRight = "0" }) {
+export default function ProfileAvatar({
+  size = "20px",
+  marginRight = "0",
+}: {
+  size?: string;
+  marginRight?: string;
+}) {
   const currentProfile = useCurrentProfile();
   const botDomain = useBotDomainContext();
   const currentAvatar = currentProfile?.profile?.avatar;

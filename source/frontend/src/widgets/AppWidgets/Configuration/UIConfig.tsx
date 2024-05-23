@@ -1,6 +1,12 @@
+import "./uiConfig.css";
+
+import JsonEditor from "@techfreaque/json-editor-react";
+import { JsonEditorType } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import { useCallback, useMemo } from "react";
-import { getUiConfigSchema } from "./uiConfigSchema";
+
+import { errorResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
+import createNotification from "../../../components/Notifications/Notification";
 import {
   BacktestingAnalysisUiConfig,
   BacktestingUiConfig,
@@ -17,16 +23,9 @@ import {
   useUiConfigContext,
 } from "../../../context/config/UiConfigProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
-import "./uiConfig.css";
-import {
-  errorResponseCallBackParams,
-  successResponseCallBackParams,
-} from "../../../api/fetchAndStoreFromBot";
-import createNotification from "../../../components/Notifications/Notification";
-import JsonEditor from "@techfreaque/json-editor-react";
+import { getUiConfigSchema } from "./uiConfigSchema";
 
 export const flowEditorSettingsName = "flow_editor_settings";
-
 export const availableUIConfigKeys: UiConfigKeyType[] = [
   "backtesting_run_settings",
   "backtesting_analysis_settings",
@@ -49,7 +48,7 @@ export default function UIConfig({
   const saveUiConfig = useSaveUiConfig();
   const handleEditorsAutosave = useCallback(
     (
-      editor: JSONEditor<
+      editor: JsonEditorType<
         | OptimizerUiConfig
         | BacktestingUiConfig
         | BacktestingAnalysisUiConfig
@@ -65,7 +64,6 @@ export default function UIConfig({
         ...uiConfig,
         [configKey]: convertTimestamps(editor.getValue(), true),
       };
-      function successCallback(payload: successResponseCallBackParams) {}
       function errorCallback(payload: errorResponseCallBackParams) {
         createNotification({
           title: "Failed to autosave UI config",
@@ -73,7 +71,7 @@ export default function UIConfig({
         });
       }
       if (newConfigs) {
-        saveUiConfig(newConfigs, successCallback, errorCallback);
+        saveUiConfig(newConfigs, undefined, errorCallback);
       }
     },
     [saveUiConfig, uiConfig]
@@ -140,7 +138,7 @@ export default function UIConfig({
 
 function convertTimestamps(
   config: UiSubConfigsType,
-  convertBack: boolean = false
+  convertBack = false
 ): UiSubConfigsType {
   const newValues: any = {};
   config &&

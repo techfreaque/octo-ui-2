@@ -1,7 +1,8 @@
-import { useOptimizerEditorCounterContext } from "../../../context/config/OptimizerEditorProvider";
 import { useMemo } from "react";
+
 import NumberTag from "../../../components/Notifications/NumberTag";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { useOptimizerEditorCounterContext } from "../../../context/config/OptimizerEditorProvider";
 
 export default function OptimizerRunsToBeAdded() {
   const optimizerCounter = useOptimizerEditorCounterContext();

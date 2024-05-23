@@ -1,20 +1,21 @@
+import { CloseOutlined } from "@ant-design/icons";
+import { Avatar,Modal, Tooltip } from "antd";
+import { AvatarSize } from "antd/es/avatar/AvatarContext";
 import { CSSProperties, Dispatch, SetStateAction, useState } from "react";
-import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
-import IconFromString from "../../../components/Icons/IconFromString";
-import { Tooltip, Modal, Avatar } from "antd";
+
 import AntButton, {
+  buttonSizes,
   ButtonSizeType,
   ButtonType,
-  ButtonVariantType,
-  buttonSizes,
   buttonTypes,
   buttonVariants,
+  ButtonVariantType,
 } from "../../../components/Buttons/AntButton";
-import { CloseOutlined } from "@ant-design/icons";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import IconFromString from "../../../components/Icons/IconFromString";
 import { sizes } from "../../../constants/frontendConstants";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
-import { AvatarSize } from "antd/es/avatar/AvatarContext";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 export default function ButtonWithModal({
   title,

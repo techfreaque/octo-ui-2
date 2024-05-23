@@ -1,4 +1,17 @@
+import { CloseCircleOutlined, DollarCircleOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Space, Typography } from "antd";
+import { useEffect } from "react";
+
+import AntButton, {
+  buttonSizes,
+  buttonTypes,
+} from "../../../components/Buttons/AntButton";
+import AntTable, {
+  AntTableColumnType,
+  AntTableDataType,
+} from "../../../components/Tables/AntTable";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   AppStoreCartType,
   AppStorePaymentUrlType,
@@ -12,19 +25,6 @@ import {
   useUpdateAppStoreCartIsOpenContext,
 } from "../../../context/data/AppStoreDataProvider";
 import ButtonWithModal from "../Modals/ButtonWithModal";
-import AntTable, {
-  AntTableColumnType,
-  AntTableDataType,
-} from "../../../components/Tables/AntTable";
-import AntButton, {
-  buttonSizes,
-  buttonTypes,
-} from "../../../components/Buttons/AntButton";
-import { CloseCircleOutlined, DollarCircleOutlined } from "@ant-design/icons";
-import { Refresh } from "@mui/icons-material";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { useEffect } from "react";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 
 export default function AppStoreCartModal({ content }: UiLayoutPageLayoutType) {
   const appStoreCart = useAppStoreCartContext();
@@ -124,7 +124,7 @@ export function AppStoreCart() {
               <AntButton
                 size={buttonSizes.large}
                 onClick={checkStorePayment}
-                muiIconComponent={Refresh}
+                antIconComponent={ReloadOutlined}
               >
                 No Payment Detected - Check Payment Status
               </AntButton>

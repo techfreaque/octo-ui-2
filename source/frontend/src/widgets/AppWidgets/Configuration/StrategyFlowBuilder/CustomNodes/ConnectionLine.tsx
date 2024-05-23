@@ -1,17 +1,18 @@
+import { CloseCircleOutlined } from "@ant-design/icons";
 import { CSSProperties, useCallback } from "react";
 import {
-  getBezierPath,
-  EdgeLabelRenderer,
   BaseEdge,
-  useReactFlow,
+  EdgeLabelRenderer,
   EdgeProps,
+  getBezierPath,
+  useReactFlow,
 } from "reactflow";
+
 import AntButton, {
   buttonSizes,
   buttonTypes,
   buttonVariants,
 } from "../../../../../components/Buttons/AntButton";
-import { CloseCircleOutlined } from "@ant-design/icons";
 
 export const CustomEdge = ({
   id,

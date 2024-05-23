@@ -1,30 +1,26 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useEffect,
-  useCallback,
-  SetStateAction,
   Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
+
 import {
   fetchPlotlyBacktestingPlotData,
   fetchPlotlyLivePlotData,
 } from "../../api/data";
 import { ID_SEPARATOR, PlotSourceType } from "../../constants/backendConstants";
-import { useBotDomainContext } from "../config/BotDomainProvider";
-import { useUiConfigContext } from "../config/UiConfigProvider";
-import { useVisibleExchangesContext } from "../config/VisibleExchangesProvider";
-import { useVisiblePairsContext } from "../config/VisiblePairProvider";
-import { useVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
-import { BotInfoType, useBotInfoContext } from "./BotInfoProvider";
-import { useCurrentTentacleConfig } from "../../widgets/AppWidgets/Configuration/TentaclesConfig";
+import { emptyValueFunction } from "../../helpers/helpers";
+import { ChartType } from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
 import {
   ChartLocationType,
   NonChartLocationTypes,
 } from "../../widgets/AppWidgets/Charts/MainCharts/Plotly";
-import { ChartType } from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
 import { MarkerAttributesType } from "../../widgets/AppWidgets/Charts/MainCharts/PlotlyGenerateData";
+import { useCurrentTentacleConfig } from "../../widgets/AppWidgets/Configuration/TentaclesConfig";
 import {
   DataTableColumnType,
   DataTableDataType,
@@ -32,7 +28,13 @@ import {
 import {
   mergeRunIdentifiers,
   splitRunIdentifiers,
-} from "../../components/Tables/w2ui/RunDataTable";
+} from "../../widgets/AppWidgets/Tables/RunDataTable/AntRunDataTable";
+import { useBotDomainContext } from "../config/BotDomainProvider";
+import { useUiConfigContext } from "../config/UiConfigProvider";
+import { useVisibleExchangesContext } from "../config/VisibleExchangesProvider";
+import { useVisiblePairsContext } from "../config/VisiblePairProvider";
+import { useVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
+import { useBotInfoContext } from "./BotInfoProvider";
 
 export type ChartDetailsType = {
   own_yaxis?: boolean;
@@ -105,20 +107,20 @@ const UpdateBotPlottedElementsContext = createContext<
   Dispatch<
     SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
   >
->((_value) => {});
+>(emptyValueFunction);
 const HiddenBacktestingMetadataColumnsContext = createContext<
   string[] | undefined
 >(undefined);
 const UpdateHiddenBacktestingMetadataColumnsContext = createContext<
   Dispatch<SetStateAction<string[] | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 export interface DisplayedRunIdsType {
   live: string[];
   backtesting: string[];
 }
 
-const defaultDisplayedRunIds: DisplayedRunIdsType = {
+export const defaultDisplayedRunIds: DisplayedRunIdsType = {
   live: [],
   backtesting: [],
 };
@@ -128,7 +130,7 @@ const DisplayedRunIdsContext = createContext<DisplayedRunIdsType>(
 );
 const UpdateDisplayedRunIdsContext = createContext<
   Dispatch<SetStateAction<DisplayedRunIdsType>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useBotPlottedElementsContext = () => {
   return useContext(BotPlottedElementsContext);
@@ -160,28 +162,32 @@ export const useFetchPlotData = () => {
     botInfo &&
     visibleExchanges &&
     botInfo.ids_by_exchange_name[visibleExchanges];
-  return useCallback(() => {
-    if (visiblePairs && visibleTimeframes && visibleExchangeIds) {
-      fetchPlotlyLivePlotData({
-        symbol: visiblePairs,
-        timeFrame: visibleTimeframes,
-        exchangeId: visibleExchangeIds,
-        exchangeName: visibleExchanges,
-        botDomain,
-        optimizationCampaign: botInfo.optimization_campaign,
-        setBotPlottedElements,
-        liveId: botInfo.live_id,
-      });
-    }
-  }, [
-    visiblePairs,
-    visibleTimeframes,
-    visibleExchangeIds,
-    visibleExchanges,
-    botDomain,
-    botInfo,
-    setBotPlottedElements,
-  ]);
+  return useCallback(
+    (onDone?: () => void) => {
+      if (visiblePairs && visibleTimeframes && visibleExchangeIds) {
+        fetchPlotlyLivePlotData({
+          symbol: visiblePairs,
+          timeFrame: visibleTimeframes,
+          exchangeId: visibleExchangeIds,
+          exchangeName: visibleExchanges,
+          botDomain,
+          optimizationCampaign: botInfo.optimization_campaign,
+          setBotPlottedElements,
+          liveId: botInfo.live_id,
+          onDone,
+        });
+      }
+    },
+    [
+      visiblePairs,
+      visibleTimeframes,
+      visibleExchangeIds,
+      visibleExchanges,
+      botDomain,
+      botInfo,
+      setBotPlottedElements,
+    ]
+  );
 };
 
 function clearUnselectedRuns(
@@ -288,7 +294,7 @@ function loadMissingRuns(
   botDomain: string,
   setBotPlottedElements: Dispatch<
     SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
-  >,
+  >
 ) {
   // load missing runs
   displayedRunIds?.backtesting?.forEach((runIdentifier) => {
@@ -308,8 +314,8 @@ function loadMissingRuns(
         botDomain,
         setBotPlottedElements,
         optimizationCampaign: campaignName,
-        backtestingId,
-        optimizerId,
+        backtestingId: String(backtestingId),
+        optimizerId: String(optimizerId),
       });
     }
   });
@@ -365,7 +371,7 @@ export const BotPlottedElementsProvider = ({
         visibleExchangeIds,
         visibleExchanges,
         botDomain,
-        setBotPlottedElements,
+        setBotPlottedElements
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

@@ -1,12 +1,13 @@
+import { Dispatch, SetStateAction, useState } from "react";
+
 import {
   deleteProfile,
   duplicateProfile,
   selectProfile,
 } from "../../../../api/actions";
-import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
-import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
-import AppActions from "./AppActions/AppActions";
+import createNotification from "../../../../components/Notifications/Notification";
 import { backendRoutes } from "../../../../constants/backendConstants";
+import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import {
   AppStoreAppType,
   StoreCategoryType,
@@ -14,18 +15,18 @@ import {
   useInstallAnyAppPackage,
   useUploadToAppStore,
 } from "../../../../context/data/AppStoreDataProvider";
-import { Dispatch, SetStateAction, useState } from "react";
-import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
-import AppCardTemplate from "./AppCardTemplate";
+import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 import { useRestartBot } from "../../../../context/data/IsBotOnlineProvider";
-import createNotification from "../../../../components/Notifications/Notification";
+import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
 import {
-  StrategyModeSettingsNameType,
   strategyModeName,
+  StrategyModeSettingsNameType,
 } from "../storeConstants";
-import { CleanDescription } from "./AppDescription";
-import { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
+import AppActions from "./AppActions/AppActions";
 import { CloneAppInfoType } from "./AppActions/CloneApp/CloneAppForm";
+import { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
+import AppCardTemplate from "./AppCardTemplate";
+import { CleanDescription } from "./AppDescription";
 
 export default function StrategyCard({
   app,
@@ -78,7 +79,6 @@ export default function StrategyCard({
     await selectProfile(
       botDomain,
       app.package_id,
-      app.title,
       onSuccess,
       onFail
     );

@@ -1,30 +1,33 @@
+import { Alert, Typography } from "antd";
 import { useEffect, useMemo } from "react";
+
 import {
-  OPTIMIZER_INPUTS_KEY,
   _INPUT_SEPARATOR,
+  OPTIMIZER_INPUTS_KEY,
 } from "../../../../constants/backendConstants";
+import { projectProName } from "../../../../constants/frontendConstants";
+import { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
+import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
 import {
   OptimizerEditorInputArrayType,
   OptimizerEditorInputNumberType,
-  OptimizerEditorInputType,
   OptimizerEditorInputsType,
+  OptimizerEditorInputType,
+  OptimizerEditorType,
   SchemaValueType,
   useFetchProConfig,
-  useSaveOptimizerForm,
   useOptimizerEditorContext,
+  useSaveOptimizerForm,
   useUpdateOptimizerEditorContext,
-  OptimizerEditorType,
 } from "../../../../context/config/OptimizerEditorProvider";
 import {
   SchemaValueRawType,
+  tentacleConfigTypes,
   TentaclesConfigsRootType,
   TentaclesConfigsSchemaType,
-  tentacleConfigTypes,
   useTentaclesConfigContext,
 } from "../../../../context/config/TentaclesConfigProvider";
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
-import { Alert, Typography } from "antd";
-import { projectProName } from "../../../../constants/frontendConstants";
 import OptimizerSettingsContainer, {
   OptimizerNotHandledValueType,
   OptimizerSettingBoolean,
@@ -33,8 +36,6 @@ import OptimizerSettingsContainer, {
   OptimizerSettingOptions,
   OptimizerSettingTentacleGroup,
 } from "./OptimizerInputTemplate";
-import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
-import { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
 
 export default function OptimizerConfigForm() {
   const optimizerEditor = useOptimizerEditorContext();
@@ -186,7 +187,7 @@ function OptimizerSettingsForm({
         const groupInputs =
           element.schema?.properties &&
           Object.values(element.schema.properties).map((inputDetail) => {
-            const value = getOptimizerConfigElementSettingForm({
+            const value = OptimizerConfigElementSettingForm({
               botColors,
               handleSettingsChange,
               inputDetails: inputDetail,
@@ -204,7 +205,7 @@ function OptimizerSettingsForm({
             <OptimizerSettingTentacleGroup
               botColors={botColors}
               name={tentacleName}
-              key={tentacleName + tentacleName}
+              key={tentacleName}
               title={tentacleName}
             >
               <>{groupInputs}</>
@@ -390,7 +391,7 @@ function UserInputConfigEntry({
   );
 }
 
-function getOptimizerConfigElementSettingForm({
+function OptimizerConfigElementSettingForm({
   inputDetails,
   configValues,
   parentInputIdentifier,
@@ -404,11 +405,11 @@ function getOptimizerConfigElementSettingForm({
   inputIdentifier: string;
   botColors: ColorsType;
   handleSettingsChange: HandleOptimizerSettingsUpdateType;
-}): JSX.Element | undefined {
+}): JSX.Element | null {
   if (inputDetails.options?.in_optimizer) {
     const valueType = _getValueType(inputDetails.type);
     if (valueType === "nested_config") {
-      return getOptimizerNestedConfigSettingsForm({
+      return OptimizerNestedConfigSettingsForm({
         inputDetail: inputDetails,
         configValues,
         botColors,
@@ -428,9 +429,9 @@ function getOptimizerConfigElementSettingForm({
       />
     );
   }
-  return undefined;
+  return null;
 }
-function getOptimizerNestedConfigSettingsForm({
+function OptimizerNestedConfigSettingsForm({
   inputDetail,
   configValues,
   parentInputIdentifier,
@@ -442,13 +443,13 @@ function getOptimizerNestedConfigSettingsForm({
   parentInputIdentifier: string;
   botColors: ColorsType;
   handleSettingsChange: HandleOptimizerSettingsUpdateType;
-}): JSX.Element | undefined {
+}): JSX.Element | null {
   let atLeastOneUserInput = false;
   const inputs =
     inputDetail.properties &&
     Object.entries(inputDetail.properties).map(
       ([nestedInput, nestedInputDetails]) => {
-        const element = getOptimizerConfigElementSettingForm({
+        const element = OptimizerConfigElementSettingForm({
           inputDetails: nestedInputDetails,
           configValues,
           parentInputIdentifier,
@@ -480,7 +481,7 @@ function getOptimizerNestedConfigSettingsForm({
       </OptimizerSettingNestedTentacleConfig>
     );
   }
-  return <></>;
+  return null;
 }
 
 // function _getInputFilterFromTemplate(userInputIdentifiers, filterSetting) {

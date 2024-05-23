@@ -1,13 +1,15 @@
+import { Datum } from "plotly.js";
 import {
+  createContext,
   Dispatch,
   SetStateAction,
-  createContext,
   useContext,
   useState,
 } from "react";
+
+import { emptyValueFunction } from "../../../../helpers/helpers";
 import { ChartLocationType } from "./Plotly";
 import { AxisType } from "./PlotlyGenerateData";
-import { Datum } from "plotly.js";
 
 export type PlotlyLayoutsType = {
   [chartLocation in ChartLocationType]?: PlotlyLayoutType | undefined;
@@ -78,10 +80,10 @@ export type UpdatePlotlyLayoutsType = {
 };
 
 const UpdatePlotlyLayoutsContext = createContext<UpdatePlotlyLayoutsType>({
-  "main-chart": (value) => {},
-  "sub-chart": (value) => {},
-  "pie-chart": (value) => {},
-  b: (value) => {},
+  "main-chart": emptyValueFunction,
+  "sub-chart": emptyValueFunction,
+  "pie-chart": emptyValueFunction,
+  b: emptyValueFunction,
 });
 const PlotlyLayoutsContext = createContext<PlotlyLayoutsType>({
   "main-chart": undefined,

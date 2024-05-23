@@ -1,19 +1,20 @@
-import { Modal } from "@mui/material";
-import { Box } from "@mui/system";
-import { useMemo, useState } from "react";
-import { realTradingSwitch } from "../../../../api/actions";
-import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
-import { Space, Tooltip, Alert, Typography } from "antd";
-import { sizes } from "../../../../constants/frontendConstants";
 import {
   DollarOutlined,
   PauseOutlined,
   RobotOutlined,
 } from "@ant-design/icons";
-import { AntIconByReactFunc } from "../../../../components/Icons/AntIcon";
+import { Modal } from "@mui/material";
+import { Box } from "@mui/system";
+import { Alert, Space, Tooltip, Typography } from "antd";
+import { useMemo, useState } from "react";
+
+import { realTradingSwitch } from "../../../../api/actions";
 import AntButton, {
   buttonTypes,
 } from "../../../../components/Buttons/AntButton";
+import { AntIconByReactFunc } from "../../../../components/Icons/AntIcon";
+import { sizes } from "../../../../constants/frontendConstants";
+import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 
 const { Paragraph, Title } = Typography;

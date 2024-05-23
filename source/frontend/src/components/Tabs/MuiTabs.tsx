@@ -1,9 +1,10 @@
-import Tabs from "@mui/material/Tabs";
-import Box from "@mui/material/Box";
-import { useBotColorsContext } from "../../context/config/BotColorsProvider";
-import useMediaQuery from "@mui/material/useMediaQuery";
-import { CSSProperties, SyntheticEvent, useState } from "react";
 import { Tab } from "@mui/material";
+import Box from "@mui/material/Box";
+import Tabs from "@mui/material/Tabs";
+import useMediaQuery from "@mui/material/useMediaQuery";
+import { CSSProperties, useState } from "react";
+
+import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 
 export interface MuiTabType {
   title: JSX.Element | string;
@@ -29,12 +30,6 @@ export default function MuiTabs({
     defaultTabId ? defaultTabId : 0
   );
   const isBigScreen = useMediaQuery("(min-width:530px)");
-  const handleTabChange = (
-    event: SyntheticEvent<Element, Event>,
-    newCurrentTabId: number | string
-  ) => {
-    setCurrentTabId(newCurrentTabId);
-  };
   return (
     tabs && (
       <div
@@ -57,16 +52,17 @@ export default function MuiTabs({
                 // style={{ marginRight: "auto" }}
               >
                 <Tabs
-                  //  style={{ marginRight: "auto"}}
+                  style={{ marginRight: "auto", marginLeft: "auto" }}
                   value={currentTabId}
-                  onChange={handleTabChange}
+                  onChange={(_, newCurrentTabId) =>
+                    setCurrentTabId(newCurrentTabId)
+                  }
                   variant="scrollable"
                   // scrollButtons
                   allowScrollButtonsMobile
                   aria-label="Tabs"
-                  className="mx-auto"
                 >
-                  {tabs.map((tab, index) =>
+                  {tabs.map((tab) =>
                     typeof tab.title === "string" ? (
                       <Tab
                         key={tab.tabId}
@@ -101,9 +97,7 @@ export default function MuiTabs({
               key={index}
               style={{
                 // TODO use toolbar height
-                height: tab.dontScroll
-                  ? "calc(100% - 54px)"
-                  : "calc(100% - 54px)",
+                height: "calc(100% - 54px)",
                 width: "100%",
                 ...display,
               }}
@@ -157,17 +151,11 @@ function TabsElement({
       maxWidth: "100%",
       display: "flex",
       flexWrap: "wrap",
+      marginRight: "auto",
     };
     if (isBigScreen) {
       style.minHeight = "49px";
     }
   }
-  return (
-    <div
-      className={isRightContent ? "" : isLeftContent ? "" : "me-auto"}
-      style={style}
-    >
-      {children}
-    </div>
-  );
+  return <div style={style}>{children}</div>;
 }

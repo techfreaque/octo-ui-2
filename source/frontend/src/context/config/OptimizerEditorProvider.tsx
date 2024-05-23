@@ -1,29 +1,31 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useCallback,
-  useEffect,
-  SetStateAction,
   Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
-import { useBotDomainContext } from "./BotDomainProvider";
+
 import { saveProConfig } from "../../api/configs";
-import {
-  OPTIMIZER_INPUTS_KEY,
-  backendRoutes,
-} from "../../constants/backendConstants";
-import createNotification from "../../components/Notifications/Notification";
 import {
   errorResponseCallBackParams,
   sendAndInterpretBotUpdate,
   successResponseCallBackParams,
 } from "../../api/fetchAndStoreFromBot";
+import createNotification from "../../components/Notifications/Notification";
+import {
+  backendRoutes,
+  OPTIMIZER_INPUTS_KEY,
+} from "../../constants/backendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
+import { useBotDomainContext } from "./BotDomainProvider";
 
 const OptimizerEditorCounterContext = createContext<number>(0);
 const UpdateOptimizerEditorCounterContext = createContext<
   Dispatch<SetStateAction<number>>
->((_value) => {});
+>(emptyValueFunction);
 
 export type OptimizerEditorInputNumberType = {
   min: number;
@@ -76,7 +78,7 @@ const OptimizerEditorContext = createContext<OptimizerEditorType | undefined>(
 );
 const UpdateOptimizerEditorContext = createContext<
   Dispatch<SetStateAction<OptimizerEditorType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useOptimizerEditorCounterContext = () => {
   return useContext(OptimizerEditorCounterContext);
@@ -132,7 +134,7 @@ export const useSaveOptimizerForm = () => {
       });
     }
     if (optimizerForm)
-      saveProConfig(botDomain, optimizerForm, () => {}, errorCallback);
+      saveProConfig(botDomain, optimizerForm, undefined, errorCallback);
     return optimizerForm;
   }, [botDomain, optimizerForm]);
 };

@@ -1,7 +1,8 @@
 import { Progress, Tooltip } from "antd";
-import { useBacktestingProgressContext } from "../../../context/actions/BotBacktestingProvider";
 import { useMemo } from "react";
 import { useTranslation } from "react-i18next";
+
+import { useBacktestingProgressContext } from "../../../context/actions/BotBacktestingProvider";
 
 export default function BacktestingProgress() {
   const backtestingProgress = useBacktestingProgressContext();

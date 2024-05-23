@@ -1,5 +1,20 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+import "./pairsTable.css";
+
+import { FilterValue } from "antd/es/table/interface";
 import { useEffect } from "react";
+
+import AntTable, {
+  AntTableColumnType,
+  AntTableDataType,
+} from "../../../components/Tables/AntTable";
+import EnablerSwitch from "../../../components/UserInputs/EnablerSwich";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { useUpdateVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
+import { useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
+import {
+  useUpdateVisiblePairsContext,
+  useVisiblePairsContext,
+} from "../../../context/config/VisiblePairProvider";
 import {
   CurrencyListType,
   ExchangeInfoType,
@@ -10,20 +25,6 @@ import {
   useUnsavedCurrencyListContext,
 } from "../../../context/data/BotExchangeInfoProvider";
 import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import { useUpdateVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
-import {
-  useUpdateVisiblePairsContext,
-  useVisiblePairsContext,
-} from "../../../context/config/VisiblePairProvider";
-import { useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
-import "./pairsTable.css";
-import AntTable, {
-  AntTableColumnType,
-  AntTableDataType,
-} from "../../../components/Tables/AntTable";
-import EnablerSwitch from "../../../components/UserInputs/EnablerSwich";
-import { FilterValue } from "antd/es/table/interface";
 
 export default function PairsTable() {
   const isOnline = useIsBotOnlineContext();
@@ -62,6 +63,7 @@ export default function PairsTable() {
     <AntTable<PairsTableDataType, PairsTableColumnType>
       columns={columns}
       data={preSorteddata}
+      maxHeight="calc(100vh - 200px)"
     />
   );
 }
@@ -75,7 +77,7 @@ interface PairsTableDataType extends AntTableDataType {
   availableAfterRestart: boolean | undefined;
   exchange: string;
 }
-interface PairsTableColumnType extends AntTableColumnType<PairsTableDataType> {}
+type PairsTableColumnType = AntTableColumnType<PairsTableDataType>;
 
 const columns: PairsTableColumnType[] = [
   {
@@ -149,11 +151,7 @@ function getData({
   visibleExchanges: string | undefined;
   visiblePairs: string | undefined;
   handlePairSelection: (symbol: string, exchange: string) => void;
-  handleSettingChange: (
-    enabled: boolean,
-    exchange: string,
-    symbol: string
-  ) => void;
+  handleSettingChange: (enabled: boolean, symbol: string) => void;
 }): PairsTableDataType[] {
   const preSorteddata: PairsTableDataType[] = [];
   const enabledExchanges =
@@ -184,7 +182,6 @@ function getData({
         enabledLabel: (
           <SymbolEnabler
             unsavedCurrencyList={unsavedCurrencyList}
-            exchange={exchange}
             symbol={symbol}
             availableAfterRestart={availableAfterRestart}
             isEnabled={isEnabled}
@@ -210,21 +207,15 @@ function getData({
 function SymbolEnabler({
   availableAfterRestart,
   unsavedCurrencyList,
-  exchange,
   symbol,
   isEnabled,
   handleSettingChange,
 }: {
   availableAfterRestart: boolean | undefined;
   unsavedCurrencyList: CurrencyListType | undefined;
-  exchange: string;
   symbol: string;
   isEnabled: boolean | undefined;
-  handleSettingChange: (
-    enabled: boolean,
-    exchange: string,
-    symbol: string
-  ) => void;
+  handleSettingChange: (enabled: boolean, symbol: string) => void;
 }) {
   const disabledAfterRestart =
     !unsavedCurrencyList?.includes(symbol) && isEnabled;
@@ -234,7 +225,7 @@ function SymbolEnabler({
       title={symbol}
       isEnabled={isEnabled}
       disabledAfterRestart={disabledAfterRestart}
-      onChange={(event) => handleSettingChange(event, exchange, symbol)}
+      onChange={(event) => handleSettingChange(event, symbol)}
     />
   );
 }

@@ -51,7 +51,9 @@
     "exchangeNotAuthenticatedTooltip": "No se pudieron verificar sus claves de API. \nSe requieren claves API válidas para el comercio real.",
     "isTestedExchangeTooltip": "Este intercambio es totalmente compatible y probado.",
     "isTestedExchangeSimulatedTooltip": "Este intercambio se prueba y admite solo en modo de simulación.",
-    "isUntestedExchangeTooltip": "Este intercambio aún no se ha probado y no es compatible oficialmente."
+    "isUntestedExchangeTooltip": "Este intercambio aún no se ha probado y no es compatible oficialmente.",
+    "hasWebsocketTooltip": "Este intercambio admite websocket y puede admitir muchos pares.",
+    "noWebsocketTooltip": "Este intercambio no es compatible con websocket y solo puede utilizar una cantidad limitada de pares."
   },
   "progress": {
     "backtestingProgressTooltip": "El backtest está {{progressPercent}}% completado"

@@ -1,15 +1,17 @@
 import {
-  useState,
-  useContext,
   createContext,
-  SetStateAction,
   Dispatch,
+  SetStateAction,
+  useContext,
+  useState,
 } from "react";
+
+import { emptyValueFunction } from "../../helpers/helpers";
 
 const VisibleTimeFramesContext = createContext<string | undefined>(undefined);
 const UpdateVisibleTimeFramesContext = createContext<
   Dispatch<SetStateAction<string | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useVisibleTimeFramesContext = () => {
   return useContext(VisibleTimeFramesContext);

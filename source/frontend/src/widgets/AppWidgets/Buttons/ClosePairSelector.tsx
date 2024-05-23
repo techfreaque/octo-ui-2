@@ -1,12 +1,13 @@
+import { CloseOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 import { useMemo } from "react";
+import { Trans } from "react-i18next";
+
 import AntButton, {
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
-import { CloseOutlined } from "@ant-design/icons";
 import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
 import { sizes } from "../../../constants/frontendConstants";
-import { Tooltip } from "antd";
-import { Trans } from "react-i18next";
 import {
   usePairSelectorMenuOpenContext,
   useUpdatePairSelectorMenuOpenContext,
@@ -46,7 +47,9 @@ export default function ClosePairSelector() {
           </Tooltip>
         </span>
       );
-    } else return <></>;
+    } else {
+      return <></>;
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pairSelectorMenuOpen?.open]);
 }

@@ -1,5 +1,22 @@
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import {
+  CheckCircleOutlined,
+  ExclamationCircleOutlined,
+  QuestionCircleOutlined,
+  WarningOutlined,
+} from "@ant-design/icons";
+import { Input, Space, Tooltip } from "antd";
 import { useEffect } from "react";
+import { Trans } from "react-i18next";
+
+import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
+import AntTable, {
+  AntTableColumnType,
+  AntTableDataType,
+  AntTableExpandableConfig,
+} from "../../../components/Tables/AntTable";
+import EnablerSwitch from "../../../components/UserInputs/EnablerSwich";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
 import {
   ExchangeConfigType,
@@ -8,23 +25,7 @@ import {
   useNewConfigExchangesContext,
   useServicesInfoContext,
 } from "../../../context/data/BotExchangeInfoProvider";
-import AntTable, {
-  AntTableColumnType,
-  AntTableDataType,
-  AntTableExpandableConfig,
-} from "../../../components/Tables/AntTable";
 import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
-import { Input, Space, Tooltip } from "antd";
-import {
-  CheckCircleOutlined,
-  ExclamationCircleOutlined,
-  QuestionCircleOutlined,
-  WarningOutlined,
-} from "@ant-design/icons";
-import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
-import { Trans } from "react-i18next";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import EnablerSwitch from "../../../components/UserInputs/EnablerSwich";
 
 export default function ExchangeSelector() {
   const botDomain = useBotDomainContext();
@@ -292,7 +293,6 @@ export default function ExchangeSelector() {
               )
             }
             value={record?.apiPassword}
-            // defaultValue="mysite"
           />
         </Space>
       </div>
@@ -302,7 +302,7 @@ export default function ExchangeSelector() {
   return (
     <AntTable
       columns={columns}
-      // maxWidth="950px"
+      maxHeight="calc(100vh - 200px)"
       expandable={expandable}
       data={exchangesData}
     />
@@ -330,7 +330,7 @@ interface ExchangeDataType extends AntTableDataType {
   hasWebsocketsLabel: JSX.Element;
 }
 
-interface ExchangeColumnType extends AntTableColumnType<ExchangeDataType> {}
+type ExchangeColumnType = AntTableColumnType<ExchangeDataType>;
 
 const columns: ExchangeColumnType[] = [
   {

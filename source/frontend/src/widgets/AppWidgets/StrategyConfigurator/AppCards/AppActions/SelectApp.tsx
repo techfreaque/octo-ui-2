@@ -1,10 +1,11 @@
 import { SelectOutlined } from "@ant-design/icons";
-import { ConfirmAction } from "./AppActions";
 import { Tooltip } from "antd";
-import AppIconButton from "../../../../../components/Buttons/AppIconButton";
+import { useState } from "react";
 import { Trans } from "react-i18next";
-import { Dispatch, SetStateAction, useState } from "react";
+
+import AppIconButton from "../../../../../components/Buttons/AppIconButton";
 import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
+import { ConfirmAction } from "./AppActions";
 
 export default function SelectApp({
   app,
@@ -18,7 +19,7 @@ export default function SelectApp({
   const [open, setOpen] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
   if (!app.is_selected && app.is_installed && handleSelect) {
-    const handleOk = (_setOpen: Dispatch<SetStateAction<boolean>>) => {
+    const handleOk = () => {
       setConfirmLoading(true);
       handleSelect(() => {
         setOpen(false);

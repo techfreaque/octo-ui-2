@@ -1,12 +1,13 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useCallback,
-  SetStateAction,
   Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
   useEffect,
+  useState,
 } from "react";
+
 import {
   errorResponseCallBackParams,
   sendAndInterpretBotUpdate,
@@ -14,6 +15,7 @@ import {
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 
 export interface RunInputType {
@@ -49,12 +51,12 @@ const OptimizerQueueContext = createContext<OptimizerQueueType | undefined>(
 );
 const UpdateOptimizerQueueContext = createContext<
   Dispatch<SetStateAction<OptimizerQueueType | undefined>>
->((_value) => {});
+>(emptyValueFunction);
 
 const OptimizerQueueCounterContext = createContext<number>(0);
 const UpdateOptimizerQueueCounterContext = createContext<
   Dispatch<SetStateAction<number>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useOptimizerQueueContext = () => {
   return useContext(OptimizerQueueContext);
@@ -76,7 +78,7 @@ export const useFetchOptimizerQueue = () => {
   const setOptimizerQueue = useUpdateOptimizerQueueContext();
   const botDomain = useBotDomainContext();
   return useCallback(() => {
-    const errorCallback = (payload: errorResponseCallBackParams) => {
+    const errorCallback = () => {
       createNotification({
         title: "Failed to load the optimizer queue",
         type: "danger",
@@ -84,7 +86,8 @@ export const useFetchOptimizerQueue = () => {
     };
     const successCallback = (payload: successResponseCallBackParams) => {
       if (!payload.data?.success) {
-        return errorCallback(payload);
+        errorCallback();
+        return;
       }
       setOptimizerQueue(payload.data?.data);
     };
@@ -116,7 +119,8 @@ export const useSaveOptimizerQueue = () => {
       };
       const successCallback = (payload: successResponseCallBackParams) => {
         if (!payload.data?.success) {
-          return errorCallback(payload);
+          errorCallback(payload);
+          return;
         }
         fetchOptimizerQueue();
         createNotification({ title: "Optimizer queue updated" });

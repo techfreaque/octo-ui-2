@@ -1,12 +1,13 @@
-import { useEffect, useMemo, useState } from "react";
-import { Button } from "@mui/material";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faRedo } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Button } from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
+
+import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
 import {
   useBacktestingRunDataContext,
   useFetchBacktestingRunData,
 } from "../../../../context/data/BacktestingRunDataProvider";
-import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
 import AntRunDataTable from "./AntRunDataTable";
 
 export function BacktestingRunDataTable() {
@@ -15,7 +16,9 @@ export function BacktestingRunDataTable() {
   const fetchBacktestingRunData = useFetchBacktestingRunData();
   const currentOptimizerCampaignName = uiSettings?.optimization_campaign?.name;
   useEffect(() => {
-    if (currentOptimizerCampaignName) fetchBacktestingRunData();
+    if (currentOptimizerCampaignName) {
+      fetchBacktestingRunData();
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentOptimizerCampaignName]);
   return useMemo(

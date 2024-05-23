@@ -51,7 +51,9 @@
     "exchangeNotAuthenticatedTooltip": "Ihre API-Schlüssel konnten nicht verifiziert werden. \nFür den echten Handel sind gültige API-Schlüssel erforderlich.",
     "isTestedExchangeTooltip": "Diese Börse wird vollständig unterstützt und ist getestet.",
     "isTestedExchangeSimulatedTooltip": "Diese Börse wurde nur im Simulationsmodus getestet.",
-    "isUntestedExchangeTooltip": "Diese Börse wurde noch nicht getestet und wird noch nicht offiziell unterstützt."
+    "isUntestedExchangeTooltip": "Diese Börse wurde noch nicht getestet und wird noch nicht offiziell unterstützt.",
+    "hasWebsocketTooltip": "Diese Börse unterstützt WebSocket und kann viele Paare verwenden.",
+    "noWebsocketTooltip": "Diese Börse unterstützt kein WebSocket und kann nur eine begrenzte Anzahl von Paaren verwenden."
   },
   "progress": {
     "backtestingProgressTooltip": "Backtest ist zu {{progressPercent}} % abgeschlossen"

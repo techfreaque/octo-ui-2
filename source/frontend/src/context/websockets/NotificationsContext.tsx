@@ -1,7 +1,9 @@
 import { Dispatch, SetStateAction, useEffect } from "react";
-import { useState, useContext, createContext } from "react";
+import { createContext,useContext, useState } from "react";
 import { useSocket, useSocketEvent } from "socket.io-react-hook";
+
 import createNotification from "../../components/Notifications/Notification";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useUpdateIsBotOnlineContext } from "../data/IsBotOnlineProvider";
 
@@ -29,7 +31,7 @@ const NotificationsHistoryContext = createContext<
 >(undefined);
 const UpdateNotificationsHistoryContext = createContext<
   Dispatch<SetStateAction<NotificationHistoryType[] | undefined>>
->(() => {});
+>(emptyValueFunction);
 
 export const useNotificationsHistoryContext = () => {
   return useContext(NotificationsHistoryContext);
@@ -87,7 +89,9 @@ export const NotificationsContextProvider = ({
   }, [connected, setIsBotOnline, socket?.active, socket?.recovered]);
   const { lastMessage } = useSocketEvent(socket, "update");
   useEffect(() => {
-    if (lastMessage) onNewMessage(lastMessage as WebsocketNotificationType);
+    if (lastMessage) {
+      onNewMessage(lastMessage as WebsocketNotificationType);
+    }
   }, [lastMessage]);
 
   return (

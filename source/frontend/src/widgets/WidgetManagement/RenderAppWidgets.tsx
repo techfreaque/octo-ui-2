@@ -1,15 +1,16 @@
-import { Component, ErrorInfo, createElement } from "react";
+import { Component, createElement,ErrorInfo } from "react";
 import { useMemo } from "react";
-import {
-  AppWidgetNameType,
-  registeredComponents,
-} from "./RegisteredAppWidgets";
+
+import createNotification from "../../components/Notifications/Notification";
 import { isProduction } from "../../constants/frontendConstants";
 import {
   UiLayoutPageLayoutType,
   UiLayoutPageType,
 } from "../../context/config/BotLayoutProvider";
-import createNotification from "../../components/Notifications/Notification";
+import {
+  AppWidgetNameType,
+  registeredComponents,
+} from "./RegisteredAppWidgets";
 
 export default function AppWidgets(props: {
   currentPage?: UiLayoutPageType;
@@ -72,7 +73,7 @@ export default function AppWidgets(props: {
 }
 
 export class ErrorBoundary extends Component {
-  override props!: { children: JSX.Element; componentName: string };
+  override props!: { children: JSX.Element; componentName: string; };
   override state: {
     error: Error | null;
     errorInfo: ErrorInfo | null;

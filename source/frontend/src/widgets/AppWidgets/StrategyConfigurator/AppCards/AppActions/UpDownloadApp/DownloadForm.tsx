@@ -1,12 +1,14 @@
 import { DownloadOutlined, ShoppingCartOutlined } from "@ant-design/icons";
+import { Grid } from "@mui/material";
 import { Alert, Card, Tooltip, Typography } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
 
+import AntButton from "../../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
-import { useBotColorsContext } from "../../../../../../context/config/BotColorsProvider";
 import AntTable, {
   AntTableDataType,
 } from "../../../../../../components/Tables/AntTable";
+import { useBotColorsContext } from "../../../../../../context/config/BotColorsProvider";
 import {
   AppStoreAppType,
   AppStoreAppVersionType,
@@ -16,11 +18,9 @@ import {
   useIsInAppStoreCart,
   useUpdateAppStoreCartIsOpenContext,
 } from "../../../../../../context/data/AppStoreDataProvider";
-import { IsInstalledIcon, IsNotInstalledIcon } from "../../AppCover";
-import AntButton from "../../../../../../components/Buttons/AntButton";
-import { Grid } from "@mui/material";
 import { appPackagesName, strategyName } from "../../../storeConstants";
 import { DownloadInfo } from "../../AppCard";
+import { IsInstalledIcon, IsNotInstalledIcon } from "../../AppCover";
 
 export default function AppDownloadForm({
   setDownloadInfo,
@@ -234,7 +234,7 @@ function AppVersions({
       major_version: firtVersion?.major_version,
       minor_version: firtVersion?.minor_version,
       bug_fix_version: firtVersion?.bug_fix_version,
-      versionDetailsOpen: reversedVersions?.length ? true : false,
+      versionDetailsOpen: !!reversedVersions?.length,
     }));
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reversedVersions]);

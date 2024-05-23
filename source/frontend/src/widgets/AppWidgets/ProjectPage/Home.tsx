@@ -1,28 +1,28 @@
-import { Grid } from "@mui/material";
-import { Card, Typography } from "antd";
-import AntButton, { buttonSizes } from "../../../components/Buttons/AntButton";
 import {
   CloudDownloadOutlined,
   CloudServerOutlined,
   RocketOutlined,
 } from "@ant-design/icons";
 import {
+  faDocker,
+  faLinux,
+  faWindows,
+} from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Grid } from "@mui/material";
+import { Card, Typography } from "antd";
+
+import AntButton, { buttonSizes } from "../../../components/Buttons/AntButton";
+import {
   projectDownloadUrl,
   projectName,
 } from "../../../constants/frontendConstants";
-import ButtonWithModal from "../Modals/ButtonWithModal";
 import {
   useIsDemoMode,
   useProjectInfoOpenContext,
   useUpdateProjectInfoOpenContext,
 } from "../../../context/data/BotInfoProvider";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faDocker,
-  faLinux,
-  faWindows,
-} from "@fortawesome/free-brands-svg-icons";
-import { RocketLaunchOutlined } from "@mui/icons-material";
+import ButtonWithModal from "../Modals/ButtonWithModal";
 import logo from "../other/octane-logo.png";
 import CloudDeploymentModal from "./CloudDeployment";
 
@@ -96,8 +96,8 @@ export default function ProjectHomePage() {
           the fast-paced market?
         </Typography.Paragraph>
         <Typography.Paragraph>
-          It's time to revolutionize your approach with our advanced automation
-          solutions.
+          It&apos;s time to revolutionize your approach with our advanced
+          automation solutions.
         </Typography.Paragraph>
         <Typography.Paragraph>
           By harnessing cutting-edge technology, our custom trading bot empowers
@@ -124,7 +124,7 @@ export default function ProjectHomePage() {
       </Grid>
       <Grid item sm={12} md={4}>
         <Card style={{ height: "100%" }}>
-          <RocketLaunchOutlined style={{ fontSize: "60px" }} />
+          <RocketOutlined style={{ fontSize: "60px" }} />
           <TitleSubTitleCombo
             title="Get Your Custom Trading Bot"
             subTitle="Automate Your Strategy and Boost Your Trading Success"

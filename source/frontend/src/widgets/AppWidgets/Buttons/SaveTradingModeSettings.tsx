@@ -1,15 +1,16 @@
-import { Tooltip } from "antd";
-import AntButton from "../../../components/Buttons/AntButton";
 import { SaveOutlined } from "@ant-design/icons";
+import { Tooltip } from "antd";
 import { useMemo, useState } from "react";
+
+import AntButton from "../../../components/Buttons/AntButton";
 import { TentaclesConfigByTentacleType, useSaveTentaclesConfig } from "../../../context/config/TentaclesConfigProvider";
+import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
+import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 import {
   saveUserInputs,
   strategyFlowMakerName,
 } from "../Configuration/TentaclesConfig";
-import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 import { useCurrentTradingConfig } from "../Configuration/TradingConfig";
-import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
 
 export default function SaveTradingModeSettings() {
   const [isSaving, setIsSaving] = useState(false);

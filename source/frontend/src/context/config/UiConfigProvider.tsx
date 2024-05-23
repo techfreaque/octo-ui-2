@@ -1,35 +1,37 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useCallback,
-  useEffect,
-  SetStateAction,
   Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
 } from "react";
+
 import { fetchUIConfig, saveUIConfig } from "../../api/configs";
-import { useBotDomainContext } from "./BotDomainProvider";
-import { useBotInfoContext } from "../data/BotInfoProvider";
-import {
-  BACKTESTING_ANALYSIS_SETTINGS,
-  BACKTESTING_RUN_SETTINGS_KEY,
-  CURRENT_LIVE_ID_KEY,
-  CanldesPlotSourceType,
-  DISPLAY_SETTINGS_KEY,
-  GRAPHS_KEY,
-  LIVE_ANALYSIS_SETTINGS,
-  OPTIMIZER_CAMPAIGNS_TO_LOAD_KEY,
-  OPTIMIZER_CAMPAIGN_KEY,
-  OPTIMIZER_INPUTS_KEY,
-  OPTIMIZER_RUN_SETTINGS_KEY,
-  botLayoutKey,
-} from "../../constants/backendConstants";
-import { UiLayoutPageType } from "./BotLayoutProvider";
 import {
   errorResponseCallBackParams,
   successResponseCallBackParams,
 } from "../../api/fetchAndStoreFromBot";
+import {
+  BACKTESTING_ANALYSIS_SETTINGS,
+  BACKTESTING_RUN_SETTINGS_KEY,
+  botLayoutKey,
+  CanldesPlotSourceType,
+  CURRENT_LIVE_ID_KEY,
+  DISPLAY_SETTINGS_KEY,
+  GRAPHS_KEY,
+  LIVE_ANALYSIS_SETTINGS,
+  OPTIMIZER_CAMPAIGN_KEY,
+  OPTIMIZER_CAMPAIGNS_TO_LOAD_KEY,
+  OPTIMIZER_INPUTS_KEY,
+  OPTIMIZER_RUN_SETTINGS_KEY,
+} from "../../constants/backendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { flowEditorSettingsName } from "../../widgets/AppWidgets/Configuration/UIConfig";
+import { useBotInfoContext } from "../data/BotInfoProvider";
+import { useBotDomainContext } from "./BotDomainProvider";
+import { UiLayoutPageType } from "./BotLayoutProvider";
 
 export interface BotLayoutType {
   layouts: UiLayoutPageType[];
@@ -111,7 +113,7 @@ export interface UiConfigType {
 const UiConfigContext = createContext<UiConfigType>({});
 const UpdateUiConfigContext = createContext<
   Dispatch<SetStateAction<UiConfigType>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useUiConfigContext = () => {
   return useContext(UiConfigContext);
@@ -138,11 +140,11 @@ export const useSaveUiConfig = () => {
   return useCallback(
     (
       newConfig: UiConfigType,
-      successCallback: (
-        payload: successResponseCallBackParams
-      ) => void | undefined,
+      successCallback:
+        | ((payload: successResponseCallBackParams) => void)
+        | undefined,
       errorCallback: (payload: errorResponseCallBackParams) => void,
-      overwriteConfig: boolean = false
+      overwriteConfig = false
     ) => {
       setUiConfig((prevConfig) => {
         const _newConfig: UiConfigType = {

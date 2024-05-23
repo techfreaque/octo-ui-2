@@ -1,18 +1,19 @@
 import { Dispatch, SetStateAction } from "react";
+
 import createNotification from "../components/Notifications/Notification";
 import { backendRoutes } from "../constants/backendConstants";
+import { StatBacktestingSettingsType } from "../context/actions/BotBacktestingProvider";
+import { StartOptimizerSettingsType } from "../context/actions/BotOptimizerProvider";
+import { OptimizerEditorInputsType } from "../context/config/OptimizerEditorProvider";
+import { OptimizerUiConfig } from "../context/config/UiConfigProvider";
+import { ExchangeConfigUpdateType } from "../context/data/BotExchangeInfoProvider";
+import { ProfileInfoUpdateType } from "../widgets/AppWidgets/Modals/ProfileModal/ProfileModalButton";
+import { ResetDataStorageInfoType } from "../widgets/AppWidgets/ResetConfigs/ResetConfigs";
 import {
   errorResponseCallBackParams,
   sendAndInterpretBotUpdate,
   successResponseCallBackParams,
 } from "./fetchAndStoreFromBot";
-import { StatBacktestingSettingsType } from "../context/actions/BotBacktestingProvider";
-import { OptimizerUiConfig } from "../context/config/UiConfigProvider";
-import { OptimizerEditorInputsType } from "../context/config/OptimizerEditorProvider";
-import { StartOptimizerSettingsType } from "../context/actions/BotOptimizerProvider";
-import { ProfileInfoUpdateType } from "../widgets/AppWidgets/Modals/ProfileModal/ProfileModalButton";
-import { ExchangeConfigUpdateType } from "../context/data/BotExchangeInfoProvider";
-import { ResetDataStorageInfoType } from "../widgets/AppWidgets/ResetConfigs/ResetConfigs";
 
 export async function startBacktesting(
   botDomain: string,
@@ -43,11 +44,14 @@ export async function restartBot(
 ) {
   function successCallback() {
     updateIsOnline(false);
-    if (notification) createNotification({ title: "The bot is restarting..." });
+    if (notification) {
+      createNotification({ title: "The bot is restarting..." });
+    }
   }
   function errorCallback() {
-    if (notification)
+    if (notification) {
       createNotification({ title: "Failed to restart bot", type: "danger" });
+    }
   }
   sendAndInterpretBotUpdate({
     updatedData: {},
@@ -357,7 +361,8 @@ export async function cancelOrders(
   setIsCancelling?.(true);
   function successCallback(payload: successResponseCallBackParams) {
     if (payload.data === "0 orders cancelled") {
-      return errorCallback();
+      errorCallback();
+      return;
     }
     createNotification({ title: "Successfully canceled orders" });
     upDateOrders();
@@ -472,7 +477,6 @@ export async function deleteProfile(
 export async function selectProfile(
   botDomain: string,
   profileId: string,
-  profileName: string,
   onSuccess: (payload: successResponseCallBackParams) => void,
   onFail: (payload: errorResponseCallBackParams) => void
 ) {

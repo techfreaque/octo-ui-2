@@ -1,15 +1,16 @@
+import { EditOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import { CleanDescription } from "../../StrategyConfigurator/AppCards/AppDescription";
+import TextArea from "antd/es/input/TextArea";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+
 import AntButton, {
   buttonSizes,
   buttonTypes,
   buttonVariants,
 } from "../../../../components/Buttons/AntButton";
-import { EditOutlined } from "@ant-design/icons";
 import { sizes } from "../../../../constants/frontendConstants";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
-import TextArea from "antd/es/input/TextArea";
 import { ProfileType } from "../../../../context/data/BotInfoProvider";
+import { CleanDescription } from "../../StrategyConfigurator/AppCards/AppDescription";
 
 export function ProfileDescription({
   newProfileSettings,

@@ -1,4 +1,5 @@
-import { Space, Tag, Badge } from "antd";
+import { Badge,Space, Tag } from "antd";
+
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 
 export default function NumberTag({
@@ -48,11 +49,21 @@ export default function NumberTag({
 }
 
 function getBadgeSize(formattedNumber: string): string {
-  if (formattedNumber.length < 2) return "15px";
-  if (formattedNumber.length === 2) return "25px";
-  if (formattedNumber.length === 3) return "30px";
-  if (formattedNumber.length === 4) return "35px";
-  if (formattedNumber.length === 5) return "45px";
+  if (formattedNumber.length < 2) {
+    return "15px";
+  }
+  if (formattedNumber.length === 2) {
+    return "25px";
+  }
+  if (formattedNumber.length === 3) {
+    return "30px";
+  }
+  if (formattedNumber.length === 4) {
+    return "35px";
+  }
+  if (formattedNumber.length === 5) {
+    return "45px";
+  }
   return "48px";
 }
 
@@ -69,6 +80,8 @@ function formatNumber(number: number): string {
   if (number >= 1e9 && number < 1e12) {
     return `${(number / 1e9).toFixed(2)}B`;
   }
-  if (number >= 1e12) return `${(number / 1e12).toFixed(2)}T`;
+  if (number >= 1e12) {
+    return `${(number / 1e12).toFixed(2)}T`;
+  }
   return number.toString();
 }

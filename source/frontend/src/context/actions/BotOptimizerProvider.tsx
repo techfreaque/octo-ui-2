@@ -1,23 +1,27 @@
+import type { DefaultEventsMap } from "@socket.io/component-emitter";
 import {
-  useState,
-  useContext,
   createContext,
-  useCallback,
-  SetStateAction,
   Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useState,
 } from "react";
+import type { Socket } from "socket.io-client";
+
 import {
   addToOptimizerQueue,
   startOptimizer,
   stopOptimizer,
 } from "../../api/actions";
+import { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
+import createNotification from "../../components/Notifications/Notification";
 import {
-  OPTIMIZER_RUN_SETTINGS_KEY,
   backendRoutes,
+  OPTIMIZER_RUN_SETTINGS_KEY,
 } from "../../constants/backendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
-import { IdsByExchangeType, useBotInfoContext } from "../data/BotInfoProvider";
-import { useFetchOptimizerQueue } from "../data/OptimizerQueueProvider";
 import {
   OptimizerEditorInputsType,
   useFetchProConfig,
@@ -27,23 +31,17 @@ import {
   OptimizerUiConfig,
   useUiConfigContext,
 } from "../config/UiConfigProvider";
+import { IdsByExchangeType, useBotInfoContext } from "../data/BotInfoProvider";
+import { useFetchOptimizerQueue } from "../data/OptimizerQueueProvider";
 import {
   AbstractWebsocketContext,
   WebsocketDataType,
 } from "../websockets/AbstractWebsocketContext";
-import createNotification from "../../components/Notifications/Notification";
-import {
-  errorResponseCallBackParams,
-  sendAndInterpretBotUpdate,
-  successResponseCallBackParams,
-} from "../../api/fetchAndStoreFromBot";
-import type { DefaultEventsMap } from "@socket.io/component-emitter";
-import type { Socket } from "socket.io-client";
 
 const BotIsOptimizingContext = createContext<boolean | "isStopping">(false);
 const UpdateBotIsOptimizingContext = createContext<
   Dispatch<SetStateAction<boolean | "isStopping">>
->((_value) => {});
+>(emptyValueFunction);
 
 interface OptimizerProgressType extends WebsocketDataType {
   remaining_time?: number;
@@ -75,23 +73,13 @@ export const useStopOptimizer = () => {
 export const useStopTraining = () => {
   const botDomain = useBotDomainContext();
   return useCallback(() => {
-    function successCallback({
-      updatedData,
-      updateUrl,
-      data,
-      response,
-    }: successResponseCallBackParams) {
+    function successCallback() {
       createNotification({
         title: "Successfully stopped training",
         message: "Training will stop once this generation has finished",
       });
     }
-    function errorCallback({
-      updatedData,
-      updateUrl,
-      data,
-      response,
-    }: errorResponseCallBackParams) {
+    function errorCallback() {
       createNotification({ title: "Failed to stop training", type: "danger" });
     }
     sendAndInterpretBotUpdate({

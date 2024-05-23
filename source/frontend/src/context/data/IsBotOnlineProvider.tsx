@@ -1,12 +1,14 @@
 import { Dispatch, SetStateAction, useCallback } from "react";
-import { useState, useContext, createContext } from "react";
+import { createContext, useContext, useState } from "react";
+
 import { restartBot } from "../../api/actions";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 
 const IsBotOnlineContext = createContext<boolean>(true);
 const UpdateIsBotOnlineContext = createContext<
   Dispatch<SetStateAction<boolean>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useIsBotOnlineContext = () => {
   return useContext(IsBotOnlineContext);

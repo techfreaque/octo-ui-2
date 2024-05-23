@@ -1,7 +1,9 @@
-import { CSSProperties, useMemo } from "react";
 import "./OptimizerInputTemplate.css";
-import { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
+
 import { InputNumber, Select, Switch } from "antd";
+import { CSSProperties, useMemo } from "react";
+
+import { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
 import {
   OptimizerEditorInputArrayType,
   OptimizerEditorInputNumberType,

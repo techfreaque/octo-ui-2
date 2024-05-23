@@ -1,10 +1,11 @@
+import { Typography } from "antd";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
 import {
   useDeleteStoreUser,
   useGetStorePayments,
   useGetUsers,
 } from "../../../../context/data/AppStoreDataProvider";
-import { Typography } from "antd";
 import { ConfirmAction } from "../AppCards/AppActions/AppActions";
 
 export default function BackendDashboard() {
@@ -24,7 +25,7 @@ export default function BackendDashboard() {
           <Typography.Title level={4}>Users</Typography.Title>
           {storeUsers.users.map((user) => {
             return (
-              <li>
+              <li key={user.id}>
                 {`${user.id} ${user.email} (ref id${user.referral_user_id})`}
                 <ConfirmAction
                   onConfirm={(setOpen: Dispatch<SetStateAction<boolean>>) =>
@@ -44,7 +45,7 @@ export default function BackendDashboard() {
           <Typography.Title level={4}>Visits</Typography.Title>
           {storeUsers.visits.map((visit) => {
             return (
-              <li>
+              <li key={visit.user_id}>
                 {`count: ${visit.visit_counter} - ${visit.origin} (${visit.user_id})`}
               </li>
             );
@@ -56,7 +57,7 @@ export default function BackendDashboard() {
           <Typography.Title level={4}>Store Payments</Typography.Title>
           {storePayments.payments.map((payment) => {
             return (
-              <li>
+              <li key={payment.id}>
                 {`${payment.id} ${payment.timestamp} ${payment.payment_status} ${payment.user_id} ${payment.payment_id} ${payment.origin_packages} ${payment.payment_timestamp} ${payment.price} ${payment.payment_success_secret} ${payment.payment_cancel_secret} ${payment.payment_url} ${payment.cancel_url} ${payment.subscription_months}`}
               </li>
             );
@@ -68,7 +69,7 @@ export default function BackendDashboard() {
           <Typography.Title level={4}>Store Payments</Typography.Title>
           {storePayments.subscriptions.map((payment) => {
             return (
-              <li>
+              <li key={payment.id}>
                 {`${payment.id} ${payment.user_id} ${payment.start_timestamp} ${payment.end_timestamp} ${payment.origin_package}`}
               </li>
             );

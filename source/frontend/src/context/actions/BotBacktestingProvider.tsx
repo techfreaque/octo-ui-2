@@ -1,33 +1,35 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useCallback,
-  SetStateAction,
   Dispatch,
+  SetStateAction,
+  useCallback,
+  useContext,
+  useState,
 } from "react";
+
 import { startBacktesting, stopBacktesting } from "../../api/actions";
+import createNotification from "../../components/Notifications/Notification";
 import {
   BACKTESTING_RUN_SETTINGS_KEY,
   CURRENT_BOT_DATA,
 } from "../../constants/backendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
-import { useBotInfoContext } from "../data/BotInfoProvider";
 import {
   BacktestingUiConfig,
   useUiConfigContext,
 } from "../config/UiConfigProvider";
+import { useBotInfoContext } from "../data/BotInfoProvider";
 import {
   AbstractWebsocketContext,
   WebsocketDataType,
   WebsocketOnConnectionUpdateType,
 } from "../websockets/AbstractWebsocketContext";
-import createNotification from "../../components/Notifications/Notification";
 
 const BotIsBacktestingContext = createContext<boolean>(false);
 const UpdateBotIsDataCollectingContext = createContext<
   Dispatch<SetStateAction<boolean>>
->((_value) => {});
+>(emptyValueFunction);
 const BotIsDataCollectingContext = createContext<boolean>(false);
 
 interface DataCollectingProgressType extends WebsocketDataType {
@@ -41,7 +43,7 @@ const DataCollectingProgressContext = createContext<DataCollectingProgressType>(
 );
 const UpdateBotIsBacktestingContext = createContext<
   Dispatch<SetStateAction<boolean>>
->((_value) => {});
+>(emptyValueFunction);
 
 interface BacktestingProgressType extends WebsocketDataType {
   progress?: number;
@@ -95,8 +97,9 @@ export const useStartBacktesting = () => {
         data_sources: [CURRENT_BOT_DATA],
         ...backtestingSettings,
         exchange_ids: backtestingSettings.exchange_names
-          ? backtestingSettings.exchange_names
-              .map((exchangeName) => String(ids_by_exchange_name[exchangeName]))
+          ? backtestingSettings.exchange_names.map((exchangeName) =>
+              String(ids_by_exchange_name[exchangeName])
+            )
           : Object.values(ids_by_exchange_name),
       };
       startBacktesting(botDomain, _backtestingSettings, setBotIsBacktesting);

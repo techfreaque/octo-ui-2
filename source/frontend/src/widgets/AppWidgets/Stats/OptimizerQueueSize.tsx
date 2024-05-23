@@ -1,7 +1,8 @@
 import { useMemo } from "react";
-import { useOptimizerQueueCounterContext } from "../../../context/data/OptimizerQueueProvider";
+
 import NumberTag from "../../../components/Notifications/NumberTag";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { useOptimizerQueueCounterContext } from "../../../context/data/OptimizerQueueProvider";
 
 export default function OptimizerQueueSize() {
   const optimizerQueueSize = useOptimizerQueueCounterContext();

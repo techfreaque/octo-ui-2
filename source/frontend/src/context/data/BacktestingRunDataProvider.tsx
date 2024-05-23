@@ -1,11 +1,12 @@
 import {
-  useState,
-  useContext,
   createContext,
-  useCallback,
   Dispatch,
   SetStateAction,
+  useCallback,
+  useContext,
+  useState,
 } from "react";
+
 import { fetchBacktestingRunData } from "../../api/data";
 import {
   errorResponseCallBackParams,
@@ -13,16 +14,16 @@ import {
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
+import { TentaclesConfigValuesType } from "../config/TentaclesConfigProvider";
 import {
   useUiConfigContext,
   useUpdateUiConfigContext,
 } from "../config/UiConfigProvider";
-import { TentaclesConfigValuesType } from "../config/TentaclesConfigProvider";
 import { useUpdateDisplayedRunIdsContext } from "./BotPlottedElementsProvider";
 
-export interface BacktestingRunData {
-  id: number;
+export interface BacktestingRunDataWithoutID {
   "optimization campaign": string;
   "user inputs": TentaclesConfigValuesType;
   timestamp: number;
@@ -52,9 +53,12 @@ export interface BacktestingRunData {
   exchanges: string[];
   start_time: number;
   end_time: number;
-  future_contracts: {};
+  future_contracts: any;
   "optimizer id": number;
 }
+export type BacktestingRunData = BacktestingRunDataWithoutID & {
+  id: number;
+};
 export interface BacktestingRunsData {
   data: BacktestingRunData[];
   campaigns: {
@@ -67,7 +71,7 @@ const BacktestingRunDataContext = createContext<
 >(undefined);
 const UpdateBacktestingRunDataContext = createContext<
   Dispatch<SetStateAction<BacktestingRunsData | undefined>>
->((_) => {});
+>(emptyValueFunction);
 
 export const useBacktestingRunDataContext = () => {
   return useContext(BacktestingRunDataContext);
@@ -84,7 +88,7 @@ export const useFetchBacktestingRunData = () => {
   const setUiConfig = useUpdateUiConfigContext();
   return useCallback(
     (onDone?: () => void) => {
-      if (uiConfig?.optimization_campaign)
+      if (uiConfig?.optimization_campaign) {
         fetchBacktestingRunData(
           setBacktestingRunData,
           setUiConfig,
@@ -95,6 +99,7 @@ export const useFetchBacktestingRunData = () => {
           },
           onDone
         );
+      }
     },
     [setBacktestingRunData, botDomain, uiConfig, setUiConfig]
   );
@@ -113,7 +118,8 @@ export const useDeleteBacktestingRunData = () => {
   return useCallback(
     (
       runsToDelete: RunsToDeleteDataType,
-      isDeleting: Dispatch<SetStateAction<boolean>>
+      isDeleting: Dispatch<SetStateAction<boolean>>,
+      onSuccess?: () => void
     ) => {
       isDeleting(true);
       const data = {
@@ -127,6 +133,7 @@ export const useDeleteBacktestingRunData = () => {
           backtesting: [],
         }));
         isDeleting(false);
+        onSuccess?.();
       };
       const errorCallback = (payload: errorResponseCallBackParams) => {
         reloadData();

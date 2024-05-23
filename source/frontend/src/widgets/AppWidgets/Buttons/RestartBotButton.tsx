@@ -1,14 +1,15 @@
 import { useMemo } from "react";
-import {
-  useIsBotOnlineContext,
-  useRestartBot,
-} from "../../../context/data/IsBotOnlineProvider";
 import { Trans } from "react-i18next";
+
 import AntButton, {
   ButtonType,
   buttonTypes,
 } from "../../../components/Buttons/AntButton";
 import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
+import {
+  useIsBotOnlineContext,
+  useRestartBot,
+} from "../../../context/data/IsBotOnlineProvider";
 
 export default function RestartBotButton({
   buttonType = buttonTypes.warning,

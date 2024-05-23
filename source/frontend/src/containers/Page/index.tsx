@@ -1,12 +1,13 @@
 import { useMemo } from "react";
 import { Helmet } from "react-helmet";
+
 import {
   projectDescription,
   projectName,
 } from "../../constants/frontendConstants";
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
-import AppWidgets from "../../widgets/WidgetManagement/RenderAppWidgets";
 import { UiLayoutPageType } from "../../context/config/BotLayoutProvider";
+import AppWidgets from "../../widgets/WidgetManagement/RenderAppWidgets";
 
 export default function Page({
   currentPage,

@@ -25,7 +25,7 @@
     // https://eslint.org/docs/rules/no-fallthrough
     // "noUnusedLocals": true,
     // https://eslint.org/docs/rules/no-unused-vars
-    // "noUnusedParameters": true,
+    "noUnusedParameters": true,
     // "noPropertyAccessFromIndexSignature": true,
     // "exactOptionalPropertyTypes": true,
     "alwaysStrict": true,

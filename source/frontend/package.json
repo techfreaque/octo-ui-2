@@ -9,13 +9,11 @@
     "@emotion/styled": "^11.11.5",
     "@fortawesome/fontawesome-svg-core": "^6.5.2",
     "@fortawesome/free-brands-svg-icons": "^6.5.2",
-    "@fortawesome/free-regular-svg-icons": "^6.5.2",
     "@fortawesome/free-solid-svg-icons": "^6.5.2",
     "@fortawesome/react-fontawesome": "^0.2.0",
-    "@mui/icons-material": "^5.15.17",
     "@mui/material": "^5.15.17",
     "@techfreaque/json-editor-react": "^1.4.8",
-    "antd": "^5.17.0",
+    "antd": "^5.17.3",
     "bootstrap": "^5.3.3",
     "d3-format": "^3.1.0",
     "d3-time-format": "^4.1.0",
@@ -28,21 +26,19 @@
     "react-bootstrap": "^2.10.2",
     "react-dom": "^18.3.1",
     "react-helmet": "^6.1.0",
-    "react-highlight-words": "^0.20.0",
     "react-i18next": "^14.1.1",
     "react-notifications-component": "^4.0.1",
     "react-plotly.js": "^2.6.0",
     "react-router-dom": "^6.23.0",
     "react-use-measure": "^2.1.1",
-    "react-visibility-sensor": "^5.1.1",
     "reactflow": "^11.11.3",
-    "socket.io-react-hook": "^2.4.4",
-    "w2ui": "github:vitmalina/w2ui"
+    "socket.io-react-hook": "^2.4.4"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "lint": "eslint src/* --fix",
     "eject": "react-scripts eject",
     "prettier:check": "npmx prettier --check \"**/*.{ts,tsx}\"",
     "prettier:write": "npmx prettier --write \"**/*.{ts,tsx}\""
@@ -65,18 +61,25 @@
     ]
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/plugin-transform-private-property-in-object": "^7.24.5",
+    "@eslint/js": "^9.3.0",
     "@types/node": "^20.12.11",
     "@types/react": "^18.3.1",
     "@types/react-dom": "^18.3.0",
     "@types/react-helmet": "^6.1.11",
     "@types/react-jsonschema-form": "^1.7.13",
     "@types/react-plotly.js": "^2.6.3",
-    "@types/w2ui": "^1.4.37",
+    "eslint": "^8.57.0",
+    "eslint-plugin-react": "^7.34.1",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "eslint-plugin-simple-import-sort": "^12.1.0",
+    "globals": "^15.3.0",
     "react-scripts": "5.0.1",
-    "typescript": "^5.4.5"
+    "typescript": "5.1.6",
+    "typescript-eslint": "^7.10.0"
   },
   "overrides": {
-    "typescript": "^5.4.5"
+    "typescript": "5.1.6"
   }
 }

@@ -1,17 +1,10 @@
 import { BankOutlined } from "@ant-design/icons";
-import AppIconButton from "../../../../components/Buttons/AppIconButton";
 import { useEffect, useMemo, useState } from "react";
-import {
-  ProfileType,
-  useFetchBotInfo,
-} from "../../../../context/data/BotInfoProvider";
-import {
-  useIsBotOnlineContext,
-  useRestartBot,
-} from "../../../../context/data/IsBotOnlineProvider";
-import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
+
 import { updateConfig, updateProfileInfo } from "../../../../api/actions";
-import ProfileModal from "./ProfileModal";
+import AppIconButton from "../../../../components/Buttons/AppIconButton";
+import createNotification from "../../../../components/Notifications/Notification";
+import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import {
   ExchangeConfigUpdateType,
   getProfileCurrencyUpdate,
@@ -20,7 +13,15 @@ import {
   useExchangeInfoContext,
   useUnsavedCurrencyListContext,
 } from "../../../../context/data/BotExchangeInfoProvider";
-import createNotification from "../../../../components/Notifications/Notification";
+import {
+  ProfileType,
+  useFetchBotInfo,
+} from "../../../../context/data/BotInfoProvider";
+import {
+  useIsBotOnlineContext,
+  useRestartBot,
+} from "../../../../context/data/IsBotOnlineProvider";
+import ProfileModal from "./ProfileModal";
 
 export default function ProfileModalButton({
   profile,

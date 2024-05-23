@@ -1,10 +1,11 @@
 import { useMemo } from "react";
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
-import { backendRoutes } from "../../../constants/backendConstants";
-import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
-import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import { Trans } from "react-i18next";
+
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import { backendRoutes } from "../../../constants/backendConstants";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
+import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 
 export default function LoginButton() {
   const isOnline = useIsBotOnlineContext();

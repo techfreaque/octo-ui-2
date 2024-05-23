@@ -1,11 +1,12 @@
-import Page from "../Page";
-import NotFoundPage from "../NotFoundPage";
-import { useBotLayoutContext } from "../../context/config/BotLayoutProvider";
 import { useMemo } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { backendRoutes } from "../../constants/backendConstants";
 import { ReactNotifications } from "react-notifications-component";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+
+import { backendRoutes } from "../../constants/backendConstants";
+import { useBotLayoutContext } from "../../context/config/BotLayoutProvider";
 import LoadingPage from "../LoadingPage";
+import NotFoundPage from "../NotFoundPage";
+import Page from "../Page";
 
 export default function Pages() {
   const botLayout = useBotLayoutContext();

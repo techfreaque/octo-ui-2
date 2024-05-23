@@ -1,22 +1,24 @@
-import RestartBotButton from "../../Buttons/RestartBotButton";
-import UpdateBotButton from "../../Buttons/UpdateBotButton";
-import StopBotButton from "../../Buttons/StopBotButton";
-import LogoutButton from "../../Buttons/LogoutButton";
+import { PoweroffOutlined } from "@ant-design/icons";
 import { Dropdown, Tooltip } from "antd";
-import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
+import type { ItemType } from "antd/es/menu/interface";
 import { useState } from "react";
+import { Trans } from "react-i18next";
+
+import AntButton, {
+  buttonVariants,
+} from "../../../../components/Buttons/AntButton";
+import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import {
   useBotInfoContext,
   useIsDemoMode,
 } from "../../../../context/data/BotInfoProvider";
-import { PoweroffOutlined } from "@ant-design/icons";
-import { Trans } from "react-i18next";
-import AntButton, {
-  buttonVariants,
-} from "../../../../components/Buttons/AntButton";
 import ColorModeSwitch from "../../Buttons/ColorModeSwitcher";
+import LanguageSwitch from "../../Buttons/LanguageSwitch";
 import LoginButton from "../../Buttons/LoginButton";
-import { ItemType } from "antd/es/menu/hooks/useItems";
+import LogoutButton from "../../Buttons/LogoutButton";
+import RestartBotButton from "../../Buttons/RestartBotButton";
+import StopBotButton from "../../Buttons/StopBotButton";
+import UpdateBotButton from "../../Buttons/UpdateBotButton";
 
 export default function PowerMenu() {
   const botDomain = useBotDomainContext();
@@ -60,6 +62,7 @@ export default function PowerMenu() {
         </AntButton>
       ),
     },
+    { key: "language", label: <LanguageSwitch /> },
   ];
   if (botInfo?.can_logout) {
     items.unshift({

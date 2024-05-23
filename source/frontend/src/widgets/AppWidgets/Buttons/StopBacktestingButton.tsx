@@ -1,10 +1,11 @@
 import { faStop } from "@fortawesome/free-solid-svg-icons";
+import { useMemo } from "react";
+
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import {
   useBotIsBacktestingContext,
   useStopBacktesting,
 } from "../../../context/actions/BotBacktestingProvider";
-import { useMemo } from "react";
-import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 
 export default function StopBacktestingButton() {
   const isBacktesting = useBotIsBacktestingContext();

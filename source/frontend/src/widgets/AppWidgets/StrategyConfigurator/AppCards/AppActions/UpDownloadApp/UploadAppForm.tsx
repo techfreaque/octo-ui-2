@@ -1,17 +1,18 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { Alert, Input, Select, Switch, Tooltip } from "antd";
-import {
-  appVersionTags,
-  appVersionTypes,
-  strategyName,
-} from "../../../storeConstants";
-import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
 import { Dispatch, SetStateAction, useEffect } from "react";
+
+import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
 import {
   AppStoreAppType,
   AppStoreVersionTagType,
   AppStoreVersionTypeType,
 } from "../../../../../../context/data/AppStoreDataProvider";
+import {
+  appVersionTags,
+  appVersionTypes,
+  strategyName,
+} from "../../../storeConstants";
 import { UploadInfo } from "../../AppCard";
 const { TextArea } = Input;
 
@@ -133,7 +134,7 @@ function UploadPackage({
   return (
     <>
       {app.is_from_store && (
-        <UserInputLabel title={`Select the type of your update`}>
+        <UserInputLabel title={"Select the type of your update"}>
           <Select
             defaultValue={defaultVersionType.value}
             onChange={(value) => handleInputChange("version_type", value)}
@@ -156,7 +157,7 @@ function UploadPackage({
             <Alert
               message={
                 <>
-                  <div>Let your users know what you've changed.</div>
+                  <div>Let your users know what you&apos;ve changed.</div>
                   <div>
                     {`Add at least ${
                       minReleaseNotesLength -

@@ -1,14 +1,15 @@
 import { Alert, List, Typography } from "antd";
+import { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
+
+import { fetchBotLogs } from "../../../api/data";
+import AntButton from "../../../components/Buttons/AntButton";
+import { backendRoutes } from "../../../constants/backendConstants";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import {
   NotificationHistoryNotificationsType,
   useNotificationsHistoryContext,
 } from "../../../context/websockets/NotificationsContext";
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import { useEffect, useState } from "react";
-import { fetchBotLogs } from "../../../api/data";
-import AntButton from "../../../components/Buttons/AntButton";
-import { backendRoutes } from "../../../constants/backendConstants";
-import { Trans } from "react-i18next";
 
 interface NotificationHistory extends NotificationHistoryNotificationsType {
   Time: Date;

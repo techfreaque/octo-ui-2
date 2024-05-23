@@ -4,9 +4,10 @@
  * This is the page we show when the user visits a url that doesn't have a route
  */
 
-import { Link } from "react-router-dom";
-import { backendRoutes } from "../../constants/backendConstants";
 import { Trans } from "react-i18next";
+import { Link } from "react-router-dom";
+
+import { backendRoutes } from "../../constants/backendConstants";
 export default function NotFoundPage() {
   return (
     <div>

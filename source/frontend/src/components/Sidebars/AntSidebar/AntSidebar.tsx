@@ -1,18 +1,20 @@
-import { Collapse, Button } from "antd";
+import "./antSidebar.css";
+
+import { useMediaQuery } from "@mui/material";
+import { Button,Collapse } from "antd";
 import { CSSProperties, Dispatch, SetStateAction, useMemo } from "react";
 import { useState } from "react";
-import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { useColorModeContext } from "../../../context/config/ColorModeProvider";
-import { iconStringNoIcon } from "../../Icons/AntIcon";
-import IconFromString from "../../Icons/IconFromString";
-import "./antSidebar.css";
 import { useEffect } from "react";
-import { useMediaQuery } from "@mui/material";
-import AppIconButton from "../../Buttons/AppIconButton";
+
 import {
   ColorModeType,
   ColorsType,
 } from "../../../constants/uiTemplate/defaultColors";
+import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
+import { useColorModeContext } from "../../../context/config/ColorModeProvider";
+import AppIconButton from "../../Buttons/AppIconButton";
+import { iconStringNoIcon } from "../../Icons/AntIcon";
+import IconFromString from "../../Icons/IconFromString";
 const { Panel } = Collapse;
 
 export interface AntSideBarMenutItemType {
@@ -21,7 +23,7 @@ export interface AntSideBarMenutItemType {
   antIcon?: string | undefined;
   content: JSX.Element;
   noPadding?: boolean | undefined;
-  children?: AntSideBarMenutItemType[];
+  items?: AntSideBarMenutItemType[];
   onClick?: (item: AntSideBarMenutItemType) => void;
   disabled?: boolean;
   dontScroll?: boolean;
@@ -178,9 +180,9 @@ function findCurrentContent(
       activeMenus.push(menuItemData.key);
       anyChildrenHasContent = true;
       // content.push((<Content menuItemData={menuItemData} visible={true}/>))
-    } else if (menuItemData.children) {
+    } else if (menuItemData.items) {
       const thisAnyChildrenHasContent = findCurrentContent(
-        menuItemData.children,
+        menuItemData.items,
         currentlySelectedMenu,
         activeMenus
       );
@@ -226,7 +228,7 @@ function Content({
         </div>
       }
       {useMemo(() => {
-        return menuItemData?.children?.map((subMenuItemData) => {
+        return menuItemData?.items?.map((subMenuItemData) => {
           const key = subMenuItemData.key;
           return (
             <Content
@@ -325,7 +327,7 @@ function MenuItem({
 
   return useMemo(
     () =>
-      menuItem.children?.length ? (
+      menuItem.items?.length ? (
         <NestedSideBarMenuItem
           colorMode={colorMode}
           activeMenus={activeMenus}
@@ -445,7 +447,7 @@ function NestedSideBarMenuItem({
         style={{ border: "none" }}
       >
         <MenuItems
-          menuItems={menuItem.children as AntSideBarMenutItemType[]}
+          menuItems={menuItem.items as AntSideBarMenutItemType[]}
           hideText={hideText}
           activeMenus={activeMenus}
           isSubMenu={true}

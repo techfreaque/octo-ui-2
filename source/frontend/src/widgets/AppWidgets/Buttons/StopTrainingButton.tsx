@@ -1,7 +1,8 @@
 import { faStop } from "@fortawesome/free-solid-svg-icons";
-import { useStopTraining } from "../../../context/actions/BotOptimizerProvider";
 import { useMemo } from "react";
+
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import { useStopTraining } from "../../../context/actions/BotOptimizerProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 
 export default function StopTrainingButton() {

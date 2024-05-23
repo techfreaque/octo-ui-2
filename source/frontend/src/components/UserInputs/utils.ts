@@ -1,4 +1,5 @@
 import { JsonEditorType } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+
 import { TENTACLE_SEPARATOR } from "../../constants/backendConstants";
 import { TentaclesConfigsRootType } from "../../context/config/TentaclesConfigProvider";
 
@@ -73,13 +74,15 @@ export function findUserInputAndTentacleLabel(
   }
 }
 
-export function validateJSONEditor(editor: JsonEditorType<any>) {
+export function validateJSONEditor(
+  editor: JsonEditorType<any>
+): string | undefined {
   const errors = editor.validate();
   let errorsDesc: string | undefined;
   if (!errors.length) {
-    return;
+    return undefined;
   }
-  window.console && console.error("Errors when validating editor:", errors);
+  console.error("Errors when validating editor:", errors);
   errors.forEach((error) => {
     errorsDesc = `${errorsDesc}${error.path.split("root.")[1]} ${
       error.message

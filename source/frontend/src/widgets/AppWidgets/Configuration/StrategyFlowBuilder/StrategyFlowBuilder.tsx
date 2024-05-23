@@ -1,3 +1,6 @@
+import "reactflow/dist/style.css";
+import "./strategyFlowBuilder.css";
+
 import {
   Dispatch,
   DragEventHandler,
@@ -10,6 +13,7 @@ import {
   useState,
 } from "react";
 import {
+  addEdge,
   Connection,
   Controls,
   Edge,
@@ -19,26 +23,24 @@ import {
   ReactFlow,
   ReactFlowInstance,
   ReactFlowProvider,
-  addEdge,
   useEdgesState,
   useNodesState,
 } from "reactflow";
-import "reactflow/dist/style.css";
-import "./strategyFlowBuilder.css";
-import SaveStrategyFlowBuilderSettings, {
-  useGetFlowConfig,
-  useSaveFlowBuilderSettings,
-} from "./SaveStrategyFlowBuilder";
+
 import {
   FlowEdgeConfigType,
   TentaclesConfigValuesType,
   useUpdateIsSavingTentaclesConfigContext,
 } from "../../../../context/config/TentaclesConfigProvider";
-import StrategyBlockNode from "./CustomNodes/StrategyBlockNode";
-import { StrategyFlowMakerNameType } from "../TentaclesConfig";
 import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
+import { StrategyFlowMakerNameType } from "../TentaclesConfig";
 import { flowEditorSettingsName } from "../UIConfig";
 import { CustomEdge } from "./CustomNodes/ConnectionLine";
+import StrategyBlockNode from "./CustomNodes/StrategyBlockNode";
+import SaveStrategyFlowBuilderSettings, {
+  useGetFlowConfig,
+  useSaveFlowBuilderSettings,
+} from "./SaveStrategyFlowBuilder";
 
 const getId = () =>
   Date.now().toString(36) + Math.random().toString(36).substring(2);

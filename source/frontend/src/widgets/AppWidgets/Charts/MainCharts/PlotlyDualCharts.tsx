@@ -1,25 +1,27 @@
-import { useMemo } from "react";
-import { getSplitterClasses } from "../../../LayoutWidgets/SplitMainContent";
-import PlotlyChart, {
-  ChartLocationType,
-  allChartLocations,
-  enableAxisSelect,
-} from "./Plotly";
-import { useEffect } from "react";
 import "./crosshair.css";
+
+import Splitter, { SplitDirection } from "@devbookhq/splitter";
+import { useMemo } from "react";
+import { useEffect } from "react";
+import useMeasure from "react-use-measure";
+
+import { useColorModeContext } from "../../../../context/config/ColorModeProvider";
+import { getSplitterClasses } from "../../../LayoutWidgets/SplitMainContent";
+import { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
 import Crosshair, {
   handleCrosshairOnMouseEnter,
   handleCrosshairOnMouseLeave,
 } from "./Crosshair";
-import useMeasure from "react-use-measure";
-import Splitter, { SplitDirection } from "@devbookhq/splitter";
-import { useColorModeContext } from "../../../../context/config/ColorModeProvider";
+import PlotlyChart, {
+  allChartLocations,
+  ChartLocationType,
+  enableAxisSelect,
+} from "./Plotly";
 import {
-  PlotlyLayoutType,
   PlotlyLayoutsType,
+  PlotlyLayoutType,
   UpdatePlotlyLayoutsType,
 } from "./PlotlyContext";
-import { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
 
 export default function PlotlyDualCharts({
   chartLocations = allChartLocations,

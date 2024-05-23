@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
-import { useGetAffiliateDashboard } from "../../../../context/data/AppStoreDataProvider";
 import { Typography } from "antd";
+import { useEffect, useState } from "react";
+
+import { useGetAffiliateDashboard } from "../../../../context/data/AppStoreDataProvider";
 
 export default function AffiliateDashboard() {
   const [dashboardData, setDashboardData] = useState<AffiliateDashboardData>();
@@ -24,4 +25,6 @@ export default function AffiliateDashboard() {
   );
 }
 
-export interface AffiliateDashboardData {}
+export interface AffiliateDashboardData {
+  todo: string;
+}

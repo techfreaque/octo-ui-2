@@ -1,8 +1,9 @@
+import { SearchOutlined } from "@ant-design/icons";
 import { Input, Tooltip, Typography } from "antd";
+import { DragEvent, DragEventHandler, useMemo, useState } from "react";
+
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
-import { SearchOutlined } from "@ant-design/icons";
-import { DragEvent, DragEventHandler, useMemo, useState } from "react";
 import { objectKeys } from "../../../../helpers/helpers";
 
 export type BlockNameType = "";

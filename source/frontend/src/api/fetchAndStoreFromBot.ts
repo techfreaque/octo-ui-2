@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+
 import createNotification from "../components/Notifications/Notification";
 
 export async function sendAndInterpretBotUpdate({
@@ -97,9 +98,11 @@ export async function sendFile({
   url: string;
   file: Blob;
   fileName: string;
-  data?: { [key: string]: any };
-  onSuccess: (responseData: any) => void;
-  onError: (error: any) => void;
+  data?: {
+    [key: string]: string | boolean | undefined | number | string[];
+  };
+  onSuccess: (responseData: unknown) => void;
+  onError: (error: unknown) => void;
   withCredentials: boolean;
   token: string;
 }) {
@@ -107,7 +110,7 @@ export async function sendFile({
   const formData = new FormData();
   data &&
     Object.keys(data).forEach((key) => {
-      formData.append(key, data[key]);
+      formData.append(key, String(data[key]));
     });
   formData.append("file", file, fileName);
   const requestData: RequestInit = {
@@ -115,9 +118,7 @@ export async function sendFile({
     body: formData,
     credentials: withCredentials ? "include" : "same-origin",
     headers:
-      withCredentials && token
-        ? { Authorization: `Bearer ${token}` }
-        : {},
+      withCredentials && token ? { Authorization: `Bearer ${token}` } : {},
   };
   addAuthToRequest(requestData, withCredentials, token);
   try {
@@ -199,7 +200,7 @@ export default async function fetchAndStoreFromBot({
     if (data?.success === true) {
       const _data = data?.data || data;
       if (keepPreviousValues) {
-        setBotDataFunction((prevData: any) => ({
+        setBotDataFunction((prevData: object) => ({
           ...prevData,
           ..._data,
         }));
@@ -252,10 +253,10 @@ function genericRequestSuccessCallback({
 }
 
 export function defaultSuccessNotification(data: any, updateUrl: string) {
-  if (data.hasOwnProperty("title")) {
+  if (data?.title) {
     createNotification({ title: data.title, message: data?.details });
   } else {
-    console.warn(`Unknown API Notification: Url: ${updateUrl}, Data: ${data}`);
+    console.warn(`Unknown API Notification: Url: ${updateUrl}, Data: `, data);
     createNotification({
       title: "Unknown Notification",
       message: `Url: ${updateUrl}, Data: ${data}`,

@@ -1,7 +1,7 @@
 import {
+  iNotification,
   NOTIFICATION_TYPE,
   Store,
-  iNotification,
 } from "react-notifications-component";
 
 export default function createNotification({
@@ -9,13 +9,13 @@ export default function createNotification({
   type = "success",
   message,
   duration = 10_000,
-  dismiss = true,
+  // dismiss = true,
 }: {
   title: string;
   type?: NOTIFICATION_TYPE;
   message?: string | JSX.Element | undefined;
   duration?: number;
-  dismiss?: boolean;
+  // dismiss?: boolean;
 }) {
   const newNotification: iNotification = {
     title,

@@ -1,33 +1,34 @@
-import W2uiDataTable from "../Tables/DataTable";
-import PlotlyDualCharts from "./MainCharts/PlotlyDualCharts";
-import { sizes } from "../../../constants/frontendConstants";
-import {
-  useChartTypeContext,
-  useUpdateChartTypeContext,
-} from "../../../context/config/CurrentChartTypeProvider";
-import { useEffect, useState } from "react";
 import {
   LineChartOutlined,
   PieChartOutlined,
   SettingOutlined,
   UnorderedListOutlined,
 } from "@ant-design/icons";
-import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
-import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
-import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
+import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
-import DualPieChart, { pieChartName } from "./PieCharts/DualPieChart";
+
+import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
+import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
+import { sizes } from "../../../constants/frontendConstants";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import {
+  useChartTypeContext,
+  useUpdateChartTypeContext,
+} from "../../../context/config/CurrentChartTypeProvider";
+import { useUiConfigContext } from "../../../context/config/UiConfigProvider";
+import { useVisiblePairsContext } from "../../../context/config/VisiblePairProvider";
+import { useVisibleTimeFramesContext } from "../../../context/config/VisibleTimeFrameProvider";
+import { useBotPlottedElementsContext } from "../../../context/data/BotPlottedElementsProvider";
+import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
+import W2uiDataTable from "../Tables/DataTable";
+import { ChartLocationType } from "./MainCharts/Plotly";
 import {
   usePlotlyLayoutsContext,
   useUpdatePlotlyLayoutsContext,
 } from "./MainCharts/PlotlyContext";
-import { useVisibleTimeFramesContext } from "../../../context/config/VisibleTimeFrameProvider";
+import PlotlyDualCharts from "./MainCharts/PlotlyDualCharts";
 import { setPlotData } from "./MainCharts/PlotlyGenerateData";
-import { useVisiblePairsContext } from "../../../context/config/VisiblePairProvider";
-import { useUiConfigContext } from "../../../context/config/UiConfigProvider";
-import { useBotPlottedElementsContext } from "../../../context/data/BotPlottedElementsProvider";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
-import { ChartLocationType } from "./MainCharts/Plotly";
+import DualPieChart, { pieChartName } from "./PieCharts/DualPieChart";
 
 export type ChartDataType = Plotly.Data & {
   backtesting_id?: string;
@@ -195,5 +196,7 @@ export default function ChartTablePieCombo({
         />
       )
     );
-  } else return <></>;
+  } else {
+    return <></>;
+  }
 }

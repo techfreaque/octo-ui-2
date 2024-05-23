@@ -218,10 +218,10 @@ declare class JSONEditor<TValue> {
     };
   };
   constructor(element: HTMLElement, options: JSONEditorOptions<TValue>);
-  public on(event: string, fn: Function): JSONEditor<TValue>;
-  public off(event: string, fn: Function): JSONEditor<TValue>;
-  public watch(event: string, fn: Function): JSONEditor<TValue>;
-  public unwatch(event: string, fn: Function): JSONEditor<TValue>;
+  public on(event: string, fn: () => void): JSONEditor<TValue>;
+  public off(event: string, fn: () => void): JSONEditor<TValue>;
+  public watch(event: string, fn: () => void): JSONEditor<TValue>;
+  public unwatch(event: string, fn: () => void): JSONEditor<TValue>;
   public validate(value?: TValue): JSONEditorError[];
   public setValue(value: TValue): void;
   public getValue(): TValue;

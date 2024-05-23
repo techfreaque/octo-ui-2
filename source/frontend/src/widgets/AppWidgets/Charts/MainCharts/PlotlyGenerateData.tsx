@@ -1,4 +1,5 @@
 import { Dispatch, SetStateAction } from "react";
+
 import {
   ALL_PLOT_SOURCES,
   CANDLES_PLOT_SOURCES,
@@ -8,25 +9,25 @@ import {
   PlotSourceType,
 } from "../../../../constants/backendConstants";
 import { UiConfigType } from "../../../../context/config/UiConfigProvider";
+import {
+  ChartDetailsType,
+  PlottedBacktestingElementType,
+  PlottedElementBacktestingNameType,
+  PlottedElementLiveNameType,
+  PlottedElementNameType,
+  PlottedElementsType,
+  PlottedLiveElementType,
+  PlottedSubElementType,
+} from "../../../../context/data/BotPlottedElementsProvider";
+import { objectEntries } from "../../../../helpers/helpers";
 import { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
+import { allChartLocations,ChartLocationType } from "./Plotly";
 import {
   PlotlyAxisLayout,
   PlotlyLayoutsType,
   PlotlyLayoutType,
   UpdatePlotlyLayoutsType,
 } from "./PlotlyContext";
-import {
-  ChartDetailsType,
-  PlottedElementLiveNameType,
-  PlottedElementNameType,
-  PlottedLiveElementType,
-  PlottedElementsType,
-  PlottedSubElementType,
-  PlottedBacktestingElementType,
-  PlottedElementBacktestingNameType,
-} from "../../../../context/data/BotPlottedElementsProvider";
-import { ChartLocationType, allChartLocations } from "./Plotly";
-import { objectEntries } from "../../../../helpers/helpers";
 
 type ChartsInfoType = {
   maxRange: {

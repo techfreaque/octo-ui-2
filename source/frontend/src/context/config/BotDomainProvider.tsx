@@ -1,15 +1,17 @@
 import {
-  useState,
-  useContext,
   createContext,
   Dispatch,
   SetStateAction,
+  useContext,
+  useState,
 } from "react";
+
 import { isProduction } from "../../constants/frontendConstants";
+import { emptyValueFunction } from "../../helpers/helpers";
 
 const BotDomainContext = createContext<string>("");
 const UpdateBotDomainContext = createContext<Dispatch<SetStateAction<string>>>(
-  (_value) => {}
+  emptyValueFunction
 );
 
 export const useBotDomainContext = () => {

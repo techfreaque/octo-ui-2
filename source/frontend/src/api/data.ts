@@ -1,39 +1,40 @@
 import { Dispatch, SetStateAction } from "react";
+
 import createNotification from "../components/Notifications/Notification";
 import {
-  OPTIMIZER_CAMPAIGNS_TO_LOAD_KEY,
   backendRoutes,
+  OPTIMIZER_CAMPAIGNS_TO_LOAD_KEY,
 } from "../constants/backendConstants";
-import fetchAndStoreFromBot, {
-  errorResponseCallBackParams,
-  sendAndInterpretBotUpdate,
-  successResponseCallBackParams,
-} from "./fetchAndStoreFromBot";
-import { BotInfoType } from "../context/data/BotInfoProvider";
-import { BotLogHistory } from "../widgets/AppWidgets/NotificationCenter/NotificationCenter";
-import { BacktestingRunsData } from "../context/data/BacktestingRunDataProvider";
 import {
   OptimizerCampaignsToLoadUiConfig,
   UiConfigType,
 } from "../context/config/UiConfigProvider";
-import { ExchangeInfoType } from "../context/data/BotExchangeInfoProvider";
-import { PortfolioType } from "../context/data/BotPortfolioProvider";
 import {
   AppStoreUserType,
   InstalledTentaclesInfoType,
 } from "../context/data/AppStoreDataProvider";
-import { LoginSignupFormType } from "../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
+import { BacktestingRunsData } from "../context/data/BacktestingRunDataProvider";
+import { ExchangeInfoType } from "../context/data/BotExchangeInfoProvider";
+import { BotInfoType } from "../context/data/BotInfoProvider";
 import {
   PlottedElementBacktestingNameType,
   PlottedElementNameType,
   PlottedElementsType,
 } from "../context/data/BotPlottedElementsProvider";
+import { PortfolioType } from "../context/data/BotPortfolioProvider";
+import { BotLogHistory } from "../widgets/AppWidgets/NotificationCenter/NotificationCenter";
+import { LoginSignupFormType } from "../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
+import fetchAndStoreFromBot, {
+  errorResponseCallBackParams,
+  sendAndInterpretBotUpdate,
+  successResponseCallBackParams,
+} from "./fetchAndStoreFromBot";
 
 export async function fetchBotInfo(
   botDomain: string,
   setBotInfo: Dispatch<SetStateAction<BotInfoType | undefined>>,
   visibleExchanges?: string,
-  successNotification: boolean = false,
+  successNotification = false,
   setIsFinished?: Dispatch<SetStateAction<boolean>>
 ) {
   await fetchAndStoreFromBot({
@@ -49,7 +50,7 @@ export async function fetchBotInfo(
 export async function fetchExchangeInfo(
   botDomain: string,
   setExchangeInfo: Dispatch<SetStateAction<ExchangeInfoType | undefined>>,
-  successNotification: boolean = false,
+  successNotification = false,
   setIsFinished?: Dispatch<SetStateAction<boolean>>
 ) {
   await fetchAndStoreFromBot({
@@ -81,6 +82,7 @@ interface FetchPlotlyPlotDataBacktestingProps {
 
 interface FetchPlotlyPlotDataLiveProps {
   liveId: number;
+  onDone?: (() => void) | undefined;
 }
 
 export async function fetchPlotlyLivePlotData({
@@ -92,6 +94,7 @@ export async function fetchPlotlyLivePlotData({
   setBotPlottedElements,
   optimizationCampaign,
   liveId,
+  onDone,
 }: FetchPlotlyPlotDataProps & FetchPlotlyPlotDataLiveProps) {
   const data: {
     exchange_id: string;
@@ -122,6 +125,7 @@ export async function fetchPlotlyLivePlotData({
       };
       return newData;
     });
+    onDone?.();
   };
   function errorCallback() {
     createNotification({
@@ -129,6 +133,7 @@ export async function fetchPlotlyLivePlotData({
       type: "danger",
       message: `The data for ${exchangeName} - ${symbol} - ${timeFrame} is not available`,
     });
+    onDone?.();
   }
   sendAndInterpretBotUpdate({
     updatedData: data,

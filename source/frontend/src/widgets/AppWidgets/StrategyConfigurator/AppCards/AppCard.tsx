@@ -1,19 +1,20 @@
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
-import TradingModeCard from "./TradingModeCard";
-import StrategyCard from "./StrategyCard";
 import { Grid } from "@mui/material";
-import OtherAppCard from "./OtherAppCard";
-import {
-  StrategyModeSettingsNameType,
-  strategyModeName,
-  strategyName,
-} from "../storeConstants";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
 import {
   AppStoreAppType,
   AppStoreVersionTagType,
   AppStoreVersionTypeType,
   StoreCategoryType,
 } from "../../../../context/data/AppStoreDataProvider";
+import {
+  strategyModeName,
+  StrategyModeSettingsNameType,
+  strategyName,
+} from "../storeConstants";
+import OtherAppCard from "./OtherAppCard";
+import StrategyCard from "./StrategyCard";
+import TradingModeCard from "./TradingModeCard";
 
 export interface UploadInfo {
   open?: boolean;

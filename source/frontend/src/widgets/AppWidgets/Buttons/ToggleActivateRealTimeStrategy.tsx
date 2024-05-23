@@ -1,19 +1,19 @@
+import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
 import { useMemo, useState } from "react";
-import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
+
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
+import createNotification from "../../../components/Notifications/Notification";
+import {
+  TentaclesConfigByTentacleType,
+  useSaveTentaclesConfigAndSendAction,
+} from "../../../context/config/TentaclesConfigProvider";
 import {
   useBotInfoContext,
   useFetchBotInfo,
   useIsDemoMode,
 } from "../../../context/data/BotInfoProvider";
-import { TentaclesConfigByTentacleType, useSaveTentaclesConfigAndSendAction } from "../../../context/config/TentaclesConfigProvider";
-import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
-import createNotification from "../../../components/Notifications/Notification";
+import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 import { saveUserInputs } from "../Configuration/TentaclesConfig";
-import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
-import {
-  errorResponseCallBackParams,
-  successResponseCallBackParams,
-} from "../../../api/fetchAndStoreFromBot";
 
 export type RealTimeStrategyCommandsType =
   | "activate_realtime_strategy"
@@ -40,14 +40,14 @@ export default function ToggleActivateRealTimeStrategy() {
     const command = isActivated
       ? COMMAND_DISABLE_REALTIME_STRATEGY
       : COMMAND_ACTIVATE_REALTIME_STRATEGY;
-    const failed = (payload: errorResponseCallBackParams) => {
+    const failed = () => {
       setIsExecuting(false);
       createNotification({
         title: "Failed to activate real time strategy",
         type: "danger",
       });
     };
-    const success = (payload: successResponseCallBackParams) => {
+    const success = () => {
       fetchBotInfo();
       setIsExecuting(false);
       createNotification({

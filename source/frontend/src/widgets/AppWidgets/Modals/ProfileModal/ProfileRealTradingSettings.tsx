@@ -1,8 +1,9 @@
 import { Grid } from "@mui/material";
 import { Switch, Typography } from "antd";
-import { onProfileSettingChange } from "./ProfileTradingSettings";
-import { ProfileType } from "../../../../context/data/BotInfoProvider";
 import { Dispatch, SetStateAction } from "react";
+
+import { ProfileType } from "../../../../context/data/BotInfoProvider";
+import { onProfileSettingChange } from "./ProfileTradingSettings";
 
 export function ProfileRealSettings({
   newProfileSettings,

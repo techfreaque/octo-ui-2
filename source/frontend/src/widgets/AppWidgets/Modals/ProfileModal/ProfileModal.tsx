@@ -1,26 +1,26 @@
+import { CloseOutlined, SaveOutlined } from "@ant-design/icons";
+import { Tab } from "@mui/material";
 import { Modal } from "antd";
-import { ProfileTitle } from "./ProfileTitle";
+import { Dispatch, SetStateAction } from "react";
+
 import AntButton, {
   buttonSizes,
 } from "../../../../components/Buttons/AntButton";
-import { SaveOutlined } from "@ant-design/icons";
+import { buttonTypes } from "../../../../components/Buttons/AntButton";
+import { buttonVariants } from "../../../../components/Buttons/AntButton";
 import MuiTabs from "../../../../components/Tabs/MuiTabs";
+import { ProfileType } from "../../../../context/data/BotInfoProvider";
 import { TabLabel, tabStyle } from "../../../LayoutWidgets/Tabs/ScrollableTabs";
-import { Tab } from "@mui/material";
-import PairsTable from "../../PairsSelector/PairsTable";
 import ExchangeSelector from "../../ExchangeSelector/ExchangeSelector";
+import PairsTable from "../../PairsSelector/PairsTable";
 import { ProfileDescription } from "./ProfileDescription";
+import { ProfileRealSettings } from "./ProfileRealTradingSettings";
+import { ProfileSimulatedSettings } from "./ProfileSimulatedTradingSettings";
+import { ProfileTitle } from "./ProfileTitle";
 import {
   ProfileReferenceMarketSettings,
   ProfileTradingTypeSettings,
 } from "./ProfileTradingSettings";
-import { ProfileRealSettings } from "./ProfileRealTradingSettings";
-import { ProfileSimulatedSettings } from "./ProfileSimulatedTradingSettings";
-import { buttonTypes } from "../../../../components/Buttons/AntButton";
-import { CancelOutlined } from "@mui/icons-material";
-import { buttonVariants } from "../../../../components/Buttons/AntButton";
-import { Dispatch, SetStateAction } from "react";
-import { ProfileType } from "../../../../context/data/BotInfoProvider";
 
 export default function ProfileModal({
   isCurrentProfile,
@@ -185,7 +185,7 @@ export default function ProfileModal({
           <div>
             <AntButton
               key="back"
-              muiIconComponent={CancelOutlined}
+              antIconComponent={CloseOutlined}
               size={buttonSizes.large}
               onClick={handleClose}
             >

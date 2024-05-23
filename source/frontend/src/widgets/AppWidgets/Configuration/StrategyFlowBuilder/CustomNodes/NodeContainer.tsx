@@ -1,37 +1,38 @@
-import defaultJsonEditorSettings from "../../../../../components/Forms/JsonEditor/JsonEditorDefaults";
-import { flowBuilderStorageKey } from "./StrategyBlockNode";
+import { CloseCircleOutlined } from "@ant-design/icons";
+import JsonEditor from "@techfreaque/json-editor-react";
+import { CSSProperties, useCallback, useMemo } from "react";
 import {
+  getConnectedEdges,
   Handle,
   HandleType,
   Position,
   ReactFlowState,
-  getConnectedEdges,
   useNodeId,
   useReactFlow,
   useStore,
   useStoreApi,
 } from "reactflow";
-import { useBotColorsContext } from "../../../../../context/config/BotColorsProvider";
-import { CSSProperties, useCallback, useMemo } from "react";
-import {
-  useGetFlowConfig,
-  useSaveFlowBuilderSettings,
-} from "../SaveStrategyFlowBuilder";
-import { strategyFlowMakerName } from "../../TentaclesConfig";
-import {
-  TentaclesConfigValuesType,
-  TentaclesConfigsSchemaType,
-  useUpdateIsSavingTentaclesConfigContext,
-} from "../../../../../context/config/TentaclesConfigProvider";
-import { useUiConfigContext } from "../../../../../context/config/UiConfigProvider";
-import { flowEditorSettingsName } from "../../UIConfig";
+
 import AntButton, {
   buttonSizes,
   buttonTypes,
   buttonVariants,
 } from "../../../../../components/Buttons/AntButton";
-import { CloseCircleOutlined } from "@ant-design/icons";
-import JsonEditor from "@techfreaque/json-editor-react";
+import defaultJsonEditorSettings from "../../../../../components/Forms/JsonEditor/JsonEditorDefaults";
+import { useBotColorsContext } from "../../../../../context/config/BotColorsProvider";
+import {
+  TentaclesConfigsSchemaType,
+  TentaclesConfigValuesType,
+  useUpdateIsSavingTentaclesConfigContext,
+} from "../../../../../context/config/TentaclesConfigProvider";
+import { useUiConfigContext } from "../../../../../context/config/UiConfigProvider";
+import { strategyFlowMakerName } from "../../TentaclesConfig";
+import { flowEditorSettingsName } from "../../UIConfig";
+import {
+  useGetFlowConfig,
+  useSaveFlowBuilderSettings,
+} from "../SaveStrategyFlowBuilder";
+import { flowBuilderStorageKey } from "./StrategyBlockNode";
 
 export function NodeContainer({
   children,

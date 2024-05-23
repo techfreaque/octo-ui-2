@@ -1,10 +1,29 @@
+import { DeleteFilled } from "@ant-design/icons";
+import { faShuffle } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@mui/material";
+import { Tooltip } from "antd";
+import Title from "antd/es/typography/Title";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+
+import AntButton, {
+  buttonTypes,
+  buttonVariants,
+} from "../../../components/Buttons/AntButton";
+import AntTable, {
+  AntTableColumnType,
+  AntTableDataType,
+} from "../../../components/Tables/AntTable";
 import {
   findUserInputAndTentacleLabel,
   splitUserInputKey,
   userInputKey,
 } from "../../../components/UserInputs/utils";
+import {
+  tentacleConfigTypes,
+  TentaclesConfigsRootType,
+  useTentaclesConfigContext,
+} from "../../../context/config/TentaclesConfigProvider";
+import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 import {
   OptimizerQueueElementType,
   OptimizerQueueType,
@@ -16,24 +35,6 @@ import {
   useSaveOptimizerQueue,
 } from "../../../context/data/OptimizerQueueProvider";
 import { OptimizerNotInstalled } from "../Configuration/OptimizerConfigForm/OptimizerConfigForm";
-import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
-import AntTable, {
-  AntTableColumnType,
-  AntTableDataType,
-} from "../../../components/Tables/AntTable";
-import Title from "antd/es/typography/Title";
-import AntButton, {
-  buttonTypes,
-  buttonVariants,
-} from "../../../components/Buttons/AntButton";
-import { Tooltip } from "antd";
-import { faShuffle } from "@fortawesome/free-solid-svg-icons";
-import { DeleteFilled } from "@ant-design/icons";
-import {
-  TentaclesConfigsRootType,
-  tentacleConfigTypes,
-  useTentaclesConfigContext,
-} from "../../../context/config/TentaclesConfigProvider";
 
 export default function OptimizerQueueTable() {
   const fetchOptimizerQueue = useFetchOptimizerQueue();
@@ -54,7 +55,7 @@ export default function OptimizerQueueTable() {
   return (
     <>
       <OptimizerNotInstalled />
-      <div className="text-center mx-4 my-4">
+      <div style={{ margin: "1.5rem", textAlign: "center" }}>
         <Button onClick={fetchOptimizerQueue}>Reload optimizer queue</Button>
       </div>
       <div id={"optimizer-queue-container"} style={{ height: "100%" }}>
@@ -87,6 +88,7 @@ function OptimizerQueueTables({
           if (optimizerRun.runs) {
             return (
               <OptimizerRunQueueTable
+                key={optimizerRun.id}
                 optimizerRun={optimizerRun}
                 currentTentaclesTradingConfig={currentTentaclesTradingConfig}
                 saveOptimizerQueue={saveOptimizerQueue}
@@ -99,7 +101,10 @@ function OptimizerQueueTables({
     );
   }
   return (
-    <div id={"optimizer-queue-no-message"} className="text-center mx-4 my-4">
+    <div
+      id={"optimizer-queue-no-message"}
+      style={{ margin: "1.5rem", textAlign: "center" }}
+    >
       <h4>The optimizer queue is empty</h4>
     </div>
   );
@@ -163,7 +168,7 @@ function OptimizerRunQueueTable({
     updateOptimizerQueue({ updatedRunData: reorderedData });
   }
 
-  function onDelete(deleteEveryRun: boolean = false) {
+  function onDelete(deleteEveryRun = false) {
     updateOptimizerQueue({
       deletedRunIds: selectedRecordIds,
       deleteEveryRun:
@@ -251,8 +256,7 @@ type RunDataTableElementType = AntTableDataType & {
   [inputKey: string]: number | boolean | string;
 };
 
-interface RunDataTableColumnType
-  extends AntTableColumnType<RunDataTableElementType> {}
+type RunDataTableColumnType = AntTableColumnType<RunDataTableElementType>
 
 function generateTableData(
   optimizerRun: OptimizerQueueElementType,

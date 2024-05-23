@@ -1,4 +1,22 @@
+import { CloseCircleOutlined } from "@ant-design/icons";
+import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
+import { Tooltip, Typography } from "antd";
 import { Dispatch, SetStateAction, useMemo } from "react";
+import { useState } from "react";
+
+import { cancelOrders } from "../../../api/actions";
+import AntButton, {
+  buttonTypes,
+  buttonVariants,
+} from "../../../components/Buttons/AntButton";
+import AntSidebar, {
+  AntSideBarMenutItemType,
+} from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import AntTable, {
+  AntTableColumnType,
+  AntTableDataType,
+} from "../../../components/Tables/AntTable";
+import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import {
   PlottedBacktestingElementType,
   PlottedElementNameType,
@@ -8,24 +26,7 @@ import {
   useBotPlottedElementsContext,
   useFetchPlotData,
 } from "../../../context/data/BotPlottedElementsProvider";
-import AntSidebar, {
-  AntSideBarMenutItemType,
-} from "../../../components/Sidebars/AntSidebar/AntSidebar";
-import { useState } from "react";
-import { Tooltip, Typography } from "antd";
-import { cancelOrders } from "../../../api/actions";
-import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { objectEntries } from "../../../helpers/helpers";
-import AntTable, {
-  AntTableColumnType,
-  AntTableDataType,
-} from "../../../components/Tables/AntTable";
-import AntButton, {
-  buttonTypes,
-  buttonVariants,
-} from "../../../components/Buttons/AntButton";
-import { CloseCircleOutlined } from "@ant-design/icons";
-import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 
 export default function W2uiDataTable() {
   const plottedElements = useBotPlottedElementsContext();
@@ -247,9 +248,8 @@ interface CancelOrderDetailsType {
   ) => void;
 }
 
-export interface DataTableDataType extends AntTableDataType {}
-export interface DataTableColumnType
-  extends AntTableColumnType<DataTableDataType> {}
+export type DataTableDataType = AntTableDataType
+export type DataTableColumnType = AntTableColumnType<DataTableDataType>
 
 function TableFromElement({
   data,

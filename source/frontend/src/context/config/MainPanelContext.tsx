@@ -2,6 +2,8 @@ import { Dispatch, SetStateAction, useCallback, useContext } from "react";
 import { createContext } from "react";
 import { useState } from "react";
 
+import { emptyValueFunction } from "../../helpers/helpers";
+
 interface PanelSizeType {
   percent: number;
   shouldUpdate: boolean;
@@ -15,7 +17,7 @@ const defaultPanelSize: PanelSizeType = {
 const CurrentPanelContext = createContext<PanelSizeType>(defaultPanelSize);
 const UpdateCurrentPanelContext = createContext<
   Dispatch<SetStateAction<PanelSizeType>>
->((_value) => {});
+>(emptyValueFunction);
 
 export const useCurrentPanelContext = () => {
   return useContext(CurrentPanelContext);

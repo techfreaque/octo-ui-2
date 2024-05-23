@@ -1,4 +1,5 @@
 import { Typography } from "antd";
+
 import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
 
 export function CardDescription({
@@ -32,10 +33,7 @@ export function CardDescription({
       }}
     >
       {isMouseHover ? (
-        <OnHoverDescription
-          cardActions={cardActions}
-          lineHeightWithMargin={lineHeightWithMargin}
-        />
+        <OnHoverDescription cardActions={cardActions} />
       ) : (
         <NonHoverDescription
           marginBottom={marginBottom}
@@ -117,13 +115,7 @@ export function CleanDescription({
   );
 }
 
-function OnHoverDescription({
-  cardActions,
-  lineHeightWithMargin,
-}: {
-  cardActions: JSX.Element;
-  lineHeightWithMargin: number;
-}) {
+function OnHoverDescription({ cardActions }: { cardActions: JSX.Element }) {
   return (
     <div
       style={{
