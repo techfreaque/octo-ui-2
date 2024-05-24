@@ -3,9 +3,25 @@
     "sourceLanguageTag": "en",
     "languageTags": [
         "en",
+        "zh",
+        "es",
+        "hi",
+        "ar",
+        "pt",
+        "bn",
+        "ru",
+        "ja",
         "de",
-        "se",
-        "zh"
+        "ko",
+        "fr",
+        "vi",
+        "it",
+        "ur",
+        "tr",
+        "fa",
+        "pl",
+        "pa",
+        "nl"
     ],
     "modules": [
         "https://cdn.jsdelivr.net/npm/@inlang/plugin-json@latest/dist/index.js",
@@ -21,8 +37,8 @@
     "plugin.inlang.json": {
         "pathPattern": "./source/frontend/public/locales/{languageTag}/translation.json",
         "variableReferencePattern": [
-            "{",
-            "}"
+            "{{",
+            "}}"
         ]
     }
 }
