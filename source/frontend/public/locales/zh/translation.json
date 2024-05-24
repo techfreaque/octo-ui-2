@@ -64,18 +64,18 @@
   "modal": {
     "powerMenuTooltip": "电源菜单"
   },
-  "failed-to-activate-real-time-strategy": "实时策略激活失败",
-  "optimizer-is-pausing": "优化器正在暂停",
   "pause-optimizer": "暂停优化器",
-  "save-strategy-mode-settings": "保存策略模式设置",
-  "save-strategy-mode-settings-tooltip": "保存策略模式设置",
-  "start-backtest": "开始回测",
+  "optimizer-is-pausing": "优化器正在暂停",
   "start-optimizer": "启动优化器",
   "start-real-time-strategy": "开始实时策略",
-  "stop-backtest": "停止回测",
   "stop-real-time-strategy": "停止实时策略",
-  "stop-training": "停止训练",
   "successfully-activated-real-time-strategy": "成功激活即时策略",
-  "switch-to-language-name": "切换到{lang}",
-  "training-is-about-to-stop": "训练即将停止"
+  "failed-to-activate-real-time-strategy": "实时策略激活失败",
+  "training-is-about-to-stop": "训练即将停止",
+  "stop-training": "停止训练",
+  "stop-backtest": "停止回测",
+  "start-backtest": "开始回测",
+  "save-strategy-mode-settings": "保存策略模式设置",
+  "save-strategy-mode-settings-tooltip": "保存策略模式设置",
+  "switch-to-language-name": "切换到{lang}"
 }

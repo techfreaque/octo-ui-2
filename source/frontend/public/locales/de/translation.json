@@ -64,18 +64,18 @@
   "modal": {
     "powerMenuTooltip": "Power-Menü"
   },
-  "failed-to-activate-real-time-strategy": "Die Echtzeitstrategie konnte nicht aktiviert werden",
-  "optimizer-is-pausing": "Der Optimierer pausiert",
   "pause-optimizer": "Optimierer pausieren",
-  "save-strategy-mode-settings": "Strategiemodus Einstellungen Speichern",
-  "save-strategy-mode-settings-tooltip": "Speichern Sie die Einstellungen des Strategiemodus",
-  "start-backtest": "Backtest starten",
+  "optimizer-is-pausing": "Der Optimierer pausiert",
   "start-optimizer": "Optimierer Starten",
   "start-real-time-strategy": "Echtzeitstrategie Starten",
-  "stop-backtest": "Backtest Stoppen",
   "stop-real-time-strategy": "Echtzeitstrategie Stoppen",
-  "stop-training": "Training Stoppen",
   "successfully-activated-real-time-strategy": "Echtzeitstrategie erfolgreich aktiviert",
-  "switch-to-language-name": "Wechsle zu {lang}",
-  "training-is-about-to-stop": "Training wird beendet"
+  "failed-to-activate-real-time-strategy": "Die Echtzeitstrategie konnte nicht aktiviert werden",
+  "training-is-about-to-stop": "Training wird beendet",
+  "stop-training": "Training Stoppen",
+  "stop-backtest": "Backtest Stoppen",
+  "start-backtest": "Backtest starten",
+  "save-strategy-mode-settings": "Strategiemodus Einstellungen Speichern",
+  "save-strategy-mode-settings-tooltip": "Speichern Sie die Einstellungen des Strategiemodus",
+  "switch-to-language-name": "Wechsle zu {lang}"
 }
