@@ -1,9 +1,13 @@
 import { SaveOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import { useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton from "../../../components/Buttons/AntButton";
-import { TentaclesConfigByTentacleType, useSaveTentaclesConfig } from "../../../context/config/TentaclesConfigProvider";
+import {
+  TentaclesConfigByTentacleType,
+  useSaveTentaclesConfig,
+} from "../../../context/config/TentaclesConfigProvider";
 import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
 import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 import {
@@ -40,7 +44,7 @@ export default function SaveTradingModeSettings() {
         >
           <Tooltip
             placement="topRight"
-            title={"Save Strategy Mode Settings"}
+            title={<Trans i18nKey="save-strategy-mode-settings-tooltip" />}
             arrow={false}
           >
             <div>
@@ -53,7 +57,7 @@ export default function SaveTradingModeSettings() {
                 //     {fontSize: '22px'}
                 // }
               >
-                Save Strategy Mode Settings
+                <Trans i18nKey="save-strategy-mode-settings"></Trans>
               </AntButton>
             </div>
           </Tooltip>

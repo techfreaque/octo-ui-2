@@ -1,6 +1,8 @@
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Button, Dropdown, List, Switch, Typography } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 
 import { buttonTypes } from "../../../components/Buttons/AntButton";
 import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
@@ -36,20 +38,22 @@ export default function TimeFrameSelector() {
   return (
     botInfo?.strategy_names &&
     botInfo?.time_frames?.length && (
-      <RadioButtonGroup
-        rightContent={
-          <TimeFrameEnabler
-            enabledTimeFrame={enabledTimeFrame}
-            setEnabledTimeFrame={setEnabledTimeFrame}
-          />
-        }
-        menuItems={botInfo.traded_time_frames.map((time_frame) => ({
-          label: time_frame,
-          key: time_frame,
-        }))}
-        onChange={handleChange}
-        selected={visibleTimeframes}
-      />
+      <div style={{ marginTop: "auto", marginBottom: "auto" }}>
+        <RadioButtonGroup
+          rightContent={
+            <TimeFrameEnabler
+              enabledTimeFrame={enabledTimeFrame}
+              setEnabledTimeFrame={setEnabledTimeFrame}
+            />
+          }
+          menuItems={botInfo.traded_time_frames.map((time_frame) => ({
+            label: time_frame,
+            key: time_frame,
+          }))}
+          onChange={handleChange}
+          selected={visibleTimeframes}
+        />
+      </div>
     )
   );
 }
@@ -79,11 +83,11 @@ function TimeFrameEnabler({
       JSON.stringify(botInfo?.traded_time_frames);
     function onSaveFinished() {
       createNotification({
-        title: "Pending restart",
+        title: t('pending-restart'),
         type: "warning",
         message: (
           <>
-            The newly selected time frames will be available after a restart
+            <Trans i18nKey="the-newly-selected-time-frames-will-be-available-after-a-restart"></Trans>
             <RestartBotButton buttonType={buttonTypes.black} />
           </>
         ),

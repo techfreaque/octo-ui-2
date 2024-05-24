@@ -1,5 +1,6 @@
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { useMemo } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import {
@@ -25,7 +26,7 @@ export default function StartBacktestingButton() {
           buttonType={buttonTypes.success}
           faIconComponent={faPlay}
         >
-          Start Backtest
+          <Trans i18nKey="start-backtest"></Trans>
         </AntButton>
       )
     );

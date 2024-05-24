@@ -1,5 +1,6 @@
 import { faPlay } from "@fortawesome/free-solid-svg-icons";
 import { useMemo } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import { useBotIsDataCollectingContext } from "../../../context/actions/BotBacktestingProvider";
@@ -37,7 +38,7 @@ export default function StartOptimizerButton() {
           faIconComponent={faPlay}
           disabled={canNotStart}
         >
-          Start Optimizer
+          <Trans i18nKey="start-optimizer"></Trans>
         </AntButton>
       )
     );

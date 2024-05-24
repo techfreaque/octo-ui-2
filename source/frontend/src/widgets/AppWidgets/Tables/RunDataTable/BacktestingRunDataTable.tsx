@@ -2,6 +2,7 @@ import { faRedo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
 import {
@@ -45,8 +46,7 @@ function NoBacktestingData({
   return (
     <>
       <h4>
-        No backtests finished yet. Once a backtest is finished, you can select
-        them here to analyze the results.
+        <Trans i18nKey="no-backtests-finished-yet-message"></Trans>
       </h4>
       <h4>
         <Button
@@ -57,7 +57,7 @@ function NoBacktestingData({
           }}
         >
           <FontAwesomeIcon icon={faRedo} style={{ marginRight: "5px" }} />
-          Reload Backtestings
+          <Trans i18nKey="reload-backtestings"></Trans>
         </Button>
       </h4>
     </>

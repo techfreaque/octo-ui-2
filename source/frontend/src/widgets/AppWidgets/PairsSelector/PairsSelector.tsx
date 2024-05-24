@@ -21,7 +21,7 @@ export default function PairsSelector({ content }: UiLayoutPageLayoutType) {
   const setMenuIsOpen = useUpdatePairSelectorMenuOpenContext();
   return useMemo(() => {
     return (
-      <div style={{ margin: "auto" }}>
+      <div style={{ marginTop: "auto", marginBottom: "auto" }}>
         <PairConfiguratorDropdown
           setMenuIsOpen={setMenuIsOpen}
           menuIsOpen={menuIsOpen?.open}

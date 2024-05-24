@@ -63,5 +63,19 @@
   },
   "modal": {
     "powerMenuTooltip": "Menú de energía"
-  }
+  },
+  "failed-to-activate-real-time-strategy": "No se pudo activar la estrategia en tiempo real",
+  "optimizer-is-pausing": "El optimizador está en pausa",
+  "pause-optimizer": "Optimizador de pausa",
+  "save-strategy-mode-settings": "Guardar configuración del modo de estrategia",
+  "save-strategy-mode-settings-tooltip": "Guardar configuración del modo de estrategia",
+  "start-backtest": "Iniciar prueba retrospectiva",
+  "start-optimizer": "Iniciar optimizador",
+  "start-real-time-strategy": "Iniciar estrategia en tiempo real",
+  "stop-backtest": "Detener la prueba retrospectiva",
+  "stop-real-time-strategy": "Detener la estrategia en tiempo real",
+  "stop-training": "Dejar de entrenar",
+  "successfully-activated-real-time-strategy": "Estrategia en tiempo real activada con éxito",
+  "switch-to-language-name": "Cambiar a {lang}",
+  "training-is-about-to-stop": "El entrenamiento está a punto de terminar"
 }

@@ -1,5 +1,5 @@
 import { CloseOutlined } from "@ant-design/icons";
-import { Avatar,Modal, Tooltip } from "antd";
+import { Avatar, Modal, Tooltip } from "antd";
 import { AvatarSize } from "antd/es/avatar/AvatarContext";
 import { CSSProperties, Dispatch, SetStateAction, useState } from "react";
 
@@ -56,8 +56,8 @@ export default function ButtonWithModal({
   return (
     <div
       style={{
-        margin: "auto",
-        height: "100%",
+        marginTop: "auto",
+        marginBottom: "auto",
       }}
     >
       <Tooltip placement="top" title={title} arrow={false}>

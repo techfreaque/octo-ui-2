@@ -1,5 +1,6 @@
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import { cancelAllOrders } from "../../../api/actions";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
@@ -22,7 +23,7 @@ export default function CancelAllOrdersButton() {
         faIconComponent={faStop}
         marginRight="5px"
       >
-        Cancel All Orders
+        <Trans i18nKey="cancel-all-orders"></Trans>
       </AntButton>
     );
   }, [botDomain, color, isCancelling, isDemo, isOnline]);

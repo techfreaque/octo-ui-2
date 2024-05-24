@@ -7,6 +7,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useMediaQuery } from "@mui/material";
 import { Alert, Modal, Typography } from "antd";
+import { t } from "i18next";
 import { useMemo, useState } from "react";
 
 import AntButton, { buttonSizes } from "../../../components/Buttons/AntButton";
@@ -112,12 +113,12 @@ function UnsupportedWarning({
             onClick={() => setOpen(true)}
             type="warning"
             showIcon={!isSmallScreen}
-            message="This distribution isn't officially supported"
+            message={t("this-distribution-isnt-officially-supported")}
           />
           <Modal
             open={open}
             onCancel={() => setOpen(false)}
-            title={"Get Octane today!"}
+            title={t("get-octane-today")}
             centered
             width="800px"
             bodyStyle={{ display: "flex" }}
@@ -125,7 +126,10 @@ function UnsupportedWarning({
           >
             <div>
               <Typography.Title level={2}>
-                {`${octobotProject} is not officially supported yet by ${projectName}`}
+                {t(
+                  "octobotproject-is-not-officially-supported-yet-by-projectname",
+                  { octobotProject, projectName }
+                )}
               </Typography.Title>
               <Alert
                 style={{ marginBottom: "20px" }}
@@ -147,7 +151,7 @@ function UnsupportedWarning({
                 onClick={() => setProjectInfoOpen(true)}
                 antIconComponent={RocketOutlined}
               >
-                Switch To Octane For Free
+                {t("switch-to-projectname-for-free", { projectName })}
               </AntButton>
             </div>
           </Modal>

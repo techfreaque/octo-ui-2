@@ -1,4 +1,5 @@
 import { Tooltip } from "antd";
+import { t } from "i18next";
 import { useMemo } from "react";
 
 import AntButton from "../../../components/Buttons/AntButton";
@@ -37,10 +38,10 @@ export default function CurrentPanelPosition({
   const props = {
     title:
       position === availablePanelPositions.maximized
-        ? "Maximize Panel"
+        ? t('maximize-panel')
         : position === availablePanelPositions.minimized
-        ? "Minimize Panel"
-        : "Restore Panel",
+        ? t('minimize-panel')
+        : t('restore-panel'),
     icon:
       position === availablePanelPositions.maximized
         ? "VerticalAlignTopOutlined"

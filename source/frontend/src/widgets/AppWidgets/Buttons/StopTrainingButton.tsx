@@ -1,5 +1,6 @@
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useMemo } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import { useStopTraining } from "../../../context/actions/BotOptimizerProvider";
@@ -16,7 +17,7 @@ export default function StopTrainingButton() {
         faIconComponent={faStop}
         disabled={true}
       >
-        Training is About to stop
+        <Trans i18nKey="training-is-about-to-stop"></Trans>
       </AntButton>
     ) : (
       botInfo?.any_neural_net_active && (
@@ -26,7 +27,7 @@ export default function StopTrainingButton() {
           style={{ marginRight: "5px" }}
           faIconComponent={faStop}
         >
-          Stop Training
+          <Trans i18nKey="stop-training"></Trans>
         </AntButton>
       )
     );

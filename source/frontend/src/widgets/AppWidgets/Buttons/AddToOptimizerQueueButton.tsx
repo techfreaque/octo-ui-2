@@ -1,5 +1,6 @@
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import { useMemo } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import {
@@ -33,7 +34,7 @@ export default function AddToOptimizerQueueButton() {
           marginRight="5px"
           disabled={canNotAdd}
         >
-          Add to Queue
+          <Trans i18nKey="add-to-queue"></Trans>
         </AntButton>
       )
     );

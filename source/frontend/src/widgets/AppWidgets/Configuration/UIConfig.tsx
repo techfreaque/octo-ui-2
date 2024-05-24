@@ -2,6 +2,7 @@ import "./uiConfig.css";
 
 import JsonEditor from "@techfreaque/json-editor-react";
 import { JsonEditorType } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import { t } from "i18next";
 import { useCallback, useMemo } from "react";
 
 import { errorResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
@@ -66,7 +67,7 @@ export default function UIConfig({
       };
       function errorCallback(payload: errorResponseCallBackParams) {
         createNotification({
-          title: "Failed to autosave UI config",
+          title: t('failed-to-autosave-ui-config'),
           message: `Error: ${payload.data}`,
         });
       }

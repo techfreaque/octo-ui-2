@@ -1,5 +1,7 @@
 import { faPlay, faStop } from "@fortawesome/free-solid-svg-icons";
+import { t } from "i18next";
 import { useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import createNotification from "../../../components/Notifications/Notification";
@@ -43,7 +45,7 @@ export default function ToggleActivateRealTimeStrategy() {
     const failed = () => {
       setIsExecuting(false);
       createNotification({
-        title: "Failed to activate real time strategy",
+        title: t("failed-to-activate-real-time-strategy"),
         type: "danger",
       });
     };
@@ -51,7 +53,7 @@ export default function ToggleActivateRealTimeStrategy() {
       fetchBotInfo();
       setIsExecuting(false);
       createNotification({
-        title: "Successfully activated real time strategy",
+        title: t("successfully-activated-real-time-strategy"),
       });
     };
     return (
@@ -76,7 +78,7 @@ export default function ToggleActivateRealTimeStrategy() {
           buttonType={buttonTypes.warning}
           faIconComponent={faStop}
         >
-          Stop Real Time Strategy
+          <Trans i18nKey="stop-real-time-strategy"></Trans>
         </AntButton>
       ) : (
         <AntButton
@@ -98,7 +100,7 @@ export default function ToggleActivateRealTimeStrategy() {
           buttonType={buttonTypes.warning}
           faIconComponent={faPlay}
         >
-          Start Real Time Strategy
+          <Trans i18nKey="start-real-time-strategy"></Trans>
         </AntButton>
       ))
     );

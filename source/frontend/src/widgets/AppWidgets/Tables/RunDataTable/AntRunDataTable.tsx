@@ -5,7 +5,9 @@ import {
   UnorderedListOutlined,
 } from "@ant-design/icons";
 import { Radio, Switch, Tooltip } from "antd";
+import { t } from "i18next";
 import { useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, {
   buttonTypes,
@@ -155,8 +157,8 @@ function MetaDataTable({
         );
       } else {
         createNotification({
-          title: "Failed to restore settings",
-          message: "No settings found for this run",
+          title: t("failed-to-restore-settings"),
+          message: t("no-settings-found-for-this-run"),
           type: "danger",
         });
       }
@@ -202,7 +204,7 @@ function MetaDataTable({
         paginationSize={500}
         header={
           <>
-            <Tooltip title={"Refreshes the run data table"}>
+            <Tooltip title={t("refreshes-the-run-data-table")}>
               <div>
                 <AntButton
                   antIconComponent={ReloadOutlined}
@@ -219,9 +221,9 @@ function MetaDataTable({
               </div>
             </Tooltip>
             <Tooltip
-              title={
-                "Toggle displaying data only from the current campaign or from all activated ones"
-              }
+              title={t(
+                "toggle-displaying-data-only-from-the-current-campaign-or-from-all-activated-ones-tooltip"
+              )}
             >
               <div>
                 <AntButton
@@ -238,7 +240,9 @@ function MetaDataTable({
                     });
                   }}
                 >
-                  <>Current campaign: {currentCampaignName}</>
+                  {t("current-campaign-campaignName", {
+                    currentCampaignName,
+                  })}
                 </AntButton>
               </div>
             </Tooltip>
@@ -247,17 +251,27 @@ function MetaDataTable({
               style={{ display: "flex" }}
               onChange={(event) => setVisibleColumns(event.target.value)}
             >
-              <Tooltip title="Display Run Information">
-                <Radio.Button value="info">Info</Radio.Button>
+              <Tooltip title={t("display-run-information")}>
+                <Radio.Button value="info">
+                  <Trans i18nKey="backtesting-info"></Trans>
+                </Radio.Button>
               </Tooltip>
-              <Tooltip title="Display All Run Information">
-                <Radio.Button value="allInfo">All Info</Radio.Button>
+              <Tooltip title={t("display-all-run-information")}>
+                <Radio.Button value="allInfo">
+                  <Trans i18nKey="backtesting-all-info"></Trans>
+                </Radio.Button>
               </Tooltip>
-              <Tooltip title="Display Run Settings">
-                <Radio.Button value="settings">Settings</Radio.Button>
+              <Tooltip title={t("display-run-settings")}>
+                <Radio.Button value="settings">
+                  <Trans i18nKey="backtestings-settings"></Trans>
+                </Radio.Button>
               </Tooltip>
             </Radio.Group>
-            <Tooltip title="Load plots for selected runs or just select them. Helpful when you want to select runs to delete.">
+            <Tooltip
+              title={t(
+                "load-plots-for-selected-runs-or-just-select-them-tooltip"
+              )}
+            >
               <Switch
                 checkedChildren={"plot"}
                 unCheckedChildren={"select"}
@@ -279,9 +293,11 @@ function MetaDataTable({
             <div style={{ margin: "auto" }} />
             <Tooltip
               title={
-                onlyOneIsSelected
-                  ? "Restores all settings from this run"
-                  : "Select only one run to be able to restore the settings"
+                onlyOneIsSelected ? (
+                  <Trans i18nKey="restores-all-settings-from-this-run"></Trans>
+                ) : (
+                  <Trans i18nKey="select-only-one-run-to-be-able-to-restore-the-settings"></Trans>
+                )
               }
             >
               <div>
@@ -304,7 +320,7 @@ function MetaDataTable({
                       : undefined
                   }
                 >
-                  Restore Settings
+                  <Trans i18nKey="backtesting-restore-settings"></Trans>
                 </AntButton>
               </div>
             </Tooltip>
@@ -321,7 +337,7 @@ function MetaDataTable({
                     somethingSelected ? () => handleDeleteSelected() : undefined
                   }
                 >
-                  Delete selected
+                  <Trans i18nKey="backtesting-delete-selected"></Trans>
                 </AntButton>
               </div>
             </Tooltip>
@@ -447,7 +463,7 @@ function useFormatTableData(
     //   const columns = runDataColumns.concat(userInputColumns);
     const columns: RunDataTableColumnType[] = [
       {
-        title: "Run Information",
+        title: t("run-information"),
         key: "runInformation",
         disableSearch: true,
         children: runDataColumns || [],

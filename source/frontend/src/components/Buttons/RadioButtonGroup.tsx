@@ -25,6 +25,7 @@ export default function RadioButtonGroup({
       style={{
         margin: "auto",
         marginRight: "5px",
+        display: "block",
       }}
     >
       <Space>

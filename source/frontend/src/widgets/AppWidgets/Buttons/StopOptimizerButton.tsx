@@ -1,5 +1,6 @@
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useMemo } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import {
@@ -13,7 +14,7 @@ export default function StopOptimizerButton() {
   return useMemo(() => {
     return isOptimizer === "isStopping" ? (
       <AntButton buttonType={buttonTypes.warning} faIconComponent={faStop}>
-        Optimizer is Pausing
+        <Trans i18nKey="optimizer-is-pausing"></Trans>
       </AntButton>
     ) : (
       isOptimizer && (
@@ -22,7 +23,7 @@ export default function StopOptimizerButton() {
           buttonType={buttonTypes.warning}
           faIconComponent={faStop}
         >
-          Pause Optimizer
+          <Trans i18nKey="pause-optimizer"></Trans>
         </AntButton>
       )
     );

@@ -3,7 +3,9 @@ import { faShuffle } from "@fortawesome/free-solid-svg-icons";
 import { Button } from "@mui/material";
 import { Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, {
   buttonTypes,
@@ -56,7 +58,9 @@ export default function OptimizerQueueTable() {
     <>
       <OptimizerNotInstalled />
       <div style={{ margin: "1.5rem", textAlign: "center" }}>
-        <Button onClick={fetchOptimizerQueue}>Reload optimizer queue</Button>
+        <Button onClick={fetchOptimizerQueue}>
+          <Trans i18nKey="reload-optimizer-queue"></Trans>
+        </Button>
       </div>
       <div id={"optimizer-queue-container"} style={{ height: "100%" }}>
         <OptimizerQueueTables
@@ -105,7 +109,9 @@ function OptimizerQueueTables({
       id={"optimizer-queue-no-message"}
       style={{ margin: "1.5rem", textAlign: "center" }}
     >
-      <h4>The optimizer queue is empty</h4>
+      <h4>
+        <Trans i18nKey="the-optimizer-queue-is-empty"></Trans>
+      </h4>
     </div>
   );
 }
@@ -183,10 +189,9 @@ function OptimizerRunQueueTable({
   }
   return (
     <>
-      <Title
-        style={{ marginTop: "30px" }}
-        level={3}
-      >{`Runs for optimizer ${optimizerId}`}</Title>
+      <Title style={{ marginTop: "30px" }} level={3}>
+        {t("runs-for-optimizer-optimizerid", { optimizerId })}
+      </Title>
       <AntTable<RunDataTableElementType, RunDataTableColumnType>
         data={data}
         columns={columns}
@@ -198,7 +203,7 @@ function OptimizerRunQueueTable({
         onChange={onReorderRow}
         header={
           <>
-            <Tooltip title={"Deletes the selected runs from the queue"}>
+            <Tooltip title={t("deletes-the-selected-runs-from-the-queue")}>
               <div>
                 <AntButton
                   antIconComponent={DeleteFilled}
@@ -209,11 +214,15 @@ function OptimizerRunQueueTable({
                   buttonVariant={buttonVariants.text}
                   onClick={somethingSelected ? () => onDelete() : undefined}
                 >
-                  Delete selected
+                  <Trans i18nKey="optimizer-queue-delete-selected"></Trans>
                 </AntButton>
               </div>
             </Tooltip>
-            <Tooltip title={"This will delete all runs in this optimizer id"}>
+            <Tooltip
+              title={
+                <Trans i18nKey="optimizer-queue-this-will-delete-all-runs-in-this-optimizer-id"></Trans>
+              }
+            >
               <div>
                 <AntButton
                   antIconComponent={DeleteFilled}
@@ -224,12 +233,14 @@ function OptimizerRunQueueTable({
                   buttonVariant={buttonVariants.text}
                   onClick={() => onDelete(true)}
                 >
-                  Delete all
+                  <Trans i18nKey="optimizer-queue-delete-all"></Trans>
                 </AntButton>
               </div>
             </Tooltip>
             <Tooltip
-              title={"This will randomize all records in this optimizer id"}
+              title={
+                <Trans i18nKey="optimizer-queue-this-will-randomize-all-records-in-this-optimizer-id"></Trans>
+              }
             >
               <div>
                 <AntButton
@@ -241,7 +252,7 @@ function OptimizerRunQueueTable({
                   buttonVariant={buttonVariants.text}
                   onClick={randomizeRecords}
                 >
-                  Randomize
+                  <Trans i18nKey="optimizer-queue-randomize"></Trans>
                 </AntButton>
               </div>
             </Tooltip>
@@ -256,7 +267,7 @@ type RunDataTableElementType = AntTableDataType & {
   [inputKey: string]: number | boolean | string;
 };
 
-type RunDataTableColumnType = AntTableColumnType<RunDataTableElementType>
+type RunDataTableColumnType = AntTableColumnType<RunDataTableElementType>;
 
 function generateTableData(
   optimizerRun: OptimizerQueueElementType,

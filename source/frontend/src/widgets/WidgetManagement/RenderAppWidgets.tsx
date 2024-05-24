@@ -1,5 +1,7 @@
+import { t } from "i18next";
 import { Component, createElement,ErrorInfo } from "react";
 import { useMemo } from "react";
+import { Trans } from "react-i18next";
 
 import createNotification from "../../components/Notifications/Notification";
 import { isProduction } from "../../constants/frontendConstants";
@@ -87,14 +89,14 @@ export class ErrorBoundary extends Component {
   override render() {
     if (this.state.errorInfo) {
       createNotification({
-        title: `Oh no! ${this.props.componentName} crashed!`,
+        title: t('oh-no-this-componentname-crashed', { componentName: this.props.componentName }),
         type: "danger",
         duration: 999999,
         message: `Error: ${JSON.stringify(this.state.error?.message)}`,
       });
       return (
         <div>
-          <h2>Something went wrong. :(</h2>
+          <h2><Trans i18nKey="something-went-wrong"></Trans></h2>
           <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state.error?.toString()}
             <br /> {this.state.errorInfo.componentStack}

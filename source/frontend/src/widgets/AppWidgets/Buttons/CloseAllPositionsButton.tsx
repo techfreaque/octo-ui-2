@@ -1,5 +1,6 @@
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import { closeAllPositions } from "../../../api/actions";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
@@ -20,7 +21,7 @@ export default function CloseAllPositionsButton() {
         buttonType={buttonTypes.error}
         faIconComponent={faStop}
       >
-        Close all positions
+        <Trans i18nKey="close-all-positions"></Trans>
       </AntButton>
     );
   }, [botDomain, isClosing, isDemo, isOnline]);
