@@ -108,7 +108,7 @@
     "notSupportedOctoBotDistroWarning": {
       "this-distribution-isnt-officially-supported": "This distribution isn't officially supported",
       "get-octane-today": "Get Octane today!",
-      "octobotproject-is-not-officially-supported-yet-by-projectname": "{{octobotProject}} is not officially supported yet by {projectName}",
+      "octobotproject-is-not-officially-supported-yet-by-projectname": "{{octobotProject}} is not officially supported yet by {{projectName}}",
       "switch-to-projectname-for-free": "Switch To {{projectName}} For Free"
     }
   },

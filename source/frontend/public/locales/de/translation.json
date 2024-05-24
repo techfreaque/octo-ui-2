@@ -10,7 +10,8 @@
     "updateBot": "Bot aktualisieren",
     "logout": "Melden Sie sich vom Bot ab",
     "colorModeSwitch": "Farbmodus",
-    "login": "Einloggen"
+    "login": "Einloggen",
+    "contributeTranslations": "Übersetzungen bearbeiten"
   },
   "notFoundPage": {
     "goHome": "zur Startseite",
@@ -57,7 +58,86 @@
   "apps": {
     "cantSelectStrategyModeTooltip": "Du kannst den Modus einer Nur-Lese-Strategie nicht ändern. \nKlone eine Strategie, um alle Einstellungen anzupassen."
   },
+  "optimizer": {
+    "pause-optimizer": "Optimierer Pausieren",
+    "optimizer-is-pausing": "Optimierer wird pausiert",
+    "start-optimizer": "Optimierer Starten",
+    "reload-optimizer-queue": "Optimierer-Warteschlange neu laden",
+    "the-optimizer-queue-is-empty": "Die Optimiererwarteschlange ist leer",
+    "runs-for-optimizer-optimizerid": "Läufe für Optimierer {{optimizerId}}",
+    "deletes-the-selected-runs-from-the-queue": "Löscht die ausgewählten Läufe aus der Warteschlange",
+    "queue-delete-selected": "Ausgewählte löschen",
+    "queue-this-will-delete-all-runs-in-this-optimizer-id": "Dadurch werden alle Läufe in dieser Optimierer-ID gelöscht.",
+    "queue-delete-all": "Alle löschen",
+    "queue-this-will-randomize-all-records-in-this-optimizer-id": "Dadurch werden alle Datensätze in dieser Optimierer-ID randomisiert",
+    "queue-randomize": "Randomisieren",
+    "add-to-queue": "Zur Warteschlange hinzufügen"
+  },
+  "backtesting": {
+    "training-is-about-to-stop": "Training wird bald gestoppt",
+    "stop-training": "Training beenden",
+    "stop-backtest": "Backtest stoppen",
+    "start-backtest": "Backtest starten",
+    "runDataTable": {
+      "reload-backtestings": "Backtestings neu laden",
+      "no-backtests-finished-yet-message": "Es sind noch keine Backtests abgeschlossen. Sobald ein Backtest abgeschlossen ist, können Sie ihn hier auswählen, um die Ergebnisse zu analysieren.",
+      "failed-to-restore-settings": "Einstellungen konnten nicht wiederhergestellt werden",
+      "no-settings-found-for-this-run": "Für diesen Lauf wurden keine Einstellungen gefunden",
+      "run-information": "Lauf Infos",
+      "backtesting-delete-selected": "Ausgewählte löschen",
+      "restore-settings": "Einstellungen wiederherstellen",
+      "restores-all-settings-from-this-run": "Stellt alle Einstellungen aus diesem Lauf wieder her",
+      "select-only-one-run-to-be-able-to-restore-the-settings": "Wählen Sie nur einen Lauf aus, um die Einstellungen wiederherstellen zu können",
+      "load-plots-for-selected-runs-or-just-select-them-tooltip": "Laden Sie Diagramme für ausgewählte Läufe oder wählen Sie sie nur aus. Hilfreich, wenn Sie Läufe zum Löschen auswählen möchten.",
+      "display-run-settings": "Laufeinstellungen anzeigen",
+      "display-all-run-information": "Alle Laufinformationen anzeigen",
+      "display-run-information": "Laufinformationen anzeigen",
+      "current-campaign-campaignName": "Aktuelle Kampagne: {{currentCampaignName}}",
+      "backtesting-info": "Info",
+      "backtesting-all-info": "Alle Infos",
+      "backtestings-settings": "Einstellungen",
+      "toggle-displaying-data-only-from-the-current-campaign-or-from-all-activated-ones-tooltip": "Umschalten zwischen der Anzeige der Daten der aktuellen Kampagne oder aller aktivierten Kampagnen",
+      "refreshes-the-run-data-table": "Aktualisiert die Laufdatentabelle"
+    }
+  },
   "footer": {
-    "softRefresh": "Sanfte Aktualisierung"
+    "restore-panel": "Bedienfeld Wiederherstellen",
+    "minimize-panel": "Bedienfeld minimieren",
+    "maximize-panel": "Bedienfeld maximieren",
+    "softRefresh": "Sanfte Aktualisierung",
+    "notSupportedOctoBotDistroWarning": {
+      "this-distribution-isnt-officially-supported": "Diese Distribution wird nicht offiziell unterstützt",
+      "get-octane-today": "Holen Sie sich Octane noch heute!",
+      "octobotproject-is-not-officially-supported-yet-by-projectname": "{{octobotProject}} wird von {{projectName}} noch nicht offiziell unterstützt",
+      "switch-to-projectname-for-free": "Wechseln Sie kostenlos zu {{projectName}}"
+    }
+  },
+  "start-real-time-strategy": "Starten Sie die Echtzeitstrategie",
+  "stop-real-time-strategy": "Stoppen Sie die Echtzeitstrategie",
+  "successfully-activated-real-time-strategy": "Echtzeitstrategie erfolgreich aktiviert",
+  "failed-to-activate-real-time-strategy": "Die Echtzeitstrategie konnte nicht aktiviert werden.",
+  "save-strategy-mode-settings": "Strategiemodus Einstellungen speichern",
+  "save-strategy-mode-settings-tooltip": "Einstellungen für den Strategiemodus speichern",
+  "switch-to-language-name": "Wechseln Sie zu {{lang}}",
+  "close-all-positions": "Alle Positionen schließen",
+  "cancel-all-orders": "Alle Orders stornieren",
+  "uiConfig": {
+    "failed-to-autosave-ui-config": "Automatisches Speichern der UI-Konfiguration fehlgeschlagen",
+    "ui-config": "UI-Konfiguration",
+    "plot-settings": {
+      "plot-settings": "Plot-Einstellungen",
+      "plot-unrealized-portfolio-value": "Nicht realisierten Portfoliowert grafisch darstellen",
+      "chart-location-unrealized-portfolio-value": "Diagrammstandort nicht realisierter Portfoliowert",
+      "plot-unrealized-portfolio-value-for-each-asset": "Nicht realisierten Portfoliowert für jedes Asset grafisch darstellen",
+      "plot-unrealized-portfolio-value-in-btc": "Nicht realisierten Portfoliowert in BTC grafisch darstellen"
+    }
+  },
+  "componentError": {
+    "something-went-wrong": "Etwas ist schief gelaufen. :(",
+    "oh-no-this-componentname-crashed": "Oh nein! {{componentName}} ist abgestürzt!"
+  },
+  "timeFrameSelector": {
+    "pending-restart": "Ausstehender Neustart",
+    "the-newly-selected-time-frames-will-be-available-after-a-restart": "Die neu ausgewählten Zeiträume sind nach einem Neustart verfügbar"
   }
 }
