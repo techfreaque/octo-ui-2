@@ -130,7 +130,6 @@
       "chart-location-unrealized-portfolio-value": "Chart location unrealized portfolio value",
       "plot-unrealized-portfolio-value-for-each-asset": "Plot unrealized portfolio value for each asset",
       "plot-unrealized-portfolio-value-in-btc": "Plot unrealized portfolio value in BTC",
-      "plot-unrealized-portfolio-amount-for-each-asset": "Plot unrealized portfolio amount for each asset"
     }
   },
   "componentError": {
