@@ -1,3 +1,4 @@
+import { DownloadOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import { useMemo, useState } from "react";
 import { Trans } from "react-i18next";
@@ -33,9 +34,9 @@ export default function UpdateBotButton({ onClick }: { onClick: () => void }) {
             }}
             block={true}
             buttonType={buttonTypes.warning}
-            antIcon="DownloadOutlined"
+            icon={<DownloadOutlined height="24px" width="24px" />}
           >
-            <Trans i18nKey="buttons.updateBot" />
+            <Trans i18nKey="powerMenu.updateBot" />
           </AntButton>
         </div>
       </Tooltip>

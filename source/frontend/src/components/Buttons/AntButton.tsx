@@ -128,6 +128,9 @@ export default function AntButton({
   if (buttonType === buttonTypes.black) {
     _style.color = botColors?.white;
   }
+  if (!block) {
+    _style.display = "flex";
+  }
   const theme = {
     token: {
       colorError: botColors[buttonType],
@@ -142,7 +145,7 @@ export default function AntButton({
   if (selected) {
     _style.color = botColors?.fontActive;
   }
-  if (href) {
+  if (href && !block) {
     _style.width = "fit-content";
   }
 
@@ -191,7 +194,9 @@ export default function AntButton({
                 spin={spin}
               />
             )}
-            {icon}
+            {icon && (
+              <div style={children ? { paddingRight: "5px" } : {}}>{icon}</div>
+            )}
           </>
         }
         danger={buttonVariant === buttonVariants.outline}
@@ -210,7 +215,6 @@ export default function AntButton({
           marginRight,
           marginTop: "auto",
           marginBottom: "auto",
-          display: "flex",
           textDecoration: "none",
           ..._style,
           ...style,

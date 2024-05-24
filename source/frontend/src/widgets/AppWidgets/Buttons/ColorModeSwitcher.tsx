@@ -31,7 +31,7 @@ export default function ColorModeSwitch({ onClick }: { onClick?: () => void }) {
           colorMode === colorModes.dark ? buttonTypes.white : buttonTypes.black
         }
       >
-        <Trans i18nKey="buttons.colorModeSwitch" />
+        <Trans i18nKey="powerMenu.colorModeSwitch" />
       </AntButton>
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps

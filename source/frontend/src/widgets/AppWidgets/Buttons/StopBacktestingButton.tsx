@@ -19,7 +19,7 @@ export default function StopBacktestingButton() {
           buttonType={buttonTypes.warning}
           faIconComponent={faStop}
         >
-          <Trans i18nKey="stop-backtest"></Trans>
+          <Trans i18nKey="backtesting.stop-backtest"></Trans>
         </AntButton>
       )
     );

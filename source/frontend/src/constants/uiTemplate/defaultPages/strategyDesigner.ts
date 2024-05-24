@@ -411,6 +411,7 @@ export const defaultStrategyDesignerPageLayout: UiLayoutPageType = {
               ],
               component: "TentaclesConfig",
               content: [],
+              autoSave: true,
               tentacleNames: "RunAnalysisModePlugin",
             },
           ],

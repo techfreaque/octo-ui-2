@@ -207,12 +207,12 @@ export default function ResetConfigs() {
           }}
         >
           <Button onClick={toggleSelectAll} danger>
-            <Trans i18nKey="select.all" />
+            <Trans i18nKey="resetConfigs.select_all" />
           </Button>
 
           <Popconfirm
-            title={<Trans i18nKey="title.warning" />}
-            description={<Trans i18nKey="description.warning" />}
+            title={<Trans i18nKey="resetConfigs.warning_title" />}
+            description={<Trans i18nKey="resetConfigs.warning" />}
             open={open}
             onConfirm={handleOk}
             okButtonProps={{
@@ -224,15 +224,17 @@ export default function ResetConfigs() {
               disabled={
                 isDemo ||
                 isResetting ||
-                !(checkedList &&
-                  Object.values(checkedList).find((value) => value))
+                !(
+                  checkedList &&
+                  Object.values(checkedList).find((value) => value)
+                )
               }
               onClick={showPopconfirm}
               type="primary"
               danger
               style={{ marginLeft: "10px" }}
             >
-              <Trans i18nKey="Reset.Selected" />
+              <Trans i18nKey="resetConfigs.Selected" />
             </Button>
           </Popconfirm>
         </div>

@@ -1,12 +1,14 @@
 {
   "buttons": {
+    "closePairSelectorTooltip": "Klicken Sie hier, um die Exchange-Einstellungen zu schließen"
+  },
+  "powerMenu": {
+    "powerMenuTooltip": "Power-Menü",
     "backToOctoBot": "Zurück zu OctoBot",
     "restartBot": "Bot neu starten",
-    "softRefresh": "Sanfte Aktualisierung",
     "stopBot": "Bot stoppen",
     "updateBot": "Bot aktualisieren",
     "logout": "Melden Sie sich vom Bot ab",
-    "closePairSelectorTooltip": "Klicken Sie hier, um die Exchange-Einstellungen zu schließen",
     "colorModeSwitch": "Farbmodus",
     "login": "Einloggen"
   },
@@ -31,17 +33,11 @@
   "pairExchangeSettings": {
     "currentPairTooltip": "Währungen und Symbole auswählen und einrichten"
   },
-  "title": {
-    "warning": "Warnung"
-  },
-  "description": {
-    "warning": "Sie sind dabei, alle ausgewählten Einstellungen zurückzusetzen. \nMöchtest du fortfahren?"
-  },
-  "Reset": {
-    "Selected": "Ausgewählte zurücksetzen"
-  },
-  "select": {
-    "all": "Wählen Sie Alle"
+  "resetConfigs": {
+    "warning_title": "Warnung",
+    "warning": "Sie sind dabei, alle ausgewählten Einstellungen zurückzusetzen. \nMöchtest du fortfahren?",
+    "Selected": "Ausgewählte zurücksetzen",
+    "select_all": "Alle Auswählen"
   },
   "pairSelector": {
     "SaveAndRestart": "Speichern und neu starten"
@@ -56,26 +52,12 @@
     "noWebsocketTooltip": "Diese Börse unterstützt kein WebSocket und kann nur eine begrenzte Anzahl von Paaren verwenden."
   },
   "progress": {
-    "backtestingProgressTooltip": "Backtest ist zu {{progressPercent}} % abgeschlossen"
+    "backtestingProgressTooltip": "Backtest ist zu {{progressPercent}}% abgeschlossen"
   },
   "apps": {
     "cantSelectStrategyModeTooltip": "Du kannst den Modus einer Nur-Lese-Strategie nicht ändern. \nKlone eine Strategie, um alle Einstellungen anzupassen."
   },
-  "modal": {
-    "powerMenuTooltip": "Power-Menü"
-  },
-  "pause-optimizer": "Optimierer pausieren",
-  "optimizer-is-pausing": "Der Optimierer pausiert",
-  "start-optimizer": "Optimierer Starten",
-  "start-real-time-strategy": "Echtzeitstrategie Starten",
-  "stop-real-time-strategy": "Echtzeitstrategie Stoppen",
-  "successfully-activated-real-time-strategy": "Echtzeitstrategie erfolgreich aktiviert",
-  "failed-to-activate-real-time-strategy": "Die Echtzeitstrategie konnte nicht aktiviert werden",
-  "training-is-about-to-stop": "Training wird beendet",
-  "stop-training": "Training Stoppen",
-  "stop-backtest": "Backtest Stoppen",
-  "start-backtest": "Backtest starten",
-  "save-strategy-mode-settings": "Strategiemodus Einstellungen Speichern",
-  "save-strategy-mode-settings-tooltip": "Speichern Sie die Einstellungen des Strategiemodus",
-  "switch-to-language-name": "Wechsle zu {lang}"
+  "footer": {
+    "softRefresh": "Sanfte Aktualisierung"
+  }
 }

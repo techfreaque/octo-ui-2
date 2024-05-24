@@ -8,7 +8,7 @@ import { objectEntries } from "../../../helpers/helpers";
 export default function LanguageSwitch() {
   const { i18n } = useTranslation();
   return (
-    <div style={{ display: "flex", gap: "6px" }}>
+    <div style={{ display: "flex", justifyContent: "space-between" }}>
       {objectEntries(languages).map(([lng, langData]) => {
         return (
           <Tooltip

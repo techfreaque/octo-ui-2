@@ -59,13 +59,16 @@ export async function saveUIConfig({
 }: {
   botDomain: string;
   newConfig: UiConfigType;
-  successCallback?: (payload: successResponseCallBackParams) => void;
+  successCallback:
+    | ((payload: successResponseCallBackParams) => void)
+    | undefined;
   errorCallback: (payload: errorResponseCallBackParams) => void;
 }) {
   sendAndInterpretBotUpdate({
     updatedData: newConfig,
     updateUrl: botDomain + backendRoutes.uIConfig,
-    successCallback: successCallback ? successCallback : undefined,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    successCallback: successCallback ? successCallback : () => {},
     errorCallback,
   });
 }

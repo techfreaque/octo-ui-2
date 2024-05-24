@@ -53,6 +53,11 @@ export function NodeContainer({
         return node.id !== nodeId;
       });
     });
+    reactFlow.setEdges((edges) => { 
+      return edges.filter((edge) => {
+        return edge.source !== nodeId && edge.target !== nodeId;
+      });
+    })
   }, [nodeId, reactFlow]);
   return (
     <div

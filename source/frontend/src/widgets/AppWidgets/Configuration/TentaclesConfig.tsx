@@ -47,10 +47,12 @@ export default function TentaclesConfig({
   content,
   tentacleNames = "RunAnalysisModePlugin",
   additionalTabs = [],
+  autoSave = false,
 }: {
   content: UiLayoutPageLayoutType[] | undefined;
   tentacleNames: StorageNameType;
   additionalTabs: UiLayoutPageLayoutType[] | undefined;
+  autoSave?: boolean;
 }) {
   const botInfo = useBotInfoContext();
   const fetchTentaclesConfig = useFetchTentaclesConfig();
@@ -86,10 +88,12 @@ export default function TentaclesConfig({
         content={content}
         additionalTabsAfter={_additionalTabs}
         storageName={tentacleNames}
+        autoSave={autoSave}
       />
     );
   }, [
     _additionalTabs,
+    autoSave,
     content,
     currentTentaclesNonTradingConfig,
     fetchTentaclesConfig,
@@ -135,6 +139,7 @@ export function AbstractTentaclesConfig({
   content,
   storageName = "tradingConfig",
   additionalTabsAfter,
+  autoSave,
 }: {
   fetchCurrentTentaclesConfig: (
     successCallback?:
@@ -146,12 +151,26 @@ export function AbstractTentaclesConfig({
   content: UiLayoutPageLayoutType[] | undefined;
   storageName: StorageNameType;
   additionalTabsAfter: TentacleConfigTabsData[] | undefined;
+  autoSave: boolean;
 }) {
   const botInfo = useBotInfoContext();
   const botDomain = useBotDomainContext();
   const exchangeId = botInfo?.exchange_id;
   const [tabs, setTabs] = useState<TentacleConfigTabsData[]>();
   const [isSaving, setIsSaving] = useState(false);
+  function handleUserInputSave() {
+    saveUserInputs(
+      (newConfigs: TentaclesConfigByTentacleType) =>
+        saveTentaclesConfig(
+          newConfigs,
+          setIsSaving,
+          true,
+          storageName === "tradingConfig"
+        ),
+      setIsSaving,
+      storageName
+    );
+  }
   useEffect(() => {
     if (currentTentaclesTradingConfig) {
       setTabs(
@@ -160,6 +179,8 @@ export function AbstractTentaclesConfig({
           userInputs: currentTentaclesTradingConfig,
           storageName,
           additionalTabsAfter,
+          autoSave,
+          handleUserInputSave,
         })
       );
     }
@@ -175,35 +196,27 @@ export function AbstractTentaclesConfig({
       : tabs
       ? tabs?.[0]?.tabId
       : 0;
-  function handleUserInputSave() {
-    saveUserInputs(
-      (newConfigs: TentaclesConfigByTentacleType) =>
-        saveTentaclesConfig(
-          newConfigs,
-          setIsSaving,
-          true,
-          storageName === "tradingConfig"
-        ),
-      setIsSaving,
-      storageName
-    );
-  }
+
   const isDemo = useIsDemoMode();
   return useMemo(() => {
     return tabs && defaultTabId ? (
       <MuiTabs
         tabs={tabs}
         rightContent={
-          <>
-            {content && <AppWidgets layout={content} />}
-            <AntButton
-              buttonType={buttonTypes.primary}
-              disabled={isSaving || isDemo}
-              onClick={handleUserInputSave}
-              antIconComponent={SaveOutlined}
-              iconSize={sizes.medium}
-            />
-          </>
+          autoSave ? (
+            <></>
+          ) : (
+            <>
+              {content && <AppWidgets layout={content} />}
+              <AntButton
+                buttonType={buttonTypes.primary}
+                disabled={isSaving || isDemo}
+                onClick={handleUserInputSave}
+                antIconComponent={SaveOutlined}
+                iconSize={sizes.medium}
+              />
+            </>
+          )
         }
         defaultTabId={defaultTabId}
       />
@@ -240,12 +253,16 @@ export function generateTradingConfigTabs({
   storageName = "tradingConfig",
   additionalTabsAfter,
   displayStyle,
+  autoSave,
+  handleUserInputSave,
 }: {
   userInputs: TentaclesConfigsRootType;
   setHiddenMetadataColumns?: Dispatch<SetStateAction<string[] | undefined>>;
   storageName: StorageNameType;
   additionalTabsAfter?: TentacleConfigTabsData[] | undefined;
   displayStyle: DisplayStyleType;
+  autoSave: boolean;
+  handleUserInputSave: () => void;
 }): TentacleConfigTabsData[] {
   const tabsData: TentacleConfigTabsData[] = [];
   // window.trading_mode_objects = {}
@@ -265,6 +282,8 @@ export function generateTradingConfigTabs({
       storageName,
       displayStyle,
       tentaclesInfoStorage,
+      autoSave,
+      handleUserInputSave,
     });
     if (setHiddenMetadataColumns) {
       handleHiddenUserInputs(editedUserInputs, setHiddenMetadataColumns);
@@ -287,6 +306,8 @@ export function generateTradingConfigTabs({
       tabsData,
       storageName,
       displayStyle,
+      autoSave,
+      handleUserInputSave,
     });
   });
   tabsData.sort((a, b) => {
@@ -333,12 +354,16 @@ function create_custom_tabs({
   storageName,
   displayStyle,
   tentaclesInfoStorage,
+  autoSave,
+  handleUserInputSave,
 }: {
   tentacleInputs: TentaclesConfigRootType | undefined;
   tabsData: TentacleConfigTabsData[];
   storageName: StorageNameType;
   displayStyle: DisplayStyleType;
   tentaclesInfoStorage: TentacleInfoStorageType;
+  autoSave: boolean;
+  handleUserInputSave: () => void;
 }) {
   const infoStorage: string[] = [];
   // gather custom user inputs
@@ -359,6 +384,8 @@ function create_custom_tabs({
         storageName,
         antIcon: property?.options?.antIcon,
         displayStyle,
+        autoSave,
+        handleUserInputSave,
       });
       delete tentacleInputs.config[propertyKey];
       delete schemaProperties[propertyKey];
@@ -472,6 +499,8 @@ function _createTentacleConfigTab({
   storageName,
   displayStyle,
   antIcon,
+  autoSave,
+  handleUserInputSave,
 }: {
   configTitle: string;
   configName: string;
@@ -482,6 +511,8 @@ function _createTentacleConfigTab({
   storageName: StorageNameType;
   displayStyle: DisplayStyleType;
   antIcon: string | undefined;
+  autoSave: boolean;
+  handleUserInputSave: () => void;
 }) {
   if (schema) {
     _addGridDisplayOptions(schema);
@@ -503,6 +534,8 @@ function _createTentacleConfigTab({
                 editorKey,
                 storageName,
                 antIcon,
+                autoSave,
+                handleUserInputSave,
               })
             : createSidebarItem({
                 configName,
@@ -512,6 +545,8 @@ function _createTentacleConfigTab({
                 editorKey,
                 storageName,
                 antIcon,
+                autoSave,
+                handleUserInputSave,
               })
         );
     } catch (error) {
@@ -528,6 +563,8 @@ function createSidebarItem({
   editorKey,
   storageName,
   antIcon,
+  autoSave,
+  handleUserInputSave,
 }: {
   configName: string;
   config: TentaclesConfigValueType | undefined;
@@ -536,6 +573,8 @@ function createSidebarItem({
   editorKey: TentacleType | string;
   storageName: StorageNameType;
   antIcon: string | undefined;
+  autoSave: boolean;
+  handleUserInputSave: () => void;
 }): TentacleConfigTabsData {
   return {
     title: configTitle.replace(/_/g, " "),
@@ -551,6 +590,7 @@ function createSidebarItem({
         {...defaultJsonEditorSettings()}
         display_required_only={true}
         storageName={storageName}
+        onChange={autoSave ? handleUserInputSave : undefined}
       />
     ),
   };
@@ -564,6 +604,8 @@ function createTab({
   editorKey,
   storageName,
   antIcon,
+  autoSave,
+  handleUserInputSave,
 }: {
   configName: string;
   config: TentaclesConfigValueType | undefined;
@@ -572,6 +614,8 @@ function createTab({
   editorKey: TentacleType | string;
   storageName: StorageNameType;
   antIcon: string | undefined;
+  autoSave: boolean;
+  handleUserInputSave: () => void;
 }): TentacleConfigTabsData {
   return {
     title: (
@@ -590,6 +634,7 @@ function createTab({
       <JsonEditor
         schema={schema}
         startval={config}
+        onChange={autoSave ? handleUserInputSave : undefined}
         editorName={`${editorKey}##${configName}`}
         {...defaultJsonEditorSettings()}
         display_required_only={true}

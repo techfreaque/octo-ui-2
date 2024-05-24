@@ -1,6 +1,6 @@
 import { SyncOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
-import { useEffect,useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
@@ -31,7 +31,7 @@ export default function RefreshBotData() {
     return (
       <Tooltip
         placement="top"
-        title={<Trans i18nKey="buttons.softRefresh" />}
+        title={<Trans i18nKey="footer.softRefresh" />}
         arrow={false}
       >
         <div>

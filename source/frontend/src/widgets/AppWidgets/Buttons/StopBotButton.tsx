@@ -1,3 +1,4 @@
+import { StopOutlined } from "@ant-design/icons";
 import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useMemo, useState } from "react";
 import { Trans } from "react-i18next";
@@ -27,9 +28,9 @@ export default function StopBotButton({ onClick }: { onClick: () => void }) {
           onClick?.();
         }}
         buttonType={buttonTypes.error}
-        faIconComponent={faStop}
+        icon={<StopOutlined height="24px" width="24px" />}
       >
-        <Trans i18nKey="buttons.stopBot" />
+        <Trans i18nKey="powerMenu.stopBot" />
       </AntButton>
     );
   }, [botDomain, isDemo, isLoading, isOnline, onClick, updateIsOnline]);

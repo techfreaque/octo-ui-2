@@ -269,11 +269,14 @@ function genericRequestFailureCallback({
   data,
 }: errorResponseCallBackParams) {
   console.error(
-    `Unknown API connect error: Update url: ${updateUrl}, error: ${data}`
+    `Unknown API connect error: Update url: ${updateUrl}, error: `,
+    data
   );
   createNotification({
     title: "Can't connect to OctoBot",
     type: "danger",
-    message: `Unknown error: Update url: ${updateUrl}, error: ${data}`,
+    message: `Unknown error: Update url: ${updateUrl}, error: ${JSON.stringify(
+      data
+    )}`,
   });
 }

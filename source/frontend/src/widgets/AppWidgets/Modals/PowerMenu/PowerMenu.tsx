@@ -1,4 +1,8 @@
-import { PoweroffOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  EditOutlined,
+  PoweroffOutlined,
+} from "@ant-design/icons";
 import { Dropdown, Tooltip } from "antd";
 import type { ItemType } from "antd/es/menu/interface";
 import { useState } from "react";
@@ -56,13 +60,29 @@ export default function PowerMenu() {
           block={true}
           target="blank"
           disabled={isDemo}
+          icon={<ArrowLeftOutlined height="24px" width="24px" />}
           href={`${botDomain}/home`}
         >
-          <Trans i18nKey="buttons.backToOctoBot" />
+          <Trans i18nKey="powerMenu.backToOctoBot" />
         </AntButton>
       ),
     },
     { key: "language", label: <LanguageSwitch /> },
+    {
+      key: "helpTranslate",
+      label: (
+        <AntButton
+          onClick={handleClose}
+          buttonVariant={buttonVariants.outline}
+          block={true}
+          icon={<EditOutlined height="24px" width="24px" />}
+          target="blank"
+          href={"https://fink.inlang.com/github.com/techfreaque/octo-ui-2"}
+        >
+          <Trans i18nKey="powerMenu.contributeTranslations" />
+        </AntButton>
+      ),
+    },
   ];
   if (botInfo?.can_logout) {
     items.unshift({
@@ -91,7 +111,7 @@ export default function PowerMenu() {
     >
       <Tooltip
         placement="topRight"
-        title={<Trans i18nKey="modal.powerMenuTooltip" />}
+        title={<Trans i18nKey="powerMenu.powerMenuTooltip" />}
         arrow={false}
       >
         <div>

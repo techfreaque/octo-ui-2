@@ -83,7 +83,7 @@ export const defaultColors: { [key in ColorModeType]: ColorsType } = {
     },
   },
   light: {
-    background: "rgb(243 243 243)",
+    background: "#e3e3e3",
     backgroundSecondary: "rgba(0, 0, 0, 0.02)",
     backgroundHover: "rgba(0,0,0,.06)",
     backgroundActive: "#e6f4ff",

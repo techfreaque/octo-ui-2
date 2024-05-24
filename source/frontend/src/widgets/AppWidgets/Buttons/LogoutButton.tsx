@@ -1,3 +1,4 @@
+import { LogoutOutlined } from "@ant-design/icons";
 import { useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 import { useNavigate } from "react-router-dom";
@@ -34,9 +35,9 @@ export default function LogoutButton({ onClick }: { onClick?: () => void }) {
         }}
         block={true}
         buttonType={buttonTypes.warning}
-        antIcon="LogoutOutlined"
+        icon={<LogoutOutlined height="24px" width="24px" />}
       >
-        <Trans i18nKey="buttons.logout" />
+        <Trans i18nKey="powerMenu.logout" />
       </AntButton>
     ) : (
       <></>

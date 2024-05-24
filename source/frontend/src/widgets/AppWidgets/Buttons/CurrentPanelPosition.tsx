@@ -38,10 +38,10 @@ export default function CurrentPanelPosition({
   const props = {
     title:
       position === availablePanelPositions.maximized
-        ? t('maximize-panel')
+        ? t("footer.maximize-panel")
         : position === availablePanelPositions.minimized
-        ? t('minimize-panel')
-        : t('restore-panel'),
+        ? t("footer.minimize-panel")
+        : t("footer.restore-panel"),
     icon:
       position === availablePanelPositions.maximized
         ? "VerticalAlignTopOutlined"

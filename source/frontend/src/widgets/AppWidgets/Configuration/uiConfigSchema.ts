@@ -99,7 +99,7 @@ function _getUiConfigSchema(
 ): UiConfigSchemaType {
   return {
     type: "object",
-    title: t('ui-config'),
+    title: t("uiConfig.ui-config-title"),
     properties: {
       backtesting_analysis_settings: {
         type: "object",
@@ -107,11 +107,13 @@ function _getUiConfigSchema(
         properties: {
           backtesting_plot_settings: {
             type: "object",
-            title: t('plot-settings'),
+            title: t("uiConfig.plot-settings.plot-settings-title"),
             properties: {
               plot_unrealized_portfolio: {
                 type: "boolean",
-                title: t('plot-unrealized-portfolio-value'),
+                title: t(
+                  "uiConfig.plot-settings.plot-unrealized-portfolio-value"
+                ),
                 format: "checkbox",
                 fieldType: "boolean",
                 options: {
@@ -121,12 +123,16 @@ function _getUiConfigSchema(
               },
               ...selectableChartlocation(
                 "chart_location_unrealized_portfolio_value",
-                t('chart-location-unrealized-portfolio-value'),
+                t(
+                  "uiConfig.plot-settings.chart-location-unrealized-portfolio-value"
+                ),
                 2
               ),
               plot_unrealized_portfolio_value_for_each_asset: {
                 type: "boolean",
-                title: t('plot-unrealized-portfolio-value-for-each-asset'),
+                title: t(
+                  "uiConfig.plot-settings.uiConfig.plot-settings.plot-unrealized-portfolio-value-for-each-asset"
+                ),
                 format: "checkbox",
                 fieldType: "boolean",
                 options: {
@@ -136,12 +142,16 @@ function _getUiConfigSchema(
               },
               ...selectableChartlocation(
                 "chart_location_unrealized_portfolio_value_for_each_asset",
-                t('chart-location-unrealized-portfolio-value-0'),
+                t(
+                  "uiConfig.plot-settings.chart-location-unrealized-portfolio-value"
+                ),
                 4
               ),
               plot_unrealized_portfolio_amount_in_btc: {
                 type: "boolean",
-                title: t('plot-unrealized-portfolio-value-in-btc'),
+                title: t(
+                  "uiConfig.plot-settings.uiConfig.plot-settings.plot-unrealized-portfolio-value-in-btc"
+                ),
                 format: "checkbox",
                 fieldType: "boolean",
                 options: {
@@ -151,12 +161,16 @@ function _getUiConfigSchema(
               },
               ...selectableChartlocation(
                 "chart_location_unrealized_portfolio_amount_in_btc",
-                t('chart-location-unrealized-portfolio-value-1'),
+                t(
+                  "uiConfig.plot-settings.chart-location-unrealized-portfolio-value"
+                ),
                 6
               ),
               plot_unrealized_portfolio_amount_for_each_asset: {
                 type: "boolean",
-                title: t('plot-unrealized-portfolio-amount-for-each-asset'),
+                title: t(
+                  "uiConfig.plot-settings.plot-unrealized-portfolio-amount-for-each-asset"
+                ),
                 format: "checkbox",
                 fieldType: "boolean",
                 options: {
@@ -166,7 +180,9 @@ function _getUiConfigSchema(
               },
               ...selectableChartlocation(
                 "chart_location_unrealized_portfolio_amount_for_each_asset",
-                t('chart-location-unrealized-portfolio-value-2'),
+                t(
+                  "uiConfig.plot-settings.chart-location-unrealized-portfolio-value"
+                ),
                 8
               ),
               plot_realized_portfolio: {

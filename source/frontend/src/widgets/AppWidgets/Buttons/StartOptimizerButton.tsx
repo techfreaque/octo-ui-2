@@ -38,7 +38,7 @@ export default function StartOptimizerButton() {
           faIconComponent={faPlay}
           disabled={canNotStart}
         >
-          <Trans i18nKey="start-optimizer"></Trans>
+          <Trans i18nKey="optimizer.start-optimizer"></Trans>
         </AntButton>
       )
     );

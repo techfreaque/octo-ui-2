@@ -38,6 +38,13 @@ export default function appWidgetsProps() {
       defaultValue: "RunAnalysisModePlugin",
     }),
     ...generateSimpleProp({
+      propName: "autoSave",
+      dependentComponents: ["TentaclesConfig"],
+      type: "boolean",
+      defaultValue: true,
+      format: "checkbox",
+    }),
+    ...generateSimpleProp({
       propName: "dontScroll",
       dependentComponents: ["Tab"],
       defaultValue: "SidebarMenuItem",

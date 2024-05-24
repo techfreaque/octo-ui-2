@@ -113,12 +113,16 @@ function UnsupportedWarning({
             onClick={() => setOpen(true)}
             type="warning"
             showIcon={!isSmallScreen}
-            message={t("this-distribution-isnt-officially-supported")}
+            message={t(
+              "footer.notSupportedOctoBotDistroWarning.this-distribution-isnt-officially-supported"
+            )}
           />
           <Modal
             open={open}
             onCancel={() => setOpen(false)}
-            title={t("get-octane-today")}
+            title={t(
+              "footer.notSupportedOctoBotDistroWarning.get-octane-today"
+            )}
             centered
             width="800px"
             bodyStyle={{ display: "flex" }}
@@ -127,7 +131,7 @@ function UnsupportedWarning({
             <div>
               <Typography.Title level={2}>
                 {t(
-                  "octobotproject-is-not-officially-supported-yet-by-projectname",
+                  "footer.notSupportedOctoBotDistroWarning.octobotproject-is-not-officially-supported-yet-by-projectname",
                   { octobotProject, projectName }
                 )}
               </Typography.Title>
@@ -139,7 +143,7 @@ function UnsupportedWarning({
                   <Typography.Paragraph>
                     For some features to work properly, {projectName} requires
                     modifications to the core of OctoBot which are not ported
-                    back yet. It is recommended to use Octane, which is a
+                    back yet. It is recommended to use {projectName}, which is a
                     distribution of OctoBot.
                   </Typography.Paragraph>
                 }
@@ -151,7 +155,10 @@ function UnsupportedWarning({
                 onClick={() => setProjectInfoOpen(true)}
                 antIconComponent={RocketOutlined}
               >
-                {t("switch-to-projectname-for-free", { projectName })}
+                {t(
+                  "footer.notSupportedOctoBotDistroWarning.switch-to-projectname-for-free",
+                  { projectName }
+                )}
               </AntButton>
             </div>
           </Modal>

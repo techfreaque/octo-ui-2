@@ -1,3 +1,4 @@
+import { ReloadOutlined } from "@ant-design/icons";
 import { useMemo } from "react";
 import { Trans } from "react-i18next";
 
@@ -31,10 +32,9 @@ export default function RestartBotButton({
         }}
         block={true}
         buttonType={buttonType}
-        antIcon={"ReloadOutlined"}
-        spin={!isOnline}
+        icon={<ReloadOutlined spin={!isOnline} height="24px" width="24px" />}
       >
-        <Trans i18nKey="buttons.restartBot" />
+        <Trans i18nKey="powerMenu.restartBot" />
       </AntButton>
     );
   }, [buttonType, isDemo, isOnline, onClick, restartBot]);

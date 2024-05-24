@@ -157,8 +157,8 @@ function MetaDataTable({
         );
       } else {
         createNotification({
-          title: t("failed-to-restore-settings"),
-          message: t("no-settings-found-for-this-run"),
+          title: t("backtesting.runDataTable.failed-to-restore-settings"),
+          message: t("backtesting.runDataTable.no-settings-found-for-this-run"),
           type: "danger",
         });
       }
@@ -204,7 +204,9 @@ function MetaDataTable({
         paginationSize={500}
         header={
           <>
-            <Tooltip title={t("refreshes-the-run-data-table")}>
+            <Tooltip
+              title={t("backtesting.runDataTable.refreshes-the-run-data-table")}
+            >
               <div>
                 <AntButton
                   antIconComponent={ReloadOutlined}
@@ -222,7 +224,7 @@ function MetaDataTable({
             </Tooltip>
             <Tooltip
               title={t(
-                "toggle-displaying-data-only-from-the-current-campaign-or-from-all-activated-ones-tooltip"
+                "backtesting.runDataTable.toggle-displaying-data-only-from-the-current-campaign-or-from-all-activated-ones-tooltip"
               )}
             >
               <div>
@@ -240,7 +242,7 @@ function MetaDataTable({
                     });
                   }}
                 >
-                  {t("current-campaign-campaignName", {
+                  {t("backtesting.runDataTable.current-campaign-campaignName", {
                     currentCampaignName,
                   })}
                 </AntButton>
@@ -251,25 +253,33 @@ function MetaDataTable({
               style={{ display: "flex" }}
               onChange={(event) => setVisibleColumns(event.target.value)}
             >
-              <Tooltip title={t("display-run-information")}>
+              <Tooltip
+                title={t("backtesting.runDataTable.display-run-information")}
+              >
                 <Radio.Button value="info">
-                  <Trans i18nKey="backtesting-info"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.backtesting-info"></Trans>
                 </Radio.Button>
               </Tooltip>
-              <Tooltip title={t("display-all-run-information")}>
+              <Tooltip
+                title={t(
+                  "backtesting.runDataTable.display-all-run-information"
+                )}
+              >
                 <Radio.Button value="allInfo">
-                  <Trans i18nKey="backtesting-all-info"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.backtesting-all-info"></Trans>
                 </Radio.Button>
               </Tooltip>
-              <Tooltip title={t("display-run-settings")}>
+              <Tooltip
+                title={t("backtesting.runDataTable.display-run-settings")}
+              >
                 <Radio.Button value="settings">
-                  <Trans i18nKey="backtestings-settings"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.backtestings-settings"></Trans>
                 </Radio.Button>
               </Tooltip>
             </Radio.Group>
             <Tooltip
               title={t(
-                "load-plots-for-selected-runs-or-just-select-them-tooltip"
+                "backtesting.runDataTable.load-plots-for-selected-runs-or-just-select-them-tooltip"
               )}
             >
               <Switch
@@ -294,9 +304,9 @@ function MetaDataTable({
             <Tooltip
               title={
                 onlyOneIsSelected ? (
-                  <Trans i18nKey="restores-all-settings-from-this-run"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.restores-all-settings-from-this-run"></Trans>
                 ) : (
-                  <Trans i18nKey="select-only-one-run-to-be-able-to-restore-the-settings"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.select-only-one-run-to-be-able-to-restore-the-settings"></Trans>
                 )
               }
             >
@@ -320,7 +330,7 @@ function MetaDataTable({
                       : undefined
                   }
                 >
-                  <Trans i18nKey="backtesting-restore-settings"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.restore-settings"></Trans>
                 </AntButton>
               </div>
             </Tooltip>
@@ -337,7 +347,7 @@ function MetaDataTable({
                     somethingSelected ? () => handleDeleteSelected() : undefined
                   }
                 >
-                  <Trans i18nKey="backtesting-delete-selected"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.backtesting-delete-selected"></Trans>
                 </AntButton>
               </div>
             </Tooltip>
@@ -463,7 +473,7 @@ function useFormatTableData(
     //   const columns = runDataColumns.concat(userInputColumns);
     const columns: RunDataTableColumnType[] = [
       {
-        title: t("run-information"),
+        title: t("backtesting.runDataTable.run-information"),
         key: "runInformation",
         disableSearch: true,
         children: runDataColumns || [],

@@ -26,7 +26,7 @@ export default function StartBacktestingButton() {
           buttonType={buttonTypes.success}
           faIconComponent={faPlay}
         >
-          <Trans i18nKey="start-backtest"></Trans>
+          <Trans i18nKey="backtesting.start-backtest"></Trans>
         </AntButton>
       )
     );

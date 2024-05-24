@@ -83,11 +83,11 @@ function TimeFrameEnabler({
       JSON.stringify(botInfo?.traded_time_frames);
     function onSaveFinished() {
       createNotification({
-        title: t('pending-restart'),
+        title: t("timeFrameSelector.pending-restart"),
         type: "warning",
         message: (
           <>
-            <Trans i18nKey="the-newly-selected-time-frames-will-be-available-after-a-restart"></Trans>
+            <Trans i18nKey="timeFrameSelector.the-newly-selected-time-frames-will-be-available-after-a-restart"></Trans>
             <RestartBotButton buttonType={buttonTypes.black} />
           </>
         ),

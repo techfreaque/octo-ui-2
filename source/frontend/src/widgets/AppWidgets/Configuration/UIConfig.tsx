@@ -67,7 +67,7 @@ export default function UIConfig({
       };
       function errorCallback(payload: errorResponseCallBackParams) {
         createNotification({
-          title: t('failed-to-autosave-ui-config'),
+          title: t("uiConfig.failed-to-autosave-ui-config"),
           message: `Error: ${payload.data}`,
         });
       }

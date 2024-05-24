@@ -44,6 +44,7 @@ export interface UiLayoutPageLayoutType {
   noPadding?: boolean;
   tentacleNames?: "RunAnalysisModePlugin";
   minHeights?: string;
+  autoSave?: boolean;
 }
 
 export interface UiLayoutPageType {

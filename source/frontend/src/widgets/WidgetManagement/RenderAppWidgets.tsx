@@ -89,14 +89,14 @@ export class ErrorBoundary extends Component {
   override render() {
     if (this.state.errorInfo) {
       createNotification({
-        title: t('oh-no-this-componentname-crashed', { componentName: this.props.componentName }),
+        title: t('componentError.oh-no-this-componentname-crashed-notification', { componentName: this.props.componentName }),
         type: "danger",
         duration: 999999,
         message: `Error: ${JSON.stringify(this.state.error?.message)}`,
       });
       return (
         <div>
-          <h2><Trans i18nKey="something-went-wrong"></Trans></h2>
+          <h2><Trans i18nKey="componentError.something-went-wrong"></Trans></h2>
           <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state.error?.toString()}
             <br /> {this.state.errorInfo.componentStack}

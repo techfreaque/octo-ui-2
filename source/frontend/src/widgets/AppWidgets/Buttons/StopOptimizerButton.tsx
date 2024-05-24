@@ -14,7 +14,7 @@ export default function StopOptimizerButton() {
   return useMemo(() => {
     return isOptimizer === "isStopping" ? (
       <AntButton buttonType={buttonTypes.warning} faIconComponent={faStop}>
-        <Trans i18nKey="optimizer-is-pausing"></Trans>
+        <Trans i18nKey="optimizer.optimizer-is-pausing"></Trans>
       </AntButton>
     ) : (
       isOptimizer && (
@@ -23,7 +23,7 @@ export default function StopOptimizerButton() {
           buttonType={buttonTypes.warning}
           faIconComponent={faStop}
         >
-          <Trans i18nKey="pause-optimizer"></Trans>
+          <Trans i18nKey="optimizer.pause-optimizer"></Trans>
         </AntButton>
       )
     );

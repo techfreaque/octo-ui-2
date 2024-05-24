@@ -1,12 +1,14 @@
 {
   "buttons": {
+    "closePairSelectorTooltip": "Haga clic para cerrar la configuración de intercambio",
+  },
+  "powerMenu": {
+    "powerMenuTooltip": "Menú de energía",
     "backToOctoBot": "Volver a OctoBot",
     "restartBot": "Reiniciar robot",
-    "softRefresh": "Actualización suave",
     "stopBot": "Detener robot",
     "updateBot": "Actualizar robot",
     "logout": "Cerrar sesión de Bot",
-    "closePairSelectorTooltip": "Haga clic para cerrar la configuración de intercambio",
     "colorModeSwitch": "Modo de color",
     "login": "Inicie sesión en el bot"
   },
@@ -31,17 +33,11 @@
   "pairExchangeSettings": {
     "currentPairTooltip": "Seleccionar y configurar monedas y símbolos"
   },
-  "title": {
-    "warning": "Advertencia"
-  },
-  "description": {
-    "warning": "Está a punto de restablecer todas las configuraciones seleccionadas. \n¿Quieres continuar?"
-  },
-  "Reset": {
-    "Selected": "Restablecer seleccionado"
-  },
-  "select": {
-    "all": "Seleccionar todo"
+  "resetConfigs": {
+    "warning_title": "Advertencia",
+    "warning": "Está a punto de restablecer todas las configuraciones seleccionadas. \n¿Quieres continuar?",
+    "Selected": "Restablecer seleccionado",
+    "select_all": "Seleccionar todo"
   },
   "pairSelector": {
     "SaveAndRestart": "Guardar y reiniciar"
@@ -61,21 +57,7 @@
   "apps": {
     "cantSelectStrategyModeTooltip": "No puede cambiar el modo en una estrategia de solo lectura. \nClona una estrategia para personalizar todos los ajustes."
   },
-  "modal": {
-    "powerMenuTooltip": "Menú de energía"
-  },
-  "failed-to-activate-real-time-strategy": "No se pudo activar la estrategia en tiempo real",
-  "optimizer-is-pausing": "El optimizador está en pausa",
-  "pause-optimizer": "Optimizador de pausa",
-  "save-strategy-mode-settings": "Guardar configuración del modo de estrategia",
-  "save-strategy-mode-settings-tooltip": "Guardar configuración del modo de estrategia",
-  "start-backtest": "Iniciar prueba retrospectiva",
-  "start-optimizer": "Iniciar optimizador",
-  "start-real-time-strategy": "Iniciar estrategia en tiempo real",
-  "stop-backtest": "Detener la prueba retrospectiva",
-  "stop-real-time-strategy": "Detener la estrategia en tiempo real",
-  "stop-training": "Dejar de entrenar",
-  "successfully-activated-real-time-strategy": "Estrategia en tiempo real activada con éxito",
-  "switch-to-language-name": "Cambiar a {lang}",
-  "training-is-about-to-stop": "El entrenamiento está a punto de terminar"
+  "footer": {
+    "softRefresh": "Actualización suave"
+  }
 }

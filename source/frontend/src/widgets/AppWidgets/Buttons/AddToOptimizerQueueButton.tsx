@@ -34,7 +34,7 @@ export default function AddToOptimizerQueueButton() {
           marginRight="5px"
           disabled={canNotAdd}
         >
-          <Trans i18nKey="add-to-queue"></Trans>
+          <Trans i18nKey="optimizer.add-to-queue"></Trans>
         </AntButton>
       )
     );
