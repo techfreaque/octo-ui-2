@@ -1,7 +1,9 @@
 import { DownloadOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Grid } from "@mui/material";
 import { Alert, Card, Tooltip, Typography } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton from "../../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
@@ -135,26 +137,26 @@ const versionTypes: {
   key: AppStoreVersionTagType;
 }[] = [
   {
-    label: "Alpha Versions",
-    icon: "α",
+    label: t("appStore.appCard.downloadApp.alpha-versions"),
+    icon: t("appStore.appCard.downloadApp.alpha-veriosn-icon"),
 
-    toolTipText: "Switch to the alpha version",
+    toolTipText: t("appStore.appCard.downloadApp.switch-to-the-alpha-version"),
     key: "alpha_version",
     // disabled: true
   },
   {
-    label: "Beta Versions",
-    icon: "β",
+    label: t("appStore.appCard.downloadApp.beta-versions"),
+    icon: t("appStore.appCard.downloadApp.beta-version-icon"),
 
-    toolTipText: "Switch to the beta version",
+    toolTipText: t("appStore.appCard.downloadApp.switch-to-the-beta-version"),
     key: "beta_version",
     // disabled: true
   },
   {
-    label: "Stable Versions",
-    icon: "S",
+    label: t("appStore.appCard.downloadApp.stable-versions"),
+    icon: t("appStore.appCard.downloadApp.stable-version-icon"),
 
-    toolTipText: "Switch to the stable version",
+    toolTipText: t("appStore.appCard.downloadApp.switch-to-the-stable-version"),
     key: "stable_version",
     // disabled: true
   },
@@ -283,16 +285,24 @@ function AppVersions({
         {selectedVersion && downloadInfo.versionDetailsOpen && (
           <>
             <Typography.Title level={3}>
-              {`v${selectedVersion.major_version}.${
-                selectedVersion.minor_version
-              }.${selectedVersion.bug_fix_version} ${
-                versionTagKeyToTitle[selectedVersion.version_tag]
-              } Details:`}
+              {t(
+                "appStore.appCard.downloadApp.v-major_version-minor_version-bug_fix_version-version_tag-details",
+
+                {
+                  majorVersion: selectedVersion.major_version,
+                  minorVersion: selectedVersion.minor_version,
+                  bugFixVersion: selectedVersion.bug_fix_version,
+                  versionTag: versionTagKeyToTitle[selectedVersion.version_tag],
+                }
+              )}
             </Typography.Title>
             <Alert
               type="info"
               showIcon={true}
-              message={`${app.title} is part of these Packages:`}
+              message={t(
+                "appStore.appCard.downloadApp.appTitle-is-part-of-these-packages",
+                { appTitle: app.title }
+              )}
               style={{ marginBottom: "5px" }}
             />
 
@@ -305,11 +315,17 @@ function AppVersions({
             />
 
             <Typography.Title level={5}>
-              {`Release Notes of ${app.title} v${
-                selectedVersion.major_version
-              }.${selectedVersion.minor_version}.${
-                selectedVersion.bug_fix_version
-              } ${versionTagKeyToTitle[selectedVersion.version_tag]}:`}
+              {t(
+                "appStore.appCard.downloadApp.release-notes-of-appTitle-v-major_version-minor_version-bug_fix_version-version_tag",
+
+                {
+                  appTitle: app.title,
+                  majorVersion: selectedVersion.major_version,
+                  minorVersion: selectedVersion.minor_version,
+                  bugFixVersion: selectedVersion.bug_fix_version,
+                  versionTag: versionTagKeyToTitle[selectedVersion.version_tag],
+                }
+              )}
             </Typography.Title>
             <Typography.Text> {selectedVersion.release_notes} </Typography.Text>
           </>
@@ -434,8 +450,12 @@ function RequiredPackage({
         <Tooltip
           title={
             packageInstalled
-              ? "The App package is already installed"
-              : "The App Package isn't installed yet"
+              ? t(
+                  "appStore.appCard.downloadApp.the-app-package-is-already-installed"
+                )
+              : t(
+                  "appStore.appCard.downloadApp.the-app-package-isnt-installed-yet"
+                )
           }
         >
           <div>
@@ -456,34 +476,21 @@ function RequiredPackage({
         <Typography.Paragraph style={{ marginBottom: "5px" }}>
           {!packageInstalled &&
             (mainPackageApp.price
-              ? `${mainPackageApp.price}$ / month`
-              : "free")}
+              ? t("appStore.appCard.downloadApp.appPrice-month", {
+                  appPrice: mainPackageApp.price,
+                })
+              : t("appStore.appCard.downloadApp.appPrice-free"))}
         </Typography.Paragraph>
-        {/* <Alert type="info"
-                    showIcon={true}
-                    message={
-                        `${
-                            app.title
-                        } uses:`
-                    }
-                    style={
-                        {marginBottom: "5px"}
-                    }
-                    // description={
-                    //     (
- 
-                    //     )
-                    // }
-                    
-                    /> */}
-        Required Apps:
+        <Trans i18nKey="appStore.appCard.downloadApp.required-apps"></Trans>
         <ul>
           {requiredAppsInPackage.map((requiredApp, index) => (
             <Tooltip
               title={
                 requiredApp?.is_installed
-                  ? "The App is already installed"
-                  : "The App isn't installed yet"
+                  ? t(
+                      "appStore.appCard.downloadApp.the-app-is-already-installed"
+                    )
+                  : t("appStore.appCard.downloadApp.the-app-isnt-installed-yet")
               }
               key={`${requiredApp?.package_id}${index}`}
             >
@@ -507,7 +514,7 @@ function RequiredPackage({
             ...(showAllAppsInpackage ? {} : { color: botColors?.fontActive }),
           }}
         >
-          All included apps in package:
+          <Trans i18nKey="appStore.appCard.downloadApp.all-included-apps-in-package"></Trans>
         </div>
         {showAllAppsInpackage && (
           <AllAppsInPackage requiredAppPackage={requiredAppPackageName} />
@@ -603,9 +610,9 @@ function DownloadPackageButton({
   if (isMainPackage && !requirementsSatisfied) {
     return (
       <Tooltip
-        title={
-          "All requirements must be satisfied before you can download this app"
-        }
+        title={t(
+          "appStore.appCard.downloadApp.all-requirements-must-be-satisfied-before-you-can-download-this-app"
+        )}
       >
         <div>
           <AntButton
@@ -614,7 +621,7 @@ function DownloadPackageButton({
             disabled={true}
             antIconComponent={DownloadOutlined}
           >
-            Download Now
+            <Trans i18nKey="appStore.appCard.downloadApp.download-now"></Trans>
           </AntButton>
         </div>
       </Tooltip>
@@ -633,7 +640,7 @@ function DownloadPackageButton({
         onClick={thisHandleDownload}
         antIconComponent={DownloadOutlined}
       >
-        Update Now
+        <Trans i18nKey="appStore.appCard.downloadApp.update-now"></Trans>
       </AntButton>
     );
   } else if (mainPackageApp.price) {
@@ -645,7 +652,7 @@ function DownloadPackageButton({
           onClick={thisHandleDownload}
           antIconComponent={DownloadOutlined}
         >
-          Download Now
+          <Trans i18nKey="appStore.appCard.downloadApp.download-now"></Trans>
         </AntButton>
       );
     } else if (mainPackageInCart) {
@@ -656,7 +663,7 @@ function DownloadPackageButton({
           onClick={() => setOpenBasket(true)}
           antIconComponent={ShoppingCartOutlined}
         >
-          Go to Shopping Basket
+          <Trans i18nKey="appStore.appCard.downloadApp.go-to-shopping-basket"></Trans>
         </AntButton>
       );
     } else {
@@ -667,7 +674,7 @@ function DownloadPackageButton({
           onClick={() => addAppStoreCart(mainPackageApp)}
           antIconComponent={ShoppingCartOutlined}
         >
-          Add To Shopping Basket
+          <Trans i18nKey="appStore.appCard.downloadApp.add-to-shopping-basket"></Trans>
         </AntButton>
       );
     }
@@ -680,7 +687,7 @@ function DownloadPackageButton({
         onClick={thisHandleDownload}
         antIconComponent={DownloadOutlined}
       >
-        Download for free
+        <Trans i18nKey="appStore.appCard.downloadApp.download-for-free"></Trans>
       </AntButton>
     );
   }
@@ -703,8 +710,12 @@ function VersionSelector({
     <div style={{ marginTop: "20px" }}>
       <Typography.Title level={3} onClick={() => handleAccordionChange(false)}>
         {downloadInfo.versionDetailsOpen
-          ? `See all versions of ${app.title}`
-          : `Versions of ${app.title}`}
+          ? t("appStore.appCard.downloadApp.see-all-versions-of-app-title", {
+              appTitle: app.title,
+            })
+          : t("appStore.appCard.downloadApp.versions-of-app-title", {
+              appTitle: app.title,
+            })}
       </Typography.Title>
       <div
         style={
@@ -755,9 +766,9 @@ function VersionSelector({
 }
 
 const versionTagKeyToTitle = {
-  alpha_version: "Alpha Version",
-  beta_version: "Beta Version",
-  stable_version: "Stable Version",
+  alpha_version: t('appStore.appCard.downloadApp.alpha-version'),
+  beta_version: t('appStore.appCard.downloadApp.beta-version'),
+  stable_version: t('appStore.appCard.downloadApp.stable-version'),
 };
 
 // const defaultTentaclePackages = {
@@ -768,7 +779,7 @@ const versionTagKeyToTitle = {
 
 const versionColumns = [
   {
-    title: "Select a version",
+    title: t("appStore.appCard.downloadApp.select-a-version"),
     dataIndex: "title",
     key: "title",
   },

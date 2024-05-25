@@ -2,9 +2,12 @@
     "files.exclude": {
         "**/build": true
     },
-    "i18n-ally.localesPaths": ["public/locales"],
+    "i18n-ally.localesPaths": [
+        "public/locales"
+    ],
     "i18n-ally.keystyle": "nested",
     "cSpell.words": [
         "Popconfirm"
-    ]
+    ],
+    "i18n-ally.extract.autoDetect": true
 }

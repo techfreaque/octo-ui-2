@@ -2,7 +2,9 @@ import "./AppCards/appRatingStyle.css";
 
 import { BranchesOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import AntSidebar, {
   AntSideBarMenutItemType,
@@ -145,7 +147,7 @@ export default function AppStore() {
               marginTop: "20px",
             }}
           >
-            Select a setting category from the sidebar
+            <Trans i18nKey="strategyConfigurator.select-a-setting-category-from-the-sidebar"></Trans>
           </Typography.Title>
         ),
         items: isFlowMode
@@ -159,7 +161,7 @@ export default function AppStore() {
           : [...(tradingConfigTabs || [])],
       },
       {
-        title: "Other Apps",
+        title: t("strategyConfigurator.other-apps"),
         key: "other_apps",
         antIcon: "AppstoreAddOutlined",
         dontScroll: true,
@@ -171,7 +173,7 @@ export default function AppStore() {
               marginTop: "20px",
             }}
           >
-            Select a app category from the sidebar
+            <Trans i18nKey="strategyConfigurator.select-a-app-category-from-the-sidebar"></Trans>
           </Typography.Title>
         ),
         items: availableCategories

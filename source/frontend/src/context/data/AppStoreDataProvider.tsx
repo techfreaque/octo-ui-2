@@ -757,18 +757,20 @@ export const useCancelStorePayment = () => {
       if (appStorePaymentUrl?.cancelUrl) {
         fetch(appStorePaymentUrl?.cancelUrl);
         setAppStorePaymentUrl(undefined);
-        localStorage.setItem("payment", JSON.stringify({}));
+        localStorage.removeItem("payment");
         if (notification) {
           createNotification({ title: "Payment canceled" });
         }
         return;
       }
       setAppStorePaymentUrl(undefined);
-      createNotification({
-        title: "Failed to cancel payment",
-        type: "danger",
-        message: "No cancel url found",
-      });
+      if (notification) {
+        createNotification({
+          title: "Failed to cancel payment",
+          type: "danger",
+          message: "No cancel url found",
+        });
+      }
     },
     [appStorePaymentUrl?.cancelUrl, setAppStorePaymentUrl]
   );

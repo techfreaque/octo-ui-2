@@ -109,7 +109,9 @@
       "this-distribution-isnt-officially-supported": "This distribution isn't officially supported",
       "get-octane-today": "Get Octane today!",
       "octobotproject-is-not-officially-supported-yet-by-projectname": "{{octobotProject}} is not officially supported yet by {{projectName}}",
-      "switch-to-projectname-for-free": "Switch To {{projectName}} For Free"
+      "switch-to-projectname-for-free": "Switch To {{projectName}} For Free",
+      "warningMessage": "For some features to work properly, {{projectName}} requires modifications to the core of OctoBot which are not ported back yet. It is recommended to use {{projectName}}, which is a distribution of OctoBot.",
+      "warning-title": "{{projectName}} wont work as intended!"
     }
   },
   "start-real-time-strategy": "Start Real Time Strategy",
@@ -129,15 +131,139 @@
       "plot-unrealized-portfolio-value": "Plot unrealized portfolio value",
       "chart-location-unrealized-portfolio-value": "Chart location unrealized portfolio value",
       "plot-unrealized-portfolio-value-for-each-asset": "Plot unrealized portfolio value for each asset",
-      "plot-unrealized-portfolio-value-in-btc": "Plot unrealized portfolio value in BTC",
+      "plot-unrealized-portfolio-value-in-btc": "Plot unrealized portfolio value in BTC"
     }
   },
   "componentError": {
     "something-went-wrong": "Something went wrong. :(",
-    "oh-no-this-componentname-crashed": "Oh no! {{componentName}} crashed!"
+    "oh-no-this-componentname-crashed-notification": "Oh no! {{componentName}} crashed!"
   },
   "timeFrameSelector": {
     "pending-restart": "Pending restart",
     "the-newly-selected-time-frames-will-be-available-after-a-restart": "The newly selected time frames will be available after a restart"
+  },
+  "dataTable": {
+    "there-are-no-historical-trading-data-tables-to-display": "There are no historical trading data tables to display :(",
+    "to-display-tables-for-trades-orders-etc-you-can": "To display tables for trades, orders, etc you can:",
+    "noDataYetText": {
+      "select-a-backtesting-run": "Select a backtesting run",
+      "enter-valid-exchange-api-keys-and-activate-real-trading": "Enter valid exchange api keys and activate real trading",
+      "in-simulation-mode-wait-until-your-strategy-takes-the-first-trade": "In simulation mode wait until your strategy takes the first trade"
+    },
+    "select-a-table-from-the-sidebar": "Select a table from the sidebar",
+    "live-trading": "Live trading",
+    "backtesting-trading": "Backtesting trading",
+    "cancel-selected-orders": "Cancel selected orders",
+    "orders": "Orders"
+  },
+  "strategyConfigurator": {
+    "select-a-setting-category-from-the-sidebar": "Select a setting category from the sidebar",
+    "select-a-app-category-from-the-sidebar": "Select a app category from the sidebar",
+    "other-apps": "Other Apps"
+  },
+  "manageAccount": {
+    "manage-your-octane-account": "Manage your Octane account",
+    "logout": "Logout",
+    "sign-up": "Sign Up",
+    "log-in": "Log In",
+    "create-an-octane-account-now": "Create an Octane account now",
+    "log-into-octane-now": "Log into Octane now",
+    "enter-your-email": "Enter your email",
+    "enter-your-password": "Enter your password",
+    "enter-a-referral-code-if-you-have-one": "Enter a referral code if you have one",
+    "create-account-now": "Create Account Now",
+    "login-now": "Login Now"
+  },
+  "appStore": {
+    "appCard": {
+      "installed": "Installed",
+      "current-categoryName": "Current {{categoryName}}",
+      "uploadApp": {
+        "upload-new-package-version": "Upload new package version",
+        "select-the-type-of-your-update": "Select the type of your update",
+        "how-stable-is-your-app-category": "How stable is your {{category}}",
+        "share-release-notes": "Share release notes",
+        "let-your-users-know-what-youve-changed": "Let your users know what you've changed.",
+        "add-at-least-missingCharacters-more-characters": "Add at least {{missingCharacters}} more characters",
+        "define-a-monthly-price-for-your-appCategory": "Define a monthly price for your {{appCategory}}",
+        "define-a-price-for-your-app": "Define a price for your app",
+        "publish-update": "Publish Update",
+        "sell-strat-mode": "Sell Strat Mode",
+        "sell-strategy": "Sell Strategy",
+        "sell-app": "Sell App",
+        "you-need-to-be-signed-in-to-publish-an-update": "You need to be signed in to publish an update.",
+        "publish-strat-mode-now": "Publish Strat Mode Now",
+        "publish-strategy-now": "Publish Strategy Now",
+        "publish-app-now": "Publish App Now",
+        "you-need-to-be-signed-in-to-sell-an-app": "You need to be signed in to sell an app."
+      },
+      "downloadApp": {
+        "alpha-versions": "Alpha Versions",
+        "alpha-veriosn-icon": "α",
+        "switch-to-the-alpha-version": "Switch to the alpha version",
+        "beta-versions": "Beta Versions",
+        "beta-version-icon": "β",
+        "switch-to-the-beta-version": "Switch to the beta version",
+        "stable-versions": "Stable Versions",
+        "switch-to-the-stable-version": "Switch to the stable version",
+        "stable-version-icon": "S",
+        "appTitle-is-part-of-these-packages": "{{appTitle}} is part of these Packages:",
+        "v-major_version-minor_version-bug_fix_version-version_tag-details": "v{{majorVersion}}.{{minorVersion}}.{{bugFixVersion}} {{versionTag}} Details:",
+        "release-notes-of-appTitle-v-major_version-minor_version-bug_fix_version-version_tag": "Release Notes of {{appTitle}} v{{majorVersion}}.{{minorVersion}}.{{bugFixVersion}} {{versionTag}}:",
+        "the-app-package-is-already-installed": "The App package is already installed",
+        "the-app-package-isnt-installed-yet": "The App Package isn't installed yet",
+        "appPrice-month": "{{appPrice}}$ / month",
+        "appPrice-free": "free",
+        "required-apps": "Required Apps:",
+        "the-app-is-already-installed": "The App is already installed",
+        "the-app-isnt-installed-yet": "The App isn't installed yet",
+        "all-included-apps-in-package": "All included apps in package:",
+        "all-requirements-must-be-satisfied-before-you-can-download-this-app": "All requirements must be satisfied before you can download this app",
+        "download-now": "Download Now",
+        "update-now": "Update Now",
+        "go-to-shopping-basket": "Go to Shopping Basket",
+        "add-to-shopping-basket": "Add To Shopping Basket",
+        "download-for-free": "Download For Free",
+        "see-all-versions-of-app-title": "See all versions of {{appTitle}}",
+        "versions-of-app-title": "Versions of {{appTitle}}",
+        "select-a-version": "Select a version",
+        "alpha-version": "Alpha Version",
+        "beta-version": "Beta Version",
+        "stable-version": "Stable Version",
+        "this-app-gets-updated-with-your-octobot-distribution": "This app gets updated with your OctoBot distribution",
+        "you-need-to-be-signed-in-to-download-updates": "You need to be signed in to download updates.",
+        "update-appCategory": "Update {{appCategory}}",
+        "download": "Download",
+        "you-need-to-be-signed-in-to-download-apps": "You need to be signed in to download apps.",
+        "you-need-to-be-signed-in-to-download-free-apps": "You need to be signed in to download free apps.",
+        "free-download": "Free download",
+        "go-back": "Go Back",
+        "buy-app-title-today": "Buy {{appTitle}} today",
+        "download-appCategory": "Download {{appCategory}}"
+      }
+    },
+    "cart": {
+      "shopping-cart": "Shopping Cart",
+      "no-app-in-package-originpackagename": "No app in package {{originPackageName}}",
+      "no-price-for-firstappinpackage-package_id": "No price for {{packageId}}",
+      "remove-from-basket": "Remove from Basket",
+      "title": {
+        "complete-your-purchase": "Complete your purchase",
+        "shopping-basket": "Shopping Basket"
+      },
+      "firstappinpackage-price-month": "{{price}}$ / month",
+      "total-totalprice-incl-tax": "Total: {{totalPrice}}$ (incl. Tax)",
+      "no-payment-detected-check-payment-status": "No Payment Detected - Check Payment Status",
+      "cancel-purchase": "Cancel Purchase",
+      "finalize-payment": "Finalize Payment",
+      "complete-purchase-and-pay-now": "Complete Purchase & Pay Now",
+      "cart-table": {
+        "package-name": "Package Name",
+        "price": "Price",
+        "months": "Months",
+        "total": "Total",
+        "action": "Action"
+      }
+    }
   }
 }

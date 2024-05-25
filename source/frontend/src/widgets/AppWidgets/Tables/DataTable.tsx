@@ -1,8 +1,10 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
 import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import { Tooltip, Typography } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useMemo } from "react";
 import { useState } from "react";
+import { Trans } from "react-i18next";
 
 import { cancelOrders } from "../../../api/actions";
 import AntButton, {
@@ -43,16 +45,16 @@ export default function W2uiDataTable() {
         }}
       >
         <Typography.Title>
-          There are no historical trading data tables to display :(
+          <Trans i18nKey="dataTable.there-are-no-historical-trading-data-tables-to-display"></Trans>
         </Typography.Title>
         <Typography.Title level={2}>
-          To display tables for trades, orders, etc you can:
+          <Trans i18nKey="dataTable.to-display-tables-for-trades-orders-etc-you-can"></Trans>
         </Typography.Title>
         <ul>
-          <li>Select a backtesting run</li>
-          <li>Enter valid exchange api keys and activate real trading</li>
+          <li><Trans i18nKey="dataTable.noDataYetText.select-a-backtesting-run"></Trans></li>
+          <li><Trans i18nKey="dataTable.noDataYetText.enter-valid-exchange-api-keys-and-activate-real-trading"></Trans></li>
           <li>
-            In simulation mode wait until your strategy takes the first trade
+            <Trans i18nKey="dataTable.noDataYetText.in-simulation-mode-wait-until-your-strategy-takes-the-first-trade"></Trans>
           </li>
         </ul>
       </div>
@@ -150,15 +152,13 @@ export function createTradingOrBacktestingTab(
   liveOrBacktest: PlottedElementNameType
 ): DataTableSideBarMainItemType {
   return {
-    title: `${
-      liveOrBacktest.charAt(0).toUpperCase() + liveOrBacktest.slice(1)
-    } trading`,
+    title: liveOrBacktest === "live" ? t('dataTable.live-trading') : t('dataTable.backtesting-trading'),
     key: liveOrBacktest,
     antIcon: liveOrBacktest === "live" ? "DollarOutlined" : "RobotOutlined",
     dontScroll: true,
     content: (
       <Typography.Title level={2}>
-        Select a table from the sidebar
+        <Trans i18nKey="dataTable.select-a-table-from-the-sidebar"></Trans>
       </Typography.Title>
     ),
     children: [],
@@ -195,10 +195,10 @@ function _generateTablesAndSidebarItems({
     let cancelOrdersDetails: CancelOrderDetailsType | undefined = undefined;
     if (liveOrBacktest === "live") {
       label = `${element.title} ${runId}`;
-      if (element.title.startsWith("Orders")) {
+      if (element.title.startsWith(t('dataTable.orders'))) {
         cancelOrdersDetails = {
-          text: "Cancel selected orders",
-          tooltip: "Cancel selected orders",
+          text: t('dataTable.cancel-selected-orders'),
+          tooltip: t('dataTable.cancel-selected-orders'),
           icon: CloseCircleOutlined,
           cancelCallback: (
             orderIdsToCancel: string[],

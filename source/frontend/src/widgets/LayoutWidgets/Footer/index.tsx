@@ -137,14 +137,17 @@ function UnsupportedWarning({
               </Typography.Title>
               <Alert
                 style={{ marginBottom: "20px" }}
-                message={`${projectName} wont work as intended!`}
+                message={t(
+                  "footer.notSupportedOctoBotDistroWarning.warning-title",
+                  { projectName }
+                )}
                 type="warning"
                 description={
                   <Typography.Paragraph>
-                    For some features to work properly, {projectName} requires
-                    modifications to the core of OctoBot which are not ported
-                    back yet. It is recommended to use {projectName}, which is a
-                    distribution of OctoBot.
+                    {t(
+                      "footer.notSupportedOctoBotDistroWarning.warningMessage",
+                      { projectName }
+                    )}
                   </Typography.Paragraph>
                 }
                 showIcon={true}

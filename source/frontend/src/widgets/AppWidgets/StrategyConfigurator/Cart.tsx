@@ -1,6 +1,12 @@
-import { CloseCircleOutlined, DollarCircleOutlined, ReloadOutlined } from "@ant-design/icons";
+import {
+  CloseCircleOutlined,
+  DollarCircleOutlined,
+  ReloadOutlined,
+} from "@ant-design/icons";
 import { Space, Typography } from "antd";
+import { t } from "i18next";
 import { useEffect } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, {
   buttonSizes,
@@ -14,7 +20,6 @@ import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   AppStoreCartType,
-  AppStorePaymentUrlType,
   useAppStoreCartContext,
   useAppStoreCartIsOpenContext,
   useAppStorePaymentUrlContext,
@@ -43,7 +48,7 @@ export default function AppStoreCartModal({ content }: UiLayoutPageLayoutType) {
     appStoreCart &&
     Object.keys(appStoreCart)?.length > 0 && (
       <ButtonWithModal
-        title={"Shopping Cart"}
+        title={t("appStore.cart.shopping-cart")}
         content={content}
         open={open}
         setOpen={setOpen}
@@ -74,26 +79,39 @@ export function AppStoreCart() {
           ? originPackage[firstAppKeyInPackage]
           : undefined;
         if (!firstAppInPackage) {
-          throw new Error(`No app in package ${originPackageName}`);
+          throw new Error(
+            t("appStore.cart.no-app-in-package-originpackagename", {
+              originPackageName,
+            })
+          );
         }
         if (!firstAppInPackage.price) {
-          throw new Error(`No price for ${firstAppInPackage.package_id}`);
+          throw new Error(
+            t("appStore.cart.no-price-for-firstappinpackage-package_id", {
+              packageId: firstAppInPackage.package_id,
+            })
+          );
         }
         totalPrice += firstAppInPackage.price * 12;
         return {
           ...firstAppInPackage,
           id: originPackageName,
           key: originPackageName,
-          price: `${firstAppInPackage.price}$ / month`,
+          price: t('appStore.cart.firstappinpackage-price-month', { price: firstAppInPackage.price }),
           months: 12,
           total: `${12 * firstAppInPackage.price}$`,
           action: (
             <AntButton
               antIconComponent={CloseCircleOutlined}
               buttonType={buttonTypes.warning}
-              onClick={() => removeFromCart(originPackageName)}
+              onClick={() => {
+                if (appStorePaymentUrl) {
+                  cancelStorePayment();
+                }
+                removeFromCart(originPackageName);
+              }}
             >
-              Remove from Basket
+              <Trans i18nKey="appStore.cart.remove-from-basket"></Trans>
             </AntButton>
           ),
         };
@@ -102,11 +120,13 @@ export function AppStoreCart() {
   return (
     <div>
       <Typography.Title level={2}>
-        {appStorePaymentUrl ? "Complete your purchase" : "Shopping Basket"}
+        {appStorePaymentUrl
+          ? t("appStore.cart.title.complete-your-purchase")
+          : t("appStore.cart.title.shopping-basket")}
       </Typography.Title>
       <AntTable
         maxWidth="100%"
-        columns={getCartItemsColumns(appStorePaymentUrl)}
+        columns={getCartItemsColumns()}
         data={cartList}
       />
       <div
@@ -116,7 +136,7 @@ export function AppStoreCart() {
         }}
       >
         <Typography.Title level={4}>
-          {`Total: ${totalPrice}$ (incl. Tax)`}
+          {t('appStore.cart.total-totalprice-incl-tax', { totalPrice })}
         </Typography.Title>
         {appStorePaymentUrl ? (
           <Space>
@@ -126,7 +146,7 @@ export function AppStoreCart() {
                 onClick={checkStorePayment}
                 antIconComponent={ReloadOutlined}
               >
-                No Payment Detected - Check Payment Status
+                <Trans i18nKey="appStore.cart.no-payment-detected-check-payment-status"></Trans>
               </AntButton>
             </Space>
             <Space>
@@ -136,7 +156,7 @@ export function AppStoreCart() {
                 onClick={() => cancelStorePayment()}
                 antIconComponent={CloseCircleOutlined}
               >
-                Cancel Purchase
+                <Trans i18nKey="appStore.cart.cancel-purchase"></Trans>
               </AntButton>
               <AntButton
                 href={appStorePaymentUrl.paymentUrl}
@@ -144,7 +164,7 @@ export function AppStoreCart() {
                 antIconComponent={DollarCircleOutlined}
                 target="blank"
               >
-                Finalize Payment
+                <Trans i18nKey="appStore.cart.finalize-payment"></Trans>
               </AntButton>
             </Space>
           </Space>
@@ -161,7 +181,7 @@ export function AppStoreCart() {
                 )
               }
             >
-              Complete Purchase & Pay Now
+              <Trans i18nKey="appStore.cart.complete-purchase-and-pay-now"></Trans>
             </AntButton>
           </Space>
         )}
@@ -170,37 +190,33 @@ export function AppStoreCart() {
   );
 }
 
-function getCartItemsColumns(
-  appStorePaymentUrl: AppStorePaymentUrlType | undefined
-): AntTableColumnType<AntTableDataType>[] {
+function getCartItemsColumns(): AntTableColumnType<AntTableDataType>[] {
   const items = [
     {
-      title: "Package Name",
+      title: t('appStore.cart.cart-table.package-name'),
       dataIndex: "origin_package",
       key: "origin_package",
     },
     {
-      title: "Price",
+      title: t('appStore.cart.cart-table.price'),
       dataIndex: "price",
       key: "price",
     },
     {
-      title: "Months",
+      title: t('appStore.cart.cart-table.months'),
       dataIndex: "months",
       key: "months",
     },
     {
-      title: "Total",
+      title: t('appStore.cart.cart-table.total'),
       dataIndex: "total",
       key: "total",
     },
-  ];
-  if (appStorePaymentUrl) {
-    items.push({
-      title: "Action",
+    {
+      title: t('appStore.cart.cart-table.action'),
       dataIndex: "action",
       key: "action",
-    });
-  }
+    },
+  ];
   return items;
 }

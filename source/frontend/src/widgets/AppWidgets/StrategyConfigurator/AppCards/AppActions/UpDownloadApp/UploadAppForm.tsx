@@ -1,6 +1,8 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { Alert, Input, Select, Switch, Tooltip } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useEffect } from "react";
+import { Trans } from "react-i18next";
 
 import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
 import {
@@ -77,7 +79,9 @@ export default function UploadAppForm({
   return (
     <div style={{ marginRight: "20px" }}>
       {!isStrategy && (
-        <UserInputLabel title={"Upload new package version"}>
+        <UserInputLabel
+          title={t("appStore.appCard.uploadApp.upload-new-package-version")}
+        >
           <Switch
             checked={uploadInfo?.includePackage || false}
             onChange={(checked) => handleInputChange("includePackage", checked)}
@@ -134,7 +138,9 @@ function UploadPackage({
   return (
     <>
       {app.is_from_store && (
-        <UserInputLabel title={"Select the type of your update"}>
+        <UserInputLabel
+          title={t("appStore.appCard.uploadApp.select-the-type-of-your-update")}
+        >
           <Select
             defaultValue={defaultVersionType.value}
             onChange={(value) => handleInputChange("version_type", value)}
@@ -143,7 +149,11 @@ function UploadPackage({
           />
         </UserInputLabel>
       )}
-      <UserInputLabel title={`How stable is your ${app.categories[0]}`}>
+      <UserInputLabel
+        title={t("appStore.appCard.uploadApp.how-stable-is-your-app-category", {
+          category: app.categories[0],
+        })}
+      >
         <Select
           defaultValue={defaultVersionTag.value}
           onChange={(value) => handleInputChange("version_tag", value)}
@@ -151,18 +161,26 @@ function UploadPackage({
           options={versionTagOptions}
         />
       </UserInputLabel>
-      <UserInputLabel title={"Share release notes"}>
+      <UserInputLabel
+        title={t("appStore.appCard.uploadApp.share-release-notes")}
+      >
         <>
           {(uploadInfo?.release_notes?.length || 0) < minReleaseNotesLength && (
             <Alert
               message={
                 <>
-                  <div>Let your users know what you&apos;ve changed.</div>
                   <div>
-                    {`Add at least ${
-                      minReleaseNotesLength -
-                      (uploadInfo?.release_notes?.length || 0)
-                    } more characters`}
+                    <Trans i18nKey="appStore.appCard.uploadApp.let-your-users-know-what-youve-changed"></Trans>
+                  </div>
+                  <div>
+                    {t(
+                      "appStore.appCard.uploadApp.add-at-least-missingCharacters-more-characters",
+                      {
+                        missingCharacters:
+                          minReleaseNotesLength -
+                          (uploadInfo?.release_notes?.length || 0),
+                      }
+                    )}
                   </div>
                 </>
               }
@@ -183,9 +201,12 @@ function UploadPackage({
         </>
       </UserInputLabel>
       <UserInputLabel
-        title={`Define a monthly price for your ${app.categories[0]}`}
+        title={t(
+          "appStore.appCard.uploadApp.define-a-monthly-price-for-your-appCategory",
+          { appCategory: app.categories[0] }
+        )}
       >
-        <Tooltip title={"Define a price for your app"}>
+        <Tooltip title={t('appStore.appCard.uploadApp.define-a-price-for-your-app')}>
           <div>
             <Input
               onChange={(event) =>

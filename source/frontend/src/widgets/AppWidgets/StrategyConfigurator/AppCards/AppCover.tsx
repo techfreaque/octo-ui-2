@@ -1,5 +1,6 @@
 import { CheckCircleOutlined, CloseCircleOutlined } from "@ant-design/icons";
 import { Avatar, Tooltip, Typography } from "antd";
+import { t } from "i18next";
 
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
 import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
@@ -29,7 +30,7 @@ export function AppCover({
           marginTop: "30px",
         }}
       >
-        Current {app?.categories[0]}
+        {t('appStore.appCard.current-categoryName', {categoryName: app?.categories[0]})}
       </Typography.Title>
       <AppRating
         rating={app.rating}
@@ -88,7 +89,7 @@ export function IsNotInstalledIcon({ topRight }: { topRight: boolean }) {
 export function IsInstalledIndicator({
   app,
   topRight = true,
-  tooltipText = "Installed",
+  tooltipText = t("appStore.appCard.installed"),
 }: {
   app: AppStoreAppType;
   topRight?: boolean;

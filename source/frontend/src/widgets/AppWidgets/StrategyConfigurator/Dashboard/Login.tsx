@@ -1,5 +1,7 @@
 import { Button, Input, Radio, Space, Typography } from "antd";
+import { t } from "i18next";
 import { useState } from "react";
+import { Trans } from "react-i18next";
 
 import {
   useAppStoreUserContext,
@@ -33,8 +35,12 @@ function ManageAccount() {
   }
   return (
     <>
-      <Typography.Title>Manage your Octane account</Typography.Title>
-      <Button onClick={handleLogoutFromppStore}>Logout</Button>
+      <Typography.Title>
+        <Trans i18nKey="manageAccount.manage-your-octane-account"></Trans>
+      </Typography.Title>
+      <Button onClick={handleLogoutFromppStore}>
+        <Trans i18nKey="manageAccount.logout"></Trans>
+      </Button>
       {/* <AffiliateDashboard /> */}
       <BackendDashboard />
     </>
@@ -79,16 +85,20 @@ function LoginSignup() {
     <>
       <Typography.Title>
         {formType === signUptTypes.signUp
-          ? "Create an Octane account now"
-          : " Log into Octane now"}
+          ? t("manageAccount.create-an-octane-account-now")
+          : t("manageAccount.log-into-octane-now")}
       </Typography.Title>
       <div style={{ margin: "10px 0" }}>
         <Radio.Group
           onChange={(event) => setFormType(event.target.value)}
           defaultValue={signUptTypes.signUp}
         >
-          <Radio.Button value={signUptTypes.signUp}>Sign Up</Radio.Button>
-          <Radio.Button value={signUptTypes.login}>Log In</Radio.Button>
+          <Radio.Button value={signUptTypes.signUp}>
+            <Trans i18nKey="manageAccount.sign-up"></Trans>
+          </Radio.Button>
+          <Radio.Button value={signUptTypes.login}>
+            <Trans i18nKey="manageAccount.log-in"></Trans>
+          </Radio.Button>
         </Radio.Group>
       </div>
       <Input
@@ -97,7 +107,7 @@ function LoginSignup() {
         onChange={(event) =>
           handleCredentialInput("email", event?.target?.value)
         }
-        placeholder="Enter your email"
+        placeholder={t("manageAccount.enter-your-email")}
       />
       <div style={{ margin: "10px 0" }}>
         <Input.Password
@@ -105,7 +115,7 @@ function LoginSignup() {
           onChange={(event) =>
             handleCredentialInput("password", event?.target?.value)
           }
-          placeholder="Enter your password"
+          placeholder={t("manageAccount.enter-your-password")}
         />
       </div>
       {formType === signUptTypes.signUp && (
@@ -115,15 +125,21 @@ function LoginSignup() {
             onChange={(event) =>
               handleCredentialInput("referral_user_id", event?.target?.value)
             }
-            placeholder="Enter a referral code if you have one"
+            placeholder={t(
+              "manageAccount.enter-a-referral-code-if-you-have-one"
+            )}
           />
         </div>
       )}
       <Space wrap>
         {formType === signUptTypes.signUp ? (
-          <Button onClick={handleSignupToAppStore}>Create Account Now</Button>
+          <Button onClick={handleSignupToAppStore}>
+            <Trans i18nKey="manageAccount.create-account-now"></Trans>
+          </Button>
         ) : (
-          <Button onClick={handleLoginToAppStore}>Login Now</Button>
+          <Button onClick={handleLoginToAppStore}>
+            <Trans i18nKey="manageAccount.login-now"></Trans>
+          </Button>
         )}
       </Space>
     </>

@@ -261,8 +261,8 @@ export function generateTradingConfigTabs({
   storageName: StorageNameType;
   additionalTabsAfter?: TentacleConfigTabsData[] | undefined;
   displayStyle: DisplayStyleType;
-  autoSave: boolean;
-  handleUserInputSave: () => void;
+  autoSave?: boolean;
+  handleUserInputSave?: () => void;
 }): TentacleConfigTabsData[] {
   const tabsData: TentacleConfigTabsData[] = [];
   // window.trading_mode_objects = {}
@@ -362,8 +362,8 @@ function create_custom_tabs({
   storageName: StorageNameType;
   displayStyle: DisplayStyleType;
   tentaclesInfoStorage: TentacleInfoStorageType;
-  autoSave: boolean;
-  handleUserInputSave: () => void;
+  autoSave?: boolean;
+  handleUserInputSave?: () => void;
 }) {
   const infoStorage: string[] = [];
   // gather custom user inputs
@@ -511,8 +511,8 @@ function _createTentacleConfigTab({
   storageName: StorageNameType;
   displayStyle: DisplayStyleType;
   antIcon: string | undefined;
-  autoSave: boolean;
-  handleUserInputSave: () => void;
+  autoSave?: boolean;
+  handleUserInputSave?: () => void;
 }) {
   if (schema) {
     _addGridDisplayOptions(schema);
@@ -573,8 +573,8 @@ function createSidebarItem({
   editorKey: TentacleType | string;
   storageName: StorageNameType;
   antIcon: string | undefined;
-  autoSave: boolean;
-  handleUserInputSave: () => void;
+  autoSave?: boolean;
+  handleUserInputSave?: () => void;
 }): TentacleConfigTabsData {
   return {
     title: configTitle.replace(/_/g, " "),
@@ -614,8 +614,8 @@ function createTab({
   editorKey: TentacleType | string;
   storageName: StorageNameType;
   antIcon: string | undefined;
-  autoSave: boolean;
-  handleUserInputSave: () => void;
+  autoSave?: boolean;
+  handleUserInputSave?: () => void;
 }): TentacleConfigTabsData {
   return {
     title: (
