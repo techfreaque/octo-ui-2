@@ -56,7 +56,7 @@
     "reset-trading-mode-plotting-cache": "Reset strategy plotting cache",
     "reset-current-trading-mode-settings": "Reset current Strategy settings",
     "resets-the-following-tentacle-settings-to-the-defaults": "Resets the following app settings to the defaults:",
-    "resets-the-plotting-cache-for-all-tentacles-settings": "Resets the plotting cache for all tentacles settings",
+    "resets-the-plotting-cache-for-all-tentacles-settings": "Resets the plotting cache for all app settings",
     "reset-the-portfolio-history": "Reset the Portfolio History",
     "resets-the-portfolio-history": "Resets the portfolio history",
     "reset-the-orders-history": "Reset the Orders History",

@@ -56,6 +56,7 @@
     "reset-trading-mode-plotting-cache": "Plot-Cache der Strategie zurücksetzen",
     "reset-current-trading-mode-settings": "Aktuelle Strategie Einstellungen zurücksetzen",
     "resets-the-following-tentacle-settings-to-the-defaults": "Setzt die folgenden App Einstellungen zurück:",
+    "resets-the-plotting-cache-for-all-tentacles-settings": "Setzt den Plot-Cache für alle App Einstellungen zurück.",
     "reset-the-portfolio-history": "Zurücksetzen des Portfolioverlaufs",
     "resets-the-portfolio-history": "Setzt den Portfolioverlauf zurück",
     "reset-the-orders-history": "Setzen Sie den Order Verlauf zurück",
@@ -209,6 +210,7 @@
     "other-apps": "Andere Apps",
     "strategyFlowMaker": {
       "search-for-ema-rsi-strategy": "Suche nach EMA, RSI, Strategie ...",
+      "you-can-drag-these-building-blocks-to-the-pane": "Sie können diese Bausteine in den Bereich ziehen",
       "successfully-changed-autosave-setting": "Einstellung für automatisches Speichern erfolgreich geändert",
       "failed-to-activate-autosave": "Automatisches Speichern konnte nicht aktiviert werden",
       "auto-save-on": "auto Speichern ein",
@@ -334,7 +336,9 @@
         "you-need-to-be-signed-in-to-download-apps": "Du musst angemeldet sein, um Apps herunterzuladen.",
         "you-need-to-be-signed-in-to-download-free-apps": "Du musst angemeldet sein, um kostenlose Apps herunterzuladen.",
         "free-download": "Gratis Download",
-        "go-back": "Zurück"
+        "go-back": "Zurück",
+        "buy-app-title-today": "Kaufe {{appTitle}} noch heute",
+        "download-appCategory": "{{appCategory}} Herunterladen"
       },
       "appInfo": {
         "appCategory-info": "{{appCategory}} Info",
@@ -375,6 +379,9 @@
     "simulated-trading": "Simulierter Handel",
     "trading-paused": "Handel pausiert",
     "currently-using-tradingType": "Derzeit verwendet: {{tradingType}}",
+    "by-switching-to-simulated-trading-projectName-will-only-use-its-simulation-mode-on-real-market-conditions": "Durch die Umstellung auf simulierten Handel nutzt {{projectName}} seinen Simulationsmodus unter realen Marktbedingungen.",
+    "by-switching-to-real-trading-projectName-will-use-your-real-funds": "Durch die Umstellung auf den realen Handel verwendet {{projectName}} dein reales Kapital",
+    "warning-the-switch-button-will-also-restart-projectName": "Achtung! Der Umschaltknopf startet {{projectName}} neu",
     "cancel": "Abbrechen",
     "switch-to-simulated-trading": "Wechseln Sie zum simulierten Handel",
     "switch-to-real-trading": "Wechseln Sie zum Realhandel"
