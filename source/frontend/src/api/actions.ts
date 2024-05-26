@@ -11,10 +11,10 @@ import type { ProfileInfoUpdateType } from "../widgets/AppWidgets/Modals/Profile
 import type { ResetDataStorageInfoType } from "../widgets/AppWidgets/ResetConfigs/ResetConfigs";
 import type {
   errorResponseCallBackParams,
-  successResponseCallBackParams} from "./fetchAndStoreFromBot";
-import {
-  sendAndInterpretBotUpdate
+  successResponseCallBackParams,
 } from "./fetchAndStoreFromBot";
+import { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
+import { projectName } from "../constants/frontendConstants";
 
 export async function startBacktesting(
   botDomain: string,
@@ -617,7 +617,7 @@ export async function realTradingSwitch(
   function successCallback() {
     createNotification({
       title: `Successfully switched to ${title} trading`,
-      message: "OctoBot will restart now",
+      message: projectName + " will restart now",
     });
   }
   function errorCallback() {
@@ -653,7 +653,7 @@ export async function updateConfig(
     createNotification({
       title: `Successfully updated ${profileName} config`,
       message: newConfig.restart_after_save
-        ? "OctoBot will restart now"
+        ? projectName + " will restart now"
         : undefined,
     });
   }

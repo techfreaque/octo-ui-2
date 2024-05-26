@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from "react";
 
 import createNotification from "../components/Notifications/Notification";
 import type { AnyType } from "../helpers/helpers";
+import { projectName } from "../constants/frontendConstants";
 
 export async function sendAndInterpretBotUpdate({
   updatedData,
@@ -274,7 +275,7 @@ function genericRequestFailureCallback({
     data
   );
   createNotification({
-    title: "Can't connect to OctoBot",
+    title: "Can't connect to " + projectName,
     type: "danger",
     message: `Unknown error: Update url: ${updateUrl}, error: ${JSON.stringify(
       data

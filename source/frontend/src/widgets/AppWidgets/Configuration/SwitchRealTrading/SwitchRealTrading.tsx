@@ -15,7 +15,7 @@ import AntButton, {
   buttonTypes,
 } from "../../../../components/Buttons/AntButton";
 import { AntIconByReactFunc } from "../../../../components/Icons/AntIcon";
-import { sizes } from "../../../../constants/frontendConstants";
+import { projectName, sizes } from "../../../../constants/frontendConstants";
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 
@@ -73,7 +73,10 @@ export default function RealTradingSwitch() {
             {isRealTrading ? (
               <>
                 <Paragraph>
-                  <Trans i18nKey="realTradingSwitch.by-switching-to-simulated-trading-octobot-will-only-use-its-simulation-mode-on-real-market-conditions" />
+                  {t(
+                    "realTradingSwitch.by-switching-to-simulated-trading-projectName-will-only-use-its-simulation-mode-on-real-market-conditions",
+                    { projectName }
+                  )}
                 </Paragraph>
                 <Paragraph>
                   <Trans i18nKey="realTradingSwitch.it-will-no-longer-create-trades-with-your-exchange-account-it-will-use-a-simulated-portfolio-managed-by-octobot" />
@@ -81,14 +84,18 @@ export default function RealTradingSwitch() {
               </>
             ) : (
               <Paragraph>
-                <Trans i18nKey="realTradingSwitch.by-switching-to-real-trading-octobot-will-use-your-real-funds" />
+                {t(
+                  "realTradingSwitch.by-switching-to-real-trading-projectName-will-use-your-real-funds",
+                  { projectName }
+                )}
               </Paragraph>
             )}
             <Alert
               banner
               style={{ margin: "20px 0 30px 0" }}
               message={t(
-                "realTradingSwitch.warning-the-switch-button-will-also-restart-octobot"
+                "realTradingSwitch.warning-the-switch-button-will-also-restart-projectName",
+                { projectName }
               )}
             />
             <div style={{ float: "right" }}>
@@ -106,8 +113,8 @@ export default function RealTradingSwitch() {
                   buttonVariant="primary"
                 >
                   {isRealTrading
-                    ? t('realTradingSwitch.switch-to-simulated-trading')
-                    : t('realTradingSwitch.switch-to-real-trading')}
+                    ? t("realTradingSwitch.switch-to-simulated-trading")
+                    : t("realTradingSwitch.switch-to-real-trading")}
                 </AntButton>
               </Space>
             </div>

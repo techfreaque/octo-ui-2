@@ -311,7 +311,7 @@ function getResetData(tentacles: string[]): ResetDataType {
       key: "resetTradingModePlottingCache",
       title: t("resetConfigs.reset-trading-mode-plotting-cache"),
       description: t(
-        "resetConfigs.resets-the-plotting-cache-for-thiplotting-cacheall-tentacles-settings"
+        "resetConfigs.resets-the-plotting-cache-for-all-tentacles-settings"
       ),
     },
     resetTradingmodeSettings: {

@@ -1,6 +1,6 @@
-export const projectName = "O UI";
+export const projectName = "Octane";
 export const projectProName = "O UI Pro";
-export const projectDescription = "OctoBot trading bot frontend";
+export const projectDescription = `${projectName} trading bot`;
 export const appStoreDomainProduction = "https://apps.a42.ch";
 // export const appStoreDomainProduction = "https://apps-dev.a42.ch"
 export const projectDownloadUrl =
