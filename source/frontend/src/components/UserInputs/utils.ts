@@ -1,4 +1,4 @@
-import type { JsonEditorType } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import type { JsonEditorType } from "@techfreaque/json-editor-react";
 
 import { TENTACLE_SEPARATOR } from "../../constants/backendConstants";
 import type { TentaclesConfigsRootType } from "../../context/config/TentaclesConfigProvider";

@@ -6,10 +6,9 @@ import type { OptimizerEditorType } from "../context/config/OptimizerEditorProvi
 import type { UiConfigType } from "../context/config/UiConfigProvider";
 import type {
   errorResponseCallBackParams,
-  successResponseCallBackParams} from "./fetchAndStoreFromBot";
-import {
-  sendAndInterpretBotUpdate
+  successResponseCallBackParams,
 } from "./fetchAndStoreFromBot";
+import { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
 
 export async function fetchUIConfig(
   botDomain: string,
@@ -85,7 +84,8 @@ export async function saveProConfig(
   sendAndInterpretBotUpdate({
     updatedData: newConfig,
     updateUrl: botDomain + backendRoutes.proConfig,
-    successCallback,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    successCallback: successCallback ? successCallback : () => {},
     errorCallback,
   });
 }

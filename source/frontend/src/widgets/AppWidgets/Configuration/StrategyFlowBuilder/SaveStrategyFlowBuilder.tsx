@@ -1,5 +1,5 @@
 import { ReloadOutlined } from "@ant-design/icons";
-import type { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import type { JsonEditorWindow } from "@techfreaque/json-editor-react";
 import { Space, Switch } from "antd";
 import { t } from "i18next";
 import type { Dispatch, SetStateAction} from "react";

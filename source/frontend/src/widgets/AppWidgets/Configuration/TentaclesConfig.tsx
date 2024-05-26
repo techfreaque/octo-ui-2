@@ -1,7 +1,7 @@
 import { SaveOutlined } from "@ant-design/icons";
 import { Tab } from "@mui/material";
+import type { JsonEditorWindow } from "@techfreaque/json-editor-react";
 import JsonEditor from "@techfreaque/json-editor-react";
-import type { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useMemo, useState } from "react";
 
@@ -63,7 +63,9 @@ export default function TentaclesConfig({
   const currentTentaclesConfig = useTentaclesConfigContext();
   const currentTentaclesNonTradingConfig =
     currentTentaclesConfig?.[tentacleConfigTypes.tentacles];
-  const tentacles = tentacleNames.split(",");
+  const currentTentaclesNonTradingConfigJson = JSON.stringify(
+    currentTentaclesNonTradingConfig
+  );
   const saveTentaclesConfig = useSaveTentaclesConfig();
   useEffect(() => {
     fetchTentaclesConfig(tentacleNames.split(","));
@@ -71,15 +73,18 @@ export default function TentaclesConfig({
   }, [botInfo]);
   const _additionalTabs = useGetAdditionalTabs(additionalTabs);
   return useMemo(() => {
-    if (!currentTentaclesNonTradingConfig) {
+    if (!currentTentaclesNonTradingConfigJson) {
       return <></>;
     }
     function handleTentaclesUpdate() {
       fetchTentaclesConfig(tentacleNames.split(","));
     }
     const configs: TentaclesConfigsRootType = {};
+    const tentacles = tentacleNames.split(",");
     tentacles?.forEach((tentacle) => {
-      const _config = currentTentaclesNonTradingConfig?.[tentacle];
+      const _config = (JSON.parse(
+        currentTentaclesNonTradingConfigJson
+      ) as TentaclesConfigsRootType)?.[tentacle];
       if (_config) {
         configs[tentacle] = _config;
       }
@@ -99,11 +104,10 @@ export default function TentaclesConfig({
     _additionalTabs,
     autoSave,
     content,
-    currentTentaclesNonTradingConfig,
+    currentTentaclesNonTradingConfigJson,
     fetchTentaclesConfig,
     saveTentaclesConfig,
     tentacleNames,
-    tentacles,
   ]);
 }
 
@@ -172,7 +176,9 @@ export function AbstractTentaclesConfig({
           newConfigs,
           setIsSaving,
           true,
-          storageName === "tradingConfig"
+          storageName === "tradingConfig",
+          true,
+          autoSave ? false : true
         ),
       setIsSaving,
       storageName

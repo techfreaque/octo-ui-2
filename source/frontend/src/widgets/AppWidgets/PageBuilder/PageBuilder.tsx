@@ -1,6 +1,6 @@
 import { Alert } from "@mui/material";
+import type { JsonEditorWindow } from "@techfreaque/json-editor-react";
 import JsonEditor from "@techfreaque/json-editor-react";
-import type { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import { Button, Space } from "antd";
 import { t } from "i18next";
 import { Trans } from "react-i18next";
@@ -11,19 +11,16 @@ import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/Json
 import createNotification from "../../../components/Notifications/Notification";
 import { botLayoutKey } from "../../../constants/backendConstants";
 import { defaultBotTemplate } from "../../../constants/uiTemplate/defaultPages/allPages";
+import type { UiLayoutPageType } from "../../../context/config/BotLayoutProvider";
 import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider";
-import type {
-  UiConfigType} from "../../../context/config/UiConfigProvider";
-import {
-  useSaveUiConfig,
-} from "../../../context/config/UiConfigProvider";
+import type { UiConfigType } from "../../../context/config/UiConfigProvider";
+import { useSaveUiConfig } from "../../../context/config/UiConfigProvider";
 import appWidgetsProps from "../../WidgetManagement/AppWidgetProps";
 import type {
   AppWidgetNameType,
-  NonAppWidgetNameType} from "../../WidgetManagement/RegisteredAppWidgets";
-import {
-  registeredComponents,
+  NonAppWidgetNameType,
 } from "../../WidgetManagement/RegisteredAppWidgets";
+import { registeredComponents } from "../../WidgetManagement/RegisteredAppWidgets";
 
 declare const window: JsonEditorWindow;
 
@@ -97,7 +94,7 @@ export default function PageBuilder() {
           <Trans i18nKey="uiEditor.reset-to-default-layout" />
         </Button>
       </Space>
-      <JsonEditor
+      <JsonEditor<UiLayoutPageType[], PageBuilderSchema>
         {...defaultJsonEditorSettings()}
         schema={pageBuilderSchema()}
         startval={botLayout}
@@ -112,14 +109,71 @@ export default function PageBuilder() {
   );
 }
 
-function pageBuilderSchema() {
+type PageBuilderSchema = {
+  type: string;
+  title: string;
+  items: {
+    type: string;
+    headerTemplate: string;
+    properties: {
+      path: {
+        type: string;
+      };
+      title: {
+        type: string;
+      };
+      layout: {
+        type: string;
+        title: string;
+        items: {
+          $ref: string;
+        };
+        options: {
+          collapsed: boolean;
+        };
+      };
+    };
+    options: {
+      collapsed: boolean;
+    };
+  };
+  definitions: { appWidget: AppWidgetDefinitionType };
+};
+
+type AppWidgetDefinitionType = {
+  headerTemplate: string;
+  type: "object";
+  properties: {
+    component: {
+      type: "string";
+      enum: string[];
+      default: "Configuration";
+    };
+  };
+  options: {
+    collapsed: true;
+  };
+} & {
+  properties: {
+    [propName: string]:
+      | SimpleAppWidgetPropType
+      | AppWidgetPropType
+      | {
+          type: "string";
+          enum: string[];
+          default: "Configuration";
+        };
+  };
+};
+
+function pageBuilderSchema(): PageBuilderSchema {
   const availableComponentsList = [
     "Tab",
     ...Object.keys(registeredComponents)
       .map((componentName) => componentName)
       .sort(),
   ];
-  const appWidget = () => {
+  function appWidget(): AppWidgetDefinitionType {
     return {
       headerTemplate: "{{self.component}}- Component     {{i}}",
       type: "object",
@@ -135,7 +189,7 @@ function pageBuilderSchema() {
         collapsed: true,
       },
     };
-  };
+  }
 
   return {
     type: "array",
@@ -173,10 +227,27 @@ function pageBuilderSchema() {
 
 export type PagebuilderComponents = AppWidgetNameType | NonAppWidgetNameType;
 
+type AppWidgetPropType = {
+  type: string;
+  items: {
+    $ref: string;
+  };
+  options: {
+    dependencies: {
+      component: PagebuilderComponents | PagebuilderComponents[];
+    };
+    collapsed: boolean;
+  };
+};
+
+type AppWidgetsPropType = {
+  [propName: string]: AppWidgetPropType;
+};
+
 export function generateAppWidgetProp(
   propName: string,
   dependentComponents: PagebuilderComponents[] | PagebuilderComponents
-) {
+): AppWidgetsPropType {
   return {
     [propName]: {
       type: "array",
@@ -192,6 +263,26 @@ export function generateAppWidgetProp(
     },
   };
 }
+
+type SimpleAppWidgetPropType = {
+  default: string | boolean | undefined;
+  options: {
+    dependencies: {
+      component: PagebuilderComponents | PagebuilderComponents[];
+    };
+  };
+  items?: {
+    enum: string[];
+    type: "string";
+  };
+  enum?: string[];
+  type: "string" | "boolean" | "array";
+  format: "checkbox" | "select" | undefined;
+};
+
+type SimpleAppWidgetsPropType = {
+  [x: string]: SimpleAppWidgetPropType;
+};
 
 export function generateSimpleProp({
   propName,
@@ -209,8 +300,15 @@ export function generateSimpleProp({
   enumList?: string[];
   enumMulti?: boolean;
   defaultValue?: boolean | string;
-}) {
-  const items = enumList
+}): SimpleAppWidgetsPropType {
+  const items: {
+    items?: {
+      enum: string[];
+      type: "string";
+    };
+    enum?: string[];
+    type?: "string";
+  } = enumList
     ? enumMulti
       ? {
           items: {

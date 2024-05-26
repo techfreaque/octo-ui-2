@@ -1,10 +1,8 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
 import JsonEditor from "@techfreaque/json-editor-react";
-import type { CSSProperties} from "react";
+import type { CSSProperties } from "react";
 import { useCallback, useMemo } from "react";
-import type {
-  HandleType,
-  ReactFlowState} from "reactflow";
+import type { HandleType, ReactFlowState } from "reactflow";
 import {
   getConnectedEdges,
   Handle,
@@ -24,10 +22,9 @@ import defaultJsonEditorSettings from "../../../../../components/Forms/JsonEdito
 import { useBotColorsContext } from "../../../../../context/config/BotColorsProvider";
 import type {
   TentaclesConfigsSchemaType,
-  TentaclesConfigValuesType} from "../../../../../context/config/TentaclesConfigProvider";
-import {
-  useUpdateIsSavingTentaclesConfigContext,
+  TentaclesConfigValuesType,
 } from "../../../../../context/config/TentaclesConfigProvider";
+import { useUpdateIsSavingTentaclesConfigContext } from "../../../../../context/config/TentaclesConfigProvider";
 import { useUiConfigContext } from "../../../../../context/config/UiConfigProvider";
 import { strategyFlowMakerName } from "../../TentaclesConfig";
 import { flowEditorSettingsName } from "../../UIConfig";
@@ -56,11 +53,11 @@ export function NodeContainer({
         return node.id !== nodeId;
       });
     });
-    reactFlow.setEdges((edges) => { 
+    reactFlow.setEdges((edges) => {
       return edges.filter((edge) => {
         return edge.source !== nodeId && edge.target !== nodeId;
       });
-    })
+    });
   }, [nodeId, reactFlow]);
   return (
     <div
@@ -130,7 +127,7 @@ export function NodeEditor({
     return (
       schema && (
         <div>
-          <JsonEditor
+          <JsonEditor<TentaclesConfigValuesType, TentaclesConfigsSchemaType>
             schema={schema}
             startval={config}
             editorName={nodeId}

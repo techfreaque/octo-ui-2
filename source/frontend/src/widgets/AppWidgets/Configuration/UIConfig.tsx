@@ -1,5 +1,5 @@
+import type { JsonEditorType } from "@techfreaque/json-editor-react";
 import JsonEditor from "@techfreaque/json-editor-react";
-import type { JsonEditorType } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import { t } from "i18next";
 import { useCallback, useMemo } from "react";
 
@@ -94,7 +94,7 @@ export default function UIConfig({ configKeys }: UiLayoutPageLayoutType) {
                 schema.properties["exchange_names"].items.enum;
             }
             return (
-              <JsonEditor
+              <JsonEditor<UiSubConfigsType, UiConfigSubSchemaType>
                 {...defaultJsonEditorSettings()}
                 schema={schema}
                 startval={config}

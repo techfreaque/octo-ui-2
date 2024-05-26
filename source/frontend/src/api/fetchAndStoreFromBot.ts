@@ -1,7 +1,7 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { Dispatch, SetStateAction } from "react";
 
 import createNotification from "../components/Notifications/Notification";
+import type { AnyType } from "../helpers/helpers";
 
 export async function sendAndInterpretBotUpdate({
   updatedData,
@@ -12,7 +12,7 @@ export async function sendAndInterpretBotUpdate({
   withCredentials,
   token,
 }: {
-  updatedData?: any;
+  updatedData?: AnyType;
   updateUrl: string;
   successCallback?:
     | ((payload: successResponseCallBackParams) => void)
@@ -168,9 +168,9 @@ export default async function fetchAndStoreFromBot({
   failNotification = true,
 }: {
   url: string;
-  setBotDataFunction: Dispatch<SetStateAction<any>>;
+  setBotDataFunction: Dispatch<SetStateAction<AnyType>>;
   method?: "GET" | "POST";
-  dataToSend?: any;
+  dataToSend?: AnyType;
   successNotification?: boolean | undefined;
   keepPreviousValues?: boolean | undefined;
   setIsFinished?: Dispatch<SetStateAction<boolean>> | undefined;
@@ -233,16 +233,16 @@ export default async function fetchAndStoreFromBot({
 }
 
 export interface successResponseCallBackParams {
-  updatedData: any;
+  updatedData: AnyType;
   updateUrl: string;
-  data: any;
+  data: AnyType;
   response: Response;
 }
 
 export interface errorResponseCallBackParams {
-  updatedData: any;
+  updatedData: AnyType;
   updateUrl: string;
-  data: any;
+  data: AnyType;
   response?: Response | undefined;
 }
 
@@ -253,14 +253,14 @@ function genericRequestSuccessCallback({
   defaultSuccessNotification(data, updateUrl);
 }
 
-export function defaultSuccessNotification(data: any, updateUrl: string) {
+export function defaultSuccessNotification(data: AnyType, updateUrl: string) {
   if (data?.title) {
     createNotification({ title: data.title, message: data?.details });
   } else {
     console.warn(`Unknown API Notification: Url: ${updateUrl}, Data: `, data);
     createNotification({
       title: "Unknown Notification",
-      message: `Url: ${updateUrl}, Data: ${data}`,
+      message: `Url: ${updateUrl}, Data: ${JSON.stringify(data)}`,
     });
   }
 }

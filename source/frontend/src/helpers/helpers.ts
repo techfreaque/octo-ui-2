@@ -15,6 +15,7 @@ export function isObjectEmpty(object: object) {
   return true;
 }
 
-
 // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars, @typescript-eslint/no-explicit-any
-export const emptyValueFunction = (_value: any) => {}
+export const emptyValueFunction = (_value: any) => {};
+
+export type AnyType = any;
