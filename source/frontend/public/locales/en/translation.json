@@ -475,7 +475,7 @@
     "failed-to-read-the-config-from-the-editor": "Failed to read the config from the editor",
     "successfully-saved-new-ui-layout": "Successfully saved new UI layout",
     "customize-the-ui": "Customize the UI",
-    "customize-info-text": "Once you have saved the page layout, it wont get overridded by a updated default layout in the future. You should reset your config after each update to make sure you'll get the latest futures. You can copy the config of your custom config with the help of the editor, and then past it after resetting.",
+    "customize-info-text": "Once you have saved the page layout, it won't get overridden by an updated default layout in the future. You should reset your config after each update to make sure you'll get the latest futures. You can copy the config of your custom config with the help of the editor, and then past it after resetting.",
     "save-page-layout": "Save Page Layout",
     "reset-to-default-layout": "Reset to default layout",
     "pages": "Pages",
