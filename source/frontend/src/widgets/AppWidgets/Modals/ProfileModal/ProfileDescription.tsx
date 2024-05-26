@@ -1,7 +1,8 @@
 import { EditOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import type { ChangeEvent, Dispatch, SetStateAction} from "react";
+import { useState } from "react";
 
 import AntButton, {
   buttonSizes,
@@ -9,7 +10,7 @@ import AntButton, {
   buttonVariants,
 } from "../../../../components/Buttons/AntButton";
 import { sizes } from "../../../../constants/frontendConstants";
-import { ProfileType } from "../../../../context/data/BotInfoProvider";
+import type { ProfileType } from "../../../../context/data/BotInfoProvider";
 import { CleanDescription } from "../../StrategyConfigurator/AppCards/AppDescription";
 
 export function ProfileDescription({

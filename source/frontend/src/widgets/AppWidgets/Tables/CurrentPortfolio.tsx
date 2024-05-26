@@ -6,10 +6,11 @@ import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
-import AntTable, {
+import type {
   AntTableColumnType,
   AntTableDataType,
 } from "../../../components/Tables/AntTable";
+import AntTable from "../../../components/Tables/AntTable";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import {
   useBotPortfolioContext,

@@ -1,7 +1,8 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -9,15 +10,17 @@ import {
 } from "react";
 
 import { saveProConfig } from "../../api/configs";
-import {
+import type {
   errorResponseCallBackParams,
-  sendAndInterpretBotUpdate,
-  successResponseCallBackParams,
+  successResponseCallBackParams} from "../../api/fetchAndStoreFromBot";
+import {
+  sendAndInterpretBotUpdate
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
+import type {
+  OPTIMIZER_INPUTS_KEY} from "../../constants/backendConstants";
 import {
-  backendRoutes,
-  OPTIMIZER_INPUTS_KEY,
+  backendRoutes
 } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "./BotDomainProvider";

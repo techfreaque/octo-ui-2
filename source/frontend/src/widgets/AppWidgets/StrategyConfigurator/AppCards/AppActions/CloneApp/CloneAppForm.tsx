@@ -1,8 +1,9 @@
 import { Input, Switch } from "antd";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useEffect } from "react";
 
 import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
-import { AppStoreAppType } from "../../../../../../context/data/AppStoreDataProvider";
+import type { AppStoreAppType } from "../../../../../../context/data/AppStoreDataProvider";
 
 export interface CloneAppInfoType {
   newProfileName?: string;

@@ -4,34 +4,38 @@ import { Button } from "@mui/material";
 import { Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import { t } from "i18next";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 
 import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
-import AntTable, {
+import type {
   AntTableColumnType,
   AntTableDataType,
 } from "../../../components/Tables/AntTable";
+import AntTable from "../../../components/Tables/AntTable";
 import {
   findUserInputAndTentacleLabel,
   splitUserInputKey,
   userInputKey,
 } from "../../../components/UserInputs/utils";
+import type {
+  TentaclesConfigsRootType} from "../../../context/config/TentaclesConfigProvider";
 import {
   tentacleConfigTypes,
-  TentaclesConfigsRootType,
   useTentaclesConfigContext,
 } from "../../../context/config/TentaclesConfigProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
-import {
+import type {
   OptimizerQueueElementType,
   OptimizerQueueType,
   OptimizerQueueUpdateType,
   RunInputType,
-  UpdatedRunType,
+  UpdatedRunType} from "../../../context/data/OptimizerQueueProvider";
+import {
   useFetchOptimizerQueue,
   useOptimizerQueueContext,
   useSaveOptimizerQueue,

@@ -1,4 +1,4 @@
-import { UiLayoutPageType } from "../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageType } from "../../../context/config/BotLayoutProvider";
 
 export const defaultStrategyDesignerPageLayout: UiLayoutPageType = {
   layout: [

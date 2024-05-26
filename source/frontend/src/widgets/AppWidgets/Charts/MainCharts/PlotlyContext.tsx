@@ -1,15 +1,16 @@
-import { Datum } from "plotly.js";
+import type { Datum } from "plotly.js";
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useContext,
   useState,
 } from "react";
 
 import { emptyValueFunction } from "../../../../helpers/helpers";
-import { ChartLocationType } from "./Plotly";
-import { AxisType } from "./PlotlyGenerateData";
+import type { ChartLocationType } from "./Plotly";
+import type { AxisType } from "./PlotlyGenerateData";
 
 export type PlotlyLayoutsType = {
   [chartLocation in ChartLocationType]?: PlotlyLayoutType | undefined;

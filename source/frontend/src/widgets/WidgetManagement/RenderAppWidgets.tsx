@@ -1,16 +1,18 @@
 import { t } from "i18next";
-import { Component, createElement,ErrorInfo } from "react";
+import type {ErrorInfo } from "react";
+import { Component, createElement } from "react";
 import { useMemo } from "react";
 import { Trans } from "react-i18next";
 
 import createNotification from "../../components/Notifications/Notification";
 import { isProduction } from "../../constants/frontendConstants";
-import {
+import type {
   UiLayoutPageLayoutType,
   UiLayoutPageType,
 } from "../../context/config/BotLayoutProvider";
+import type {
+  AppWidgetNameType} from "./RegisteredAppWidgets";
 import {
-  AppWidgetNameType,
   registeredComponents,
 } from "./RegisteredAppWidgets";
 

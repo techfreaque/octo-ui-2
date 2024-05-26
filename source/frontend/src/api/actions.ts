@@ -1,18 +1,19 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import createNotification from "../components/Notifications/Notification";
 import { backendRoutes } from "../constants/backendConstants";
-import { StatBacktestingSettingsType } from "../context/actions/BotBacktestingProvider";
-import { StartOptimizerSettingsType } from "../context/actions/BotOptimizerProvider";
-import { OptimizerEditorInputsType } from "../context/config/OptimizerEditorProvider";
-import { OptimizerUiConfig } from "../context/config/UiConfigProvider";
-import { ExchangeConfigUpdateType } from "../context/data/BotExchangeInfoProvider";
-import { ProfileInfoUpdateType } from "../widgets/AppWidgets/Modals/ProfileModal/ProfileModalButton";
-import { ResetDataStorageInfoType } from "../widgets/AppWidgets/ResetConfigs/ResetConfigs";
-import {
+import type { StatBacktestingSettingsType } from "../context/actions/BotBacktestingProvider";
+import type { StartOptimizerSettingsType } from "../context/actions/BotOptimizerProvider";
+import type { OptimizerEditorInputsType } from "../context/config/OptimizerEditorProvider";
+import type { OptimizerUiConfig } from "../context/config/UiConfigProvider";
+import type { ExchangeConfigUpdateType } from "../context/data/BotExchangeInfoProvider";
+import type { ProfileInfoUpdateType } from "../widgets/AppWidgets/Modals/ProfileModal/ProfileModalButton";
+import type { ResetDataStorageInfoType } from "../widgets/AppWidgets/ResetConfigs/ResetConfigs";
+import type {
   errorResponseCallBackParams,
-  sendAndInterpretBotUpdate,
-  successResponseCallBackParams,
+  successResponseCallBackParams} from "./fetchAndStoreFromBot";
+import {
+  sendAndInterpretBotUpdate
 } from "./fetchAndStoreFromBot";
 
 export async function startBacktesting(

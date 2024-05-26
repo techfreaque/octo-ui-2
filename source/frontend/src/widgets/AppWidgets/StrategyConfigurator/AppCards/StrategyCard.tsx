@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useState } from "react";
 
 import {
   deleteProfile,
@@ -8,23 +9,25 @@ import {
 import createNotification from "../../../../components/Notifications/Notification";
 import { backendRoutes } from "../../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
-import {
+import type {
   AppStoreAppType,
   StoreCategoryType,
-  StrategyCategoryType,
+  StrategyCategoryType} from "../../../../context/data/AppStoreDataProvider";
+import {
   useInstallAnyAppPackage,
   useUploadToAppStore,
 } from "../../../../context/data/AppStoreDataProvider";
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 import { useRestartBot } from "../../../../context/data/IsBotOnlineProvider";
 import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
+import type {
+  StrategyModeSettingsNameType} from "../storeConstants";
 import {
-  strategyModeName,
-  StrategyModeSettingsNameType,
+  strategyModeName
 } from "../storeConstants";
 import AppActions from "./AppActions/AppActions";
-import { CloneAppInfoType } from "./AppActions/CloneApp/CloneAppForm";
-import { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
+import type { CloneAppInfoType } from "./AppActions/CloneApp/CloneAppForm";
+import type { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
 import AppCardTemplate from "./AppCardTemplate";
 import { CleanDescription } from "./AppDescription";
 

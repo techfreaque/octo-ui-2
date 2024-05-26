@@ -1,9 +1,10 @@
 import { CopyOutlined } from "@ant-design/icons";
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
-import { AppStoreAppType } from "../../../../../../context/data/AppStoreDataProvider";
+import type { AppStoreAppType } from "../../../../../../context/data/AppStoreDataProvider";
 import { ConfirmAction } from "../AppActions";
-import CloneAppForm, { CloneAppInfoType } from "./CloneAppForm";
+import type { CloneAppInfoType } from "./CloneAppForm";
+import CloneAppForm from "./CloneAppForm";
 
 export default function CloneApp({
   app,

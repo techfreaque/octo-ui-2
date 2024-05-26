@@ -12,14 +12,16 @@ import AntButton, {
   buttonSizes,
   buttonTypes,
 } from "../../../components/Buttons/AntButton";
-import AntTable, {
+import type {
   AntTableColumnType,
   AntTableDataType,
 } from "../../../components/Tables/AntTable";
+import AntTable from "../../../components/Tables/AntTable";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type {
+  AppStoreCartType} from "../../../context/data/AppStoreDataProvider";
 import {
-  AppStoreCartType,
   useAppStoreCartContext,
   useAppStoreCartIsOpenContext,
   useAppStorePaymentUrlContext,

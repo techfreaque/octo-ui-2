@@ -2,17 +2,18 @@ import "./OptimizerInputTemplate.css";
 
 import { InputNumber, Select, Switch } from "antd";
 import { t } from "i18next";
-import { CSSProperties, useMemo } from "react";
+import type { CSSProperties} from "react";
+import { useMemo } from "react";
 import { Trans } from "react-i18next";
 
-import { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
-import {
+import type { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
+import type {
   OptimizerEditorInputArrayType,
   OptimizerEditorInputNumberType,
   SchemaOptionsValueType,
   SchemaValueType,
 } from "../../../../context/config/OptimizerEditorProvider";
-import { HandleOptimizerSettingsUpdateType } from "./OptimizerConfigForm";
+import type { HandleOptimizerSettingsUpdateType } from "./OptimizerConfigForm";
 
 export default function OptimizerSettingsContainer({
   botColors,

@@ -3,7 +3,7 @@ import { Avatar, Tooltip, Typography } from "antd";
 import { t } from "i18next";
 
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
-import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
+import type { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
 import AppRating from "./AppRating";
 
 export function AppTitle({ title }: { title: string }) {

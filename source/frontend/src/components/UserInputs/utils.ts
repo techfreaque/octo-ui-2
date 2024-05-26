@@ -1,7 +1,7 @@
-import { JsonEditorType } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import type { JsonEditorType } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 
 import { TENTACLE_SEPARATOR } from "../../constants/backendConstants";
-import { TentaclesConfigsRootType } from "../../context/config/TentaclesConfigProvider";
+import type { TentaclesConfigsRootType } from "../../context/config/TentaclesConfigProvider";
 
 export function userInputKey(userInput: string, tentacle: string[] | string) {
   return `${userInput}${TENTACLE_SEPARATOR}${tentacle}`;
@@ -74,8 +74,8 @@ export function findUserInputAndTentacleLabel(
   }
 }
 
-export function validateJSONEditor<TStartValueType>(
-  editor: JsonEditorType<TStartValueType>
+export function validateJSONEditor<TentaclesConfigValueType, TentaclesConfigsSchemaType>(
+  editor: JsonEditorType<TentaclesConfigValueType, TentaclesConfigsSchemaType>
 ): string | undefined {
   const errors = editor.validate();
   let errorsDesc: string | undefined;

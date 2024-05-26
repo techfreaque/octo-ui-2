@@ -1,10 +1,11 @@
 import { Grid } from "@mui/material";
 import { AutoComplete, Radio, Typography } from "antd";
 import { t } from "i18next";
-import { Dispatch, SetStateAction, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useState } from "react";
 import { Trans } from "react-i18next";
 
-import {
+import type {
   ProfileRootPathType,
   ProfileType,
 } from "../../../../context/data/BotInfoProvider";

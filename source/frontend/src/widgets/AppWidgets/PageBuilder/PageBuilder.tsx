@@ -1,25 +1,27 @@
 import { Alert } from "@mui/material";
 import JsonEditor from "@techfreaque/json-editor-react";
-import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import type { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import { Button, Space } from "antd";
 import { t } from "i18next";
 import { Trans } from "react-i18next";
 
-import { errorResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
+import type { errorResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import createNotification from "../../../components/Notifications/Notification";
 import { botLayoutKey } from "../../../constants/backendConstants";
 import { defaultBotTemplate } from "../../../constants/uiTemplate/defaultPages/allPages";
 import { useBotLayoutContext } from "../../../context/config/BotLayoutProvider";
+import type {
+  UiConfigType} from "../../../context/config/UiConfigProvider";
 import {
-  UiConfigType,
   useSaveUiConfig,
 } from "../../../context/config/UiConfigProvider";
 import appWidgetsProps from "../../WidgetManagement/AppWidgetProps";
-import {
+import type {
   AppWidgetNameType,
-  NonAppWidgetNameType,
+  NonAppWidgetNameType} from "../../WidgetManagement/RegisteredAppWidgets";
+import {
   registeredComponents,
 } from "../../WidgetManagement/RegisteredAppWidgets";
 

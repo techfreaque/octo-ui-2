@@ -2,11 +2,12 @@ import "./antSidebar.css";
 
 import { useMediaQuery } from "@mui/material";
 import { Button,Collapse } from "antd";
-import { CSSProperties, Dispatch, SetStateAction, useMemo } from "react";
+import type { CSSProperties, Dispatch, SetStateAction} from "react";
+import { useMemo } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
 
-import {
+import type {
   ColorModeType,
   ColorsType,
 } from "../../../constants/uiTemplate/defaultColors";

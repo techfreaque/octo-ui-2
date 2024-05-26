@@ -1,12 +1,14 @@
-import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
-import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import { ButtonProps, Popconfirm, Tooltip } from "antd";
-import {
+import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
+import type { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+import type { ButtonProps} from "antd";
+import { Popconfirm, Tooltip } from "antd";
+import type {
   CSSProperties,
   Dispatch,
   ForwardRefExoticComponent,
   RefAttributes,
-  SetStateAction,
+  SetStateAction} from "react";
+import {
   useState,
 } from "react";
 
@@ -15,11 +17,11 @@ import AntButton, {
   buttonVariants,
 } from "../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
-import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
-import { DownloadInfo, UploadInfo } from "../AppCard";
+import type { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
+import type { DownloadInfo, UploadInfo } from "../AppCard";
 import AppInfoModal from "./AppInfoModal";
 import CloneApp from "./CloneApp/CloneApp";
-import { CloneAppInfoType } from "./CloneApp/CloneAppForm";
+import type { CloneAppInfoType } from "./CloneApp/CloneAppForm";
 import ConfigureApp from "./ConfigureApp";
 import ExportApp from "./ExportApp";
 import PublishApp from "./PublishApp";

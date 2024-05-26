@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useCallback, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useCallback, useState } from "react";
 import { createContext, useContext } from "react";
 
 import { fetchBotPortfolio } from "../../api/data";

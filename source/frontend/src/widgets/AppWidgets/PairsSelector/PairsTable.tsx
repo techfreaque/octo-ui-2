@@ -1,12 +1,13 @@
 import "./pairsTable.css";
 
-import { FilterValue } from "antd/es/table/interface";
+import type { FilterValue } from "antd/es/table/interface";
 import { useEffect } from "react";
 
-import AntTable, {
+import type {
   AntTableColumnType,
   AntTableDataType,
 } from "../../../components/Tables/AntTable";
+import AntTable from "../../../components/Tables/AntTable";
 import EnablerSwitch from "../../../components/UserInputs/EnablerSwich";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useUpdateVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
@@ -15,9 +16,10 @@ import {
   useUpdateVisiblePairsContext,
   useVisiblePairsContext,
 } from "../../../context/config/VisiblePairProvider";
-import {
+import type {
   CurrencyListType,
-  ExchangeInfoType,
+  ExchangeInfoType} from "../../../context/data/BotExchangeInfoProvider";
+import {
   useCurrentCurrencyListContext,
   useExchangeInfoContext,
   useFetchExchangeInfo,

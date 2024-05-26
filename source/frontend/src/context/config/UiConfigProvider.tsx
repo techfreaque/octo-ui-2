@@ -1,7 +1,8 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -9,11 +10,11 @@ import {
 } from "react";
 
 import { fetchUIConfig, saveUIConfig } from "../../api/configs";
-import {
+import type {
   errorResponseCallBackParams,
   successResponseCallBackParams,
 } from "../../api/fetchAndStoreFromBot";
-import {
+import type {
   BACKTESTING_RUN_SETTINGS_KEY,
   botLayoutKey,
   CanldesPlotSourceType,
@@ -25,10 +26,10 @@ import {
   OPTIMIZER_RUN_SETTINGS_KEY,
 } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
-import { flowEditorSettingsName } from "../../widgets/AppWidgets/Configuration/UIConfig";
+import type { flowEditorSettingsName } from "../../widgets/AppWidgets/Configuration/UIConfig";
 import { useBotInfoContext } from "../data/BotInfoProvider";
 import { useBotDomainContext } from "./BotDomainProvider";
-import { UiLayoutPageType } from "./BotLayoutProvider";
+import type { UiLayoutPageType } from "./BotLayoutProvider";
 
 export interface BotLayoutType {
   layouts: UiLayoutPageType[];

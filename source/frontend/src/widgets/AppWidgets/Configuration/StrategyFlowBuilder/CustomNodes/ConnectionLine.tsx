@@ -1,9 +1,11 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
-import { CSSProperties, useCallback } from "react";
+import type { CSSProperties} from "react";
+import { useCallback } from "react";
+import type {
+  EdgeProps} from "reactflow";
 import {
   BaseEdge,
   EdgeLabelRenderer,
-  EdgeProps,
   getBezierPath,
   useReactFlow,
 } from "reactflow";

@@ -5,8 +5,9 @@ import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import createNotification from "../../../components/Notifications/Notification";
+import type {
+  TentaclesConfigByTentacleType} from "../../../context/config/TentaclesConfigProvider";
 import {
-  TentaclesConfigByTentacleType,
   useSaveTentaclesConfigAndSendAction,
 } from "../../../context/config/TentaclesConfigProvider";
 import {

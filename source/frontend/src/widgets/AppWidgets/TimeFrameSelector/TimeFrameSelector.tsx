@@ -1,7 +1,8 @@
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Button, Dropdown, List, Switch, Typography } from "antd";
 import { t } from "i18next";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 
 import { buttonTypes } from "../../../components/Buttons/AntButton";

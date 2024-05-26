@@ -3,7 +3,7 @@ import { t } from "i18next";
 import { useMemo } from "react";
 
 import AntButton from "../../../components/Buttons/AntButton";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   useCurrentPanelContext,
   useSetCurrentPanelPercent,

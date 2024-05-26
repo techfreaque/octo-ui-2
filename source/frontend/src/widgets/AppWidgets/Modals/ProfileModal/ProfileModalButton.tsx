@@ -5,16 +5,18 @@ import { updateConfig, updateProfileInfo } from "../../../../api/actions";
 import AppIconButton from "../../../../components/Buttons/AppIconButton";
 import createNotification from "../../../../components/Notifications/Notification";
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
+import type {
+  ExchangeConfigUpdateType} from "../../../../context/data/BotExchangeInfoProvider";
 import {
-  ExchangeConfigUpdateType,
   getProfileCurrencyUpdate,
   useCurrentCurrencyListContext,
   useExchangeConfigUpdateContext,
   useExchangeInfoContext,
   useUnsavedCurrencyListContext,
 } from "../../../../context/data/BotExchangeInfoProvider";
+import type {
+  ProfileType} from "../../../../context/data/BotInfoProvider";
 import {
-  ProfileType,
   useFetchBotInfo,
 } from "../../../../context/data/BotInfoProvider";
 import {

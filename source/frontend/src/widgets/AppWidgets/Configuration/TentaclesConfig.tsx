@@ -1,31 +1,35 @@
 import { SaveOutlined } from "@ant-design/icons";
 import { Tab } from "@mui/material";
 import JsonEditor from "@techfreaque/json-editor-react";
-import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import type { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import type { Dispatch, SetStateAction } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { successResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
+import type { successResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import createNotification from "../../../components/Notifications/Notification";
-import { AntSideBarMenutItemType } from "../../../components/Sidebars/AntSidebar/AntSidebar";
-import MuiTabs, { MuiTabType } from "../../../components/Tabs/MuiTabs";
+import type { AntSideBarMenutItemType } from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import type { MuiTabType } from "../../../components/Tabs/MuiTabs";
+import MuiTabs from "../../../components/Tabs/MuiTabs";
 import {
   userInputKey,
   validateJSONEditor,
 } from "../../../components/UserInputs/utils";
 import { sizes } from "../../../constants/frontendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
-import {
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type {
   SaveTentaclesConfigType,
-  tentacleConfigTypes,
   TentaclesConfigByTentacleType,
   TentaclesConfigRootType,
   TentaclesConfigsRootType,
   TentaclesConfigsSchemaType,
   TentaclesConfigValueType,
   TentacleType,
+} from "../../../context/config/TentaclesConfigProvider";
+import {
+  tentacleConfigTypes,
   useSaveTentaclesConfig,
   useTentaclesConfigContext,
 } from "../../../context/config/TentaclesConfigProvider";
@@ -452,7 +456,10 @@ export function saveUserInputs(
         return;
       }
       const tentacle = `${editorKey.split("##")[1]}`;
-      const errorsDesc = validateJSONEditor<TentaclesConfigValueType>(editor);
+      const errorsDesc = validateJSONEditor<
+        TentaclesConfigValueType,
+        TentaclesConfigsSchemaType
+      >(editor);
       if (errorsDesc) {
         save = false;
         setIsLoading(false);
@@ -585,7 +592,7 @@ function createSidebarItem({
     antIcon,
     order: schema?.order || 0,
     content: (
-      <JsonEditor<TentaclesConfigValueType>
+      <JsonEditor<TentaclesConfigValueType, TentaclesConfigsSchemaType>
         schema={schema}
         startval={config}
         editorName={`${editorKey}##${configName}`}
@@ -633,7 +640,7 @@ function createTab({
     antIcon,
     order: schema?.order || 0,
     content: (
-      <JsonEditor
+      <JsonEditor<TentaclesConfigValueType, TentaclesConfigsSchemaType>
         schema={schema}
         startval={config}
         onChange={autoSave ? handleUserInputSave : undefined}

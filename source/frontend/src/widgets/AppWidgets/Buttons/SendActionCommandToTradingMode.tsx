@@ -1,6 +1,7 @@
-import { Dispatch, SetStateAction, useMemo, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useMemo, useState } from "react";
 
-import {
+import type {
   errorResponseCallBackParams,
   successResponseCallBackParams,
 } from "../../../api/fetchAndStoreFromBot";
@@ -8,13 +9,15 @@ import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type {
+  TentaclesConfigByTentacleType} from "../../../context/config/TentaclesConfigProvider";
 import {
-  TentaclesConfigByTentacleType,
   useSaveTentaclesConfigAndSendAction,
 } from "../../../context/config/TentaclesConfigProvider";
+import type {
+  ApiActionsType} from "../../../context/data/BotInfoProvider";
 import {
-  ApiActionsType,
   useBotInfoContext,
   useIsDemoMode,
 } from "../../../context/data/BotInfoProvider";

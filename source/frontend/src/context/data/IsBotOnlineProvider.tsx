@@ -1,4 +1,5 @@
-import { Dispatch, SetStateAction, useCallback } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useCallback } from "react";
 import { createContext, useContext, useState } from "react";
 
 import { restartBot } from "../../api/actions";

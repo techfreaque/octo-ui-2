@@ -1,15 +1,17 @@
 import { Grid } from "@mui/material";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useEffect, useState } from "react";
 
-import {
+import type {
   AppStoreAppType,
   AppStoreVersionTagType,
   AppStoreVersionTypeType,
   StoreCategoryType,
 } from "../../../../context/data/AppStoreDataProvider";
+import type {
+  StrategyModeSettingsNameType} from "../storeConstants";
 import {
   strategyModeName,
-  StrategyModeSettingsNameType,
   strategyName,
 } from "../storeConstants";
 import OtherAppCard from "./OtherAppCard";

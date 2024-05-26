@@ -1,6 +1,7 @@
-import {
+import type {
   iNotification,
-  NOTIFICATION_TYPE,
+  NOTIFICATION_TYPE} from "react-notifications-component";
+import {
   Store,
 } from "react-notifications-component";
 

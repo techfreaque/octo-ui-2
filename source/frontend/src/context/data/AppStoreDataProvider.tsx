@@ -1,7 +1,8 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -15,12 +16,13 @@ import {
   logoutFromAppStore,
   signupToAppStore,
 } from "../../api/data";
-import {
+import type {
   errorResponseCallBackParams,
+  successResponseCallBackParams} from "../../api/fetchAndStoreFromBot";
+import {
   getFile,
   sendAndInterpretBotUpdate,
-  sendFile,
-  successResponseCallBackParams,
+  sendFile
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
@@ -30,16 +32,16 @@ import {
 } from "../../constants/frontendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
 import { minReleaseNotesLength } from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppActions/UpDownloadApp/UploadAppForm";
-import {
+import type {
   UploadInfo,
   VerifiedDownloadInfo,
 } from "../../widgets/AppWidgets/StrategyConfigurator/AppCards/AppCard";
-import { AffiliateDashboardData } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/AffiliateDashboard";
-import {
+import type { AffiliateDashboardData } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/AffiliateDashboard";
+import type {
   StorePayments,
   StoreUsersType,
 } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Backend";
-import { LoginSignupFormType } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
+import type { LoginSignupFormType } from "../../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
 import { strategyName } from "../../widgets/AppWidgets/StrategyConfigurator/storeConstants";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import { useBotInfoContext } from "./BotInfoProvider";

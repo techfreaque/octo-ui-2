@@ -1,11 +1,12 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { Alert, Input, Select, Switch, Tooltip } from "antd";
 import { t } from "i18next";
-import { Dispatch, SetStateAction, useEffect } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useEffect } from "react";
 import { Trans } from "react-i18next";
 
 import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
-import {
+import type {
   AppStoreAppType,
   AppStoreVersionTagType,
   AppStoreVersionTypeType,
@@ -15,7 +16,7 @@ import {
   appVersionTypes,
   strategyName,
 } from "../../../storeConstants";
-import { UploadInfo } from "../../AppCard";
+import type { UploadInfo } from "../../AppCard";
 const { TextArea } = Input;
 
 type ApiFieldsType = "version_type" | "version_tag" | "price" | "release_notes";

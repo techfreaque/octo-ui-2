@@ -1,7 +1,8 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -11,9 +12,9 @@ import {
 
 import { fetchBotInfo } from "../../api/data";
 import { emptyValueFunction } from "../../helpers/helpers";
-import { RealTimeStrategyCommandsType } from "../../widgets/AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
-import { BlockInfoType } from "../../widgets/AppWidgets/Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
-import { ClearOlottingCacheType } from "../../widgets/AppWidgets/ResetConfigs/ResetConfigs";
+import type { RealTimeStrategyCommandsType } from "../../widgets/AppWidgets/Buttons/ToggleActivateRealTimeStrategy";
+import type { BlockInfoType } from "../../widgets/AppWidgets/Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
+import type { ClearOlottingCacheType } from "../../widgets/AppWidgets/ResetConfigs/ResetConfigs";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import {
   useUpdateVisibleExchangesContext,
@@ -21,9 +22,10 @@ import {
 } from "../config/VisibleExchangesProvider";
 import { useUpdateVisiblePairsContext } from "../config/VisiblePairProvider";
 import { useUpdateVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
+import type {
+  ConfigSymbolsType} from "./BotExchangeInfoProvider";
 import {
-  BotExchangeInfoProvider,
-  ConfigSymbolsType,
+  BotExchangeInfoProvider
 } from "./BotExchangeInfoProvider";
 import { useIsBotOnlineContext } from "./IsBotOnlineProvider";
 

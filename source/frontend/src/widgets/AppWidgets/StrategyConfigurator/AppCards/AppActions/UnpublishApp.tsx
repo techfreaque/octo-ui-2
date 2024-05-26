@@ -1,9 +1,10 @@
 import { ShareAltOutlined } from "@ant-design/icons";
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import createNotification from "../../../../../components/Notifications/Notification";
+import type {
+  AppStoreAppType} from "../../../../../context/data/AppStoreDataProvider";
 import {
-  AppStoreAppType,
   useDeleteApp,
   useUnpublishApp,
 } from "../../../../../context/data/AppStoreDataProvider";

@@ -1,13 +1,14 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useContext,
   useState,
 } from "react";
 
 import { emptyValueFunction } from "../../helpers/helpers";
-import { ChartType } from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
+import type { ChartType } from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
 
 const defaultChartType = "chart";
 

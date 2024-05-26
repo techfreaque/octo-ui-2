@@ -6,7 +6,7 @@ import {
   projectName,
 } from "../../constants/frontendConstants";
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
-import { UiLayoutPageType } from "../../context/config/BotLayoutProvider";
+import type { UiLayoutPageType } from "../../context/config/BotLayoutProvider";
 import AppWidgets from "../../widgets/WidgetManagement/RenderAppWidgets";
 
 export default function Page({

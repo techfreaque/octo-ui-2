@@ -1,24 +1,25 @@
-import "./uiConfig.css";
-
 import JsonEditor from "@techfreaque/json-editor-react";
-import { JsonEditorType } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import type { JsonEditorType } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import { t } from "i18next";
 import { useCallback, useMemo } from "react";
 
-import { errorResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
+import type { errorResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import createNotification from "../../../components/Notifications/Notification";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
-import {
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type {
   BacktestingUiConfig,
   OptimizerUiConfig,
   UiConfigKeyType,
   UiConfigType,
   UiSubConfigsType,
+} from "../../../context/config/UiConfigProvider";
+import {
   useSaveUiConfig,
   useUiConfigContext,
 } from "../../../context/config/UiConfigProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
+import type { UiConfigSubSchemaType } from "./uiConfigSchema";
 import { getUiConfigSchema } from "./uiConfigSchema";
 
 export const flowEditorSettingsName = "flow_editor_settings";
@@ -37,7 +38,10 @@ export default function UIConfig({ configKeys }: UiLayoutPageLayoutType) {
   const botInfo = useBotInfoContext();
   const saveUiConfig = useSaveUiConfig();
   const handleEditorsAutosave = useCallback(
-    (editor: JsonEditorType<UiSubConfigsType>, configKey: UiConfigKeyType) => {
+    (
+      editor: JsonEditorType<UiSubConfigsType, UiConfigSubSchemaType>,
+      configKey: UiConfigKeyType
+    ) => {
       const newConfigs: UiConfigType = {
         ...uiConfig,
         [configKey]: convertTimestamps(editor.getValue(), true),

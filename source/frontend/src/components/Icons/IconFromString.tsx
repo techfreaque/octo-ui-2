@@ -1,6 +1,7 @@
-import { CSSProperties } from "react";
+import type { CSSProperties } from "react";
 
-import { sizes,SizeType } from "../../constants/frontendConstants";
+import type {SizeType } from "../../constants/frontendConstants";
+import { sizes } from "../../constants/frontendConstants";
 import { AntIconByString, iconStringNoIcon } from "./AntIcon";
 import FontAwesomeIconByString from "./FontAwesome";
 

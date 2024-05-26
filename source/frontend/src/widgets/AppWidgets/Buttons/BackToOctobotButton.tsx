@@ -1,5 +1,5 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
-import { MouseEvent } from "react";
+import type { MouseEvent } from "react";
 import { Trans } from "react-i18next";
 
 import AntButton, {

@@ -1,14 +1,16 @@
 import { Dropdown, Tooltip } from "antd";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useMemo } from "react";
 import { Trans } from "react-i18next";
 
 import AntButton from "../../../components/Buttons/AntButton";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import { useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
 import { useVisiblePairsContext } from "../../../context/config/VisiblePairProvider";
+import type {
+  PairSelectorMenuOpenType} from "../../../context/data/BotExchangeInfoProvider";
 import {
-  PairSelectorMenuOpenType,
   usePairSelectorMenuOpenContext,
   useUpdatePairSelectorMenuOpenContext,
 } from "../../../context/data/BotExchangeInfoProvider";

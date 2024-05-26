@@ -1,10 +1,10 @@
-import { PlotRelayoutEvent } from "plotly.js";
+import type { PlotRelayoutEvent } from "plotly.js";
 import { useMemo } from "react";
 import Plot from "react-plotly.js";
 
 import { objectKeys } from "../../../../helpers/helpers";
-import { ChartDataType } from "../ChartTablePieCombo";
-import { PlotlyLayoutType, UpdatePlotlyLayoutsType } from "./PlotlyContext";
+import type { ChartDataType } from "../ChartTablePieCombo";
+import type { PlotlyLayoutType, UpdatePlotlyLayoutsType } from "./PlotlyContext";
 
 export type ChartLocationType = "main-chart" | "sub-chart" | "pie-chart" | "b";
 

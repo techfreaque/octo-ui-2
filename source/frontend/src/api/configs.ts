@@ -1,13 +1,14 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import { backendRoutes, botLayoutKey } from "../constants/backendConstants";
 import { defaultBotTemplate } from "../constants/uiTemplate/defaultPages/allPages";
-import { OptimizerEditorType } from "../context/config/OptimizerEditorProvider";
-import { UiConfigType } from "../context/config/UiConfigProvider";
-import {
+import type { OptimizerEditorType } from "../context/config/OptimizerEditorProvider";
+import type { UiConfigType } from "../context/config/UiConfigProvider";
+import type {
   errorResponseCallBackParams,
-  sendAndInterpretBotUpdate,
-  successResponseCallBackParams,
+  successResponseCallBackParams} from "./fetchAndStoreFromBot";
+import {
+  sendAndInterpretBotUpdate
 } from "./fetchAndStoreFromBot";
 
 export async function fetchUIConfig(

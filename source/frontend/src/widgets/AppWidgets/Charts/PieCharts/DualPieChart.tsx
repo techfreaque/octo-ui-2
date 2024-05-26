@@ -1,17 +1,19 @@
 import { useEffect, useState } from "react";
 import useMeasure from "react-use-measure";
 
-import AntSidebar, {
+import type {
   AntSideBarMenutItemType,
 } from "../../../../components/Sidebars/AntSidebar/AntSidebar";
-import { PlottedElementNameType } from "../../../../context/data/BotPlottedElementsProvider";
+import AntSidebar from "../../../../components/Sidebars/AntSidebar/AntSidebar";
+import type { PlottedElementNameType } from "../../../../context/data/BotPlottedElementsProvider";
+import type {
+  DataTableSideBarMainItemType} from "../../Tables/DataTable";
 import {
-  createTradingOrBacktestingTab,
-  DataTableSideBarMainItemType,
+  createTradingOrBacktestingTab
 } from "../../Tables/DataTable";
-import { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
+import type { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
 import PlotlyChart from "../MainCharts/Plotly";
-import {
+import type {
   PlotlyLayoutType,
   UpdatePlotlyLayoutsType,
 } from "../MainCharts/PlotlyContext";

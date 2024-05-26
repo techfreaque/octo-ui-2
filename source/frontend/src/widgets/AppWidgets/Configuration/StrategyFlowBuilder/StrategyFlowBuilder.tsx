@@ -1,39 +1,42 @@
 import "reactflow/dist/style.css";
 import "./strategyFlowBuilder.css";
 
-import {
+import type {
   Dispatch,
   DragEventHandler,
   RefObject,
-  SetStateAction,
+  SetStateAction} from "react";
+import {
   useCallback,
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
-import {
-  addEdge,
+import type {
   Connection,
-  Controls,
   Edge,
   EdgeTypes,
   Node,
   NodeTypes,
+  ReactFlowInstance} from "reactflow";
+import {
+  addEdge,
+  Controls,
   ReactFlow,
-  ReactFlowInstance,
   ReactFlowProvider,
   useEdgesState,
   useNodesState,
 } from "reactflow";
 
-import {
+import type {
   FlowEdgeConfigType,
-  TentaclesConfigValuesType,
+  TentaclesConfigValuesType} from "../../../../context/config/TentaclesConfigProvider";
+import {
   useUpdateIsSavingTentaclesConfigContext,
 } from "../../../../context/config/TentaclesConfigProvider";
 import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
-import { StrategyFlowMakerNameType } from "../TentaclesConfig";
+import type { StrategyFlowMakerNameType } from "../TentaclesConfig";
 import { flowEditorSettingsName } from "../UIConfig";
 import { CustomEdge } from "./CustomNodes/ConnectionLine";
 import StrategyBlockNode from "./CustomNodes/StrategyBlockNode";

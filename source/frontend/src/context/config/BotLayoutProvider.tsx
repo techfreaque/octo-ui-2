@@ -1,7 +1,8 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useContext,
   useEffect,
   useState,
@@ -9,10 +10,11 @@ import {
 
 import { botLayoutKey } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
-import { PanelPositionType } from "../../widgets/AppWidgets/Buttons/CurrentPanelPosition";
-import { PagebuilderComponents } from "../../widgets/AppWidgets/PageBuilder/PageBuilder";
-import { ApiActionsType } from "../data/BotInfoProvider";
-import { UiConfigKeyType, useUiConfigContext } from "./UiConfigProvider";
+import type { PanelPositionType } from "../../widgets/AppWidgets/Buttons/CurrentPanelPosition";
+import type { PagebuilderComponents } from "../../widgets/AppWidgets/PageBuilder/PageBuilder";
+import type { ApiActionsType } from "../data/BotInfoProvider";
+import type { UiConfigKeyType} from "./UiConfigProvider";
+import { useUiConfigContext } from "./UiConfigProvider";
 
 export interface UiLayoutPageLayoutType {
   title?: string;

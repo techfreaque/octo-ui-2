@@ -1,22 +1,23 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import { updateConfig, updateProfileInfo } from "../../../../api/actions";
 import createNotification from "../../../../components/Notifications/Notification";
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
-import {
+import type {
   AppStoreAppType,
   StoreCategoryType,
   StrategyModeCategoryType,
 } from "../../../../context/data/AppStoreDataProvider";
-import { ExchangeConfigUpdateType } from "../../../../context/data/BotExchangeInfoProvider";
+import type { ExchangeConfigUpdateType } from "../../../../context/data/BotExchangeInfoProvider";
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 import { useRestartBot } from "../../../../context/data/IsBotOnlineProvider";
-import { ProfileInfoUpdateType } from "../../Modals/ProfileModal/ProfileModalButton";
+import type { ProfileInfoUpdateType } from "../../Modals/ProfileModal/ProfileModalButton";
+import type {
+  StrategyModeSettingsNameType} from "../storeConstants";
 import {
-  strategyModeSettingsName,
-  StrategyModeSettingsNameType,
+  strategyModeSettingsName
 } from "../storeConstants";
-import { DownloadInfo, UploadInfo } from "./AppCard";
+import type { DownloadInfo, UploadInfo } from "./AppCard";
 import OtherAppCard from "./OtherAppCard";
 
 export default function TradingModeCard({

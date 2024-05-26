@@ -1,19 +1,21 @@
 import { ReloadOutlined } from "@ant-design/icons";
-import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
+import type { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import { Space, Switch } from "antd";
 import { t } from "i18next";
-import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useCallback, useMemo } from "react";
 import { Trans } from "react-i18next";
-import { Edge, Node } from "reactflow";
+import type { Edge, Node } from "reactflow";
 
-import { errorResponseCallBackParams } from "../../../../api/fetchAndStoreFromBot";
+import type { errorResponseCallBackParams } from "../../../../api/fetchAndStoreFromBot";
 import AntButton from "../../../../components/Buttons/AntButton";
 import createNotification from "../../../../components/Notifications/Notification";
-import {
+import type {
   FlowEdgeConfigType,
-  tentacleConfigTypes,
   TentaclesConfigByTentacleType,
-  TentaclesConfigValuesType,
+  TentaclesConfigValuesType} from "../../../../context/config/TentaclesConfigProvider";
+import {
+  tentacleConfigTypes,
   useIsSavingTentaclesConfigContext,
   useSaveTentaclesConfig,
   useTentaclesConfigContext,
@@ -26,17 +28,18 @@ import {
 import { useIsDemoMode } from "../../../../context/data/BotInfoProvider";
 import { useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../../context/data/BotPlottedElementsProvider";
 import { useIsBotOnlineContext } from "../../../../context/data/IsBotOnlineProvider";
+import type {
+  StrategyFlowMakerNameType} from "../TentaclesConfig";
 import {
   handleHiddenUserInputs,
-  strategyFlowMakerName,
-  StrategyFlowMakerNameType,
+  strategyFlowMakerName
 } from "../TentaclesConfig";
 import { flowEditorSettingsName } from "../UIConfig";
 import {
   flowBuilderStorageKey,
   getNodeConfigKey,
 } from "./CustomNodes/StrategyBlockNode";
-import { EdgeData, NodeData } from "./StrategyFlowBuilder";
+import type { EdgeData, NodeData } from "./StrategyFlowBuilder";
 
 export default function SaveStrategyFlowBuilderSettings({
   tradingModeKey,

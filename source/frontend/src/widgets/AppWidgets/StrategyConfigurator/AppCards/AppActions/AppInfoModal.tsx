@@ -8,7 +8,7 @@ import { Trans } from "react-i18next";
 
 import AntButton from "../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
-import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
+import type { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
 
 export default function AppInfoModal({
   app,

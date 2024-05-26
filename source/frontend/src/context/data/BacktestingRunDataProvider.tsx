@@ -1,22 +1,24 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useContext,
   useState,
 } from "react";
 
 import { fetchBacktestingRunData } from "../../api/data";
+import type {
+  errorResponseCallBackParams} from "../../api/fetchAndStoreFromBot";
 import {
-  errorResponseCallBackParams,
   sendAndInterpretBotUpdate,
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
-import { TentaclesConfigValuesType } from "../config/TentaclesConfigProvider";
+import type { TentaclesConfigValuesType } from "../config/TentaclesConfigProvider";
 import {
   useUiConfigContext,
   useUpdateUiConfigContext,

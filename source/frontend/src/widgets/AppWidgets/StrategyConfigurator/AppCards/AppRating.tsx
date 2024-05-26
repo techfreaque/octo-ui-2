@@ -1,9 +1,11 @@
 import { Rate, Tooltip } from "antd";
-import { CSSProperties, useState } from "react";
+import type { CSSProperties} from "react";
+import { useState } from "react";
 
 import { projectName } from "../../../../constants/frontendConstants";
+import type {
+  AppStoreAppType} from "../../../../context/data/AppStoreDataProvider";
 import {
-  AppStoreAppType,
   useAppStoreUserContext,
   useRateAppStore,
 } from "../../../../context/data/AppStoreDataProvider";

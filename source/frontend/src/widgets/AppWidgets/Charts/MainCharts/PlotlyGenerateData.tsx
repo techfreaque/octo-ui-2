@@ -1,15 +1,16 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
+import type {
+  CanldesPlotSourceType,
+  PlotSourceType} from "../../../../constants/backendConstants";
 import {
   ALL_PLOT_SOURCES,
   CANDLES_PLOT_SOURCES,
-  CanldesPlotSourceType,
   DISPLAY_SETTINGS_KEY,
-  GRAPHS_KEY,
-  PlotSourceType,
+  GRAPHS_KEY
 } from "../../../../constants/backendConstants";
-import { UiConfigType } from "../../../../context/config/UiConfigProvider";
-import {
+import type { UiConfigType } from "../../../../context/config/UiConfigProvider";
+import type {
   ChartDetailsType,
   PlottedBacktestingElementType,
   PlottedElementBacktestingNameType,
@@ -20,9 +21,10 @@ import {
   PlottedSubElementType,
 } from "../../../../context/data/BotPlottedElementsProvider";
 import { objectEntries } from "../../../../helpers/helpers";
-import { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
-import { allChartLocations, ChartLocationType } from "./Plotly";
-import {
+import type { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
+import type { ChartLocationType } from "./Plotly";
+import { allChartLocations } from "./Plotly";
+import type {
   PlotlyAxisLayout,
   PlotlyLayoutsType,
   PlotlyLayoutType,

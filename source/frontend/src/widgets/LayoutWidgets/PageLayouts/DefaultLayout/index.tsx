@@ -1,13 +1,14 @@
-import {
+import type {
   Dispatch,
-  SetStateAction,
+  SetStateAction} from "react";
+import {
   useEffect,
   useMemo,
   useRef,
   useState,
 } from "react";
 
-import { UiLayoutPageLayoutType } from "../../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../../context/config/BotLayoutProvider";
 import AppWidgets from "../../../WidgetManagement/RenderAppWidgets";
 import SplitMainContent from "../../SplitMainContent";
 

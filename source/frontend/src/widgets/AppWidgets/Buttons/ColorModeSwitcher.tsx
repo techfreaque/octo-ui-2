@@ -3,7 +3,7 @@ import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import Moon from "../../../components/Icons/Moon";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   colorModes,
   useToggleColorModeContext,

@@ -4,10 +4,10 @@ import {
   DollarOutlined,
   LeftOutlined,
 } from "@ant-design/icons";
-import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
+import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import { Modal, Tooltip, Typography } from "antd";
 import { t } from "i18next";
-import {
+import type {
   Dispatch,
   ForwardRefExoticComponent,
   RefAttributes,
@@ -18,13 +18,14 @@ import { Trans } from "react-i18next";
 import AntButton from "../../../../../../components/Buttons/AntButton";
 import { buttonTypes } from "../../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
+import type {
+  AppStoreAppType} from "../../../../../../context/data/AppStoreDataProvider";
 import {
-  AppStoreAppType,
   useAppStoreUserContext,
   validateUploadInfo,
 } from "../../../../../../context/data/AppStoreDataProvider";
 import { strategyModeName, strategyName } from "../../../storeConstants";
-import { DownloadInfo, UploadInfo } from "../../AppCard";
+import type { DownloadInfo, UploadInfo } from "../../AppCard";
 import { handlePopConfirmOpen } from "../AppActions";
 import AppDownloadForm from "./DownloadForm";
 import UploadAppForm from "./UploadAppForm";

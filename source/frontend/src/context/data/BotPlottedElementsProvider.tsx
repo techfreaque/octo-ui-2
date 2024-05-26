@@ -1,7 +1,8 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useContext,
   useEffect,
@@ -12,16 +13,17 @@ import {
   fetchPlotlyBacktestingPlotData,
   fetchPlotlyLivePlotData,
 } from "../../api/data";
-import { ID_SEPARATOR, PlotSourceType } from "../../constants/backendConstants";
+import type { PlotSourceType } from "../../constants/backendConstants";
+import { ID_SEPARATOR } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
-import { ChartType } from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
-import {
+import type { ChartType } from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
+import type {
   ChartLocationType,
   NonChartLocationTypes,
 } from "../../widgets/AppWidgets/Charts/MainCharts/Plotly";
-import { MarkerAttributesType } from "../../widgets/AppWidgets/Charts/MainCharts/PlotlyGenerateData";
+import type { MarkerAttributesType } from "../../widgets/AppWidgets/Charts/MainCharts/PlotlyGenerateData";
 import { useCurrentTentacleConfig } from "../../widgets/AppWidgets/Configuration/TentaclesConfig";
-import {
+import type {
   DataTableColumnType,
   DataTableDataType,
 } from "../../widgets/AppWidgets/Tables/DataTable";

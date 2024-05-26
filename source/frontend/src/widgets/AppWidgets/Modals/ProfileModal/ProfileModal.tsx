@@ -2,7 +2,7 @@ import { CloseOutlined, SaveOutlined } from "@ant-design/icons";
 import { Tab } from "@mui/material";
 import { Modal } from "antd";
 import { t } from "i18next";
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { Trans } from "react-i18next";
 
 import AntButton, {
@@ -11,7 +11,7 @@ import AntButton, {
 import { buttonTypes } from "../../../../components/Buttons/AntButton";
 import { buttonVariants } from "../../../../components/Buttons/AntButton";
 import MuiTabs from "../../../../components/Tabs/MuiTabs";
-import { ProfileType } from "../../../../context/data/BotInfoProvider";
+import type { ProfileType } from "../../../../context/data/BotInfoProvider";
 import { TabLabel, tabStyle } from "../../../LayoutWidgets/Tabs/ScrollableTabs";
 import ExchangeSelector from "../../ExchangeSelector/ExchangeSelector";
 import PairsTable from "../../PairsSelector/PairsTable";

@@ -1,5 +1,6 @@
-import { ConfigProvider, Switch, ThemeConfig, Tooltip } from "antd";
-import { SwitchChangeEventHandler } from "antd/es/switch";
+import type { ThemeConfig} from "antd";
+import { ConfigProvider, Switch, Tooltip } from "antd";
+import type { SwitchChangeEventHandler } from "antd/es/switch";
 
 export default function EnablerSwitch({
   availableAfterRestart,

@@ -1,8 +1,8 @@
 import { Card } from "antd";
-import { CSSProperties, Dispatch, SetStateAction } from "react";
+import type { CSSProperties, Dispatch, SetStateAction } from "react";
 
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
-import {
+import type {
   AppStoreAppType,
   StoreCategoryType,
 } from "../../../../context/data/AppStoreDataProvider";

@@ -1,7 +1,8 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Input, Tooltip, Typography } from "antd";
 import { t } from "i18next";
-import { DragEvent, DragEventHandler, useMemo, useState } from "react";
+import type { DragEvent, DragEventHandler} from "react";
+import { useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";

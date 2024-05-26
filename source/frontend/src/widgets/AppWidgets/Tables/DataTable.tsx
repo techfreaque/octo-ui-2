@@ -1,8 +1,9 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
-import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
+import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import { Tooltip, Typography } from "antd";
 import { t } from "i18next";
-import { Dispatch, SetStateAction, useMemo } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useMemo } from "react";
 import { useState } from "react";
 import { Trans } from "react-i18next";
 
@@ -11,20 +12,23 @@ import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
-import AntSidebar, {
+import type {
   AntSideBarMenutItemType,
 } from "../../../components/Sidebars/AntSidebar/AntSidebar";
-import AntTable, {
+import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import type {
   AntTableColumnType,
   AntTableDataType,
 } from "../../../components/Tables/AntTable";
+import AntTable from "../../../components/Tables/AntTable";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import {
+import type {
   PlottedBacktestingElementType,
   PlottedElementNameType,
   PlottedElementsType,
   PlottedLiveElementType,
-  PlottedSubSubElementType,
+  PlottedSubSubElementType} from "../../../context/data/BotPlottedElementsProvider";
+import {
   useBotPlottedElementsContext,
   useFetchPlotData,
 } from "../../../context/data/BotPlottedElementsProvider";

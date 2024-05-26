@@ -2,7 +2,8 @@ import { Tab } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { CSSProperties, useState } from "react";
+import type { CSSProperties} from "react";
+import { useState } from "react";
 
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 

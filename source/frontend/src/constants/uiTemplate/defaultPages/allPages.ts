@@ -1,4 +1,4 @@
-import { BotLayoutType } from "../../../context/config/UiConfigProvider";
+import type { BotLayoutType } from "../../../context/config/UiConfigProvider";
 import { defaultStrategyDesignerPageLayout } from "./strategyDesigner";
 
 export const defaultBotTemplate: BotLayoutType = {

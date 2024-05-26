@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Trans } from "react-i18next";
 
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
-import { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
+import type { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
 import { ConfirmAction } from "./AppActions";
 
 export default function SelectApp({

@@ -9,17 +9,19 @@ import { useEffect } from "react";
 import { Trans } from "react-i18next";
 
 import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
-import AntTable, {
+import type {
   AntTableColumnType,
   AntTableDataType,
   AntTableExpandableConfig,
 } from "../../../components/Tables/AntTable";
+import AntTable from "../../../components/Tables/AntTable";
 import EnablerSwitch from "../../../components/UserInputs/EnablerSwich";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
+import type {
+  ExchangeConfigType} from "../../../context/data/BotExchangeInfoProvider";
 import {
-  ExchangeConfigType,
   useFetchExchangesList,
   useHandleExchangeSettingChange,
   useNewConfigExchangesContext,

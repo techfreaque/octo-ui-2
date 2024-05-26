@@ -1,12 +1,14 @@
 import { useMemo } from "react";
-import { HandleType, NodeProps, Position } from "reactflow";
+import type { HandleType, NodeProps} from "reactflow";
+import { Position } from "reactflow";
 
-import {
+import type {
   NodeConfigKeyType,
-  tentacleConfigTypes,
   TentaclesConfigsSchemaPropertiesType,
   TentaclesConfigsSchemaType,
-  TentaclesConfigValuesType,
+  TentaclesConfigValuesType} from "../../../../../context/config/TentaclesConfigProvider";
+import {
+  tentacleConfigTypes,
   useTentaclesConfigContext,
 } from "../../../../../context/config/TentaclesConfigProvider";
 import { strategyFlowMakerName } from "../../TentaclesConfig";

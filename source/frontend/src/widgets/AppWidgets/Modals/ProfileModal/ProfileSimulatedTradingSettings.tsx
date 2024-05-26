@@ -15,10 +15,11 @@ import {
   Typography,
 } from "antd";
 import { t } from "i18next";
-import { Dispatch, SetStateAction, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useState } from "react";
 import { Trans } from "react-i18next";
 
-import { ProfileType } from "../../../../context/data/BotInfoProvider";
+import type { ProfileType } from "../../../../context/data/BotInfoProvider";
 import { onProfileSettingChange } from "./ProfileTradingSettings";
 
 export function ProfileSimulatedSettings({

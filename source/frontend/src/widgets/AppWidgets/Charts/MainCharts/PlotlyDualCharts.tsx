@@ -7,17 +7,18 @@ import useMeasure from "react-use-measure";
 
 import { useColorModeContext } from "../../../../context/config/ColorModeProvider";
 import { getSplitterClasses } from "../../../LayoutWidgets/SplitMainContent";
-import { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
+import type { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
 import Crosshair, {
   handleCrosshairOnMouseEnter,
   handleCrosshairOnMouseLeave,
 } from "./Crosshair";
+import type {
+  ChartLocationType} from "./Plotly";
 import PlotlyChart, {
   allChartLocations,
-  ChartLocationType,
   enableAxisSelect,
 } from "./Plotly";
-import {
+import type {
   PlotlyLayoutsType,
   PlotlyLayoutType,
   UpdatePlotlyLayoutsType,

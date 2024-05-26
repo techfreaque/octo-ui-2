@@ -1,8 +1,9 @@
 import type { DefaultEventsMap } from "@socket.io/component-emitter";
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useContext,
   useState,
@@ -22,20 +23,24 @@ import {
 } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
+import type {
+  OptimizerEditorInputsType} from "../config/OptimizerEditorProvider";
 import {
-  OptimizerEditorInputsType,
   useFetchProConfig,
   useOptimizerEditorContext,
 } from "../config/OptimizerEditorProvider";
+import type {
+  OptimizerUiConfig} from "../config/UiConfigProvider";
 import {
-  OptimizerUiConfig,
   useUiConfigContext,
 } from "../config/UiConfigProvider";
-import { IdsByExchangeType, useBotInfoContext } from "../data/BotInfoProvider";
+import type { IdsByExchangeType} from "../data/BotInfoProvider";
+import { useBotInfoContext } from "../data/BotInfoProvider";
 import { useFetchOptimizerQueue } from "../data/OptimizerQueueProvider";
+import type {
+  WebsocketDataType} from "../websockets/AbstractWebsocketContext";
 import {
-  AbstractWebsocketContext,
-  WebsocketDataType,
+  AbstractWebsocketContext
 } from "../websockets/AbstractWebsocketContext";
 
 const BotIsOptimizingContext = createContext<boolean | "isStopping">(false);

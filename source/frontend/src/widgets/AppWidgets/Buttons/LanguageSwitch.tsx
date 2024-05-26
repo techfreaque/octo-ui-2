@@ -2,7 +2,8 @@ import { Tooltip } from "antd";
 import { t } from "i18next";
 import { useTranslation } from "react-i18next";
 
-import { languages, LanguageType } from "../../../containers/App/i18n";
+import type { LanguageType } from "../../../containers/App/i18n";
+import { languages } from "../../../containers/App/i18n";
 import { objectEntries } from "../../../helpers/helpers";
 
 export default function LanguageSwitch() {

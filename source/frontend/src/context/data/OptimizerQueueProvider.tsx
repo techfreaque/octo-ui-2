@@ -1,17 +1,19 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useContext,
   useEffect,
   useState,
 } from "react";
 
-import {
+import type {
   errorResponseCallBackParams,
-  sendAndInterpretBotUpdate,
-  successResponseCallBackParams,
+  successResponseCallBackParams} from "../../api/fetchAndStoreFromBot";
+import {
+  sendAndInterpretBotUpdate
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";

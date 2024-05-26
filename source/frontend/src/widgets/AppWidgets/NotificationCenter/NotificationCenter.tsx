@@ -7,8 +7,9 @@ import { fetchBotLogs } from "../../../api/data";
 import AntButton from "../../../components/Buttons/AntButton";
 import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import type {
+  NotificationHistoryNotificationsType} from "../../../context/websockets/NotificationsContext";
 import {
-  NotificationHistoryNotificationsType,
   useNotificationsHistoryContext,
 } from "../../../context/websockets/NotificationsContext";
 

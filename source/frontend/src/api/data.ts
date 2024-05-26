@@ -1,33 +1,34 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import createNotification from "../components/Notifications/Notification";
 import {
   backendRoutes,
   OPTIMIZER_CAMPAIGNS_TO_LOAD_KEY,
 } from "../constants/backendConstants";
-import {
+import type {
   OptimizerCampaignsToLoadUiConfig,
   UiConfigType,
 } from "../context/config/UiConfigProvider";
-import {
+import type {
   AppStoreUserType,
   InstalledTentaclesInfoType,
 } from "../context/data/AppStoreDataProvider";
-import { BacktestingRunsData } from "../context/data/BacktestingRunDataProvider";
-import { ExchangeInfoType } from "../context/data/BotExchangeInfoProvider";
-import { BotInfoType } from "../context/data/BotInfoProvider";
-import {
+import type { BacktestingRunsData } from "../context/data/BacktestingRunDataProvider";
+import type { ExchangeInfoType } from "../context/data/BotExchangeInfoProvider";
+import type { BotInfoType } from "../context/data/BotInfoProvider";
+import type {
   PlottedElementBacktestingNameType,
   PlottedElementNameType,
   PlottedElementsType,
 } from "../context/data/BotPlottedElementsProvider";
-import { PortfolioType } from "../context/data/BotPortfolioProvider";
-import { BotLogHistory } from "../widgets/AppWidgets/NotificationCenter/NotificationCenter";
-import { LoginSignupFormType } from "../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
-import fetchAndStoreFromBot, {
+import type { PortfolioType } from "../context/data/BotPortfolioProvider";
+import type { BotLogHistory } from "../widgets/AppWidgets/NotificationCenter/NotificationCenter";
+import type { LoginSignupFormType } from "../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
+import type {
   errorResponseCallBackParams,
-  sendAndInterpretBotUpdate,
-  successResponseCallBackParams,
+  successResponseCallBackParams} from "./fetchAndStoreFromBot";
+import fetchAndStoreFromBot, {
+  sendAndInterpretBotUpdate
 } from "./fetchAndStoreFromBot";
 
 export async function fetchBotInfo(

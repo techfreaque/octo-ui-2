@@ -1,16 +1,18 @@
 import { createTheme, ThemeProvider } from "@mui/material";
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useContext,
   useEffect,
   useMemo,
   useState,
 } from "react";
 
+import type {
+  ColorsType} from "../../constants/uiTemplate/defaultColors";
 import {
-  ColorsType,
   defaultColors,
 } from "../../constants/uiTemplate/defaultColors";
 import { emptyValueFunction } from "../../helpers/helpers";

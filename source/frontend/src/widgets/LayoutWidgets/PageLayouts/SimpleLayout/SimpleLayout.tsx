@@ -1,6 +1,6 @@
 import { useRef } from "react";
 
-import { UiLayoutPageLayoutType } from "../../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../../context/config/BotLayoutProvider";
 import AppWidgets from "../../../WidgetManagement/RenderAppWidgets";
 
 export default function SimpleLayout({

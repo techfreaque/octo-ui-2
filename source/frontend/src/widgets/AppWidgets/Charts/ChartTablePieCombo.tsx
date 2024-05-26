@@ -10,7 +10,7 @@ import { Trans } from "react-i18next";
 import RadioButtonGroup from "../../../components/Buttons/RadioButtonGroup";
 import { AntIconByReactFunc } from "../../../components/Icons/AntIcon";
 import { sizes } from "../../../constants/frontendConstants";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   useChartTypeContext,
   useUpdateChartTypeContext,
@@ -21,7 +21,7 @@ import { useVisibleTimeFramesContext } from "../../../context/config/VisibleTime
 import { useBotPlottedElementsContext } from "../../../context/data/BotPlottedElementsProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 import W2uiDataTable from "../Tables/DataTable";
-import { ChartLocationType } from "./MainCharts/Plotly";
+import type { ChartLocationType } from "./MainCharts/Plotly";
 import {
   usePlotlyLayoutsContext,
   useUpdatePlotlyLayoutsContext,

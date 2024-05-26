@@ -6,25 +6,27 @@ import {
   OPTIMIZER_INPUTS_KEY,
 } from "../../../../constants/backendConstants";
 import { projectProName } from "../../../../constants/frontendConstants";
-import { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
+import type { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
-import {
+import type {
   OptimizerEditorInputArrayType,
   OptimizerEditorInputNumberType,
   OptimizerEditorInputsType,
   OptimizerEditorInputType,
   OptimizerEditorType,
-  SchemaValueType,
+  SchemaValueType} from "../../../../context/config/OptimizerEditorProvider";
+import {
   useFetchProConfig,
   useOptimizerEditorContext,
   useSaveOptimizerForm,
   useUpdateOptimizerEditorContext,
 } from "../../../../context/config/OptimizerEditorProvider";
-import {
+import type {
   SchemaValueRawType,
-  tentacleConfigTypes,
   TentaclesConfigsRootType,
-  TentaclesConfigsSchemaType,
+  TentaclesConfigsSchemaType} from "../../../../context/config/TentaclesConfigProvider";
+import {
+  tentacleConfigTypes,
   useTentaclesConfigContext,
 } from "../../../../context/config/TentaclesConfigProvider";
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";

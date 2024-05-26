@@ -3,8 +3,8 @@ import "./index.css";
 import Splitter, { SplitDirection } from "@devbookhq/splitter";
 import { useMemo } from "react";
 
-import { ColorModeType } from "../../../constants/uiTemplate/defaultColors";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type { ColorModeType } from "../../../constants/uiTemplate/defaultColors";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import { useColorModeContext } from "../../../context/config/ColorModeProvider";
 import { useSetCurrentPanelPercent } from "../../../context/config/MainPanelContext";
 import { useCurrentPanelContext } from "../../../context/config/MainPanelContext";

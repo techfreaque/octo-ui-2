@@ -4,8 +4,9 @@ import { useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 
 import AntButton from "../../../components/Buttons/AntButton";
+import type {
+  TentaclesConfigByTentacleType} from "../../../context/config/TentaclesConfigProvider";
 import {
-  TentaclesConfigByTentacleType,
   useSaveTentaclesConfig,
 } from "../../../context/config/TentaclesConfigProvider";
 import { useIsDemoMode } from "../../../context/data/BotInfoProvider";

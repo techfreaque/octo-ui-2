@@ -3,20 +3,23 @@ import "./AppCards/appRatingStyle.css";
 import { BranchesOutlined } from "@ant-design/icons";
 import { Typography } from "antd";
 import { t } from "i18next";
-import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 
-import AntSidebar, {
+import type {
   AntSideBarMenutItemType,
 } from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import {
   tentacleConfigTypes,
   useFetchCurrentTradingTentaclesConfig,
   useTentaclesConfigContext,
 } from "../../../context/config/TentaclesConfigProvider";
-import {
+import type {
   AppStoreAppType,
-  StoreCategoryType,
+  StoreCategoryType} from "../../../context/data/AppStoreDataProvider";
+import {
   useAppStoreDataContext,
   useAppStoreUserContext,
   useFetchAppStoreData,
@@ -26,21 +29,23 @@ import { useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../conte
 import { objectKeys } from "../../../helpers/helpers";
 import BuildingBlocksSidebar from "../Configuration/StrategyFlowBuilder/BuildingBlocksSideBar";
 import StrategyFlowBuilder from "../Configuration/StrategyFlowBuilder/StrategyFlowBuilder";
+import type {
+  TentacleConfigTabsData} from "../Configuration/TentaclesConfig";
 import {
   displayStyles,
   generateTradingConfigTabs,
   replaceUppercaseWithSpace,
-  strategyFlowMakerName,
-  TentacleConfigTabsData,
+  strategyFlowMakerName
 } from "../Configuration/TentaclesConfig";
 import ProfileAvatar from "../Stats/ProfileAvatar";
 import AppList from "./AppList";
+import type {
+  StrategyModeSettingsNameType} from "./storeConstants";
 import {
   appPackagesName,
   hiddenCategories,
   strategyModeName,
   strategyModeSettingsName,
-  StrategyModeSettingsNameType,
   strategyName,
 } from "./storeConstants";
 

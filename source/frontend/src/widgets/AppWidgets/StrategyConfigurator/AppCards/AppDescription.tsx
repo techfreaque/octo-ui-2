@@ -1,6 +1,6 @@
 import { Typography } from "antd";
 
-import { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
+import type { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
 
 export function CardDescription({
   app,

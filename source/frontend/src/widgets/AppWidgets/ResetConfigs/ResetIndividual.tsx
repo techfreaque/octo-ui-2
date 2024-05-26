@@ -1,7 +1,7 @@
 import { ConfigProvider, Switch, Tooltip } from "antd";
 
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { CheckedListType, SorageResetKeyType } from "./ResetConfigs";
+import type { CheckedListType, SorageResetKeyType } from "./ResetConfigs";
 
 export default function ResetIndividual({
   title,

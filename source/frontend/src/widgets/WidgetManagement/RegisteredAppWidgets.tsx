@@ -1,4 +1,4 @@
-import { UiLayoutPageLayoutType } from "../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../context/config/BotLayoutProvider";
 import AppDrawerDropdown from "../AppWidgets/AppDrawerDropdown";
 import AddToOptimizerQueueButton from "../AppWidgets/Buttons/AddToOptimizerQueueButton";
 import CancelAllOrdersButton from "../AppWidgets/Buttons/CancelAllOrdersButton";

@@ -1,8 +1,10 @@
-import { IconProp, SizeProp } from "@fortawesome/fontawesome-svg-core";
+import type { IconProp, SizeProp } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { createElement, CSSProperties } from "react";
+import type { CSSProperties } from "react";
+import { createElement } from "react";
 
-import { sizes, SizeType } from "../../constants/frontendConstants";
+import type { SizeType } from "../../constants/frontendConstants";
+import { sizes } from "../../constants/frontendConstants";
 
 const iconStyles: {
   [key in SizeType]: SizeProp | undefined;

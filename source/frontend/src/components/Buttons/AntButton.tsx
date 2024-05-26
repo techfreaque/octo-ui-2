@@ -1,7 +1,7 @@
-import { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
-import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
+import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { Button, ConfigProvider, Tag } from "antd";
-import {
+import type {
   CSSProperties,
   ForwardRefExoticComponent,
   HTMLAttributeAnchorTarget,
@@ -9,7 +9,8 @@ import {
   RefAttributes,
 } from "react";
 
-import { sizes, SizeType } from "../../constants/frontendConstants";
+import type { SizeType } from "../../constants/frontendConstants";
+import { sizes } from "../../constants/frontendConstants";
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 import { AntIconByReactFunc } from "../Icons/AntIcon";
 import { FaIconByReactFunc } from "../Icons/FontAwesome";

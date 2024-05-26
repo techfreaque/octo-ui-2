@@ -14,10 +14,11 @@ import AntButton, {
   buttonVariants,
 } from "../../../../components/Buttons/AntButton";
 import createNotification from "../../../../components/Notifications/Notification";
-import AntTable, {
+import type {
   AntTableColumnType,
   AntTableDataType,
 } from "../../../../components/Tables/AntTable";
+import AntTable from "../../../../components/Tables/AntTable";
 import {
   findUserInputAndTentacleLabel,
   userInputKey,
@@ -30,23 +31,26 @@ import {
   METADATA_UNDISPLAYED_FIELDS,
   TIMESTAMP_DATA,
 } from "../../../../constants/backendConstants";
-import {
-  tentacleConfigTypes,
+import type {
   TentaclesConfigByTentacleType,
   TentaclesConfigsRootType,
   TentaclesConfigValuesType,
-  TentaclesConfigValueType,
+  TentaclesConfigValueType} from "../../../../context/config/TentaclesConfigProvider";
+import {
+  tentacleConfigTypes,
   useSaveTentaclesConfig,
   useTentaclesConfigContext,
 } from "../../../../context/config/TentaclesConfigProvider";
-import {
+import type {
   BacktestingRunData,
-  BacktestingRunDataWithoutID,
+  BacktestingRunDataWithoutID} from "../../../../context/data/BacktestingRunDataProvider";
+import {
   useDeleteBacktestingRunData,
 } from "../../../../context/data/BacktestingRunDataProvider";
+import type {
+  DisplayedRunIdsType} from "../../../../context/data/BotPlottedElementsProvider";
 import {
   defaultDisplayedRunIds,
-  DisplayedRunIdsType,
   useDisplayedRunIdsContext,
   useHiddenBacktestingMetadataColumnsContext,
   useUpdateDisplayedRunIdsContext,

@@ -20,7 +20,7 @@ import {
   supportedOctoBotDistributions,
 } from "../../../constants/frontendConstants";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   useBotInfoContext,
   useUpdateProjectInfoOpenContext,

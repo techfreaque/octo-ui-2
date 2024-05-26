@@ -1,15 +1,16 @@
 import { SearchOutlined } from "@ant-design/icons";
+import type {
+  InputRef,
+  TablePaginationConfig} from "antd";
 import {
   Button,
   Flex,
   Input,
-  InputRef,
   Space,
-  Table,
-  TablePaginationConfig,
+  Table
 } from "antd";
-import { SizeType } from "antd/es/config-provider/SizeContext";
-import {
+import type { SizeType } from "antd/es/config-provider/SizeContext";
+import type {
   ExpandableConfig,
   FilterDropdownProps,
   FilterValue,
@@ -17,11 +18,12 @@ import {
   TableCurrentDataSource,
 } from "antd/es/table/interface";
 import { t } from "i18next";
-import {
+import type {
   Dispatch,
   LegacyRef,
   RefObject,
-  SetStateAction,
+  SetStateAction} from "react";
+import {
   useRef,
   useState,
 } from "react";

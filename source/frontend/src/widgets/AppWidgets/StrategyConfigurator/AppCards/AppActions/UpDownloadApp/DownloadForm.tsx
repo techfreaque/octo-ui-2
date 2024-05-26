@@ -2,26 +2,29 @@ import { DownloadOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Grid } from "@mui/material";
 import { Alert, Card, Tooltip, Typography } from "antd";
 import { t } from "i18next";
-import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 
 import AntButton from "../../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
-import AntTable, {
+import type {
   AntTableDataType,
 } from "../../../../../../components/Tables/AntTable";
+import AntTable from "../../../../../../components/Tables/AntTable";
 import { useBotColorsContext } from "../../../../../../context/config/BotColorsProvider";
-import {
+import type {
   AppStoreAppType,
   AppStoreAppVersionType,
-  AppStoreVersionTagType,
+  AppStoreVersionTagType} from "../../../../../../context/data/AppStoreDataProvider";
+import {
   useAddToAppStoreCart,
   useAppStoreDataContext,
   useIsInAppStoreCart,
   useUpdateAppStoreCartIsOpenContext,
 } from "../../../../../../context/data/AppStoreDataProvider";
 import { appPackagesName, strategyName } from "../../../storeConstants";
-import { DownloadInfo } from "../../AppCard";
+import type { DownloadInfo } from "../../AppCard";
 import { IsInstalledIcon, IsNotInstalledIcon } from "../../AppCover";
 
 export default function AppDownloadForm({

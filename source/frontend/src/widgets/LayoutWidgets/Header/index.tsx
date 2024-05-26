@@ -1,7 +1,7 @@
 import { Layout } from "antd";
 
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import Logo from "../../AppWidgets/other/Logo";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 

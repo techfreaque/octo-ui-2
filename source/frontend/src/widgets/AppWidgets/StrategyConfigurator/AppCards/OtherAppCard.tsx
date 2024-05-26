@@ -1,16 +1,17 @@
-import { Dispatch, SetStateAction } from "react";
+import type { Dispatch, SetStateAction } from "react";
 
 import { backendRoutes } from "../../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
-import {
+import type {
   AppStoreAppType,
-  StoreCategoryType,
+  StoreCategoryType} from "../../../../context/data/AppStoreDataProvider";
+import {
   useInstallAnyAppPackage,
   useUnInstallAppPackage,
   useUploadToAppStore,
 } from "../../../../context/data/AppStoreDataProvider";
 import AppActions from "./AppActions/AppActions";
-import { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
+import type { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
 import AppCardTemplate from "./AppCardTemplate";
 
 export default function OtherAppCard({

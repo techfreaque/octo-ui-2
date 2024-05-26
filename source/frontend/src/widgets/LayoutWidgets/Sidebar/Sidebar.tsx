@@ -1,7 +1,8 @@
-import AntSidebar, {
+import type {
   AntSideBarMenutItemType,
 } from "../../../components/Sidebars/AntSidebar/AntSidebar";
-import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
+import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
 export default function Sidebar({ sideBarContent }: UiLayoutPageLayoutType) {

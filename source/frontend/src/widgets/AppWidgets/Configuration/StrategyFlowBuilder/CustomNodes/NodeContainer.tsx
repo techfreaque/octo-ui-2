@@ -1,12 +1,14 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
 import JsonEditor from "@techfreaque/json-editor-react";
-import { CSSProperties, useCallback, useMemo } from "react";
+import type { CSSProperties} from "react";
+import { useCallback, useMemo } from "react";
+import type {
+  HandleType,
+  ReactFlowState} from "reactflow";
 import {
   getConnectedEdges,
   Handle,
-  HandleType,
   Position,
-  ReactFlowState,
   useNodeId,
   useReactFlow,
   useStore,
@@ -20,9 +22,10 @@ import AntButton, {
 } from "../../../../../components/Buttons/AntButton";
 import defaultJsonEditorSettings from "../../../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import { useBotColorsContext } from "../../../../../context/config/BotColorsProvider";
-import {
+import type {
   TentaclesConfigsSchemaType,
-  TentaclesConfigValuesType,
+  TentaclesConfigValuesType} from "../../../../../context/config/TentaclesConfigProvider";
+import {
   useUpdateIsSavingTentaclesConfigContext,
 } from "../../../../../context/config/TentaclesConfigProvider";
 import { useUiConfigContext } from "../../../../../context/config/UiConfigProvider";

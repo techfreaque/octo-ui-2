@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo, useState } from "react";
 
-import { ColorModeType } from "../../constants/uiTemplate/defaultColors";
+import type { ColorModeType } from "../../constants/uiTemplate/defaultColors";
 
 const defaultColorMode: ColorModeType = "dark";
 

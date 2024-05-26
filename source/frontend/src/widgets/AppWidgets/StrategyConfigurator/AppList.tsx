@@ -1,16 +1,18 @@
 import { Grid } from "@mui/material";
-import { Dispatch, SetStateAction, useState } from "react";
+import type { Dispatch, SetStateAction} from "react";
+import { useState } from "react";
 
-import {
+import type {
   AppStoreAppType,
   AppStoreDataType,
   StoreCategoryType,
 } from "../../../context/data/AppStoreDataProvider";
 import { ErrorBoundary } from "../../WidgetManagement/RenderAppWidgets";
 import AppCard from "./AppCards/AppCard";
+import type {
+  StrategyModeSettingsNameType} from "./storeConstants";
 import {
-  strategyModeSettingsName,
-  StrategyModeSettingsNameType,
+  strategyModeSettingsName
 } from "./storeConstants";
 
 export default function AppList({

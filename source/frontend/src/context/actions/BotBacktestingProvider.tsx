@@ -1,7 +1,8 @@
+import type {
+  Dispatch,
+  SetStateAction} from "react";
 import {
   createContext,
-  Dispatch,
-  SetStateAction,
   useCallback,
   useContext,
   useState,
@@ -15,15 +16,17 @@ import {
 } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
+import type {
+  BacktestingUiConfig} from "../config/UiConfigProvider";
 import {
-  BacktestingUiConfig,
   useUiConfigContext,
 } from "../config/UiConfigProvider";
 import { useBotInfoContext } from "../data/BotInfoProvider";
-import {
-  AbstractWebsocketContext,
+import type {
   WebsocketDataType,
-  WebsocketOnConnectionUpdateType,
+  WebsocketOnConnectionUpdateType} from "../websockets/AbstractWebsocketContext";
+import {
+  AbstractWebsocketContext
 } from "../websockets/AbstractWebsocketContext";
 
 const BotIsBacktestingContext = createContext<boolean>(false);

@@ -1,8 +1,8 @@
 import { t } from "i18next";
 
 import { CURRENT_BOT_DATA } from "../../../constants/backendConstants";
-import { UiConfigKeyType } from "../../../context/config/UiConfigProvider";
-import { DataFilesType } from "../../../context/data/BotInfoProvider";
+import type { UiConfigKeyType } from "../../../context/config/UiConfigProvider";
+import type { DataFilesType } from "../../../context/data/BotInfoProvider";
 
 export function getUiConfigSchema(
   configKey: UiConfigKeyType,
@@ -32,51 +32,52 @@ export function getUiConfigSchema(
 interface UiConfigSchemaType {
   type: string;
   title: string;
-  properties: UiConfigSubSchemaType;
+  properties: UiConfigSubSchemasType;
 }
-interface UiConfigSubSchemaType {
-  [key: string]: {
-    type: string;
-    title: string;
-    properties?: UiConfigSubSchemaType;
-    format?: "checkbox" | "tabs" | "select2" | "date" | "number";
-    fieldType?: "boolean";
-    options?: {
-      grid_columns?: 12 | 6;
-      enum_titles?: string[];
-      select2?: {
-        tags: true;
-      };
-    };
-    items?: {
-      type: "string";
-      enum: string[];
-      options: {
-        enum_titles: string[];
-      };
-    };
-    description?: string;
-    propertyOrder?: number;
-    enum?: string[];
-    uniqueItems?: boolean;
-    minItems?: number;
-    minimum?: number;
-    default?: string | number | boolean | string[] | undefined;
-    patternProperties?: {
-      [pattern: string]: {
-        type: "boolean";
-        format: "checkbox";
-        fieldType: "boolean";
-      };
+export interface UiConfigSubSchemaType {
+  type: string;
+  title: string;
+  properties?: UiConfigSubSchemasType;
+  format?: "checkbox" | "tabs" | "select2" | "date" | "number";
+  fieldType?: "boolean";
+  options?: {
+    grid_columns?: 12 | 6;
+    enum_titles?: string[];
+    select2?: {
+      tags: true;
     };
   };
+  items?: {
+    type: "string";
+    enum: string[];
+    options: {
+      enum_titles: string[];
+    };
+  };
+  description?: string;
+  propertyOrder?: number;
+  enum?: string[];
+  uniqueItems?: boolean;
+  minItems?: number;
+  minimum?: number;
+  default?: string | number | boolean | string[] | undefined;
+  patternProperties?: {
+    [pattern: string]: {
+      type: "boolean";
+      format: "checkbox";
+      fieldType: "boolean";
+    };
+  };
+}
+interface UiConfigSubSchemasType {
+  [key: string]: UiConfigSubSchemaType;
 }
 
 function selectableChartlocation(
   name: string,
   title: string,
   order: number
-): UiConfigSubSchemaType {
+): UiConfigSubSchemasType {
   return {
     [name]: {
       type: "string",
