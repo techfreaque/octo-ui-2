@@ -2,6 +2,7 @@ import type { Dispatch, SetStateAction } from "react";
 
 import createNotification from "../components/Notifications/Notification";
 import { backendRoutes } from "../constants/backendConstants";
+import { projectName } from "../constants/frontendConstants";
 import type { StatBacktestingSettingsType } from "../context/actions/BotBacktestingProvider";
 import type { StartOptimizerSettingsType } from "../context/actions/BotOptimizerProvider";
 import type { OptimizerEditorInputsType } from "../context/config/OptimizerEditorProvider";
@@ -14,7 +15,6 @@ import type {
   successResponseCallBackParams,
 } from "./fetchAndStoreFromBot";
 import { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
-import { projectName } from "../constants/frontendConstants";
 
 export async function startBacktesting(
   botDomain: string,
@@ -617,7 +617,7 @@ export async function realTradingSwitch(
   function successCallback() {
     createNotification({
       title: `Successfully switched to ${title} trading`,
-      message: projectName + " will restart now",
+      message: `${projectName  } will restart now`,
     });
   }
   function errorCallback() {
@@ -653,7 +653,7 @@ export async function updateConfig(
     createNotification({
       title: `Successfully updated ${profileName} config`,
       message: newConfig.restart_after_save
-        ? projectName + " will restart now"
+        ? `${projectName  } will restart now`
         : undefined,
     });
   }
