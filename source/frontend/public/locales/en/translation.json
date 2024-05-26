@@ -381,7 +381,7 @@
     "trading-paused": "Trading paused",
     "currently-using-tradingType": "Currently using: {{tradingType}}",
     "by-switching-to-simulated-trading-projectName-will-only-use-its-simulation-mode-on-real-market-conditions": "By switching to simulated trading, {{projectName}} will only use its simulation mode on real market conditions.",
-    "it-will-no-longer-create-trades-with-your-exchange-account-it-will-use-a-simulated-portfolio-managed-by-octobot": "It will no longer create trades with your exchange account, it will use a simulated portfolio managed by OctoBot.",
+    "it-will-no-longer-create-trades-with-your-exchange-account-it-will-use-a-simulated-portfolio-managed-by-projectName": "It will no longer create trades with your exchange account, it will use a simulated portfolio managed by {{projectName}}.",
     "by-switching-to-real-trading-projectName-will-use-your-real-funds": "By switching to real trading, {{projectName}} will use your real funds",
     "warning-the-switch-button-will-also-restart-projectName": "Warning! The switch button will also restart {{projectName}}",
     "cancel": "Cancel",

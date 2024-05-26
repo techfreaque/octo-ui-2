@@ -79,7 +79,10 @@ export default function RealTradingSwitch() {
                   )}
                 </Paragraph>
                 <Paragraph>
-                  <Trans i18nKey="realTradingSwitch.it-will-no-longer-create-trades-with-your-exchange-account-it-will-use-a-simulated-portfolio-managed-by-octobot" />
+                  {t(
+                    "realTradingSwitch.it-will-no-longer-create-trades-with-your-exchange-account-it-will-use-a-simulated-portfolio-managed-by-projectName",
+                    { projectName }
+                  )}
                 </Paragraph>
               </>
             ) : (
