@@ -4,20 +4,16 @@ import AntSidebar, {
 import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
 
-export default function Sidebar({
-  sideBarContent,
-}: {
-  sideBarContent: UiLayoutPageLayoutType[];
-}) {
+export default function Sidebar({ sideBarContent }: UiLayoutPageLayoutType) {
   const _sideBarContent = hydrateSideBarContent(sideBarContent);
   return <AntSidebar menuItems={_sideBarContent} />;
 }
 
 function hydrateSideBarContent(
-  sideBarContent: UiLayoutPageLayoutType[]
+  sideBarContent: UiLayoutPageLayoutType[] | undefined
 ): AntSideBarMenutItemType[] {
   const hydratedContent: AntSideBarMenutItemType[] = [];
-  sideBarContent.forEach((menuItem, index) => {
+  sideBarContent?.forEach((menuItem, index) => {
     const hydratedItem: AntSideBarMenutItemType = {
       title: menuItem.label || `No Label for ${menuItem.component}`,
       key: `${menuItem.label}${index}`,
@@ -39,4 +35,5 @@ function hydrateSideBarContent(
 
 export function SidebarMenuItem() {
   // Dummy Component - will never be called
+  return <></>;
 }

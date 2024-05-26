@@ -33,36 +33,36 @@ export default function SaveTradingModeSettings() {
     }
     const tentacleNames =
       currentTentaclesConfig && Object.keys(currentTentaclesConfig);
-    return (
-      !tentacleNames?.includes(strategyFlowMakerName) && (
-        <div
-          style={{
-            marginTop: "auto",
-            marginBottom: "auto",
-            marginRight: "5px",
-          }}
+    return !tentacleNames?.includes(strategyFlowMakerName) ? (
+      <div
+        style={{
+          marginTop: "auto",
+          marginBottom: "auto",
+          marginRight: "5px",
+        }}
+      >
+        <Tooltip
+          placement="topRight"
+          title={<Trans i18nKey="save-strategy-mode-settings-tooltip" />}
+          arrow={false}
         >
-          <Tooltip
-            placement="topRight"
-            title={<Trans i18nKey="save-strategy-mode-settings-tooltip" />}
-            arrow={false}
-          >
-            <div>
-              <AntButton
-                onClick={handleUserInputSave}
-                disabled={isSaving || !isOnline || isDemo}
-                // buttonVariant="text"
-                antIconComponent={SaveOutlined}
-                // style={
-                //     {fontSize: '22px'}
-                // }
-              >
-                <Trans i18nKey="save-strategy-mode-settings"></Trans>
-              </AntButton>
-            </div>
-          </Tooltip>
-        </div>
-      )
+          <div>
+            <AntButton
+              onClick={handleUserInputSave}
+              disabled={isSaving || !isOnline || isDemo}
+              // buttonVariant="text"
+              antIconComponent={SaveOutlined}
+              // style={
+              //     {fontSize: '22px'}
+              // }
+            >
+              <Trans i18nKey="save-strategy-mode-settings" />
+            </AntButton>
+          </div>
+        </Tooltip>
+      </div>
+    ) : (
+      <></>
     );
   }, [currentTentaclesConfig, isDemo, isOnline, isSaving, saveTentaclesConfig]);
 }

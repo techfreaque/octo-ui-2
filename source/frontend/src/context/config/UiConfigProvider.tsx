@@ -14,17 +14,14 @@ import {
   successResponseCallBackParams,
 } from "../../api/fetchAndStoreFromBot";
 import {
-  BACKTESTING_ANALYSIS_SETTINGS,
   BACKTESTING_RUN_SETTINGS_KEY,
   botLayoutKey,
   CanldesPlotSourceType,
   CURRENT_LIVE_ID_KEY,
   DISPLAY_SETTINGS_KEY,
   GRAPHS_KEY,
-  LIVE_ANALYSIS_SETTINGS,
   OPTIMIZER_CAMPAIGN_KEY,
   OPTIMIZER_CAMPAIGNS_TO_LOAD_KEY,
-  OPTIMIZER_INPUTS_KEY,
   OPTIMIZER_RUN_SETTINGS_KEY,
 } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
@@ -40,22 +37,16 @@ export interface BotLayoutType {
 
 export type UiConfigKeyType =
   | "backtesting_run_settings"
-  | "optimization_campaign"
   | "optimizer_campaigns_to_load"
   | "optimizer_run_settings"
   | "optimization_campaign"
-  | "backtesting_analysis_settings"
-  | "live_analysis_settings"
   | "flow_editor_settings"
   | "display_settings";
 
 export type UiSubConfigsType =
   | OptimizerUiConfig
   | OptimizerCampaignsToLoadUiConfig
-  | OptimizerInputsUiConfig
   | BacktestingUiConfig
-  | BacktestingAnalysisUiConfig
-  | LiveAnalysisUiConfig
   | FlowSettingsUiConfig
   | DisplaySettingsUiConfig
   | undefined;
@@ -71,8 +62,9 @@ export interface OptimizerUiConfig {
   queue_size?: number;
   start_timestamp?: number | null;
 }
-export interface OptimizerCampaignsToLoadUiConfig {}
-export interface OptimizerInputsUiConfig {}
+export type OptimizerCampaignsToLoadUiConfig = {
+  [campaignName: string]: boolean;
+};
 export interface BacktestingUiConfig {
   data_sources?: string[];
   end_timestamp?: number | null;
@@ -80,8 +72,6 @@ export interface BacktestingUiConfig {
   exchange_type?: "use_current_profile";
   start_timestamp?: number | null;
 }
-export interface BacktestingAnalysisUiConfig {}
-export interface LiveAnalysisUiConfig {}
 export interface FlowSettingsUiConfig {
   auto_save?: boolean;
 }
@@ -98,10 +88,7 @@ export interface UiConfigType {
   [botLayoutKey]?: BotLayoutType | undefined;
   [OPTIMIZER_RUN_SETTINGS_KEY]?: OptimizerUiConfig;
   [BACKTESTING_RUN_SETTINGS_KEY]?: BacktestingUiConfig;
-  [BACKTESTING_ANALYSIS_SETTINGS]?: BacktestingAnalysisUiConfig;
-  [LIVE_ANALYSIS_SETTINGS]?: LiveAnalysisUiConfig;
   [OPTIMIZER_CAMPAIGNS_TO_LOAD_KEY]?: OptimizerCampaignsToLoadUiConfig;
-  [OPTIMIZER_INPUTS_KEY]?: OptimizerInputsUiConfig;
   [CURRENT_LIVE_ID_KEY]?: number;
   [DISPLAY_SETTINGS_KEY]?: DisplaySettingsUiConfig;
   [OPTIMIZER_CAMPAIGN_KEY]?: {

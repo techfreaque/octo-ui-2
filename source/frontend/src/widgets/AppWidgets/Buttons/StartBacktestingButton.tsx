@@ -18,17 +18,17 @@ export default function StartBacktestingButton() {
   const isOnline = useIsBotOnlineContext();
   const isDemo = useIsDemoMode();
   return useMemo(() => {
-    return (
-      !isBacktesting && (
-        <AntButton
-          onClick={startBacktesting}
-          disabled={isDataCollecting || !isOnline || isDemo}
-          buttonType={buttonTypes.success}
-          faIconComponent={faPlay}
-        >
-          <Trans i18nKey="backtesting.start-backtest"></Trans>
-        </AntButton>
-      )
+    return isBacktesting ? (
+      <></>
+    ) : (
+      <AntButton
+        onClick={startBacktesting}
+        disabled={isDataCollecting || !isOnline || isDemo}
+        buttonType={buttonTypes.success}
+        faIconComponent={faPlay}
+      >
+        <Trans i18nKey="backtesting.start-backtest" />
+      </AntButton>
     );
   }, [isBacktesting, isDataCollecting, isDemo, isOnline, startBacktesting]);
 }

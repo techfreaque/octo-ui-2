@@ -9,6 +9,7 @@ import { useMediaQuery } from "@mui/material";
 import { Alert, Modal, Typography } from "antd";
 import { t } from "i18next";
 import { useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, { buttonSizes } from "../../../components/Buttons/AntButton";
 import {
@@ -55,15 +56,15 @@ export default function Footer({ rightContent }: UiLayoutPageLayoutType) {
             <div style={{ margin: "auto 15px" }}>
               <a href={projectGithubUrl} target="blank">
                 <FontAwesomeIcon style={{ margin: "0 3px" }} icon={faGithub} />
-                <span className="d-none d-md-inline">GitHub</span>
+                <span className="d-none d-md-inline"><Trans i18nKey="footer.github" /></span>
               </a>
               <a href={projectDiscord} target="blank">
                 <FontAwesomeIcon style={{ margin: "0 3px" }} icon={faDiscord} />
-                <span className="d-none d-md-inline">Discord</span>
+                <span className="d-none d-md-inline"><Trans i18nKey="footer.discord" /></span>
               </a>
               <a href={projectYouTube} target="blank">
                 <FontAwesomeIcon style={{ margin: "0 3px" }} icon={faYoutube} />
-                <span className="d-none d-md-inline">YouTube</span>
+                <span className="d-none d-md-inline"><Trans i18nKey="footer.youtube" /></span>
               </a>
             </div>
           )}

@@ -16,6 +16,7 @@ import {
   SorterResult,
   TableCurrentDataSource,
 } from "antd/es/table/interface";
+import { t } from "i18next";
 import {
   Dispatch,
   LegacyRef,
@@ -24,6 +25,7 @@ import {
   useRef,
   useState,
 } from "react";
+import { Trans } from "react-i18next";
 
 export default function AntTable<
   TAntTableDataType extends AntTableDataType,
@@ -370,7 +372,7 @@ function FilterDrowdown({
     <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
       <Input
         ref={searchInput}
-        placeholder={`Search ${elementName}`}
+        placeholder={t('table.search-columnName', { columnName: elementName })}
         value={selectedKeys[0]}
         onChange={(e) =>
           setSelectedKeys(e.target.value ? [e.target.value] : [])
@@ -389,14 +391,14 @@ function FilterDrowdown({
           size="small"
           style={{ width: 90 }}
         >
-          Search
+          <Trans i18nKey="table.search" />
         </Button>
         <Button
           onClick={() => handleReset()}
           size="small"
           style={{ width: 90 }}
         >
-          Reset
+          <Trans i18nKey="table.reset" />
         </Button>
       </Space>
     </div>

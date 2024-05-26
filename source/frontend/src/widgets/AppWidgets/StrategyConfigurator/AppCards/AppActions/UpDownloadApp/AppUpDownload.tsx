@@ -342,7 +342,7 @@ function UpDownloadloadAppModal({
               size="large"
               onClick={() => handlePopConfirmOpen(setInfo, false)}
             >
-              <Trans i18nKey="appStore.appCard.downloadApp.go-back"></Trans>
+              <Trans i18nKey="appStore.appCard.downloadApp.go-back" />
             </AntButton>
             {confirmButtonText && (
               <AntButton

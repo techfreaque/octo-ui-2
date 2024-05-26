@@ -1,7 +1,9 @@
 import { CloseOutlined, SaveOutlined } from "@ant-design/icons";
 import { Tab } from "@mui/material";
 import { Modal } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, {
   buttonSizes,
@@ -56,7 +58,7 @@ export default function ProfileModal({
           label={
             <TabLabel
               key={0}
-              tabTitle={"Strategy Info"}
+              tabTitle={t('strategyConfigurator.profileSettings.strategy-info')}
               antIcon={"ProfileOutlined"}
             />
           }
@@ -87,7 +89,7 @@ export default function ProfileModal({
           label={
             <TabLabel
               key={1}
-              tabTitle={"Simulation Settings"}
+              tabTitle={t('strategyConfigurator.profileSettings.simulation-settings')}
               antIcon={"RobotOutlined"}
             />
           }
@@ -115,7 +117,7 @@ export default function ProfileModal({
             label={
               <TabLabel
                 key={2}
-                tabTitle={"Traded Pairs"}
+                tabTitle={t('strategyConfigurator.profileSettings.traded-pairs')}
                 antIcon={"DollarCircleOutlined"}
               />
             }
@@ -143,7 +145,7 @@ export default function ProfileModal({
             label={
               <TabLabel
                 key={3}
-                tabTitle={"Exchanges"}
+                tabTitle={t('strategyConfigurator.profileSettings.exchanges')}
                 antIcon={"BankOutlined"}
               />
             }
@@ -189,7 +191,7 @@ export default function ProfileModal({
               size={buttonSizes.large}
               onClick={handleClose}
             >
-              Cancel
+              <Trans i18nKey="strategyConfigurator.profileSettings.cancel" />
             </AntButton>
           </div>
           <div
@@ -208,7 +210,7 @@ export default function ProfileModal({
                 size={buttonSizes.large}
                 onClick={() => saveProfile()}
               >
-                Save And Restart Later
+                <Trans i18nKey="strategyConfigurator.profileSettings.save-and-restart-later" />
               </AntButton>
             )}
             {isCurrentProfile && (
@@ -221,7 +223,7 @@ export default function ProfileModal({
                 size={buttonSizes.large}
                 onClick={saveProfileAndRestart}
               >
-                Save And Restart Now
+                <Trans i18nKey="strategyConfigurator.profileSettings.save-and-restart-now" />
               </AntButton>
             )}
           </div>

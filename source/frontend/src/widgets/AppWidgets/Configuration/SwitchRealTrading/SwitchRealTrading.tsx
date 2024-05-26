@@ -6,7 +6,9 @@ import {
 import { Modal } from "@mui/material";
 import { Box } from "@mui/system";
 import { Alert, Space, Tooltip, Typography } from "antd";
+import { t } from "i18next";
 import { useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import { realTradingSwitch } from "../../../../api/actions";
 import AntButton, {
@@ -30,10 +32,10 @@ export default function RealTradingSwitch() {
   const isSimulatedTrading =
     botInfo?.current_profile?.config["trader-simulator"].enabled;
   const title = isRealTrading
-    ? "Real trading"
+    ? t("realTradingSwitch.real-trading")
     : isSimulatedTrading
-    ? "Simulated trading"
-    : "Trading paused";
+    ? t("realTradingSwitch.simulated-trading")
+    : t("realTradingSwitch.trading-paused");
   return useMemo(() => {
     const icon = isRealTrading ? (
       <AntIconByReactFunc AntReactIcon={DollarOutlined} size={sizes.medium} />
@@ -63,27 +65,31 @@ export default function RealTradingSwitch() {
           aria-labelledby={"real-trading-switch-modal-title"}
         >
           <Box sx={style}>
-            <Title level={3}>Currently using: {title}</Title>
+            <Title level={3}>
+              {t("realTradingSwitch.currently-using-tradingType", {
+                tradingType: title,
+              })}
+            </Title>
             {isRealTrading ? (
               <>
                 <Paragraph>
-                  By switching to simulated trading, OctoBot will only use its
-                  simulation mode on real market conditions.
+                  <Trans i18nKey="realTradingSwitch.by-switching-to-simulated-trading-octobot-will-only-use-its-simulation-mode-on-real-market-conditions" />
                 </Paragraph>
                 <Paragraph>
-                  It will no longer create trades with your exchange account, it
-                  will use a simulated portfolio managed by OctoBot.
+                  <Trans i18nKey="realTradingSwitch.it-will-no-longer-create-trades-with-your-exchange-account-it-will-use-a-simulated-portfolio-managed-by-octobot" />
                 </Paragraph>
               </>
             ) : (
               <Paragraph>
-                By switching to real trading, OctoBot will use your real funds
+                <Trans i18nKey="realTradingSwitch.by-switching-to-real-trading-octobot-will-use-your-real-funds" />
               </Paragraph>
             )}
             <Alert
               banner
               style={{ margin: "20px 0 30px 0" }}
-              message="Warning! The switch button will also restart OctoBot"
+              message={t(
+                "realTradingSwitch.warning-the-switch-button-will-also-restart-octobot"
+              )}
             />
             <div style={{ float: "right" }}>
               <Space>
@@ -92,17 +98,16 @@ export default function RealTradingSwitch() {
                   style={{ marginRight: "5px" }}
                   buttonType={buttonTypes.primary}
                 >
-                  Cancel
+                  <Trans i18nKey="realTradingSwitch.cancel" />
                 </AntButton>
                 <AntButton
                   onClick={() => realTradingSwitch(botDomain, isRealTrading)}
                   buttonType={buttonTypes.primary}
                   buttonVariant="primary"
                 >
-                  <>
-                    Switch to
-                    {isRealTrading ? " Simulated trading" : " Real trading"}
-                  </>
+                  {isRealTrading
+                    ? t('realTradingSwitch.switch-to-simulated-trading')
+                    : t('realTradingSwitch.switch-to-real-trading')}
                 </AntButton>
               </Space>
             </div>

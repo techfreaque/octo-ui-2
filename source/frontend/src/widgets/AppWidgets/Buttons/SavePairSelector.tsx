@@ -29,7 +29,7 @@ export default function SavePairSelector() {
   return useMemo(() => {
     const exchangeConfigUpdateHasChanged = Boolean(
       exchangeConfigUpdate.global_config &&
-        Object.keys(exchangeConfigUpdate.global_config).length,
+        Object.keys(exchangeConfigUpdate.global_config).length
     );
     const hasUnsavedChanges =
       JSON.stringify(unsavedCurrencyList) !==
@@ -38,27 +38,27 @@ export default function SavePairSelector() {
       handleProfileUpdate(restartAfterSave);
       setPairSelectorMenuOpen({ open: false, wantsClose: false });
     }
-    return (
-      pairSelectorMenuOpen?.open &&
-      (exchangeConfigUpdateHasChanged || hasUnsavedChanges) && (
-        <span
-          style={{
-            margin: "auto",
-            display: "flex",
-            marginRight: "5px",
-          }}
+    return pairSelectorMenuOpen?.open &&
+      (exchangeConfigUpdateHasChanged || hasUnsavedChanges) ? (
+      <span
+        style={{
+          margin: "auto",
+          display: "flex",
+          marginRight: "5px",
+        }}
+      >
+        <AntButton
+          onClick={() => handleSave(true)}
+          disabled={isDemo || !isOnline}
+          antIconComponent={SaveOutlined}
+          buttonType={buttonTypes.error}
+          buttonVariant={buttonVariants.primary}
         >
-          <AntButton
-            onClick={() => handleSave(true)}
-            disabled={isDemo || !isOnline}
-            antIconComponent={SaveOutlined}
-            buttonType={buttonTypes.error}
-            buttonVariant={buttonVariants.primary}
-          >
-            <Trans i18nKey="pairSelector.SaveAndRestart" />
-          </AntButton>
-        </span>
-      )
+          <Trans i18nKey="pairSelector.SaveAndRestart" />
+        </AntButton>
+      </span>
+    ) : (
+      <></>
     );
   }, [
     currentCurrencyList,

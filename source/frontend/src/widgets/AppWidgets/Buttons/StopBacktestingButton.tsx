@@ -12,16 +12,16 @@ export default function StopBacktestingButton() {
   const isBacktesting = useBotIsBacktestingContext();
   const stopBacktesting = useStopBacktesting();
   return useMemo(() => {
-    return (
-      isBacktesting && (
-        <AntButton
-          onClick={stopBacktesting}
-          buttonType={buttonTypes.warning}
-          faIconComponent={faStop}
-        >
-          <Trans i18nKey="backtesting.stop-backtest"></Trans>
-        </AntButton>
-      )
+    return isBacktesting ? (
+      <AntButton
+        onClick={stopBacktesting}
+        buttonType={buttonTypes.warning}
+        faIconComponent={faStop}
+      >
+        <Trans i18nKey="backtesting.stop-backtest" />
+      </AntButton>
+    ) : (
+      <></>
     );
   }, [isBacktesting, stopBacktesting]);
 }

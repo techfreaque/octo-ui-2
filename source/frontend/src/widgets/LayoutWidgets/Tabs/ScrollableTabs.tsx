@@ -9,11 +9,7 @@ export default function ResizableTabs({
   tabs,
   rightContent,
   defaultTabId = 0,
-}: {
-  tabs: UiLayoutPageLayoutType[];
-  rightContent: UiLayoutPageLayoutType[];
-  defaultTabId?: number;
-}) {
+}: UiLayoutPageLayoutType) {
   const tabsData: MuiTabType[] = [];
   tabs?.forEach((tab, index) => {
     tabsData.push(

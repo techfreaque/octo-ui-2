@@ -14,8 +14,8 @@ export function splitUserInputKey(
   tetacles: string[];
 } {
   const splitKey = userInputKey.split(TENTACLE_SEPARATOR);
-  const userInput = `${splitKey[0]}`;
-  const tentacleStr = `${splitKey[1]}`;
+  const userInput = String(splitKey[0]);
+  const tentacleStr = String(splitKey[1]);
   const tetacles = tentacleStr.split(",");
   return {
     userInput,
@@ -74,8 +74,8 @@ export function findUserInputAndTentacleLabel(
   }
 }
 
-export function validateJSONEditor(
-  editor: JsonEditorType<any>
+export function validateJSONEditor<TStartValueType>(
+  editor: JsonEditorType<TStartValueType>
 ): string | undefined {
   const errors = editor.validate();
   let errorsDesc: string | undefined;

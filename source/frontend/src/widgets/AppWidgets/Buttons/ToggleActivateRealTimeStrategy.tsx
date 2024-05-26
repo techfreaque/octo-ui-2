@@ -56,9 +56,8 @@ export default function ToggleActivateRealTimeStrategy() {
         title: t("successfully-activated-real-time-strategy"),
       });
     };
-    return (
-      isAvailableApiAction &&
-      (isActivated ? (
+    return isAvailableApiAction ? (
+      isActivated ? (
         <AntButton
           disabled={!isOnline || isExecuting || isDemo}
           onClick={() =>
@@ -78,7 +77,7 @@ export default function ToggleActivateRealTimeStrategy() {
           buttonType={buttonTypes.warning}
           faIconComponent={faStop}
         >
-          <Trans i18nKey="stop-real-time-strategy"></Trans>
+          <Trans i18nKey="stop-real-time-strategy" />
         </AntButton>
       ) : (
         <AntButton
@@ -100,9 +99,11 @@ export default function ToggleActivateRealTimeStrategy() {
           buttonType={buttonTypes.warning}
           faIconComponent={faPlay}
         >
-          <Trans i18nKey="start-real-time-strategy"></Trans>
+          <Trans i18nKey="start-real-time-strategy" />
         </AntButton>
-      ))
+      )
+    ) : (
+      <></>
     );
   }, [
     botInfo?.real_time_strategies_active,

@@ -419,9 +419,9 @@ export const useUploadToAppStore = () => {
             onFail();
           };
           const uploadUrl =
-            appStoreDomain +
-            backendRoutes.appStoreUpload +
-            `/${app.categories[0]}/${appDetails.package_id}`;
+            `${appStoreDomain +
+            backendRoutes.appStoreUpload 
+            }/${app.categories[0]}/${appDetails.package_id}`;
           if (uploadInfo.includePackage) {
             const handleAppUpload = (appFile: Blob) => {
               sendFile({

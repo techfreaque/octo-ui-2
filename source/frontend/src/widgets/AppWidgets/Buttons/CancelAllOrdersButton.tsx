@@ -23,7 +23,7 @@ export default function CancelAllOrdersButton() {
         faIconComponent={faStop}
         marginRight="5px"
       >
-        <Trans i18nKey="cancel-all-orders"></Trans>
+        <Trans i18nKey="cancel-all-orders" />
       </AntButton>
     );
   }, [botDomain, color, isCancelling, isDemo, isOnline]);

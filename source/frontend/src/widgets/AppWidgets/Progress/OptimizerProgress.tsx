@@ -20,37 +20,37 @@ export default function OptimizerProgress() {
           backtestingProgress?.remaining_time * 1000 + Date.now()
         )}`
       : "Remaining time computing";
-    return (
-      inProgress && (
-        <div
-          style={{
-            margin: "auto",
-            marginLeft: "5px",
-            marginRight: "10px",
-          }}
+    return inProgress ? (
+      <div
+        style={{
+          margin: "auto",
+          marginLeft: "5px",
+          marginRight: "10px",
+        }}
+      >
+        <Tooltip
+          title={
+            <>
+              <div>
+                {`Optimizer is ${
+                  Math.round(overallProgress * 10) / 10
+                }% completed.`}
+              </div>
+              <div>{remainingTime}</div>
+            </>
+          }
         >
-          <Tooltip
-            title={
-              <>
-                <div>
-                  {`Optimizer is ${
-                    Math.round(overallProgress * 10) / 10
-                  }% completed.`}
-                </div>
-                <div>{remainingTime}</div>
-              </>
-            }
-          >
-            <div>
-              <Progress
-                type="circle"
-                percent={Math.round(overallProgress)}
-                size={25}
-              />
-            </div>
-          </Tooltip>
-        </div>
-      )
+          <div>
+            <Progress
+              type="circle"
+              percent={Math.round(overallProgress)}
+              size={25}
+            />
+          </div>
+        </Tooltip>
+      </div>
+    ) : (
+      <></>
     );
   }, [backtestingProgress?.remaining_time, inProgress, overallProgress]);
 }

@@ -147,7 +147,7 @@ export default function AppStore() {
               marginTop: "20px",
             }}
           >
-            <Trans i18nKey="strategyConfigurator.select-a-setting-category-from-the-sidebar"></Trans>
+            <Trans i18nKey="strategyConfigurator.select-a-setting-category-from-the-sidebar" />
           </Typography.Title>
         ),
         items: isFlowMode
@@ -173,7 +173,7 @@ export default function AppStore() {
               marginTop: "20px",
             }}
           >
-            <Trans i18nKey="strategyConfigurator.select-a-app-category-from-the-sidebar"></Trans>
+            <Trans i18nKey="strategyConfigurator.select-a-app-category-from-the-sidebar" />
           </Typography.Title>
         ),
         items: availableCategories

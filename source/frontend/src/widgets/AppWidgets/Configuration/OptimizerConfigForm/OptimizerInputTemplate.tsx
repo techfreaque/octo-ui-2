@@ -1,7 +1,9 @@
 import "./OptimizerInputTemplate.css";
 
 import { InputNumber, Select, Switch } from "antd";
+import { t } from "i18next";
 import { CSSProperties, useMemo } from "react";
+import { Trans } from "react-i18next";
 
 import { ColorsType } from "../../../../constants/uiTemplate/defaultColors";
 import {
@@ -23,9 +25,15 @@ export default function OptimizerSettingsContainer({
   return (
     <div className="mx-4">
       <div className="row" style={borderStyle}>
-        <div className="col-3 p-2">Input name</div>
-        <div className="col-7 p-2">Values</div>
-        <div className="col-2 p-2">Enabled</div>
+        <div className="col-3 p-2">
+          <Trans i18nKey="optimizer.runConfig.input-name" />
+        </div>
+        <div className="col-7 p-2">
+          <Trans i18nKey="optimizer.runConfig.values" />
+        </div>
+        <div className="col-2 p-2">
+          <Trans i18nKey="optimizer.runConfig.enabled" />
+        </div>
       </div>
       <div className="row" style={borderStyle} id="optimizer-settings-root">
         {children}
@@ -178,8 +186,8 @@ export function OptimizerSettingBoolean({
       value={value}
       botColors={botColors}
       options={[
-        { label: "True", value: true },
-        { label: "False", value: false },
+        { label: t("optimizer.runConfig.true"), value: true },
+        { label: t("optimizer.runConfig.false"), value: false },
       ]}
       handleSettingsChange={handleSettingsChange}
     />
@@ -232,7 +240,7 @@ export function OptimizerSettingOptions({
             mode="multiple"
             allowClear
             style={{ width: "99%" }}
-            placeholder="Select values to use"
+            placeholder={t("optimizer.runConfig.select-values-to-use")}
             onChange={(value) => onChange(value)}
             options={options}
             value={value}
@@ -271,7 +279,9 @@ export function OptimizerNotHandledValueType({
         {title}
       </div>
       <div className="col-8 setting-values row p-2" id={`${name}Input-values`}>
-        <h2>{valueType} not handled yet</h2>
+        <h2>
+          {t("optimizer.runConfig.valuetype-not-handled-yet", { valueType })}
+        </h2>
       </div>
     </div>
   );
@@ -326,7 +336,7 @@ export function OptimizerSettingNumber({
             <div className="input-group input-group-sm">
               <InputNumber
                 style={{ width: "100%" }}
-                prefix="Min"
+                prefix={t("optimizer.runConfig.min")}
                 min={0.000000000000000000001}
                 value={currentMinValue}
                 onChange={(value) => value && onChange(value, "min")}
@@ -336,7 +346,7 @@ export function OptimizerSettingNumber({
           <div className="col-4">
             <div className="input-group input-group-sm">
               <InputNumber
-                prefix="Max"
+                prefix={t("optimizer.runConfig.max")}
                 style={{ width: "100%" }}
                 min={0.000000000000000000001}
                 value={currentMaxValue}
@@ -348,7 +358,7 @@ export function OptimizerSettingNumber({
             <div className="input-group input-group-sm">
               <InputNumber
                 style={{ width: "100%" }}
-                prefix="Step"
+                prefix={t("optimizer.runConfig.step")}
                 min={0.000000000000000000001}
                 value={currentStepValue}
                 onChange={(value) => value && onChange(value, "step")}

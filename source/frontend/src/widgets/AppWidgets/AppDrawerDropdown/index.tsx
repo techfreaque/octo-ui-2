@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Menu, MenuItem } from "@mui/material";
 import Link from "antd/es/typography/Link";
 import { useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
@@ -60,13 +61,15 @@ export default function AppDrawerDropdown() {
             );
           })}
           <a
-            href={botDomain}
+            href={`${botDomain}${backendRoutes.octobotHome}`}
             style={{
               color: colorMode === colorModes.dark ? "#fff" : "#000",
             }}
           >
             <li>
-              <MenuItem onClick={handleClose}>back to OctoBot</MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Trans i18nKey="powerMenu.backToOctoBot" />
+              </MenuItem>
             </li>
           </a>
         </Menu>

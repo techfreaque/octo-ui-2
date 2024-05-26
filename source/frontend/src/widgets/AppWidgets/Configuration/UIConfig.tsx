@@ -8,14 +8,9 @@ import { useCallback, useMemo } from "react";
 import { errorResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import createNotification from "../../../components/Notifications/Notification";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
-  BacktestingAnalysisUiConfig,
   BacktestingUiConfig,
-  DisplaySettingsUiConfig,
-  FlowSettingsUiConfig,
-  LiveAnalysisUiConfig,
-  OptimizerCampaignsToLoadUiConfig,
-  OptimizerInputsUiConfig,
   OptimizerUiConfig,
   UiConfigKeyType,
   UiConfigType,
@@ -29,8 +24,6 @@ import { getUiConfigSchema } from "./uiConfigSchema";
 export const flowEditorSettingsName = "flow_editor_settings";
 export const availableUIConfigKeys: UiConfigKeyType[] = [
   "backtesting_run_settings",
-  "backtesting_analysis_settings",
-  "live_analysis_settings",
   "optimizer_campaigns_to_load",
   "optimizer_run_settings",
   "display_settings",
@@ -39,28 +32,12 @@ export const availableUIConfigKeys: UiConfigKeyType[] = [
 ];
 const storageName = "uiConfig";
 
-export default function UIConfig({
-  configKeys,
-}: {
-  configKeys: UiConfigKeyType[];
-}) {
+export default function UIConfig({ configKeys }: UiLayoutPageLayoutType) {
   const uiConfig = useUiConfigContext();
   const botInfo = useBotInfoContext();
   const saveUiConfig = useSaveUiConfig();
   const handleEditorsAutosave = useCallback(
-    (
-      editor: JsonEditorType<
-        | OptimizerUiConfig
-        | BacktestingUiConfig
-        | BacktestingAnalysisUiConfig
-        | LiveAnalysisUiConfig
-        | OptimizerCampaignsToLoadUiConfig
-        | OptimizerInputsUiConfig
-        | DisplaySettingsUiConfig
-        | FlowSettingsUiConfig
-      >,
-      configKey: UiConfigKeyType
-    ) => {
+    (editor: JsonEditorType<UiSubConfigsType>, configKey: UiConfigKeyType) => {
       const newConfigs: UiConfigType = {
         ...uiConfig,
         [configKey]: convertTimestamps(editor.getValue(), true),
@@ -85,14 +62,16 @@ export default function UIConfig({
       <div>
         {botInfo &&
           uiConfig &&
-          configKeys.map((configKey) => {
+          configKeys?.map((configKey) => {
             const schema = getUiConfigSchema(
               configKey,
               dataFiles,
               currentSymbols,
               availableExchanges
             );
-            const config = convertTimestamps(uiConfig[configKey]);
+            const config = convertTimestamps(
+              uiConfig[configKey] as UiSubConfigsType
+            );
             if (
               schema?.properties?.["exchange_names"]?.items?.enum &&
               (config as

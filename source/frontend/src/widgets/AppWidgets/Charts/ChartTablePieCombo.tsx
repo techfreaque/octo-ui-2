@@ -171,30 +171,28 @@ export default function ChartTablePieCombo({
   }, [plottedElements, uiConfig, visiblePairs, visibleTimeframes]);
 
   if (chartType === chartTypes.CHART) {
-    return (
-      charts && (
-        <PlotlyDualCharts
-          charts={charts}
-          setLayouts={setLayouts}
-          layouts={layouts}
-        />
-      )
+    return charts ? (
+      <PlotlyDualCharts
+        charts={charts}
+        setLayouts={setLayouts}
+        layouts={layouts}
+      />
+    ) : (
+      <></>
     );
   } else if (chartType === chartTypes.TABLE) {
     return <W2uiDataTable />;
   } else if (chartType === chartTypes.RUN_ANALYSIS) {
-    return settingsContent && <AppWidgets layout={settingsContent} />;
+    return settingsContent ? <AppWidgets layout={settingsContent} /> : <></>;
   } else if (chartType === chartTypes.PIE) {
-    return (
-      settingsContent &&
-      layouts[pieChartName] &&
-      charts && (
-        <DualPieChart
-          charts={charts}
-          setLayouts={setLayouts}
-          layout={layouts[pieChartName]}
-        />
-      )
+    return settingsContent && layouts[pieChartName] && charts ? (
+      <DualPieChart
+        charts={charts}
+        setLayouts={setLayouts}
+        layout={layouts[pieChartName]}
+      />
+    ) : (
+      <></>
     );
   } else {
     return <></>;

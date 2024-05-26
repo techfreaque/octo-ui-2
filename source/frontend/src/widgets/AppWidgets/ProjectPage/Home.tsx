@@ -11,6 +11,8 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Grid } from "@mui/material";
 import { Card, Typography } from "antd";
+import { t } from "i18next";
+import { Trans } from "react-i18next";
 
 import AntButton, { buttonSizes } from "../../../components/Buttons/AntButton";
 import {
@@ -31,10 +33,10 @@ export function ProjectHomePageModal() {
   const setProjectInfoOpen = useUpdateProjectInfoOpenContext();
   return (
     <ButtonWithModal
-      title={"About the Project"}
+      title={t("projectInfoPage.about-the-project")}
       content={[
         {
-          title: "About the Project",
+          title: t("projectInfoPage.about-the-project"),
           component: "ProjectHomePage",
         },
       ]}
@@ -62,14 +64,20 @@ export default function ProjectHomePage() {
             display: "flex",
           }}
         >
-          <span style={{ marginLeft: "auto" }}>Welcome to the</span>
+          <span style={{ marginLeft: "auto" }}>
+            <Trans i18nKey="projectInfoPage.welcomeMessage.welcome-to-the" />
+          </span>
           <img
             height={"30px"}
             style={{ margin: "auto 10px" }}
-            alt="Octane Logo"
+            alt={t("projectInfoPage.welcomeMessage.projectname-logo", {
+              projectName,
+            })}
             src={logo}
           />
-          <span style={{ marginRight: "auto" }}>Project</span>
+          <span style={{ marginRight: "auto" }}>
+            <Trans i18nKey="projectInfoPage.welcomeMessage.project" />
+          </span>
         </Typography.Title>
         {isDemo && (
           <AntButton
@@ -78,7 +86,7 @@ export default function ProjectHomePage() {
             antIconComponent={RocketOutlined}
             size={buttonSizes.large}
           >
-            Try the Demo Version
+            <Trans i18nKey="projectInfoPage.try-the-demo-version" />
           </AntButton>
         )}
         <Typography.Title
@@ -88,67 +96,66 @@ export default function ProjectHomePage() {
             // marginBottom: "100px"
           }}
         >
-          Revolutionize Your Trading Strategy with Cutting-Edge Automation
-          Solutions
+          <Trans i18nKey="projectInfoPage.revolutionize-your-trading-strategy-with-cutting-edge-automation-solutions" />
         </Typography.Title>
         <Typography.Paragraph>
-          Are you tired of outdated trading strategies that fail to keep up with
-          the fast-paced market?
+          <Trans i18nKey="projectInfoPage.are-you-tired-of-outdated-trading-strategies-that-fail-to-keep-up-with-the-fast-paced-market" />
         </Typography.Paragraph>
         <Typography.Paragraph>
-          It&apos;s time to revolutionize your approach with our advanced
-          automation solutions.
+          <Trans i18nKey="projectInfoPage.it-and-apos-s-time-to-revolutionize-your-approach-with-our-advanced-automation-solutions" />
         </Typography.Paragraph>
         <Typography.Paragraph>
-          By harnessing cutting-edge technology, our custom trading bot empowers
-          you to stay ahead of the curve and optimize your trading strategy like
-          never before.
+          <Trans i18nKey="projectInfoPage.by-harnessing-cutting-edge-technology-our-custom-trading-bot-empowers-you-to-stay-ahead-of-the-curve-and-optimize-your-trading-strategy-like-never-before" />
         </Typography.Paragraph>
         <Typography.Paragraph style={{ marginBottom: "100px" }}>
-          Say goodbye to manual execution and hello to streamlined efficiency.
-          Take the leap into the future of trading and unlock new possibilities
-          for success.
+          <Trans i18nKey="projectInfoPage.say-goodbye-to-manual-execution-and-hello-to-streamlined-efficiency-take-the-leap-into-the-future-of-trading-and-unlock-new-possibilities-for-success" />
         </Typography.Paragraph>
       </Grid>
       <Grid item xs={12}>
         <Typography.Title level={2} style={{ display: "flex" }}>
-          <span style={{ marginLeft: "auto" }}>Get</span>
+          <span style={{ marginLeft: "auto" }}>
+            <Trans i18nKey="projectInfoPage.get-project-logo-now-message.get" />
+          </span>
           <img
             height={"25px"}
             style={{ margin: "auto 10px" }}
-            alt="Octane Logo"
+            alt={t("projectInfoPage.welcomeMessage.projectname-logo", {
+              projectName,
+            })}
             src={logo}
           />
-          <span style={{ marginRight: "auto" }}>now!</span>
+          <span style={{ marginRight: "auto" }}>
+            <Trans i18nKey="projectInfoPage.get-project-logo-now-message.now" />
+          </span>
         </Typography.Title>
       </Grid>
       <Grid item sm={12} md={4}>
         <Card style={{ height: "100%" }}>
           <RocketOutlined style={{ fontSize: "60px" }} />
           <TitleSubTitleCombo
-            title="Get Your Custom Trading Bot"
-            subTitle="Automate Your Strategy and Boost Your Trading Success"
+            title={t("projectInfoPage.get-your-custom-trading-bot")}
+            subTitle={t(
+              "projectInfoPage.automate-your-strategy-and-boost-your-trading-success"
+            )}
           />
           <Typography.Paragraph>
-            Unlock the power of automation with your own custom trading bot.
+            <Trans i18nKey="projectInfoPage.unlock-the-power-of-automation-with-your-own-custom-trading-bot" />
           </Typography.Paragraph>
           <Typography.Paragraph>
-            Designed for both traders seeking to streamline their strategy and
-            startups looking to provide cutting-edge trading solutions to their
-            customers.
+            <Trans i18nKey="projectInfoPage.designed-for-both-traders-seeking-to-streamline-their-strategy-and-startups-looking-to-provide-cutting-edge-trading-solutions-to-their-customers" />
           </Typography.Paragraph>
           <Typography.Paragraph>
-            Get in touch with a strategy developer today!
+            <Trans i18nKey="projectInfoPage.get-in-touch-with-a-strategy-developer-today" />
           </Typography.Paragraph>
           <AntButton
             target="blank"
-            href={
-              "mailto:max@a42.ch?subject=Let's discuss my trading bot project!"
-            }
+            href={`mailto:max@a42.ch?subject=${t(
+              "projectInfoPage.lets-discuss-my-trading-bot-project"
+            )}`}
             style={{ margin: "auto" }}
             block={true}
           >
-            Transform Your Trading Today!
+            <Trans i18nKey="projectInfoPage.transform-your-trading-today" />
           </AntButton>
         </Card>
       </Grid>
@@ -161,19 +168,17 @@ export default function ProjectHomePage() {
         >
           <CloudServerOutlined style={{ fontSize: "60px" }} />
           <TitleSubTitleCombo
-            title="Cloud-Based Trading Bot Deployment"
-            subTitle="Streamline Your Strategy with Ease"
+            title={t("projectInfoPage.cloud-based-trading-bot-deployment")}
+            subTitle={t("projectInfoPage.streamline-your-strategy-with-ease")}
           />
           <Typography.Paragraph>
-            Experience seamless deployment of your trading bot in the cloud.
+            <Trans i18nKey="projectInfoPage.experience-seamless-deployment-of-your-trading-bot-in-the-cloud" />
           </Typography.Paragraph>
           <Typography.Paragraph>
-            Leave maintenance and updates to our team of experts while you focus
-            on maximizing your profits.
+            <Trans i18nKey="projectInfoPage.leave-maintenance-and-updates-to-our-team-of-experts-while-you-focus-on-maximizing-your-profits" />
           </Typography.Paragraph>
           <Typography.Paragraph>
-            With hassle-free management, you can unleash the full potential of
-            your trading strategy.
+            <Trans i18nKey="projectInfoPage.with-hassle-free-management-you-can-unleash-the-full-potential-of-your-trading-strategy" />
           </Typography.Paragraph>
           <CloudDeploymentModal />
         </Card>
@@ -182,15 +187,14 @@ export default function ProjectHomePage() {
         <Card style={{ height: "100%" }}>
           <CloudDownloadOutlined style={{ fontSize: "60px" }} />
           <TitleSubTitleCombo
-            title="Download Your Free Trading Bot"
-            subTitle="Empower Your Trading Journey"
+            title={t('projectInfoPage.download-your-free-trading-bot')}
+            subTitle={t('projectInfoPage.empower-your-trading-journey')}
           />
           <Typography.Paragraph>
-            Gain a competitive edge with our powerful trading bot, available for
-            free.
+            <Trans i18nKey="projectInfoPage.gain-a-competitive-edge-with-our-powerful-trading-bot-available-for-free" />
           </Typography.Paragraph>
           <Typography.Paragraph>
-            Take control of your trading decisions and unlock new possibilities.
+            <Trans i18nKey="projectInfoPage.take-control-of-your-trading-decisions-and-unlock-new-possibilities" />
           </Typography.Paragraph>
           <div style={{ marginBottom: "20px" }}>
             <FontAwesomeIcon size="5x" icon={faDocker} />
@@ -210,7 +214,7 @@ export default function ProjectHomePage() {
             href={projectDownloadUrl}
             target="blank"
           >
-            Get Your Free Trading Bot Today!
+            <Trans i18nKey="projectInfoPage.get-your-free-trading-bot-today" />
           </AntButton>
         </Card>
       </Grid>
@@ -247,15 +251,15 @@ export default function ProjectHomePage() {
             </Grid> */}
       <Grid item xs={12} style={{ marginTop: "150px" }}>
         <Typography.Title level={2}>
-          {`A special thanks to all Open Source Projects that are used within ${projectName}`}
+          {t('projectInfoPage.a-special-thanks-to-all-open-source-projects-that-are-used-within-projectname', {projectName})}
         </Typography.Title>
         <TitleSubTitleCombo
-          subTitle={"The Kernel and Backend for the bot"}
+          subTitle={t('projectInfoPage.the-kernel-and-backend-for-the-bot')}
           title={"OctoBot"}
           startLevel={3}
         />
         <Typography.Paragraph>
-          Without OctoBot the project would be nothing
+          <Trans i18nKey="projectInfoPage.without-octobot-the-project-would-be-nothing" />
           <AntButton
             style={{
               marginLeft: "auto",
@@ -264,16 +268,16 @@ export default function ProjectHomePage() {
             href="https://octobot.online"
             target="blank"
           >
-            Check out and support the OctoBot Project
+            <Trans i18nKey="projectInfoPage.check-out-and-support-the-octobot-project" />
           </AntButton>
         </Typography.Paragraph>
         <TitleSubTitleCombo
-          subTitle={"Library used to build the frontend"}
+          subTitle={t('projectInfoPage.library-used-to-build-the-frontend')}
           title={"react.js"}
           startLevel={3}
         />
         <Typography.Paragraph>
-          We all hate FaceBook, but react is nice
+          <Trans i18nKey="projectInfoPage.we-all-hate-facebook-but-react-is-nice" />
           <AntButton
             style={{
               marginLeft: "auto",
@@ -282,12 +286,12 @@ export default function ProjectHomePage() {
             href="https://react.dev/"
             target="blank"
           >
-            Check out the react project
+            <Trans i18nKey="projectInfoPage.check-out-the-react-project" />
           </AntButton>
         </Typography.Paragraph>
         <TitleSubTitleCombo
-          subTitle={"Charting library"}
-          title={"Plotly"}
+          subTitle={t('projectInfoPage.charting-library')}
+          title={t('projectInfoPage.plotly')}
           startLevel={3}
         />
         <Typography.Paragraph>
@@ -299,12 +303,12 @@ export default function ProjectHomePage() {
             href="https://plotly.com/javascript/"
             target="blank"
           >
-            Check out the plotly project
+            <Trans i18nKey="projectInfoPage.check-out-the-plotly-project" />
           </AntButton>
         </Typography.Paragraph>
         <TitleSubTitleCombo
-          subTitle={"Flow chart library used for the Strategy Designer"}
-          title={"Reactflow"}
+          subTitle={t('projectInfoPage.flow-chart-library-used-for-the-strategy-designer')}
+          title={t('projectInfoPage.reactflow')}
           startLevel={3}
         />
         <Typography.Paragraph>
@@ -316,18 +320,18 @@ export default function ProjectHomePage() {
             href="https://reactflow.dev"
             target="blank"
           >
-            Check out the Reactflow project
+            <Trans i18nKey="projectInfoPage.check-out-the-reactflow-project" />
           </AntButton>
         </Typography.Paragraph>
         <TitleSubTitleCombo
           subTitle={
-            "Machine learning library used for the neural net evaluator"
+            t('projectInfoPage.machine-learning-library-used-for-the-neural-net-evaluator')
           }
           title={"tensorflow"}
           startLevel={3}
         />
         <Typography.Paragraph>
-          So simple to use and yet so powerful
+          <Trans i18nKey="projectInfoPage.so-simple-to-use-and-yet-so-powerful" />
           <AntButton
             style={{
               marginLeft: "auto",
@@ -336,11 +340,11 @@ export default function ProjectHomePage() {
             href="https://www.tensorflow.org"
             target="blank"
           >
-            Check out the tensorflow project
+            <Trans i18nKey="projectInfoPage.check-out-the-tensorflow-project" />
           </AntButton>
         </Typography.Paragraph>
         <Typography.Title level={3}>
-          And many more that you can find in the requirements.txt
+          <Trans i18nKey="projectInfoPage.and-many-more-that-you-can-find-in-the-requirements-txt" />
         </Typography.Title>
       </Grid>
     </Grid>

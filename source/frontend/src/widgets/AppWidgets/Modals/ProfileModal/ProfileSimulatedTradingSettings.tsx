@@ -14,7 +14,9 @@ import {
   List,
   Typography,
 } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useState } from "react";
+import { Trans } from "react-i18next";
 
 import { ProfileType } from "../../../../context/data/BotInfoProvider";
 import { onProfileSettingChange } from "./ProfileTradingSettings";
@@ -32,7 +34,7 @@ export function ProfileSimulatedSettings({
     <Grid container spacing={2} style={{ marginTop: "15px" }}>
       <Grid item xs={12} sm={6}>
         <Typography.Title level={5}>
-          Maker Fees (Limit Orders):
+          <Trans i18nKey="strategyConfigurator.profileSettings.maker-fees-limit-orders" />
         </Typography.Title>
         <InputNumber
           style={{ width: "100%" }}
@@ -59,7 +61,7 @@ export function ProfileSimulatedSettings({
       </Grid>
       <Grid item xs={12} sm={6}>
         <Typography.Title level={5}>
-          Taker Fees (Market Orders):
+          <Trans i18nKey="strategyConfigurator.profileSettings.taker-fees-market-orders" />
         </Typography.Title>
         <InputNumber
           style={{ width: "100%" }}
@@ -128,7 +130,7 @@ export function ProfilePortfolioSettings({
   return (
     <Grid item xs={12}>
       <Typography.Title level={5}>
-        Simulated Starting Portfolio:
+        <Trans i18nKey="strategyConfigurator.profileSettings.simulated-starting-portfolio" />
       </Typography.Title>
       {isCurrentProfile && (
         <Alert
@@ -138,8 +140,7 @@ export function ProfilePortfolioSettings({
                 style={{ marginRight: "5px" }}
                 icon={faInfoCircle}
               />
-              Changes to the simulated starting portfolio will reset enabled
-              exchanges simulated portfolio history.
+              <Trans i18nKey="strategyConfigurator.profileSettings.changes-to-the-simulated-starting-portfolio-will-reset-enabled-exchanges-simulated-portfolio-history" />
             </>
           }
           type="info"
@@ -205,14 +206,14 @@ export function ProfileAddCoinSettings({
     <List.Item>
       <Card>
         <Typography.Title level={5} style={{ width: "100%" }}>
-          Add a new Asset:
+          <Trans i18nKey="strategyConfigurator.profileSettings.add-a-new-asset" />
         </Typography.Title>
         <Input
           value={coinToSet.coin}
           onChange={(event) =>
             handleCoinToAdd("coin", event.target.value.toUpperCase())
           }
-          placeholder="Asset name"
+          placeholder={t("strategyConfigurator.profileSettings.asset-name")}
           style={{ width: "100%" }}
         />
         <InputNumber
@@ -224,7 +225,7 @@ export function ProfileAddCoinSettings({
           addonAfter={coinToSet.coin ? coinToSet.coin : <></>}
           min={0}
           step={0.0000001}
-          placeholder="Asset amount"
+          placeholder={t("strategyConfigurator.profileSettings.asset-amount")}
           onChange={(newValue) => handleCoinToAdd("value", newValue || 0)}
         />
         <Button
@@ -236,7 +237,7 @@ export function ProfileAddCoinSettings({
           }
           onClick={handleCoinAdd}
         >
-          Add Coin
+          <Trans i18nKey="strategyConfigurator.profileSettings.add-coin" />
         </Button>
       </Card>
     </List.Item>
@@ -295,7 +296,9 @@ export function ProfilePortfolioCoinSettings({
           editable={
             isCurrentProfile
               ? {
-                  tooltip: "click to edit the asset",
+                  tooltip: (
+                    <Trans i18nKey="strategyConfigurator.profileSettings.click-to-edit-the-asset" />
+                  ),
                   onChange: handleCoinNameChange,
                   text: item.coin,
                 }
@@ -337,7 +340,9 @@ export function ProfilePortfolioCoinSettings({
             }
             onClick={handleRemoveCoin}
           >
-            Remove {item.coin}
+            {t("strategyConfigurator.profileSettings.remove-coinName", {
+              coinName: item.coin,
+            })}
           </Button>
         )}
       </Card>

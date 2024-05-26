@@ -1,6 +1,9 @@
 import { Typography } from "antd";
+import { t } from "i18next";
 import { useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 
+import { projectName } from "../../../../constants/frontendConstants";
 import { useGetAffiliateDashboard } from "../../../../context/data/AppStoreDataProvider";
 
 export default function AffiliateDashboard() {
@@ -12,14 +15,18 @@ export default function AffiliateDashboard() {
 
   return (
     <div style={{ margin: "20px 0" }}>
-      <Typography.Title level={2}>Affiliate Program</Typography.Title>
+      <Typography.Title level={2}>
+        <Trans i18nKey="manageAccount.affiliateDashboard.affiliate-program" />
+      </Typography.Title>
       <Typography.Paragraph>
-        With Octane Affiliate Program you get commissions when people from your
-        network become our customers. You earn money. They get a top product. A
-        win-win situation!
+        {t(
+          "manageAccount.affiliateDashboard.with-projectname-affiliate-program-you-get-commissions-when-people-from-your-network-become-our-customers-you-earn-money-they-get-a-top-product-a-win-win-situation",
+          { projectName }
+        )}
       </Typography.Paragraph>
-      <Typography.Title level={3}>Monetize your Network</Typography.Title>
-      <Typography.Title level={3}>Monetize your Network</Typography.Title>
+      <Typography.Title level={3}>
+        <Trans i18nKey="manageAccount.affiliateDashboard.monetize-your-network" />
+      </Typography.Title>
       {JSON.stringify(dashboardData)}
     </div>
   );

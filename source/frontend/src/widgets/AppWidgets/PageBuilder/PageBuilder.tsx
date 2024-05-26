@@ -2,10 +2,10 @@ import { Alert } from "@mui/material";
 import JsonEditor from "@techfreaque/json-editor-react";
 import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import { Button, Space } from "antd";
+import { t } from "i18next";
+import { Trans } from "react-i18next";
 
-import {
-  errorResponseCallBackParams,
-} from "../../../api/fetchAndStoreFromBot";
+import { errorResponseCallBackParams } from "../../../api/fetchAndStoreFromBot";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import defaultJsonEditorSettings from "../../../components/Forms/JsonEditor/JsonEditorDefaults";
 import createNotification from "../../../components/Notifications/Notification";
@@ -35,28 +35,30 @@ export default function PageBuilder() {
     };
     function errorCallback(payload: errorResponseCallBackParams) {
       createNotification({
-        title: "Failed to restored default UI layout",
+        title: t("uiEditor.failed-to-restored-default-ui-layout"),
         type: "danger",
         message: `Error: ${payload.data}`,
       });
     }
     const success = () =>
-      createNotification({ title: "Successfully restored default UI layout" });
+      createNotification({
+        title: t("uiEditor.successfully-restored-default-ui-layout"),
+      });
     saveUiConfig(newConfig, success, errorCallback);
   }
   function handlePageLayoutSaving() {
     function errorCallback(payload: errorResponseCallBackParams) {
       createNotification({
-        title: "Failed to save new UI layout",
+        title: t("uiEditor.failed-to-save-new-ui-layout"),
         type: "danger",
         message: `Error: ${payload.data}`,
       });
     }
     if (!window.$JsonEditors?.[editorName]) {
       createNotification({
-        title: "Failed to restored default UI layout",
+        title: t("uiEditor.failed-to-restored-default-ui-layout"),
         type: "danger",
-        message: "Failed to read the config from the editor",
+        message: t("uiEditor.failed-to-read-the-config-from-the-editor"),
       });
       return;
     }
@@ -67,18 +69,18 @@ export default function PageBuilder() {
       },
     };
     const success = () =>
-      createNotification({ title: "Successfully saved new UI layout" });
+      createNotification({
+        title: t("uiEditor.successfully-saved-new-ui-layout"),
+      });
     saveUiConfig(newConfig, success, errorCallback);
   }
   return (
     <div style={{ margin: "20px" }}>
-      <h1>Customize the UI</h1>
+      <h1>
+        <Trans i18nKey="uiEditor.customize-the-ui" />
+      </h1>
       <Alert severity="info" style={{ backgroundColor: "transparent" }}>
-        Once you have saved the page layout, it wont get overridded by a updated
-        default layout in the future. You should reset your config after each
-        update to make sure you&apos;ll get the latest futures. You can copy the
-        config of your custom config with the help of the editor, and then past
-        it after resetting.
+        <Trans i18nKey="uiEditor.customize-info-text" />
       </Alert>
       <Space wrap>
         <AntButton
@@ -87,10 +89,10 @@ export default function PageBuilder() {
           style={{ margin: "20px 10px 20px 0" }}
           onClick={handlePageLayoutSaving}
         >
-          Save Page Layout
+          <Trans i18nKey="uiEditor.save-page-layout" />
         </AntButton>
         <Button type="primary" danger onClick={handleResetLayout}>
-          Reset to default layout
+          <Trans i18nKey="uiEditor.reset-to-default-layout" />
         </Button>
       </Space>
       <JsonEditor
@@ -135,7 +137,7 @@ function pageBuilderSchema() {
 
   return {
     type: "array",
-    title: "Pages",
+    title: t("uiEditor.pages"),
     items: {
       type: "object",
       headerTemplate: "{{self.title}}- Page     {{i}}- path:     {{self.path}}",
@@ -148,7 +150,7 @@ function pageBuilderSchema() {
         },
         layout: {
           type: "array",
-          title: "Page Layout",
+          title: t("uiEditor.page-layout"),
           items: {
             $ref: "#/definitions/appWidget",
           },

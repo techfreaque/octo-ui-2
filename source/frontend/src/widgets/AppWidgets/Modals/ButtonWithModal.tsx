@@ -32,13 +32,8 @@ export default function ButtonWithModal({
   size = buttonSizes.small,
   buttonType = buttonTypes.success,
   buttonStyle,
-}: {
-  title: JSX.Element | string;
+}: UiLayoutPageLayoutType & {
   content?: UiLayoutPageLayoutType[] | undefined;
-  antIcon?: string;
-  faIcon?: string;
-  iconOnly?: boolean;
-  displayAsAvatar?: boolean;
   width?: number | string;
   open?: boolean;
   setOpen?: Dispatch<SetStateAction<boolean>>;

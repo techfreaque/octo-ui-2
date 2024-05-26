@@ -1,12 +1,15 @@
 import { Grid } from "@mui/material";
 import { Card, Tooltip, Typography } from "antd";
+import { t } from "i18next";
 import { useState } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton, {
   buttonSizes,
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
+import { projectName } from "../../../constants/frontendConstants";
 import ButtonWithModal from "../Modals/ButtonWithModal";
 import { TitleSubTitleCombo } from "./Home";
 
@@ -24,10 +27,12 @@ export default function CloudDeploymentModal() {
   // </Tooltip>)
   return (
     <ButtonWithModal
-      title={"Deploy Your Bot in the Cloud Now!"}
+      title={t(
+        "projectInfoPage.cloudDeployment.deploy-your-bot-in-the-cloud-now"
+      )}
       content={[
         {
-          title: "Cloud Deployment",
+          title: t("projectInfoPage.cloudDeployment.cloud-deployment"),
           component: "CloudDeployment",
         },
       ]}
@@ -51,10 +56,10 @@ export function CloudDeployment() {
         <TitleSubTitleCombo
           center
           startLevel={1}
-          title={"Cloud Trading Bot Servers"}
-          subTitle={
-            "Effortless and Fully Managed Solutions for Your Trading Strategies"
-          }
+          title={t("projectInfoPage.cloudDeployment.cloud-trading-bot-servers")}
+          subTitle={t(
+            "projectInfoPage.cloudDeployment.effortless-and-fully-managed-solutions-for-your-trading-strategies"
+          )}
         />
       </Grid>
       {cloudOptions.map((option) => (
@@ -70,13 +75,22 @@ function CloudOption({ option }: { option: CloudOptionType }) {
       <Card style={{ height: "100%" }}>
         <TitleSubTitleCombo
           title={option.title}
-          subTitle={`${option.price}$ / month`}
+          subTitle={t("projectInfoPage.cloudDeployment.instancePrice-month", {
+            instancePrice: option.price,
+          })}
         />
         <Typography.Paragraph>
-          Octane Instances: {option.instances}
+          {t(
+            "projectInfoPage.cloudDeployment.projectName-instances-instanceLimit",
+            { projectName, instanceLimit: option.instances }
+          )}
         </Typography.Paragraph>
         <Typography.Paragraph> {option.description} </Typography.Paragraph>
-        <Tooltip title={"Cloud Deployment will be available soon!"}>
+        <Tooltip
+          title={t(
+            "projectInfoPage.cloudDeployment.cloud-deployment-will-be-available-soon"
+          )}
+        >
           <div>
             <AntButton
               disabled
@@ -84,7 +98,7 @@ function CloudOption({ option }: { option: CloudOptionType }) {
               style={{ margin: "auto" }}
               size={buttonSizes.large}
             >
-              Select and configure
+              <Trans i18nKey="projectInfoPage.cloudDeployment.select-and-configure" />
             </AntButton>
           </div>
         </Tooltip>
@@ -104,66 +118,62 @@ interface CloudOptionType {
 const cloudOptions: CloudOptionType[] = [
   {
     key: "nano",
-    title: "Sunny (Nano)",
-    description:
-      "The Nano server option provides a lightweight and cost-effective solution for running your trading bot. It offers a single instance, making it suitable for small-scale trading operations.",
+    title: t("projectInfoPage.cloudDeployment.sunny-nano"),
+    description: t("projectInfoPage.cloudDeployment.sunny-nano-description"),
     price: 6,
     instances: 1,
   },
   {
     key: "micro",
-    title: "Foggy (Micro)",
-    description:
-      "The Micro server option is slightly more powerful than the Nano option, offering two instances for increased flexibility and performance. It is suitable for moderate trading volumes and strategies.",
+    title: t("projectInfoPage.cloudDeployment.foggy-micro"),
+    description: t("projectInfoPage.cloudDeployment.foggy-micro-description"),
     price: 12,
     instances: 2,
   },
   {
     key: "small",
-    title: "Snow (Small)",
-    description:
-      "The Small server option provides scalability and cost-efficiency for your trading bot. With four instances, you can distribute workloads effectively and adapt to market changes with ease.",
+    title: t("projectInfoPage.cloudDeployment.snow-small"),
+    description: t("projectInfoPage.cloudDeployment.snow-small-description"),
     price: 20,
     instances: 4,
   },
   {
     key: "medium",
-    title: "Ice (Medium)",
-    description:
-      "The Medium server option offers enhanced computing power and resources, making it suitable for demanding trading strategies and higher trading volumes. It provides a scalable solution with no instance limit.",
+    title: t("projectInfoPage.cloudDeployment.ice-medium"),
+    description: t("projectInfoPage.cloudDeployment.ice-medium-description"),
     price: 30,
-    instances: "no limit",
+    instances: t("projectInfoPage.cloudDeployment.no-limit"),
   },
   {
     key: "large",
-    title: "Wind (Large)",
-    description:
-      "The Large server option is optimized for high-performance trading. It provides ample computing power and resources, ensuring smooth execution of complex trading strategies. It offers a scalable solution with no limit on instances.",
+    title: t("projectInfoPage.cloudDeployment.wind-large"),
+    description: t("projectInfoPage.cloudDeployment.wind-large-description"),
     price: 60,
-    instances: "no limit",
+    instances: t("projectInfoPage.cloudDeployment.no-limit"),
   },
   {
     key: "xlarge",
-    title: "Storm (X Large)",
-    description:
-      "The X large server option is specifically designed for intensive trading operations. It offers significant computing power and resources, making it suitable for advanced trading strategies and high-frequency trading.",
+    title: t("projectInfoPage.cloudDeployment.storm-x-large"),
+    description: t("projectInfoPage.cloudDeployment.storm-x-large-description"),
     price: 90,
-    instances: "no limit",
+    instances: t("projectInfoPage.cloudDeployment.no-limit"),
   },
   {
     key: "xxlarge",
-    title: "Flash (XX Large)",
-    description:
-      "Unleash exceptional trading power with the Flash server option. Designed for intensive operations, it offers robust computing resources and unlimited instances. Execute advanced strategies and handle substantial trading volumes effortlessly, maximizing profitability.",
+    title: t("projectInfoPage.cloudDeployment.flash-xx-large"),
+    description: t(
+      "projectInfoPage.cloudDeployment.flash-xx-large-description"
+    ),
     price: 150,
-    instances: "no limit",
+    instances: t("projectInfoPage.cloudDeployment.no-limit"),
   },
   {
     key: "xxxlarge",
-    title: "Tornado (XXX Large)",
-    description:
-      "The XXX large server option is the most powerful and robust choice for running your trading bot. It provides unparalleled computing power and resources, enabling you to handle massive trading volumes and execute complex strategies with ease.",
+    title: t("projectInfoPage.cloudDeployment.tornado-xxx-large"),
+    description: t(
+      "projectInfoPage.cloudDeployment.tornado-xxx-large-description"
+    ),
     price: 250,
-    instances: "no limit",
+    instances: t("projectInfoPage.cloudDeployment.no-limit"),
   },
 ];

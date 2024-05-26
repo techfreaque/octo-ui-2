@@ -1,7 +1,9 @@
 import { ReloadOutlined } from "@ant-design/icons";
 import { JsonEditorWindow } from "@techfreaque/json-editor-react/dist/components/JsonEditor";
 import { Space, Switch } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useCallback, useMemo } from "react";
+import { Trans } from "react-i18next";
 import { Edge, Node } from "reactflow";
 
 import { errorResponseCallBackParams } from "../../../../api/fetchAndStoreFromBot";
@@ -63,12 +65,16 @@ export default function SaveStrategyFlowBuilderSettings({
       newConfigs[flowEditorSettingsName].auto_save = checked;
       const successCallback = () => {
         createNotification({
-          title: "Successfully changed autosave setting",
+          title: t(
+            "strategyConfigurator.strategyFlowMaker.successfully-changed-autosave-setting"
+          ),
         });
       };
       const errorCallback = (payload: errorResponseCallBackParams) => {
         createNotification({
-          title: "Failed to activate autosave",
+          title: t(
+            "strategyConfigurator.strategyFlowMaker.failed-to-activate-autosave"
+          ),
           type: "danger",
           message: `Error: ${payload.data.message}` || payload.data,
         });
@@ -94,8 +100,12 @@ export default function SaveStrategyFlowBuilderSettings({
           <Switch
             checked={autoSave}
             onChange={(checked) => handleAutoSaveSettingChange(checked)}
-            checkedChildren="auto save on"
-            unCheckedChildren="auto save off"
+            checkedChildren={t(
+              "strategyConfigurator.strategyFlowMaker.auto-save-on"
+            )}
+            unCheckedChildren={t(
+              "strategyConfigurator.strategyFlowMaker.auto-save-off"
+            )}
           />
           {!autoSave && (
             <AntButton
@@ -118,7 +128,7 @@ export default function SaveStrategyFlowBuilderSettings({
                 </span>
               }
             >
-              Save
+              <Trans i18nKey="strategyConfigurator.strategyFlowMaker.save" />
             </AntButton>
           )}
           <AntButton
@@ -141,7 +151,11 @@ export default function SaveStrategyFlowBuilderSettings({
               </span>
             }
           >
-            Save & Reload Plots
+            {autoSave
+              ? t("strategyConfigurator.strategyFlowMaker.reload-plots")
+              : t(
+                  "strategyConfigurator.strategyFlowMaker.save-and-reload-plots"
+                )}
           </AntButton>
         </Space>
       </div>

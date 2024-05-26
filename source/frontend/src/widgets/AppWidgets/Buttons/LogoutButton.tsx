@@ -7,13 +7,16 @@ import { logOutBot } from "../../../api/actions";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import { useBotInfoContext } from "../../../context/data/BotInfoProvider";
 import {
   useIsBotOnlineContext,
   useUpdateIsBotOnlineContext,
 } from "../../../context/data/IsBotOnlineProvider";
 
-export default function LogoutButton({ onClick }: { onClick?: () => void }) {
+export default function LogoutButton({
+  onClick,
+}: UiLayoutPageLayoutType & { onClick?: () => void }) {
   const [isLoading, setIsloading] = useState(false);
   const updateIsOnline = useUpdateIsBotOnlineContext();
   const isOnline = useIsBotOnlineContext();

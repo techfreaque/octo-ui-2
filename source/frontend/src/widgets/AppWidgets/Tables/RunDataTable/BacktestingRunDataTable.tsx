@@ -46,7 +46,7 @@ function NoBacktestingData({
   return (
     <>
       <h4>
-        <Trans i18nKey="backtesting.runDataTable.no-backtests-finished-yet-message"></Trans>
+        <Trans i18nKey="backtesting.runDataTable.no-backtests-finished-yet-message" />
       </h4>
       <h4>
         <Button
@@ -57,7 +57,7 @@ function NoBacktestingData({
           }}
         >
           <FontAwesomeIcon icon={faRedo} style={{ marginRight: "5px" }} />
-          <Trans i18nKey="backtesting.runDataTable.reload-backtestings"></Trans>
+          <Trans i18nKey="backtesting.runDataTable.reload-backtestings" />
         </Button>
       </h4>
     </>

@@ -45,16 +45,16 @@ export default function W2uiDataTable() {
         }}
       >
         <Typography.Title>
-          <Trans i18nKey="dataTable.there-are-no-historical-trading-data-tables-to-display"></Trans>
+          <Trans i18nKey="dataTable.there-are-no-historical-trading-data-tables-to-display" />
         </Typography.Title>
         <Typography.Title level={2}>
-          <Trans i18nKey="dataTable.to-display-tables-for-trades-orders-etc-you-can"></Trans>
+          <Trans i18nKey="dataTable.to-display-tables-for-trades-orders-etc-you-can" />
         </Typography.Title>
         <ul>
-          <li><Trans i18nKey="dataTable.noDataYetText.select-a-backtesting-run"></Trans></li>
-          <li><Trans i18nKey="dataTable.noDataYetText.enter-valid-exchange-api-keys-and-activate-real-trading"></Trans></li>
+          <li><Trans i18nKey="dataTable.noDataYetText.select-a-backtesting-run" /></li>
+          <li><Trans i18nKey="dataTable.noDataYetText.enter-valid-exchange-api-keys-and-activate-real-trading" /></li>
           <li>
-            <Trans i18nKey="dataTable.noDataYetText.in-simulation-mode-wait-until-your-strategy-takes-the-first-trade"></Trans>
+            <Trans i18nKey="dataTable.noDataYetText.in-simulation-mode-wait-until-your-strategy-takes-the-first-trade" />
           </li>
         </ul>
       </div>
@@ -158,7 +158,7 @@ export function createTradingOrBacktestingTab(
     dontScroll: true,
     content: (
       <Typography.Title level={2}>
-        <Trans i18nKey="dataTable.select-a-table-from-the-sidebar"></Trans>
+        <Trans i18nKey="dataTable.select-a-table-from-the-sidebar" />
       </Typography.Title>
     ),
     children: [],

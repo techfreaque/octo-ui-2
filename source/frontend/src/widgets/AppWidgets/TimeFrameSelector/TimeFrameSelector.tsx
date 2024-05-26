@@ -35,26 +35,25 @@ export default function TimeFrameSelector() {
     setVisibleTimeframes(newTimeFrame);
   };
 
-  return (
-    botInfo?.strategy_names &&
-    botInfo?.time_frames?.length && (
-      <div style={{ marginTop: "auto", marginBottom: "auto" }}>
-        <RadioButtonGroup
-          rightContent={
-            <TimeFrameEnabler
-              enabledTimeFrame={enabledTimeFrame}
-              setEnabledTimeFrame={setEnabledTimeFrame}
-            />
-          }
-          menuItems={botInfo.traded_time_frames.map((time_frame) => ({
-            label: time_frame,
-            key: time_frame,
-          }))}
-          onChange={handleChange}
-          selected={visibleTimeframes}
-        />
-      </div>
-    )
+  return botInfo?.strategy_names && botInfo?.time_frames?.length ? (
+    <div style={{ marginTop: "auto", marginBottom: "auto" }}>
+      <RadioButtonGroup
+        rightContent={
+          <TimeFrameEnabler
+            enabledTimeFrame={enabledTimeFrame}
+            setEnabledTimeFrame={setEnabledTimeFrame}
+          />
+        }
+        menuItems={botInfo.traded_time_frames.map((time_frame) => ({
+          label: time_frame,
+          key: time_frame,
+        }))}
+        onChange={handleChange}
+        selected={visibleTimeframes}
+      />
+    </div>
+  ) : (
+    <></>
   );
 }
 
@@ -87,7 +86,7 @@ function TimeFrameEnabler({
         type: "warning",
         message: (
           <>
-            <Trans i18nKey="timeFrameSelector.the-newly-selected-time-frames-will-be-available-after-a-restart"></Trans>
+            <Trans i18nKey="timeFrameSelector.the-newly-selected-time-frames-will-be-available-after-a-restart" />
             <RestartBotButton buttonType={buttonTypes.black} />
           </>
         ),

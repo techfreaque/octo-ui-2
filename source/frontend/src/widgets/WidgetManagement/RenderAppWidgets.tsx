@@ -48,10 +48,7 @@ export default function AppWidgets(props: {
                     registeredComponents[
                       element.component as AppWidgetNameType
                     ],
-                    {
-                      id: index,
-                      ...element,
-                    }
+                    element,
                   )}
                 </ErrorBoundary>
               );
@@ -75,7 +72,7 @@ export default function AppWidgets(props: {
 }
 
 export class ErrorBoundary extends Component {
-  override props!: { children: JSX.Element; componentName: string; };
+  override props!: { children: JSX.Element; componentName: string | undefined; };
   override state: {
     error: Error | null;
     errorInfo: ErrorInfo | null;
@@ -96,7 +93,7 @@ export class ErrorBoundary extends Component {
       });
       return (
         <div>
-          <h2><Trans i18nKey="componentError.something-went-wrong"></Trans></h2>
+          <h2><Trans i18nKey="componentError.something-went-wrong" /></h2>
           <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state.error?.toString()}
             <br /> {this.state.errorInfo.componentStack}

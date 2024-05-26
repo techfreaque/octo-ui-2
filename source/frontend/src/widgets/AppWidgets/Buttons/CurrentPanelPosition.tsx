@@ -3,6 +3,7 @@ import { t } from "i18next";
 import { useMemo } from "react";
 
 import AntButton from "../../../components/Buttons/AntButton";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   useCurrentPanelContext,
   useSetCurrentPanelPercent,
@@ -31,9 +32,7 @@ export const availablePanelPositionsArray = [
 
 export default function CurrentPanelPosition({
   position,
-}: {
-  position: PanelPositionType;
-}) {
+}: UiLayoutPageLayoutType) {
   const currentPanel = useCurrentPanelContext();
   const props = {
     title:
@@ -56,17 +55,17 @@ export default function CurrentPanelPosition({
         : 50,
   };
   if (position === availablePanelPositions.maximized) {
-    return currentPanel?.percent > 0.1 && <PanelSize {...props} />;
+    return currentPanel?.percent > 0.1 ? <PanelSize {...props} /> : <></>;
   } else if (position === availablePanelPositions.minimized) {
-    return currentPanel?.percent !== 100 && <PanelSize {...props} />;
+    return currentPanel?.percent === 100 ? <></> : <PanelSize {...props} />;
   } else if (position === availablePanelPositions.half) {
-    return (
-      !(30 <= currentPanel?.percent && currentPanel?.percent <= 70) && (
-        <PanelSize {...props} />
-      )
+    return 30 <= currentPanel?.percent && currentPanel?.percent <= 70 ? (
+      <></>
+    ) : (
+      <PanelSize {...props} />
     );
   } else if (position === availablePanelPositions.footerHalf) {
-    return currentPanel?.percent > 98 && <PanelSize {...props} />;
+    return currentPanel?.percent > 98 ? <PanelSize {...props} /> : <></>;
   }
   return <></>;
 }

@@ -52,8 +52,8 @@ export const NotificationsContextProvider = ({
   const botDomain = useBotDomainContext();
 
   const socketUrl =
-    botDomain.replace("http://", "ws://").replace("https://", "wss://") +
-    "/notifications";
+    `${botDomain.replace("http://", "ws://").replace("https://", "wss://") 
+    }/notifications`;
   const setIsBotOnline = useUpdateIsBotOnlineContext();
 
   function onNewMessage(newMessage: WebsocketNotificationType) {

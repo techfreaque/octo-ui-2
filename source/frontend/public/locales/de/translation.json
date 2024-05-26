@@ -134,7 +134,7 @@
   },
   "componentError": {
     "something-went-wrong": "Etwas ist schief gelaufen. :(",
-    "oh-no-this-componentname-crashed": "Oh nein! {{componentName}} ist abgestürzt!"
+    "oh-no-this-componentname-crashed-notification": "Oh nein! {{componentName}} ist abgestürzt!"
   },
   "timeFrameSelector": {
     "pending-restart": "Ausstehender Neustart",

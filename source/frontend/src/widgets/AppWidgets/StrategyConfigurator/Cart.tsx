@@ -44,23 +44,22 @@ export default function AppStoreCartModal({ content }: UiLayoutPageLayoutType) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  return (
-    appStoreCart &&
-    Object.keys(appStoreCart)?.length > 0 && (
-      <ButtonWithModal
-        title={t("appStore.cart.shopping-cart")}
-        content={content}
-        open={open}
-        setOpen={setOpen}
-        iconStyle={{
-          color: botColors?.warning,
-        }}
-        antIcon={"ShoppingCartOutlined"}
-        iconOnly={true}
-        // displayAsAvatar={displayAsAvatar}
-        width={"1000"}
-      />
-    )
+  return appStoreCart && Object.keys(appStoreCart)?.length > 0 ? (
+    <ButtonWithModal
+      title={t("appStore.cart.shopping-cart")}
+      content={content}
+      open={open}
+      setOpen={setOpen}
+      iconStyle={{
+        color: botColors?.warning,
+      }}
+      antIcon={"ShoppingCartOutlined"}
+      iconOnly={true}
+      // displayAsAvatar={displayAsAvatar}
+      width={"1000"}
+    />
+  ) : (
+    <></>
   );
 }
 
@@ -97,7 +96,9 @@ export function AppStoreCart() {
           ...firstAppInPackage,
           id: originPackageName,
           key: originPackageName,
-          price: t('appStore.cart.firstappinpackage-price-month', { price: firstAppInPackage.price }),
+          price: t("appStore.cart.firstappinpackage-price-month", {
+            price: firstAppInPackage.price,
+          }),
           months: 12,
           total: `${12 * firstAppInPackage.price}$`,
           action: (
@@ -111,7 +112,7 @@ export function AppStoreCart() {
                 removeFromCart(originPackageName);
               }}
             >
-              <Trans i18nKey="appStore.cart.remove-from-basket"></Trans>
+              <Trans i18nKey="appStore.cart.remove-from-basket" />
             </AntButton>
           ),
         };
@@ -136,7 +137,7 @@ export function AppStoreCart() {
         }}
       >
         <Typography.Title level={4}>
-          {t('appStore.cart.total-totalprice-incl-tax', { totalPrice })}
+          {t("appStore.cart.total-totalprice-incl-tax", { totalPrice })}
         </Typography.Title>
         {appStorePaymentUrl ? (
           <Space>
@@ -146,7 +147,7 @@ export function AppStoreCart() {
                 onClick={checkStorePayment}
                 antIconComponent={ReloadOutlined}
               >
-                <Trans i18nKey="appStore.cart.no-payment-detected-check-payment-status"></Trans>
+                <Trans i18nKey="appStore.cart.no-payment-detected-check-payment-status" />
               </AntButton>
             </Space>
             <Space>
@@ -156,7 +157,7 @@ export function AppStoreCart() {
                 onClick={() => cancelStorePayment()}
                 antIconComponent={CloseCircleOutlined}
               >
-                <Trans i18nKey="appStore.cart.cancel-purchase"></Trans>
+                <Trans i18nKey="appStore.cart.cancel-purchase" />
               </AntButton>
               <AntButton
                 href={appStorePaymentUrl.paymentUrl}
@@ -164,7 +165,7 @@ export function AppStoreCart() {
                 antIconComponent={DollarCircleOutlined}
                 target="blank"
               >
-                <Trans i18nKey="appStore.cart.finalize-payment"></Trans>
+                <Trans i18nKey="appStore.cart.finalize-payment" />
               </AntButton>
             </Space>
           </Space>
@@ -181,7 +182,7 @@ export function AppStoreCart() {
                 )
               }
             >
-              <Trans i18nKey="appStore.cart.complete-purchase-and-pay-now"></Trans>
+              <Trans i18nKey="appStore.cart.complete-purchase-and-pay-now" />
             </AntButton>
           </Space>
         )}
@@ -193,27 +194,27 @@ export function AppStoreCart() {
 function getCartItemsColumns(): AntTableColumnType<AntTableDataType>[] {
   const items = [
     {
-      title: t('appStore.cart.cart-table.package-name'),
+      title: t("appStore.cart.cart-table.package-name"),
       dataIndex: "origin_package",
       key: "origin_package",
     },
     {
-      title: t('appStore.cart.cart-table.price'),
+      title: t("appStore.cart.cart-table.price"),
       dataIndex: "price",
       key: "price",
     },
     {
-      title: t('appStore.cart.cart-table.months'),
+      title: t("appStore.cart.cart-table.months"),
       dataIndex: "months",
       key: "months",
     },
     {
-      title: t('appStore.cart.cart-table.total'),
+      title: t("appStore.cart.cart-table.total"),
       dataIndex: "total",
       key: "total",
     },
     {
-      title: t('appStore.cart.cart-table.action'),
+      title: t("appStore.cart.cart-table.action"),
       dataIndex: "action",
       key: "action",
     },

@@ -15,7 +15,7 @@ import {
 import { useIsBotOnlineContext } from "../../../context/data/IsBotOnlineProvider";
 
 export default function AddToOptimizerQueueButton() {
-  const isOptimizer = useBotIsOptimizingContext();
+  const isOptimizing = useBotIsOptimizingContext();
   const AddToOptimizerQueue = useAddToOptimizerQueue();
   const botInfo = useBotInfoContext();
   const uiProInstalled = botInfo?.ui_pro_installed;
@@ -25,18 +25,18 @@ export default function AddToOptimizerQueueButton() {
   const canNotAdd =
     !uiProInstalled || !isOnline || isDemo || optimizerCounter === 0;
   return useMemo(() => {
-    return (
-      !isOptimizer && (
-        <AntButton
-          onClick={AddToOptimizerQueue}
-          buttonType={buttonTypes.success}
-          faIconComponent={faPlus}
-          marginRight="5px"
-          disabled={canNotAdd}
-        >
-          <Trans i18nKey="optimizer.add-to-queue"></Trans>
-        </AntButton>
-      )
+    return isOptimizing ? (
+      <></>
+    ) : (
+      <AntButton
+        onClick={AddToOptimizerQueue}
+        buttonType={buttonTypes.success}
+        faIconComponent={faPlus}
+        marginRight="5px"
+        disabled={canNotAdd}
+      >
+        <Trans i18nKey="optimizer.add-to-queue" />
+      </AntButton>
     );
-  }, [AddToOptimizerQueue, canNotAdd, isOptimizer]);
+  }, [AddToOptimizerQueue, canNotAdd, isOptimizing]);
 }

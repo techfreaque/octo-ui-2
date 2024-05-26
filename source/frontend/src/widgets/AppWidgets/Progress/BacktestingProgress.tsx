@@ -13,7 +13,7 @@ export default function BacktestingProgress() {
   const { t } = useTranslation();
   return useMemo(
     () =>
-      inProgress && (
+      inProgress ? (
         <div
           style={{
             margin: "auto",
@@ -35,6 +35,8 @@ export default function BacktestingProgress() {
             </div>
           </Tooltip>
         </div>
+      ) : (
+        <></>
       ),
     [inProgress, progress, t]
   );

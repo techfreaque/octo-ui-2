@@ -257,7 +257,7 @@ function MetaDataTable({
                 title={t("backtesting.runDataTable.display-run-information")}
               >
                 <Radio.Button value="info">
-                  <Trans i18nKey="backtesting.runDataTable.backtesting-info"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.backtesting-info" />
                 </Radio.Button>
               </Tooltip>
               <Tooltip
@@ -266,14 +266,14 @@ function MetaDataTable({
                 )}
               >
                 <Radio.Button value="allInfo">
-                  <Trans i18nKey="backtesting.runDataTable.backtesting-all-info"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.backtesting-all-info" />
                 </Radio.Button>
               </Tooltip>
               <Tooltip
                 title={t("backtesting.runDataTable.display-run-settings")}
               >
                 <Radio.Button value="settings">
-                  <Trans i18nKey="backtesting.runDataTable.backtestings-settings"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.backtestings-settings" />
                 </Radio.Button>
               </Tooltip>
             </Radio.Group>
@@ -304,9 +304,9 @@ function MetaDataTable({
             <Tooltip
               title={
                 onlyOneIsSelected ? (
-                  <Trans i18nKey="backtesting.runDataTable.restores-all-settings-from-this-run"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.restores-all-settings-from-this-run" />
                 ) : (
-                  <Trans i18nKey="backtesting.runDataTable.select-only-one-run-to-be-able-to-restore-the-settings"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.select-only-one-run-to-be-able-to-restore-the-settings" />
                 )
               }
             >
@@ -330,7 +330,7 @@ function MetaDataTable({
                       : undefined
                   }
                 >
-                  <Trans i18nKey="backtesting.runDataTable.restore-settings"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.restore-settings" />
                 </AntButton>
               </div>
             </Tooltip>
@@ -347,7 +347,7 @@ function MetaDataTable({
                     somethingSelected ? () => handleDeleteSelected() : undefined
                   }
                 >
-                  <Trans i18nKey="backtesting.runDataTable.backtesting-delete-selected"></Trans>
+                  <Trans i18nKey="backtesting.runDataTable.backtesting-delete-selected" />
                 </AntButton>
               </div>
             </Tooltip>
@@ -410,11 +410,11 @@ function useFormatTableData(
           ? (typeof rowValue as "string" | "number" | "boolean")
           : undefined,
         render: TIMESTAMP_DATA.includes(key)
-          ? (value: any) => {
+          ? (value: number) => {
               return <>{new Date(value).toISOString()}</>;
             }
           : ID_DATA.includes(key)
-          ? (value: any) => {
+          ? (value: number | string) => {
               return <>{Number(value)}</>;
             }
           : undefined,

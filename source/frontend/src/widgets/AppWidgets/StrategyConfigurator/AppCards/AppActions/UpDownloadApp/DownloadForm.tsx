@@ -481,7 +481,7 @@ function RequiredPackage({
                 })
               : t("appStore.appCard.downloadApp.appPrice-free"))}
         </Typography.Paragraph>
-        <Trans i18nKey="appStore.appCard.downloadApp.required-apps"></Trans>
+        <Trans i18nKey="appStore.appCard.downloadApp.required-apps" />
         <ul>
           {requiredAppsInPackage.map((requiredApp, index) => (
             <Tooltip
@@ -514,7 +514,7 @@ function RequiredPackage({
             ...(showAllAppsInpackage ? {} : { color: botColors?.fontActive }),
           }}
         >
-          <Trans i18nKey="appStore.appCard.downloadApp.all-included-apps-in-package"></Trans>
+          <Trans i18nKey="appStore.appCard.downloadApp.all-included-apps-in-package" />
         </div>
         {showAllAppsInpackage && (
           <AllAppsInPackage requiredAppPackage={requiredAppPackageName} />
@@ -621,7 +621,7 @@ function DownloadPackageButton({
             disabled={true}
             antIconComponent={DownloadOutlined}
           >
-            <Trans i18nKey="appStore.appCard.downloadApp.download-now"></Trans>
+            <Trans i18nKey="appStore.appCard.downloadApp.download-now" />
           </AntButton>
         </div>
       </Tooltip>
@@ -640,7 +640,7 @@ function DownloadPackageButton({
         onClick={thisHandleDownload}
         antIconComponent={DownloadOutlined}
       >
-        <Trans i18nKey="appStore.appCard.downloadApp.update-now"></Trans>
+        <Trans i18nKey="appStore.appCard.downloadApp.update-now" />
       </AntButton>
     );
   } else if (mainPackageApp.price) {
@@ -652,7 +652,7 @@ function DownloadPackageButton({
           onClick={thisHandleDownload}
           antIconComponent={DownloadOutlined}
         >
-          <Trans i18nKey="appStore.appCard.downloadApp.download-now"></Trans>
+          <Trans i18nKey="appStore.appCard.downloadApp.download-now" />
         </AntButton>
       );
     } else if (mainPackageInCart) {
@@ -663,7 +663,7 @@ function DownloadPackageButton({
           onClick={() => setOpenBasket(true)}
           antIconComponent={ShoppingCartOutlined}
         >
-          <Trans i18nKey="appStore.appCard.downloadApp.go-to-shopping-basket"></Trans>
+          <Trans i18nKey="appStore.appCard.downloadApp.go-to-shopping-basket" />
         </AntButton>
       );
     } else {
@@ -674,7 +674,7 @@ function DownloadPackageButton({
           onClick={() => addAppStoreCart(mainPackageApp)}
           antIconComponent={ShoppingCartOutlined}
         >
-          <Trans i18nKey="appStore.appCard.downloadApp.add-to-shopping-basket"></Trans>
+          <Trans i18nKey="appStore.appCard.downloadApp.add-to-shopping-basket" />
         </AntButton>
       );
     }
@@ -687,7 +687,7 @@ function DownloadPackageButton({
         onClick={thisHandleDownload}
         antIconComponent={DownloadOutlined}
       >
-        <Trans i18nKey="appStore.appCard.downloadApp.download-for-free"></Trans>
+        <Trans i18nKey="appStore.appCard.downloadApp.download-for-free" />
       </AntButton>
     );
   }

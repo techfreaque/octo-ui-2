@@ -1,4 +1,5 @@
 import { Button, Card, Popconfirm, Typography } from "antd";
+import { t } from "i18next";
 import { useState } from "react";
 import { Trans } from "react-i18next";
 
@@ -70,24 +71,27 @@ export default function ResetConfigs() {
       fetchConfig();
       setIsResetting(false);
       createNotification({
-        title: `Successfully resetted ${projectName} config`,
+        title: t("resetConfigs.successfully-resetted-projectname-config", {
+          projectName,
+        }),
       });
     };
     const failed = () => {
       setIsResetting(false);
-      createNotification({ title: `Failed to reset ${projectName} config` });
+      createNotification({
+        title: t("resetConfigs.failed-to-reset-projectname-config", {
+          projectName,
+        }),
+      });
     };
     saveUiConfig(
       {
-        backtesting_analysis_settings: {},
         backtesting_run_settings: {},
         bot_ui_layout2: undefined,
         "current-live-id": 1,
         display_settings: {},
-        live_analysis_settings: {},
         optimization_campaign: {},
         optimizer_campaigns_to_load: {},
-        optimizer_inputs: {},
         optimizer_run_settings: {},
       },
       success,
@@ -100,11 +104,15 @@ export default function ResetConfigs() {
     const CLEAR_PLOTTING_CACHE: ClearOlottingCacheType = "clear_plotting_cache";
     function successCallback() {
       setIsResetting(false);
-      createNotification({ title: "Successfully cleared plotting cache" });
+      createNotification({
+        title: t("resetConfigs.successfully-cleared-plotting-cache"),
+      });
     }
     function failCallback() {
       setIsResetting(false);
-      createNotification({ title: "Failed to reset plotting cache" });
+      createNotification({
+        title: t("resetConfigs.failed-to-reset-plotting-cache"),
+      });
     }
     setIsResetting(true);
     sendActionCommandToTradingMode(
@@ -187,7 +195,9 @@ export default function ResetConfigs() {
       }}
     >
       <Card>
-        <Title>Reset data and configuration</Title>
+        <Title>
+          <Trans i18nKey="resetConfigs.reset-data-and-configuration" />
+        </Title>
         {objectKeys(storages).map((storageKey) => (
           <ResetIndividual
             title={storages[storageKey].title}
@@ -273,32 +283,43 @@ function getResetData(tentacles: string[]): ResetDataType {
   return {
     resetAllUIConfig: {
       key: "resetAllUIConfig",
-      title: `Reset all ${projectName} Settings`,
+      title: t("resetConfigs.reset-all-projectname-settings", { projectName }),
       description: (
         <>
-          Resets the following settings:
+          <Trans i18nKey="resetConfigs.resets-the-following-settings" />
           <ul>
-            <li>Backtesting Settings</li>
-            <li>Optimizer Settings</li>
-            <li>Trading Analysis Settings</li>
-            <li>Display Settings</li>
-            <li>Page Builder Page Layout</li>
+            <li>
+              <Trans i18nKey="resetConfigs.backtesting-settings" />
+            </li>
+            <li>
+              <Trans i18nKey="resetConfigs.optimizer-settings" />
+            </li>
+            <li>
+              <Trans i18nKey="resetConfigs.trading-analysis-settings" />
+            </li>
+            <li>
+              <Trans i18nKey="resetConfigs.display-settings" />
+            </li>
+            <li>
+              <Trans i18nKey="resetConfigs.page-builder-page-layout" />
+            </li>
           </ul>
         </>
       ),
     },
     resetTradingModePlottingCache: {
       key: "resetTradingModePlottingCache",
-      title: "Reset trading mode plotting cache",
-      description:
-        "Resets the plotting cache for thiplotting cacheall tentacles settings",
+      title: t("resetConfigs.reset-trading-mode-plotting-cache"),
+      description: t(
+        "resetConfigs.resets-the-plotting-cache-for-thiplotting-cacheall-tentacles-settings"
+      ),
     },
     resetTradingmodeSettings: {
       key: "resetTradingmodeSettings",
-      title: "Reset current trading mode settings",
+      title: t("resetConfigs.reset-current-trading-mode-settings"),
       description: (
         <>
-          Resets the following tentacle settings to the defaults:
+          <Trans i18nKey="resetConfigs.resets-the-following-tentacle-settings-to-the-defaults" />
           <ul>
             {tentacles.map((tentacle) => (
               <li key={tentacle}>{tentacle}</li>
@@ -309,26 +330,26 @@ function getResetData(tentacles: string[]): ResetDataType {
     },
     resetPortfolioHistory: {
       key: "resetPortfolioHistory",
-      title: "Reset the Portfolio History",
-      description: "Resets the portfolio history",
+      title: t("resetConfigs.reset-the-portfolio-history"),
+      description: t("resetConfigs.resets-the-portfolio-history"),
       api: backendRoutes.clearPortfolioHistory,
     },
     resetOrdersHistory: {
       key: "resetOrdersHistory",
-      title: "Reset the Orders History",
-      description: "Resets the orders history",
+      title: t("resetConfigs.reset-the-orders-history"),
+      description: t("resetConfigs.resets-the-orders-history"),
       api: backendRoutes.clearOrdersHistory,
     },
     resetTradesHistory: {
       key: "resetTradesHistory",
-      title: "Reset the Trades History",
-      description: "Resets the trades history",
+      title: t("resetConfigs.reset-the-trades-history"),
+      description: t("resetConfigs.resets-the-trades-history"),
       api: backendRoutes.clearTradesHistory,
     },
     resetTransactionsHistory: {
       key: "resetTransactionsHistory",
-      title: "Reset the Transactions History",
-      description: "Resets the transactions history",
+      title: t("resetConfigs.reset-the-transactions-history"),
+      description: t("resetConfigs.resets-the-transactions-history"),
       api: backendRoutes.clearTransactionsHistory,
     },
   };

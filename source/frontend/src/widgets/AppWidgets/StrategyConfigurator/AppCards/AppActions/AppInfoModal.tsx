@@ -2,7 +2,9 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { faXmark } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Modal } from "antd";
+import { t } from "i18next";
 import { useState } from "react";
+import { Trans } from "react-i18next";
 
 import AntButton from "../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../components/Buttons/AppIconButton";
@@ -23,7 +25,9 @@ export default function AppInfoModal({
     <>
       <AppIconButton
         isSelected={app.is_selected}
-        buttonTitle={`${app.categories[0]} Info`}
+        buttonTitle={t("appStore.appCard.appInfo.appCategory-info", {
+          appCategory: app.categories[0],
+        })}
         antIconComponent={InfoCircleOutlined}
         onClick={() => setOpen(true)}
       />
@@ -48,7 +52,7 @@ export default function AppInfoModal({
             size="large"
             onClick={handleClose}
           >
-            Cancel
+            <Trans i18nKey="appStore.appCard.appInfo.close" />
           </AntButton>,
         ]}
       >

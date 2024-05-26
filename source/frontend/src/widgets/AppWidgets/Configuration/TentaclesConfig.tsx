@@ -48,10 +48,10 @@ export default function TentaclesConfig({
   tentacleNames = "RunAnalysisModePlugin",
   additionalTabs = [],
   autoSave = false,
-}: {
-  content: UiLayoutPageLayoutType[] | undefined;
-  tentacleNames: StorageNameType;
-  additionalTabs: UiLayoutPageLayoutType[] | undefined;
+}: UiLayoutPageLayoutType & {
+  content?: UiLayoutPageLayoutType[];
+  tentacleNames?: StorageNameType;
+  additionalTabs?: UiLayoutPageLayoutType[];
   autoSave?: boolean;
 }) {
   const botInfo = useBotInfoContext();
@@ -68,7 +68,7 @@ export default function TentaclesConfig({
   const _additionalTabs = useGetAdditionalTabs(additionalTabs);
   return useMemo(() => {
     if (!currentTentaclesNonTradingConfig) {
-      return null;
+      return <></>;
     }
     function handleTentaclesUpdate() {
       fetchTentaclesConfig(tentacleNames.split(","));
@@ -108,8 +108,11 @@ function useGetAdditionalTabs(
 ): TentacleConfigTabsData[] | undefined {
   return useMemo(
     () =>
-      additionalTabs?.map((tab) => {
-        const tabId = (tab.title || tab.component).replace(/ /g, "_");
+      additionalTabs?.map((tab, index) => {
+        const tabId = (tab.title || tab.component || String(index)).replace(
+          / /g,
+          "_"
+        );
         return {
           antIcon: tab.antIcon,
           dontScroll: tab.dontScroll || false,
@@ -449,7 +452,7 @@ export function saveUserInputs(
         return;
       }
       const tentacle = `${editorKey.split("##")[1]}`;
-      const errorsDesc = validateJSONEditor(editor);
+      const errorsDesc = validateJSONEditor<TentaclesConfigValueType>(editor);
       if (errorsDesc) {
         save = false;
         setIsLoading(false);
@@ -458,7 +461,6 @@ export function saveUserInputs(
           type: "danger",
           message: `${errorsDesc}`,
         });
-        return;
       }
       tentaclesConfigByTentacle[tentacle] = editor.getValue();
     });
@@ -583,7 +585,7 @@ function createSidebarItem({
     antIcon,
     order: schema?.order || 0,
     content: (
-      <JsonEditor
+      <JsonEditor<TentaclesConfigValueType>
         schema={schema}
         startval={config}
         editorName={`${editorKey}##${configName}`}

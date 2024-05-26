@@ -30,17 +30,17 @@ export default function StartOptimizerButton() {
     isDemo ||
     optimizerQueueSize === 0;
   return useMemo(() => {
-    return (
-      !isOptimizer && (
-        <AntButton
-          onClick={startOptimizer}
-          buttonType={buttonTypes.success}
-          faIconComponent={faPlay}
-          disabled={canNotStart}
-        >
-          <Trans i18nKey="optimizer.start-optimizer"></Trans>
-        </AntButton>
-      )
+    return isOptimizer ? (
+      <></>
+    ) : (
+      <AntButton
+        onClick={startOptimizer}
+        buttonType={buttonTypes.success}
+        faIconComponent={faPlay}
+        disabled={canNotStart}
+      >
+        <Trans i18nKey="optimizer.start-optimizer" />
+      </AntButton>
     );
   }, [canNotStart, isOptimizer, startOptimizer]);
 }

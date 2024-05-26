@@ -1,6 +1,8 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Input, Tooltip, Typography } from "antd";
+import { t } from "i18next";
 import { DragEvent, DragEventHandler, useMemo, useState } from "react";
+import { Trans } from "react-i18next";
 
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
@@ -39,7 +41,7 @@ export default function BuildingBlocksSidebar() {
           <Input.Search
             style={{ marginTop: "10px" }}
             onChange={(event) => setSearchText(event.target.value)}
-            placeholder="Search for ema, rsi, strategy..."
+            placeholder={t('strategyConfigurator.strategyFlowMaker.search-for-ema-rsi-strategy')}
             enterButton={
               <span>
                 <SearchOutlined style={{ margin: "auto" }} />
@@ -48,7 +50,7 @@ export default function BuildingBlocksSidebar() {
             size="large"
           />
           <Typography.Paragraph style={{ marginTop: "10px" }}>
-            You can drag these building blocks to the pane
+            <Trans i18nKey="strategyConfigurator.strategyFlowMaker.you-can-drag-these-building-blocks-to-the-pane" />
           </Typography.Paragraph>
           <BlockTemplates
             installedBlocksInfo={installedBlocksInfo}

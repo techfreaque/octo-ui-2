@@ -17,19 +17,19 @@ export default function StopTrainingButton() {
         faIconComponent={faStop}
         disabled={true}
       >
-        <Trans i18nKey="backtesting.training-is-about-to-stop"></Trans>
+        <Trans i18nKey="backtesting.training-is-about-to-stop" />
+      </AntButton>
+    ) : botInfo?.any_neural_net_active ? (
+      <AntButton
+        onClick={stopTraining}
+        buttonType={buttonTypes.warning}
+        style={{ marginRight: "5px" }}
+        faIconComponent={faStop}
+      >
+        <Trans i18nKey="backtesting.stop-training" />
       </AntButton>
     ) : (
-      botInfo?.any_neural_net_active && (
-        <AntButton
-          onClick={stopTraining}
-          buttonType={buttonTypes.warning}
-          style={{ marginRight: "5px" }}
-          faIconComponent={faStop}
-        >
-          <Trans i18nKey="backtesting.stop-training"></Trans>
-        </AntButton>
-      )
+      <></>
     );
   }, [
     botInfo?.any_neural_net_active,

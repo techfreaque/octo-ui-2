@@ -16,7 +16,7 @@ import { UiConfigKeyType, useUiConfigContext } from "./UiConfigProvider";
 
 export interface UiLayoutPageLayoutType {
   title?: string;
-  component: PagebuilderComponents;
+  component?: PagebuilderComponents | undefined;
   faIcon?: string;
   antIcon?: string;
   content?: UiLayoutPageLayoutType[];
@@ -45,6 +45,7 @@ export interface UiLayoutPageLayoutType {
   tentacleNames?: "RunAnalysisModePlugin";
   minHeights?: string;
   autoSave?: boolean;
+  defaultTabId?: number;
 }
 
 export interface UiLayoutPageType {

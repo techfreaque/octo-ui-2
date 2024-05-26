@@ -1,6 +1,8 @@
 import { Grid } from "@mui/material";
 import { AutoComplete, Radio, Typography } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useState } from "react";
+import { Trans } from "react-i18next";
 
 import {
   ProfileRootPathType,
@@ -27,15 +29,15 @@ const tradingTypes: {
   };
 } = {
   realTrading: {
-    label: "Real Trading",
+    label: t("strategyConfigurator.profileSettings.real-trading"),
     value: "realTrading",
   },
   simulatedTrading: {
-    label: "Simulated Trading",
+    label: t("strategyConfigurator.profileSettings.simulated-trading"),
     value: "simulatedTrading",
   },
   tradingDisabled: {
-    label: "Trading Disabled",
+    label: t("strategyConfigurator.profileSettings.trading-disabled"),
     value: "tradingDisabled",
   },
 };
@@ -119,7 +121,9 @@ export function ProfileTradingTypeSettings({
 
   return (
     <Grid item xs={12}>
-      <Typography.Title level={5}>Trading Type:</Typography.Title>
+      <Typography.Title level={5}>
+        <Trans i18nKey="strategyConfigurator.profileSettings.trading-type" />
+      </Typography.Title>
       <Radio.Group
         disabled={!isCurrentProfile}
         options={[
@@ -170,7 +174,9 @@ export function ProfileReferenceMarketSettings({
   }
   return (
     <Grid xs={12} sm={6} item>
-      <Typography.Title level={5}>Reference Market:</Typography.Title>
+      <Typography.Title level={5}>
+        <Trans i18nKey="strategyConfigurator.profileSettings.reference-market" />
+      </Typography.Title>
       <AutoComplete
         options={options}
         disabled={!isCurrentProfile}
@@ -185,7 +191,9 @@ export function ProfileReferenceMarketSettings({
           )
         }
         onSearch={setAutoCompleteOptions}
-        placeholder="enter a reference market like USDT or BTC"
+        placeholder={t(
+          "strategyConfigurator.profileSettings.enter-a-reference-market-like-usdt-or-btc"
+        )}
       />
     </Grid>
   );

@@ -1,5 +1,7 @@
 import { Tooltip } from "antd";
+import { t } from "i18next";
 
+import { projectName } from "../../../constants/frontendConstants";
 import { useUpdateProjectInfoOpenContext } from "../../../context/data/BotInfoProvider";
 import logo from "./octane-logo.png";
 
@@ -18,12 +20,12 @@ export default function Logo() {
           margin: "0px 5px",
         }}
       >
-        <Tooltip title={"Click to learn more about Octane"}>
+        <Tooltip title={t('projectLogo.tooltip', {projectName})}>
           <img
             onClick={() => setProjectInfoOpen(true)}
             height={"28px"}
             style={{ cursor: "pointer" }}
-            alt="Octane Logo"
+            alt={t('projectLogo.projectname-logo', {projectName})}
             src={logo}
           />
         </Tooltip>

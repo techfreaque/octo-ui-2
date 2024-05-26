@@ -59,7 +59,7 @@ export default function OptimizerQueueTable() {
       <OptimizerNotInstalled />
       <div style={{ margin: "1.5rem", textAlign: "center" }}>
         <Button onClick={fetchOptimizerQueue}>
-          <Trans i18nKey="optimizer.reload-optimizer-queue"></Trans>
+          <Trans i18nKey="optimizer.reload-optimizer-queue" />
         </Button>
       </div>
       <div id={"optimizer-queue-container"} style={{ height: "100%" }}>
@@ -110,7 +110,7 @@ function OptimizerQueueTables({
       style={{ margin: "1.5rem", textAlign: "center" }}
     >
       <h4>
-        <Trans i18nKey="optimizer.the-optimizer-queue-is-empty"></Trans>
+        <Trans i18nKey="optimizer.the-optimizer-queue-is-empty" />
       </h4>
     </div>
   );
@@ -218,13 +218,13 @@ function OptimizerRunQueueTable({
                   buttonVariant={buttonVariants.text}
                   onClick={somethingSelected ? () => onDelete() : undefined}
                 >
-                  <Trans i18nKey="optimizer.queue-delete-selected"></Trans>
+                  <Trans i18nKey="optimizer.queue-delete-selected" />
                 </AntButton>
               </div>
             </Tooltip>
             <Tooltip
               title={
-                <Trans i18nKey="optimizer.queue-this-will-delete-all-runs-in-this-optimizer-id"></Trans>
+                <Trans i18nKey="optimizer.queue-this-will-delete-all-runs-in-this-optimizer-id" />
               }
             >
               <div>
@@ -237,13 +237,13 @@ function OptimizerRunQueueTable({
                   buttonVariant={buttonVariants.text}
                   onClick={() => onDelete(true)}
                 >
-                  <Trans i18nKey="optimizer.queue-delete-all"></Trans>
+                  <Trans i18nKey="optimizer.queue-delete-all" />
                 </AntButton>
               </div>
             </Tooltip>
             <Tooltip
               title={
-                <Trans i18nKey="optimizer.queue-this-will-randomize-all-records-in-this-optimizer-id"></Trans>
+                <Trans i18nKey="optimizer.queue-this-will-randomize-all-records-in-this-optimizer-id" />
               }
             >
               <div>
@@ -256,7 +256,7 @@ function OptimizerRunQueueTable({
                   buttonVariant={buttonVariants.text}
                   onClick={randomizeRecords}
                 >
-                  <Trans i18nKey="optimizer.queue-randomize"></Trans>
+                  <Trans i18nKey="optimizer.queue-randomize" />
                 </AntButton>
               </div>
             </Tooltip>

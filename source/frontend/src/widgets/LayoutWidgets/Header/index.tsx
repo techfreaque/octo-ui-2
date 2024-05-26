@@ -10,10 +10,7 @@ const { Header: AntHeader } = Layout;
 export default function Header({
   leftContent,
   rightContent,
-}: {
-  leftContent: UiLayoutPageLayoutType[];
-  rightContent: UiLayoutPageLayoutType[];
-}) {
+}: UiLayoutPageLayoutType) {
   const botColors = useBotColorsContext();
   return (
     <div

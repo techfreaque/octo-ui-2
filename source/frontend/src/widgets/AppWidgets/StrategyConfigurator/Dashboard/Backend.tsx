@@ -1,5 +1,7 @@
 import { Typography } from "antd";
+import { t } from "i18next";
 import { Dispatch, SetStateAction, useEffect, useState } from "react";
+import { Trans } from "react-i18next";
 
 import {
   useDeleteStoreUser,
@@ -22,18 +24,27 @@ export default function BackendDashboard() {
     <>
       {storeUsers?.users && (
         <ul>
-          <Typography.Title level={4}>Users</Typography.Title>
+          <Typography.Title level={4}>
+            <Trans i18nKey="manageAccount.backend.users" />
+          </Typography.Title>
           {storeUsers.users.map((user) => {
             return (
               <li key={user.id}>
-                {`${user.id} ${user.email} (ref id${user.referral_user_id})`}
+                {`${user.id} ${user.email} (ref id: ${user.referral_user_id})`}
                 <ConfirmAction
                   onConfirm={(setOpen: Dispatch<SetStateAction<boolean>>) =>
                     deleteUser(user.id, () => setOpen(false))
                   }
-                  confirmTitle={`Delete ${user.email}`}
-                  confirmButtonText={`Delete ${user.email}`}
-                  buttonTitle={`Delete ${user.email}`}
+                  confirmTitle={t("manageAccount.backend.delete-user-email", {
+                    userEmail: user.email,
+                  })}
+                  confirmButtonText={t(
+                    "manageAccount.backend.delete-user-email",
+                    { userEmail: user.email }
+                  )}
+                  buttonTitle={t("manageAccount.backend.delete-user-email", {
+                    userEmail: user.email,
+                  })}
                 />
               </li>
             );
@@ -42,7 +53,9 @@ export default function BackendDashboard() {
       )}
       {storeUsers?.visits && (
         <ul>
-          <Typography.Title level={4}>Visits</Typography.Title>
+          <Typography.Title level={4}>
+            <Trans i18nKey="manageAccount.backend.visits" />
+          </Typography.Title>
           {storeUsers.visits.map((visit) => {
             return (
               <li key={visit.user_id}>
@@ -54,7 +67,9 @@ export default function BackendDashboard() {
       )}
       {storePayments?.payments && (
         <ul>
-          <Typography.Title level={4}>Store Payments</Typography.Title>
+          <Typography.Title level={4}>
+            <Trans i18nKey="manageAccount.backend.store-payments" />
+          </Typography.Title>
           {storePayments.payments.map((payment) => {
             return (
               <li key={payment.id}>
@@ -66,7 +81,9 @@ export default function BackendDashboard() {
       )}
       {storePayments?.subscriptions && (
         <ul>
-          <Typography.Title level={4}>Store Payments</Typography.Title>
+          <Typography.Title level={4}>
+            <Trans i18nKey="manageAccount.backend.store-subscriptions" />
+          </Typography.Title>
           {storePayments.subscriptions.map((payment) => {
             return (
               <li key={payment.id}>

@@ -53,9 +53,18 @@ export interface BacktestingRunDataWithoutID {
   exchanges: string[];
   start_time: number;
   end_time: number;
-  future_contracts: any;
+  future_contracts: {
+    [exchangeName: string]: {
+      [symbol: string]: {
+        contract_type: "linear_perpetual";
+        margin_type: "isolated";
+        position_mode: "one_way_mode";
+      };
+    };
+  };
   "optimizer id": number;
 }
+
 export type BacktestingRunData = BacktestingRunDataWithoutID & {
   id: number;
 };

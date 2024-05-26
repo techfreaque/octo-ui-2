@@ -8,6 +8,7 @@ import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   TentaclesConfigByTentacleType,
   useSaveTentaclesConfigAndSendAction,
@@ -25,11 +26,9 @@ export default function SendActionCommandToTradingMode({
   title,
   faIcon,
   antIcon,
-}: {
-  command: ApiActionsType;
-  title: string;
-  faIcon?: string;
-  antIcon?: string;
+}: UiLayoutPageLayoutType & {
+  command?: ApiActionsType;
+  title?: string;
 }) {
   const isOnline = useIsBotOnlineContext();
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
@@ -38,26 +37,27 @@ export default function SendActionCommandToTradingMode({
   const isDemo = useIsDemoMode();
   return useMemo(() => {
     const availableApiActions = botInfo?.available_api_actions;
-    const isAvailableApiAction = availableApiActions?.includes(command);
-    return (
-      isAvailableApiAction && (
-        <AntButton
-          disabled={!isOnline || isExecuting || isDemo}
-          onClick={() =>
-            sendActionCommandToTradingMode(
-              command,
-              saveTentaclesConfigAndSendAction,
-              setIsExecuting
-            )
-          }
-          buttonVariant={buttonVariants.outline}
-          buttonType={buttonTypes.warning}
-          faIcon={faIcon}
-          antIcon={antIcon}
-        >
-          {title}
-        </AntButton>
-      )
+    const isAvailableApiAction =
+      command && availableApiActions?.includes(command);
+    return isAvailableApiAction ? (
+      <AntButton
+        disabled={!isOnline || isExecuting || isDemo}
+        onClick={() =>
+          sendActionCommandToTradingMode(
+            command,
+            saveTentaclesConfigAndSendAction,
+            setIsExecuting
+          )
+        }
+        buttonVariant={buttonVariants.outline}
+        buttonType={buttonTypes.warning}
+        faIcon={faIcon}
+        antIcon={antIcon}
+      >
+        {title}
+      </AntButton>
+    ) : (
+      <></>
     );
   }, [
     botInfo?.available_api_actions,

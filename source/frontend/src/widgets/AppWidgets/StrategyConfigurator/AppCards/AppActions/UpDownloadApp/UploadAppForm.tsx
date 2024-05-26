@@ -170,7 +170,7 @@ function UploadPackage({
               message={
                 <>
                   <div>
-                    <Trans i18nKey="appStore.appCard.uploadApp.let-your-users-know-what-youve-changed"></Trans>
+                    <Trans i18nKey="appStore.appCard.uploadApp.let-your-users-know-what-youve-changed" />
                   </div>
                   <div>
                     {t(

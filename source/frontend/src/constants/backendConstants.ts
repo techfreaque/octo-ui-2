@@ -14,6 +14,7 @@ export const backendRoutes = {
   plottedRunData: `${basePath}/plotted_run_data`,
   botPortfolio: `${basePath}/portfolio`,
   symbolsInfo: `${basePath}/symbols-info`,
+  octobotHome: "/home",
   appStoreFree: "/free/repo",
   appStoreLogin: "/login",
   appStoreLogout: "/logout",
@@ -144,8 +145,6 @@ export const OPTIMIZER_CAMPAIGN_KEY = "optimization_campaign";
 export const OPTIMIZER_INPUTS_KEY = "optimizer_inputs";
 export const CURRENT_LIVE_ID_KEY = "current-live-id";
 export const BACKTESTING_RUN_SETTINGS_KEY = "backtesting_run_settings";
-export const BACKTESTING_ANALYSIS_SETTINGS = "backtesting_analysis_settings";
-export const LIVE_ANALYSIS_SETTINGS = "live_analysis_settings";
 export const DISPLAY_SETTINGS_KEY = "display_settings";
 export const DISPLAYED_ELEMENTS_KEY = "displayed_elements";
 export const GRAPHS_KEY = "graphs";

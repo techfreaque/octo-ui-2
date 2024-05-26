@@ -11,7 +11,7 @@ export default function DataCollectorProgress() {
   const progress = collectorProgress?.progress?.current_step_percent || 0;
   return useMemo(
     () =>
-      inProgress && (
+      inProgress ? (
         <div
           style={{
             margin: "auto",
@@ -33,6 +33,8 @@ export default function DataCollectorProgress() {
             </div>
           </Tooltip>
         </div>
+      ) : (
+        <></>
       ),
     [inProgress, progress]
   );

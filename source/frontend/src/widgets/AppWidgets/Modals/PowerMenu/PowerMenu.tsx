@@ -1,5 +1,4 @@
 import {
-  ArrowLeftOutlined,
   EditOutlined,
   PoweroffOutlined,
 } from "@ant-design/icons";
@@ -11,11 +10,10 @@ import { Trans } from "react-i18next";
 import AntButton, {
   buttonVariants,
 } from "../../../../components/Buttons/AntButton";
-import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import {
   useBotInfoContext,
-  useIsDemoMode,
 } from "../../../../context/data/BotInfoProvider";
+import BackToOctobotButton from "../../Buttons/BackToOctobotButton";
 import ColorModeSwitch from "../../Buttons/ColorModeSwitcher";
 import LanguageSwitch from "../../Buttons/LanguageSwitch";
 import LoginButton from "../../Buttons/LoginButton";
@@ -25,11 +23,9 @@ import StopBotButton from "../../Buttons/StopBotButton";
 import UpdateBotButton from "../../Buttons/UpdateBotButton";
 
 export default function PowerMenu() {
-  const botDomain = useBotDomainContext();
   const [open, setOpen] = useState<boolean>(false);
   const botInfo = useBotInfoContext();
   const handleClose = () => setOpen(false);
-  const isDemo = useIsDemoMode();
   const items: ItemType[] = [
     {
       key: "login",
@@ -53,19 +49,7 @@ export default function PowerMenu() {
     },
     {
       key: "back",
-      label: (
-        <AntButton
-          onClick={handleClose}
-          buttonVariant={buttonVariants.outline}
-          block={true}
-          target="blank"
-          disabled={isDemo}
-          icon={<ArrowLeftOutlined height="24px" width="24px" />}
-          href={`${botDomain}/home`}
-        >
-          <Trans i18nKey="powerMenu.backToOctoBot" />
-        </AntButton>
-      ),
+      label: <BackToOctobotButton onClick={handleClose} />,
     },
     { key: "language", label: <LanguageSwitch /> },
     {

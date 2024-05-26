@@ -21,7 +21,7 @@ import {
 } from "../../../../context/data/BotPlottedElementsProvider";
 import { objectEntries } from "../../../../helpers/helpers";
 import { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
-import { allChartLocations,ChartLocationType } from "./Plotly";
+import { allChartLocations, ChartLocationType } from "./Plotly";
 import {
   PlotlyAxisLayout,
   PlotlyLayoutsType,
@@ -31,8 +31,8 @@ import {
 
 type ChartsInfoType = {
   maxRange: {
-    start: undefined;
-    end: undefined;
+    start: number | undefined;
+    end: number | undefined;
   };
   chartsWithData: {
     [chart in ChartLocationType]?: boolean;
@@ -542,18 +542,18 @@ function _createPieChartElement({
 }
 
 type ChartedElementType = {
-  x?: any;
-  mode?: any;
-  type: any;
-  text?: any;
-  labels?: any;
-  values?: any;
+  x?: number[] | null;
+  mode?: "lines" | "markers";
+  type: "candlestick" | "scattergl" | "pie" | undefined;
+  text?: null;
+  labels?: string[] | null | undefined;
+  values?: number[] | null | undefined;
   name: string;
   user_title?: string;
   backtesting_id?: string;
   optimizer_id?: string;
   campaign_name?: string;
-  hole?: any;
+  hole?: number | null | undefined;
   textposition?: "inside";
   hoverlabel?: {
     font: {
@@ -567,7 +567,7 @@ type ChartedElementType = {
   xaxis?: string;
   yaxis?: string;
   marker?: {
-    [attribute in MarkerAttributesType]?: any;
+    [attribute in MarkerAttributesType]?: number[] | string[] | undefined | null;
   };
 } & {
   [sourceType in PlotSourceType]?: null | number[];
@@ -608,7 +608,7 @@ function _createChartedElement({
     campaign_name: optimizerCampaign,
     line: {
       shape: chartDetails.line_shape,
-      color: chartDetails.color?.[0],
+      color: chartDetails.color?.[0] as string | undefined,
     },
   };
   MARKER_ATTRIBUTES.forEach((attribute) => {
@@ -660,22 +660,25 @@ function _logChartsInfo(
 ) {
   chartsInfo.chartsWithData[chartLocation] = true;
   // log max range
-  const lastIndex = chartedElement.x.length - 1;
-  if (chartsInfo.maxRange.start) {
-    chartsInfo.maxRange.start =
-      chartsInfo.maxRange.start < chartedElement.x[0]
-        ? chartsInfo.maxRange.start
-        : chartedElement.x[0];
-    chartsInfo.maxRange.end =
-      chartsInfo.maxRange.end &&
-      chartsInfo.maxRange.end > chartedElement.x[lastIndex]
-        ? chartsInfo.maxRange.end
-        : chartedElement.x[lastIndex];
-  } else {
-    chartsInfo.maxRange = {
-      start: chartedElement.x[0],
-      end: chartedElement.x[lastIndex],
-    };
+  if (chartedElement.x?.length) {
+    const lastIndex = chartedElement.x.length - 1;
+    if (chartsInfo.maxRange.start && chartsInfo.maxRange.end) {
+      const firstTimestamp = chartedElement.x[0];
+      const lastTimestamp = chartedElement.x[lastIndex];
+      chartsInfo.maxRange.start =
+        !firstTimestamp || chartsInfo.maxRange.start < firstTimestamp
+          ? chartsInfo.maxRange.start
+          : chartedElement.x[0];
+      chartsInfo.maxRange.end =
+        !lastTimestamp || chartsInfo.maxRange.end > lastTimestamp
+          ? chartsInfo.maxRange.end
+          : chartedElement.x[lastIndex];
+    } else {
+      chartsInfo.maxRange = {
+        start: chartedElement.x[0],
+        end: chartedElement.x[lastIndex],
+      };
+    }
   }
 }
 

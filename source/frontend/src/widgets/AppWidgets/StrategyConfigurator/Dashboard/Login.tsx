@@ -36,10 +36,10 @@ function ManageAccount() {
   return (
     <>
       <Typography.Title>
-        <Trans i18nKey="manageAccount.manage-your-octane-account"></Trans>
+        <Trans i18nKey="manageAccount.manage-your-octane-account" />
       </Typography.Title>
       <Button onClick={handleLogoutFromppStore}>
-        <Trans i18nKey="manageAccount.logout"></Trans>
+        <Trans i18nKey="manageAccount.logout" />
       </Button>
       {/* <AffiliateDashboard /> */}
       <BackendDashboard />
@@ -94,10 +94,10 @@ function LoginSignup() {
           defaultValue={signUptTypes.signUp}
         >
           <Radio.Button value={signUptTypes.signUp}>
-            <Trans i18nKey="manageAccount.sign-up"></Trans>
+            <Trans i18nKey="manageAccount.sign-up" />
           </Radio.Button>
           <Radio.Button value={signUptTypes.login}>
-            <Trans i18nKey="manageAccount.log-in"></Trans>
+            <Trans i18nKey="manageAccount.log-in" />
           </Radio.Button>
         </Radio.Group>
       </div>
@@ -134,11 +134,11 @@ function LoginSignup() {
       <Space wrap>
         {formType === signUptTypes.signUp ? (
           <Button onClick={handleSignupToAppStore}>
-            <Trans i18nKey="manageAccount.create-account-now"></Trans>
+            <Trans i18nKey="manageAccount.create-account-now" />
           </Button>
         ) : (
           <Button onClick={handleLoginToAppStore}>
-            <Trans i18nKey="manageAccount.login-now"></Trans>
+            <Trans i18nKey="manageAccount.login-now" />
           </Button>
         )}
       </Space>

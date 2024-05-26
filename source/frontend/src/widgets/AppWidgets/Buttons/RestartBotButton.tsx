@@ -6,6 +6,7 @@ import AntButton, {
   ButtonType,
   buttonTypes,
 } from "../../../components/Buttons/AntButton";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
 import {
   useIsBotOnlineContext,
@@ -15,7 +16,7 @@ import {
 export default function RestartBotButton({
   buttonType = buttonTypes.warning,
   onClick,
-}: {
+}: UiLayoutPageLayoutType & {
   buttonType?: ButtonType;
   onClick?: () => void;
 }) {

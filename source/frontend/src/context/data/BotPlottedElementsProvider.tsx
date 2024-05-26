@@ -41,26 +41,30 @@ export type ChartDetailsType = {
   own_xaxis?: boolean;
   x_type?: "date";
   y_type?: "date" | null;
-  labels?: null;
+  labels?: null | string[];
   text?: null;
-  values?: null;
+  values?: null | number[];
   value?: null;
   columns?: DataTableColumnType[];
   rows?: DataTableDataType[];
-  kind?: "candlestick" | "scattergl";
+  kind?: "candlestick" | "scattergl" | "pie";
   mode?: "lines";
   title: string;
   config?: {
     antIcon?: string;
     faIcon?: string;
   };
-  hole?: null;
+  hole?: number | null;
   line_shape?: "linear";
 } & {
   [candleSource in PlotSourceType]: number[] | null;
 } &
   {
-    [markerAtribute in MarkerAttributesType]: null | string[];
+    [markerAtribute in MarkerAttributesType]:
+      | null
+      | string[]
+      | number[]
+      | undefined;
   };
 
 export type PlottedSubSubElementType = {

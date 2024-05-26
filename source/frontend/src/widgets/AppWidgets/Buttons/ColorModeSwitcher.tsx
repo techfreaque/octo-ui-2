@@ -3,13 +3,16 @@ import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import Moon from "../../../components/Icons/Moon";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import {
   colorModes,
   useToggleColorModeContext,
 } from "../../../context/config/ColorModeProvider";
 import { useColorModeContext } from "../../../context/config/ColorModeProvider";
 
-export default function ColorModeSwitch({ onClick }: { onClick?: () => void }) {
+export default function ColorModeSwitch({
+  onClick,
+}: UiLayoutPageLayoutType & { onClick?: () => void }) {
   const colorMode = useColorModeContext();
   const colorModeToggle = useToggleColorModeContext();
   return useMemo(() => {

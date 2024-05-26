@@ -1,3 +1,4 @@
+import { UiLayoutPageLayoutType } from "../../context/config/BotLayoutProvider";
 import AppDrawerDropdown from "../AppWidgets/AppDrawerDropdown";
 import AddToOptimizerQueueButton from "../AppWidgets/Buttons/AddToOptimizerQueueButton";
 import CancelAllOrdersButton from "../AppWidgets/Buttons/CancelAllOrdersButton";
@@ -137,7 +138,9 @@ export type AppWidgetNameType =
   | "ServicesConfig"
   | "CloudDeployment";
 
-export const registeredComponents: { [key in AppWidgetNameType]: any } = {
+export const registeredComponents: {
+  [key in AppWidgetNameType]: (props: UiLayoutPageLayoutType) => JSX.Element;
+} = {
   // define your custom widget here
   DefaultLayout,
   SimpleLayout,
@@ -173,7 +176,6 @@ export const registeredComponents: { [key in AppWidgetNameType]: any } = {
   CancelAllOrdersButton,
   PowerMenu,
   SendActionCommandToTradingMode,
-  // OptimizerConfigForm2,
   ToggleActivateRealTimeStrategy,
   LogoutButton,
   Sidebar,

@@ -21,7 +21,7 @@ export default function CloseAllPositionsButton() {
         buttonType={buttonTypes.error}
         faIconComponent={faStop}
       >
-        <Trans i18nKey="close-all-positions"></Trans>
+        <Trans i18nKey="close-all-positions" />
       </AntButton>
     );
   }, [botDomain, isClosing, isDemo, isOnline]);

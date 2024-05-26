@@ -1,18 +1,20 @@
 import { StopOutlined } from "@ant-design/icons";
-import { faStop } from "@fortawesome/free-solid-svg-icons";
 import { useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 
 import { stopBot } from "../../../api/actions";
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
+import { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
 import {
   useIsBotOnlineContext,
   useUpdateIsBotOnlineContext,
 } from "../../../context/data/IsBotOnlineProvider";
 
-export default function StopBotButton({ onClick }: { onClick: () => void }) {
+export default function StopBotButton({
+  onClick,
+}: UiLayoutPageLayoutType & { onClick?: () => void }) {
   const [isLoading, setIsloading] = useState(false);
   const updateIsOnline = useUpdateIsBotOnlineContext();
   const isOnline = useIsBotOnlineContext();

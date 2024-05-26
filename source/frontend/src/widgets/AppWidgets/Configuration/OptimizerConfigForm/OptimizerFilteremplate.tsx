@@ -1,3 +1,5 @@
+import { Trans } from "react-i18next";
+
 import { useBotColorsContext } from "../../../../context/config/BotColorsProvider";
 
 export default function OptimizerRunFilterTemplate() {
@@ -8,11 +10,11 @@ export default function OptimizerRunFilterTemplate() {
   return (
     <div className="mx-4">
       <div className="row" style={borderStyle}>
-        <div className="col-4 p-2">Input name</div>
-        <div className="col-1 p-2">Condition</div>
-        <div className="col-4 p-2">Other input name</div>
-        <div className="col-2 p-2">Value</div>
-        <div className="col-1 p-2">Remove</div>
+        <div className="col-4 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.input-name" /></div>
+        <div className="col-1 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.condition" /></div>
+        <div className="col-4 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.other-input-name" /></div>
+        <div className="col-2 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.value" /></div>
+        <div className="col-1 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.remove" /></div>
       </div>
       <div className="row" style={borderStyle} id="optimizer-filters-root" />
       <div
@@ -27,7 +29,7 @@ export default function OptimizerRunFilterTemplate() {
           className="btn btn-primary waves-effect"
           id="add-optimizer-filter"
         >
-          Add filter
+          <Trans i18nKey="optimizer.runConfig.runFilter.add-filter" />
         </button>
       </div>
     </div>
@@ -37,7 +39,7 @@ export default function OptimizerRunFilterTemplate() {
 function OptimizerRunFilter() {
   const botColors = useBotColorsContext();
   const borderStyle = {
-    border: "1px solid " + botColors?.border,
+    border: `1px solid ${  botColors?.border}`,
   };
   return (
     <div
