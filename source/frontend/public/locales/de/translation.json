@@ -19,7 +19,9 @@
   },
   "notificationCenter": {
     "botErrorLog": "Bot-Fehlerprotokoll",
-    "botNotifications": "Bot-Benachrichtigungen"
+    "botNotifications": "Bot-Benachrichtigungen",
+    "no-notifications-yet": "Noch keine Benachrichtigungen",
+    "export-debug-logs": "Debug Logs exportieren"
   },
   "plotting": {
     "switchtotheDisplaySettings": "Wechseln zu den Anzeigeeinstellungen",
@@ -38,7 +40,30 @@
     "warning_title": "Warnung",
     "warning": "Sie sind dabei, alle ausgewählten Einstellungen zurückzusetzen. \nMöchtest du fortfahren?",
     "Selected": "Ausgewählte zurücksetzen",
-    "select_all": "Alle Auswählen"
+    "select_all": "Alle Auswählen",
+    "successfully-resetted-projectname-config": "{{projectName}} Konfiguration erfolgreich zurückgesetzt",
+    "failed-to-reset-projectname-config": "{{projectName}} zurücksetzten fehlgeschlagen",
+    "successfully-cleared-plotting-cache": "Plot-Cache erfolgreich geleert",
+    "failed-to-reset-plotting-cache": "Plot-Cache konnte nicht zurückgesetzt werden",
+    "reset-data-and-configuration": "Daten und Konfiguration zurücksetzen",
+    "reset-all-projectname-settings": "Alle {{projectName}} Einstellungen zurücksetzen",
+    "resets-the-following-settings": "Setzt die folgenden Einstellungen zurück:",
+    "backtesting-settings": "Backtesting-Einstellungen",
+    "optimizer-settings": "Optimierereinstellungen",
+    "trading-analysis-settings": "Einstellungen für die Trading Analyse",
+    "display-settings": "Anzeigeeinstellungen",
+    "page-builder-page-layout": "Seitenlayout des Page Builders",
+    "reset-trading-mode-plotting-cache": "Plot-Cache der Strategie zurücksetzen",
+    "reset-current-trading-mode-settings": "Aktuelle Strategie Einstellungen zurücksetzen",
+    "resets-the-following-tentacle-settings-to-the-defaults": "Setzt die folgenden App Einstellungen zurück:",
+    "reset-the-portfolio-history": "Zurücksetzen des Portfolioverlaufs",
+    "resets-the-portfolio-history": "Setzt den Portfolioverlauf zurück",
+    "reset-the-orders-history": "Setzen Sie den Order Verlauf zurück",
+    "resets-the-orders-history": "Setzt den Order Verlauf zurück",
+    "reset-the-trades-history": "Setzen Sie den Trades Verlauf zurück",
+    "resets-the-trades-history": "Setzt den Trades Verlauf zurück",
+    "reset-the-transactions-history": "Setzen Sie den Transaktionsverlauf zurück",
+    "resets-the-transactions-history": "Setzt den Transaktionsverlauf zurück"
   },
   "pairSelector": {
     "SaveAndRestart": "Speichern und neu starten"
@@ -71,7 +96,27 @@
     "queue-delete-all": "Alle löschen",
     "queue-this-will-randomize-all-records-in-this-optimizer-id": "Dadurch werden alle Datensätze in dieser Optimierer-ID randomisiert",
     "queue-randomize": "Randomisieren",
-    "add-to-queue": "Zur Warteschlange hinzufügen"
+    "add-to-queue": "Zur Warteschlange hinzufügen",
+    "runConfig": {
+      "runFilter": {
+        "input-name": "Feld Name",
+        "condition": "Bedingung",
+        "other-input-name": "Anderer Feld Name",
+        "value": "Wert",
+        "remove": "Entfernen",
+        "add-filter": "Filter hinzufügen"
+      },
+      "input-name": "Feld Name",
+      "values": "Werte",
+      "enabled": "Aktiviert",
+      "true": "Aktivert",
+      "false": "Deaktiviert",
+      "select-values-to-use": "Zu verwendende Werte auswählen",
+      "valuetype-not-handled-yet": "{{valueType}} noch nicht unterstützt",
+      "min": "Min",
+      "max": "Max",
+      "step": "Schritt"
+    }
   },
   "backtesting": {
     "training-is-about-to-stop": "Training wird bald gestoppt",
@@ -109,8 +154,12 @@
       "this-distribution-isnt-officially-supported": "Diese Distribution wird nicht offiziell unterstützt",
       "get-octane-today": "Holen Sie sich Octane noch heute!",
       "octobotproject-is-not-officially-supported-yet-by-projectname": "{{octobotProject}} wird von {{projectName}} noch nicht offiziell unterstützt",
-      "switch-to-projectname-for-free": "Wechseln Sie kostenlos zu {{projectName}}"
-    }
+      "switch-to-projectname-for-free": "Wechseln Sie kostenlos zu {{projectName}}",
+      "warning-title": "{{projectName}} wird nicht wie vorgesehen funktionieren!"
+    },
+    "discord": "Discord",
+    "github": "GitHub",
+    "youtube": "YouTube"
   },
   "start-real-time-strategy": "Starten Sie die Echtzeitstrategie",
   "stop-real-time-strategy": "Stoppen Sie die Echtzeitstrategie",
@@ -139,5 +188,100 @@
   "timeFrameSelector": {
     "pending-restart": "Ausstehender Neustart",
     "the-newly-selected-time-frames-will-be-available-after-a-restart": "Die neu ausgewählten Zeiträume sind nach einem Neustart verfügbar"
+  },
+  "dataTable": {
+    "there-are-no-historical-trading-data-tables-to-display": "Es sind keine Tabellen mit historischen Handelsdaten zum Anzeigen vorhanden :(",
+    "to-display-tables-for-trades-orders-etc-you-can": "Um Tabellen für Trades, Orders usw. anzuzeigen, können Sie:",
+    "noDataYetText": {
+      "select-a-backtesting-run": "Wählen Sie einen Backtesting-Lauf",
+      "enter-valid-exchange-api-keys-and-activate-real-trading": "Geben Sie gültige Börsen-API-Schlüssel ein und aktivieren Sie den echten Handel",
+      "in-simulation-mode-wait-until-your-strategy-takes-the-first-trade": "Warten Sie im Simulationsmodus, bis Ihre Strategie den ersten Handel durchführt"
+    },
+    "select-a-table-from-the-sidebar": "Wählen Sie eine Tabelle aus der Seitenleiste aus",
+    "live-trading": "Live-Handel",
+    "backtesting-trading": "Backtesting-Handel",
+    "cancel-selected-orders": "Ausgewählte Orders stornieren",
+    "orders": "Orders"
+  },
+  "strategyConfigurator": {
+    "select-a-setting-category-from-the-sidebar": "Wählen Sie eine Einstellungskategorie aus der Seitenleiste",
+    "select-a-app-category-from-the-sidebar": "Wählen Sie eine App-Kategorie aus der Seitenleiste",
+    "other-apps": "Andere Apps",
+    "strategyFlowMaker": {
+      "search-for-ema-rsi-strategy": "Suche nach EMA, RSI, Strategie ...",
+      "successfully-changed-autosave-setting": "Einstellung für automatisches Speichern erfolgreich geändert",
+      "failed-to-activate-autosave": "Automatisches Speichern konnte nicht aktiviert werden",
+      "auto-save-on": "auto Speichern ein",
+      "auto-save-off": "auto Speichern aus",
+      "save": "Speichern",
+      "reload-plots": "Chart neu laden",
+      "save-and-reload-plots": "Speichern und Chart neu laden"
+    },
+    "profileSettings": {
+      "real-trading": "Echter Handel",
+      "simulated-trading": "Simulierter Handel",
+      "trading-disabled": "Handel deaktiviert",
+      "trading-type": "Handelsart:",
+      "reference-market": "Referenzmarkt:",
+      "enter-a-reference-market-like-usdt-or-btc": "Geben Sie einen Referenzmarkt wie USDT oder BTC ein",
+      "maker-fees-limit-orders": "Maker-Gebühren (Limit-Orders):",
+      "taker-fees-market-orders": "Taker-Gebühren (Markt Orders):",
+      "simulated-starting-portfolio": "Simuliertes Startportfolio:",
+      "changes-to-the-simulated-starting-portfolio-will-reset-enabled-exchanges-simulated-portfolio-history": "Änderungen am simulierten Startportfolio setzen den simulierten Portfolioverlauf der aktivierten Börsen zurück.",
+      "add-a-new-asset": "Fügen Sie ein neues Asset hinzu:",
+      "asset-name": "Assetname",
+      "asset-amount": "Asset Menge",
+      "add-coin": "Coin hinzufügen",
+      "click-to-edit-the-asset": "Klicken Sie hier, um das Asset zu bearbeiten",
+      "remove-coinName": "{{coinName}} entfernen",
+      "real-trading-settings": "Echte Handelseinstellungen",
+      "load-trades-history-from-exchange": "Handelsverlauf von der Börse laden",
+      "dont-load-trades-history-from-exchange": "Handelsverlauf von der Börse nicht laden",
+      "simulation-settings": "Simulationseinstellungen",
+      "traded-pairs": "Gehandelte Paare",
+      "exchanges": "Börsen",
+      "cancel": "Abbrechen",
+      "save-and-restart-later": "Speichern und später neu starten",
+      "save-and-restart-now": "Speichern und jetzt neu starten",
+      "strategy-info": "Strategie Info"
+    }
+  },
+  "manageAccount": {
+    "manage-your-octane-account": "Verwalten Sie Ihr Octane-Konto",
+    "logout": "Ausloggen",
+    "sign-up": "Registrieren",
+    "log-in": "Anmelden",
+    "create-an-octane-account-now": "Jetzt Octane-Konto erstellen",
+    "log-into-octane-now": "Melden Sie sich jetzt bei Octane an",
+    "enter-your-email": "Gib deine E-Mail Adresse ein",
+    "enter-your-password": "Gib dein Passwort ein",
+    "enter-a-referral-code-if-you-have-one": "Gib einen Empfehlungscode ein, falls du einen hast",
+    "create-account-now": "Jetzt Konto erstellen",
+    "login-now": "Jetzt einloggen",
+    "backend": {
+      "users": "Benutzer",
+      "delete-user-email": "{{userEmail}} löschen",
+      "store-subscriptions": "Shop Abonnements",
+      "store-payments": "Shop Zahlungen",
+      "visits": "Besuche"
+    },
+    "affiliateDashboard": {
+      "affiliate-program": "Partnerprogramm",
+      "with-projectname-affiliate-program-you-get-commissions-when-people-from-your-network-become-our-customers-you-earn-money-they-get-a-top-product-a-win-win-situation": "Mit {{projectName}} Partnerprogramm erhältst du Provisionen, wenn Personen aus deinem Netzwerk unsere Kunden werden, verdienst du Geld. Sie erhalten ein Top-Produkt. Eine Win-Win-Situation!",
+      "monetize-your-network": "Monetarisiere dein Netzwerk"
+    }
+  },
+  "appStore": {
+    "appCard": {
+      "installed": "Installiert",
+      "current-categoryName": "Aktuelle {{categoryName}}",
+      "uploadApp": {
+        "upload-new-package-version": "Neue Paketversion hochladen",
+        "select-the-type-of-your-update": "Wählen Sie den Typ Ihres Updates",
+        "how-stable-is-your-app-category": "Wie stabil ist Ihre {{category}}",
+        "share-release-notes": "Versionshinweise teilen",
+        "let-your-users-know-what-youve-changed": "Lass deine User wissen, was geändert hast."
+      }
+    }
   }
 }
