@@ -704,7 +704,7 @@ export const useCreatePaymentFromAppStoreCart = () => {
           });
         } else {
           createNotification({
-            title: "Failed create payment",
+            title: "Failed to create payment",
             type: "danger",
           });
         }

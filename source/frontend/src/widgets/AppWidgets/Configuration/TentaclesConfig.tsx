@@ -598,7 +598,10 @@ function createSidebarItem({
     antIcon,
     order: schema?.order || 0,
     content: (
-      <JsonEditor<TentaclesConfigValueType, TentaclesConfigsSchemaType>
+      <JsonEditor<
+        TentaclesConfigValueType | undefined,
+        TentaclesConfigsSchemaType
+      >
         schema={schema}
         startval={config}
         editorName={`${editorKey}##${configName}`}
@@ -646,7 +649,10 @@ function createTab({
     antIcon,
     order: schema?.order || 0,
     content: (
-      <JsonEditor<TentaclesConfigValueType, TentaclesConfigsSchemaType>
+      <JsonEditor<
+        TentaclesConfigValueType | undefined,
+        TentaclesConfigsSchemaType
+      >
         schema={schema}
         startval={config}
         onChange={autoSave ? handleUserInputSave : undefined}

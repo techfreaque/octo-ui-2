@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import { AutoComplete, Radio, Typography } from "antd";
 import { t } from "i18next";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { Trans } from "react-i18next";
 
@@ -15,7 +15,7 @@ type TradingTypeValueType =
   | "simulatedTrading"
   | "tradingDisabled";
 
-const tradingTypes: {
+function getTradingTypes(): {
   realTrading: {
     label: string;
     value: TradingTypeValueType;
@@ -28,20 +28,22 @@ const tradingTypes: {
     label: string;
     value: TradingTypeValueType;
   };
-} = {
-  realTrading: {
-    label: t("strategyConfigurator.profileSettings.real-trading"),
-    value: "realTrading",
-  },
-  simulatedTrading: {
-    label: t("strategyConfigurator.profileSettings.simulated-trading"),
-    value: "simulatedTrading",
-  },
-  tradingDisabled: {
-    label: t("strategyConfigurator.profileSettings.trading-disabled"),
-    value: "tradingDisabled",
-  },
-};
+} {
+  return {
+    realTrading: {
+      label: t("strategyConfigurator.profileSettings.real-trading"),
+      value: "realTrading",
+    },
+    simulatedTrading: {
+      label: t("strategyConfigurator.profileSettings.simulated-trading"),
+      value: "simulatedTrading",
+    },
+    tradingDisabled: {
+      label: t("strategyConfigurator.profileSettings.trading-disabled"),
+      value: "tradingDisabled",
+    },
+  };
+}
 
 export function onProfileSettingChange(
   setNewProfileSettings: Dispatch<SetStateAction<ProfileType>>,
@@ -92,6 +94,7 @@ export function ProfileTradingTypeSettings({
   newProfileSettings: ProfileType;
   isCurrentProfile: boolean | undefined;
 }) {
+  const tradingTypes = getTradingTypes();
   const isRealTrading = newProfileSettings?.config?.trader?.enabled;
   const isSimulatedTrading =
     newProfileSettings?.config?.["trader-simulator"].enabled;

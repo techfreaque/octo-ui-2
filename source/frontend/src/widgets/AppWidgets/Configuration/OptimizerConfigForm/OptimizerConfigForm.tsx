@@ -1,8 +1,10 @@
 import { Alert, Typography } from "antd";
+import { t } from "i18next";
 import { useEffect, useMemo } from "react";
+import { Trans } from "react-i18next";
 
 import {
-  _INPUT_SEPARATOR,
+  INPUT_SEPARATOR,
   OPTIMIZER_INPUTS_KEY,
 } from "../../../../constants/backendConstants";
 import { projectProName } from "../../../../constants/frontendConstants";
@@ -14,7 +16,8 @@ import type {
   OptimizerEditorInputsType,
   OptimizerEditorInputType,
   OptimizerEditorType,
-  SchemaValueType} from "../../../../context/config/OptimizerEditorProvider";
+  SchemaValueType,
+} from "../../../../context/config/OptimizerEditorProvider";
 import {
   useFetchProConfig,
   useOptimizerEditorContext,
@@ -24,7 +27,8 @@ import {
 import type {
   SchemaValueRawType,
   TentaclesConfigsRootType,
-  TentaclesConfigsSchemaType} from "../../../../context/config/TentaclesConfigProvider";
+  TentaclesConfigsSchemaType,
+} from "../../../../context/config/TentaclesConfigProvider";
 import {
   tentacleConfigTypes,
   useTentaclesConfigContext,
@@ -108,7 +112,9 @@ export default function OptimizerConfigForm() {
                 />
               ) : (
                 <div>
-                  <h2>Config is loading...</h2>
+                  <h2>
+                    <Trans i18nKey="optimizer.runConfig.config-is-loading" />
+                  </h2>
                 </div>
               )}
             </OptimizerSettingsContainer>
@@ -154,10 +160,16 @@ export function OptimizerNotInstalled() {
       type="warning"
       message={
         <Typography.Title level={3}>
-          {`Seems like you haven't installed ${projectProName}`}
+          {t(
+            "optimizer.runConfig.seems-like-you-havent-installed-projectProName",
+            { projectProName }
+          )}
         </Typography.Title>
       }
-      description={`${projectProName} is required to use the Optimizer`}
+      description={t(
+        "optimizer.runConfig.projectProName-is-required-to-use-the-optimizer",
+        { projectProName }
+      )}
     />
   );
 }
@@ -195,7 +207,9 @@ function OptimizerSettingsForm({
               inputDetails: inputDetail,
               configValues: configInputs,
               parentInputIdentifier: tentacleName,
-              inputIdentifier: inputDetail?.options?.name || "no input name",
+              inputIdentifier:
+                inputDetail?.options?.name ||
+                t("optimizer.runConfig.no-input-name-found"),
             });
             if (value) {
               atLeastOneUserInput = true;
@@ -416,7 +430,10 @@ function OptimizerConfigElementSettingForm({
         configValues,
         botColors,
         handleSettingsChange,
-        parentInputIdentifier: `${parentInputIdentifier}${_INPUT_SEPARATOR}${inputIdentifier}`,
+        parentInputIdentifier: mergeTentacleKey(
+          parentInputIdentifier,
+          inputIdentifier
+        ),
       });
     }
     return (
@@ -433,6 +450,27 @@ function OptimizerConfigElementSettingForm({
   }
   return null;
 }
+
+function mergeTentacleKey(
+  parentInputIdentifier: string,
+  inputIdentifier: string
+): string {
+  return `${parentInputIdentifier}${INPUT_SEPARATOR}${inputIdentifier}`;
+}
+
+export function splitTentacleKey(
+  tentacleKey: string
+): {
+  rootTentacle: string;
+  tentacleKeys: string[];
+} {
+  const [rootTentacle, ...tentacleKeys] = tentacleKey.split(INPUT_SEPARATOR);
+  return {
+    rootTentacle: rootTentacle as string,
+    tentacleKeys,
+  };
+}
+
 function OptimizerNestedConfigSettingsForm({
   inputDetail,
   configValues,
@@ -476,7 +514,9 @@ function OptimizerNestedConfigSettingsForm({
           "no input name"
         }
         title={
-          inputDetail.title || inputDetail.options?.name || "no input name"
+          inputDetail.title ||
+          inputDetail.options?.name ||
+          t("optimizer.runConfig.no-input-name-found")
         }
       >
         <>{inputs}</>

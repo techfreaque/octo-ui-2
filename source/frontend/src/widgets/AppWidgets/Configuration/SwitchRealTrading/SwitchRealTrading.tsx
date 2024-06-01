@@ -55,14 +55,12 @@ export default function RealTradingSwitch() {
           <div>
             <AntButton onClick={handleOpen} buttonVariant="text">
               {icon}
-              {}
             </AntButton>
           </div>
         </Tooltip>
         <Modal
           open={open}
           onClose={handleClose}
-          aria-labelledby={"real-trading-switch-modal-title"}
         >
           <Box sx={style}>
             <Title level={3}>

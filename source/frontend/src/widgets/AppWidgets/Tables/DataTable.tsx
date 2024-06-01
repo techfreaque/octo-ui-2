@@ -2,7 +2,7 @@ import { CloseCircleOutlined } from "@ant-design/icons";
 import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import { Tooltip, Typography } from "antd";
 import { t } from "i18next";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useMemo } from "react";
 import { useState } from "react";
 import { Trans } from "react-i18next";
@@ -12,22 +12,22 @@ import AntButton, {
   buttonTypes,
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
-import type {
-  AntSideBarMenutItemType,
-} from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import type { AntSideBarMenutItemType } from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import type {
   AntTableColumnType,
   AntTableDataType,
 } from "../../../components/Tables/AntTable";
 import AntTable from "../../../components/Tables/AntTable";
+import { tableSizes } from "../../../constants/frontendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import type {
   PlottedBacktestingElementType,
   PlottedElementNameType,
   PlottedElementsType,
   PlottedLiveElementType,
-  PlottedSubSubElementType} from "../../../context/data/BotPlottedElementsProvider";
+  PlottedSubSubElementType,
+} from "../../../context/data/BotPlottedElementsProvider";
 import {
   useBotPlottedElementsContext,
   useFetchPlotData,
@@ -55,8 +55,12 @@ export default function W2uiDataTable() {
           <Trans i18nKey="dataTable.to-display-tables-for-trades-orders-etc-you-can" />
         </Typography.Title>
         <ul>
-          <li><Trans i18nKey="dataTable.noDataYetText.select-a-backtesting-run" /></li>
-          <li><Trans i18nKey="dataTable.noDataYetText.enter-valid-exchange-api-keys-and-activate-real-trading" /></li>
+          <li>
+            <Trans i18nKey="dataTable.noDataYetText.select-a-backtesting-run" />
+          </li>
+          <li>
+            <Trans i18nKey="dataTable.noDataYetText.enter-valid-exchange-api-keys-and-activate-real-trading" />
+          </li>
           <li>
             <Trans i18nKey="dataTable.noDataYetText.in-simulation-mode-wait-until-your-strategy-takes-the-first-trade" />
           </li>
@@ -149,14 +153,17 @@ function generateTablesAndSidebarItems({
 }
 
 export interface DataTableSideBarMainItemType extends AntSideBarMenutItemType {
-  children: AntSideBarMenutItemType[];
+  items: AntSideBarMenutItemType[];
 }
 
 export function createTradingOrBacktestingTab(
   liveOrBacktest: PlottedElementNameType
 ): DataTableSideBarMainItemType {
   return {
-    title: liveOrBacktest === "live" ? t('dataTable.live-trading') : t('dataTable.backtesting-trading'),
+    title:
+      liveOrBacktest === "live"
+        ? t("dataTable.live-trading")
+        : t("dataTable.backtesting-trading"),
     key: liveOrBacktest,
     antIcon: liveOrBacktest === "live" ? "DollarOutlined" : "RobotOutlined",
     dontScroll: true,
@@ -165,7 +172,7 @@ export function createTradingOrBacktestingTab(
         <Trans i18nKey="dataTable.select-a-table-from-the-sidebar" />
       </Typography.Title>
     ),
-    children: [],
+    items: [],
   };
 }
 
@@ -199,10 +206,10 @@ function _generateTablesAndSidebarItems({
     let cancelOrdersDetails: CancelOrderDetailsType | undefined = undefined;
     if (liveOrBacktest === "live") {
       label = `${element.title} ${runId}`;
-      if (element.title.startsWith(t('dataTable.orders'))) {
+      if (element.title.startsWith(t("dataTable.orders"))) {
         cancelOrdersDetails = {
-          text: t('dataTable.cancel-selected-orders'),
-          tooltip: t('dataTable.cancel-selected-orders'),
+          text: t("dataTable.cancel-selected-orders"),
+          tooltip: t("dataTable.cancel-selected-orders"),
           icon: CloseCircleOutlined,
           cancelCallback: (
             orderIdsToCancel: string[],
@@ -220,7 +227,7 @@ function _generateTablesAndSidebarItems({
     } else {
       label = `${element.title} ${campaignName} ${optimizerId} ${runId}`;
     }
-    liveOrBacktestingItems.children.push({
+    liveOrBacktestingItems.items.push({
       title: label,
       antIcon: element.config?.antIcon,
       faIcon: element.config?.faIcon,
@@ -252,8 +259,8 @@ interface CancelOrderDetailsType {
   ) => void;
 }
 
-export type DataTableDataType = AntTableDataType
-export type DataTableColumnType = AntTableColumnType<DataTableDataType>
+export type DataTableDataType = AntTableDataType;
+export type DataTableColumnType = AntTableColumnType<DataTableDataType>;
 
 function TableFromElement({
   data,
@@ -273,7 +280,7 @@ function TableFromElement({
       data={data}
       columns={columns}
       maxWidth="100%"
-      size="small"
+      size={tableSizes.small}
       selectedRowKeys={cancelOrdersDetails ? selectedRecordIds : undefined}
       setSelectedRowKeys={
         cancelOrdersDetails ? setSelectedRecordIds : undefined

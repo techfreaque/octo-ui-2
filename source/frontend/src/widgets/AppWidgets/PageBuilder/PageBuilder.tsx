@@ -94,17 +94,21 @@ export default function PageBuilder() {
           <Trans i18nKey="uiEditor.reset-to-default-layout" />
         </Button>
       </Space>
-      <JsonEditor<UiLayoutPageType[], PageBuilderSchema>
-        {...defaultJsonEditorSettings()}
-        schema={pageBuilderSchema()}
-        startval={botLayout}
-        editorName={editorName}
-        disable_properties={false}
-        disable_array_add={false}
-        no_additional_properties={false}
-        use_name_attributes={true}
-        display_required_only={true}
-      />
+      {botLayout ? (
+        <JsonEditor<UiLayoutPageType[], PageBuilderSchema>
+          {...defaultJsonEditorSettings()}
+          schema={pageBuilderSchema()}
+          startval={botLayout}
+          editorName={editorName}
+          disable_properties={false}
+          disable_array_add={false}
+          no_additional_properties={false}
+          use_name_attributes={true}
+          display_required_only={true}
+        />
+      ) : (
+        <></>
+      )}
     </div>
   );
 }

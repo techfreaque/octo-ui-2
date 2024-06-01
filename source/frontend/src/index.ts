@@ -5,6 +5,6 @@ import App from "./containers/App";
 
 const rootElement = document.getElementById("root");
 if (!rootElement) {
-  throw new Error("no root element");
+  throw new Error("no_root_element");
 }
 createRoot(rootElement).render(createElement(App));

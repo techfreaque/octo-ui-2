@@ -1,6 +1,4 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import {
   createContext,
   useCallback,
@@ -12,18 +10,19 @@ import {
 import { saveProConfig } from "../../api/configs";
 import type {
   errorResponseCallBackParams,
-  successResponseCallBackParams} from "../../api/fetchAndStoreFromBot";
-import {
-  sendAndInterpretBotUpdate
+  successResponseCallBackParams,
 } from "../../api/fetchAndStoreFromBot";
+import { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
-import type {
-  OPTIMIZER_INPUTS_KEY} from "../../constants/backendConstants";
-import {
-  backendRoutes
-} from "../../constants/backendConstants";
+import type { OPTIMIZER_INPUTS_KEY } from "../../constants/backendConstants";
+import { backendRoutes } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
+import { filterActiveUserInputs } from "../actions/BotOptimizerProvider";
 import { useBotDomainContext } from "./BotDomainProvider";
+import {
+  tentacleConfigTypes,
+  useTentaclesConfigContext,
+} from "./TentaclesConfigProvider";
 
 const OptimizerEditorCounterContext = createContext<number>(0);
 const UpdateOptimizerEditorCounterContext = createContext<
@@ -149,10 +148,22 @@ export const OptimizerEditorProvider = ({
 }) => {
   const [optimizerEditorCounter, setOptimizerEditorCounter] = useState(0);
   const [optimizerEditor, setOptimizerEditor] = useState<OptimizerEditorType>();
+  const currentTentaclesConfig = useTentaclesConfigContext();
+  const currentTentaclesTradingConfig =
+    currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
   useEffect(() => {
-    const inputs = optimizerEditor?.optimizer_inputs?.user_inputs;
-    inputs && setOptimizerEditorCounter(getOptimizerEditorCounter(inputs));
-  }, [optimizerEditor]);
+    const filteredForm =
+      currentTentaclesTradingConfig &&
+      optimizerEditor?.optimizer_inputs &&
+      filterActiveUserInputs(
+        currentTentaclesTradingConfig,
+        optimizerEditor?.optimizer_inputs
+      );
+    const inputs = filteredForm?.user_inputs;
+    if (inputs) {
+      setOptimizerEditorCounter(getOptimizerEditorCounter(inputs));
+    }
+  }, [currentTentaclesTradingConfig, optimizerEditor]);
 
   return (
     <OptimizerEditorCounterContext.Provider value={optimizerEditorCounter}>

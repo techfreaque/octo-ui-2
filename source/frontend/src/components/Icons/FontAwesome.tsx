@@ -55,12 +55,13 @@ export default function FontAwesomeIconByString({
   spin?: boolean | undefined;
   style?: CSSProperties | undefined;
 }) {
-  const className = spin
-    ? `fa-spin fa-${iconStyles[size]} far fa-${faIcon}`
-    : `fa-${iconStyles[size]} fas fa-${faIcon}`;
   return faIcon ? (
     <i
-      className={className}
+      className={
+        spin
+          ? `fa-spin fa-${iconStyles[size]} far fa-${faIcon}`
+          : `fa-${iconStyles[size]} fas fa-${faIcon}`
+      }
       style={{ marginRight, lineHeight: "normal", ...style }}
     />
   ) : (

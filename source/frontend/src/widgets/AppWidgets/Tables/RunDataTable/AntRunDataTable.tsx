@@ -31,11 +31,13 @@ import {
   METADATA_UNDISPLAYED_FIELDS,
   TIMESTAMP_DATA,
 } from "../../../../constants/backendConstants";
+import { tableSizes } from "../../../../constants/frontendConstants";
 import type {
   TentaclesConfigByTentacleType,
   TentaclesConfigsRootType,
   TentaclesConfigValuesType,
-  TentaclesConfigValueType} from "../../../../context/config/TentaclesConfigProvider";
+  TentaclesConfigValueType,
+} from "../../../../context/config/TentaclesConfigProvider";
 import {
   tentacleConfigTypes,
   useSaveTentaclesConfig,
@@ -43,12 +45,10 @@ import {
 } from "../../../../context/config/TentaclesConfigProvider";
 import type {
   BacktestingRunData,
-  BacktestingRunDataWithoutID} from "../../../../context/data/BacktestingRunDataProvider";
-import {
-  useDeleteBacktestingRunData,
+  BacktestingRunDataWithoutID,
 } from "../../../../context/data/BacktestingRunDataProvider";
-import type {
-  DisplayedRunIdsType} from "../../../../context/data/BotPlottedElementsProvider";
+import { useDeleteBacktestingRunData } from "../../../../context/data/BacktestingRunDataProvider";
+import type { DisplayedRunIdsType } from "../../../../context/data/BotPlottedElementsProvider";
 import {
   defaultDisplayedRunIds,
   useDisplayedRunIdsContext,
@@ -173,7 +173,7 @@ function MetaDataTable({
         columns={columns}
         maxWidth="100%"
         height="100%"
-        size="small"
+        size={tableSizes.small}
         bordered
         scrollWidth={"100%"}
         selectedRowKeys={selectedRunIds.backtesting}

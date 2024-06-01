@@ -2,21 +2,20 @@ import { DownloadOutlined, ShoppingCartOutlined } from "@ant-design/icons";
 import { Grid } from "@mui/material";
 import { Alert, Card, Tooltip, Typography } from "antd";
 import { t } from "i18next";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 
 import AntButton from "../../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
-import type {
-  AntTableDataType,
-} from "../../../../../../components/Tables/AntTable";
+import type { AntTableDataType } from "../../../../../../components/Tables/AntTable";
 import AntTable from "../../../../../../components/Tables/AntTable";
 import { useBotColorsContext } from "../../../../../../context/config/BotColorsProvider";
 import type {
   AppStoreAppType,
   AppStoreAppVersionType,
-  AppStoreVersionTagType} from "../../../../../../context/data/AppStoreDataProvider";
+  AppStoreVersionTagType,
+} from "../../../../../../context/data/AppStoreDataProvider";
 import {
   useAddToAppStoreCart,
   useAppStoreDataContext,
@@ -133,38 +132,43 @@ export default function AppDownloadForm({
 //     )
 // }
 
-const versionTypes: {
+function getVersionTypes(): {
   label: string;
   icon: string;
   toolTipText: string;
   key: AppStoreVersionTagType;
-}[] = [
-  {
-    label: t("appStore.appCard.downloadApp.alpha-versions"),
-    icon: t("appStore.appCard.downloadApp.alpha-veriosn-icon"),
+}[] {
+  return [
+    {
+      label: t("appStore.appCard.downloadApp.alpha-versions"),
+      icon: t("appStore.appCard.downloadApp.alpha-veriosn-icon"),
 
-    toolTipText: t("appStore.appCard.downloadApp.switch-to-the-alpha-version"),
-    key: "alpha_version",
-    // disabled: true
-  },
-  {
-    label: t("appStore.appCard.downloadApp.beta-versions"),
-    icon: t("appStore.appCard.downloadApp.beta-version-icon"),
+      toolTipText: t(
+        "appStore.appCard.downloadApp.switch-to-the-alpha-version"
+      ),
+      key: "alpha_version",
+      // disabled: true
+    },
+    {
+      label: t("appStore.appCard.downloadApp.beta-versions"),
+      icon: t("appStore.appCard.downloadApp.beta-version-icon"),
 
-    toolTipText: t("appStore.appCard.downloadApp.switch-to-the-beta-version"),
-    key: "beta_version",
-    // disabled: true
-  },
-  {
-    label: t("appStore.appCard.downloadApp.stable-versions"),
-    icon: t("appStore.appCard.downloadApp.stable-version-icon"),
+      toolTipText: t("appStore.appCard.downloadApp.switch-to-the-beta-version"),
+      key: "beta_version",
+      // disabled: true
+    },
+    {
+      label: t("appStore.appCard.downloadApp.stable-versions"),
+      icon: t("appStore.appCard.downloadApp.stable-version-icon"),
 
-    toolTipText: t("appStore.appCard.downloadApp.switch-to-the-stable-version"),
-    key: "stable_version",
-    // disabled: true
-  },
-];
-
+      toolTipText: t(
+        "appStore.appCard.downloadApp.switch-to-the-stable-version"
+      ),
+      key: "stable_version",
+      // disabled: true
+    },
+  ];
+}
 interface VersionDataToDisplay extends AntTableDataType {
   key: string;
   major_version: number;
@@ -189,7 +193,7 @@ function AppVersions({
 }) {
   // const [versionType, setVersionType] = useState("stable_version")
   const botColors = useBotColorsContext();
-
+  const versionTagKeyToTitle = getVersionTagKeyToTitle();
   const reversedVersions = app.versions?.reverse();
   const preSorteddata: VersionDataToDisplay[] | undefined = reversedVersions
     ?.filter((version) =>
@@ -731,7 +735,7 @@ function VersionSelector({
               }
         }
       >
-        {versionTypes.map((versionTypeObj) => (
+        {getVersionTypes().map((versionTypeObj) => (
           <AppIconButton
             key={versionTypeObj.key}
             isSelected={false}
@@ -759,7 +763,7 @@ function VersionSelector({
         {preSorteddata && (
           <AntTable
             maxWidth="100%"
-            columns={versionColumns}
+            columns={getVersionColumns()}
             data={preSorteddata}
           />
         )}
@@ -768,11 +772,13 @@ function VersionSelector({
   );
 }
 
-const versionTagKeyToTitle = {
-  alpha_version: t('appStore.appCard.downloadApp.alpha-version'),
-  beta_version: t('appStore.appCard.downloadApp.beta-version'),
-  stable_version: t('appStore.appCard.downloadApp.stable-version'),
-};
+function getVersionTagKeyToTitle() {
+  return {
+    alpha_version: t("appStore.appCard.downloadApp.alpha-version"),
+    beta_version: t("appStore.appCard.downloadApp.beta-version"),
+    stable_version: t("appStore.appCard.downloadApp.stable-version"),
+  };
+}
 
 // const defaultTentaclePackages = {
 //     "OctoBot-Default-Tentacles": {},
@@ -780,13 +786,15 @@ const versionTagKeyToTitle = {
 
 // }
 
-const versionColumns = [
-  {
-    title: t("appStore.appCard.downloadApp.select-a-version"),
-    dataIndex: "title",
-    key: "title",
-  },
-];
+function getVersionColumns() {
+  return [
+    {
+      title: t("appStore.appCard.downloadApp.select-a-version"),
+      dataIndex: "title",
+      key: "title",
+    },
+  ];
+}
 
 function handdleVersionSelect(
   setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>,

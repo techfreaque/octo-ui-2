@@ -20,7 +20,7 @@ export function ProfileRealSettings({
     <>
       <Grid item xs={12}>
         <Typography.Title level={3}>
-          <Trans i18nKey="strategyConfigurator.profileSettings.real-trading-settings" />
+          <Trans i18nKey="strategyConfigurator.profileSettings.real-trading" />
         </Typography.Title>
       </Grid>
       <Grid item xs={12} sm={6}>

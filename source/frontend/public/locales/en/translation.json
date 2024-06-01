@@ -116,7 +116,11 @@
       "valuetype-not-handled-yet": "{{valueType}} not handled yet",
       "min": "Min",
       "max": "Max",
-      "step": "Step"
+      "step": "Step",
+      "config-is-loading": "Config is loading...",
+      "seems-like-you-havent-installed-projectProName": "Seems like you haven't installed {{projectProName}}",
+      "projectProName-is-required-to-use-the-optimizer": "{{projectProName}} is required to use the Optimizer",
+      "no-input-name-found": "no input name found"
     }
   },
   "backtesting": {
@@ -174,7 +178,7 @@
   "cancel-all-orders": "Cancel All Orders",
   "uiConfig": {
     "failed-to-autosave-ui-config": "Failed to autosave UI config",
-    "ui-config": "UI Config",
+    "ui-config-title": "UI Config",
     "plot-settings": {
       "plot-settings": "Plot Settings",
       "plot-unrealized-portfolio-value": "Plot unrealized portfolio value",

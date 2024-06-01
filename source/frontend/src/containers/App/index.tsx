@@ -9,7 +9,6 @@ import { Suspense } from "react";
 import BotDataProvider from "../../context/BotDataProvider";
 import LoadingPage from "../LoadingPage";
 import Pages from "../Pages/Pages";
-
 export default function App() {
   return (
     <Suspense fallback={<LoadingPage />}>

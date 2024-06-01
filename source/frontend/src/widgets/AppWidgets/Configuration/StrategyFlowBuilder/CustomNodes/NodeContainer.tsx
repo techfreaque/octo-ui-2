@@ -127,7 +127,7 @@ export function NodeEditor({
     return (
       schema && (
         <div>
-          <JsonEditor<TentaclesConfigValuesType, TentaclesConfigsSchemaType>
+          <JsonEditor<TentaclesConfigValuesType | undefined, TentaclesConfigsSchemaType>
             schema={schema}
             startval={config}
             editorName={nodeId}

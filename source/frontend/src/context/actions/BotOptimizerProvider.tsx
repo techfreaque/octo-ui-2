@@ -1,13 +1,6 @@
 import type { DefaultEventsMap } from "@socket.io/component-emitter";
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 import type { Socket } from "socket.io-client";
 
 import {
@@ -22,26 +15,31 @@ import {
   OPTIMIZER_RUN_SETTINGS_KEY,
 } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
+import { splitTentacleKey } from "../../widgets/AppWidgets/Configuration/OptimizerConfigForm/OptimizerConfigForm";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 import type {
-  OptimizerEditorInputsType} from "../config/OptimizerEditorProvider";
+  OptimizerEditorInputsType,
+  OptimizerEditorInputType,
+} from "../config/OptimizerEditorProvider";
 import {
   useFetchProConfig,
   useOptimizerEditorContext,
 } from "../config/OptimizerEditorProvider";
 import type {
-  OptimizerUiConfig} from "../config/UiConfigProvider";
+  TentaclesConfigsRootType,
+  TentaclesConfigValuesType,
+} from "../config/TentaclesConfigProvider";
 import {
-  useUiConfigContext,
-} from "../config/UiConfigProvider";
-import type { IdsByExchangeType} from "../data/BotInfoProvider";
+  tentacleConfigTypes,
+  useTentaclesConfigContext,
+} from "../config/TentaclesConfigProvider";
+import type { OptimizerUiConfig } from "../config/UiConfigProvider";
+import { useUiConfigContext } from "../config/UiConfigProvider";
+import type { IdsByExchangeType } from "../data/BotInfoProvider";
 import { useBotInfoContext } from "../data/BotInfoProvider";
 import { useFetchOptimizerQueue } from "../data/OptimizerQueueProvider";
-import type {
-  WebsocketDataType} from "../websockets/AbstractWebsocketContext";
-import {
-  AbstractWebsocketContext
-} from "../websockets/AbstractWebsocketContext";
+import type { WebsocketDataType } from "../websockets/AbstractWebsocketContext";
+import { AbstractWebsocketContext } from "../websockets/AbstractWebsocketContext";
 
 const BotIsOptimizingContext = createContext<boolean | "isStopping">(false);
 const UpdateBotIsOptimizingContext = createContext<
@@ -188,58 +186,126 @@ export const useAddToOptimizerQueue = () => {
   const optimizerForm = useOptimizerEditorContext();
   const fetchOptimizerQueue = useFetchOptimizerQueue();
   const fetchProConfig = useFetchProConfig();
+  const currentTentaclesConfig = useTentaclesConfigContext();
+  const currentTentaclesTradingConfig =
+    currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
   return useCallback(() => {
-    if (exchageId) {
-      if (optimizerSettings) {
-        if (optimizerForm?.optimizer_inputs?.user_inputs) {
-          addToOptimizerQueue(
-            botDomain,
-            optimizerSettings,
-            optimizerForm?.optimizer_inputs,
-            fetchOptimizerQueue
-          );
+    if (currentTentaclesTradingConfig) {
+      if (exchageId) {
+        if (optimizerSettings) {
+          if (optimizerForm?.optimizer_inputs?.user_inputs) {
+            addToOptimizerQueue(
+              botDomain,
+              optimizerSettings,
+              filterActiveUserInputs(
+                currentTentaclesTradingConfig,
+                optimizerForm.optimizer_inputs
+              ),
+              fetchOptimizerQueue
+            );
+          } else {
+            // settings not loaded yet, use directly from settings storage
+            fetchProConfig((fetchedOptimizerForm) => {
+              if (fetchedOptimizerForm?.optimizer_inputs?.user_inputs) {
+                addToOptimizerQueue(
+                  botDomain,
+                  optimizerSettings,
+                  filterActiveUserInputs(
+                    currentTentaclesTradingConfig,
+                    fetchedOptimizerForm.optimizer_inputs
+                  ),
+                  fetchOptimizerQueue
+                );
+              } else {
+                createNotification({
+                  title: "Failed to add to optimizer queue",
+                  type: "danger",
+                  message: "Check your optimizer run configuration",
+                });
+              }
+            });
+          }
         } else {
-          // settings not loaded yet, use directly from settings storage
-          fetchProConfig((fetchedOptimizerForm) => {
-            if (fetchedOptimizerForm?.optimizer_inputs) {
-              addToOptimizerQueue(
-                botDomain,
-                optimizerSettings,
-                fetchedOptimizerForm.optimizer_inputs,
-                fetchOptimizerQueue
-              );
-            } else {
-              createNotification({
-                title: "Failed to add to optimizer queue",
-                type: "danger",
-                message: "Check your optimizer run configuration",
-              });
-            }
+          createNotification({
+            title: "Failed to add to the queue",
+            type: "danger",
+            message: "Optimizer settings arent initialized yet.",
           });
         }
       } else {
         createNotification({
           title: "Failed to add to the queue",
           type: "danger",
-          message: "Optimizer settings arent initialized yet.",
+          message: "The exchange is not initialized",
         });
       }
     } else {
       createNotification({
         title: "Failed to add to the queue",
         type: "danger",
-        message: "The exchange is not initialized",
+        message: "Trading config is not initialized yet",
       });
     }
   }, [
-    optimizerSettings,
     exchageId,
-    optimizerForm,
+    optimizerSettings,
+    optimizerForm?.optimizer_inputs,
     botDomain,
+    currentTentaclesTradingConfig,
     fetchOptimizerQueue,
     fetchProConfig,
   ]);
 };
+
+export function filterActiveUserInputs(
+  currentTentaclesTradingConfig: TentaclesConfigsRootType,
+  optimizerForm: OptimizerEditorInputsType
+): OptimizerEditorInputsType {
+  const filteredOptimizerInputs: OptimizerEditorInputType = {};
+  optimizerForm.user_inputs &&
+    Object.entries(optimizerForm.user_inputs).forEach(([inputKey, values]) => {
+      if (values.enabled) {
+        const { rootTentacle, tentacleKeys } = splitTentacleKey(
+          values.tentacle
+        );
+        const rootTentacleConfigs =
+          currentTentaclesTradingConfig[rootTentacle]?.config;
+        if (
+          rootTentacleConfigs &&
+          hasUserInput(rootTentacleConfigs, [
+            ...tentacleKeys,
+            values.user_input,
+          ])
+        ) {
+          filteredOptimizerInputs[inputKey] = values;
+        }
+      }
+    });
+  return {
+    filters_settings: [...(optimizerForm.filters_settings || [])],
+    user_inputs: filteredOptimizerInputs,
+  };
+}
+
+function hasUserInput(
+  currentTentaclesTradingConfig: TentaclesConfigValuesType,
+  tentacleKeys: string[]
+): boolean {
+  const [nextInputKey, ...nextTentacleKeys] = tentacleKeys;
+  const thisConfig =
+    nextInputKey && currentTentaclesTradingConfig?.[nextInputKey];
+  if (nextTentacleKeys.length === 0) {
+    return thisConfig !== undefined;
+  } else {
+    if (typeof thisConfig === "object") {
+      return hasUserInput(
+        thisConfig as TentaclesConfigValuesType,
+        nextTentacleKeys
+      );
+    }
+    return false;
+  }
+}
 
 export const BotOptimizerProvider = ({
   children,

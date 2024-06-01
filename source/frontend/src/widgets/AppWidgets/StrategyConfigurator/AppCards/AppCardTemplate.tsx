@@ -26,12 +26,13 @@ export default function AppCardTemplate({
   category: StoreCategoryType;
 }) {
   const botColors = useBotColorsContext();
-  const boxShadowColor =
-    app?.is_selected || isMouseHover
-      ? botColors?.borderActive
-      : "rgb(0 0 0 / 24%)";
+
   const cardStyle: CSSProperties = {
-    boxShadow: `0px 0px 3px ${boxShadowColor}`,
+    boxShadow: `0px 0px 3px ${
+      app?.is_selected || isMouseHover
+        ? botColors?.borderActive
+        : "rgb(0 0 0 / 24%)"
+    }`,
     borderRadius: "4px",
     transition: "all 200ms linear 0ms",
   };

@@ -1,14 +1,6 @@
 import { SearchOutlined } from "@ant-design/icons";
-import type {
-  InputRef,
-  TablePaginationConfig} from "antd";
-import {
-  Button,
-  Flex,
-  Input,
-  Space,
-  Table
-} from "antd";
+import type { InputRef, TablePaginationConfig } from "antd";
+import { Button, Flex, Input, Space, Table } from "antd";
 import type { SizeType } from "antd/es/config-provider/SizeContext";
 import type {
   ExpandableConfig,
@@ -18,15 +10,8 @@ import type {
   TableCurrentDataSource,
 } from "antd/es/table/interface";
 import { t } from "i18next";
-import type {
-  Dispatch,
-  LegacyRef,
-  RefObject,
-  SetStateAction} from "react";
-import {
-  useRef,
-  useState,
-} from "react";
+import type { Dispatch, LegacyRef, RefObject, SetStateAction } from "react";
+import { useRef, useState } from "react";
 import { Trans } from "react-i18next";
 
 export default function AntTable<
@@ -374,7 +359,7 @@ function FilterDrowdown({
     <div style={{ padding: 8 }} onKeyDown={(e) => e.stopPropagation()}>
       <Input
         ref={searchInput}
-        placeholder={t('table.search-columnName', { columnName: elementName })}
+        placeholder={t("table.search-columnName", { columnName: elementName })}
         value={selectedKeys[0]}
         onChange={(e) =>
           setSelectedKeys(e.target.value ? [e.target.value] : [])

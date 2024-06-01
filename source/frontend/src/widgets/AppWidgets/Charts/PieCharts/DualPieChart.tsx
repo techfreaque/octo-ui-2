@@ -71,7 +71,7 @@ function generateSidebarMenu(
         liveOrBacktest
       );
     }
-    newMenuItems[liveOrBacktest]?.children.push({
+    newMenuItems[liveOrBacktest]?.items.push({
       title: chart.name,
       key: chart.name,
       // antIcon: element.config ?. antIcon,

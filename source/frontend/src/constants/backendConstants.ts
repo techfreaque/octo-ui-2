@@ -1,3 +1,4 @@
+/* eslint-disable i18next/no-literal-string */
 export const basePath = "/octo_ui2";
 export const proBasePath = "/octo_ui2_pro";
 export const apiPath = "/api";
@@ -134,7 +135,7 @@ export const METADATA_HIDDEN_FIELDS = [
 export const METADATA_ADVANCED_HIDDEN_FIELDS = ["user inputs"];
 export const METADATA_UNDISPLAYED_FIELDS = ["user inputs"];
 export const CUSTOM_USER_INPUT_PATH_SEPARATOR = "/";
-export const _INPUT_SEPARATOR = "_------_";
+export const INPUT_SEPARATOR = "_------_";
 
 export const hidden_class = "d-none";
 

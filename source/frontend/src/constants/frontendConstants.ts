@@ -2,7 +2,7 @@ export const projectName = "Octane";
 export const projectProName = "O UI Pro";
 export const projectDescription = `${projectName} trading bot`;
 export const appStoreDomainProduction = "https://apps.a42.ch";
-// export const appStoreDomainProduction = "https://apps-dev.a42.ch"
+
 export const projectDownloadUrl =
   "https://github.com/techfreaque/octane#readme";
 export const projectGithubUrl = "https://github.com/techfreaque/octane#readme";
@@ -18,6 +18,13 @@ export const isProduction = process.env.NODE_ENV !== "development";
 
 export type SizeType = "extraSmall" | "small" | "medium" | "large";
 
+export const tableSizes: {
+  [key in "small" | "large" | "middle"]: "small" | "large" | "middle";
+} = {
+  small: "small",
+  middle: "middle",
+  large: "large",
+};
 export const sizes: { [key in SizeType]: SizeType } = {
   extraSmall: "extraSmall",
   small: "small",

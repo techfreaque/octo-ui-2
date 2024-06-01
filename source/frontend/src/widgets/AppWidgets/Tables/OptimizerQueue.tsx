@@ -22,6 +22,7 @@ import {
   splitUserInputKey,
   userInputKey,
 } from "../../../components/UserInputs/utils";
+import { tableSizes } from "../../../constants/frontendConstants";
 import type {
   TentaclesConfigsRootType} from "../../../context/config/TentaclesConfigProvider";
 import {
@@ -202,7 +203,7 @@ function OptimizerRunQueueTable({
         data={data}
         columns={columns}
         maxWidth="100%"
-        size="small"
+        size={tableSizes.small}
         paginationSize={100}
         setSelectedRowKeys={setSelectedRecordIds}
         selectedRowKeys={selectedRecordIds}
