@@ -215,7 +215,7 @@ function getSorter<
   TAntTableColumnType extends AntTableColumnType<TAntTableDataType>
 >(
   column: TAntTableColumnType
-): ((a: TAntTableDataType, b: TAntTableDataType) => any) | undefined {
+): ((a: TAntTableDataType, b: TAntTableDataType) => number) | undefined {
   if (column.dsorter === "boolean") {
     return (a: TAntTableDataType, b: TAntTableDataType) =>
       ((a as any)[column.key] === true ? 1 : 0) -
@@ -263,7 +263,7 @@ function getSorter<
           const comparisonResult = sortedPropB[i]
             ? sortedPropA?.[i]?.localeCompare(sortedPropB[i] as string)
             : 0;
-          if (comparisonResult !== 0) {
+          if (comparisonResult) {
             return comparisonResult;
           }
         }

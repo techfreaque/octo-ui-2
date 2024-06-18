@@ -2,8 +2,9 @@ import { Tab } from "@mui/material";
 import Box from "@mui/material/Box";
 import Tabs from "@mui/material/Tabs";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import type { CSSProperties} from "react";
+import type { CSSProperties } from "react";
 import { useState } from "react";
+import useMeasure from "react-use-measure";
 
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 
@@ -31,6 +32,8 @@ export default function MuiTabs({
     defaultTabId ? defaultTabId : 0
   );
   const isBigScreen = useMediaQuery("(min-width:530px)");
+  const [containerRef, { height }] = useMeasure();
+
   return (
     tabs && (
       <div
@@ -42,47 +45,48 @@ export default function MuiTabs({
         }}
       >
         <Box sx={{ borderBottom: `solid 1px ${botColors?.border}` }}>
-          <TabsContainer>
-            <>
-              <TabsElement isRightContent={true}>
-                {rightContent || <></>}
-              </TabsElement>
-              <TabsElement
-                isBigScreen={isBigScreen}
-                isLeftContent={true}
-                // style={{ marginRight: "auto" }}
+          <div
+            ref={containerRef}
+            style={{ width: "100%", display: "flow-root" }}
+          >
+            <TabsElement isRightContent={true}>
+              {rightContent || <></>}
+            </TabsElement>
+            <TabsElement
+              isBigScreen={isBigScreen}
+              isLeftContent={true}
+              // style={{ marginRight: "auto" }}
+            >
+              <Tabs
+                style={{ marginRight: "auto", marginLeft: "auto" }}
+                value={currentTabId}
+                onChange={(_, newCurrentTabId) =>
+                  setCurrentTabId(newCurrentTabId)
+                }
+                variant="scrollable"
+                // scrollButtons
+                allowScrollButtonsMobile
+                aria-label="Tabs"
               >
-                <Tabs
-                  style={{ marginRight: "auto", marginLeft: "auto" }}
-                  value={currentTabId}
-                  onChange={(_, newCurrentTabId) =>
-                    setCurrentTabId(newCurrentTabId)
-                  }
-                  variant="scrollable"
-                  // scrollButtons
-                  allowScrollButtonsMobile
-                  aria-label="Tabs"
-                >
-                  {tabs.map((tab) =>
-                    typeof tab.title === "string" ? (
-                      <Tab
-                        key={tab.tabId}
-                        label={tab.title.replace(/_/g, " ")}
-                        value={tab.tabId}
-                        sx={{ textTransform: "none" }}
-                      />
-                    ) : (
-                      tab.title
-                    )
-                  )}
-                </Tabs>
-              </TabsElement>
-              <TabsElement isBigScreen={isBigScreen}>
-                {tabs.find((tab) => tab.tabId === currentTabId)
-                  ?.toolBarContent || <></>}
-              </TabsElement>
-            </>
-          </TabsContainer>
+                {tabs.map((tab) =>
+                  typeof tab.title === "string" ? (
+                    <Tab
+                      key={tab.tabId}
+                      label={tab.title.replace(/_/g, " ")}
+                      value={tab.tabId}
+                      sx={{ textTransform: "none" }}
+                    />
+                  ) : (
+                    tab.title
+                  )
+                )}
+              </Tabs>
+            </TabsElement>
+            <TabsElement isBigScreen={isBigScreen}>
+              {tabs.find((tab) => tab.tabId === currentTabId)
+                ?.toolBarContent || <></>}
+            </TabsElement>
+          </div>
         </Box>
         {tabs.map((tab, index) => {
           const display: CSSProperties = {};
@@ -98,7 +102,7 @@ export default function MuiTabs({
               key={index}
               style={{
                 // TODO use toolbar height
-                height: "calc(100% - 54px)",
+                height: `calc(100% - ${height || 54}px)`,
                 width: "100%",
                 ...display,
               }}
@@ -118,10 +122,6 @@ export default function MuiTabs({
       </div>
     )
   );
-}
-
-function TabsContainer({ children }: { children: JSX.Element }) {
-  return <div style={{ width: "100%", display: "flow-root" }}>{children}</div>;
 }
 
 function TabsElement({

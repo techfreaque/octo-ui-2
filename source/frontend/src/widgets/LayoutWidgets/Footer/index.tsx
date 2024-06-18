@@ -54,17 +54,35 @@ export default function Footer({ rightContent }: UiLayoutPageLayoutType) {
           />
           {!isSmallScreen && (
             <div style={{ margin: "auto 15px" }}>
-              <a href={projectGithubUrl} target="blank">
+              <a
+                href={projectGithubUrl}
+                target="blank"
+                style={{ textDecoration: "none" }}
+              >
                 <FontAwesomeIcon style={{ margin: "0 3px" }} icon={faGithub} />
-                <span className="d-none d-md-inline"><Trans i18nKey="footer.github" /></span>
+                <span className="d-none d-md-inline">
+                  <Trans i18nKey="footer.github" />
+                </span>
               </a>
-              <a href={projectDiscord} target="blank">
+              <a
+                href={projectDiscord}
+                target="blank"
+                style={{ textDecoration: "none" }}
+              >
                 <FontAwesomeIcon style={{ margin: "0 3px" }} icon={faDiscord} />
-                <span className="d-none d-md-inline"><Trans i18nKey="footer.discord" /></span>
+                <span className="d-none d-md-inline">
+                  <Trans i18nKey="footer.discord" />
+                </span>
               </a>
-              <a href={projectYouTube} target="blank">
+              <a
+                href={projectYouTube}
+                target="blank"
+                style={{ textDecoration: "none" }}
+              >
                 <FontAwesomeIcon style={{ margin: "0 3px" }} icon={faYoutube} />
-                <span className="d-none d-md-inline"><Trans i18nKey="footer.youtube" /></span>
+                <span className="d-none d-md-inline">
+                  <Trans i18nKey="footer.youtube" />
+                </span>
               </a>
             </div>
           )}

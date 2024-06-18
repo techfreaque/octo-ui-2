@@ -1,8 +1,8 @@
 import "./antSidebar.css";
 
 import { useMediaQuery } from "@mui/material";
-import { Button,Collapse } from "antd";
-import type { CSSProperties, Dispatch, SetStateAction} from "react";
+import { Button, Collapse } from "antd";
+import type { CSSProperties, Dispatch, SetStateAction } from "react";
 import { useMemo } from "react";
 import { useState } from "react";
 import { useEffect } from "react";
@@ -53,7 +53,7 @@ export default function AntSidebar({
     : undefined;
   const [_currentlySelectedMenu, _setCurrentlySelectedMenu] = useState<
     string | undefined
-  >(_defaultSelected);
+  >();
   const [hideText, setHideText] = useState(false);
   const iSmallScreen = useMediaQuery("(max-width:800px)");
 
@@ -101,6 +101,7 @@ export default function AntSidebar({
           <div
             style={{
               overflowY: "auto",
+              overflowX: "hidden",
               height: "100%",
             }}
           >
@@ -313,7 +314,11 @@ function MenuItem({
   botColors: ColorsType;
 }) {
   function handleCurentChange() {
-    setCurrentlySelectedMenu(menuItem.key);
+    setCurrentlySelectedMenu((prevSelection) => {
+      return menuItem.items?.length && prevSelection === menuItem.key
+        ? undefined
+        : menuItem.key;
+    });
     menuItem?.onClick?.(menuItem);
   }
   const colorMode = useColorModeContext();
@@ -385,7 +390,7 @@ function NestedSideBarMenuItem({
     <Collapse
       prefixCls={`${colorMode}`}
       activeKey={activeMenus}
-      onChange={handleCurentChange}
+      // onChange={handleCurentChange}
       style={{ border: "none" }}
       expandIconPosition={"end"}
       // expandIcon={()=>(<></>)}
@@ -415,16 +420,21 @@ function NestedSideBarMenuItem({
                 isResponsive={false}
                 antIconString={menuItem.antIcon}
                 faIconString={menuItem.faIcon}
-                onClick={
-                  menuItem.onClick
-                    ? () => menuItem.onClick?.(menuItem)
-                    : handleCurentChange
-                }
+                onClick={() => {
+                  menuItem.onClick?.(menuItem);
+                  handleCurentChange();
+                }}
                 disabled={menuItem.disabled}
               />
             </div>
           ) : (
-            <div style={{ display: "flex" }}>
+            <div
+              style={{ display: "flex" }}
+              onClick={() => {
+                menuItem.onClick?.(menuItem);
+                handleCurentChange();
+              }}
+            >
               {menuItem?.icon && menuItem.icon}
               <IconFromString
                 faIcon={menuItem.faIcon}

@@ -1,4 +1,4 @@
-import { CloseCircleOutlined } from "@ant-design/icons";
+import { CloseCircleOutlined, ReloadOutlined } from "@ant-design/icons";
 import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import { Tooltip, Typography } from "antd";
 import { t } from "i18next";
@@ -274,6 +274,7 @@ function TableFromElement({
   const [selectedRecordIds, setSelectedRecordIds] = useState<string[]>();
   const updateTable = useFetchPlotData();
   const [isCancelling, setIsCancelling] = useState<boolean>(false);
+  const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const somethingSelected = !!selectedRecordIds?.length;
   return (
     <AntTable<DataTableDataType, DataTableColumnType>
@@ -286,33 +287,52 @@ function TableFromElement({
         cancelOrdersDetails ? setSelectedRecordIds : undefined
       }
       header={
-        cancelOrdersDetails ? (
-          <Tooltip title={cancelOrdersDetails.tooltip}>
+        <>
+          <Tooltip title={t("dataTable.refresh-tooltip")}>
             <div>
               <AntButton
-                antIconComponent={cancelOrdersDetails.icon}
+                antIconComponent={ReloadOutlined}
                 colorType={
-                  isCancelling ? buttonTypes.font : buttonTypes.fontActive
+                  isUpdating ? buttonTypes.font : buttonTypes.fontActive
                 }
-                disabled={!somethingSelected}
+                disabled={isUpdating || isCancelling}
                 buttonVariant={buttonVariants.text}
-                onClick={
-                  somethingSelected
-                    ? () =>
-                        cancelOrdersDetails.cancelCallback(
-                          selectedRecordIds,
-                          setIsCancelling,
-                          updateTable
-                        )
-                    : undefined
-                }
-                spin={isCancelling}
-              >
-                {cancelOrdersDetails.text}
-              </AntButton>
+                onClick={() => {
+                  setIsUpdating(true);
+                  updateTable(() => setIsUpdating(false));
+                }}
+                spin={isUpdating || isCancelling}
+              />
             </div>
           </Tooltip>
-        ) : undefined
+          {cancelOrdersDetails ? (
+            <Tooltip title={cancelOrdersDetails.tooltip}>
+              <div>
+                <AntButton
+                  antIconComponent={cancelOrdersDetails.icon}
+                  colorType={
+                    isCancelling ? buttonTypes.font : buttonTypes.fontActive
+                  }
+                  disabled={!somethingSelected || isCancelling || isUpdating}
+                  buttonVariant={buttonVariants.text}
+                  onClick={
+                    somethingSelected
+                      ? () =>
+                          cancelOrdersDetails.cancelCallback(
+                            selectedRecordIds,
+                            setIsCancelling,
+                            updateTable
+                          )
+                      : undefined
+                  }
+                  spin={isCancelling}
+                >
+                  {cancelOrdersDetails.text}
+                </AntButton>
+              </div>
+            </Tooltip>
+          ) : undefined}
+        </>
       }
     />
   );

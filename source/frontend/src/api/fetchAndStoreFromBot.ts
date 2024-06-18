@@ -118,7 +118,7 @@ export async function sendFile({
   const requestData: RequestInit = {
     method: "POST",
     body: formData,
-    credentials: withCredentials ? "include" : "same-origin",
+    // credentials: withCredentials ? "include" : "same-origin",
     headers:
       withCredentials && token ? { Authorization: `Bearer ${token}` } : {},
   };
@@ -155,7 +155,9 @@ export async function getFile({
     .then((blob) => {
       successCallback(blob);
     })
-    .catch((error) => errorCallback?.(error));
+    .catch((error) => {
+      errorCallback?.(error);
+    });
 }
 
 export default async function fetchAndStoreFromBot({
@@ -275,7 +277,7 @@ function genericRequestFailureCallback({
     data
   );
   createNotification({
-    title: `Can't connect to ${  projectName}`,
+    title: `Can't connect to ${projectName}`,
     type: "danger",
     message: `Unknown error: Update url: ${updateUrl}, error: ${JSON.stringify(
       data

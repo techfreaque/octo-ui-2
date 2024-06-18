@@ -207,7 +207,8 @@
     "live-trading": "Live trading",
     "backtesting-trading": "Backtesting trading",
     "cancel-selected-orders": "Cancel selected orders",
-    "orders": "Orders"
+    "orders": "Orders",
+    "refresh-tooltip": "Refreshes all tables"
   },
   "strategyConfigurator": {
     "select-a-setting-category-from-the-sidebar": "Select a setting category from the sidebar",
