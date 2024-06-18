@@ -5,6 +5,7 @@ repository: Unknown repository location
 short-name: any_platform.zip
 tags: []
 tentacles:
+- basic_tentacles@1.2.0
 - RunAnalysis@1.1.0
 - octo_ui2@0.9.30
 - run_analysis_mode@0.9.23
