@@ -33,7 +33,7 @@ export function BacktestingRunDataTable() {
       ) : (
         <NoBacktestingData fetchBacktestingRunData={fetchBacktestingRunData} />
       ),
-    [currentOptimizerCampaignName, fetchBacktestingRunData, runData?.data]
+    [currentOptimizerCampaignName, fetchBacktestingRunData, runData?.data],
   );
 }
 

@@ -1,7 +1,7 @@
 import { SearchOutlined } from "@ant-design/icons";
 import { Input, Tooltip, Typography } from "antd";
 import { t } from "i18next";
-import type { DragEvent, DragEventHandler} from "react";
+import type { DragEvent, DragEventHandler } from "react";
 import { useMemo, useState } from "react";
 import { Trans } from "react-i18next";
 
@@ -42,7 +42,9 @@ export default function BuildingBlocksSidebar() {
           <Input.Search
             style={{ marginTop: "10px" }}
             onChange={(event) => setSearchText(event.target.value)}
-            placeholder={t('strategyConfigurator.strategyFlowMaker.search-for-ema-rsi-strategy')}
+            placeholder={t(
+              "strategyConfigurator.strategyFlowMaker.search-for-ema-rsi-strategy",
+            )}
             enterButton={
               <span>
                 <SearchOutlined style={{ margin: "auto" }} />
@@ -61,7 +63,7 @@ export default function BuildingBlocksSidebar() {
       ) : (
         <></>
       ),
-    [botColors.background, botColors.font, installedBlocksInfo, searchText]
+    [botColors.background, botColors.font, installedBlocksInfo, searchText],
   );
 }
 
@@ -84,7 +86,7 @@ function BlockTemplates({
       event: DragEvent<HTMLDivElement>,
       blockId: string,
       nodeType: BlockNameType,
-      nodesData: BlockType
+      nodesData: BlockType,
     ) => {
       event.dataTransfer.setData(
         "application/reactflow",
@@ -94,7 +96,7 @@ function BlockTemplates({
             ...nodesData,
             blockId,
           },
-        })
+        }),
       );
       event.dataTransfer.effectAllowed = "move";
     };
@@ -128,7 +130,7 @@ function BlockTemplate({
     event: DragEvent<HTMLDivElement>,
     blockId: string,
     nodeType: BlockNameType,
-    nodesData: BlockType
+    nodesData: BlockType,
   ) => void;
   blockType: BlockNameType;
   searchText: string;
@@ -146,7 +148,7 @@ function BlockTemplate({
             block.description.toLowerCase().includes(_searchText)
           ) {
             const handleOnDragStart: DragEventHandler<HTMLDivElement> = (
-              event
+              event,
             ) => {
               onDragStart(event, blockName, blockType, block);
             };

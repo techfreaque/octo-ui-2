@@ -30,7 +30,9 @@ export function AppCover({
           marginTop: "30px",
         }}
       >
-        {t('appStore.appCard.current-categoryName', {categoryName: app?.categories[0]})}
+        {t("appStore.appCard.current-categoryName", {
+          categoryName: app?.categories[0],
+        })}
       </Typography.Title>
       <AppRating
         rating={app.rating}

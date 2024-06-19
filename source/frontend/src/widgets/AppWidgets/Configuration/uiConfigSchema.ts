@@ -8,7 +8,7 @@ export function getUiConfigSchema(
   configKey: UiConfigKeyType,
   dataFiles: DataFilesType | undefined,
   currentSymbols: string[] | undefined,
-  availableExchanges: string[] | undefined
+  availableExchanges: string[] | undefined,
 ) {
   const dataFilevalues = [CURRENT_BOT_DATA];
   const dataFilesTitles = [
@@ -17,14 +17,14 @@ export function getUiConfigSchema(
   dataFiles?.forEach((dataFile) => {
     dataFilevalues.push(dataFile[0]);
     dataFilesTitles.push(
-      `${dataFile[1].exchange} - ${dataFile[1].symbols} - ${dataFile[1].time_frames} from ${dataFile[1].start_date} to from ${dataFile[1].end_date}`
+      `${dataFile[1].exchange} - ${dataFile[1].symbols} - ${dataFile[1].time_frames} from ${dataFile[1].start_date} to from ${dataFile[1].end_date}`,
     );
   });
 
   const uiConfigSchema = _getUiConfigSchema(
     availableExchanges,
     dataFilevalues,
-    dataFilesTitles
+    dataFilesTitles,
   );
   return uiConfigSchema.properties[configKey] as UiConfigSubSchemaType;
 }
@@ -76,7 +76,7 @@ interface UiConfigSubSchemasType {
 function _getUiConfigSchema(
   availableExchanges: string[] | undefined,
   dataFilevalues: string[],
-  dataFilesTitles: string[]
+  dataFilesTitles: string[],
 ): UiConfigSchemaType {
   return {
     type: "object",

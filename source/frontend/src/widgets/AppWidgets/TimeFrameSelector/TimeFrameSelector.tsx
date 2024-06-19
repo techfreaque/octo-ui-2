@@ -1,7 +1,7 @@
 import { CaretDownOutlined } from "@ant-design/icons";
 import { Button, Dropdown, List, Switch, Typography } from "antd";
 import { t } from "i18next";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 
@@ -24,7 +24,7 @@ export default function TimeFrameSelector() {
   const visibleTimeframes = useVisibleTimeFramesContext();
   const setVisibleTimeframes = useUpdateVisibleTimeFramesContext();
   const [enabledTimeFrame, setEnabledTimeFrame] = useState(
-    botInfo?.traded_time_frames || []
+    botInfo?.traded_time_frames || [],
   );
   useEffect(() => {
     if (botInfo?.traded_time_frames) {
@@ -71,7 +71,7 @@ function TimeFrameEnabler({
   function handleTimeFrameChange(timeFrame: string) {
     const newTimeframes = enabledTimeFrame.includes(timeFrame)
       ? enabledTimeFrame.filter(
-          (foundTimeframe) => foundTimeframe !== timeFrame
+          (foundTimeframe) => foundTimeframe !== timeFrame,
         )
       : [...enabledTimeFrame, timeFrame];
     setEnabledTimeFrame(newTimeframes);
@@ -104,7 +104,7 @@ function TimeFrameEnabler({
         },
         onSaveFinished,
         false,
-        true
+        true,
       );
     }
   }

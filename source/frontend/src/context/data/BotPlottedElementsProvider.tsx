@@ -1,6 +1,4 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import {
   createContext,
   useCallback,
@@ -60,14 +58,13 @@ export type ChartDetailsType = {
   line_shape?: "linear";
 } & {
   [candleSource in PlotSourceType]: number[] | null;
-} &
-  {
-    [markerAtribute in MarkerAttributesType]:
-      | null
-      | string[]
-      | number[]
-      | undefined;
-  };
+} & {
+  [markerAtribute in MarkerAttributesType]:
+    | null
+    | string[]
+    | number[]
+    | undefined;
+};
 
 export type PlottedSubSubElementType = {
   type: ChartType;
@@ -109,17 +106,19 @@ export type PlottedElementsType<TPlottedElementNameType> = {
 const BotPlottedElementsContext = createContext<
   PlottedElementsType<PlottedElementNameType> | undefined
 >(undefined);
-const UpdateBotPlottedElementsContext = createContext<
-  Dispatch<
-    SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
-  >
->(emptyValueFunction);
+const UpdateBotPlottedElementsContext =
+  createContext<
+    Dispatch<
+      SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
+    >
+  >(emptyValueFunction);
 const HiddenBacktestingMetadataColumnsContext = createContext<
   string[] | undefined
 >(undefined);
-const UpdateHiddenBacktestingMetadataColumnsContext = createContext<
-  Dispatch<SetStateAction<string[] | undefined>>
->(emptyValueFunction);
+const UpdateHiddenBacktestingMetadataColumnsContext =
+  createContext<Dispatch<SetStateAction<string[] | undefined>>>(
+    emptyValueFunction,
+  );
 
 export interface DisplayedRunIdsType {
   live: string[];
@@ -132,11 +131,12 @@ export const defaultDisplayedRunIds: DisplayedRunIdsType = {
 };
 
 const DisplayedRunIdsContext = createContext<DisplayedRunIdsType>(
-  defaultDisplayedRunIds
+  defaultDisplayedRunIds,
 );
-const UpdateDisplayedRunIdsContext = createContext<
-  Dispatch<SetStateAction<DisplayedRunIdsType>>
->(emptyValueFunction);
+const UpdateDisplayedRunIdsContext =
+  createContext<Dispatch<SetStateAction<DisplayedRunIdsType>>>(
+    emptyValueFunction,
+  );
 
 export const useBotPlottedElementsContext = () => {
   return useContext(BotPlottedElementsContext);
@@ -192,7 +192,7 @@ export const useFetchPlotData = () => {
       botDomain,
       botInfo,
       setBotPlottedElements,
-    ]
+    ],
   );
 };
 
@@ -205,7 +205,7 @@ function clearUnselectedRuns(
     SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
   >,
   visiblePairs: string,
-  visibleTimeframes: string
+  visibleTimeframes: string,
 ) {
   // clear not selected runs
   const newPlottedElements = {
@@ -218,7 +218,7 @@ function clearUnselectedRuns(
       Object.keys(backtesting).forEach((thisCampaign) => {
         if (
           displayedRunIds.backtesting.some((runId) =>
-            runId.endsWith(thisCampaign)
+            runId.endsWith(thisCampaign),
           )
         ) {
           const thisCampaignData = backtesting?.[thisCampaign];
@@ -226,7 +226,7 @@ function clearUnselectedRuns(
             Object.keys(thisCampaignData).forEach((thisOptimizerId) => {
               if (
                 displayedRunIds.backtesting.some((runId) =>
-                  runId.endsWith(thisOptimizerId + ID_SEPARATOR + thisCampaign)
+                  runId.endsWith(thisOptimizerId + ID_SEPARATOR + thisCampaign),
                 )
               ) {
                 const thisOptimizerData = thisCampaignData?.[thisOptimizerId];
@@ -240,8 +240,8 @@ function clearUnselectedRuns(
                             mergeRunIdentifiers(
                               thisBacktestingId,
                               thisOptimizerId,
-                              thisCampaign
-                            )
+                              thisCampaign,
+                            ),
                         )
                       ) {
                         const thisBacktestingData =
@@ -258,17 +258,17 @@ function clearUnselectedRuns(
                                       if (thisTimeframe !== visibleTimeframes) {
                                         delete thisPairData[thisTimeframe];
                                       }
-                                    }
+                                    },
                                   );
                               } else {
                                 delete thisBacktestingData[thisPair];
                               }
-                            }
+                            },
                           );
                       } else {
                         delete thisOptimizerData[thisBacktestingId];
                       }
-                    }
+                    },
                   );
               } else {
                 delete thisCampaignData[thisOptimizerId];
@@ -300,13 +300,12 @@ function loadMissingRuns(
   botDomain: string,
   setBotPlottedElements: Dispatch<
     SetStateAction<PlottedElementsType<PlottedElementNameType> | undefined>
-  >
+  >,
 ) {
   // load missing runs
   displayedRunIds?.backtesting?.forEach((runIdentifier) => {
-    const { backtestingId, optimizerId, campaignName } = splitRunIdentifiers(
-      runIdentifier
-    );
+    const { backtestingId, optimizerId, campaignName } =
+      splitRunIdentifiers(runIdentifier);
     if (
       !botPlottedElements?.backtesting?.[campaignName]?.[optimizerId]?.[
         backtestingId
@@ -341,7 +340,7 @@ export const BotPlottedElementsProvider = ({
   ] = useState<string[]>();
 
   const [displayedRunIds, setDisplayedRunIds] = useState<DisplayedRunIdsType>(
-    defaultDisplayedRunIds
+    defaultDisplayedRunIds,
   );
   const botInfo = useBotInfoContext();
   const botDomain = useBotDomainContext();
@@ -367,7 +366,7 @@ export const BotPlottedElementsProvider = ({
         botPlottedElements,
         setBotPlottedElements,
         visiblePairs,
-        visibleTimeframes
+        visibleTimeframes,
       );
       loadMissingRuns(
         displayedRunIds,
@@ -377,7 +376,7 @@ export const BotPlottedElementsProvider = ({
         visibleExchangeIds,
         visibleExchanges,
         botDomain,
-        setBotPlottedElements
+        setBotPlottedElements,
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

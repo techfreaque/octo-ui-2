@@ -10,11 +10,21 @@ export default function OptimizerRunFilterTemplate() {
   return (
     <div className="mx-4">
       <div className="row" style={borderStyle}>
-        <div className="col-4 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.input-name" /></div>
-        <div className="col-1 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.condition" /></div>
-        <div className="col-4 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.other-input-name" /></div>
-        <div className="col-2 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.value" /></div>
-        <div className="col-1 p-2"><Trans i18nKey="optimizer.runConfig.runFilter.remove" /></div>
+        <div className="col-4 p-2">
+          <Trans i18nKey="optimizer.runConfig.runFilter.input-name" />
+        </div>
+        <div className="col-1 p-2">
+          <Trans i18nKey="optimizer.runConfig.runFilter.condition" />
+        </div>
+        <div className="col-4 p-2">
+          <Trans i18nKey="optimizer.runConfig.runFilter.other-input-name" />
+        </div>
+        <div className="col-2 p-2">
+          <Trans i18nKey="optimizer.runConfig.runFilter.value" />
+        </div>
+        <div className="col-1 p-2">
+          <Trans i18nKey="optimizer.runConfig.runFilter.remove" />
+        </div>
       </div>
       <div className="row" style={borderStyle} id="optimizer-filters-root" />
       <div
@@ -39,7 +49,7 @@ export default function OptimizerRunFilterTemplate() {
 function OptimizerRunFilter() {
   const botColors = useBotColorsContext();
   const borderStyle = {
-    border: `1px solid ${  botColors?.border}`,
+    border: `1px solid ${botColors?.border}`,
   };
   return (
     <div

@@ -1,20 +1,13 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useContext, useState } from "react";
 
 import { emptyValueFunction } from "../../helpers/helpers";
 import type { ChartType } from "../../widgets/AppWidgets/Charts/ChartTablePieCombo";
 
 const defaultChartType = "chart";
 
-const updateChartTypeContext = createContext<
-  Dispatch<SetStateAction<ChartType>>
->(emptyValueFunction);
+const updateChartTypeContext =
+  createContext<Dispatch<SetStateAction<ChartType>>>(emptyValueFunction);
 const ChartTypeContext = createContext<ChartType>(defaultChartType);
 
 export const useUpdateChartTypeContext = () => {

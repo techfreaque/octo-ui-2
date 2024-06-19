@@ -1,6 +1,6 @@
 import { Typography } from "antd";
 import { t } from "i18next";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 
@@ -41,7 +41,7 @@ export default function BackendDashboard() {
                   })}
                   confirmButtonText={t(
                     "manageAccount.backend.delete-user-email",
-                    { userEmail: user.email }
+                    { userEmail: user.email },
                   )}
                   buttonTitle={t("manageAccount.backend.delete-user-email", {
                     userEmail: user.email,

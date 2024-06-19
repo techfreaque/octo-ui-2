@@ -40,7 +40,7 @@ export default function CurrentPortfolioTable() {
           lockedIn: symbolPortfolio.locked,
           valueIn: botPortfolio.symbols_values[symbol],
         });
-      }
+      },
     );
 
     return (

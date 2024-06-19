@@ -1,8 +1,7 @@
 import { CloseCircleOutlined } from "@ant-design/icons";
-import type { CSSProperties} from "react";
+import type { CSSProperties } from "react";
 import { useCallback } from "react";
-import type {
-  EdgeProps} from "reactflow";
+import type { EdgeProps } from "reactflow";
 import {
   BaseEdge,
   EdgeLabelRenderer,
@@ -27,16 +26,13 @@ export const CustomEdge = ({
   selected,
 }: EdgeProps) => {
   const reactFlow = useReactFlow();
-  const onEdgeDelete = useCallback(
-    () => {
-      reactFlow.setEdges((edges) => {
-        return edges.filter((edge) => {
-          return edge.id !== id;
-        });
+  const onEdgeDelete = useCallback(() => {
+    reactFlow.setEdges((edges) => {
+      return edges.filter((edge) => {
+        return edge.id !== id;
       });
-    },
-    [id, reactFlow]
-  );
+    });
+  }, [id, reactFlow]);
   const [edgePath, labelX, labelY] = getBezierPath({
     sourceX,
     sourceY,

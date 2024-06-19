@@ -8,7 +8,7 @@ export interface WebsocketDataType {
 }
 export type WebsocketOnConnectionUpdateType = (
   data: WebsocketDataType,
-  socket: Socket<DefaultEventsMap, DefaultEventsMap>
+  socket: Socket<DefaultEventsMap, DefaultEventsMap>,
 ) => void;
 
 export const AbstractWebsocketContext = ({
@@ -29,7 +29,7 @@ export const AbstractWebsocketContext = ({
       socketUrl,
       onConnectionUpdate,
       onConnectionLost,
-      onKey
+      onKey,
     );
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -41,10 +41,10 @@ function initWebsocket(
   socketUrl: string,
   onConnectionUpdate: WebsocketOnConnectionUpdateType,
   onConnectionLost: () => void,
-  onKey: string
+  onKey: string,
 ): () => void {
   const socket = getWebsocket(
-    socketUrl.replace("http://", "ws://").replace("https://", "wss://")
+    socketUrl.replace("http://", "ws://").replace("https://", "wss://"),
   );
   socket.on(onKey, function (data) {
     onConnectionUpdate?.(data, socket);

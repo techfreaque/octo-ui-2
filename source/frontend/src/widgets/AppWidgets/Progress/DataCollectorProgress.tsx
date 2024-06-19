@@ -36,6 +36,6 @@ export default function DataCollectorProgress() {
       ) : (
         <></>
       ),
-    [inProgress, progress]
+    [inProgress, progress],
   );
 }

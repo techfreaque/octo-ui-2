@@ -1,19 +1,12 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 
 import { botLayoutKey } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
 import type { PanelPositionType } from "../../widgets/AppWidgets/Buttons/CurrentPanelPosition";
 import type { PagebuilderComponents } from "../../widgets/AppWidgets/PageBuilder/PageBuilder";
 import type { ApiActionsType } from "../data/BotInfoProvider";
-import type { UiConfigKeyType} from "./UiConfigProvider";
+import type { UiConfigKeyType } from "./UiConfigProvider";
 import { useUiConfigContext } from "./UiConfigProvider";
 
 export interface UiLayoutPageLayoutType {
@@ -69,17 +62,16 @@ const defaultUiDimensions: UiDimensionsType = {
 };
 
 const BotLayoutContext = createContext<UiLayoutPageType[] | undefined>(
-  undefined
+  undefined,
 );
-const UpdateBotLayoutContext = createContext<
-  Dispatch<SetStateAction<UiLayoutPageType[] | undefined>>
->(emptyValueFunction);
-const UiDimensionsContext = createContext<UiDimensionsType>(
-  defaultUiDimensions
-);
-const UpdateUiDimensionsContext = createContext<
-  Dispatch<SetStateAction<UiDimensionsType>>
->(emptyValueFunction);
+const UpdateBotLayoutContext =
+  createContext<Dispatch<SetStateAction<UiLayoutPageType[] | undefined>>>(
+    emptyValueFunction,
+  );
+const UiDimensionsContext =
+  createContext<UiDimensionsType>(defaultUiDimensions);
+const UpdateUiDimensionsContext =
+  createContext<Dispatch<SetStateAction<UiDimensionsType>>>(emptyValueFunction);
 
 export const useBotLayoutContext = () => {
   return useContext(BotLayoutContext);

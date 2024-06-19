@@ -1,18 +1,13 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useContext, useState } from "react";
 
 import { emptyValueFunction } from "../../helpers/helpers";
 
 const VisiblePairsContext = createContext<string | undefined>(undefined);
-const UpdateVisiblePairsContext = createContext<
-  Dispatch<SetStateAction<string | undefined>>
->(emptyValueFunction);
+const UpdateVisiblePairsContext =
+  createContext<Dispatch<SetStateAction<string | undefined>>>(
+    emptyValueFunction,
+  );
 
 export const useVisiblePairsContext = () => {
   return useContext(VisiblePairsContext);
@@ -28,7 +23,7 @@ export const VisiblePairsProvider = ({
   children: JSX.Element;
 }) => {
   const [visiblePairs, setVisiblePairs] = useState<string | undefined>(
-    undefined
+    undefined,
   );
   return (
     <VisiblePairsContext.Provider value={visiblePairs}>

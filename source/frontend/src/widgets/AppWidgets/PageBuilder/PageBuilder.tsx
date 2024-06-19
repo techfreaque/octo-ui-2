@@ -250,7 +250,7 @@ type AppWidgetsPropType = {
 
 export function generateAppWidgetProp(
   propName: string,
-  dependentComponents: PagebuilderComponents[] | PagebuilderComponents
+  dependentComponents: PagebuilderComponents[] | PagebuilderComponents,
 ): AppWidgetsPropType {
   return {
     [propName]: {

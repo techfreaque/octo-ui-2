@@ -37,7 +37,7 @@ export default function AppDownloadForm({
   app: AppStoreAppType;
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
-    otherApp: AppStoreAppType | undefined
+    otherApp: AppStoreAppType | undefined,
   ) => void;
 }) {
   return (
@@ -144,7 +144,7 @@ function getVersionTypes(): {
       icon: t("appStore.appCard.downloadApp.alpha-veriosn-icon"),
 
       toolTipText: t(
-        "appStore.appCard.downloadApp.switch-to-the-alpha-version"
+        "appStore.appCard.downloadApp.switch-to-the-alpha-version",
       ),
       key: "alpha_version",
       // disabled: true
@@ -162,7 +162,7 @@ function getVersionTypes(): {
       icon: t("appStore.appCard.downloadApp.stable-version-icon"),
 
       toolTipText: t(
-        "appStore.appCard.downloadApp.switch-to-the-stable-version"
+        "appStore.appCard.downloadApp.switch-to-the-stable-version",
       ),
       key: "stable_version",
       // disabled: true
@@ -188,7 +188,7 @@ function AppVersions({
   downloadInfo: DownloadInfo;
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
-    otherApp: AppStoreAppType | undefined
+    otherApp: AppStoreAppType | undefined,
   ) => void;
 }) {
   // const [versionType, setVersionType] = useState("stable_version")
@@ -197,7 +197,7 @@ function AppVersions({
   const reversedVersions = app.versions?.reverse();
   const preSorteddata: VersionDataToDisplay[] | undefined = reversedVersions
     ?.filter((version) =>
-      downloadInfo?.visibleVersionTypes?.includes(version.version_tag)
+      downloadInfo?.visibleVersionTypes?.includes(version.version_tag),
     )
     .map((version) => {
       const title = `${version.major_version}.${version.minor_version}.${
@@ -219,7 +219,7 @@ function AppVersions({
               handdleVersionSelect(
                 setDownloadInfo,
                 version,
-                handleAccordionChange
+                handleAccordionChange,
               )
             }
             style={
@@ -252,10 +252,10 @@ function AppVersions({
     setDownloadInfo((prevDownloadInfo) => ({
       ...prevDownloadInfo,
       visibleVersionTypes: downloadInfo?.visibleVersionTypes?.includes(
-        versionTypeKey
+        versionTypeKey,
       )
         ? downloadInfo.visibleVersionTypes.filter(
-            (thissVersionKey) => thissVersionKey !== versionTypeKey
+            (thissVersionKey) => thissVersionKey !== versionTypeKey,
           )
         : [...(downloadInfo?.visibleVersionTypes || []), versionTypeKey],
     }));
@@ -270,7 +270,7 @@ function AppVersions({
     (version) =>
       downloadInfo?.major_version === version.major_version &&
       downloadInfo?.minor_version === version.minor_version &&
-      downloadInfo?.bug_fix_version === version.bug_fix_version
+      downloadInfo?.bug_fix_version === version.bug_fix_version,
   )?.[0];
 
   return (
@@ -300,7 +300,7 @@ function AppVersions({
                   minorVersion: selectedVersion.minor_version,
                   bugFixVersion: selectedVersion.bug_fix_version,
                   versionTag: versionTagKeyToTitle[selectedVersion.version_tag],
-                }
+                },
               )}
             </Typography.Title>
             <Alert
@@ -308,7 +308,7 @@ function AppVersions({
               showIcon={true}
               message={t(
                 "appStore.appCard.downloadApp.appTitle-is-part-of-these-packages",
-                { appTitle: app.title }
+                { appTitle: app.title },
               )}
               style={{ marginBottom: "5px" }}
             />
@@ -331,7 +331,7 @@ function AppVersions({
                   minorVersion: selectedVersion.minor_version,
                   bugFixVersion: selectedVersion.bug_fix_version,
                   versionTag: versionTagKeyToTitle[selectedVersion.version_tag],
-                }
+                },
               )}
             </Typography.Title>
             <Typography.Text> {selectedVersion.release_notes} </Typography.Text>
@@ -358,7 +358,7 @@ function RequiredPackages({
   downloadInfo: DownloadInfo;
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
-    otherApp: AppStoreAppType | undefined
+    otherApp: AppStoreAppType | undefined,
   ) => void;
   setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
 }) {
@@ -381,7 +381,7 @@ function RequiredPackages({
             requiredAppsByTentaclePackage[potentialOriginPackage] = [];
           }
           requiredAppsByTentaclePackage[potentialOriginPackage]?.push(
-            potentialRequiredApp
+            potentialRequiredApp,
           );
 
           const packageInstalled = requiredAppsByTentaclePackage[
@@ -398,21 +398,21 @@ function RequiredPackages({
   return (
     <Grid container spacing={2}>
       {requiredAppsByTentaclePackage &&
-        Object.entries(
-          requiredAppsByTentaclePackage
-        ).map(([requiredAppPackageName, requiredAppsInPackage], index) => (
-          <RequiredPackage
-            key={`${app.package_id}${index}`}
-            app={app}
-            requirementsSatisfied={requirementsSatisfied}
-            isMainPackage={index === 0}
-            requiredAppsInPackage={requiredAppsInPackage}
-            requiredAppPackageName={requiredAppPackageName}
-            downloadInfo={downloadInfo}
-            handleDownload={handleDownload}
-            setDownloadInfo={setDownloadInfo}
-          />
-        ))}
+        Object.entries(requiredAppsByTentaclePackage).map(
+          ([requiredAppPackageName, requiredAppsInPackage], index) => (
+            <RequiredPackage
+              key={`${app.package_id}${index}`}
+              app={app}
+              requirementsSatisfied={requirementsSatisfied}
+              isMainPackage={index === 0}
+              requiredAppsInPackage={requiredAppsInPackage}
+              requiredAppPackageName={requiredAppPackageName}
+              downloadInfo={downloadInfo}
+              handleDownload={handleDownload}
+              setDownloadInfo={setDownloadInfo}
+            />
+          ),
+        )}
     </Grid>
   );
 }
@@ -433,7 +433,7 @@ function RequiredPackage({
   downloadInfo: DownloadInfo;
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
-    otherApp: AppStoreAppType | undefined
+    otherApp: AppStoreAppType | undefined,
   ) => void;
   setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
   requirementsSatisfied: boolean;
@@ -458,10 +458,10 @@ function RequiredPackage({
           title={
             packageInstalled
               ? t(
-                  "appStore.appCard.downloadApp.the-app-package-is-already-installed"
+                  "appStore.appCard.downloadApp.the-app-package-is-already-installed",
                 )
               : t(
-                  "appStore.appCard.downloadApp.the-app-package-isnt-installed-yet"
+                  "appStore.appCard.downloadApp.the-app-package-isnt-installed-yet",
                 )
           }
         >
@@ -495,7 +495,7 @@ function RequiredPackage({
               title={
                 requiredApp?.is_installed
                   ? t(
-                      "appStore.appCard.downloadApp.the-app-is-already-installed"
+                      "appStore.appCard.downloadApp.the-app-is-already-installed",
                     )
                   : t("appStore.appCard.downloadApp.the-app-isnt-installed-yet")
               }
@@ -588,7 +588,7 @@ function DownloadPackageButton({
 }: {
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
-    otherApp: AppStoreAppType | undefined
+    otherApp: AppStoreAppType | undefined,
   ) => void;
   setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
   downloadInfo: DownloadInfo;
@@ -611,14 +611,14 @@ function DownloadPackageButton({
           ...prevInfo,
           isDownloading,
         })),
-      isOriginPackage ? undefined : mainPackageApp
+      isOriginPackage ? undefined : mainPackageApp,
     );
   }
   if (isMainPackage && !requirementsSatisfied) {
     return (
       <Tooltip
         title={t(
-          "appStore.appCard.downloadApp.all-requirements-must-be-satisfied-before-you-can-download-this-app"
+          "appStore.appCard.downloadApp.all-requirements-must-be-satisfied-before-you-can-download-this-app",
         )}
       >
         <div>
@@ -740,7 +740,7 @@ function VersionSelector({
             key={versionTypeObj.key}
             isSelected={false}
             active={downloadInfo?.visibleVersionTypes?.includes(
-              versionTypeObj.key
+              versionTypeObj.key,
             )}
             buttonTitle={versionTypeObj.label}
             disabled={false}
@@ -799,7 +799,7 @@ function getVersionColumns() {
 function handdleVersionSelect(
   setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>,
   version: AppStoreAppVersionType,
-  handleAccordionChange: (detailsOpen: boolean) => void
+  handleAccordionChange: (detailsOpen: boolean) => void,
 ) {
   handleAccordionChange(true);
 

@@ -1,9 +1,8 @@
 import type {
   iNotification,
-  NOTIFICATION_TYPE} from "react-notifications-component";
-import {
-  Store,
+  NOTIFICATION_TYPE,
 } from "react-notifications-component";
+import { Store } from "react-notifications-component";
 
 export default function createNotification({
   title,

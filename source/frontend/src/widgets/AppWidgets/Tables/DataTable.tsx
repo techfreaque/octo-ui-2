@@ -72,7 +72,7 @@ export default function W2uiDataTable() {
 
 function generateTables(
   plottedElements: PlottedElementsType<PlottedElementNameType> | undefined,
-  botDomain: string
+  botDomain: string,
 ): AntSideBarMenutItemType[] {
   const newMenuItems: {
     [key: string]: DataTableSideBarMainItemType;
@@ -100,9 +100,9 @@ function generateTables(
                     optimizerId,
                     botDomain,
                   });
-                }
+                },
               );
-            }
+            },
           );
       }
     });
@@ -157,7 +157,7 @@ export interface DataTableSideBarMainItemType extends AntSideBarMenutItemType {
 }
 
 export function createTradingOrBacktestingTab(
-  liveOrBacktest: PlottedElementNameType
+  liveOrBacktest: PlottedElementNameType,
 ): DataTableSideBarMainItemType {
   return {
     title:
@@ -214,13 +214,13 @@ function _generateTablesAndSidebarItems({
           cancelCallback: (
             orderIdsToCancel: string[],
             setIsCancelling: Dispatch<SetStateAction<boolean>>,
-            upDateOrders: (isLive?: boolean) => void
+            upDateOrders: (isLive?: boolean) => void,
           ) =>
             cancelOrders(
               botDomain,
               orderIdsToCancel,
               setIsCancelling,
-              upDateOrders
+              upDateOrders,
             ),
         };
       }
@@ -255,7 +255,7 @@ interface CancelOrderDetailsType {
   cancelCallback: (
     orderIdsToCancel: string[],
     setIsCancelling: Dispatch<SetStateAction<boolean>>,
-    upDateOrders: () => void
+    upDateOrders: () => void,
   ) => void;
 }
 
@@ -321,7 +321,7 @@ function TableFromElement({
                           cancelOrdersDetails.cancelCallback(
                             selectedRecordIds,
                             setIsCancelling,
-                            updateTable
+                            updateTable,
                           )
                       : undefined
                   }

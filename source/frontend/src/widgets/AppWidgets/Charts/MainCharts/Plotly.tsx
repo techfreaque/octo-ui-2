@@ -4,7 +4,10 @@ import Plot from "react-plotly.js";
 
 import { objectKeys } from "../../../../helpers/helpers";
 import type { ChartDataType } from "../ChartTablePieCombo";
-import type { PlotlyLayoutType, UpdatePlotlyLayoutsType } from "./PlotlyContext";
+import type {
+  PlotlyLayoutType,
+  UpdatePlotlyLayoutsType,
+} from "./PlotlyContext";
 
 export type ChartLocationType = "main-chart" | "sub-chart" | "pie-chart" | "b";
 
@@ -46,7 +49,7 @@ export default function PlotlyChart({
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [chartData, chartLocation, JSON.stringify(layout)]
+    [chartData, chartLocation, JSON.stringify(layout)],
   );
 }
 
@@ -57,13 +60,13 @@ interface ChartDiv extends HTMLElement {
 function relayout(
   ed: Readonly<PlotRelayoutEvent>,
   chartLocation: ChartLocationType,
-  setLayouts: UpdatePlotlyLayoutsType
+  setLayouts: UpdatePlotlyLayoutsType,
 ) {
   if (Object.entries(ed).length === 0) {
     return;
   }
   const thisChartDiv: ChartDiv | null = document.getElementById(
-    getDivId(chartLocation)
+    getDivId(chartLocation),
   );
   if (thisChartDiv?.layout) {
     objectKeys(setLayouts).forEach((otherChartLocation) => {
@@ -72,7 +75,7 @@ function relayout(
         allChartLocations.includes(otherChartLocation)
       ) {
         const chartDiv: ChartDiv | null = document.getElementById(
-          getDivId(otherChartLocation)
+          getDivId(otherChartLocation),
         );
         if (chartDiv?.layout) {
           const newLayout = {
@@ -193,14 +196,14 @@ export function getPlotlyConfig(): Partial<Plotly.Config> {
 export function enableAxisSelect() {
   // allow moving chart for selected y scale layer
   const yaxis_resize_layers = document.getElementsByClassName(
-    "nsdrag drag cursor-ns-resize"
+    "nsdrag drag cursor-ns-resize",
   );
   if (yaxis_resize_layers) {
     Array.from(yaxis_resize_layers).forEach((yaxis_drag_layer) => {
       if (yaxis_drag_layer.getAttribute("listener") !== "true") {
         yaxis_drag_layer.addEventListener("click", () => {
           yaxis_drag_layer.parentElement?.parentElement?.append(
-            yaxis_drag_layer.parentElement
+            yaxis_drag_layer.parentElement,
           );
         });
         yaxis_drag_layer.setAttribute("listener", "true");

@@ -40,7 +40,7 @@ export function loadI18N(callback: () => void) {
           loadPath: "/octo_ui2/static/locales/{{lng}}/translation.json",
         },
       },
-      callback
+      callback,
     );
 }
 

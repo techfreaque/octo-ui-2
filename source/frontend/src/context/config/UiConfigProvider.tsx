@@ -1,6 +1,4 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import {
   createContext,
   useCallback,
@@ -99,9 +97,8 @@ export interface UiConfigType {
 }
 
 const UiConfigContext = createContext<UiConfigType>({});
-const UpdateUiConfigContext = createContext<
-  Dispatch<SetStateAction<UiConfigType>>
->(emptyValueFunction);
+const UpdateUiConfigContext =
+  createContext<Dispatch<SetStateAction<UiConfigType>>>(emptyValueFunction);
 
 export const useUiConfigContext = () => {
   return useContext(UiConfigContext);
@@ -132,7 +129,7 @@ export const useSaveUiConfig = () => {
         | ((payload: successResponseCallBackParams) => void)
         | undefined,
       errorCallback: (payload: errorResponseCallBackParams) => void,
-      overwriteConfig = false
+      overwriteConfig = false,
     ) => {
       setUiConfig((prevConfig) => {
         const _newConfig: UiConfigType = {
@@ -148,7 +145,7 @@ export const useSaveUiConfig = () => {
         return _newConfig;
       });
     },
-    [setUiConfig, botDomain]
+    [setUiConfig, botDomain],
   );
 };
 
@@ -157,7 +154,7 @@ export const UiConfigProvider = ({ children }: { children: JSX.Element }) => {
   const botDomain = useBotDomainContext();
   const botInfo = useBotInfoContext();
   const exchangeNamesStr = JSON.stringify(
-    botInfo?.ids_by_exchange_name && Object.keys(botInfo.ids_by_exchange_name)
+    botInfo?.ids_by_exchange_name && Object.keys(botInfo.ids_by_exchange_name),
   );
   useEffect(() => {
     if (exchangeNamesStr) {

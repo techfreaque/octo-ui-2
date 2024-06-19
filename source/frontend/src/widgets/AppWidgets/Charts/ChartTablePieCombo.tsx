@@ -164,7 +164,7 @@ export default function ChartTablePieCombo({
         visibleTimeframes,
         visiblePairs,
         setCharts,
-        setLayouts
+        setLayouts,
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

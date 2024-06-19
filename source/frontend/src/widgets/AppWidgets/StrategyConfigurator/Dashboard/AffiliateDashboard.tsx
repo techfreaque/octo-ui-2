@@ -21,7 +21,7 @@ export default function AffiliateDashboard() {
       <Typography.Paragraph>
         {t(
           "manageAccount.affiliateDashboard.with-projectname-affiliate-program-you-get-commissions-when-people-from-your-network-become-our-customers-you-earn-money-they-get-a-top-product-a-win-win-situation",
-          { projectName }
+          { projectName },
         )}
       </Typography.Paragraph>
       <Typography.Title level={3}>

@@ -29,11 +29,11 @@ export function ColorModeProvider({ children }: { children: JSX.Element }) {
     () => ({
       toggleColorMode: () => {
         setMode((prevMode) =>
-          prevMode === colorModes.light ? colorModes.dark : colorModes.light
+          prevMode === colorModes.light ? colorModes.dark : colorModes.light,
         );
       },
     }),
-    []
+    [],
   );
   return (
     <ToggleColorModeContext.Provider value={colorMode}>

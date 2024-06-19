@@ -126,7 +126,7 @@ function LoginSignup() {
               handleCredentialInput("referral_user_id", event?.target?.value)
             }
             placeholder={t(
-              "manageAccount.enter-a-referral-code-if-you-have-one"
+              "manageAccount.enter-a-referral-code-if-you-have-one",
             )}
           />
         </div>

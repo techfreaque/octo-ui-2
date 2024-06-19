@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { Tooltip } from "antd";
 import Title from "antd/es/typography/Title";
 import { t } from "i18next";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect, useState } from "react";
 import { Trans } from "react-i18next";
 
@@ -23,8 +23,7 @@ import {
   userInputKey,
 } from "../../../components/UserInputs/utils";
 import { tableSizes } from "../../../constants/frontendConstants";
-import type {
-  TentaclesConfigsRootType} from "../../../context/config/TentaclesConfigProvider";
+import type { TentaclesConfigsRootType } from "../../../context/config/TentaclesConfigProvider";
 import {
   tentacleConfigTypes,
   useTentaclesConfigContext,
@@ -35,7 +34,8 @@ import type {
   OptimizerQueueType,
   OptimizerQueueUpdateType,
   RunInputType,
-  UpdatedRunType} from "../../../context/data/OptimizerQueueProvider";
+  UpdatedRunType,
+} from "../../../context/data/OptimizerQueueProvider";
 import {
   useFetchOptimizerQueue,
   useOptimizerQueueContext,
@@ -86,7 +86,7 @@ function OptimizerQueueTables({
   optimizerQueue: OptimizerQueueType | undefined;
   saveOptimizerQueue: (
     updatedQueue: OptimizerQueueUpdateType,
-    setIsUpdating: Dispatch<SetStateAction<boolean>>
+    setIsUpdating: Dispatch<SetStateAction<boolean>>,
   ) => void;
   currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined;
 }): JSX.Element {
@@ -129,7 +129,7 @@ function OptimizerRunQueueTable({
   optimizerRun: OptimizerQueueElementType;
   saveOptimizerQueue: (
     updatedQueue: OptimizerQueueUpdateType,
-    setIsUpdating: Dispatch<SetStateAction<boolean>>
+    setIsUpdating: Dispatch<SetStateAction<boolean>>,
   ) => void;
   currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined;
 }): JSX.Element {
@@ -137,7 +137,7 @@ function OptimizerRunQueueTable({
 
   const { data, columns } = generateTableData(
     optimizerRun,
-    currentTentaclesTradingConfig
+    currentTentaclesTradingConfig,
   );
   const [selectedRecordIds, setSelectedRecordIds] = useState<string[]>();
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
@@ -157,12 +157,12 @@ function OptimizerRunQueueTable({
       UpdatedRuns = data.map((record) =>
         createUpdatedRunDataFromTableRow(
           record,
-          deletedRunIds.includes(record.id)
-        )
+          deletedRunIds.includes(record.id),
+        ),
       );
     } else if (updatedRunData) {
       UpdatedRuns = updatedRunData.map((record) =>
-        createUpdatedRunDataFromTableRow(record, false)
+        createUpdatedRunDataFromTableRow(record, false),
       );
     }
     const updatedQueue: OptimizerQueueUpdateType = {
@@ -280,7 +280,7 @@ type RunDataTableColumnType = AntTableColumnType<RunDataTableElementType>;
 
 function generateTableData(
   optimizerRun: OptimizerQueueElementType,
-  currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined
+  currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined,
 ): {
   data: RunDataTableElementType[];
   columns: RunDataTableColumnType[];
@@ -303,7 +303,7 @@ function generateTableData(
     const { userInputLabel, tentacleLabel } = findUserInputAndTentacleLabel(
       currentTentaclesTradingConfig,
       inputDetail.user_input,
-      inputDetail.tentacle
+      inputDetail.tentacle,
     );
     const columnGroup = columnsObj[tentacleNameStr] || {
       title: tentacleLabel,
@@ -320,7 +320,7 @@ function generateTableData(
   }
 
   const records: RunDataTableElementType[] = Object.values(
-    optimizerRun.runs
+    optimizerRun.runs,
   ).map((run, index) => {
     const row: RunDataTableElementType = {
       id: `${index}`,
@@ -329,7 +329,7 @@ function generateTableData(
     run.forEach((runUserInputDetails) => {
       const field = userInputKey(
         runUserInputDetails.user_input,
-        runUserInputDetails.tentacle
+        runUserInputDetails.tentacle,
       );
       row[field] = runUserInputDetails.value;
       addColumn(runUserInputDetails);
@@ -345,7 +345,7 @@ function generateTableData(
         disableSearch: true,
         children: Object.values(columnGroup.children),
       };
-    }
+    },
   );
 
   return {
@@ -356,7 +356,7 @@ function generateTableData(
 
 function createUpdatedRunDataFromTableRow(
   record: RunDataTableElementType,
-  deleted: boolean
+  deleted: boolean,
 ) {
   const run: UpdatedRunType = [];
   Object.entries(record).forEach(([inputKey, value]) => {

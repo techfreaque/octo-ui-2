@@ -4,7 +4,8 @@ import { backendRoutes } from "../../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
 import type {
   AppStoreAppType,
-  StoreCategoryType} from "../../../../context/data/AppStoreDataProvider";
+  StoreCategoryType,
+} from "../../../../context/data/AppStoreDataProvider";
 import {
   useInstallAnyAppPackage,
   useUnInstallAppPackage,
@@ -49,7 +50,7 @@ export default function OtherAppCard({
   const installAnyAppPackage = useInstallAnyAppPackage();
   async function handleDownloadApp(
     setOpen: (isOpen: boolean) => void,
-    otherApp: AppStoreAppType | undefined
+    otherApp: AppStoreAppType | undefined,
   ) {
     const theApp = otherApp ? otherApp : app;
     const verifiedDownloadInfo: VerifiedDownloadInfo = {
@@ -66,7 +67,7 @@ export default function OtherAppCard({
   }
   const uninstallAppPackage = useUnInstallAppPackage();
   async function handleUninstallApp(
-    setOpen: Dispatch<SetStateAction<boolean>>
+    setOpen: Dispatch<SetStateAction<boolean>>,
   ) {
     uninstallAppPackage(app, setIsloading, setOpen);
   }
@@ -98,7 +99,7 @@ export default function OtherAppCard({
               uploadInfo,
               profileDownloadUrl,
               setIsloading,
-              setOpen
+              setOpen,
             )
           }
           setUploadInfo={setUploadInfo}

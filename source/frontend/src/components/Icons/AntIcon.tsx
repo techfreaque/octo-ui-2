@@ -3,12 +3,11 @@ import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import type {
   CSSProperties,
   ForwardRefExoticComponent,
-  RefAttributes} from "react";
-import {
-  createElement
+  RefAttributes,
 } from "react";
+import { createElement } from "react";
 
-import type {SizeType } from "../../constants/frontendConstants";
+import type { SizeType } from "../../constants/frontendConstants";
 import { sizes } from "../../constants/frontendConstants";
 
 export const iconStringNoIcon = "noIcon";
@@ -26,7 +25,7 @@ for (const [_icon, iconModule] of Object.entries(icons) as [
   string,
   ForwardRefExoticComponent<
     Omit<AntdIconProps, "ref"> & RefAttributes<HTMLSpanElement>
-  >
+  >,
 ][]) {
   iconStringToComponent[_icon] = iconModule;
 }

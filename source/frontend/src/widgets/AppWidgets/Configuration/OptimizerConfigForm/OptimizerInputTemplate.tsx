@@ -2,7 +2,7 @@ import "./OptimizerInputTemplate.css";
 
 import { InputNumber, Select, Switch } from "antd";
 import { t } from "i18next";
-import type { CSSProperties} from "react";
+import type { CSSProperties } from "react";
 import { useMemo } from "react";
 import { Trans } from "react-i18next";
 
@@ -150,7 +150,7 @@ function OptimizerSettingContainer({
                 tentacleName,
                 valueType,
                 name,
-                value
+                value,
               )
             }
           />

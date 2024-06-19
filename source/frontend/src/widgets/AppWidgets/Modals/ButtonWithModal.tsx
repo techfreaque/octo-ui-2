@@ -1,17 +1,18 @@
 import { CloseOutlined } from "@ant-design/icons";
 import { Avatar, Modal, Tooltip } from "antd";
 import type { AvatarSize } from "antd/es/avatar/AvatarContext";
-import type { CSSProperties, Dispatch, SetStateAction} from "react";
+import type { CSSProperties, Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
 import type {
   ButtonSizeType,
   ButtonType,
-  ButtonVariantType} from "../../../components/Buttons/AntButton";
+  ButtonVariantType,
+} from "../../../components/Buttons/AntButton";
 import AntButton, {
   buttonSizes,
   buttonTypes,
-  buttonVariants
+  buttonVariants,
 } from "../../../components/Buttons/AntButton";
 import IconFromString from "../../../components/Icons/IconFromString";
 import { sizes } from "../../../constants/frontendConstants";

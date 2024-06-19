@@ -1,12 +1,5 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 import { startBacktesting, stopBacktesting } from "../../api/actions";
 import createNotification from "../../components/Notifications/Notification";
@@ -16,23 +9,18 @@ import {
 } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
-import type {
-  BacktestingUiConfig} from "../config/UiConfigProvider";
-import {
-  useUiConfigContext,
-} from "../config/UiConfigProvider";
+import type { BacktestingUiConfig } from "../config/UiConfigProvider";
+import { useUiConfigContext } from "../config/UiConfigProvider";
 import { useBotInfoContext } from "../data/BotInfoProvider";
 import type {
   WebsocketDataType,
-  WebsocketOnConnectionUpdateType} from "../websockets/AbstractWebsocketContext";
-import {
-  AbstractWebsocketContext
+  WebsocketOnConnectionUpdateType,
 } from "../websockets/AbstractWebsocketContext";
+import { AbstractWebsocketContext } from "../websockets/AbstractWebsocketContext";
 
 const BotIsBacktestingContext = createContext<boolean>(false);
-const UpdateBotIsDataCollectingContext = createContext<
-  Dispatch<SetStateAction<boolean>>
->(emptyValueFunction);
+const UpdateBotIsDataCollectingContext =
+  createContext<Dispatch<SetStateAction<boolean>>>(emptyValueFunction);
 const BotIsDataCollectingContext = createContext<boolean>(false);
 
 interface DataCollectingProgressType extends WebsocketDataType {
@@ -42,11 +30,10 @@ interface DataCollectingProgressType extends WebsocketDataType {
 }
 
 const DataCollectingProgressContext = createContext<DataCollectingProgressType>(
-  {}
+  {},
 );
-const UpdateBotIsBacktestingContext = createContext<
-  Dispatch<SetStateAction<boolean>>
->(emptyValueFunction);
+const UpdateBotIsBacktestingContext =
+  createContext<Dispatch<SetStateAction<boolean>>>(emptyValueFunction);
 
 interface BacktestingProgressType extends WebsocketDataType {
   progress?: number;
@@ -101,7 +88,7 @@ export const useStartBacktesting = () => {
         ...backtestingSettings,
         exchange_ids: backtestingSettings.exchange_names
           ? backtestingSettings.exchange_names.map((exchangeName) =>
-              String(ids_by_exchange_name[exchangeName])
+              String(ids_by_exchange_name[exchangeName]),
             )
           : Object.values(ids_by_exchange_name),
       };
@@ -130,7 +117,7 @@ function DataCollectorProgressProvider({
   const socketUrl = `${botDomain}/data_collector`;
   const onConnectionUpdate: WebsocketOnConnectionUpdateType = (
     data,
-    socket
+    socket,
   ) => {
     if (data) {
       setDataCollectorProgress(data);
@@ -176,7 +163,7 @@ function BacktestingProgressProvider({
   const socketUrl = `${botDomain}/backtesting`;
   const onConnectionUpdate: WebsocketOnConnectionUpdateType = (
     data,
-    socket
+    socket,
   ) => {
     if (data) {
       setBacktestingProgress(data);
@@ -216,12 +203,10 @@ export const BotBacktestingProvider = ({
   children: JSX.Element;
 }) => {
   const [botIsBacktesting, setBotIsBacktesting] = useState<boolean>(false);
-  const [backtestingProgress, setBacktestingProgress] = useState<
-    BacktestingProgressType
-  >({});
-  const [dataCollectorProgress, setDataCollectorProgress] = useState<
-    DataCollectingProgressType
-  >({});
+  const [backtestingProgress, setBacktestingProgress] =
+    useState<BacktestingProgressType>({});
+  const [dataCollectorProgress, setDataCollectorProgress] =
+    useState<DataCollectingProgressType>({});
   const [isDataCollecting, setIsDataCollecting] = useState<boolean>(false);
   return (
     <BotIsBacktestingContext.Provider value={botIsBacktesting}>

@@ -59,9 +59,9 @@ export default function AntSidebar({
 
   const actualCurrentlySelectedMenu =
     currentlySelectedMenu || _currentlySelectedMenu;
-  const actualSetCurrentlySelectedMenu: Dispatch<SetStateAction<
-    string | undefined
-  >> = setCurrentlySelectedMenu || _setCurrentlySelectedMenu;
+  const actualSetCurrentlySelectedMenu: Dispatch<
+    SetStateAction<string | undefined>
+  > = setCurrentlySelectedMenu || _setCurrentlySelectedMenu;
 
   useEffect(() => {
     if (iSmallScreen) {
@@ -174,7 +174,7 @@ function DisplayCurrentContent({
 function findCurrentContent(
   menuItemsData: AntSideBarMenutItemType[],
   currentlySelectedMenu: string | undefined,
-  activeMenus: string[]
+  activeMenus: string[],
 ) {
   let anyChildrenHasContent = false;
   for (const menuItemData of menuItemsData) {
@@ -186,7 +186,7 @@ function findCurrentContent(
       const thisAnyChildrenHasContent = findCurrentContent(
         menuItemData.items,
         currentlySelectedMenu,
-        activeMenus
+        activeMenus,
       );
       if (thisAnyChildrenHasContent) {
         // content.push((<Content  menuItemData={menuItemData}/>))
@@ -363,7 +363,7 @@ function MenuItem({
       currentlySelectedMenu,
       menuItem,
       hideText,
-    ]
+    ],
   );
 }
 

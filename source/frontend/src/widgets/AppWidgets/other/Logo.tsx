@@ -20,12 +20,12 @@ export default function Logo() {
           margin: "0px 5px",
         }}
       >
-        <Tooltip title={t('projectLogo.tooltip', {projectName})}>
+        <Tooltip title={t("projectLogo.tooltip", { projectName })}>
           <img
             onClick={() => setProjectInfoOpen(true)}
             height={"28px"}
             style={{ cursor: "pointer" }}
-            alt={t('projectLogo.projectname-logo', {projectName})}
+            alt={t("projectLogo.projectname-logo", { projectName })}
             src={logo}
           />
         </Tooltip>

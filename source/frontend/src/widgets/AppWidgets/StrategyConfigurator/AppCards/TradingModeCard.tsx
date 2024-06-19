@@ -12,11 +12,8 @@ import type { ExchangeConfigUpdateType } from "../../../../context/data/BotExcha
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 import { useRestartBot } from "../../../../context/data/IsBotOnlineProvider";
 import type { ProfileInfoUpdateType } from "../../Modals/ProfileModal/ProfileModalButton";
-import type {
-  StrategyModeSettingsNameType} from "../storeConstants";
-import {
-  strategyModeSettingsName
-} from "../storeConstants";
+import type { StrategyModeSettingsNameType } from "../storeConstants";
+import { strategyModeSettingsName } from "../storeConstants";
 import type { DownloadInfo, UploadInfo } from "./AppCard";
 import OtherAppCard from "./OtherAppCard";
 
@@ -85,7 +82,7 @@ export default function TradingModeCard({
           botDomain,
           profileUpdate,
           onFail,
-          onSuccessSetRequirements
+          onSuccessSetRequirements,
         );
       };
       setIsloading(true);
@@ -109,7 +106,7 @@ export default function TradingModeCard({
         if (currentSelectedApp?.requirements?.length) {
           currentSelectedApp.requirements.forEach(
             (requirement) =>
-              (configUpdate.evaluator_config[requirement] = false)
+              (configUpdate.evaluator_config[requirement] = false),
           );
         }
       }
@@ -117,7 +114,7 @@ export default function TradingModeCard({
       configUpdate.trading_config[app.package_id] = "true";
       if (newlySelectedRequirements?.length) {
         newlySelectedRequirements.forEach(
-          (requirement) => (configUpdate.evaluator_config[requirement] = true)
+          (requirement) => (configUpdate.evaluator_config[requirement] = true),
         );
       }
       await updateConfig(
@@ -125,7 +122,7 @@ export default function TradingModeCard({
         configUpdate,
         botInfo.current_profile.profile.name,
         onFail,
-        () => onSuccessSelection()
+        () => onSuccessSelection(),
       );
       setIsloading(false);
       setClosed();

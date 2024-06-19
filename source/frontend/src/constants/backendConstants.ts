@@ -160,7 +160,7 @@ export const CANDLES_PLOT_SOURCES: CanldesPlotSourceType[] = [
   "close",
 ];
 export const ALL_PLOT_SOURCES: PlotSourceType[] = ["y", "z", "volume"].concat(
-  CANDLES_PLOT_SOURCES
+  CANDLES_PLOT_SOURCES,
 ) as PlotSourceType[];
 
 export const botLayoutKey = "bot_ui_layout2";

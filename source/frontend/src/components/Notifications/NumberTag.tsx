@@ -1,4 +1,4 @@
-import { Badge,Space, Tag } from "antd";
+import { Badge, Space, Tag } from "antd";
 
 import { useBotColorsContext } from "../../context/config/BotColorsProvider";
 

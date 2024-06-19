@@ -46,7 +46,7 @@ export default function ResizableTabs({
               <AppWidgets key={tab.title?.replace(/ /g, "_")} layout={[tab]} />
             ),
             content: tab.content ? <AppWidgets layout={tab.content} /> : <></>,
-          }
+          },
     );
   });
   return (

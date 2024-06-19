@@ -5,8 +5,7 @@ import { updateConfig, updateProfileInfo } from "../../../../api/actions";
 import AppIconButton from "../../../../components/Buttons/AppIconButton";
 import createNotification from "../../../../components/Notifications/Notification";
 import { useBotDomainContext } from "../../../../context/config/BotDomainProvider";
-import type {
-  ExchangeConfigUpdateType} from "../../../../context/data/BotExchangeInfoProvider";
+import type { ExchangeConfigUpdateType } from "../../../../context/data/BotExchangeInfoProvider";
 import {
   getProfileCurrencyUpdate,
   useCurrentCurrencyListContext,
@@ -14,11 +13,8 @@ import {
   useExchangeInfoContext,
   useUnsavedCurrencyListContext,
 } from "../../../../context/data/BotExchangeInfoProvider";
-import type {
-  ProfileType} from "../../../../context/data/BotInfoProvider";
-import {
-  useFetchBotInfo,
-} from "../../../../context/data/BotInfoProvider";
+import type { ProfileType } from "../../../../context/data/BotInfoProvider";
+import { useFetchBotInfo } from "../../../../context/data/BotInfoProvider";
 import {
   useIsBotOnlineContext,
   useRestartBot,
@@ -41,7 +37,7 @@ export default function ProfileModalButton({
   const botDomain = useBotDomainContext();
   const currentProfileTitle = profile?.profile?.name;
   const [newProfileSettings, setNewProfileSettings] = useState<ProfileType>(
-    JSON.parse(JSON.stringify(profile))
+    JSON.parse(JSON.stringify(profile)),
   );
   const currentCurrencyList = useCurrentCurrencyListContext();
   const unsavedCurrencyList = useUnsavedCurrencyListContext();
@@ -52,7 +48,7 @@ export default function ProfileModalButton({
   const exchangeConfigUpdate = useExchangeConfigUpdateContext();
   const exchangeConfigUpdateHasChanged = Boolean(
     exchangeConfigUpdate.global_config &&
-      Object.keys(exchangeConfigUpdate.global_config).length
+      Object.keys(exchangeConfigUpdate.global_config).length,
   );
   const hasChanged =
     JSON.stringify(profile || {}) !== JSON.stringify(newProfileSettings) ||
@@ -111,10 +107,10 @@ export default function ProfileModalButton({
         newProfileSettings.config["trader-simulator"]["starting-portfolio"];
       const portfolioCoins = new Set([
         ...Object.keys(
-          newProfileSettings.config["trader-simulator"]["starting-portfolio"]
+          newProfileSettings.config["trader-simulator"]["starting-portfolio"],
         ),
         ...Object.keys(
-          profile?.config["trader-simulator"]["starting-portfolio"]
+          profile?.config["trader-simulator"]["starting-portfolio"],
         ),
       ]);
       portfolioCoins.forEach((coin) => {
@@ -135,7 +131,7 @@ export default function ProfileModalButton({
         botDomain,
         configUpdate,
         newProfileSettings.profile.name,
-        () => setIsloading(false)
+        () => setIsloading(false),
       );
     }
     if (infoHasChanged) {
@@ -146,7 +142,7 @@ export default function ProfileModalButton({
           name: newProfileSettings.profile.name,
           description: newProfileSettings.profile.description,
         },
-        onFail
+        onFail,
       );
     }
     setIsloading(false);
@@ -212,7 +208,7 @@ export default function ProfileModalButton({
       loading,
       newProfileSettings,
       open,
-    ]
+    ],
   );
 }
 

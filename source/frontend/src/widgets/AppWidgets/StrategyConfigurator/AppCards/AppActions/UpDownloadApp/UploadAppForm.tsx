@@ -1,7 +1,7 @@
 import { DollarCircleOutlined } from "@ant-design/icons";
 import { Alert, Input, Select, Switch, Tooltip } from "antd";
 import { t } from "i18next";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
 import { Trans } from "react-i18next";
 
@@ -38,7 +38,7 @@ export default function UploadAppForm({
         label: versionType.title,
         value: versionType.key,
       };
-    }
+    },
   );
   const versionTagOptions = Object.values(appVersionTags).map((versionTag) => {
     return {
@@ -57,7 +57,7 @@ export default function UploadAppForm({
   const isStrategy = app.categories?.[0] === strategyName;
   function handleInputChange(
     key: "includePackage" | ApiFieldsType,
-    value: boolean | string
+    value: boolean | string,
   ) {
     setUploadInfo((prevInfo) => ({
       ...prevInfo,
@@ -133,7 +133,7 @@ function UploadPackage({
   uploadInfo: UploadInfo;
   handleInputChange: (
     key: "includePackage" | ApiFieldsType,
-    value: boolean | string
+    value: boolean | string,
   ) => void;
 }) {
   return (
@@ -180,7 +180,7 @@ function UploadPackage({
                         missingCharacters:
                           minReleaseNotesLength -
                           (uploadInfo?.release_notes?.length || 0),
-                      }
+                      },
                     )}
                   </div>
                 </>
@@ -204,10 +204,12 @@ function UploadPackage({
       <UserInputLabel
         title={t(
           "appStore.appCard.uploadApp.define-a-monthly-price-for-your-appCategory",
-          { appCategory: app.categories[0] }
+          { appCategory: app.categories[0] },
         )}
       >
-        <Tooltip title={t('appStore.appCard.uploadApp.define-a-price-for-your-app')}>
+        <Tooltip
+          title={t("appStore.appCard.uploadApp.define-a-price-for-your-app")}
+        >
           <div>
             <Input
               onChange={(event) =>

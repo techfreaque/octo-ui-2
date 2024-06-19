@@ -13,7 +13,7 @@ import { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
 export async function fetchUIConfig(
   botDomain: string,
   saveUIConfig: Dispatch<SetStateAction<UiConfigType>>,
-  exchangeNames?: string[]
+  exchangeNames?: string[],
 ) {
   function successCallback({ data }: successResponseCallBackParams) {
     if (exchangeNames) {
@@ -22,7 +22,7 @@ export async function fetchUIConfig(
       }
       data.backtesting_run_settings.exchange_names = filterByEnabledExchanges(
         data.backtesting_run_settings?.exchange_names || [],
-        exchangeNames
+        exchangeNames,
       );
       if (!data.backtesting_run_settings.exchange_names.length) {
         data.backtesting_run_settings.exchange_names = exchangeNames;
@@ -32,7 +32,7 @@ export async function fetchUIConfig(
       }
       data.optimizer_run_settings.exchange_names = filterByEnabledExchanges(
         data.optimizer_run_settings?.exchange_names || [],
-        exchangeNames
+        exchangeNames,
       );
       if (!data.optimizer_run_settings.exchange_names.length) {
         data.optimizer_run_settings.exchange_names = exchangeNames;
@@ -79,7 +79,7 @@ export async function saveProConfig(
   successCallback:
     | ((payload: successResponseCallBackParams) => void)
     | undefined,
-  errorCallback: (payload: errorResponseCallBackParams) => void
+  errorCallback: (payload: errorResponseCallBackParams) => void,
 ) {
   sendAndInterpretBotUpdate({
     updatedData: newConfig,
@@ -92,9 +92,9 @@ export async function saveProConfig(
 
 function filterByEnabledExchanges(
   settingsExchanges: string[],
-  currentExchanges: string[]
+  currentExchanges: string[],
 ) {
   return settingsExchanges.filter((exchange) =>
-    currentExchanges.includes(exchange)
+    currentExchanges.includes(exchange),
   );
 }

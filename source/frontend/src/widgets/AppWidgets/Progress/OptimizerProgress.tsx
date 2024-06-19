@@ -17,7 +17,7 @@ export default function OptimizerProgress() {
   return useMemo(() => {
     const remainingTime = backtestingProgress?.remaining_time
       ? `Approximate completion date ${new Date(
-          backtestingProgress?.remaining_time * 1000 + Date.now()
+          backtestingProgress?.remaining_time * 1000 + Date.now(),
         )}`
       : "Remaining time computing";
     return inProgress ? (

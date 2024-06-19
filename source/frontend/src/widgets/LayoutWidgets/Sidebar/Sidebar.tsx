@@ -1,6 +1,4 @@
-import type {
-  AntSideBarMenutItemType,
-} from "../../../components/Sidebars/AntSidebar/AntSidebar";
+import type { AntSideBarMenutItemType } from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import AntSidebar from "../../../components/Sidebars/AntSidebar/AntSidebar";
 import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import AppWidgets from "../../WidgetManagement/RenderAppWidgets";
@@ -11,7 +9,7 @@ export default function Sidebar({ sideBarContent }: UiLayoutPageLayoutType) {
 }
 
 function hydrateSideBarContent(
-  sideBarContent: UiLayoutPageLayoutType[] | undefined
+  sideBarContent: UiLayoutPageLayoutType[] | undefined,
 ): AntSideBarMenutItemType[] {
   const hydratedContent: AntSideBarMenutItemType[] = [];
   sideBarContent?.forEach((menuItem, index) => {

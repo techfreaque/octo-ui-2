@@ -106,7 +106,7 @@ export default function Footer({ rightContent }: UiLayoutPageLayoutType) {
       botInfo?.octobot_version,
       isSmallScreen,
       rightContent,
-    ]
+    ],
   );
 }
 
@@ -133,14 +133,14 @@ function UnsupportedWarning({
             type="warning"
             showIcon={!isSmallScreen}
             message={t(
-              "footer.notSupportedOctoBotDistroWarning.this-distribution-isnt-officially-supported"
+              "footer.notSupportedOctoBotDistroWarning.this-distribution-isnt-officially-supported",
             )}
           />
           <Modal
             open={open}
             onCancel={() => setOpen(false)}
             title={t(
-              "footer.notSupportedOctoBotDistroWarning.get-octane-today"
+              "footer.notSupportedOctoBotDistroWarning.get-octane-today",
             )}
             centered
             width="800px"
@@ -151,21 +151,21 @@ function UnsupportedWarning({
               <Typography.Title level={2}>
                 {t(
                   "footer.notSupportedOctoBotDistroWarning.octobotproject-is-not-officially-supported-yet-by-projectname",
-                  { octobotProject, projectName }
+                  { octobotProject, projectName },
                 )}
               </Typography.Title>
               <Alert
                 style={{ marginBottom: "20px" }}
                 message={t(
                   "footer.notSupportedOctoBotDistroWarning.warning-title",
-                  { projectName }
+                  { projectName },
                 )}
                 type="warning"
                 description={
                   <Typography.Paragraph>
                     {t(
                       "footer.notSupportedOctoBotDistroWarning.warningMessage",
-                      { projectName }
+                      { projectName },
                     )}
                   </Typography.Paragraph>
                 }
@@ -179,7 +179,7 @@ function UnsupportedWarning({
               >
                 {t(
                   "footer.notSupportedOctoBotDistroWarning.switch-to-projectname-for-free",
-                  { projectName }
+                  { projectName },
                 )}
               </AntButton>
             </div>
@@ -188,6 +188,6 @@ function UnsupportedWarning({
       ) : (
         <></>
       ),
-    [isSmallScreen, octobotProject, open, setProjectInfoOpen]
+    [isSmallScreen, octobotProject, open, setProjectInfoOpen],
   );
 }

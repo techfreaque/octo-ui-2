@@ -34,8 +34,8 @@ export default function RealTradingSwitch() {
   const title = isRealTrading
     ? t("realTradingSwitch.real-trading")
     : isSimulatedTrading
-    ? t("realTradingSwitch.simulated-trading")
-    : t("realTradingSwitch.trading-paused");
+      ? t("realTradingSwitch.simulated-trading")
+      : t("realTradingSwitch.trading-paused");
   return useMemo(() => {
     const icon = isRealTrading ? (
       <AntIconByReactFunc AntReactIcon={DollarOutlined} size={sizes.medium} />
@@ -58,10 +58,7 @@ export default function RealTradingSwitch() {
             </AntButton>
           </div>
         </Tooltip>
-        <Modal
-          open={open}
-          onClose={handleClose}
-        >
+        <Modal open={open} onClose={handleClose}>
           <Box sx={style}>
             <Title level={3}>
               {t("realTradingSwitch.currently-using-tradingType", {
@@ -73,13 +70,13 @@ export default function RealTradingSwitch() {
                 <Paragraph>
                   {t(
                     "realTradingSwitch.by-switching-to-simulated-trading-projectName-will-only-use-its-simulation-mode-on-real-market-conditions",
-                    { projectName }
+                    { projectName },
                   )}
                 </Paragraph>
                 <Paragraph>
                   {t(
                     "realTradingSwitch.it-will-no-longer-create-trades-with-your-exchange-account-it-will-use-a-simulated-portfolio-managed-by-projectName",
-                    { projectName }
+                    { projectName },
                   )}
                 </Paragraph>
               </>
@@ -87,7 +84,7 @@ export default function RealTradingSwitch() {
               <Paragraph>
                 {t(
                   "realTradingSwitch.by-switching-to-real-trading-projectName-will-use-your-real-funds",
-                  { projectName }
+                  { projectName },
                 )}
               </Paragraph>
             )}
@@ -96,7 +93,7 @@ export default function RealTradingSwitch() {
               style={{ margin: "20px 0 30px 0" }}
               message={t(
                 "realTradingSwitch.warning-the-switch-button-will-also-restart-projectName",
-                { projectName }
+                { projectName },
               )}
             />
             <div style={{ float: "right" }}>

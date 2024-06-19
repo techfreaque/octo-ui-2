@@ -38,7 +38,8 @@ export default function ResetConfigs() {
   const isDemo = useIsDemoMode();
 
   const fetchConfig = useFetchUiConfig();
-  const saveTentaclesConfigAndSendAction = useSaveTentaclesConfigAndSendAction();
+  const saveTentaclesConfigAndSendAction =
+    useSaveTentaclesConfigAndSendAction();
 
   function handleCheckboxClick(key: SorageResetKeyType) {
     setCheckedList((prevCheckedList) => {
@@ -53,7 +54,7 @@ export default function ResetConfigs() {
   function toggleSelectAll() {
     setCheckedList((prevCheckedList) => {
       const isAllSelected = objectKeys(storages).every(
-        (thisKey) => prevCheckedList?.[thisKey]
+        (thisKey) => prevCheckedList?.[thisKey],
       );
       const newSelected: CheckedListType = {};
       if (!isAllSelected) {
@@ -96,7 +97,7 @@ export default function ResetConfigs() {
       },
       success,
       failed,
-      true
+      true,
     );
   }
 
@@ -120,7 +121,7 @@ export default function ResetConfigs() {
       saveTentaclesConfigAndSendAction,
       setIsResetting,
       successCallback,
-      failCallback
+      failCallback,
     );
   }
 
@@ -130,7 +131,7 @@ export default function ResetConfigs() {
       tentacles,
       botDomain,
       setIsResetting,
-      fetchCurrentTentaclesConfig
+      fetchCurrentTentaclesConfig,
     );
   }
   function handleResetStorage(storagekey: SorageResetKeyType) {
@@ -140,7 +141,7 @@ export default function ResetConfigs() {
       storage,
       botDomain,
       setIsResetting,
-      fetchCurrentTentaclesConfig
+      fetchCurrentTentaclesConfig,
     );
   }
   function handleReset() {
@@ -311,7 +312,7 @@ function getResetData(tentacles: string[]): ResetDataType {
       key: "resetTradingModePlottingCache",
       title: t("resetConfigs.reset-trading-mode-plotting-cache"),
       description: t(
-        "resetConfigs.resets-the-plotting-cache-for-all-tentacles-settings"
+        "resetConfigs.resets-the-plotting-cache-for-all-tentacles-settings",
       ),
     },
     resetTradingmodeSettings: {

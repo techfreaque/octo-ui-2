@@ -1,6 +1,4 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import {
   createContext,
   useCallback,
@@ -22,17 +20,13 @@ import {
 } from "../config/VisibleExchangesProvider";
 import { useUpdateVisiblePairsContext } from "../config/VisiblePairProvider";
 import { useUpdateVisibleTimeFramesContext } from "../config/VisibleTimeFrameProvider";
-import type {
-  ConfigSymbolsType} from "./BotExchangeInfoProvider";
-import {
-  BotExchangeInfoProvider
-} from "./BotExchangeInfoProvider";
+import type { ConfigSymbolsType } from "./BotExchangeInfoProvider";
+import { BotExchangeInfoProvider } from "./BotExchangeInfoProvider";
 import { useIsBotOnlineContext } from "./IsBotOnlineProvider";
 
 const ProjectInfoOpenContext = createContext<boolean>(false);
-const UpdateProjectInfoOpenContext = createContext<
-  Dispatch<SetStateAction<boolean>>
->(emptyValueFunction);
+const UpdateProjectInfoOpenContext =
+  createContext<Dispatch<SetStateAction<boolean>>>(emptyValueFunction);
 
 export const useProjectInfoOpenContext = () => {
   return useContext(ProjectInfoOpenContext);
@@ -129,15 +123,16 @@ export type DataFilesType = [
     time_frames: string[];
     timestamp: number;
     type: string;
-  }
+  },
 ][];
 
 export type IdsByExchangeType = { [exchange: string]: string };
 
 const BotInfoContext = createContext<BotInfoType | undefined>(undefined);
-const UpdateBotInfoContext = createContext<
-  Dispatch<SetStateAction<BotInfoType | undefined>>
->(emptyValueFunction);
+const UpdateBotInfoContext =
+  createContext<Dispatch<SetStateAction<BotInfoType | undefined>>>(
+    emptyValueFunction,
+  );
 export const useBotInfoContext = () => {
   return useContext(BotInfoContext);
 };
@@ -158,7 +153,7 @@ export const useFetchBotInfo = () => {
   const logic = useCallback(
     (
       successNotification = false,
-      setIsFinished?: Dispatch<SetStateAction<boolean>>
+      setIsFinished?: Dispatch<SetStateAction<boolean>>,
     ) => {
       setIsFinished && setIsFinished(false);
       fetchBotInfo(
@@ -166,10 +161,10 @@ export const useFetchBotInfo = () => {
         setBotInfo,
         visibleExchanges,
         successNotification,
-        setIsFinished
+        setIsFinished,
       );
     },
-    [setBotInfo, botDomain, visibleExchanges]
+    [setBotInfo, botDomain, visibleExchanges],
   );
   return logic;
 };

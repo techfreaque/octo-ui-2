@@ -1,5 +1,5 @@
 import { t } from "i18next";
-import type {ErrorInfo } from "react";
+import type { ErrorInfo } from "react";
 import { Component, createElement } from "react";
 import { useMemo } from "react";
 import { Trans } from "react-i18next";
@@ -10,15 +10,12 @@ import type {
   UiLayoutPageLayoutType,
   UiLayoutPageType,
 } from "../../context/config/BotLayoutProvider";
-import type {
-  AppWidgetNameType} from "./RegisteredAppWidgets";
-import {
-  registeredComponents,
-} from "./RegisteredAppWidgets";
+import type { AppWidgetNameType } from "./RegisteredAppWidgets";
+import { registeredComponents } from "./RegisteredAppWidgets";
 
 export default function AppWidgets(props: {
   currentPage?: UiLayoutPageType;
-  layout: UiLayoutPageLayoutType[]| undefined;
+  layout: UiLayoutPageLayoutType[] | undefined;
 }): JSX.Element {
   return useMemo(() => {
     if (props.layout?.[0]) {
@@ -34,7 +31,7 @@ export default function AppWidgets(props: {
                 "error loading widget: ",
                 element.component,
                 element,
-                props
+                props,
               );
               return <span key={`${index}-${element.component}`} />;
             }
@@ -60,7 +57,7 @@ export default function AppWidgets(props: {
                 element.component,
                 element,
                 props,
-                error
+                error,
               );
               return <span key={`${index}-${element.component}`} />;
             }
@@ -74,7 +71,7 @@ export default function AppWidgets(props: {
 }
 
 export class ErrorBoundary extends Component {
-  override props!: { children: JSX.Element; componentName: string | undefined; };
+  override props!: { children: JSX.Element; componentName: string | undefined };
   override state: {
     error: Error | null;
     errorInfo: ErrorInfo | null;
@@ -88,14 +85,19 @@ export class ErrorBoundary extends Component {
   override render() {
     if (this.state.errorInfo) {
       createNotification({
-        title: t('componentError.oh-no-this-componentname-crashed-notification', { componentName: this.props.componentName }),
+        title: t(
+          "componentError.oh-no-this-componentname-crashed-notification",
+          { componentName: this.props.componentName },
+        ),
         type: "danger",
         duration: 999999,
         message: `Error: ${JSON.stringify(this.state.error?.message)}`,
       });
       return (
         <div>
-          <h2><Trans i18nKey="componentError.something-went-wrong" /></h2>
+          <h2>
+            <Trans i18nKey="componentError.something-went-wrong" />
+          </h2>
           <details style={{ whiteSpace: "pre-wrap" }}>
             {this.state.error?.toString()}
             <br /> {this.state.errorInfo.componentStack}

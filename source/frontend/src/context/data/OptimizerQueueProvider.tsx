@@ -1,6 +1,4 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import {
   createContext,
   useCallback,
@@ -11,10 +9,9 @@ import {
 
 import type {
   errorResponseCallBackParams,
-  successResponseCallBackParams} from "../../api/fetchAndStoreFromBot";
-import {
-  sendAndInterpretBotUpdate
+  successResponseCallBackParams,
 } from "../../api/fetchAndStoreFromBot";
+import { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
@@ -49,16 +46,16 @@ export type OptimizerQueueUpdateType = {
 };
 
 const OptimizerQueueContext = createContext<OptimizerQueueType | undefined>(
-  undefined
+  undefined,
 );
-const UpdateOptimizerQueueContext = createContext<
-  Dispatch<SetStateAction<OptimizerQueueType | undefined>>
->(emptyValueFunction);
+const UpdateOptimizerQueueContext =
+  createContext<Dispatch<SetStateAction<OptimizerQueueType | undefined>>>(
+    emptyValueFunction,
+  );
 
 const OptimizerQueueCounterContext = createContext<number>(0);
-const UpdateOptimizerQueueCounterContext = createContext<
-  Dispatch<SetStateAction<number>>
->(emptyValueFunction);
+const UpdateOptimizerQueueCounterContext =
+  createContext<Dispatch<SetStateAction<number>>>(emptyValueFunction);
 
 export const useOptimizerQueueContext = () => {
   return useContext(OptimizerQueueContext);
@@ -108,7 +105,7 @@ export const useSaveOptimizerQueue = () => {
   return useCallback(
     (
       updatedQueue: OptimizerQueueUpdateType,
-      setIsUpdating: Dispatch<SetStateAction<boolean>>
+      setIsUpdating: Dispatch<SetStateAction<boolean>>,
     ) => {
       setIsUpdating(true);
       const errorCallback = (payload: errorResponseCallBackParams) => {
@@ -135,13 +132,13 @@ export const useSaveOptimizerQueue = () => {
         errorCallback,
       });
     },
-    [botDomain, fetchOptimizerQueue]
+    [botDomain, fetchOptimizerQueue],
   );
 };
 
 export function updateOptimizerQueueCount(
   optimizerQueue: OptimizerQueueType | undefined,
-  updateOptimizerQueueCounter: Dispatch<SetStateAction<number>>
+  updateOptimizerQueueCounter: Dispatch<SetStateAction<number>>,
 ) {
   let count = 0;
   if (optimizerQueue?.length) {

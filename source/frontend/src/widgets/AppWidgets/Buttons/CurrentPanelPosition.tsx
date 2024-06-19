@@ -39,20 +39,20 @@ export default function CurrentPanelPosition({
       position === availablePanelPositions.maximized
         ? t("footer.maximize-panel")
         : position === availablePanelPositions.minimized
-        ? t("footer.minimize-panel")
-        : t("footer.restore-panel"),
+          ? t("footer.minimize-panel")
+          : t("footer.restore-panel"),
     icon:
       position === availablePanelPositions.maximized
         ? "VerticalAlignTopOutlined"
         : position === availablePanelPositions.minimized
-        ? "VerticalAlignBottomOutlined"
-        : "VerticalAlignMiddleOutlined",
+          ? "VerticalAlignBottomOutlined"
+          : "VerticalAlignMiddleOutlined",
     panelPercent:
       position === availablePanelPositions.maximized
         ? 0
         : position === availablePanelPositions.minimized
-        ? 100
-        : 50,
+          ? 100
+          : 50,
   };
   if (position === availablePanelPositions.maximized) {
     return currentPanel?.percent > 0.1 ? <PanelSize {...props} /> : <></>;

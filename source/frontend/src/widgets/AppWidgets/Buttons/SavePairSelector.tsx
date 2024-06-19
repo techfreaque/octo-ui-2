@@ -29,7 +29,7 @@ export default function SavePairSelector() {
   return useMemo(() => {
     const exchangeConfigUpdateHasChanged = Boolean(
       exchangeConfigUpdate.global_config &&
-        Object.keys(exchangeConfigUpdate.global_config).length
+        Object.keys(exchangeConfigUpdate.global_config).length,
     );
     const hasUnsavedChanges =
       JSON.stringify(unsavedCurrencyList) !==

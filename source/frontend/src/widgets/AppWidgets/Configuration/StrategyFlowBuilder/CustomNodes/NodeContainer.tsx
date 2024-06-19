@@ -127,7 +127,10 @@ export function NodeEditor({
     return (
       schema && (
         <div>
-          <JsonEditor<TentaclesConfigValuesType | undefined, TentaclesConfigsSchemaType>
+          <JsonEditor<
+            TentaclesConfigValuesType | undefined,
+            TentaclesConfigsSchemaType
+          >
             schema={schema}
             startval={config}
             editorName={nodeId}
@@ -179,7 +182,7 @@ export function NodeHandle({
         const connectedToThisHandle = connectedEdges.filter(
           (edge) =>
             (edge.targetHandle === id && edge.target === nodeId) ||
-            (edge.sourceHandle === id && edge.source === nodeId)
+            (edge.sourceHandle === id && edge.source === nodeId),
         );
         return connectedToThisHandle.length < isConnectable;
       }
@@ -193,21 +196,21 @@ export function NodeHandle({
           height: "100px",
         }
       : position === Position.Right
-      ? {
-          right: "-20px",
-          height: "100px",
-        }
-      : position === Position.Top
-      ? {
-          top: "-30px",
-          width: "100px",
-        }
-      : position === Position.Bottom
-      ? {
-          bottom: "-20px",
-          width: "100px",
-        }
-      : {};
+        ? {
+            right: "-20px",
+            height: "100px",
+          }
+        : position === Position.Top
+          ? {
+              top: "-30px",
+              width: "100px",
+            }
+          : position === Position.Bottom
+            ? {
+                bottom: "-20px",
+                width: "100px",
+              }
+            : {};
   return (
     <>
       <div

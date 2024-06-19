@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useMemo, useState } from "react";
 
 import type {
@@ -10,13 +10,9 @@ import AntButton, {
   buttonVariants,
 } from "../../../components/Buttons/AntButton";
 import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
-import type {
-  TentaclesConfigByTentacleType} from "../../../context/config/TentaclesConfigProvider";
-import {
-  useSaveTentaclesConfigAndSendAction,
-} from "../../../context/config/TentaclesConfigProvider";
-import type {
-  ApiActionsType} from "../../../context/data/BotInfoProvider";
+import type { TentaclesConfigByTentacleType } from "../../../context/config/TentaclesConfigProvider";
+import { useSaveTentaclesConfigAndSendAction } from "../../../context/config/TentaclesConfigProvider";
+import type { ApiActionsType } from "../../../context/data/BotInfoProvider";
 import {
   useBotInfoContext,
   useIsDemoMode,
@@ -35,7 +31,8 @@ export default function SendActionCommandToTradingMode({
 }) {
   const isOnline = useIsBotOnlineContext();
   const [isExecuting, setIsExecuting] = useState<boolean>(false);
-  const saveTentaclesConfigAndSendAction = useSaveTentaclesConfigAndSendAction();
+  const saveTentaclesConfigAndSendAction =
+    useSaveTentaclesConfigAndSendAction();
   const botInfo = useBotInfoContext();
   const isDemo = useIsDemoMode();
   return useMemo(() => {
@@ -49,7 +46,7 @@ export default function SendActionCommandToTradingMode({
           sendActionCommandToTradingMode(
             command,
             saveTentaclesConfigAndSendAction,
-            setIsExecuting
+            setIsExecuting,
           )
         }
         buttonVariant={buttonVariants.outline}
@@ -85,11 +82,13 @@ export function sendActionCommandToTradingMode(
     successCallback?:
       | ((payload: successResponseCallBackParams) => void)
       | undefined,
-    errorCallback?: ((payload: errorResponseCallBackParams) => void) | undefined
+    errorCallback?:
+      | ((payload: errorResponseCallBackParams) => void)
+      | undefined,
   ) => void,
   setIsExecuting: Dispatch<SetStateAction<boolean>>,
   successCallback?: (payload: successResponseCallBackParams) => void,
-  errorCallback?: (payload: errorResponseCallBackParams) => void
+  errorCallback?: (payload: errorResponseCallBackParams) => void,
 ) {
   saveUserInputs(
     (currentConfig: TentaclesConfigByTentacleType) =>
@@ -99,8 +98,8 @@ export function sendActionCommandToTradingMode(
         setIsExecuting,
         true,
         successCallback,
-        errorCallback
+        errorCallback,
       ),
-    setIsExecuting
+    setIsExecuting,
   );
 }

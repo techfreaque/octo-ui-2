@@ -1,7 +1,7 @@
 import { EditOutlined } from "@ant-design/icons";
 import { Tooltip } from "antd";
 import TextArea from "antd/es/input/TextArea";
-import type { ChangeEvent, Dispatch, SetStateAction} from "react";
+import type { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
 import AntButton, {

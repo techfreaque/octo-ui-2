@@ -1,4 +1,4 @@
-export {}
+export {};
 // import { Chip, Grid } from "@mui/material";
 // import { useEffect, useMemo, useState } from "react";
 // import { useVisiblePairsContext } from "../../../context/config/VisiblePairProvider";

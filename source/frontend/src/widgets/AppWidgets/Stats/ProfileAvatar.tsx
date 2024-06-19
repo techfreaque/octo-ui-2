@@ -19,7 +19,7 @@ export default function ProfileAvatar({
           botDomain + backendRoutes.profileMedia
         }/${currentProfile?.profile?.name?.replace(
           / /g,
-          "_"
+          "_",
         )}/${currentAvatar}`;
   return (
     currentAvatar && (

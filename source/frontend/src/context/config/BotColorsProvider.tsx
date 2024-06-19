@@ -1,27 +1,15 @@
 import { createTheme, ThemeProvider } from "@mui/material";
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
-import type {
-  ColorsType} from "../../constants/uiTemplate/defaultColors";
-import {
-  defaultColors,
-} from "../../constants/uiTemplate/defaultColors";
+import type { ColorsType } from "../../constants/uiTemplate/defaultColors";
+import { defaultColors } from "../../constants/uiTemplate/defaultColors";
 import { emptyValueFunction } from "../../helpers/helpers";
 import { colorModes, useColorModeContext } from "./ColorModeProvider";
 
 const BotColorsContext = createContext<ColorsType>(defaultColors.dark);
-const UpdateBotColorsContext = createContext<
-  Dispatch<SetStateAction<ColorsType>>
->(emptyValueFunction);
+const UpdateBotColorsContext =
+  createContext<Dispatch<SetStateAction<ColorsType>>>(emptyValueFunction);
 
 export const useBotColorsContext = () => {
   return useContext(BotColorsContext);
@@ -42,7 +30,7 @@ export const BotColorsProvider = ({ children }: { children: JSX.Element }) => {
   }, [botColorMode]);
   const theme = useMemo(() => {
     document.body.classList.remove(
-      mode === colorModes.dark ? colorModes.light : colorModes.dark
+      mode === colorModes.dark ? colorModes.light : colorModes.dark,
     );
     document.body.classList.add(mode);
     return createTheme({

@@ -67,7 +67,7 @@ export default function OptimizerConfigForm() {
     tentacleName: string,
     type: SchemaValueType,
     userInputName: string,
-    value: OptimizerEditorInputArrayType | OptimizerEditorInputNumberType
+    value: OptimizerEditorInputArrayType | OptimizerEditorInputNumberType,
   ) {
     const identifier = optimizeUserInputIdentifier(tentacleName, userInputName);
     saveOptimizerEditor((prevConfig) => {
@@ -145,7 +145,7 @@ export type HandleOptimizerSettingsUpdateType = (
   tentacleName: string,
   type: SchemaValueType,
   userInputName: string,
-  value: OptimizerEditorInputArrayType | OptimizerEditorInputNumberType
+  value: OptimizerEditorInputArrayType | OptimizerEditorInputNumberType,
 ) => void;
 
 export function OptimizerNotInstalled() {
@@ -162,13 +162,13 @@ export function OptimizerNotInstalled() {
         <Typography.Title level={3}>
           {t(
             "optimizer.runConfig.seems-like-you-havent-installed-projectProName",
-            { projectProName }
+            { projectProName },
           )}
         </Typography.Title>
       }
       description={t(
         "optimizer.runConfig.projectProName-is-required-to-use-the-optimizer",
-        { projectProName }
+        { projectProName },
       )}
     />
   );
@@ -432,7 +432,7 @@ function OptimizerConfigElementSettingForm({
         handleSettingsChange,
         parentInputIdentifier: mergeTentacleKey(
           parentInputIdentifier,
-          inputIdentifier
+          inputIdentifier,
         ),
       });
     }
@@ -453,14 +453,12 @@ function OptimizerConfigElementSettingForm({
 
 function mergeTentacleKey(
   parentInputIdentifier: string,
-  inputIdentifier: string
+  inputIdentifier: string,
 ): string {
   return `${parentInputIdentifier}${INPUT_SEPARATOR}${inputIdentifier}`;
 }
 
-export function splitTentacleKey(
-  tentacleKey: string
-): {
+export function splitTentacleKey(tentacleKey: string): {
   rootTentacle: string;
   tentacleKeys: string[];
 } {
@@ -501,7 +499,7 @@ function OptimizerNestedConfigSettingsForm({
           atLeastOneUserInput = true;
         }
         return element || <></>;
-      }
+      },
     );
   if (atLeastOneUserInput) {
     return (
@@ -567,7 +565,7 @@ function _getValueType(schemaValueType: SchemaValueRawType): SchemaValueType {
 
 export function optimizeUserInputIdentifier(
   tentacleValue: string,
-  inputName: string
+  inputName: string,
 ): string {
   return `${tentacleValue}-${inputName.replaceAll(" ", "_")}`;
 }

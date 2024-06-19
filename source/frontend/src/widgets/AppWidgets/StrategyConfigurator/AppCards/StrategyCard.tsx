@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
 import {
@@ -12,7 +12,8 @@ import { useBotDomainContext } from "../../../../context/config/BotDomainProvide
 import type {
   AppStoreAppType,
   StoreCategoryType,
-  StrategyCategoryType} from "../../../../context/data/AppStoreDataProvider";
+  StrategyCategoryType,
+} from "../../../../context/data/AppStoreDataProvider";
 import {
   useInstallAnyAppPackage,
   useUploadToAppStore,
@@ -20,11 +21,8 @@ import {
 import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 import { useRestartBot } from "../../../../context/data/IsBotOnlineProvider";
 import ProfileModalButton from "../../Modals/ProfileModal/ProfileModalButton";
-import type {
-  StrategyModeSettingsNameType} from "../storeConstants";
-import {
-  strategyModeName
-} from "../storeConstants";
+import type { StrategyModeSettingsNameType } from "../storeConstants";
+import { strategyModeName } from "../storeConstants";
 import AppActions from "./AppActions/AppActions";
 import type { CloneAppInfoType } from "./AppActions/CloneApp/CloneAppForm";
 import type { DownloadInfo, UploadInfo, VerifiedDownloadInfo } from "./AppCard";
@@ -79,17 +77,12 @@ export default function StrategyCard({
       });
     };
     setIsloading(true);
-    await selectProfile(
-      botDomain,
-      app.package_id,
-      onSuccess,
-      onFail
-    );
+    await selectProfile(botDomain, app.package_id, onSuccess, onFail);
   }
   const installAnyAppPackage = useInstallAnyAppPackage();
   function handleDownloadApp(
     setOpen: (isOpen: boolean) => void,
-    otherApp?: AppStoreAppType
+    otherApp?: AppStoreAppType,
   ) {
     const theApp: AppStoreAppType = otherApp ? otherApp : app;
     const verifiedDownloadInfo: VerifiedDownloadInfo = {
@@ -105,7 +98,7 @@ export default function StrategyCard({
     installAnyAppPackage(verifiedDownloadInfo, theApp, setIsloading, setOpen);
   }
   async function handleDeleteProfile(
-    setOpen: Dispatch<SetStateAction<boolean>>
+    setOpen: Dispatch<SetStateAction<boolean>>,
   ) {
     setIsloading(true);
     await deleteProfile(
@@ -113,12 +106,12 @@ export default function StrategyCard({
       app.package_id,
       app.title,
       () => setIsloading(false),
-      () => setIsloading(false)
+      () => setIsloading(false),
     );
     setOpen(false);
   }
   async function handleProfileDuplication(
-    setOpen: Dispatch<SetStateAction<boolean>>
+    setOpen: Dispatch<SetStateAction<boolean>>,
   ) {
     setIsloading(true);
     if (cloneAppInfo?.newProfileName) {
@@ -156,7 +149,7 @@ export default function StrategyCard({
           botDomain + backendRoutes.profileMedia
         }/${additionalProfileInfo?.profile?.name?.replace(
           / /g,
-          "_"
+          "_",
         )}/${currentAvatar}`;
 
   return (
@@ -183,7 +176,7 @@ export default function StrategyCard({
               uploadInfo,
               profileDownloadUrl,
               setIsloading,
-              setOpen
+              setOpen,
             )
           }
           setUploadInfo={setUploadInfo}

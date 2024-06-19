@@ -1,12 +1,6 @@
 import type { Datum } from "plotly.js";
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useContext, useState } from "react";
 
 import { emptyValueFunction } from "../../../../helpers/helpers";
 import type { ChartLocationType } from "./Plotly";
@@ -109,9 +103,8 @@ export const PlotlyLayoutsProvider = ({
   const [mainLayouts, setMainLayouts] = useState<PlotlyLayoutType>();
   const [subLayouts, setSubLayouts] = useState<PlotlyLayoutType>();
   const [pieChartLayouts, setPieChartLayouts] = useState<PlotlyLayoutType>();
-  const [backtestingLayouts, setBacktestingLayouts] = useState<
-    PlotlyLayoutType
-  >();
+  const [backtestingLayouts, setBacktestingLayouts] =
+    useState<PlotlyLayoutType>();
   return (
     <UpdatePlotlyLayoutsContext.Provider
       value={{

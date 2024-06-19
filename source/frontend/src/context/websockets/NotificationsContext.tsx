@@ -1,6 +1,6 @@
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
-import { createContext,useContext, useState } from "react";
+import { createContext, useContext, useState } from "react";
 import { useSocket, useSocketEvent } from "socket.io-react-hook";
 
 import createNotification from "../../components/Notifications/Notification";
@@ -30,9 +30,10 @@ interface NotificationHistoryType {
 const NotificationsHistoryContext = createContext<
   NotificationHistoryType[] | undefined
 >(undefined);
-const UpdateNotificationsHistoryContext = createContext<
-  Dispatch<SetStateAction<NotificationHistoryType[] | undefined>>
->(emptyValueFunction);
+const UpdateNotificationsHistoryContext =
+  createContext<
+    Dispatch<SetStateAction<NotificationHistoryType[] | undefined>>
+  >(emptyValueFunction);
 
 export const useNotificationsHistoryContext = () => {
   return useContext(NotificationsHistoryContext);
@@ -52,9 +53,9 @@ export const NotificationsContextProvider = ({
   >(undefined);
   const botDomain = useBotDomainContext();
 
-  const socketUrl =
-    `${botDomain.replace("http://", "ws://").replace("https://", "wss://") 
-    }/notifications`;
+  const socketUrl = `${botDomain
+    .replace("http://", "ws://")
+    .replace("https://", "wss://")}/notifications`;
   const setIsBotOnline = useUpdateIsBotOnlineContext();
 
   function onNewMessage(newMessage: WebsocketNotificationType) {

@@ -18,8 +18,7 @@ import { Trans } from "react-i18next";
 import AntButton from "../../../../../../components/Buttons/AntButton";
 import { buttonTypes } from "../../../../../../components/Buttons/AntButton";
 import AppIconButton from "../../../../../../components/Buttons/AppIconButton";
-import type {
-  AppStoreAppType} from "../../../../../../context/data/AppStoreDataProvider";
+import type { AppStoreAppType } from "../../../../../../context/data/AppStoreDataProvider";
 import {
   useAppStoreUserContext,
   validateUploadInfo,
@@ -45,7 +44,7 @@ export default function AppUpDownload({
   uploadInfo: UploadInfo;
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
-    otherApp: AppStoreAppType | undefined
+    otherApp: AppStoreAppType | undefined,
   ) => void;
   downloadInfo: DownloadInfo;
   setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
@@ -74,7 +73,7 @@ export default function AppUpDownload({
               open={uploadInfo.open}
               setInfo={setUploadInfo}
               disabledTooltipTitle={t(
-                "appStore.appCard.uploadApp.you-need-to-be-signed-in-to-publish-an-update"
+                "appStore.appCard.uploadApp.you-need-to-be-signed-in-to-publish-an-update",
               )}
               confirmDescription={
                 <UploadAppForm
@@ -93,22 +92,22 @@ export default function AppUpDownload({
         app.categories[0] === strategyModeName
           ? t("appStore.appCard.uploadApp.sell-strat-mode")
           : app.categories[0] === strategyName
-          ? t("appStore.appCard.uploadApp.sell-strategy")
-          : t("appStore.appCard.uploadApp.sell-app");
+            ? t("appStore.appCard.uploadApp.sell-strategy")
+            : t("appStore.appCard.uploadApp.sell-app");
 
       const confirmButtonText =
         app.categories[0] === strategyModeName
           ? t("appStore.appCard.uploadApp.publish-strat-mode-now")
           : app.categories[0] === strategyName
-          ? t("appStore.appCard.uploadApp.publish-strategy-now")
-          : t("appStore.appCard.uploadApp.publish-app-now");
+            ? t("appStore.appCard.uploadApp.publish-strategy-now")
+            : t("appStore.appCard.uploadApp.publish-app-now");
       const isValidated = validateUploadInfo(uploadInfo);
       return (
         handleUpload && (
           <UpDownloadloadAppModal
             onConfirm={() =>
               handleUpload((isOpen: boolean) =>
-                handlePopConfirmOpen(setUploadInfo, isOpen)
+                handlePopConfirmOpen(setUploadInfo, isOpen),
               )
             }
             isSelected={app.is_selected}
@@ -121,7 +120,7 @@ export default function AppUpDownload({
             open={uploadInfo.open}
             setInfo={setUploadInfo}
             disabledTooltipTitle={t(
-              "appStore.appCard.uploadApp.you-need-to-be-signed-in-to-sell-an-app"
+              "appStore.appCard.uploadApp.you-need-to-be-signed-in-to-sell-an-app",
             )}
             confirmDescription={
               <UploadAppForm
@@ -152,10 +151,10 @@ export default function AppUpDownload({
             disabledTooltipTitle={
               app.updated_by_distro
                 ? t(
-                    "appStore.appCard.downloadApp.this-app-gets-updated-with-your-octobot-distribution"
+                    "appStore.appCard.downloadApp.this-app-gets-updated-with-your-octobot-distribution",
                   )
                 : t(
-                    "appStore.appCard.downloadApp.you-need-to-be-signed-in-to-download-updates"
+                    "appStore.appCard.downloadApp.you-need-to-be-signed-in-to-download-updates",
                   )
             }
             confirmDescription={
@@ -185,7 +184,7 @@ export default function AppUpDownload({
             confirmTitle={confirmButtonText}
             disabled={!isSignedIn}
             disabledTooltipTitle={t(
-              "appStore.appCard.downloadApp.you-need-to-be-signed-in-to-download-apps"
+              "appStore.appCard.downloadApp.you-need-to-be-signed-in-to-download-apps",
             )}
             confirmDescription={
               <AppDownloadForm
@@ -215,7 +214,7 @@ export default function AppUpDownload({
             // confirmButtonIcon={ShoppingCartOutlined}
             confirmTitle={t(
               "appStore.appCard.downloadApp.buy-app-title-today",
-              { appTitle: app.title }
+              { appTitle: app.title },
             )}
             confirmDescription={
               <AppDownloadForm
@@ -230,7 +229,7 @@ export default function AppUpDownload({
             // confirmButtonText={"Add To Shopping Basket"}
             buttonTitle={t(
               "appStore.appCard.downloadApp.download-appCategory",
-              { appCategory: app.categories[0] }
+              { appCategory: app.categories[0] },
             )}
             // buttonTitle={
             //     `Buy for ${
@@ -243,7 +242,7 @@ export default function AppUpDownload({
     }
   } else {
     const confirmButtonText = t(
-      "appStore.appCard.downloadApp.download-for-free"
+      "appStore.appCard.downloadApp.download-for-free",
     );
     return (
       handleDownload && (
@@ -255,7 +254,7 @@ export default function AppUpDownload({
           open={downloadInfo.open}
           setInfo={setDownloadInfo}
           disabledTooltipTitle={t(
-            "appStore.appCard.downloadApp.you-need-to-be-signed-in-to-download-free-apps"
+            "appStore.appCard.downloadApp.you-need-to-be-signed-in-to-download-free-apps",
           )}
           confirmDescription={
             <AppDownloadForm

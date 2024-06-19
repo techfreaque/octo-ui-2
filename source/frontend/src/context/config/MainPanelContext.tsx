@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useContext } from "react";
 import { createContext } from "react";
 import { useState } from "react";
@@ -16,9 +16,8 @@ const defaultPanelSize: PanelSizeType = {
 };
 
 const CurrentPanelContext = createContext<PanelSizeType>(defaultPanelSize);
-const UpdateCurrentPanelContext = createContext<
-  Dispatch<SetStateAction<PanelSizeType>>
->(emptyValueFunction);
+const UpdateCurrentPanelContext =
+  createContext<Dispatch<SetStateAction<PanelSizeType>>>(emptyValueFunction);
 
 export const useCurrentPanelContext = () => {
   return useContext(CurrentPanelContext);
@@ -34,7 +33,7 @@ export const useSetCurrentPanelPercent = () => {
     (percent: number) => {
       setPanelSize({ percent, shouldUpdate: true });
     },
-    [setPanelSize]
+    [setPanelSize],
   );
 };
 

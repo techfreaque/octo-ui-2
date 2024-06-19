@@ -1,19 +1,9 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 import { fetchBacktestingRunData } from "../../api/data";
-import type {
-  errorResponseCallBackParams} from "../../api/fetchAndStoreFromBot";
-import {
-  sendAndInterpretBotUpdate,
-} from "../../api/fetchAndStoreFromBot";
+import type { errorResponseCallBackParams } from "../../api/fetchAndStoreFromBot";
+import { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
@@ -80,9 +70,10 @@ export interface BacktestingRunsData {
 const BacktestingRunDataContext = createContext<
   BacktestingRunsData | undefined
 >(undefined);
-const UpdateBacktestingRunDataContext = createContext<
-  Dispatch<SetStateAction<BacktestingRunsData | undefined>>
->(emptyValueFunction);
+const UpdateBacktestingRunDataContext =
+  createContext<Dispatch<SetStateAction<BacktestingRunsData | undefined>>>(
+    emptyValueFunction,
+  );
 
 export const useBacktestingRunDataContext = () => {
   return useContext(BacktestingRunDataContext);
@@ -108,11 +99,11 @@ export const useFetchBacktestingRunData = () => {
           {
             ...uiConfig.optimizer_campaigns_to_load,
           },
-          onDone
+          onDone,
         );
       }
     },
-    [setBacktestingRunData, botDomain, uiConfig, setUiConfig]
+    [setBacktestingRunData, botDomain, uiConfig, setUiConfig],
   );
 };
 
@@ -130,7 +121,7 @@ export const useDeleteBacktestingRunData = () => {
     (
       runsToDelete: RunsToDeleteDataType,
       isDeleting: Dispatch<SetStateAction<boolean>>,
-      onSuccess?: () => void
+      onSuccess?: () => void,
     ) => {
       isDeleting(true);
       const data = {
@@ -162,7 +153,7 @@ export const useDeleteBacktestingRunData = () => {
         errorCallback,
       });
     },
-    [botDomain, reloadData, setDisplayedRunIds]
+    [botDomain, reloadData, setDisplayedRunIds],
   );
 };
 
@@ -171,9 +162,8 @@ export const BacktestingRunDataProvider = ({
 }: {
   children: JSX.Element;
 }) => {
-  const [backtestingRunData, setBacktestingRunData] = useState<
-    BacktestingRunsData
-  >();
+  const [backtestingRunData, setBacktestingRunData] =
+    useState<BacktestingRunsData>();
   return (
     <BacktestingRunDataContext.Provider value={backtestingRunData}>
       <UpdateBacktestingRunDataContext.Provider value={setBacktestingRunData}>

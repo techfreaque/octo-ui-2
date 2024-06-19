@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useState } from "react";
 import { createContext, useContext } from "react";
 
@@ -23,9 +23,10 @@ export interface PortfolioType {
 }
 
 const BotPortfolioContext = createContext<PortfolioType | undefined>(undefined);
-const UpdateBotPortfolioContext = createContext<
-  Dispatch<SetStateAction<PortfolioType | undefined>>
->(emptyValueFunction);
+const UpdateBotPortfolioContext =
+  createContext<Dispatch<SetStateAction<PortfolioType | undefined>>>(
+    emptyValueFunction,
+  );
 
 export const useSaveBotPortfolioContext = () => {
   return useContext(UpdateBotPortfolioContext);
@@ -41,16 +42,16 @@ export const useFetchBotPortfolio = () => {
   return useCallback(
     (
       setIsFinished?: Dispatch<SetStateAction<boolean>>,
-      successNotification?: boolean
+      successNotification?: boolean,
     ) => {
       fetchBotPortfolio(
         _saveBotPortfolio,
         botDomain,
         setIsFinished,
-        successNotification
+        successNotification,
       );
     },
-    [_saveBotPortfolio, botDomain]
+    [_saveBotPortfolio, botDomain],
   );
 };
 
@@ -60,7 +61,7 @@ export const BotPortfolioProvider = ({
   children: JSX.Element;
 }) => {
   const [botPortfolio, setBotPortfolio] = useState<PortfolioType | undefined>(
-    undefined
+    undefined,
   );
   return (
     <BotPortfolioContext.Provider value={botPortfolio}>

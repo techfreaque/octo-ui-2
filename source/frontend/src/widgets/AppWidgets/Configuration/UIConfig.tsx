@@ -40,7 +40,7 @@ export default function UIConfig({ configKeys }: UiLayoutPageLayoutType) {
   const handleEditorsAutosave = useCallback(
     (
       editor: JsonEditorType<UiSubConfigsType, UiConfigSubSchemaType>,
-      configKey: UiConfigKeyType
+      configKey: UiConfigKeyType,
     ) => {
       const newConfigs: UiConfigType = {
         ...uiConfig,
@@ -56,7 +56,7 @@ export default function UIConfig({ configKeys }: UiLayoutPageLayoutType) {
         saveUiConfig(newConfigs, undefined, errorCallback);
       }
     },
-    [saveUiConfig, uiConfig]
+    [saveUiConfig, uiConfig],
   );
   return useMemo(() => {
     const dataFiles = botInfo?.data_files;
@@ -71,27 +71,25 @@ export default function UIConfig({ configKeys }: UiLayoutPageLayoutType) {
               configKey,
               dataFiles,
               currentSymbols,
-              availableExchanges
+              availableExchanges,
             );
             const config = convertTimestamps(
-              uiConfig[configKey] as UiSubConfigsType
+              uiConfig[configKey] as UiSubConfigsType,
             );
             if (
               schema?.properties?.["exchange_names"]?.items?.enum &&
-              (config as
-                | BacktestingUiConfig
-                | OptimizerUiConfig
-                | undefined)?.exchange_names?.some(
+              (
+                config as BacktestingUiConfig | OptimizerUiConfig | undefined
+              )?.exchange_names?.some(
                 (_exchange) =>
                   !schema?.properties?.["exchange_names"]?.items?.enum.includes(
-                    _exchange
-                  )
+                    _exchange,
+                  ),
               )
             ) {
-              (config as
-                | BacktestingUiConfig
-                | OptimizerUiConfig).exchange_names =
-                schema.properties["exchange_names"].items.enum;
+              (
+                config as BacktestingUiConfig | OptimizerUiConfig
+              ).exchange_names = schema.properties["exchange_names"].items.enum;
             }
             return (
               <JsonEditor<UiSubConfigsType, UiConfigSubSchemaType>
@@ -122,7 +120,7 @@ export default function UIConfig({ configKeys }: UiLayoutPageLayoutType) {
 
 function convertTimestamps(
   config: UiSubConfigsType,
-  convertBack = false
+  convertBack = false,
 ): UiSubConfigsType {
   const newValues: any = {};
   config &&

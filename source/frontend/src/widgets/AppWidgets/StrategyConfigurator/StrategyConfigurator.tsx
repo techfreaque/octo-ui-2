@@ -54,9 +54,8 @@ export default function AppStore() {
   const [selectedCategories, setSelectedCategories] = useState<
     StoreCategoryType | StrategyModeSettingsNameType
   >();
-  const [tradingConfigTabs, setTradingConfigTabs] = useState<
-    TentacleConfigTabsData[]
-  >();
+  const [tradingConfigTabs, setTradingConfigTabs] =
+    useState<TentacleConfigTabsData[]>();
   const _useFetchAppStoreData = useFetchAppStoreData();
   const fetchCurrentTentaclesConfig = useFetchCurrentTradingTentaclesConfig();
   useEffect(() => {
@@ -65,7 +64,8 @@ export default function AppStore() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [botInfo, isLoggedIn]);
   const currentTentaclesConfig = useTentaclesConfigContext();
-  const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext();
+  const setHiddenMetadataColumns =
+    useUpdateHiddenBacktestingMetadataColumnsContext();
   const currentTentaclesTradingConfig =
     currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
   const isFlowMode = botInfo?.trading_mode_name === strategyFlowMakerName;
@@ -77,7 +77,7 @@ export default function AppStore() {
           userInputs: currentTentaclesTradingConfig,
           setHiddenMetadataColumns,
           storageName: "tradingConfig",
-        })
+        }),
       );
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -87,16 +87,15 @@ export default function AppStore() {
     const currentStrategyPackageId =
       appStoreData?.Strategy &&
       Object.keys(appStoreData.Strategy).find(
-        (strategy) => appStoreData.Strategy?.[strategy]?.is_selected
+        (strategy) => appStoreData.Strategy?.[strategy]?.is_selected,
       );
-    const currentStrategy:
-      | AppStoreAppType
-      | undefined = currentStrategyPackageId
-      ? appStoreData.Strategy?.[currentStrategyPackageId]
-      : undefined;
+    const currentStrategy: AppStoreAppType | undefined =
+      currentStrategyPackageId
+        ? appStoreData.Strategy?.[currentStrategyPackageId]
+        : undefined;
     const availableCategories: StoreCategoryType[] = appStoreData
       ? objectKeys(appStoreData)?.filter(
-          (category) => !hiddenCategories.includes(category)
+          (category) => !hiddenCategories.includes(category),
         )
       : [];
     const content = (
@@ -111,7 +110,7 @@ export default function AppStore() {
       ...(availableCategories
         ?.filter(
           (category) =>
-            category === strategyName || category === strategyModeName
+            category === strategyName || category === strategyModeName,
         )
         ?.map((categoryName) => {
           if (categoryName === strategyName) {
@@ -183,7 +182,7 @@ export default function AppStore() {
             (category) =>
               category !== strategyName &&
               category !== strategyModeName &&
-              category !== appPackagesName
+              category !== appPackagesName,
           )
           ?.map((categoryName) => ({
             title: categoryName,

@@ -15,7 +15,7 @@ import {
   Typography,
 } from "antd";
 import { t } from "i18next";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 import { Trans } from "react-i18next";
 
@@ -55,7 +55,7 @@ export function ProfileSimulatedSettings({
               Number(newValue),
               "trader-simulator",
               "fees",
-              "maker"
+              "maker",
             )
           }
         />
@@ -82,7 +82,7 @@ export function ProfileSimulatedSettings({
               Number(newValue),
               "trader-simulator",
               "fees",
-              "taker"
+              "taker",
             )
           }
         />
@@ -111,7 +111,7 @@ export function ProfilePortfolioSettings({
     value: number | undefined;
   }[] = [
     ...Object.keys(
-      newProfileSettings.config["trader-simulator"]["starting-portfolio"]
+      newProfileSettings.config["trader-simulator"]["starting-portfolio"],
     ).map((coin) => {
       return {
         key: coin,
@@ -326,7 +326,7 @@ export function ProfilePortfolioCoinSettings({
               Number(newValue),
               "trader-simulator",
               "starting-portfolio",
-              item.coin
+              item.coin,
             )
           }
         />

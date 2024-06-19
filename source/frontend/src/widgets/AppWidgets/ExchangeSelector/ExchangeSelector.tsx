@@ -19,8 +19,7 @@ import EnablerSwitch from "../../../components/UserInputs/EnablerSwich";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
 import { useVisibleExchangesContext } from "../../../context/config/VisibleExchangesProvider";
-import type {
-  ExchangeConfigType} from "../../../context/data/BotExchangeInfoProvider";
+import type { ExchangeConfigType } from "../../../context/data/BotExchangeInfoProvider";
 import {
   useFetchExchangesList,
   useHandleExchangeSettingChange,
@@ -179,8 +178,8 @@ export default function ExchangeSelector() {
       isTestedExchange: isTested
         ? true
         : isTestedSimulated
-        ? "simulation"
-        : false,
+          ? "simulation"
+          : false,
       isTestedExchangeLabel: isTested ? (
         <Tooltip
           title={<Trans i18nKey="exchangeSelector.isTestedExchangeTooltip" />}
@@ -249,13 +248,13 @@ export default function ExchangeSelector() {
           supportedExchangeTypes: exchange.supported_exchange_types,
           authSuccess: exchange.auth_success || false,
         });
-      }
+      },
     );
 
   // put enabled ones on top, then config existing ones and others at the bottom
   exchangesData.sort(
     (a, b) =>
-      +b?.enabled - +a?.enabled || a?.exchange?.localeCompare(b?.exchange)
+      +b?.enabled - +a?.enabled || a?.exchange?.localeCompare(b?.exchange),
   );
   const expandable: AntTableExpandableConfig<ExchangeDataType> = {
     expandedRowRender: (record) => (
@@ -267,7 +266,7 @@ export default function ExchangeSelector() {
               handleSettingChange(
                 record.exchange,
                 "api-key",
-                event.target.value
+                event.target.value,
               )
             }
             value={record?.apiKey}
@@ -279,7 +278,7 @@ export default function ExchangeSelector() {
               handleSettingChange(
                 record.exchange,
                 "api-secret",
-                event.target.value
+                event.target.value,
               )
             }
             value={record?.apiSecret}
@@ -291,7 +290,7 @@ export default function ExchangeSelector() {
               handleSettingChange(
                 record.exchange,
                 "api-password",
-                event.target.value
+                event.target.value,
               )
             }
             value={record?.apiPassword}

@@ -135,7 +135,7 @@ export default function ProjectHomePage() {
           <TitleSubTitleCombo
             title={t("projectInfoPage.get-your-custom-trading-bot")}
             subTitle={t(
-              "projectInfoPage.automate-your-strategy-and-boost-your-trading-success"
+              "projectInfoPage.automate-your-strategy-and-boost-your-trading-success",
             )}
           />
           <Typography.Paragraph>
@@ -150,7 +150,7 @@ export default function ProjectHomePage() {
           <AntButton
             target="blank"
             href={`mailto:max@a42.ch?subject=${t(
-              "projectInfoPage.lets-discuss-my-trading-bot-project"
+              "projectInfoPage.lets-discuss-my-trading-bot-project",
             )}`}
             style={{ margin: "auto" }}
             block={true}
@@ -187,8 +187,8 @@ export default function ProjectHomePage() {
         <Card style={{ height: "100%" }}>
           <CloudDownloadOutlined style={{ fontSize: "60px" }} />
           <TitleSubTitleCombo
-            title={t('projectInfoPage.download-your-free-trading-bot')}
-            subTitle={t('projectInfoPage.empower-your-trading-journey')}
+            title={t("projectInfoPage.download-your-free-trading-bot")}
+            subTitle={t("projectInfoPage.empower-your-trading-journey")}
           />
           <Typography.Paragraph>
             <Trans i18nKey="projectInfoPage.gain-a-competitive-edge-with-our-powerful-trading-bot-available-for-free" />
@@ -251,10 +251,13 @@ export default function ProjectHomePage() {
             </Grid> */}
       <Grid item xs={12} style={{ marginTop: "150px" }}>
         <Typography.Title level={2}>
-          {t('projectInfoPage.a-special-thanks-to-all-open-source-projects-that-are-used-within-projectname', {projectName})}
+          {t(
+            "projectInfoPage.a-special-thanks-to-all-open-source-projects-that-are-used-within-projectname",
+            { projectName },
+          )}
         </Typography.Title>
         <TitleSubTitleCombo
-          subTitle={t('projectInfoPage.the-kernel-and-backend-for-the-bot')}
+          subTitle={t("projectInfoPage.the-kernel-and-backend-for-the-bot")}
           title={"OctoBot"}
           startLevel={3}
         />
@@ -272,7 +275,7 @@ export default function ProjectHomePage() {
           </AntButton>
         </Typography.Paragraph>
         <TitleSubTitleCombo
-          subTitle={t('projectInfoPage.library-used-to-build-the-frontend')}
+          subTitle={t("projectInfoPage.library-used-to-build-the-frontend")}
           title={"react.js"}
           startLevel={3}
         />
@@ -290,8 +293,8 @@ export default function ProjectHomePage() {
           </AntButton>
         </Typography.Paragraph>
         <TitleSubTitleCombo
-          subTitle={t('projectInfoPage.charting-library')}
-          title={t('projectInfoPage.plotly')}
+          subTitle={t("projectInfoPage.charting-library")}
+          title={t("projectInfoPage.plotly")}
           startLevel={3}
         />
         <Typography.Paragraph>
@@ -307,8 +310,10 @@ export default function ProjectHomePage() {
           </AntButton>
         </Typography.Paragraph>
         <TitleSubTitleCombo
-          subTitle={t('projectInfoPage.flow-chart-library-used-for-the-strategy-designer')}
-          title={t('projectInfoPage.reactflow')}
+          subTitle={t(
+            "projectInfoPage.flow-chart-library-used-for-the-strategy-designer",
+          )}
+          title={t("projectInfoPage.reactflow")}
           startLevel={3}
         />
         <Typography.Paragraph>
@@ -324,9 +329,9 @@ export default function ProjectHomePage() {
           </AntButton>
         </Typography.Paragraph>
         <TitleSubTitleCombo
-          subTitle={
-            t('projectInfoPage.machine-learning-library-used-for-the-neural-net-evaluator')
-          }
+          subTitle={t(
+            "projectInfoPage.machine-learning-library-used-for-the-neural-net-evaluator",
+          )}
           title={"tensorflow"}
           startLevel={3}
         />

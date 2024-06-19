@@ -1,4 +1,4 @@
-import type { ThemeConfig} from "antd";
+import type { ThemeConfig } from "antd";
 import { ConfigProvider, Switch, Tooltip } from "antd";
 import type { SwitchChangeEventHandler } from "antd/es/switch";
 

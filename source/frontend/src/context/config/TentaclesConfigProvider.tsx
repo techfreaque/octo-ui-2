@@ -1,28 +1,16 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useCallback, useContext, useState } from "react";
 
 import type {
   errorResponseCallBackParams,
-  successResponseCallBackParams} from "../../api/fetchAndStoreFromBot";
-import {
-  sendAndInterpretBotUpdate
+  successResponseCallBackParams,
 } from "../../api/fetchAndStoreFromBot";
+import { sendAndInterpretBotUpdate } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
-import type {
-  ApiActionsType,
-  BotInfoType} from "../data/BotInfoProvider";
-import {
-  useBotInfoContext,
-} from "../data/BotInfoProvider";
+import type { ApiActionsType, BotInfoType } from "../data/BotInfoProvider";
+import { useBotInfoContext } from "../data/BotInfoProvider";
 import { useFetchPlotData } from "../data/BotPlottedElementsProvider";
 import { useBotDomainContext } from "./BotDomainProvider";
 
@@ -41,12 +29,12 @@ export type FlowEdgeConfigType = {
   targetHandle: string;
 };
 
-export type NodeConfigKeyType = `config_${string}`
+export type NodeConfigKeyType = `config_${string}`;
 
 export type FlowNodeConfigType = {
   [nodeConfigKey: NodeConfigKeyType]: {
-    [nodeConfigPropertyKey:string]: TentaclesConfigValueType
-  }
+    [nodeConfigPropertyKey: string]: TentaclesConfigValueType;
+  };
   data: {
     blockId: string;
     color: string;
@@ -72,7 +60,7 @@ export type FlowNodeConfigType = {
 };
 
 export type FlowNodeConfigsType = {
-  [nodeKey: string]: FlowNodeConfigType
+  [nodeKey: string]: FlowNodeConfigType;
 };
 
 export type TentaclesConfigValueType =
@@ -87,12 +75,12 @@ export type TentaclesConfigValueType =
 
 export type TentaclesConfigValuesType = {
   [key: string]: TentaclesConfigValueType;
-}
+};
 
 export type TentaclesConfigByTentacleType = {
   [tentacleName: string]: TentaclesConfigValuesType & {
     nodes?: FlowNodeConfigsType;
-    edges?: FlowEdgeConfigType[]
+    edges?: FlowEdgeConfigType[];
   };
 };
 
@@ -112,7 +100,7 @@ export type TentaclesConfigsSchemaType = {
     collapsed?: boolean;
     disable_collapse?: boolean;
     color?: string;
-    side?: "right" | "left" | "top"| "bottom";
+    side?: "right" | "left" | "top" | "bottom";
     antIcon?: string;
 
     io_node_type?: "strategy_start_output" | "evaluator_signals_input";
@@ -166,7 +154,7 @@ export type TentaclesConfigRootType = {
   schema: TentaclesConfigsSchemaType;
   config: TentaclesConfigValuesType & {
     nodes?: FlowNodeConfigsType;
-    edges?: FlowEdgeConfigType[]
+    edges?: FlowEdgeConfigType[];
   };
   tentacle_type: TentacleType;
   type: "input";
@@ -187,16 +175,16 @@ export const tentacleConfigTypes: {
 };
 
 const TentaclesConfigContext = createContext<TentaclesConfigsType | undefined>(
-  undefined
+  undefined,
 );
-const UpdateTentaclesConfigContext = createContext<
-  Dispatch<SetStateAction<TentaclesConfigsType | undefined>>
->(emptyValueFunction);
+const UpdateTentaclesConfigContext =
+  createContext<Dispatch<SetStateAction<TentaclesConfigsType | undefined>>>(
+    emptyValueFunction,
+  );
 
 const IsSavingTentaclesConfigContext = createContext<boolean>(false);
-const UpdateIsSavingTentaclesConfigContext = createContext<
-  Dispatch<SetStateAction<boolean>>
->(emptyValueFunction);
+const UpdateIsSavingTentaclesConfigContext =
+  createContext<Dispatch<SetStateAction<boolean>>>(emptyValueFunction);
 
 export const useIsSavingTentaclesConfigContext = () => {
   return useContext(IsSavingTentaclesConfigContext);
@@ -218,12 +206,9 @@ export const useFetchTentaclesConfig = () => {
     (
       tentacles: string[],
       successCallback?: (payload: successResponseCallBackParams) => void,
-      isTradingTentacle = false
+      isTradingTentacle = false,
     ) => {
-      function errorCallback({
- 
-        data,
-      }: errorResponseCallBackParams) {
+      function errorCallback({ data }: errorResponseCallBackParams) {
         createNotification({
           title: "Failed to fetch tentacles config",
           type: "danger",
@@ -277,12 +262,12 @@ export const useFetchTentaclesConfig = () => {
         errorCallback,
       });
     },
-    [botDomain, updateTentaclesConfig]
+    [botDomain, updateTentaclesConfig],
   );
 };
 
 export function getEnabledTradingTentaclesList(
-  botInfo: BotInfoType | undefined
+  botInfo: BotInfoType | undefined,
 ): string[] {
   const tentacles: string[] = [];
   botInfo?.strategy_names && tentacles.push(...botInfo.strategy_names);
@@ -299,7 +284,7 @@ export const useFetchCurrentTradingTentaclesConfig = () => {
       const tentacles = getEnabledTradingTentaclesList(botInfo);
       loadTentaclesConfig(tentacles, successCallback, true);
     },
-    [botInfo, loadTentaclesConfig]
+    [botInfo, loadTentaclesConfig],
   );
 };
 
@@ -309,12 +294,13 @@ export type SaveTentaclesConfigType = (
   reloadPlots?: boolean,
   isTradingConfig?: boolean,
   keepExisting?: boolean,
-  successNotification?: boolean
+  successNotification?: boolean,
 ) => void;
 
 export const useSaveTentaclesConfig: () => SaveTentaclesConfigType = () => {
   const fetchPlotData = useFetchPlotData();
-  const loadCurrentTradingTentaclesConfig = useFetchCurrentTradingTentaclesConfig();
+  const loadCurrentTradingTentaclesConfig =
+    useFetchCurrentTradingTentaclesConfig();
   const loadTentaclesConfig = useFetchTentaclesConfig();
   const botDomain = useBotDomainContext();
   return useCallback(
@@ -324,7 +310,7 @@ export const useSaveTentaclesConfig: () => SaveTentaclesConfigType = () => {
       reloadPlots = false,
       isTradingConfig = true,
       keepExisting = true,
-      successNotification = true
+      successNotification = true,
     ) => {
       function errorCallback(payload: errorResponseCallBackParams) {
         setIsSaving?.(false);
@@ -367,7 +353,7 @@ export const useSaveTentaclesConfig: () => SaveTentaclesConfigType = () => {
       fetchPlotData,
       loadCurrentTradingTentaclesConfig,
       loadTentaclesConfig,
-    ]
+    ],
   );
 };
 
@@ -381,7 +367,7 @@ export const useSaveTentaclesConfigAndSendAction = () => {
       setIsLoading: Dispatch<SetStateAction<boolean>>,
       reloadPlots = false,
       successCallback?: (payload: successResponseCallBackParams) => void,
-      errorCallback?: (payload: errorResponseCallBackParams) => void
+      errorCallback?: (payload: errorResponseCallBackParams) => void,
     ) => {
       function _errorCallback() {
         setIsLoading(false);
@@ -406,7 +392,7 @@ export const useSaveTentaclesConfigAndSendAction = () => {
         errorCallback: errorCallback || _errorCallback,
       });
     },
-    [fetchPlotData, botDomain]
+    [fetchPlotData, botDomain],
   );
 };
 

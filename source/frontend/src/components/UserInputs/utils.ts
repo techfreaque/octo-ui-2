@@ -7,9 +7,7 @@ export function userInputKey(userInput: string, tentacle: string[] | string) {
   return `${userInput}${TENTACLE_SEPARATOR}${tentacle}`;
 }
 
-export function splitUserInputKey(
-  userInputKey: string
-): {
+export function splitUserInputKey(userInputKey: string): {
   userInput: string;
   tetacles: string[];
 } {
@@ -26,7 +24,7 @@ export function splitUserInputKey(
 export function findUserInputAndTentacleLabel(
   currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined,
   userInputName: string,
-  tentacleNames: string[]
+  tentacleNames: string[],
 ) {
   const rootTentacleName = tentacleNames[0];
   let nestedTitle: string = rootTentacleName || "";
@@ -74,8 +72,11 @@ export function findUserInputAndTentacleLabel(
   }
 }
 
-export function validateJSONEditor<TentaclesConfigValueType, TentaclesConfigsSchemaType>(
-  editor: JsonEditorType<TentaclesConfigValueType, TentaclesConfigsSchemaType>
+export function validateJSONEditor<
+  TentaclesConfigValueType,
+  TentaclesConfigsSchemaType,
+>(
+  editor: JsonEditorType<TentaclesConfigValueType, TentaclesConfigsSchemaType>,
 ): string | undefined {
   const errors = editor.validate();
   let errorsDesc: string | undefined;

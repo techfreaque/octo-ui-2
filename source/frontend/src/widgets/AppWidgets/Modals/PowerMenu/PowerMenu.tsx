@@ -1,7 +1,4 @@
-import {
-  EditOutlined,
-  PoweroffOutlined,
-} from "@ant-design/icons";
+import { EditOutlined, PoweroffOutlined } from "@ant-design/icons";
 import { Dropdown, Tooltip } from "antd";
 import type { ItemType } from "antd/es/menu/interface";
 import { useState } from "react";
@@ -10,9 +7,7 @@ import { Trans } from "react-i18next";
 import AntButton, {
   buttonVariants,
 } from "../../../../components/Buttons/AntButton";
-import {
-  useBotInfoContext,
-} from "../../../../context/data/BotInfoProvider";
+import { useBotInfoContext } from "../../../../context/data/BotInfoProvider";
 import BackToOctobotButton from "../../Buttons/BackToOctobotButton";
 import ColorModeSwitch from "../../Buttons/ColorModeSwitcher";
 import LanguageSwitch from "../../Buttons/LanguageSwitch";

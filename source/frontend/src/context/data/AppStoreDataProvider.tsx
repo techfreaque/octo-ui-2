@@ -1,12 +1,5 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { useCallback } from "react";
 
 import { selectProfile } from "../../api/actions";
@@ -18,11 +11,12 @@ import {
 } from "../../api/data";
 import type {
   errorResponseCallBackParams,
-  successResponseCallBackParams} from "../../api/fetchAndStoreFromBot";
+  successResponseCallBackParams,
+} from "../../api/fetchAndStoreFromBot";
 import {
   getFile,
   sendAndInterpretBotUpdate,
-  sendFile
+  sendFile,
 } from "../../api/fetchAndStoreFromBot";
 import createNotification from "../../components/Notifications/Notification";
 import { backendRoutes } from "../../constants/backendConstants";
@@ -123,11 +117,12 @@ export type AppStoreDataType = {
 };
 
 const AppStoreDataContext = createContext<AppStoreDataType | undefined>(
-  undefined
+  undefined,
 );
-const UpdateAppStoreDataContext = createContext<
-  Dispatch<SetStateAction<AppStoreDataType | undefined>>
->(emptyValueFunction);
+const UpdateAppStoreDataContext =
+  createContext<Dispatch<SetStateAction<AppStoreDataType | undefined>>>(
+    emptyValueFunction,
+  );
 
 export interface AppStorePaymentUrlType {
   paymentUrl: string;
@@ -137,18 +132,18 @@ export interface AppStorePaymentUrlType {
 const AppStorePaymentUrlContext = createContext<
   AppStorePaymentUrlType | undefined
 >(undefined);
-const UpdateAppStorePaymentUrlContext = createContext<
-  Dispatch<SetStateAction<AppStorePaymentUrlType | undefined>>
->(emptyValueFunction);
+const UpdateAppStorePaymentUrlContext =
+  createContext<Dispatch<SetStateAction<AppStorePaymentUrlType | undefined>>>(
+    emptyValueFunction,
+  );
 
 const defaultDomain = isProduction
   ? appStoreDomainProduction
   : process.env.REACT_APP_STORE_DEVELOPMENT_DOMAIN || appStoreDomainProduction;
 
 const AppStoreDomainContext = createContext<string>(defaultDomain);
-const UpdateAppStoreDomainContext = createContext<
-  Dispatch<SetStateAction<string>>
->(emptyValueFunction);
+const UpdateAppStoreDomainContext =
+  createContext<Dispatch<SetStateAction<string>>>(emptyValueFunction);
 
 export type AppStoreCartType = {
   [originPackageId: string]: {
@@ -157,13 +152,11 @@ export type AppStoreCartType = {
 };
 
 const AppStoreCartContext = createContext<AppStoreCartType>({});
-const UpdateAppStoreCartContext = createContext<
-  Dispatch<SetStateAction<AppStoreCartType>>
->(emptyValueFunction);
+const UpdateAppStoreCartContext =
+  createContext<Dispatch<SetStateAction<AppStoreCartType>>>(emptyValueFunction);
 const AppStoreCartIsOpenContext = createContext<boolean>(false);
-const UpdateAppStoreCartIsOpenContext = createContext<
-  Dispatch<SetStateAction<boolean>>
->(emptyValueFunction);
+const UpdateAppStoreCartIsOpenContext =
+  createContext<Dispatch<SetStateAction<boolean>>>(emptyValueFunction);
 
 export const useAppStorePaymentUrlContext = () => {
   return useContext(AppStorePaymentUrlContext);
@@ -200,12 +193,13 @@ export interface AppStoreUserType {
 }
 
 const AppStoreUserContext = createContext<AppStoreUserType | undefined>(
-  undefined
+  undefined,
 );
 
-const UpdateAppStoreUserContext = createContext<
-  Dispatch<SetStateAction<AppStoreUserType | undefined>>
->(emptyValueFunction);
+const UpdateAppStoreUserContext =
+  createContext<Dispatch<SetStateAction<AppStoreUserType | undefined>>>(
+    emptyValueFunction,
+  );
 
 export const useAppStoreUserContext = () => {
   return useContext(AppStoreUserContext);
@@ -254,7 +248,7 @@ const _useFetchAppStoreData = () => {
     (
       installedTentaclesInfo: InstalledTentaclesInfoType,
       appStoreUser: AppStoreUserType | undefined,
-      notification?: boolean
+      notification?: boolean,
     ) => {
       if (!appStoreDomain) {
         return;
@@ -284,7 +278,7 @@ const _useFetchAppStoreData = () => {
         token: appStoreUser?.token,
       });
     },
-    [appStoreDomain, saveAppStoreData]
+    [appStoreDomain, saveAppStoreData],
   );
 };
 
@@ -298,10 +292,10 @@ export const useFetchAppStoreData = () => {
         (newData: InstalledTentaclesInfoType) =>
           fetchAppStoreData(newData, appStoreUser, notification),
         botDomain,
-        notification
+        notification,
       );
     },
-    [appStoreUser, botDomain, fetchAppStoreData]
+    [appStoreUser, botDomain, fetchAppStoreData],
   );
 };
 
@@ -316,10 +310,10 @@ export const useLoginToAppStore = () => {
         appStoreDomain,
         userData,
         appStoreUser,
-        onLoggedIn
+        onLoggedIn,
       );
     },
-    [updateAppStoreUser, appStoreDomain, appStoreUser]
+    [updateAppStoreUser, appStoreDomain, appStoreUser],
   );
 };
 
@@ -351,7 +345,7 @@ export const useUploadToAppStore = () => {
       uploadInfo: UploadInfo,
       appDownloadUrl: string,
       setIsloading: Dispatch<SetStateAction<boolean>>,
-      setOpen: (isOpen: boolean) => void
+      setOpen: (isOpen: boolean) => void,
     ) => {
       setIsloading(true);
       if (!botInfo) {
@@ -420,10 +414,9 @@ export const useUploadToAppStore = () => {
             }
             onFail();
           };
-          const uploadUrl =
-            `${appStoreDomain +
-            backendRoutes.appStoreUpload 
-            }/${app.categories[0]}/${appDetails.package_id}`;
+          const uploadUrl = `${
+            appStoreDomain + backendRoutes.appStoreUpload
+          }/${app.categories[0]}/${appDetails.package_id}`;
           if (uploadInfo.includePackage) {
             const handleAppUpload = (appFile: Blob) => {
               sendFile({
@@ -468,7 +461,7 @@ export const useUploadToAppStore = () => {
         });
       }
     },
-    [appStoreDomain, appStoreUser?.token, botInfo, updateAppStoreUser]
+    [appStoreDomain, appStoreUser?.token, botInfo, updateAppStoreUser],
   );
 };
 
@@ -481,7 +474,7 @@ export const useRateAppStore = () => {
         rating: number;
         package_id: string;
       },
-      setIsloading: Dispatch<SetStateAction<boolean>>
+      setIsloading: Dispatch<SetStateAction<boolean>>,
     ) => {
       setIsloading(true);
       function errorCallback() {
@@ -512,7 +505,7 @@ export const useRateAppStore = () => {
         });
       }
     },
-    [appStoreDomain, appStoreUser?.token]
+    [appStoreDomain, appStoreUser?.token],
   );
 };
 
@@ -550,7 +543,7 @@ export const usePublishApp = () => {
         });
       }
     },
-    [appStoreDomain, appStoreUser?.token]
+    [appStoreDomain, appStoreUser?.token],
   );
 };
 
@@ -591,7 +584,7 @@ export const useUnpublishApp = () => {
         });
       }
     },
-    [appStoreDomain, appStoreUser?.token]
+    [appStoreDomain, appStoreUser?.token],
   );
 };
 
@@ -629,7 +622,7 @@ export const useDeleteApp = () => {
         });
       }
     },
-    [appStoreDomain, appStoreUser?.token]
+    [appStoreDomain, appStoreUser?.token],
   );
 };
 
@@ -659,7 +652,7 @@ export const useAddToAppStoreCart = () => {
         type: "danger",
       });
     },
-    [cancelStorePayment, setAppStoreCart]
+    [cancelStorePayment, setAppStoreCart],
   );
 };
 
@@ -679,7 +672,7 @@ export const useRemoveFromAppStoreCart = () => {
       });
       createNotification({ title: "Package removed from the cart" });
     },
-    [setAppStoreCart]
+    [setAppStoreCart],
   );
 };
 
@@ -691,7 +684,7 @@ export const useCreatePaymentFromAppStoreCart = () => {
   return useCallback(
     (
       origin_packages: string[],
-      setIsloading?: Dispatch<SetStateAction<boolean>>
+      setIsloading?: Dispatch<SetStateAction<boolean>>,
     ) => {
       setIsloading?.(true);
       function errorCallback(payload: errorResponseCallBackParams) {
@@ -747,7 +740,7 @@ export const useCreatePaymentFromAppStoreCart = () => {
       appStoreUser?.token,
       setAppStorePaymentUrl,
       updateAppStoreUser,
-    ]
+    ],
   );
 };
 
@@ -774,7 +767,7 @@ export const useCancelStorePayment = () => {
         });
       }
     },
-    [appStorePaymentUrl?.cancelUrl, setAppStorePaymentUrl]
+    [appStorePaymentUrl?.cancelUrl, setAppStorePaymentUrl],
   );
 };
 
@@ -836,7 +829,7 @@ export const useGetUsers = () => {
   const appStoreUser = useAppStoreUserContext();
   return useCallback(
     (
-      setAppStoreUsers: Dispatch<SetStateAction<StoreUsersType | undefined>>
+      setAppStoreUsers: Dispatch<SetStateAction<StoreUsersType | undefined>>,
     ) => {
       function errorCallback() {
         // createNotification({title: "Failed to load Users", "warning"})
@@ -857,7 +850,7 @@ export const useGetUsers = () => {
         });
       }
     },
-    [appStoreDomain, appStoreUser?.token]
+    [appStoreDomain, appStoreUser?.token],
   );
 };
 
@@ -868,7 +861,7 @@ export const useGetAffiliateDashboard = () => {
     (
       setAppStoreDashboardData: Dispatch<
         SetStateAction<AffiliateDashboardData | undefined>
-      >
+      >,
     ) => {
       function errorCallback() {
         // createNotification({title: "Failed to load Users", "warning"})
@@ -889,7 +882,7 @@ export const useGetAffiliateDashboard = () => {
         });
       }
     },
-    [appStoreDomain, appStoreUser?.token]
+    [appStoreDomain, appStoreUser?.token],
   );
 };
 
@@ -917,7 +910,7 @@ export const useGetStorePayments = () => {
         });
       }
     },
-    [appStoreDomain, appStoreUser?.token]
+    [appStoreDomain, appStoreUser?.token],
   );
 };
 
@@ -946,19 +939,19 @@ export const useDeleteStoreUser = () => {
         });
       }
     },
-    [appStoreDomain, appStoreUser?.token]
+    [appStoreDomain, appStoreUser?.token],
   );
 };
 
 export const useIsInAppStoreCart: () => (
-  app: AppStoreAppType
+  app: AppStoreAppType,
 ) => boolean = () => {
   const appStoreCart = useAppStoreCartContext();
   return useCallback(
     (app: AppStoreAppType) => {
       return !!(app?.origin_package && appStoreCart?.[app.origin_package]);
     },
-    [appStoreCart]
+    [appStoreCart],
   );
 };
 
@@ -974,7 +967,7 @@ export const useAppHasPremiumRequirement = () => {
       // }
       return Boolean(appStoreCart?.[app.origin_package]);
     },
-    [appStoreCart]
+    [appStoreCart],
   );
 };
 
@@ -987,10 +980,10 @@ export const useSignupToAppStore = () => {
         updateAppStoreUser,
         appStoreDomain,
         userData,
-        onLoggedIn
+        onLoggedIn,
       );
     },
-    [appStoreDomain, updateAppStoreUser]
+    [appStoreDomain, updateAppStoreUser],
   );
 };
 
@@ -1002,7 +995,7 @@ export const useInstallAnyAppPackage = () => {
       downloadInfo: VerifiedDownloadInfo,
       app: AppStoreAppType,
       setIsloading: Dispatch<SetStateAction<boolean>>,
-      setOpen: (isOpen: boolean) => void
+      setOpen: (isOpen: boolean) => void,
     ) => {
       if (app.categories?.[0] === strategyName) {
         installProfile(downloadInfo, setIsloading, setOpen);
@@ -1010,7 +1003,7 @@ export const useInstallAnyAppPackage = () => {
         installApp(downloadInfo, setIsloading, setOpen);
       }
     },
-    [installApp, installProfile]
+    [installApp, installProfile],
   );
 };
 
@@ -1022,7 +1015,7 @@ export const useInstallAppPackage = () => {
     (
       downloadInfo: VerifiedDownloadInfo,
       setIsloading: Dispatch<SetStateAction<boolean>>,
-      setOpen: (isOpen: boolean) => void
+      setOpen: (isOpen: boolean) => void,
     ) => {
       setIsloading(true);
 
@@ -1044,7 +1037,7 @@ export const useInstallAppPackage = () => {
         url: getAppUrlFromDownloadInfo(
           downloadInfo,
           appStoreDomain,
-          appStoreUser
+          appStoreUser,
         ),
       };
       sendAndInterpretBotUpdate({
@@ -1054,7 +1047,7 @@ export const useInstallAppPackage = () => {
         errorCallback,
       });
     },
-    [appStoreDomain, appStoreUser, botDomain]
+    [appStoreDomain, appStoreUser, botDomain],
   );
 };
 
@@ -1064,7 +1057,7 @@ export const useUnInstallAppPackage = () => {
     (
       app: AppStoreAppType,
       setIsloading: Dispatch<SetStateAction<boolean>>,
-      setOpen: Dispatch<SetStateAction<boolean>>
+      setOpen: Dispatch<SetStateAction<boolean>>,
     ) => {
       setIsloading(true);
       const successCallback = () => {
@@ -1089,7 +1082,7 @@ export const useUnInstallAppPackage = () => {
         errorCallback,
       });
     },
-    [botDomain]
+    [botDomain],
   );
 };
 
@@ -1101,7 +1094,7 @@ export const useInstallProfile = () => {
     (
       downloadInfo: VerifiedDownloadInfo,
       setIsloading: Dispatch<SetStateAction<boolean>>,
-      setOpen: (isOpen: boolean) => void
+      setOpen: (isOpen: boolean) => void,
     ) => {
       setIsloading(true);
       const onFailInstall = () => {
@@ -1135,7 +1128,7 @@ export const useInstallProfile = () => {
               botDomain,
               downloadInfo.package_id,
               onSelectSuccess,
-              onSelectFail
+              onSelectFail,
             );
           } else {
             setIsloading(false);
@@ -1150,7 +1143,7 @@ export const useInstallProfile = () => {
           url: getAppUrlFromDownloadInfo(
             downloadInfo,
             appStoreDomain,
-            appStoreUser
+            appStoreUser,
           ),
           name: downloadInfo.appTitle,
         },
@@ -1159,14 +1152,14 @@ export const useInstallProfile = () => {
         errorCallback: onFailInstall,
       });
     },
-    [appStoreDomain, appStoreUser, botDomain]
+    [appStoreDomain, appStoreUser, botDomain],
   );
 };
 
 function getAppUrlFromDownloadInfo(
   downloadInfo: VerifiedDownloadInfo,
   appStoreDomain: string,
-  appStoreUser: AppStoreUserType | undefined
+  appStoreUser: AppStoreUserType | undefined,
 ) {
   return `${appStoreDomain}/download_app/${appStoreUser?.download_token}/${downloadInfo.major_version}/${downloadInfo.minor_version}/${downloadInfo.bug_fix_version}/${downloadInfo.origin_package}.zip`;
 }
@@ -1178,7 +1171,7 @@ function useUpdateLoginToken() {
       localStorage.setItem("storeSession", JSON.stringify(tokens));
       updateAppStoreUser(tokens);
     },
-    [updateAppStoreUser]
+    [updateAppStoreUser],
   );
 }
 

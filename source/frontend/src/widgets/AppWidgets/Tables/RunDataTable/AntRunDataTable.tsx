@@ -101,7 +101,7 @@ function MetaDataTable({
   const [isUpdating, setIsUpdating] = useState<boolean>(false);
   const [loadSelectedRuns, setLoadSelectedRuns] = useState<boolean>(true);
   const [_selectedRunIds, _setSelectedRunIds] = useState<DisplayedRunIdsType>(
-    defaultDisplayedRunIds
+    defaultDisplayedRunIds,
   );
   const selectedRunIds = loadSelectedRuns ? displayedRunIds : _selectedRunIds;
   const setSelectedRunIds = loadSelectedRuns
@@ -110,18 +110,14 @@ function MetaDataTable({
   const somethingSelected = !!selectedRunIds.backtesting?.length;
   const onlyOneIsSelected = selectedRunIds.backtesting?.length === 1;
 
-  const {
-    columns,
-    records,
-    runDataColumnKeys,
-    userInputKeys,
-  } = useFormatTableData(
-    metadata,
-    hiddenMetadataColumns,
-    currentTentaclesTradingConfig,
-    showCurrentCampaign,
-    currentCampaignName
-  );
+  const { columns, records, runDataColumnKeys, userInputKeys } =
+    useFormatTableData(
+      metadata,
+      hiddenMetadataColumns,
+      currentTentaclesTradingConfig,
+      showCurrentCampaign,
+      currentCampaignName,
+    );
   return useMemo(() => {
     function setSelectedRecordIds(selectedRecordIds: string[]) {
       setSelectedRunIds((prev_selection) => {
@@ -136,11 +132,8 @@ function MetaDataTable({
       setIsUpdating(true);
       deleteBacktestingRuns(
         selectedRunIds.backtesting.map((runId) => {
-          const {
-            backtestingId,
-            optimizerId,
-            campaignName,
-          } = splitRunIdentifiers(runId);
+          const { backtestingId, optimizerId, campaignName } =
+            splitRunIdentifiers(runId);
           return {
             backtesting_id: backtestingId,
             optimizer_id: optimizerId,
@@ -148,7 +141,7 @@ function MetaDataTable({
           };
         }),
         setIsUpdating,
-        () => setSelectedRecordIds([])
+        () => setSelectedRecordIds([]),
       );
     }
     function restoreSettings(settings: TentaclesConfigValuesType | undefined) {
@@ -157,7 +150,7 @@ function MetaDataTable({
           settings as TentaclesConfigByTentacleType,
           setIsUpdating,
           true,
-          true
+          true,
         );
       } else {
         createNotification({
@@ -186,24 +179,24 @@ function MetaDataTable({
                 ...(showCurrentCampaign ? ["optimization campaign"] : []),
               ]
             : visibleColumns === "allInfo"
-            ? [
-                ...METADATA_ADVANCED_HIDDEN_FIELDS,
-                ...userInputKeys,
-                ...(showCurrentCampaign ? ["optimization campaign"] : []),
-              ]
-            : [
-                ...METADATA_HIDDEN_FIELDS,
-                ...(showCurrentCampaign ? ["optimization campaign"] : []),
-                ...runDataColumnKeys.filter(
-                  (key) =>
-                    ![
-                      "runId",
-                      "optimizer id",
-                      "optimization campaign",
-                      "runInformation",
-                    ].includes(key)
-                ),
-              ]
+              ? [
+                  ...METADATA_ADVANCED_HIDDEN_FIELDS,
+                  ...userInputKeys,
+                  ...(showCurrentCampaign ? ["optimization campaign"] : []),
+                ]
+              : [
+                  ...METADATA_HIDDEN_FIELDS,
+                  ...(showCurrentCampaign ? ["optimization campaign"] : []),
+                  ...runDataColumnKeys.filter(
+                    (key) =>
+                      ![
+                        "runId",
+                        "optimizer id",
+                        "optimization campaign",
+                        "runInformation",
+                      ].includes(key),
+                  ),
+                ]
         }
         paginationSize={500}
         header={
@@ -228,7 +221,7 @@ function MetaDataTable({
             </Tooltip>
             <Tooltip
               title={t(
-                "backtesting.runDataTable.toggle-displaying-data-only-from-the-current-campaign-or-from-all-activated-ones-tooltip"
+                "backtesting.runDataTable.toggle-displaying-data-only-from-the-current-campaign-or-from-all-activated-ones-tooltip",
               )}
             >
               <div>
@@ -266,7 +259,7 @@ function MetaDataTable({
               </Tooltip>
               <Tooltip
                 title={t(
-                  "backtesting.runDataTable.display-all-run-information"
+                  "backtesting.runDataTable.display-all-run-information",
                 )}
               >
                 <Radio.Button value="allInfo">
@@ -283,7 +276,7 @@ function MetaDataTable({
             </Radio.Group>
             <Tooltip
               title={t(
-                "backtesting.runDataTable.load-plots-for-selected-runs-or-just-select-them-tooltip"
+                "backtesting.runDataTable.load-plots-for-selected-runs-or-just-select-them-tooltip",
               )}
             >
               <Switch
@@ -327,7 +320,7 @@ function MetaDataTable({
                       ? () => {
                           const selectedRow = records.find(
                             (record) =>
-                              record.id === selectedRunIds.backtesting[0]
+                              record.id === selectedRunIds.backtesting[0],
                           );
                           restoreSettings(selectedRow?.["user inputs"]);
                         }
@@ -381,12 +374,12 @@ function useFormatTableData(
   hiddenMetadataColumns: string[] | undefined,
   currentTentaclesTradingConfig: TentaclesConfigsRootType | undefined,
   showCurrentCampaign: boolean,
-  currentCampaignName: string
+  currentCampaignName: string,
 ) {
   return useMemo(() => {
     const preFilteredMetadata = showCurrentCampaign
       ? (JSON.parse(JSON.stringify(metadata)) as BacktestingRunData[]).filter(
-          (row) => row["optimization campaign"] === currentCampaignName
+          (row) => row["optimization campaign"] === currentCampaignName,
         )
       : (JSON.parse(JSON.stringify(metadata)) as BacktestingRunData[]);
     preFilteredMetadata.sort((a, b) => b.timestamp - a.timestamp);
@@ -395,35 +388,34 @@ function useFormatTableData(
     const filteredFirstRow =
       firstRow &&
       Object.entries(firstRow).filter(
-        ([key]) => !METADATA_UNDISPLAYED_FIELDS.includes(key)
+        ([key]) => !METADATA_UNDISPLAYED_FIELDS.includes(key),
       );
     const runDataColumnKeys: string[] = ["runInformation"];
-    const runDataColumns:
-      | RunDataTableColumnType[]
-      | undefined = filteredFirstRow?.map(([key, rowValue]) => {
-      const _key = key === "id" ? "runId" : key;
-      runDataColumnKeys.push(_key);
-      return {
-        key: _key,
-        dataIndex: _key,
-        title: key,
-        width: 100,
-        textWrap: "word-break",
-        ellipsis: true,
-        dsorter: ["string", "number", "boolean"].includes(typeof rowValue)
-          ? (typeof rowValue as "string" | "number" | "boolean")
-          : undefined,
-        render: TIMESTAMP_DATA.includes(key)
-          ? (value: number) => {
-              return <>{new Date(value*1000).toISOString()}</>;
-            }
-          : ID_DATA.includes(key)
-          ? (value: number | string) => {
-              return <>{Number(value)}</>;
-            }
-          : undefined,
-      };
-    });
+    const runDataColumns: RunDataTableColumnType[] | undefined =
+      filteredFirstRow?.map(([key, rowValue]) => {
+        const _key = key === "id" ? "runId" : key;
+        runDataColumnKeys.push(_key);
+        return {
+          key: _key,
+          dataIndex: _key,
+          title: key,
+          width: 100,
+          textWrap: "word-break",
+          ellipsis: true,
+          dsorter: ["string", "number", "boolean"].includes(typeof rowValue)
+            ? (typeof rowValue as "string" | "number" | "boolean")
+            : undefined,
+          render: TIMESTAMP_DATA.includes(key)
+            ? (value: number) => {
+                return <>{new Date(value * 1000).toISOString()}</>;
+              }
+            : ID_DATA.includes(key)
+              ? (value: number | string) => {
+                  return <>{Number(value)}</>;
+                }
+              : undefined,
+        };
+      });
     runDataColumns && ensureBacktestingMetadataColumnsOrder(runDataColumns);
 
     // Build user inputs columns. They are hidden by default
@@ -447,7 +439,7 @@ function useFormatTableData(
             //   if (!hasTentacle) {
             //     addedTentacles.push(inputTentacle);
             //   }
-          }
+          },
         );
       }
     });
@@ -522,7 +514,7 @@ function useFormatTableData(
       const id = mergeRunIdentifiers(
         row.id,
         row["optimizer id"],
-        row["optimization campaign"]
+        row["optimization campaign"],
       );
       return {
         ...row,
@@ -625,21 +617,18 @@ export type RunDataTableColumnType = AntTableColumnType<RunDataTableDataType>;
 export function mergeRunIdentifiers(
   backtestingId: number | string,
   optimizerId: number | string,
-  campaignName: string
+  campaignName: string,
 ): string {
   return `${backtestingId}${ID_SEPARATOR}${optimizerId}${ID_SEPARATOR}${campaignName}`;
 }
 
-export function splitRunIdentifiers(
-  runIdentifier: string
-): {
+export function splitRunIdentifiers(runIdentifier: string): {
   backtestingId: number;
   optimizerId: number;
   campaignName: string;
 } {
-  const [backtestingId, optimizerId, campaignName] = runIdentifier.split(
-    ID_SEPARATOR
-  );
+  const [backtestingId, optimizerId, campaignName] =
+    runIdentifier.split(ID_SEPARATOR);
   return {
     backtestingId: Number(backtestingId),
     optimizerId: Number(optimizerId),
@@ -648,12 +637,12 @@ export function splitRunIdentifiers(
 }
 
 function ensureBacktestingMetadataColumnsOrder(
-  runDataColumns: RunDataTableColumnType[]
+  runDataColumns: RunDataTableColumnType[],
 ) {
   runDataColumns.sort(
     (a, b) =>
       (backtestingRunDataColumnOrder[a.key] || 0) -
-      (backtestingRunDataColumnOrder[b.key] || 0)
+      (backtestingRunDataColumnOrder[b.key] || 0),
   );
 }
 
@@ -703,7 +692,7 @@ type UserInpuntColumnsType = {
 };
 
 function userInpuntColumnToArray(
-  userInputColumns: UserInpuntColumnsType
+  userInputColumns: UserInpuntColumnsType,
 ): RunDataTableColumnType[] {
   return Object.entries(userInputColumns).map(([tentacleKey, columnGroup]) => {
     return {
@@ -745,14 +734,12 @@ function getUserInputColumns({
           !userInputKeys.includes(inputKey) &&
           !hiddenMetadataColumns?.includes(inputKey)
         ) {
-          const {
-            userInputLabel,
-            lastTentacleTitle,
-          } = findUserInputAndTentacleLabel(
-            currentTentaclesTradingConfig,
-            propertyKey,
-            tentacleNames
-          );
+          const { userInputLabel, lastTentacleTitle } =
+            findUserInputAndTentacleLabel(
+              currentTentaclesTradingConfig,
+              propertyKey,
+              tentacleNames,
+            );
           const columnGroup = userInputColumns[lastTentacleTitle] || {
             title: lastTentacleTitle,
             width: 0,
@@ -792,7 +779,7 @@ function getUserInputColumns({
             userInputColumns[lastTentacleTitle] = columnGroup;
           }
         }
-      }
+      },
     );
   return userInputColumns;
 }
@@ -824,7 +811,7 @@ function getUserInputColumns({
 function _formatUserInputRow(
   row: BacktestingRunData,
   userInputData: TentaclesConfigValuesType,
-  parentIdentifiers: string
+  parentIdentifiers: string,
 ) {
   Object.entries(userInputData).forEach(
     ([userInputIdentifier, userInputValue]) => {
@@ -834,11 +821,10 @@ function _formatUserInputRow(
       ) {
         _formatUserInputRow(row, userInputValue, userInputIdentifier);
       } else {
-        (row as any)[
-          userInputKey(userInputIdentifier, parentIdentifiers)
-        ] = String(userInputValue);
+        (row as any)[userInputKey(userInputIdentifier, parentIdentifiers)] =
+          String(userInputValue);
       }
-    }
+    },
   );
 }
 

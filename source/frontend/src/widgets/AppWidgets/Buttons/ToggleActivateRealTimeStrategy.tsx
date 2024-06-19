@@ -5,11 +5,8 @@ import { Trans } from "react-i18next";
 
 import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import createNotification from "../../../components/Notifications/Notification";
-import type {
-  TentaclesConfigByTentacleType} from "../../../context/config/TentaclesConfigProvider";
-import {
-  useSaveTentaclesConfigAndSendAction,
-} from "../../../context/config/TentaclesConfigProvider";
+import type { TentaclesConfigByTentacleType } from "../../../context/config/TentaclesConfigProvider";
+import { useSaveTentaclesConfigAndSendAction } from "../../../context/config/TentaclesConfigProvider";
 import {
   useBotInfoContext,
   useFetchBotInfo,
@@ -29,7 +26,8 @@ export default function ToggleActivateRealTimeStrategy() {
     "disable_realtime_strategy";
   const isOnline = useIsBotOnlineContext();
   const [isExecuting, setIsExecuting] = useState(false);
-  const saveTentaclesConfigAndSendAction = useSaveTentaclesConfigAndSendAction();
+  const saveTentaclesConfigAndSendAction =
+    useSaveTentaclesConfigAndSendAction();
   const botInfo = useBotInfoContext();
   const fetchBotInfo = useFetchBotInfo();
   const isDemo = useIsDemoMode();
@@ -37,7 +35,7 @@ export default function ToggleActivateRealTimeStrategy() {
     const isActivated = botInfo?.real_time_strategies_active;
     const availableApiActions = botInfo?.available_api_actions;
     const isAvailableApiAction = availableApiActions?.includes(
-      COMMAND_ACTIVATE_REALTIME_STRATEGY
+      COMMAND_ACTIVATE_REALTIME_STRATEGY,
     );
 
     const command = isActivated
@@ -70,9 +68,9 @@ export default function ToggleActivateRealTimeStrategy() {
                   setIsExecuting,
                   true,
                   success,
-                  failed
+                  failed,
                 ),
-              setIsExecuting
+              setIsExecuting,
             )
           }
           buttonType={buttonTypes.warning}
@@ -92,9 +90,9 @@ export default function ToggleActivateRealTimeStrategy() {
                   setIsExecuting,
                   true,
                   success,
-                  failed
+                  failed,
                 ),
-              setIsExecuting
+              setIsExecuting,
             )
           }
           buttonType={buttonTypes.warning}

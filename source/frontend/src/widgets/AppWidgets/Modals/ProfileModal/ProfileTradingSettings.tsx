@@ -50,7 +50,7 @@ export function onProfileSettingChange(
   value: number | string | boolean,
   rootPath: ProfileRootPathType,
   subPath: string,
-  subSubPath?: string
+  subSubPath?: string,
 ) {
   setNewProfileSettings((prevSettings) => {
     const newSettings = {
@@ -101,8 +101,8 @@ export function ProfileTradingTypeSettings({
   const currentTradingType = isRealTrading
     ? tradingTypes.realTrading.value
     : isSimulatedTrading
-    ? tradingTypes.simulatedTrading.value
-    : tradingTypes.tradingDisabled.value;
+      ? tradingTypes.simulatedTrading.value
+      : tradingTypes.tradingDisabled.value;
 
   function handleTradingTypeChange(value: TradingTypeValueType) {
     setNewProfileSettings((prevSettings) => {
@@ -155,7 +155,7 @@ export function ProfileReferenceMarketSettings({
   const refMarket = newProfileSettings?.config?.trading?.["reference-market"];
   // TODO replace with all available
   const quoteAssets = Array.from(
-    new Set([refMarket, "USDT", "BTC", "ETH", "USD", "BUSD", "USDC"])
+    new Set([refMarket, "USDT", "BTC", "ETH", "USD", "BUSD", "USDC"]),
   );
 
   const defaultOptions = convertStringArrayToOptions(quoteAssets);
@@ -167,11 +167,11 @@ export function ProfileReferenceMarketSettings({
           Array.from(
             new Set([
               ...quoteAssets.filter((quoteAsset) =>
-                quoteAsset.includes(searchTextU)
+                quoteAsset.includes(searchTextU),
               ),
               searchTextU,
-            ])
-          )
+            ]),
+          ),
         )
       : defaultOptions;
     setOptions(newOptions);
@@ -191,21 +191,19 @@ export function ProfileReferenceMarketSettings({
             setNewProfileSettings,
             _refMarket.toUpperCase(),
             "trading",
-            "reference-market"
+            "reference-market",
           )
         }
         onSearch={setAutoCompleteOptions}
         placeholder={t(
-          "strategyConfigurator.profileSettings.enter-a-reference-market-like-usdt-or-btc"
+          "strategyConfigurator.profileSettings.enter-a-reference-market-like-usdt-or-btc",
         )}
       />
     </Grid>
   );
 }
 
-function convertStringArrayToOptions(
-  stringArray: string[]
-): {
+function convertStringArrayToOptions(stringArray: string[]): {
   label: string;
   value: string;
 }[] {

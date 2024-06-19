@@ -1,12 +1,13 @@
 import { useMemo } from "react";
-import type { HandleType, NodeProps} from "reactflow";
+import type { HandleType, NodeProps } from "reactflow";
 import { Position } from "reactflow";
 
 import type {
   NodeConfigKeyType,
   TentaclesConfigsSchemaPropertiesType,
   TentaclesConfigsSchemaType,
-  TentaclesConfigValuesType} from "../../../../../context/config/TentaclesConfigProvider";
+  TentaclesConfigValuesType,
+} from "../../../../../context/config/TentaclesConfigProvider";
 import {
   tentacleConfigTypes,
   useTentaclesConfigContext,
@@ -435,7 +436,7 @@ export default function StrategyBlockNode({
             key={id}
             id={id}
             isConnectable={nodeOptions.is_connectable}
-          />
+          />,
         );
         ioNodes[nodeSide] = ioNodeData;
       });
@@ -459,11 +460,7 @@ export default function StrategyBlockNode({
   }, [jsonConfig, jsonIoSchema, jsonSchema, id, selected]);
 }
 
-export function useCurrentNodeSchema({
-  nodeId,
-}: {
-  nodeId: string;
-}): {
+export function useCurrentNodeSchema({ nodeId }: { nodeId: string }): {
   ioSchema: TentaclesConfigsSchemaPropertiesType | undefined;
   schema: TentaclesConfigsSchemaType | undefined;
   config: TentaclesConfigValuesType | undefined;

@@ -12,12 +12,8 @@ import Crosshair, {
   handleCrosshairOnMouseEnter,
   handleCrosshairOnMouseLeave,
 } from "./Crosshair";
-import type {
-  ChartLocationType} from "./Plotly";
-import PlotlyChart, {
-  allChartLocations,
-  enableAxisSelect,
-} from "./Plotly";
+import type { ChartLocationType } from "./Plotly";
+import PlotlyChart, { allChartLocations, enableAxisSelect } from "./Plotly";
 import type {
   PlotlyLayoutsType,
   PlotlyLayoutType,
@@ -202,6 +198,6 @@ function Chart({
         />
       </div>
     ),
-    [chart, chartLocation, containerRef, height, layout, setLayouts, width]
+    [chart, chartLocation, containerRef, height, layout, setLayouts, width],
   );
 }

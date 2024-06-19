@@ -19,7 +19,7 @@ import { sendAndInterpretBotUpdate } from "./fetchAndStoreFromBot";
 export async function startBacktesting(
   botDomain: string,
   backtestingSettings: StatBacktestingSettingsType,
-  setBotIsBacktesting: Dispatch<SetStateAction<boolean>>
+  setBotIsBacktesting: Dispatch<SetStateAction<boolean>>,
 ) {
   function successCallback(payload: successResponseCallBackParams) {
     setBotIsBacktesting(true);
@@ -41,7 +41,7 @@ export async function startBacktesting(
 export async function restartBot(
   botDomain: string,
   updateIsOnline: Dispatch<SetStateAction<boolean>>,
-  notification: boolean
+  notification: boolean,
 ) {
   function successCallback() {
     updateIsOnline(false);
@@ -67,7 +67,7 @@ export async function logOutBot(
   botDomain: string,
   updateIsOnline: Dispatch<SetStateAction<boolean>>,
   setIsloading: Dispatch<SetStateAction<boolean>>,
-  onLoggedOut: () => void
+  onLoggedOut: () => void,
 ) {
   setIsloading(true);
   function successCallback() {
@@ -92,7 +92,7 @@ export async function logOutBot(
 export async function stopBot(
   botDomain: string,
   updateIsOnline: Dispatch<SetStateAction<boolean>>,
-  setIsloading: Dispatch<SetStateAction<boolean>>
+  setIsloading: Dispatch<SetStateAction<boolean>>,
 ) {
   setIsloading(true);
   function successCallback() {
@@ -116,7 +116,7 @@ export async function stopBot(
 export async function updateBot(
   botDomain: string,
   updateIsOnline: Dispatch<SetStateAction<boolean>>,
-  setIsloading: Dispatch<SetStateAction<boolean>>
+  setIsloading: Dispatch<SetStateAction<boolean>>,
 ) {
   setIsloading(true);
   function successCallback() {
@@ -140,7 +140,7 @@ export async function updateBot(
 export async function startOptimizer(
   botDomain: string,
   optimizerRunSettings: StartOptimizerSettingsType,
-  setBotIsOptimizing: Dispatch<SetStateAction<boolean | "isStopping">>
+  setBotIsOptimizing: Dispatch<SetStateAction<boolean | "isStopping">>,
 ) {
   function successCallback({
     updatedData,
@@ -175,7 +175,7 @@ export async function addToOptimizerQueue(
   botDomain: string,
   optimizerRunSettings: OptimizerUiConfig,
   optimizerSettingsForm: OptimizerEditorInputsType,
-  fetchOptimizerQueue: () => void
+  fetchOptimizerQueue: () => void,
 ) {
   function successCallback(payload: successResponseCallBackParams) {
     fetchOptimizerQueue();
@@ -206,7 +206,7 @@ export async function addToOptimizerQueue(
 
 export async function stopBacktesting(
   botDomain: string,
-  setBotIsBacktesting: Dispatch<SetStateAction<boolean>>
+  setBotIsBacktesting: Dispatch<SetStateAction<boolean>>,
 ) {
   function successCallback(payload: successResponseCallBackParams) {
     setBotIsBacktesting(false);
@@ -221,7 +221,7 @@ export async function stopBacktesting(
 
 export async function stopOptimizer(
   botDomain: string,
-  setBotIsOptimizing: Dispatch<SetStateAction<boolean | "isStopping">>
+  setBotIsOptimizing: Dispatch<SetStateAction<boolean | "isStopping">>,
 ) {
   function successCallback(payload: successResponseCallBackParams) {
     // TODO check why streing
@@ -264,7 +264,7 @@ export async function resetPingPongStorage(botDomain: string) {
 }
 export async function deleteCurrentCache(
   botDomain: string,
-  exchangeId: string
+  exchangeId: string,
 ) {
   function successCallback() {
     createNotification({
@@ -308,7 +308,7 @@ export async function deleteAllCache(botDomain: string, exchangeId: string) {
 
 export async function cancelAllOrders(
   botDomain: string,
-  setIsCancelling: Dispatch<SetStateAction<boolean>>
+  setIsCancelling: Dispatch<SetStateAction<boolean>>,
 ) {
   setIsCancelling(true);
   function successCallback() {
@@ -334,7 +334,7 @@ export async function cancelAllOrders(
 export async function cancelOrder(
   botDomain: string,
   orderId: string,
-  setIsCancelling: Dispatch<SetStateAction<boolean>>
+  setIsCancelling: Dispatch<SetStateAction<boolean>>,
 ) {
   setIsCancelling(true);
   function successCallback() {
@@ -357,7 +357,7 @@ export async function cancelOrders(
   botDomain: string,
   orderIdsArray: string[],
   setIsCancelling: Dispatch<SetStateAction<boolean>>,
-  upDateOrders: () => void
+  upDateOrders: () => void,
 ) {
   setIsCancelling?.(true);
   function successCallback(payload: successResponseCallBackParams) {
@@ -385,7 +385,7 @@ export async function updateProfileInfo(
   botDomain: string,
   newProfileInfo: ProfileInfoUpdateType,
   onFail?: (payload: errorResponseCallBackParams) => void,
-  onSuccess?: (payload: successResponseCallBackParams) => void
+  onSuccess?: (payload: successResponseCallBackParams) => void,
 ) {
   function successCallback() {
     createNotification({ title: "Successfully updated profile info" });
@@ -450,7 +450,7 @@ export async function deleteProfile(
   profileId: string,
   profileName: string,
   onSuccess?: () => void,
-  onFail?: () => void
+  onFail?: () => void,
 ) {
   function successCallback() {
     onSuccess?.();
@@ -479,7 +479,7 @@ export async function selectProfile(
   botDomain: string,
   profileId: string,
   onSuccess: (payload: successResponseCallBackParams) => void,
-  onFail: (payload: errorResponseCallBackParams) => void
+  onFail: (payload: errorResponseCallBackParams) => void,
 ) {
   await sendAndInterpretBotUpdate({
     updatedData: {},
@@ -560,7 +560,7 @@ export async function selectProfile(
 
 export async function closeAllPositions(
   botDomain: string,
-  setIsClosing: Dispatch<SetStateAction<boolean>>
+  setIsClosing: Dispatch<SetStateAction<boolean>>,
 ) {
   setIsClosing(true);
   function successCallback() {
@@ -587,7 +587,7 @@ export async function closePosition(
   botDomain: string,
   symbol: string,
   side: string,
-  setIsClosing: Dispatch<SetStateAction<boolean>>
+  setIsClosing: Dispatch<SetStateAction<boolean>>,
 ) {
   setIsClosing(true);
   function successCallback() {
@@ -611,13 +611,13 @@ export async function closePosition(
 
 export async function realTradingSwitch(
   botDomain: string,
-  isRealTrading: boolean
+  isRealTrading: boolean,
 ) {
   const title = isRealTrading ? "real" : "simulated";
   function successCallback() {
     createNotification({
       title: `Successfully switched to ${title} trading`,
-      message: `${projectName  } will restart now`,
+      message: `${projectName} will restart now`,
     });
   }
   function errorCallback() {
@@ -647,13 +647,13 @@ export async function updateConfig(
   newConfig: ExchangeConfigUpdateType,
   profileName: string,
   onFail: () => void,
-  onSuccess?: (payload: successResponseCallBackParams) => void
+  onSuccess?: (payload: successResponseCallBackParams) => void,
 ) {
   function successCallback() {
     createNotification({
       title: `Successfully updated ${profileName} config`,
       message: newConfig.restart_after_save
-        ? `${projectName  } will restart now`
+        ? `${projectName} will restart now`
         : undefined,
     });
   }
@@ -677,8 +677,8 @@ export async function resetTentaclesConfig(
   botDomain: string,
   setIsResetting: Dispatch<SetStateAction<boolean>>,
   fetchCurrentTentaclesConfig: (
-    successCallBack: (payload: successResponseCallBackParams) => void
-  ) => void
+    successCallBack: (payload: successResponseCallBackParams) => void,
+  ) => void,
 ) {
   await Promise.all(
     tentacles.map(async (tentacle) => {
@@ -717,7 +717,7 @@ export async function resetTentaclesConfig(
         errorCallback,
       });
       return undefined;
-    })
+    }),
   );
   fetchCurrentTentaclesConfig(() => setIsResetting(false));
 }
@@ -727,8 +727,8 @@ export async function resetStorage(
   botDomain: string,
   setIsResetting: Dispatch<SetStateAction<boolean>>,
   reloadUiData: (
-    successCallBack: (payload: successResponseCallBackParams) => void
-  ) => void
+    successCallBack: (payload: successResponseCallBackParams) => void,
+  ) => void,
 ) {
   function errorCallback(payload: errorResponseCallBackParams) {
     createNotification({

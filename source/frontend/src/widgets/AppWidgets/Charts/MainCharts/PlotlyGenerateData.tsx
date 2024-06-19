@@ -2,12 +2,13 @@ import type { Dispatch, SetStateAction } from "react";
 
 import type {
   CanldesPlotSourceType,
-  PlotSourceType} from "../../../../constants/backendConstants";
+  PlotSourceType,
+} from "../../../../constants/backendConstants";
 import {
   ALL_PLOT_SOURCES,
   CANDLES_PLOT_SOURCES,
   DISPLAY_SETTINGS_KEY,
-  GRAPHS_KEY
+  GRAPHS_KEY,
 } from "../../../../constants/backendConstants";
 import type { UiConfigType } from "../../../../context/config/UiConfigProvider";
 import type {
@@ -47,7 +48,7 @@ export function setPlotData(
   visibleTimeframes: string,
   visiblePairs: string,
   setCharts: Dispatch<SetStateAction<ChartsDataType | undefined>>,
-  setLayouts: UpdatePlotlyLayoutsType
+  setLayouts: UpdatePlotlyLayoutsType,
 ) {
   if (!(plottedElements?.live || plottedElements?.backtesting)) {
     return;
@@ -70,7 +71,7 @@ export function setPlotData(
     uiConfig,
     visibleTimeframes,
     visiblePairs,
-    chartsInfo
+    chartsInfo,
   );
   const plotDataToStore: ChartsDataType = {};
   let hasCharts = false;
@@ -123,7 +124,7 @@ export function setPlotData(
 function setLayout(
   layouts: PlotlyLayoutsType,
   layout: PlotlyLayoutType,
-  chartLocation: ChartLocationType
+  chartLocation: ChartLocationType,
 ) {
   layouts[chartLocation] = layout;
 }
@@ -131,7 +132,7 @@ function setLayout(
 function getOrGenerateLayout(
   layouts: PlotlyLayoutsType,
   uiConfig: UiConfigType,
-  chartLocation: ChartLocationType
+  chartLocation: ChartLocationType,
 ): PlotlyLayoutType {
   if (typeof layouts[chartLocation] !== "undefined") {
     return layouts[chartLocation] as PlotlyLayoutType;
@@ -180,7 +181,7 @@ function formatPlottedData(
   uiConfig: UiConfigType,
   visibleTimeframes: string,
   visiblePairs: string,
-  chartsInfo: ChartsInfoType
+  chartsInfo: ChartsInfoType,
 ): { plotData: PlottedDataType; layouts: PlotlyLayoutsType } {
   const plotData: PlottedDataType = {};
   const layouts: PlotlyLayoutsType = {};
@@ -190,9 +191,8 @@ function formatPlottedData(
         if (plottedLiveOrBacktestingElements) {
           if (liveOrBacktest === "backtesting") {
             formatPlottedBacktestingData({
-              plottedBacktestingElements: plottedLiveOrBacktestingElements as PlottedElementsType<
-                PlottedElementBacktestingNameType
-              >,
+              plottedBacktestingElements:
+                plottedLiveOrBacktestingElements as PlottedElementsType<PlottedElementBacktestingNameType>,
               uiConfig,
               visibleTimeframes,
               visiblePairs,
@@ -202,9 +202,8 @@ function formatPlottedData(
             });
           } else if (liveOrBacktest === "live") {
             formatPlottedLiveData({
-              plottedLiveElements: plottedLiveOrBacktestingElements as PlottedElementsType<
-                PlottedElementLiveNameType
-              >,
+              plottedLiveElements:
+                plottedLiveOrBacktestingElements as PlottedElementsType<PlottedElementLiveNameType>,
               uiConfig,
               visibleTimeframes,
               visiblePairs,
@@ -214,7 +213,7 @@ function formatPlottedData(
             });
           }
         }
-      }
+      },
     );
   return { plotData, layouts };
 }
@@ -287,11 +286,11 @@ function formatPlottedBacktestingData({
                     visiblePairs,
                     chartsInfo,
                   });
-                }
+                },
               );
-          }
+          },
         );
-    }
+    },
   );
 }
 
@@ -351,7 +350,7 @@ function formatSubData({
                 const layout = getOrGenerateLayout(
                   layouts,
                   uiConfig,
-                  chartLocation
+                  chartLocation,
                 );
                 let yAxisId: XAxisIdType = 1;
                 let xAxisId: AxisIdType = 1;
@@ -367,14 +366,14 @@ function formatSubData({
                     yAxisId,
                     layout,
                     uiConfig,
-                    chartDetails
+                    chartDetails,
                   );
                   createAxisIfNotExists(
                     "x",
                     xAxisId,
                     layout,
                     uiConfig,
-                    chartDetails
+                    chartDetails,
                   );
                   _createCharts({
                     chartDetails,
@@ -392,7 +391,7 @@ function formatSubData({
                 });
                 setLayout(layouts, layout, chartLocation);
               });
-            }
+            },
           );
       }
     });
@@ -432,7 +431,7 @@ function _createCharts({
           backtestingId,
           optimizerId,
           optimizerCampaign,
-        })
+        }),
       );
     }
     return;
@@ -463,7 +462,7 @@ function _createCharts({
           plotOnlyY: true,
           chartsInfo,
           chartLocation,
-        })
+        }),
       );
     });
     return;
@@ -480,7 +479,7 @@ function _createCharts({
       plotOnlyY: false,
       chartsInfo,
       chartLocation,
-    })
+    }),
   );
 }
 
@@ -494,14 +493,14 @@ function displayCandlesAsLines(candlesCount: number, uiConfig: UiConfigType) {
       candlesCount >
       Number(
         uiConfig?.[DISPLAY_SETTINGS_KEY][GRAPHS_KEY]
-          .max_candles_before_line_display
+          .max_candles_before_line_display,
       )
     );
   }
   return candlesCount > default_max_candles_before_lines;
 }
 function getDisplayedCandlesLinesSources(
-  uiConfig: UiConfigType
+  uiConfig: UiConfigType,
 ): CanldesPlotSourceType[] {
   const default_max_candles_line_sources: CanldesPlotSourceType[] = ["close"];
   if (
@@ -569,7 +568,11 @@ type ChartedElementType = {
   xaxis?: string;
   yaxis?: string;
   marker?: {
-    [attribute in MarkerAttributesType]?: number[] | string[] | undefined | null;
+    [attribute in MarkerAttributesType]?:
+      | number[]
+      | string[]
+      | undefined
+      | null;
   };
 } & {
   [sourceType in PlotSourceType]?: null | number[];
@@ -658,7 +661,7 @@ const MARKER_ATTRIBUTES: MarkerAttributesType[] = [
 function _logChartsInfo(
   chartsInfo: ChartsInfoType,
   chartedElement: ChartedElementType,
-  chartLocation: ChartLocationType
+  chartLocation: ChartLocationType,
 ) {
   chartsInfo.chartsWithData[chartLocation] = true;
   // log max range
@@ -697,7 +700,7 @@ type AxisIdType = XAxisIdType | 3 | 4;
 
 type GetAxisKey<
   TAxisKeyType extends AxisKeyType,
-  TAxisIdType extends AxisIdType
+  TAxisIdType extends AxisIdType,
 > = TAxisKeyType extends "x"
   ? TAxisIdType extends XAxisIdType
     ? XAxisType
@@ -706,10 +709,10 @@ type GetAxisKey<
 
 function getAxisKey<
   TAxisKeyType extends AxisKeyType,
-  TAxisIdType extends AxisIdType
+  TAxisIdType extends AxisIdType,
 >(
   axisId: TAxisIdType,
-  axisType: TAxisKeyType
+  axisType: TAxisKeyType,
 ): GetAxisKey<TAxisKeyType, TAxisIdType> {
   return `${axisType}axis${axisId === 1 ? "" : axisId}` as GetAxisKey<
     TAxisKeyType,
@@ -722,7 +725,7 @@ function createAxisIfNotExists(
   axisId: AxisIdType,
   layout: PlotlyLayoutType,
   uiConfig: UiConfigType,
-  chartDetails: ChartDetailsType
+  chartDetails: ChartDetailsType,
 ) {
   const axisKey = getAxisKey(axisId, axisType);
   if (axisKey && !layout[axisKey]) {
@@ -730,7 +733,7 @@ function createAxisIfNotExists(
       axisKey,
       uiConfig,
       axisType,
-      chartDetails
+      chartDetails,
     );
   }
 }
@@ -746,7 +749,7 @@ function getAxisTemplate(
   axisKey: AxisType,
   uiConfig: UiConfigType,
   axisType: AxisKeyType,
-  chartDetails: ChartDetailsType
+  chartDetails: ChartDetailsType,
 ): PlotlyAxisLayout {
   const axis = axisTemplate[axisKey];
   if (axisType === "x" && chartDetails.x_type) {

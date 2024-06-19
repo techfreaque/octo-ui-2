@@ -1,5 +1,5 @@
 import { Input, Switch } from "antd";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useEffect } from "react";
 
 import UserInputLabel from "../../../../../../components/UserInputs/UserInputLabel";
@@ -28,7 +28,7 @@ export default function CloneAppForm({
   }, []);
   function handleInputChange(
     key: "newProfileName" | "selectNewProfile",
-    value: string | boolean
+    value: string | boolean,
   ) {
     setCloneAppInfo((prevInfo) => ({
       ...prevInfo,

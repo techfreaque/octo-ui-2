@@ -31,15 +31,15 @@ export function ProfileRealSettings({
               setNewProfileSettings,
               value,
               "trader",
-              "load-trade-history"
+              "load-trade-history",
             )
           }
           checked={newProfileSettings?.config?.trader?.["load-trade-history"]}
           checkedChildren={t(
-            "strategyConfigurator.profileSettings.load-trades-history-from-exchange"
+            "strategyConfigurator.profileSettings.load-trades-history-from-exchange",
           )}
           unCheckedChildren={t(
-            "strategyConfigurator.profileSettings.dont-load-trades-history-from-exchange"
+            "strategyConfigurator.profileSettings.dont-load-trades-history-from-exchange",
           )}
         />
       </Grid>

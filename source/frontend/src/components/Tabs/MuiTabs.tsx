@@ -29,7 +29,7 @@ export default function MuiTabs({
 }: MuiTabsProps) {
   const botColors = useBotColorsContext();
   const [currentTabId, setCurrentTabId] = useState<number | string>(
-    defaultTabId ? defaultTabId : 0
+    defaultTabId ? defaultTabId : 0,
   );
   const isBigScreen = useMediaQuery("(min-width:530px)");
   const [containerRef, { height }] = useMeasure();
@@ -78,7 +78,7 @@ export default function MuiTabs({
                     />
                   ) : (
                     tab.title
-                  )
+                  ),
                 )}
               </Tabs>
             </TabsElement>

@@ -18,7 +18,8 @@ import {
 } from "../../../context/config/VisiblePairProvider";
 import type {
   CurrencyListType,
-  ExchangeInfoType} from "../../../context/data/BotExchangeInfoProvider";
+  ExchangeInfoType,
+} from "../../../context/data/BotExchangeInfoProvider";
 import {
   useCurrentCurrencyListContext,
   useExchangeInfoContext,
@@ -91,7 +92,7 @@ const columns: PairsTableColumnType[] = [
     sortDirections: ["descend", "ascend"],
     dfilter: (
       item: PairsTableDataType,
-      symbolValueFilter: FilterValue
+      symbolValueFilter: FilterValue,
     ): boolean => {
       return item.symbol
         .replace("/", "")
@@ -101,7 +102,7 @@ const columns: PairsTableColumnType[] = [
           (symbolValueFilter[0] as string)
             .replace("/", "")
             .replace(":", "")
-            .toLowerCase()
+            .toLowerCase(),
         );
     },
   },

@@ -1,16 +1,11 @@
 import { useEffect, useState } from "react";
 import useMeasure from "react-use-measure";
 
-import type {
-  AntSideBarMenutItemType,
-} from "../../../../components/Sidebars/AntSidebar/AntSidebar";
+import type { AntSideBarMenutItemType } from "../../../../components/Sidebars/AntSidebar/AntSidebar";
 import AntSidebar from "../../../../components/Sidebars/AntSidebar/AntSidebar";
 import type { PlottedElementNameType } from "../../../../context/data/BotPlottedElementsProvider";
-import type {
-  DataTableSideBarMainItemType} from "../../Tables/DataTable";
-import {
-  createTradingOrBacktestingTab
-} from "../../Tables/DataTable";
+import type { DataTableSideBarMainItemType } from "../../Tables/DataTable";
+import { createTradingOrBacktestingTab } from "../../Tables/DataTable";
 import type { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
 import PlotlyChart from "../MainCharts/Plotly";
 import type {
@@ -35,7 +30,7 @@ export default function DualPieChart({
     const newMenuItems = generateSidebarMenu(
       { ...layout, width, height },
       pieCharts,
-      setLayouts
+      setLayouts,
     );
     setMenuItems(Object.values(newMenuItems));
   }, [height, layout, pieCharts, setLayouts, width]);
@@ -60,16 +55,15 @@ type DualChartsSideBarItemsType = {
 function generateSidebarMenu(
   layout: PlotlyLayoutType,
   pieCharts: ChartDataType[] | undefined,
-  setLayouts: UpdatePlotlyLayoutsType
+  setLayouts: UpdatePlotlyLayoutsType,
 ) {
   const newMenuItems: DualChartsSideBarItemsType = {};
   pieCharts?.forEach((chart) => {
     const liveOrBacktest: PlottedElementNameType =
       chart.backtesting_id === undefined ? "live" : "backtesting";
     if (!newMenuItems[liveOrBacktest]) {
-      newMenuItems[liveOrBacktest] = createTradingOrBacktestingTab(
-        liveOrBacktest
-      );
+      newMenuItems[liveOrBacktest] =
+        createTradingOrBacktestingTab(liveOrBacktest);
     }
     newMenuItems[liveOrBacktest]?.items.push({
       title: chart.name,

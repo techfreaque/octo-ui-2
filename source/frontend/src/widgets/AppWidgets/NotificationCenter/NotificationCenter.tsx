@@ -7,11 +7,8 @@ import { fetchBotLogs } from "../../../api/data";
 import AntButton from "../../../components/Buttons/AntButton";
 import { backendRoutes } from "../../../constants/backendConstants";
 import { useBotDomainContext } from "../../../context/config/BotDomainProvider";
-import type {
-  NotificationHistoryNotificationsType} from "../../../context/websockets/NotificationsContext";
-import {
-  useNotificationsHistoryContext,
-} from "../../../context/websockets/NotificationsContext";
+import type { NotificationHistoryNotificationsType } from "../../../context/websockets/NotificationsContext";
+import { useNotificationsHistoryContext } from "../../../context/websockets/NotificationsContext";
 
 interface NotificationHistory extends NotificationHistoryNotificationsType {
   Time: Date;
@@ -42,16 +39,17 @@ export default function NotificationCenter() {
     });
   });
   notificationHistory.reverse();
-  const _notificationHistory: NotificationHistory[] = notificationHistory?.length
-    ? notificationHistory
-    : [
-        {
-          Level: "info",
-          Title: t("notificationCenter.no-notifications-yet"),
-          Time: new Date(),
-          Message: "",
-        },
-      ];
+  const _notificationHistory: NotificationHistory[] =
+    notificationHistory?.length
+      ? notificationHistory
+      : [
+          {
+            Level: "info",
+            Title: t("notificationCenter.no-notifications-yet"),
+            Time: new Date(),
+            Message: "",
+          },
+        ];
   return logHistory ? (
     <>
       <Typography.Title level={2}>

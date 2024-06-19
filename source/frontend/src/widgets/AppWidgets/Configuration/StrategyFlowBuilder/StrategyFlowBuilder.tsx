@@ -5,21 +5,17 @@ import type {
   Dispatch,
   DragEventHandler,
   RefObject,
-  SetStateAction} from "react";
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
+  SetStateAction,
 } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type {
   Connection,
   Edge,
   EdgeTypes,
   Node,
   NodeTypes,
-  ReactFlowInstance} from "reactflow";
+  ReactFlowInstance,
+} from "reactflow";
 import {
   addEdge,
   Controls,
@@ -31,10 +27,9 @@ import {
 
 import type {
   FlowEdgeConfigType,
-  TentaclesConfigValuesType} from "../../../../context/config/TentaclesConfigProvider";
-import {
-  useUpdateIsSavingTentaclesConfigContext,
+  TentaclesConfigValuesType,
 } from "../../../../context/config/TentaclesConfigProvider";
+import { useUpdateIsSavingTentaclesConfigContext } from "../../../../context/config/TentaclesConfigProvider";
 import { useUiConfigContext } from "../../../../context/config/UiConfigProvider";
 import type { StrategyFlowMakerNameType } from "../TentaclesConfig";
 import { flowEditorSettingsName } from "../UIConfig";
@@ -66,7 +61,7 @@ export default function StrategyFlowBuilder({
       ) : (
         <></>
       ),
-    [flowConfig, tradingModeKey]
+    [flowConfig, tradingModeKey],
   );
 }
 
@@ -84,10 +79,10 @@ function StrategyFlowBuilderDrawingSpace({
   const setIsSaving = useUpdateIsSavingTentaclesConfigContext();
 
   const [nodes, setNodes, onNodesChange] = useNodesState<NodeData>(
-    (flowConfig?.nodes && Object.values(flowConfig?.nodes)) || []
+    (flowConfig?.nodes && Object.values(flowConfig?.nodes)) || [],
   );
   const [edges, setEdges, onEdgesChange] = useEdgesState<EdgeData>(
-    (flowConfig?.edges as FlowEdgeConfigType[]) || []
+    (flowConfig?.edges as FlowEdgeConfigType[]) || [],
   );
   const uiConfig = useUiConfigContext();
   const autoSave = uiConfig?.[flowEditorSettingsName]?.auto_save;
@@ -118,9 +113,8 @@ function StrategyFlowBuilderDrawingSpace({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [jsonNodes, jsonEdges]);
 
-  const [reactFlowInstance, setReactFlowInstance] = useState<
-    ReactFlowInstance<NodeData, EdgeData>
-  >();
+  const [reactFlowInstance, setReactFlowInstance] =
+    useState<ReactFlowInstance<NodeData, EdgeData>>();
   const handleUserInputSave = useSaveFlowBuilderSettings();
 
   const nodeTypes: NodeTypes = useMemo(() => ({ StrategyBlockNode }), []);
@@ -196,7 +190,7 @@ function StrategyFlowBuilderDrawingSpace({
       onEdgesChange,
       onNodesChange,
       tradingModeKey,
-    ]
+    ],
   );
 }
 
@@ -303,7 +297,7 @@ function useGetFlowCallbacks({
       setEdges,
       setIsSaving,
       tradingModeKey,
-    ]
+    ],
   );
 
   const onDragOver: DragEventHandler<HTMLDivElement> = useCallback((event) => {
@@ -314,12 +308,13 @@ function useGetFlowCallbacks({
   const onDrop: DragEventHandler<HTMLDivElement> = useCallback(
     (event) => {
       event.preventDefault();
-      const reactFlowBounds = reactFlowWrapper?.current?.getBoundingClientRect();
+      const reactFlowBounds =
+        reactFlowWrapper?.current?.getBoundingClientRect();
       if (!reactFlowInstance || !reactFlowBounds) {
         return;
       }
       const { nodesData, nodeType } = JSON.parse(
-        event.dataTransfer.getData("application/reactflow")
+        event.dataTransfer.getData("application/reactflow"),
       );
 
       const position = reactFlowInstance.project({
@@ -360,7 +355,7 @@ function useGetFlowCallbacks({
       setIsSaving,
       setNodes,
       tradingModeKey,
-    ]
+    ],
   );
   return {
     onConnect,

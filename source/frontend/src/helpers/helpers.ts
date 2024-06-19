@@ -1,5 +1,5 @@
 export function objectKeys<TObject extends object>(
-  object: TObject
+  object: TObject,
 ): (keyof TObject)[] {
   return Object.keys(object) as (keyof TObject)[];
 }

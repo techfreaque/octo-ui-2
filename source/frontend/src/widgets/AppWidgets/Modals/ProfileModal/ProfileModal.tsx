@@ -58,7 +58,7 @@ export default function ProfileModal({
           label={
             <TabLabel
               key={0}
-              tabTitle={t('strategyConfigurator.profileSettings.strategy-info')}
+              tabTitle={t("strategyConfigurator.profileSettings.strategy-info")}
               antIcon={"ProfileOutlined"}
             />
           }
@@ -89,7 +89,9 @@ export default function ProfileModal({
           label={
             <TabLabel
               key={1}
-              tabTitle={t('strategyConfigurator.profileSettings.simulation-settings')}
+              tabTitle={t(
+                "strategyConfigurator.profileSettings.simulation-settings",
+              )}
               antIcon={"RobotOutlined"}
             />
           }
@@ -117,7 +119,9 @@ export default function ProfileModal({
             label={
               <TabLabel
                 key={2}
-                tabTitle={t('strategyConfigurator.profileSettings.traded-pairs')}
+                tabTitle={t(
+                  "strategyConfigurator.profileSettings.traded-pairs",
+                )}
                 antIcon={"DollarCircleOutlined"}
               />
             }
@@ -145,7 +149,7 @@ export default function ProfileModal({
             label={
               <TabLabel
                 key={3}
-                tabTitle={t('strategyConfigurator.profileSettings.exchanges')}
+                tabTitle={t("strategyConfigurator.profileSettings.exchanges")}
                 antIcon={"BankOutlined"}
               />
             }
@@ -164,7 +168,7 @@ export default function ProfileModal({
             <ExchangeSelector />
           </>
         ),
-      }
+      },
     );
   return (
     <Modal

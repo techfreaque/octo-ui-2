@@ -26,9 +26,10 @@ import type { BotLogHistory } from "../widgets/AppWidgets/NotificationCenter/Not
 import type { LoginSignupFormType } from "../widgets/AppWidgets/StrategyConfigurator/Dashboard/Login";
 import type {
   errorResponseCallBackParams,
-  successResponseCallBackParams} from "./fetchAndStoreFromBot";
+  successResponseCallBackParams,
+} from "./fetchAndStoreFromBot";
 import fetchAndStoreFromBot, {
-  sendAndInterpretBotUpdate
+  sendAndInterpretBotUpdate,
 } from "./fetchAndStoreFromBot";
 
 export async function fetchBotInfo(
@@ -36,7 +37,7 @@ export async function fetchBotInfo(
   setBotInfo: Dispatch<SetStateAction<BotInfoType | undefined>>,
   visibleExchanges?: string,
   successNotification = false,
-  setIsFinished?: Dispatch<SetStateAction<boolean>>
+  setIsFinished?: Dispatch<SetStateAction<boolean>>,
 ) {
   await fetchAndStoreFromBot({
     url: `${botDomain + backendRoutes.botInfo}/${visibleExchanges}`,
@@ -52,7 +53,7 @@ export async function fetchExchangeInfo(
   botDomain: string,
   setExchangeInfo: Dispatch<SetStateAction<ExchangeInfoType | undefined>>,
   successNotification = false,
-  setIsFinished?: Dispatch<SetStateAction<boolean>>
+  setIsFinished?: Dispatch<SetStateAction<boolean>>,
 ) {
   await fetchAndStoreFromBot({
     url: botDomain + backendRoutes.exchangeInfo,
@@ -115,7 +116,7 @@ export async function fetchPlotlyLivePlotData({
   const successCallback = ({ data }: successResponseCallBackParams) => {
     setBotPlottedElements((prevData) => {
       const newData: PlottedElementsType<PlottedElementNameType> = JSON.parse(
-        JSON.stringify(prevData || {})
+        JSON.stringify(prevData || {}),
       );
       newData.live = {
         [liveId]: {
@@ -174,9 +175,8 @@ export async function fetchPlotlyBacktestingPlotData({
   };
   const successCallback = ({ data }: successResponseCallBackParams) => {
     setBotPlottedElements((prevData) => {
-      const newData: PlottedElementsType<PlottedElementBacktestingNameType> = JSON.parse(
-        JSON.stringify(prevData || {})
-      );
+      const newData: PlottedElementsType<PlottedElementBacktestingNameType> =
+        JSON.parse(JSON.stringify(prevData || {}));
       newData.backtesting = {
         ...newData.backtesting,
         [optimizationCampaign]: {
@@ -221,7 +221,7 @@ export async function fetchBacktestingRunData(
   botDomain: string,
   forceSelectLatestBacktesting: boolean,
   campaigns: OptimizerCampaignsToLoadUiConfig,
-  onDone?: () => void
+  onDone?: () => void,
 ) {
   function successCallback(payload: successResponseCallBackParams) {
     saveBotConfig(payload.data.data);
@@ -256,7 +256,7 @@ export async function fetchBotPortfolio(
   setBotPortfolio: Dispatch<SetStateAction<PortfolioType | undefined>>,
   botDomain: string,
   setIsFinished?: Dispatch<SetStateAction<boolean>>,
-  successNotification?: boolean
+  successNotification?: boolean,
 ) {
   await fetchAndStoreFromBot({
     url: botDomain + backendRoutes.botPortfolio,
@@ -269,7 +269,7 @@ export async function fetchBotPortfolio(
 export async function fetchPackagesData(
   saveAppStoreData: (newData: InstalledTentaclesInfoType) => void,
   botDomain: string,
-  notification?: boolean
+  notification?: boolean,
 ) {
   await fetchAndStoreFromBot({
     url: botDomain + backendRoutes.packagesData,
@@ -285,7 +285,7 @@ export async function loginToAppStore(
   storeDomain: string,
   loginData: LoginSignupFormType,
   appStoreUser: AppStoreUserType | undefined,
-  onLoggedIn: () => void
+  onLoggedIn: () => void,
 ) {
   function errorCallback() {
     createNotification({
@@ -317,7 +317,7 @@ export async function loginToAppStore(
 export async function logoutFromAppStore(
   saveAppStoreData: (tokens: AppStoreUserType | undefined) => void,
   storeDomain: string,
-  appStoreUser: AppStoreUserType | undefined
+  appStoreUser: AppStoreUserType | undefined,
 ) {
   function errorCallback() {
     createNotification({
@@ -356,7 +356,7 @@ export async function signupToAppStore(
   saveAppStoreData: (tokens: AppStoreUserType | undefined) => void,
   storeDomain: string,
   loginData: LoginSignupFormType,
-  onLoggedIn: () => void
+  onLoggedIn: () => void,
 ) {
   function errorCallback({ data }: errorResponseCallBackParams) {
     createNotification({
@@ -388,7 +388,7 @@ export async function signupToAppStore(
 
 export async function fetchBotLogs(
   saveLogs: Dispatch<SetStateAction<BotLogHistory[] | undefined>>,
-  botDomain: string
+  botDomain: string,
 ) {
   await fetchAndStoreFromBot({
     url: botDomain + backendRoutes.getLogs,

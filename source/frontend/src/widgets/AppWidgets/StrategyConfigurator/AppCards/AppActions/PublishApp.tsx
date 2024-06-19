@@ -2,11 +2,8 @@ import { ShareAltOutlined } from "@ant-design/icons";
 import type { Dispatch, SetStateAction } from "react";
 
 import createNotification from "../../../../../components/Notifications/Notification";
-import type {
-  AppStoreAppType} from "../../../../../context/data/AppStoreDataProvider";
-import {
-  usePublishApp,
-} from "../../../../../context/data/AppStoreDataProvider";
+import type { AppStoreAppType } from "../../../../../context/data/AppStoreDataProvider";
+import { usePublishApp } from "../../../../../context/data/AppStoreDataProvider";
 import { AppPublishStatus } from "../../storeConstants";
 import { ConfirmAction } from "./AppActions";
 
@@ -14,7 +11,7 @@ export default function PublishApp({ app }: { app: AppStoreAppType }) {
   const publishApp = usePublishApp();
   return app.publish_status &&
     [AppPublishStatus.draft, AppPublishStatus.unpublished].includes(
-      app.publish_status
+      app.publish_status,
     ) ? (
     <ConfirmAction
       antIconComponent={ShareAltOutlined}

@@ -38,6 +38,6 @@ export default function BacktestingProgress() {
       ) : (
         <></>
       ),
-    [inProgress, progress, t]
+    [inProgress, progress, t],
   );
 }

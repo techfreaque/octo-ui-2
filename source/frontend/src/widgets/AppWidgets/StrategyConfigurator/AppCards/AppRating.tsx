@@ -1,10 +1,9 @@
 import { Rate, Tooltip } from "antd";
-import type { CSSProperties} from "react";
+import type { CSSProperties } from "react";
 import { useState } from "react";
 
 import { projectName } from "../../../../constants/frontendConstants";
-import type {
-  AppStoreAppType} from "../../../../context/data/AppStoreDataProvider";
+import type { AppStoreAppType } from "../../../../context/data/AppStoreDataProvider";
 import {
   useAppStoreUserContext,
   useRateAppStore,
@@ -31,7 +30,7 @@ export default function AppRating({
         rating: myRating,
         package_id: app.package_id,
       },
-      setIsloading
+      setIsloading,
     );
   }
   // TODO replace colors with variables

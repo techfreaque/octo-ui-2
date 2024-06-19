@@ -28,7 +28,7 @@ export default function CloudDeploymentModal() {
   return (
     <ButtonWithModal
       title={t(
-        "projectInfoPage.cloudDeployment.deploy-your-bot-in-the-cloud-now"
+        "projectInfoPage.cloudDeployment.deploy-your-bot-in-the-cloud-now",
       )}
       content={[
         {
@@ -58,7 +58,7 @@ export function CloudDeployment() {
           startLevel={1}
           title={t("projectInfoPage.cloudDeployment.cloud-trading-bot-servers")}
           subTitle={t(
-            "projectInfoPage.cloudDeployment.effortless-and-fully-managed-solutions-for-your-trading-strategies"
+            "projectInfoPage.cloudDeployment.effortless-and-fully-managed-solutions-for-your-trading-strategies",
           )}
         />
       </Grid>
@@ -82,13 +82,13 @@ function CloudOption({ option }: { option: CloudOptionType }) {
         <Typography.Paragraph>
           {t(
             "projectInfoPage.cloudDeployment.projectName-instances-instanceLimit",
-            { projectName, instanceLimit: option.instances }
+            { projectName, instanceLimit: option.instances },
           )}
         </Typography.Paragraph>
         <Typography.Paragraph> {option.description} </Typography.Paragraph>
         <Tooltip
           title={t(
-            "projectInfoPage.cloudDeployment.cloud-deployment-will-be-available-soon"
+            "projectInfoPage.cloudDeployment.cloud-deployment-will-be-available-soon",
           )}
         >
           <div>
@@ -156,7 +156,7 @@ function getCloudOptions(): CloudOptionType[] {
       key: "xlarge",
       title: t("projectInfoPage.cloudDeployment.storm-x-large"),
       description: t(
-        "projectInfoPage.cloudDeployment.storm-x-large-description"
+        "projectInfoPage.cloudDeployment.storm-x-large-description",
       ),
       price: 90,
       instances: t("projectInfoPage.cloudDeployment.no-limit"),
@@ -165,7 +165,7 @@ function getCloudOptions(): CloudOptionType[] {
       key: "xxlarge",
       title: t("projectInfoPage.cloudDeployment.flash-xx-large"),
       description: t(
-        "projectInfoPage.cloudDeployment.flash-xx-large-description"
+        "projectInfoPage.cloudDeployment.flash-xx-large-description",
       ),
       price: 150,
       instances: t("projectInfoPage.cloudDeployment.no-limit"),
@@ -174,7 +174,7 @@ function getCloudOptions(): CloudOptionType[] {
       key: "xxxlarge",
       title: t("projectInfoPage.cloudDeployment.tornado-xxx-large"),
       description: t(
-        "projectInfoPage.cloudDeployment.tornado-xxx-large-description"
+        "projectInfoPage.cloudDeployment.tornado-xxx-large-description",
       ),
       price: 250,
       instances: t("projectInfoPage.cloudDeployment.no-limit"),

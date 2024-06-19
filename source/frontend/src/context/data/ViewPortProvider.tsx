@@ -1,4 +1,4 @@
-import type { RefObject} from "react";
+import type { RefObject } from "react";
 import { useEffect, useMemo, useState } from "react";
 
 export function useIsInViewport(ref: RefObject<HTMLDivElement>) {
@@ -6,9 +6,9 @@ export function useIsInViewport(ref: RefObject<HTMLDivElement>) {
   const observer = useMemo(
     () =>
       new IntersectionObserver(([entry]) =>
-        setIsIntersecting(entry?.isIntersecting || false)
+        setIsIntersecting(entry?.isIntersecting || false),
       ),
-    []
+    [],
   );
   useEffect(() => {
     ref?.current && observer.observe(ref.current);

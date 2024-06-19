@@ -19,8 +19,7 @@ import type {
 import AntTable from "../../../components/Tables/AntTable";
 import { useBotColorsContext } from "../../../context/config/BotColorsProvider";
 import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
-import type {
-  AppStoreCartType} from "../../../context/data/AppStoreDataProvider";
+import type { AppStoreCartType } from "../../../context/data/AppStoreDataProvider";
 import {
   useAppStoreCartContext,
   useAppStoreCartIsOpenContext,
@@ -83,14 +82,14 @@ export function AppStoreCart() {
           throw new Error(
             t("appStore.cart.no-app-in-package-originpackagename", {
               originPackageName,
-            })
+            }),
           );
         }
         if (!firstAppInPackage.price) {
           throw new Error(
             t("appStore.cart.no-price-for-firstappinpackage-package_id", {
               packageId: firstAppInPackage.package_id,
-            })
+            }),
           );
         }
         totalPrice += firstAppInPackage.price * 12;
@@ -180,7 +179,7 @@ export function AppStoreCart() {
                 appStoreCart &&
                 createPaymentFromAppStoreCart(
                   Object.keys(appStoreCart),
-                  undefined
+                  undefined,
                 )
               }
             >

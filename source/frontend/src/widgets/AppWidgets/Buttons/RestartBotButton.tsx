@@ -2,11 +2,8 @@ import { ReloadOutlined } from "@ant-design/icons";
 import { useMemo } from "react";
 import { Trans } from "react-i18next";
 
-import type {
-  ButtonType} from "../../../components/Buttons/AntButton";
-import AntButton, {
-  buttonTypes,
-} from "../../../components/Buttons/AntButton";
+import type { ButtonType } from "../../../components/Buttons/AntButton";
+import AntButton, { buttonTypes } from "../../../components/Buttons/AntButton";
 import type { UiLayoutPageLayoutType } from "../../../context/config/BotLayoutProvider";
 import { useIsDemoMode } from "../../../context/data/BotInfoProvider";
 import {

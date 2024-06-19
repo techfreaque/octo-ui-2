@@ -2,7 +2,7 @@ import { ReloadOutlined } from "@ant-design/icons";
 import type { JsonEditorWindow } from "@techfreaque/json-editor-react";
 import { Space, Switch } from "antd";
 import { t } from "i18next";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useCallback, useMemo } from "react";
 import { Trans } from "react-i18next";
 import type { Edge, Node } from "reactflow";
@@ -13,7 +13,8 @@ import createNotification from "../../../../components/Notifications/Notificatio
 import type {
   FlowEdgeConfigType,
   TentaclesConfigByTentacleType,
-  TentaclesConfigValuesType} from "../../../../context/config/TentaclesConfigProvider";
+  TentaclesConfigValuesType,
+} from "../../../../context/config/TentaclesConfigProvider";
 import {
   tentacleConfigTypes,
   useIsSavingTentaclesConfigContext,
@@ -28,11 +29,10 @@ import {
 import { useIsDemoMode } from "../../../../context/data/BotInfoProvider";
 import { useUpdateHiddenBacktestingMetadataColumnsContext } from "../../../../context/data/BotPlottedElementsProvider";
 import { useIsBotOnlineContext } from "../../../../context/data/IsBotOnlineProvider";
-import type {
-  StrategyFlowMakerNameType} from "../TentaclesConfig";
+import type { StrategyFlowMakerNameType } from "../TentaclesConfig";
 import {
   handleHiddenUserInputs,
-  strategyFlowMakerName
+  strategyFlowMakerName,
 } from "../TentaclesConfig";
 import { flowEditorSettingsName } from "../UIConfig";
 import {
@@ -69,14 +69,14 @@ export default function SaveStrategyFlowBuilderSettings({
       const successCallback = () => {
         createNotification({
           title: t(
-            "strategyConfigurator.strategyFlowMaker.successfully-changed-autosave-setting"
+            "strategyConfigurator.strategyFlowMaker.successfully-changed-autosave-setting",
           ),
         });
       };
       const errorCallback = (payload: errorResponseCallBackParams) => {
         createNotification({
           title: t(
-            "strategyConfigurator.strategyFlowMaker.failed-to-activate-autosave"
+            "strategyConfigurator.strategyFlowMaker.failed-to-activate-autosave",
           ),
           type: "danger",
           message: `Error: ${payload.data.message}` || payload.data,
@@ -84,7 +84,7 @@ export default function SaveStrategyFlowBuilderSettings({
       };
       saveUiConfig(newConfigs, successCallback, errorCallback);
     },
-    [saveUiConfig, uiConfig]
+    [saveUiConfig, uiConfig],
   );
   const setIsSaving = useUpdateIsSavingTentaclesConfigContext();
   const isSaving = useIsSavingTentaclesConfigContext();
@@ -104,10 +104,10 @@ export default function SaveStrategyFlowBuilderSettings({
             checked={autoSave}
             onChange={(checked) => handleAutoSaveSettingChange(checked)}
             checkedChildren={t(
-              "strategyConfigurator.strategyFlowMaker.auto-save-on"
+              "strategyConfigurator.strategyFlowMaker.auto-save-on",
             )}
             unCheckedChildren={t(
-              "strategyConfigurator.strategyFlowMaker.auto-save-off"
+              "strategyConfigurator.strategyFlowMaker.auto-save-off",
             )}
           />
           {!autoSave && (
@@ -157,7 +157,7 @@ export default function SaveStrategyFlowBuilderSettings({
             {autoSave
               ? t("strategyConfigurator.strategyFlowMaker.reload-plots")
               : t(
-                  "strategyConfigurator.strategyFlowMaker.save-and-reload-plots"
+                  "strategyConfigurator.strategyFlowMaker.save-and-reload-plots",
                 )}
           </AntButton>
         </Space>
@@ -182,7 +182,8 @@ declare const window: JsonEditorWindow;
 
 export function useGetFlowConfig(): TentaclesConfigValuesType | undefined {
   const currentTentaclesConfig = useTentaclesConfigContext();
-  const setHiddenMetadataColumns = useUpdateHiddenBacktestingMetadataColumnsContext();
+  const setHiddenMetadataColumns =
+    useUpdateHiddenBacktestingMetadataColumnsContext();
   return useMemo(() => {
     const currentTentaclesTradingConfig =
       currentTentaclesConfig?.[tentacleConfigTypes.tradingTentacles];
@@ -191,7 +192,7 @@ export function useGetFlowConfig(): TentaclesConfigValuesType | undefined {
     currentTentaclesTradingConfig &&
       handleHiddenUserInputs(
         currentTentaclesTradingConfig,
-        setHiddenMetadataColumns
+        setHiddenMetadataColumns,
       );
     return flowConfig;
   }, [currentTentaclesConfig, setHiddenMetadataColumns]);
@@ -245,9 +246,9 @@ export function useSaveFlowBuilderSettings() {
         reloadPlots,
         true,
         false,
-        successNotification
+        successNotification,
       );
     },
-    [saveTentaclesConfig]
+    [saveTentaclesConfig],
   );
 }

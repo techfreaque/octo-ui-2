@@ -1,16 +1,15 @@
 import type { AntdIconProps } from "@ant-design/icons/lib/components/AntdIcon";
 import type { IconDefinition } from "@fortawesome/free-solid-svg-icons";
-import type { ButtonProps} from "antd";
+import type { ButtonProps } from "antd";
 import { Popconfirm, Tooltip } from "antd";
 import type {
   CSSProperties,
   Dispatch,
   ForwardRefExoticComponent,
   RefAttributes,
-  SetStateAction} from "react";
-import {
-  useState,
+  SetStateAction,
 } from "react";
+import { useState } from "react";
 
 import AntButton, {
   buttonTypes,
@@ -67,7 +66,7 @@ export default function AppActions({
   exportUrl?: string;
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
-    otherApp: AppStoreAppType | undefined
+    otherApp: AppStoreAppType | undefined,
   ) => void;
   setDownloadInfo: Dispatch<SetStateAction<DownloadInfo>>;
   downloadInfo: DownloadInfo;
@@ -100,15 +99,15 @@ export default function AppActions({
                   marginTop: "20px",
                 }
               : isMouseHover
-              ? {
-                  ...buttonStyle,
-                  margin: "auto",
-                  justifyContent: "center",
-                }
-              : {
-                  ...buttonStyle,
-                  display: "none",
-                }
+                ? {
+                    ...buttonStyle,
+                    margin: "auto",
+                    justifyContent: "center",
+                  }
+                : {
+                    ...buttonStyle,
+                    display: "none",
+                  }
           }
         >
           {(didHoverOnce || app?.is_selected) && (
@@ -227,7 +226,7 @@ function OnHoverActions({
   uploadInfo: UploadInfo;
   handleDownload: (
     setOpen: (isOpen: boolean) => void,
-    otherApp: AppStoreAppType | undefined
+    otherApp: AppStoreAppType | undefined,
   ) => void;
   otherActions: JSX.Element | undefined;
   infoContent: string | JSX.Element | undefined;
@@ -355,7 +354,7 @@ export function ConfirmAction({
 
 export function handlePopConfirmOpen(
   setInfo: Dispatch<SetStateAction<UploadInfo | DownloadInfo>>,
-  isOpen: boolean
+  isOpen: boolean,
 ): void {
   setInfo((prevIfo) => ({
     ...prevIfo,

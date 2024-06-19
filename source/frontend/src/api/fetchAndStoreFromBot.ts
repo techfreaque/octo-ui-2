@@ -77,7 +77,7 @@ export async function sendAndInterpretBotUpdate({
 function addAuthToRequest(
   requestData: RequestInit,
   withCredentials?: boolean,
-  token?: string
+  token?: string,
 ): void {
   if (withCredentials && token) {
     requestData.headers = {
@@ -274,13 +274,13 @@ function genericRequestFailureCallback({
 }: errorResponseCallBackParams) {
   console.error(
     `Unknown API connect error: Update url: ${updateUrl}, error: `,
-    data
+    data,
   );
   createNotification({
     title: `Can't connect to ${projectName}`,
     type: "danger",
     message: `Unknown error: Update url: ${updateUrl}, error: ${JSON.stringify(
-      data
+      data,
     )}`,
   });
 }

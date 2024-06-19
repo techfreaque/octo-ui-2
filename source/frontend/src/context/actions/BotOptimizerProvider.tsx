@@ -42,9 +42,10 @@ import type { WebsocketDataType } from "../websockets/AbstractWebsocketContext";
 import { AbstractWebsocketContext } from "../websockets/AbstractWebsocketContext";
 
 const BotIsOptimizingContext = createContext<boolean | "isStopping">(false);
-const UpdateBotIsOptimizingContext = createContext<
-  Dispatch<SetStateAction<boolean | "isStopping">>
->(emptyValueFunction);
+const UpdateBotIsOptimizingContext =
+  createContext<Dispatch<SetStateAction<boolean | "isStopping">>>(
+    emptyValueFunction,
+  );
 
 interface OptimizerProgressType extends WebsocketDataType {
   remaining_time?: number;
@@ -102,12 +103,12 @@ function getOptimizerStartSettings(
   optimizerSettings: OptimizerUiConfig,
   idsByExchangeName: IdsByExchangeType,
   optimizerInputs: OptimizerEditorInputsType,
-  exchangeNames: string[]
+  exchangeNames: string[],
 ): StartOptimizerSettingsType {
   return {
     ...optimizerSettings,
     exchange_ids: exchangeNames.map((exchangeName) =>
-      String(idsByExchangeName[exchangeName])
+      String(idsByExchangeName[exchangeName]),
     ),
     config: optimizerInputs,
   };
@@ -132,9 +133,9 @@ export const useStartOptimizer = () => {
             optimizerSettings,
             idsByExchangeName,
             optimizerForm.optimizer_inputs,
-            exchangeNames
+            exchangeNames,
           ),
-          setBotIsOptimizing
+          setBotIsOptimizing,
         );
       } else {
         // settings not loaded yet, use directly from settings storage
@@ -146,9 +147,9 @@ export const useStartOptimizer = () => {
                 optimizerSettings,
                 idsByExchangeName,
                 fetchedOptimizerForm.optimizer_inputs,
-                exchangeNames
+                exchangeNames,
               ),
-              setBotIsOptimizing
+              setBotIsOptimizing,
             );
           } else {
             createNotification({
@@ -199,9 +200,9 @@ export const useAddToOptimizerQueue = () => {
               optimizerSettings,
               filterActiveUserInputs(
                 currentTentaclesTradingConfig,
-                optimizerForm.optimizer_inputs
+                optimizerForm.optimizer_inputs,
               ),
-              fetchOptimizerQueue
+              fetchOptimizerQueue,
             );
           } else {
             // settings not loaded yet, use directly from settings storage
@@ -212,9 +213,9 @@ export const useAddToOptimizerQueue = () => {
                   optimizerSettings,
                   filterActiveUserInputs(
                     currentTentaclesTradingConfig,
-                    fetchedOptimizerForm.optimizer_inputs
+                    fetchedOptimizerForm.optimizer_inputs,
                   ),
-                  fetchOptimizerQueue
+                  fetchOptimizerQueue,
                 );
               } else {
                 createNotification({
@@ -259,14 +260,14 @@ export const useAddToOptimizerQueue = () => {
 
 export function filterActiveUserInputs(
   currentTentaclesTradingConfig: TentaclesConfigsRootType,
-  optimizerForm: OptimizerEditorInputsType
+  optimizerForm: OptimizerEditorInputsType,
 ): OptimizerEditorInputsType {
   const filteredOptimizerInputs: OptimizerEditorInputType = {};
   optimizerForm.user_inputs &&
     Object.entries(optimizerForm.user_inputs).forEach(([inputKey, values]) => {
       if (values.enabled) {
         const { rootTentacle, tentacleKeys } = splitTentacleKey(
-          values.tentacle
+          values.tentacle,
         );
         const rootTentacleConfigs =
           currentTentaclesTradingConfig[rootTentacle]?.config;
@@ -289,7 +290,7 @@ export function filterActiveUserInputs(
 
 function hasUserInput(
   currentTentaclesTradingConfig: TentaclesConfigValuesType,
-  tentacleKeys: string[]
+  tentacleKeys: string[],
 ): boolean {
   const [nextInputKey, ...nextTentacleKeys] = tentacleKeys;
   const thisConfig =
@@ -300,7 +301,7 @@ function hasUserInput(
     if (typeof thisConfig === "object") {
       return hasUserInput(
         thisConfig as TentaclesConfigValuesType,
-        nextTentacleKeys
+        nextTentacleKeys,
       );
     }
     return false;
@@ -315,14 +316,13 @@ export const BotOptimizerProvider = ({
   const [botIsOptimizing, setBotIsOptimizing] = useState<
     boolean | "isStopping"
   >(false);
-  const [optimizerProgress, setOptimizerProgress] = useState<
-    OptimizerProgressType
-  >({});
+  const [optimizerProgress, setOptimizerProgress] =
+    useState<OptimizerProgressType>({});
   const botDomain = useBotDomainContext();
   const socketUrl = `${botDomain}/strategy_optimizer`;
   function onConnectionUpdate(
     data: OptimizerProgressType,
-    socket: Socket<DefaultEventsMap, DefaultEventsMap>
+    socket: Socket<DefaultEventsMap, DefaultEventsMap>,
   ) {
     if (data) {
       setOptimizerProgress(data);

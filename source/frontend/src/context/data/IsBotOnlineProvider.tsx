@@ -1,4 +1,4 @@
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useCallback } from "react";
 import { createContext, useContext, useState } from "react";
 
@@ -7,9 +7,8 @@ import { emptyValueFunction } from "../../helpers/helpers";
 import { useBotDomainContext } from "../config/BotDomainProvider";
 
 const IsBotOnlineContext = createContext<boolean>(true);
-const UpdateIsBotOnlineContext = createContext<
-  Dispatch<SetStateAction<boolean>>
->(emptyValueFunction);
+const UpdateIsBotOnlineContext =
+  createContext<Dispatch<SetStateAction<boolean>>>(emptyValueFunction);
 
 export const useIsBotOnlineContext = () => {
   return useContext(IsBotOnlineContext);
@@ -26,7 +25,7 @@ export function useRestartBot() {
     (notification = false) => {
       restartBot(botDomain, updateIsOnline, notification);
     },
-    [botDomain, updateIsOnline]
+    [botDomain, updateIsOnline],
   );
 }
 

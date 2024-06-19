@@ -1,19 +1,12 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
-import {
-  createContext,
-  useContext,
-  useState,
-} from "react";
+import type { Dispatch, SetStateAction } from "react";
+import { createContext, useContext, useState } from "react";
 
 import { isProduction } from "../../constants/frontendConstants";
 import { emptyValueFunction } from "../../helpers/helpers";
 
 const BotDomainContext = createContext<string>("");
-const UpdateBotDomainContext = createContext<Dispatch<SetStateAction<string>>>(
-  emptyValueFunction
-);
+const UpdateBotDomainContext =
+  createContext<Dispatch<SetStateAction<string>>>(emptyValueFunction);
 
 export const useBotDomainContext = () => {
   return useContext(BotDomainContext);
@@ -27,7 +20,7 @@ export const BotDomainProvider = ({ children }: { children: JSX.Element }) => {
   const [botDomain, setBotDomain] = useState<string>(
     isProduction
       ? window.location.origin
-      : process.env.REACT_APP_DEVELOPMENT_BOT_DOMAIN || ""
+      : process.env.REACT_APP_DEVELOPMENT_BOT_DOMAIN || "",
   );
   return (
     <BotDomainContext.Provider value={botDomain}>

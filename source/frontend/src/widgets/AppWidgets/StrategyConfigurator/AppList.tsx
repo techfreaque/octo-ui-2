@@ -1,5 +1,5 @@
 import { Grid } from "@mui/material";
-import type { Dispatch, SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import { useState } from "react";
 
 import type {
@@ -9,11 +9,8 @@ import type {
 } from "../../../context/data/AppStoreDataProvider";
 import { ErrorBoundary } from "../../WidgetManagement/RenderAppWidgets";
 import AppCard from "./AppCards/AppCard";
-import type {
-  StrategyModeSettingsNameType} from "./storeConstants";
-import {
-  strategyModeSettingsName
-} from "./storeConstants";
+import type { StrategyModeSettingsNameType } from "./storeConstants";
+import { strategyModeSettingsName } from "./storeConstants";
 
 export default function AppList({
   selectedCategories,
@@ -40,7 +37,7 @@ export default function AppList({
       ? Object.values(appStoreData[selectedCategories])
       : [];
   const preSortedAppStoreData = thisCategoryAppStoreData?.sort(
-    (a, b) => (b?.is_selected ? 1 : 0) - (a?.is_selected ? 1 : 0)
+    (a, b) => (b?.is_selected ? 1 : 0) - (a?.is_selected ? 1 : 0),
   );
 
   return (

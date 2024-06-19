@@ -26,7 +26,7 @@ export function ProfileTitle({
       newSettings.profile.name = newName;
       setRequiresInstantRestart(
         JSON.stringify(currentProfile.profile.name) !==
-          JSON.stringify(newSettings.profile.name)
+          JSON.stringify(newSettings.profile.name),
       );
       return newSettings;
     });

@@ -1,6 +1,4 @@
-import type {
-  Dispatch,
-  SetStateAction} from "react";
+import type { Dispatch, SetStateAction } from "react";
 import {
   createContext,
   useCallback,
@@ -61,22 +59,24 @@ export type ExchangeInfoType = {
 };
 
 const ExchangeInfoContext = createContext<ExchangeInfoType | undefined>(
-  undefined
+  undefined,
 );
-const UpdateExchangeInfoContext = createContext<
-  Dispatch<SetStateAction<ExchangeInfoType | undefined>>
->(emptyValueFunction);
+const UpdateExchangeInfoContext =
+  createContext<Dispatch<SetStateAction<ExchangeInfoType | undefined>>>(
+    emptyValueFunction,
+  );
 
 export type CurrencyListType = string[];
 
-const UpdateToSaveCurrencySettingsContext = createContext<
-  Dispatch<SetStateAction<ConfigSymbolsType | undefined>>
->(emptyValueFunction);
+const UpdateToSaveCurrencySettingsContext =
+  createContext<Dispatch<SetStateAction<ConfigSymbolsType | undefined>>>(
+    emptyValueFunction,
+  );
 const CurrentCurrencyListContext = createContext<CurrencyListType | undefined>(
-  undefined
+  undefined,
 );
 const UnsavedCurrencyListContext = createContext<CurrencyListType | undefined>(
-  undefined
+  undefined,
 );
 
 export interface PairSelectorMenuOpenType {
@@ -90,17 +90,19 @@ const defaultMenuIsOpenState: PairSelectorMenuOpenType = {
 };
 
 const PairSelectorMenuOpenContext = createContext<PairSelectorMenuOpenType>(
-  defaultMenuIsOpenState
+  defaultMenuIsOpenState,
 );
-const UpdatePairSelectorMenuOpenContext = createContext<
-  Dispatch<SetStateAction<PairSelectorMenuOpenType>>
->(emptyValueFunction);
+const UpdatePairSelectorMenuOpenContext =
+  createContext<Dispatch<SetStateAction<PairSelectorMenuOpenType>>>(
+    emptyValueFunction,
+  );
 const NewConfigExchangesContext = createContext<
   ExchangesConfigType | undefined
 >(undefined);
-const UpdateNewConfigExchangesContext = createContext<
-  Dispatch<SetStateAction<ExchangesConfigType | undefined>>
->(emptyValueFunction);
+const UpdateNewConfigExchangesContext =
+  createContext<Dispatch<SetStateAction<ExchangesConfigType | undefined>>>(
+    emptyValueFunction,
+  );
 
 export const useExchangeInfoContext = () => {
   return useContext(ExchangeInfoContext);
@@ -167,11 +169,12 @@ export type SericesInfoType = {
 };
 
 const ServicesInfoContext = createContext<SericesInfoType | undefined>(
-  undefined
+  undefined,
 );
-const UpdateServicesInfoContext = createContext<
-  Dispatch<SetStateAction<SericesInfoType | undefined>>
->(emptyValueFunction);
+const UpdateServicesInfoContext =
+  createContext<Dispatch<SetStateAction<SericesInfoType | undefined>>>(
+    emptyValueFunction,
+  );
 
 const initialExchangeConfigUpdate: ExchangeConfigUpdateType = {
   global_config: {},
@@ -193,11 +196,12 @@ export type ExchangeConfigUpdateType = {
 };
 
 const ExchangeConfigUpdateContext = createContext<ExchangeConfigUpdateType>(
-  initialExchangeConfigUpdate
+  initialExchangeConfigUpdate,
 );
-const UpdateExchangeConfigUpdateContext = createContext<
-  Dispatch<SetStateAction<ExchangeConfigUpdateType>>
->(emptyValueFunction);
+const UpdateExchangeConfigUpdateContext =
+  createContext<Dispatch<SetStateAction<ExchangeConfigUpdateType>>>(
+    emptyValueFunction,
+  );
 
 export const useServicesInfoContext = () => {
   return useContext(ServicesInfoContext);
@@ -220,17 +224,17 @@ export const useFetchExchangeInfo = () => {
   return useCallback(
     (
       successNotification?: boolean,
-      setIsFinished?: Dispatch<SetStateAction<boolean>>
+      setIsFinished?: Dispatch<SetStateAction<boolean>>,
     ) => {
       setIsFinished?.(false);
       fetchExchangeInfo(
         botDomain,
         setExchangeInfo,
         successNotification,
-        setIsFinished
+        setIsFinished,
       );
     },
-    [setExchangeInfo, botDomain]
+    [setExchangeInfo, botDomain],
   );
 };
 
@@ -240,7 +244,7 @@ export const useFetchExchangesList = () => {
   return useCallback(
     (
       successNotification?: boolean,
-      setIsFinished?: Dispatch<SetStateAction<boolean>>
+      setIsFinished?: Dispatch<SetStateAction<boolean>>,
     ) => {
       setIsFinished?.(false);
       fetchAndStoreFromBot({
@@ -251,7 +255,7 @@ export const useFetchExchangesList = () => {
         setIsFinished,
       });
     },
-    [setServicesInfo, botDomain]
+    [setServicesInfo, botDomain],
   );
 };
 
@@ -284,7 +288,7 @@ export const useHandleProfileUpdate = () => {
       exchangeInfo,
       botDomain,
       currencySettings,
-    ]
+    ],
   );
 };
 
@@ -308,7 +312,7 @@ export const useHandleSettingChange = () => {
         return newSettings;
       });
     },
-    [setToSaveCurrencySettings]
+    [setToSaveCurrencySettings],
   );
 };
 
@@ -319,7 +323,7 @@ export const useHandleExchangeSettingChange = () => {
     (
       exchangeName: string,
       inputName: ExchangeConfigSettingNameType,
-      newSetting: string | boolean | string[]
+      newSetting: string | boolean | string[],
     ) => {
       setNewConfigExchanges((prevExchanges) => {
         const newExchanges = {
@@ -335,13 +339,12 @@ export const useHandleExchangeSettingChange = () => {
         const newSettings: ExchangeConfigUpdateType = {
           ...prevSettings,
         };
-        newSettings.global_config[
-          `exchanges_${exchangeName}_${inputName}`
-        ] = newSetting;
+        newSettings.global_config[`exchanges_${exchangeName}_${inputName}`] =
+          newSetting;
         return newSettings;
       });
     },
-    [setExchangeConfigUpdate, setNewConfigExchanges]
+    [setExchangeConfigUpdate, setNewConfigExchanges],
   );
 };
 
@@ -356,44 +359,35 @@ export const BotExchangeInfoProvider = ({
   const botInfo = useBotInfoContext();
   const currencySettings: ConfigSymbolsType | undefined =
     botInfo?.current_profile?.config?.["crypto-currencies"];
-  const [toSaveCurrencySettings, setToSaveCurrencySettings] = useState<
-    ConfigSymbolsType
-  >();
-  const [currentCurrencyList, setCurrentCurrencyList] = useState<
-    CurrencyListType
-  >();
-  const [unsavedCurrencyList, setUnsavedCurrencyList] = useState<
-    CurrencyListType
-  >();
+  const [toSaveCurrencySettings, setToSaveCurrencySettings] =
+    useState<ConfigSymbolsType>();
+  const [currentCurrencyList, setCurrentCurrencyList] =
+    useState<CurrencyListType>();
+  const [unsavedCurrencyList, setUnsavedCurrencyList] =
+    useState<CurrencyListType>();
   const [exchangeConfigUpdate, setExchangeConfigUpdate] = useState(
-    initialExchangeConfigUpdate
+    initialExchangeConfigUpdate,
   );
-  const [newConfigExchanges, setNewConfigExchanges] = useState<
-    ExchangesConfigType
-  >();
+  const [newConfigExchanges, setNewConfigExchanges] =
+    useState<ExchangesConfigType>();
 
   useEffect(() => {
-    const {
-      currencySettings: currentCurrencySettings,
-    } = convertSymbolSettingsToNewFormat(currencySettings);
+    const { currencySettings: currentCurrencySettings } =
+      convertSymbolSettingsToNewFormat(currencySettings);
     const currentCurrencySettingsJson: string = JSON.stringify(
-      currentCurrencySettings
+      currentCurrencySettings,
     );
     setToSaveCurrencySettings(JSON.parse(currentCurrencySettingsJson));
   }, [currencySettings, exchangeInfo]);
   useEffect(() => {
-    const {
-      currencyList: _currentCurrencyList,
-    } = convertSymbolSettingsToNewFormat(currencySettings);
-    const {
-      currencyList: _unsavedCurrencyList,
-    } = convertSymbolSettingsToNewFormat(toSaveCurrencySettings);
-    const currentCurrencyListJson: string = JSON.stringify(
-      _currentCurrencyList
-    );
-    const unsavedCurrencyListJson: string = JSON.stringify(
-      _unsavedCurrencyList
-    );
+    const { currencyList: _currentCurrencyList } =
+      convertSymbolSettingsToNewFormat(currencySettings);
+    const { currencyList: _unsavedCurrencyList } =
+      convertSymbolSettingsToNewFormat(toSaveCurrencySettings);
+    const currentCurrencyListJson: string =
+      JSON.stringify(_currentCurrencyList);
+    const unsavedCurrencyListJson: string =
+      JSON.stringify(_unsavedCurrencyList);
     setUnsavedCurrencyList(JSON.parse(unsavedCurrencyListJson));
     setCurrentCurrencyList(JSON.parse(currentCurrencyListJson));
   }, [currencySettings, exchangeInfo, toSaveCurrencySettings]);
@@ -473,7 +467,7 @@ function handleProfileUpdate({
     JSON.stringify(unsavedCurrencyList) !== JSON.stringify(currentCurrencyList);
   const exchangeConfigUpdateHasChanged = Boolean(
     exchangeConfigUpdate.global_config &&
-      Object.keys(exchangeConfigUpdate.global_config).length
+      Object.keys(exchangeConfigUpdate.global_config).length,
   );
   const configUpdate: ExchangeConfigUpdateType = {
     ...exchangeConfigUpdate,
@@ -537,7 +531,7 @@ export function getProfileCurrencyUpdate({
         }
         pairKey &&
           !configUpdate.removed_elements.includes(
-            `crypto-currencies_${pairKey}`
+            `crypto-currencies_${pairKey}`,
           ) &&
           configUpdate.removed_elements.push(`crypto-currencies_${pairKey}`);
         return;
@@ -549,16 +543,15 @@ export function getProfileCurrencyUpdate({
         configUpdate.global_config[`crypto-currencies_${symbol}_pairs`] = [
           symbol,
         ];
-        configUpdate.global_config[
-          `crypto-currencies_${symbol}_enabled`
-        ] = true;
+        configUpdate.global_config[`crypto-currencies_${symbol}_enabled`] =
+          true;
       }
-    }
+    },
   );
 }
 
 function convertSymbolSettingsToNewFormat(
-  originalCurrencySettings: ConfigSymbolsType | undefined
+  originalCurrencySettings: ConfigSymbolsType | undefined,
 ): {
   currencyList: CurrencyListType;
   currencySettings: ConfigSymbolsType;

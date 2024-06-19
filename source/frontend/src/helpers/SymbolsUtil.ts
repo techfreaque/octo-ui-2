@@ -1,6 +1,4 @@
-export function parseSymbol(
-  symbol: string
-): {
+export function parseSymbol(symbol: string): {
   base: string;
   quote: string;
   settlement: string | undefined;

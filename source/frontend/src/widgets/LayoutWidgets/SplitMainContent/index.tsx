@@ -34,14 +34,16 @@ export default function SplitMainContent({
       gutterClassName={gutterClassName}
     >
       <div style={{ height: "100%" }}>
-        {useMemo(() => upperContent && <AppWidgets layout={upperContent} />, [
-          upperContent,
-        ])}
+        {useMemo(
+          () => upperContent && <AppWidgets layout={upperContent} />,
+          [upperContent],
+        )}
       </div>
       <div style={{ height: "100%" }}>
-        {useMemo(() => lowerContent && <AppWidgets layout={lowerContent} />, [
-          lowerContent,
-        ])}
+        {useMemo(
+          () => lowerContent && <AppWidgets layout={lowerContent} />,
+          [lowerContent],
+        )}
       </div>
     </Splitter>
   );
@@ -50,7 +52,7 @@ export default function SplitMainContent({
 function handleResize(
   gutterClassName: string,
   setPanelPercent: (percent: number) => void,
-  newSizes: number[]
+  newSizes: number[],
 ) {
   const gutter = document.getElementsByClassName(gutterClassName)[0];
   gutter?.classList?.remove("is-resizing");

@@ -25,9 +25,8 @@ import {
 } from "./TentaclesConfigProvider";
 
 const OptimizerEditorCounterContext = createContext<number>(0);
-const UpdateOptimizerEditorCounterContext = createContext<
-  Dispatch<SetStateAction<number>>
->(emptyValueFunction);
+const UpdateOptimizerEditorCounterContext =
+  createContext<Dispatch<SetStateAction<number>>>(emptyValueFunction);
 
 export type OptimizerEditorInputNumberType = {
   min: number;
@@ -76,11 +75,12 @@ export interface OptimizerEditorType {
 }
 
 const OptimizerEditorContext = createContext<OptimizerEditorType | undefined>(
-  undefined
+  undefined,
 );
-const UpdateOptimizerEditorContext = createContext<
-  Dispatch<SetStateAction<OptimizerEditorType | undefined>>
->(emptyValueFunction);
+const UpdateOptimizerEditorContext =
+  createContext<Dispatch<SetStateAction<OptimizerEditorType | undefined>>>(
+    emptyValueFunction,
+  );
 
 export const useOptimizerEditorCounterContext = () => {
   return useContext(OptimizerEditorCounterContext);
@@ -113,7 +113,7 @@ export const useFetchProConfig = () => {
         successCallback,
       });
     },
-    [setOptimizerEditor, botDomain]
+    [setOptimizerEditor, botDomain],
   );
 };
 
@@ -157,7 +157,7 @@ export const OptimizerEditorProvider = ({
       optimizerEditor?.optimizer_inputs &&
       filterActiveUserInputs(
         currentTentaclesTradingConfig,
-        optimizerEditor?.optimizer_inputs
+        optimizerEditor?.optimizer_inputs,
       );
     const inputs = filteredForm?.user_inputs;
     if (inputs) {
@@ -198,7 +198,7 @@ function getOptimizerEditorCounter(userInputs: OptimizerEditorInputType) {
       } else {
         console.error(
           "Unhandled user input type to compute optimizer runs count: ",
-          value
+          value,
         );
       }
     }
