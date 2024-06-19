@@ -3,7 +3,6 @@ import "./crosshair.css";
 import Splitter, { SplitDirection } from "@devbookhq/splitter";
 import { useMemo } from "react";
 import { useEffect } from "react";
-import useMeasure from "react-use-measure";
 
 import { useColorModeContext } from "../../../../context/config/ColorModeProvider";
 import { getSplitterClasses } from "../../../LayoutWidgets/SplitMainContent";
@@ -73,7 +72,7 @@ export default function PlotlyDualCharts({
               onMouseEnter={handleCrosshairOnMouseEnter}
               onMouseLeave={handleCrosshairOnMouseLeave}
             >
-              <Chart
+              <PlotlyChart
                 chartLocation={mainChartLocation}
                 setLayouts={setLayouts}
                 layout={mainLayout}
@@ -133,7 +132,7 @@ function DualChart({
           onMouseEnter={handleCrosshairOnMouseEnter}
           onMouseLeave={handleCrosshairOnMouseLeave}
         >
-          <Chart
+          <PlotlyChart
             chartLocation={mainChartLocation}
             setLayouts={setLayouts}
             layout={mainLayout}
@@ -148,7 +147,7 @@ function DualChart({
           onMouseEnter={handleCrosshairOnMouseEnter}
           onMouseLeave={handleCrosshairOnMouseLeave}
         >
-          <Chart
+          <PlotlyChart
             chartLocation={subChartLocation}
             setLayouts={setLayouts}
             layout={subLayout}
@@ -167,41 +166,4 @@ function DualChart({
     subLayout,
     subChart,
   ]);
-}
-
-function Chart({
-  chartLocation,
-  setLayouts,
-  layout,
-  chart,
-}: {
-  chartLocation: ChartLocationType;
-  setLayouts: UpdatePlotlyLayoutsType;
-  layout: PlotlyLayoutType;
-  chart: ChartDataType[];
-}) {
-  const [containerRef, { width, height }] = useMeasure();
-  return useMemo(
-    () => (
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-        }}
-        ref={containerRef}
-      >
-        <PlotlyChart
-          chartLocation={chartLocation}
-          setLayouts={setLayouts}
-          layout={{
-            ...layout,
-            width,
-            height,
-          }}
-          chartData={chart}
-        />
-      </div>
-    ),
-    [chart, chartLocation, containerRef, height, layout, setLayouts, width]
-  );
 }

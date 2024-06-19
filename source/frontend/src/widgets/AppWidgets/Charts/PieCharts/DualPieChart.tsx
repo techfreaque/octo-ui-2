@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
-import useMeasure from "react-use-measure";
 
-import type {
-  AntSideBarMenutItemType,
-} from "../../../../components/Sidebars/AntSidebar/AntSidebar";
+import type { AntSideBarMenutItemType } from "../../../../components/Sidebars/AntSidebar/AntSidebar";
 import AntSidebar from "../../../../components/Sidebars/AntSidebar/AntSidebar";
 import type { PlottedElementNameType } from "../../../../context/data/BotPlottedElementsProvider";
-import type {
-  DataTableSideBarMainItemType} from "../../Tables/DataTable";
-import {
-  createTradingOrBacktestingTab
-} from "../../Tables/DataTable";
+import type { DataTableSideBarMainItemType } from "../../Tables/DataTable";
+import { createTradingOrBacktestingTab } from "../../Tables/DataTable";
 import type { ChartDataType, ChartsDataType } from "../ChartTablePieCombo";
 import PlotlyChart from "../MainCharts/Plotly";
 import type {
@@ -27,22 +21,16 @@ export default function DualPieChart({
   setLayouts: UpdatePlotlyLayoutsType;
   layout: PlotlyLayoutType;
 }) {
-  const [containerRef, { width, height }] = useMeasure();
   const [menuItems, setMenuItems] = useState<AntSideBarMenutItemType[]>();
 
   const pieCharts: ChartDataType[] | undefined = charts?.[pieChartName];
   useEffect(() => {
-    const newMenuItems = generateSidebarMenu(
-      { ...layout, width, height },
-      pieCharts,
-      setLayouts
-    );
+    const newMenuItems = generateSidebarMenu(layout, pieCharts, setLayouts);
     setMenuItems(Object.values(newMenuItems));
-  }, [height, layout, pieCharts, setLayouts, width]);
+  }, [layout, pieCharts, setLayouts]);
 
   return (
     <div
-      ref={containerRef}
       style={{
         width: "100%",
         height: "100%",
@@ -82,7 +70,7 @@ function generateSidebarMenu(
           chartLocation={pieChartName}
           setLayouts={setLayouts}
           layout={layout}
-          chartData={[chart] as ChartDataType[]}
+          chart={[chart] as ChartDataType[]}
         />
       ),
     });

@@ -1,10 +1,15 @@
-import type { PlotRelayoutEvent } from "plotly.js";
-import { useMemo } from "react";
+import type { PlotRelayoutEvent, Root } from "plotly.js";
+import { newPlot } from "plotly.js";
+import { useEffect, useMemo } from "react";
 import Plot from "react-plotly.js";
+import useMeasure from "react-use-measure";
 
 import { objectKeys } from "../../../../helpers/helpers";
 import type { ChartDataType } from "../ChartTablePieCombo";
-import type { PlotlyLayoutType, UpdatePlotlyLayoutsType } from "./PlotlyContext";
+import type {
+  PlotlyLayoutType,
+  UpdatePlotlyLayoutsType,
+} from "./PlotlyContext";
 
 export type ChartLocationType = "main-chart" | "sub-chart" | "pie-chart" | "b";
 
@@ -20,33 +25,70 @@ export default function PlotlyChart({
   chartLocation,
   setLayouts,
   layout,
-  chartData,
+  chart,
 }: {
   chartLocation: ChartLocationType;
   setLayouts: UpdatePlotlyLayoutsType;
   layout: PlotlyLayoutType;
-  chartData: ChartDataType[];
+  chart: ChartDataType[];
 }) {
+  const [containerRef, { width, height }] = useMeasure();
+useEffect(() => {
+  const resizeEvent = new Event('resize');
+
+// Dispatch the event
+  window.dispatchEvent(resizeEvent);
+  console.log("reeee")
+}, [width,
+  height]);
+
+  const divId = getDivId(chartLocation);
+  useEffect(() => {
+    const container: HTMLElement = document.getElementById(divId);
+    newPlot(
+      container,
+      chart,
+      { ...layout, auosize: true },
+      getPlotlyConfig()
+    ).then(() => {
+      container?.on("plotly_relayout", relayout)
+    });
+  }, []);
   return useMemo(
     () => {
-      const divId = getDivId(chartLocation);
       return (
-        chartData &&
-        layout && (
-          <Plot
-            data={chartData}
-            layout={JSON.parse(JSON.stringify(layout))}
-            config={getPlotlyConfig()}
-            divId={divId}
-            onRelayout={(chart) => {
-              relayout(chart, chartLocation, setLayouts);
-            }}
-          />
-        )
+        <div
+          style={{
+            height: "100%",
+            width: "100%",
+          }}
+          id={divId}
+          ref={containerRef}
+        >
+           {/* {chart && layout && (
+            <Plot
+              data={chart}
+              layout={{
+                ...layout,
+                autosize: true,
+                // width: "100%", height: "100%"
+              }}
+              config={getPlotlyConfig()}
+              divId={divId}
+              onRelayout={(chart) => {
+                relayout(chart, chartLocation, setLayouts);
+              }}
+            />
+          )}  */}
+        </div>
       );
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [chartData, chartLocation, JSON.stringify(layout)]
+    [
+      chart,
+      chartLocation,
+      // width, height
+    ]
   );
 }
 
