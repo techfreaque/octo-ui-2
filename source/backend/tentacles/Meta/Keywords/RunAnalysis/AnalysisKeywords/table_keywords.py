@@ -129,7 +129,12 @@ def plot_table_data(
 
 
 def _get_default_column_render():
-    return {"Time": "datetime", "Entry time": "datetime", "Exit time": "datetime"}
+    return {
+        "Time": "datetime",
+        "Entry time": "datetime",
+        "Exit time": "datetime",
+        "Open Time": "datetime",
+    }
 
 
 def _get_default_types():
@@ -147,7 +152,8 @@ def _get_default_columns(plotted_element, data, column_render, key_to_label=None
             "key": row_key,
             "dataIndex": row_key,
             "title": key_to_label[row_key],
-            # "render": column_render.get(key_to_label[row_key], None),
+            "renderType": column_render.get(key_to_label[row_key], None)
+            or column_render.get(row_key, None),
             "sortable": True,
         }
         for row_key, row_value in data[0].items()
