@@ -415,7 +415,7 @@ function useFormatTableData(
           : undefined,
         render: TIMESTAMP_DATA.includes(key)
           ? (value: number) => {
-              return <>{new Date(value).toISOString()}</>;
+              return <>{new Date(value*1000).toISOString()}</>;
             }
           : ID_DATA.includes(key)
           ? (value: number | string) => {

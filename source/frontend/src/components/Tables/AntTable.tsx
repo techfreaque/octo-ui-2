@@ -45,9 +45,9 @@ export default function AntTable<
   selectedRowKeys?: string[] | undefined;
   bordered?: boolean;
   setSelectedRowKeys?:
-    | Dispatch<SetStateAction<string[] | undefined>>
-    | undefined
-    | ((selectedRowKeys: string[]) => void);
+  | Dispatch<SetStateAction<string[] | undefined>>
+  | undefined
+  | ((selectedRowKeys: string[]) => void);
   onChange?: (currentData: TAntTableDataType[]) => void;
   size?: SizeType;
   header?: JSX.Element | undefined;
@@ -59,6 +59,9 @@ export default function AntTable<
     searchInput: RefObject<InputRef>
   ): TAntTableColumnType[] {
     return columns.map((column) => {
+      const render = column.renderType === "datetime" ? (value: any) => {
+        return new Date(Number(value) * 1000).toLocaleString();
+      } : column.render;
       if (!column.disableSearch && !column.filters) {
         return {
           ...column,
@@ -67,19 +70,21 @@ export default function AntTable<
           hidden: hiddenColumns
             ? hiddenColumns.includes(column.key)
             : undefined,
+          render,
         };
       }
       return {
         ...column,
         ...(column.children
           ? {
-              children: formatColumns(
-                column.children as TAntTableColumnType[],
-                searchInput
-              ),
-            }
+            children: formatColumns(
+              column.children as TAntTableColumnType[],
+              searchInput
+            ),
+          }
           : {}),
         hidden: hiddenColumns ? hiddenColumns.includes(column.key) : undefined,
+        render,
         sorter: getSorter<TAntTableDataType, TAntTableColumnType>(column),
       };
     });
@@ -115,8 +120,8 @@ export default function AntTable<
         scroll={
           scrollWidth
             ? {
-                x: scrollWidth,
-              }
+              x: scrollWidth,
+            }
             : undefined
         }
         {...(expandable ? { expandable } : {})}
@@ -129,29 +134,29 @@ export default function AntTable<
         onChange={handleTableChange}
         {...(header
           ? {
-              title: () => (
-                <Flex gap={10} justify={"flex-start"} align={"center"}>
-                  {header}
-                </Flex>
-              ),
-            }
+            title: () => (
+              <Flex gap={10} justify={"flex-start"} align={"center"}>
+                {header}
+              </Flex>
+            ),
+          }
           : {})}
         size={size}
         {...(setSelectedRowKeys
           ? {
-              rowSelection: {
-                selectedRowKeys: selectedRowKeys || [],
-                onChange: (newSelectedRowKeys: React.Key[]) => {
-                  // only strings allowed as keys
-                  setSelectedRowKeys(newSelectedRowKeys as string[]);
-                },
-                selections: [
-                  Table.SELECTION_ALL,
-                  Table.SELECTION_INVERT,
-                  Table.SELECTION_NONE,
-                ],
+            rowSelection: {
+              selectedRowKeys: selectedRowKeys || [],
+              onChange: (newSelectedRowKeys: React.Key[]) => {
+                // only strings allowed as keys
+                setSelectedRowKeys(newSelectedRowKeys as string[]);
               },
-            }
+              selections: [
+                Table.SELECTION_ALL,
+                Table.SELECTION_INVERT,
+                Table.SELECTION_NONE,
+              ],
+            },
+          }
           : {})}
         pagination={
           _data.length > paginationSize
@@ -414,12 +419,12 @@ export interface AntTableColumnType<
   dataIndex?: string;
   width?: number | string;
   dsorter?:
-    | ((a: TAntTableDataType, b: TAntTableDataType) => number)
-    | "string"
-    | "boolean"
-    | "number"
-    | "string[]"
-    | undefined;
+  | ((a: TAntTableDataType, b: TAntTableDataType) => number)
+  | "string"
+  | "boolean"
+  | "number"
+  | "string[]"
+  | undefined;
   filters?: {
     text: string;
     value: boolean | string | number;
@@ -427,9 +432,10 @@ export interface AntTableColumnType<
   children?: AntTableColumnType<TAntTableDataType>[];
   sortDirections?: ["descend", "ascend"];
   disableSearch?: boolean;
+  renderType?: "datetime";
   render?:
-    | ((value: any, record: TAntTableDataType, index: number) => JSX.Element)
-    | undefined;
+  | ((value: any, record: TAntTableDataType, index: number) => JSX.Element)
+  | undefined;
   dfilter?: (
     item: TAntTableDataType,
     symbolValueFilter: FilterValue
