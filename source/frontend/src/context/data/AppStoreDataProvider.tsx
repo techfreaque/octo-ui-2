@@ -1161,6 +1161,10 @@ function getAppUrlFromDownloadInfo(
   appStoreDomain: string,
   appStoreUser: AppStoreUserType | undefined,
 ) {
+  // TODO handle versions properly
+  downloadInfo.major_version = 0;
+  downloadInfo.minor_version = 0;
+  downloadInfo.bug_fix_version = 0;
   return `${appStoreDomain}/download_app/${appStoreUser?.download_token}/${downloadInfo.major_version}/${downloadInfo.minor_version}/${downloadInfo.bug_fix_version}/${downloadInfo.origin_package}.zip`;
 }
 
